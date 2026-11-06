@@ -6,6 +6,13 @@
   "branch": "feature/protocolo-y-senalizacion-websocket",
   "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2a1808575bb08c1f0d5b1a489e02a14a86941df4da7005b4f358ada598cbdb37",
+    "at": "2026-11-06T10:01:57.724Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 12,
@@ -36,12 +43,6 @@
     "T": 3,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:2a1808575bb08c1f0d5b1a489e02a14a86941df4da7005b4f358ada598cbdb37",
-    "at": "2026-11-06T10:01:57.724Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T10:04:16.508Z"
 }
