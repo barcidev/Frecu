@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261106-prueba-de-concepto-de-audio",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/prueba-de-concepto-de-audio-2",
+  "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:273c9f254a2a1ce66898a8ac88d402f718eddd80ac86ac63099687c74cf9592c",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:c6ae10b106ce51aadcc66fd793759b52b789e72e08478d7a3c23b471d0f1bdbe",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:0f1d1dc611a31fdde96e952265c3e6d7f04686282db4f401aff32262fd2dc877",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 4,
+    "C": 2,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b1387e781ad0dc87ba56a4c49530df62db9e825cc551ec735fc9df57fcc84e42",
+    "at": "2026-11-06T09:49:06.816Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
