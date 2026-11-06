@@ -1,0 +1,2 @@
+{"ts":"2026-11-06T09:49:19.300Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/senalizacion-websocket-y-gestion-de-sala","epic":"20261106-prueba-de-concepto-de-audio","slice":"C1"}}
+{"ts":"2026-11-06T09:57:27.729Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.cancelled","data":{"reason":"Reestructurar cortes de la épica","delegated":true}}
