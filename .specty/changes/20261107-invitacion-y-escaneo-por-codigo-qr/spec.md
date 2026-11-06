@@ -63,7 +63,7 @@ Permitir al anfitrión generar y mostrar un código QR de invitación con los pa
   - ac: AC4, AC5
   - verify: fvm flutter test test/features/room/domain/invite_qr_usecases_test.dart
   - type: feat
-- [ ] T2: Diálogo y visualización de código QR en RoomPage con pruebas de widget.
+- [x] T2: Diálogo y visualización de código QR en RoomPage con pruebas de widget.
   - files: lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/invite_qr_dialog_test.dart
   - ac: AC4
   - verify: fvm flutter test test/features/room/presentation/invite_qr_dialog_test.dart

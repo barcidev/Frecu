@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/room/domain/usecases/build_invite_qr.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// Pantalla de la frecu activa (comunicador de voz).
 @RoutePage()
@@ -40,6 +43,33 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     }
   }
 
+  Future<void> _showInviteQrDialog(BuildContext context, Room room) async {
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => _InviteQrDialog(room: room),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context, Room? room) {
+    return AppBar(
+      title: Text(room?.name ?? t.room.title),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.qr_code),
+          tooltip: 'Código QR de invitación',
+          onPressed: room != null
+              ? () => _showInviteQrDialog(context, room)
+              : null,
+        ),
+        IconButton(
+          icon: const Icon(Icons.exit_to_app),
+          tooltip: t.room.leave,
+          onPressed: _handleLeave,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final room = ref.watch(roomNotifierProvider);
@@ -48,16 +78,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     final voiceState = ref.watch(voiceNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(room?.name ?? t.room.title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            tooltip: t.room.leave,
-            onPressed: _handleLeave,
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context, room),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -89,6 +110,52 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _InviteQrDialog extends StatelessWidget {
+  const _InviteQrDialog({required this.room});
+
+  final Room room;
+
+  @override
+  Widget build(BuildContext context) {
+    final invite = RoomInvite(
+      host: room.hostAddress,
+      port: room.port,
+      roomId: room.id,
+      accessCode: room.accessCode,
+    );
+    final qrData = const BuildInviteQr().buildUri(invite);
+
+    return AlertDialog(
+      title: const Text('Código QR de invitación'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 200,
+              height: 200,
+              child: QrImageView(data: qrData, size: 200),
+            ),
+            const SizedBox(height: 12),
+            SelectableText(
+              qrData,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8),
+            Text('PIN: ${room.accessCode}'),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cerrar'),
+        ),
+      ],
     );
   }
 }
