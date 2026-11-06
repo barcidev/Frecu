@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261106-gestion-de-sala-y-conexion-por-ip",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/gestion-de-sala-y-conexion-por-ip",
   "baseCommit": "09ba8eef2de152db33e771bee4afa264c90f6375",
   "revision": 1,
@@ -47,6 +47,9 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T11:05:16.667Z"
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:8f133e4a3e23717517743cb59d63ccd036b949633c2d13842ead721cd6cc55ba",
+    "test/features/room/domain/usecases_test.dart": "sha256:f737350a195da5ec1a802d46c060be4e7034aa8c22f3e4ec84dcaa1cdc47c6c9",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:0fc549f081348bbffb4fe4b069ea34232abea37b105d457ae265e7a61ab7aa81"
+  }
 }
