@@ -73,7 +73,7 @@ Se aplica Clean Architecture por feature:
   - files: lib/features/room/data/datasources/audio_session_datasource.dart, lib/features/room/data/repositories/voice_repository_impl.dart, test/features/room/data/voice_repository_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/room/data/voice_repository_test.dart
-- [ ] T4: Proveedores de estado en voice_provider y control visual con icono dinámico en RoomPage
+- [x] T4: Proveedores de estado en voice_provider y control visual con icono dinámico en RoomPage
   - files: lib/features/room/presentation/providers/voice_provider.dart, lib/features/room/presentation/pages/room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/voice_flow_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/room/presentation/voice_flow_test.dart

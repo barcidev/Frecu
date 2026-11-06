@@ -176,6 +176,94 @@ final class TalkModeProvider
 
 String _$talkModeHash() => r'db4fe0595803f0b9eca0a5e0ba97795069b2bda3';
 
+/// Stream reactivo de la ruta de audio activa.
+
+@ProviderFor(audioRoute)
+final audioRouteProvider = AudioRouteProvider._();
+
+/// Stream reactivo de la ruta de audio activa.
+
+final class AudioRouteProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<AudioRoute>,
+          AudioRoute,
+          Stream<AudioRoute>
+        >
+    with $FutureModifier<AudioRoute>, $StreamProvider<AudioRoute> {
+  /// Stream reactivo de la ruta de audio activa.
+  AudioRouteProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'audioRouteProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$audioRouteHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<AudioRoute> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<AudioRoute> create(Ref ref) {
+    return audioRoute(ref);
+  }
+}
+
+String _$audioRouteHash() => r'6feeaa6ab44f1013656907a675e1a677859883d4';
+
+/// Stream reactivo de las rutas de audio disponibles en el dispositivo.
+
+@ProviderFor(availableAudioRoutes)
+final availableAudioRoutesProvider = AvailableAudioRoutesProvider._();
+
+/// Stream reactivo de las rutas de audio disponibles en el dispositivo.
+
+final class AvailableAudioRoutesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Set<AudioRoute>>,
+          Set<AudioRoute>,
+          Stream<Set<AudioRoute>>
+        >
+    with $FutureModifier<Set<AudioRoute>>, $StreamProvider<Set<AudioRoute>> {
+  /// Stream reactivo de las rutas de audio disponibles en el dispositivo.
+  AvailableAudioRoutesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'availableAudioRoutesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$availableAudioRoutesHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<Set<AudioRoute>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<Set<AudioRoute>> create(Ref ref) {
+    return availableAudioRoutes(ref);
+  }
+}
+
+String _$availableAudioRoutesHash() =>
+    r'38cc50eb8e71f999d78eedbbb31fe96eec1220fd';
+
 /// Gestor de estado del micrófono y transmisión de voz.
 
 @ProviderFor(VoiceNotifier)
@@ -212,7 +300,7 @@ final class VoiceNotifierProvider
   }
 }
 
-String _$voiceNotifierHash() => r'016a63bbb7f93e561bcf99b817cde868666d76ce';
+String _$voiceNotifierHash() => r'566c641b54f01d59d8d49202a5186f08bac18589';
 
 /// Gestor de estado del micrófono y transmisión de voz.
 

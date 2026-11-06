@@ -88,6 +88,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override String get pushToTalk => 'Hold to talk';
 	@override String get openMic => 'Open microphone';
 	@override String get speaker => 'Speaker';
+	@override String get earpiece => 'Earpiece';
 	@override String get bluetooth => 'Bluetooth';
 	@override String get speaking => 'Speaking';
 	@override String get muted => 'Muted';
@@ -167,6 +168,7 @@ extension on TranslationsEn {
 			'room.pushToTalk' => 'Hold to talk',
 			'room.openMic' => 'Open microphone',
 			'room.speaker' => 'Speaker',
+			'room.earpiece' => 'Earpiece',
 			'room.bluetooth' => 'Bluetooth',
 			'room.speaking' => 'Speaking',
 			'room.muted' => 'Muted',

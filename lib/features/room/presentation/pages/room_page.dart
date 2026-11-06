@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/constants/network_constants.dart';
+import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
@@ -51,10 +52,34 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, Room? room) {
+  AppBar _buildAppBar(BuildContext context, Room? room, AudioRoute audioRoute) {
+    final IconData routeIcon;
+    final String tooltip;
+    switch (audioRoute) {
+      case AudioRoute.bluetooth:
+        routeIcon = Icons.bluetooth_audio;
+        tooltip = t.room.bluetooth;
+      case AudioRoute.earpiece:
+        routeIcon = Icons.phone_in_talk;
+        tooltip = t.room.earpiece;
+      case AudioRoute.speaker:
+        routeIcon = Icons.volume_up;
+        tooltip = t.room.speaker;
+    }
+
     return AppBar(
       title: Text(room?.name ?? t.room.title),
       actions: [
+        IconButton(
+          key: const Key('audio_route_button'),
+          icon: Icon(routeIcon),
+          tooltip: tooltip,
+          onPressed: () {
+            unawaited(
+              ref.read(voiceNotifierProvider.notifier).cycleAudioRoute(),
+            );
+          },
+        ),
         IconButton(
           icon: const Icon(Icons.qr_code),
           tooltip: 'Código QR de invitación',
@@ -80,7 +105,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     final participantsCount = participantsAsync.value?.length ?? 0;
 
     return Scaffold(
-      appBar: _buildAppBar(context, room),
+      appBar: _buildAppBar(context, room, voiceState.audioRoute),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

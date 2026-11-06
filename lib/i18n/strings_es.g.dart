@@ -123,6 +123,9 @@ class Translations$room$es {
 	/// es: 'Altavoz'
 	String get speaker => 'Altavoz';
 
+	/// es: 'Auricular'
+	String get earpiece => 'Auricular';
+
 	/// es: 'Bluetooth'
 	String get bluetooth => 'Bluetooth';
 
@@ -253,6 +256,7 @@ extension on Translations {
 			'room.pushToTalk' => 'Mantén presionado para hablar',
 			'room.openMic' => 'Micrófono abierto',
 			'room.speaker' => 'Altavoz',
+			'room.earpiece' => 'Auricular',
 			'room.bluetooth' => 'Bluetooth',
 			'room.speaking' => 'Hablando',
 			'room.muted' => 'Silenciado',

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
+import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -15,6 +18,8 @@ class VoiceState {
   const VoiceState({
     this.isTalking = false,
     this.talkMode = TalkMode.pushToTalk,
+    this.audioRoute = AudioRoute.speaker,
+    this.availableAudioRoutes = const {AudioRoute.speaker, AudioRoute.earpiece},
     this.speakingPeers = const {},
     this.isInitialized = false,
   });
@@ -24,6 +29,12 @@ class VoiceState {
 
   /// Modo de habla activo (PTT o micrófono abierto).
   final TalkMode talkMode;
+
+  /// Ruta de salida de audio activa (altavoz, auricular, Bluetooth).
+  final AudioRoute audioRoute;
+
+  /// Conjunto de rutas de salida de audio disponibles en el dispositivo.
+  final Set<AudioRoute> availableAudioRoutes;
 
   /// Conjunto de identificadores de participantes remotos hablando.
   final Set<String> speakingPeers;
@@ -35,12 +46,16 @@ class VoiceState {
   VoiceState copyWith({
     bool? isTalking,
     TalkMode? talkMode,
+    AudioRoute? audioRoute,
+    Set<AudioRoute>? availableAudioRoutes,
     Set<String>? speakingPeers,
     bool? isInitialized,
   }) {
     return VoiceState(
       isTalking: isTalking ?? this.isTalking,
       talkMode: talkMode ?? this.talkMode,
+      audioRoute: audioRoute ?? this.audioRoute,
+      availableAudioRoutes: availableAudioRoutes ?? this.availableAudioRoutes,
       speakingPeers: speakingPeers ?? this.speakingPeers,
       isInitialized: isInitialized ?? this.isInitialized,
     );
@@ -83,6 +98,20 @@ Stream<TalkMode> talkMode(Ref ref) {
   return repository.watchTalkMode();
 }
 
+/// Stream reactivo de la ruta de audio activa.
+@riverpod
+Stream<AudioRoute> audioRoute(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchAudioRoute();
+}
+
+/// Stream reactivo de las rutas de audio disponibles en el dispositivo.
+@riverpod
+Stream<Set<AudioRoute>> availableAudioRoutes(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchAvailableAudioRoutes();
+}
+
 /// Alias para consistencia de nomenclatura con la clase Notifier.
 VoiceNotifierProvider get voiceNotifierProvider => voiceProvider;
 
@@ -103,10 +132,26 @@ class VoiceNotifier extends _$VoiceNotifier {
       state = state.copyWith(talkMode: mode);
     });
 
+    StreamSubscription<AudioRoute>? routeSub;
+    try {
+      routeSub = repository.watchAudioRoute().listen((route) {
+        state = state.copyWith(audioRoute: route);
+      });
+    } on Object catch (_) {}
+
+    StreamSubscription<Set<AudioRoute>>? availSub;
+    try {
+      availSub = repository.watchAvailableAudioRoutes().listen((routes) {
+        state = state.copyWith(availableAudioRoutes: routes);
+      });
+    } on Object catch (_) {}
+
     ref.onDispose(() {
       talkingSub.cancel();
       speakingSub.cancel();
       modeSub.cancel();
+      routeSub?.cancel();
+      availSub?.cancel();
     });
 
     return const VoiceState();
@@ -147,5 +192,28 @@ class VoiceNotifier extends _$VoiceNotifier {
   Future<Result<void>> setTalkMode(TalkMode mode) async {
     final repository = ref.read(voiceRepositoryProvider);
     return repository.setTalkMode(mode);
+  }
+
+  /// Conmuta la salida a la ruta de audio especificada.
+  Future<Result<void>> setAudioRoute(AudioRoute route) async {
+    final repository = ref.read(voiceRepositoryProvider);
+    return repository.setAudioRoute(route);
+  }
+
+  /// Activa o desactiva la salida por el altavoz externo.
+  Future<Result<void>> setSpeakerOn(bool enabled) async {
+    final repository = ref.read(voiceRepositoryProvider);
+    return repository.setSpeakerOn(enabled);
+  }
+
+  /// Conmuta/cicla entre las rutas de audio disponibles en el dispositivo.
+  Future<Result<void>> cycleAudioRoute() async {
+    final available = state.availableAudioRoutes.toList();
+    if (available.isEmpty) {
+      return const Result.success(null);
+    }
+    final currentIndex = available.indexOf(state.audioRoute);
+    final nextIndex = (currentIndex + 1) % available.length;
+    return setAudioRoute(available[nextIndex]);
   }
 }
