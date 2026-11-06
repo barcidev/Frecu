@@ -56,7 +56,7 @@ Permitir que el usuario anfitrión cree una frecu viendo su dirección IP local 
 
 ## Tareas
 
-- [ ] T1: Contratos de dominio (RoomRepository), casos de uso (CreateRoom, JoinRoom, LeaveRoom) y pruebas unitarias.
+- [x] T1: Contratos de dominio (RoomRepository), casos de uso (CreateRoom, JoinRoom, LeaveRoom) y pruebas unitarias.
   - files: lib/features/room/domain/repositories/room_repository.dart, lib/features/room/domain/usecases/create_room.dart, lib/features/room/domain/usecases/join_room.dart, lib/features/room/domain/usecases/leave_room.dart, test/features/room/domain/usecases_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/domain/usecases_test.dart
