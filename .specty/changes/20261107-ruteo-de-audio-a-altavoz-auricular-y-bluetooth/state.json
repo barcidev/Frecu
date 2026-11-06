@@ -36,12 +36,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "b7efba3391b27682e894f86e899cf08fc37c6cea",
+      "attempts": 1,
       "startedAt": "2026-11-06T21:26:38.926Z",
       "doneAt": "2026-11-06T21:27:40.847Z",
-      "summary": "Creación de la entidad AudioRoute y enriquecimiento del contrato VoiceRepository con ruteo de audio"
+      "summary": "Creación de la entidad AudioRoute y enriquecimiento del contrato VoiceRepository con ruteo de audio",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "16e2b5508c129ad24c2d76c5d2f7fdb4c5edd766",
+      "startedAt": "2026-11-06T21:27:41.947Z",
+      "doneAt": "2026-11-06T21:28:38.215Z",
+      "summary": "Implementación de los casos de uso SetAudioRoute y SetSpeakerOn"
     }
   },
   "pending": {

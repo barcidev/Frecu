@@ -65,7 +65,7 @@ Se aplica Clean Architecture por feature:
   - files: lib/features/room/domain/entities/audio_route.dart, lib/features/room/domain/repositories/voice_repository.dart, test/features/room/domain/entities_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/domain/entities_test.dart
-- [ ] T2: Casos de uso de ruteo de audio (SetAudioRoute, SetSpeakerOn)
+- [x] T2: Casos de uso de ruteo de audio (SetAudioRoute, SetSpeakerOn)
   - files: lib/features/room/domain/usecases/set_audio_route.dart, lib/features/room/domain/usecases/set_speaker_on.dart, lib/features/room/domain/usecases/voice_usecases.dart, test/features/room/domain/audio_route_usecases_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/domain/audio_route_usecases_test.dart
