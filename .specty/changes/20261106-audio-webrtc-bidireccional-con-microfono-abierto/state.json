@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261106-audio-webrtc-bidireccional-con-microfono-abierto",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/audio-webrtc-bidireccional-con-microfono-abierto",
   "baseCommit": "30429030ac8db6db932aed47eb1b98fb540e5b1e",
   "revision": 2,
@@ -47,6 +47,9 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T13:50:03.791Z"
+  "lockedTests": {
+    "test/features/room/data/voice_repository_test.dart": "sha256:af1cfb4d29b36b200a747eeab1b1af079e6ab250093b9e33325a63980dd8d29f",
+    "test/features/room/domain/voice_usecases_test.dart": "sha256:c465c753f5bf64f035c0e013b6689e4853ea7b1ca5df5fb2fa384a4bf0230d51",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:11c6056c3013b3c4b023be52bfc38ad0da6a789f84fe7329a47b5f003f80de92"
+  }
 }
