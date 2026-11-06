@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "20261107-lista-reactiva-de-participantes-e-indicador-de",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/lista-reactiva-de-participantes-e-indicador-de",
+  "baseCommit": "72a8d56739d239ec06dc44d717cbf755581d518e",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 3,
+    "adjust": 0,
+    "reasons": [
+      "3 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:867d5ae9e9036f2f98da61fbd7f4597dd94b364c37d6f1da48c8063d7138e3fa",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:de6b91cdf0c70928732b201fc35261cf9b71bc28f091a6c2138d255834fc0a3a",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:c1120e5c01660d1a4c9a800e9fc37007f8ecc19b9e5dc55b5cf4d009b1e61ee6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 2,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:bbec9b39e3d3954467fa96791d39767a7f09e2588b81d99bf4b85f2861fc0a39",
+    "at": "2026-11-06T20:18:38.659Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
