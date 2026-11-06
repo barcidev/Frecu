@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261106-audio-webrtc-bidireccional-con-microfono-abierto",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/audio-webrtc-bidireccional-con-microfono-abierto",
   "baseCommit": "30429030ac8db6db932aed47eb1b98fb540e5b1e",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:1ac4831f074d2903278574581a18e0bcd4c8fe3b02e9beec717922a6453415ae",
@@ -61,15 +61,15 @@
     },
     "T3": {
       "status": "done",
+      "baseCommit": "b3321a7c7da89dfd5d6e94b201d7ccf3b1904c7f",
+      "attempts": 1,
+      "startedAt": "2026-11-06T14:17:42.408Z",
+      "doneAt": "2026-11-06T14:31:21.860Z",
+      "summary": "Implementar VoiceNotifier, controles de micrófono y badges de habla en RoomPage con pruebas de integración UI",
       "scopeExtra": [
         "lib/features/room/presentation/providers/room_provider.dart",
         "test/features/room/presentation/voice_flow_test.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "b3321a7c7da89dfd5d6e94b201d7ccf3b1904c7f",
-      "startedAt": "2026-11-06T14:17:42.408Z",
-      "doneAt": "2026-11-06T14:31:21.860Z",
-      "summary": "Implementar VoiceNotifier, controles de micrófono y badges de habla en RoomPage con pruebas de integración UI"
+      ]
     }
   },
   "pending": {
@@ -83,6 +83,7 @@
     "R": 1,
     "S": 4
   },
+  "closingSubmittedAt": "2026-11-06T14:34:58.183Z",
   "lockedTests": {
     "test/features/room/data/voice_repository_test.dart": "sha256:36e0a2e9b5635fcef7f22ba6abf6a7ff81c6edd20f5d32f17779189186e10d76",
     "test/features/room/domain/voice_usecases_test.dart": "sha256:5ea01764e5679e577f8b42e1153a711abffcf33a580a04c9e381f93404e94b45",

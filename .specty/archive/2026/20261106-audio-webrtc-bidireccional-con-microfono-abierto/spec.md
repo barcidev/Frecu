@@ -83,3 +83,28 @@ Establecer la transmisión de audio bidireccional punto a punto (WebRTC mesh) en
 ## Riesgos
 
 - R1: El plugin flutter_webrtc puede fallar en entornos headless de pruebas de CI — mitigación: encapsular llamadas nativas tras abstracciones testeables y usar dobles de prueba para RTCPeerConnection en tests unitarios.
+
+## Cierre
+
+### Resumen
+
+Se implementó con éxito la vertical de audio bidireccional WebRTC mesh para Frecu sin internet.
+
+- En la capa de dominio se definieron `TalkMode`, `VoiceRepository` y los casos de uso `StartTalking`, `StopTalking` y `ChangeTalkMode`.
+- En la capa de datos se implementaron `AudioSessionDataSource` (VoIP con altavoz, baja latencia y cancelación de eco), `PeerConnectionDataSource` (WebRTC mesh con `iceServers: []`, bufferización de candidatos ICE tempranos, control de pista de audio y señalización automática de ofertas/respuestas/candidatos e intercambio de `talk_state`) y `VoiceRepositoryImpl`.
+- En la capa de presentación se creó el gestor de estado `VoiceNotifier` con `@riverpod`, se actualizaron los controles de muteo y habla en `RoomPage`, y se añadieron indicadores visuales dinámicos de participantes que están hablando.
+- Todas las pruebas unitarias e integraciones de UI (29/29) pasan satisfactoriamente sin advertencias del analizador.
+
+### Desviaciones
+
+- Se amplió el alcance de T3 para incluir `room_provider.dart` mediante la solicitud de alcance S3, permitiendo compartir la misma instancia singleton de `SignalingClientDataSource` entre `RoomRepository` y `VoiceRepository`.
+
+### Decisiones
+
+- Se configuró la sesión de WebRTC estrictamente con `iceServers: []` para garantizar el funcionamiento off-grid en redes locales WiFi sin dependencias de infraestructura en la nube.
+- La silenciación del micrófono se maneja cambiando `track.enabled = false` y emitiendo el mensaje de señalización `talk_state` sin renegociar la sesión WebRTC, maximizando la eficiencia y evitando re-negociaciones innecesarias de SDP.
+
+### Pendientes
+
+- Integración de botones físicos de volumen para Push-To-Talk en Fase 2.
+- Servicio en segundo plano con `flutter_foreground_task` para mantener la sesión activa con la pantalla apagada.

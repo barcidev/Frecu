@@ -21,3 +21,6 @@
 {"ts":"2026-11-06T14:30:50.512Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"scope.decided","data":{"id":"S4","decision":"approved","unlock":["test/features/room/presentation/voice_flow_test.dart"],"task":"T3"}}
 {"ts":"2026-11-06T14:31:21.796Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter analyze && fvm flutter test","exit":0,"ms":7433,"tree":"sha256:72264a15805b90199a25e9491d8896c7eea37047bbb09f51e684e5c05366359e"}}
 {"ts":"2026-11-06T14:31:21.862Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Implementar VoiceNotifier, controles de micrófono y badges de habla en RoomPage con pruebas de integración UI"}}
+{"ts":"2026-11-06T14:32:17.029Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":2,"delegated":true}}
+{"ts":"2026-11-06T14:34:58.185Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":3,"hash":"sha256:eb158fbce162a9404ebd3b20220d91e541b9286573f28f354b577d59cf4b0a46","size":"L","warnings":0}}
+{"ts":"2026-11-06T14:35:03.065Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
