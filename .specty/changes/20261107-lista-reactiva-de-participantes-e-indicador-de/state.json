@@ -6,6 +6,13 @@
   "branch": "feature/lista-reactiva-de-participantes-e-indicador-de",
   "baseCommit": "72a8d56739d239ec06dc44d717cbf755581d518e",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:bbec9b39e3d3954467fa96791d39767a7f09e2588b81d99bf4b85f2861fc0a39",
+    "at": "2026-11-06T20:18:38.659Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 3,
@@ -39,12 +46,6 @@
     "T": 2,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:bbec9b39e3d3954467fa96791d39767a7f09e2588b81d99bf4b85f2861fc0a39",
-    "at": "2026-11-06T20:18:38.659Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T20:42:03.074Z"
 }
