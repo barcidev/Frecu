@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261107-invitacion-y-escaneo-por-codigo-qr",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/invitacion-y-escaneo-por-codigo-qr",
+  "baseCommit": "4ed616dd21ceb83e1ece9d040d75277bc4d827b2",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos",
+      "2 módulos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f82b523d4bbf23a70d2e50ec8c65a41919353446fe68854726d99415968ff555",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:4b3b998cad50aeee267c2c144d288cf6d6de4ecc73ab51e676697c2b3348a4b5",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:71a342215eba83a1e4fbe03af6f98beaf057d274e54b887a43aff10226d8cb7b",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 5,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:512edd0794fe95e609891cd50666ae67e95118b01afcabc7125225899f106b48",
+    "at": "2026-11-06T16:40:33.150Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
