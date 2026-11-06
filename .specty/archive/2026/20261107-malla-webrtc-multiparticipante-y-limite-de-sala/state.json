@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "id": "20261107-malla-webrtc-multiparticipante-y-limite-de-sala",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/malla-webrtc-multiparticipante-y-limite-de-sala",
+  "baseCommit": "dd92192fcdea287fb6ee7c9cc4ee321d2e384256",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2d32b74f7d264f853b3204e4c3243e9aa557737444ef175850461c9959d8f51d",
+    "at": "2026-11-06T19:19:42.761Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "7 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:0adc32d95a061780e0b8b5be36680be48d5ff837a7403ec69e5ca290026e3d8e",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:75c64e02e657ae00b8bdf3dd45bda98bb51d99064b9e562382f8393e34b29a91",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:71f29840dd10db824de7bc9257f31da967c031943e47e48d9589f1bb350e1974",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "0224bf7824250c0c7d845638a0a1592f422581e5",
+      "attempts": 1,
+      "startedAt": "2026-11-06T19:39:32.077Z",
+      "doneAt": "2026-11-06T19:41:20.720Z",
+      "summary": "Señalización multipar hasta 6 participantes, enrutamiento punto a punto y emisión de rechazo por roomFull",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_server_datasource.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "b6b0aeb8370d51f20eb9e3fc1ffa38ffe12eaab0",
+      "attempts": 1,
+      "startedAt": "2026-11-06T19:41:21.131Z",
+      "doneAt": "2026-11-06T20:00:08.306Z",
+      "summary": "Malla WebRTC multiparticipante para hasta 5 conexiones concurrentes en PeerConnectionDataSource",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/peer_connection_datasource.dart",
+        "test/flutter_test_config.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "409f543abcefd7fb988bfca5ec2594f05edca09e",
+      "attempts": 1,
+      "startedAt": "2026-11-06T20:00:08.907Z",
+      "doneAt": "2026-11-06T20:04:29.207Z",
+      "summary": "Notificación de sala llena en LobbyPage y ScanQrPage mediante FailureLocalization",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 4,
+    "T": 3,
+    "R": 1,
+    "S": 2
+  },
+  "closingSubmittedAt": "2026-11-06T20:11:03.996Z",
+  "lockedTests": {
+    "test/features/room/data/signaling_server_test.dart": "sha256:ce389f883d4cde4af85cde3e28a9b718b586d1b732d826819968f215ca504b1e",
+    "test/features/room/data/voice_repository_test.dart": "sha256:a2886817e5a93089b5ef6e823869798a81b8d15d016d36832649f9c1daa2f296",
+    "test/features/lobby/presentation/room_full_flow_test.dart": "sha256:17d2ec2222e29cceffe0cd9da81c5dac4415157a6d03a928547261c7935aa589",
+    "test/features/room/data/peer_connection_datasource_test.dart": "sha256:47be1620a96f691cee7bc6d58b7efd4caa1a0c846201fb77acce709f03789bef"
+  }
+}

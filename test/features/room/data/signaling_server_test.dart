@@ -168,5 +168,166 @@ void main() {
       await c1Sub.cancel();
       await c2Sub.cancel();
     });
+
+    // AC1
+    test('AC1: handles up to 6 concurrent participants and routes mesh signaling between them', () async {
+      await server.start(accessCode: '1234', host: '127.0.0.1', port: 0);
+      final serverUri = Uri.parse('ws://127.0.0.1:${server.port}');
+
+      final clients = List.generate(6, (_) => SignalingClientDataSource());
+      final peerIds = <String>[];
+
+      for (var i = 0; i < 6; i++) {
+        final client = clients[i];
+        await client.connect(serverUri);
+
+        final welcomeCompleter = Completer<String>();
+        final sub = client.messages.listen((msg) {
+          msg.maybeWhen(
+            welcome: (peerId, participants, _) {
+              expect(participants.length, i + 1);
+              welcomeCompleter.complete(peerId);
+            },
+            orElse: () {},
+          );
+        });
+
+        client.send(
+          SignalingMessage.join(displayName: 'Peer $i', accessCode: '1234'),
+        );
+
+        final peerId = await welcomeCompleter.future.timeout(
+          const Duration(seconds: 3),
+        );
+        peerIds.add(peerId);
+        await sub.cancel();
+      }
+
+      expect(server.participants.length, 6);
+      expect(peerIds.length, 6);
+
+      // Enrutamiento punto a punto de peer 0 a peer 5
+      final c5OfferCompleter = Completer<SignalingOfferMessage>();
+      final c5Sub = clients[5].messages.listen((msg) {
+        msg.maybeWhen(
+          offer: (from, to, sdp, _) => c5OfferCompleter.complete(
+            SignalingOfferMessage(from: from, to: to, sdp: sdp),
+          ),
+          orElse: () {},
+        );
+      });
+
+      clients[0].send(
+        SignalingMessage.offer(
+          from: peerIds[0],
+          to: peerIds[5],
+          sdp: 'offer_mesh_0_to_5',
+        ),
+      );
+
+      final receivedOffer = await c5OfferCompleter.future.timeout(
+        const Duration(seconds: 3),
+      );
+      expect(receivedOffer.from, peerIds[0]);
+      expect(receivedOffer.to, peerIds[5]);
+      expect(receivedOffer.sdp, 'offer_mesh_0_to_5');
+
+      await c5Sub.cancel();
+      for (final c in clients) {
+        await c.dispose();
+      }
+    });
+
+    // AC4
+    test('AC4: rejects 7th participant with roomFull when maxParticipants (6) is reached', () async {
+      await server.start(accessCode: '1234', host: '127.0.0.1', port: 0);
+      final serverUri = Uri.parse('ws://127.0.0.1:${server.port}');
+
+      final clients = List.generate(6, (_) => SignalingClientDataSource());
+      for (var i = 0; i < 6; i++) {
+        final client = clients[i];
+        await client.connect(serverUri);
+
+        final welcomeCompleter = Completer<void>();
+        final sub = client.messages.listen((msg) {
+          msg.maybeWhen(
+            welcome: (_, __, ___) => welcomeCompleter.complete(),
+            orElse: () {},
+          );
+        });
+
+        client.send(
+          SignalingMessage.join(displayName: 'Peer $i', accessCode: '1234'),
+        );
+        await welcomeCompleter.future.timeout(const Duration(seconds: 3));
+        await sub.cancel();
+      }
+
+      expect(server.participants.length, 6);
+
+      final serverMessages = <SignalingMessage>[];
+      final serverSub = server.messages.listen(serverMessages.add);
+
+      // El 7mo cliente intenta unirse y debe ser rechazado con roomFull
+      final client7 = SignalingClientDataSource();
+      await client7.connect(serverUri);
+
+      final rejectedCompleter = Completer<String>();
+      final sub7 = client7.messages.listen((msg) {
+        msg.maybeWhen(
+          rejected: (reason, _) => rejectedCompleter.complete(reason),
+          orElse: () {},
+        );
+      });
+
+      client7.send(
+        const SignalingMessage.join(
+          displayName: 'Intruder7',
+          accessCode: '1234',
+        ),
+      );
+
+      final reason = await rejectedCompleter.future.timeout(
+        const Duration(seconds: 3),
+      );
+      expect(reason, 'roomFull');
+      expect(serverMessages.whereType<SignalingRejectedMessage>().length, 1);
+
+      await sub7.cancel();
+      await client7.dispose();
+      await serverSub.cancel();
+
+      // Si uno sale, otro puede unirse
+      await clients[0].dispose();
+      await pumpEventQueue();
+
+      final client8 = SignalingClientDataSource();
+      await client8.connect(serverUri);
+
+      final welcome8Completer = Completer<void>();
+      final sub8 = client8.messages.listen((msg) {
+        msg.maybeWhen(
+          welcome: (_, __, ___) => welcome8Completer.complete(),
+          orElse: () {},
+        );
+      });
+
+      client8.send(
+        const SignalingMessage.join(
+          displayName: 'ReplacementPeer',
+          accessCode: '1234',
+        ),
+      );
+
+      await welcome8Completer.future.timeout(const Duration(seconds: 3));
+      expect(server.participants.length, 6);
+
+      await sub8.cancel();
+      await client8.dispose();
+
+      for (var i = 1; i < 6; i++) {
+        await clients[i].dispose();
+      }
+    });
   });
 }

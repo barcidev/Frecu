@@ -23,6 +23,10 @@ class MockRoomRepository extends Mock implements RoomRepository {}
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  setUpAll(() {
+    LocaleSettings.setLocale(AppLocale.es);
+  });
+
   group('Room presentation and UI flow', () {
     late MockRoomRepository repository;
 
@@ -37,7 +41,6 @@ void main() {
 
     setUp(() {
       repository = MockRoomRepository();
-      LocaleSettings.setLocale(AppLocale.es);
     });
 
     Widget createTestApp(AppRouter router) {
@@ -175,5 +178,58 @@ void main() {
 
       verify(() => repository.leaveRoom()).called(1);
     });
+
+    // AC3
+    testWidgets(
+      'AC3: RoomPage updates reactive participant list and counter when peer leaves',
+      (tester) async {
+        final participantsController =
+            StreamController<List<Participant>>.broadcast();
+        when(() => repository.watchParticipants())
+            .thenAnswer((_) => participantsController.stream);
+        when(() => repository.watchStatus())
+            .thenAnswer((_) => Stream.value(const RoomStatus.connected()));
+
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+
+        // Initially 2 participants
+        participantsController.add([
+          const Participant(
+            id: 'host-1',
+            displayName: 'HostAlice',
+            isHost: true,
+          ),
+          const Participant(id: 'peer-2', displayName: 'Bob'),
+        ]);
+        await tester.pumpAndSettle();
+
+        expect(find.text('HostAlice'), findsOneWidget);
+        expect(find.text('Bob'), findsOneWidget);
+        expect(find.text('Anfitrión'), findsOneWidget);
+        expect(find.text('Participantes (2/6)'), findsOneWidget);
+
+        // Peer leaves (peer_left)
+        participantsController.add([
+          const Participant(
+            id: 'host-1',
+            displayName: 'HostAlice',
+            isHost: true,
+          ),
+        ]);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Bob'), findsNothing);
+        expect(find.text('HostAlice'), findsOneWidget);
+        expect(find.text('Participantes (1/6)'), findsOneWidget);
+
+        await participantsController.close();
+      },
+    );
   });
 }

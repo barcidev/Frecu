@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
@@ -76,6 +77,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     final participantsAsync = ref.watch(roomParticipantsProvider);
     final statusAsync = ref.watch(roomStatusProvider);
     final voiceState = ref.watch(voiceNotifierProvider);
+    final participantsCount = participantsAsync.value?.length ?? 0;
 
     return Scaffold(
       appBar: _buildAppBar(context, room),
@@ -86,10 +88,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           children: [
             _RoomInfoCard(room: room, statusAsync: statusAsync),
             const SizedBox(height: 12),
-            Text(
-              t.room.participants,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            _ParticipantsHeader(count: participantsCount),
             const SizedBox(height: 8),
             Expanded(
               child: _ParticipantsList(
@@ -199,6 +198,26 @@ class _RoomInfoCard extends StatelessWidget {
   }
 }
 
+class _ParticipantsHeader extends StatelessWidget {
+  const _ParticipantsHeader({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '${t.room.participants} ($count/${NetworkConstants.maxParticipants})',
+          key: const Key('participants_header'),
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ],
+    );
+  }
+}
+
 class _ParticipantsList extends StatelessWidget {
   const _ParticipantsList({
     required this.participantsAsync,
@@ -220,31 +239,110 @@ class _ParticipantsList extends StatelessWidget {
           itemBuilder: (context, index) {
             final p = participants[index];
             final isSpeaking = p.isSpeaking || speakingPeers.contains(p.id);
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundColor: isSpeaking ? Colors.green.shade100 : null,
-                child: Icon(
-                  isSpeaking
-                      ? Icons.volume_up
-                      : (p.isHost ? Icons.star : Icons.person),
-                  color: isSpeaking ? Colors.green.shade800 : null,
-                  size: 18,
-                ),
-              ),
-              title: Text(p.displayName),
-              subtitle: isSpeaking
-                  ? Text(
-                      t.room.speaking,
-                      style: const TextStyle(color: Colors.green),
-                    )
-                  : null,
-              trailing: p.isHost ? Chip(label: Text(t.room.host)) : null,
-            );
+            return _ParticipantTile(participant: p, isSpeaking: isSpeaking);
           },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(child: Text('Error: $e')),
+    );
+  }
+}
+
+class _ParticipantTile extends StatelessWidget {
+  const _ParticipantTile({required this.participant, required this.isSpeaking});
+
+  final Participant participant;
+  final bool isSpeaking;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isHost = participant.isHost;
+
+    return Card(
+      key: Key('participant_tile_${participant.id}'),
+      elevation: isSpeaking ? 3 : 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: isSpeaking
+            ? BorderSide(color: theme.colorScheme.primary, width: 2)
+            : BorderSide.none,
+      ),
+      child: ListTile(
+        leading: _ParticipantAvatar(
+          participantId: participant.id,
+          isSpeaking: isSpeaking,
+          isHost: isHost,
+        ),
+        title: Text(
+          participant.displayName,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: isSpeaking ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        subtitle: isSpeaking
+            ? Text(
+                t.room.speaking,
+                style: TextStyle(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            : null,
+        trailing: isHost
+            ? Chip(
+                avatar: const Icon(Icons.star, size: 14),
+                label: Text(t.room.host),
+                backgroundColor: theme.colorScheme.secondaryContainer,
+              )
+            : null,
+      ),
+    );
+  }
+}
+
+class _ParticipantAvatar extends StatelessWidget {
+  const _ParticipantAvatar({
+    required this.participantId,
+    required this.isSpeaking,
+    required this.isHost,
+  });
+
+  final String participantId;
+  final bool isSpeaking;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AnimatedContainer(
+      key: isSpeaking ? Key('speaking_indicator_$participantId') : null,
+      duration: const Duration(milliseconds: 300),
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isSpeaking ? theme.colorScheme.primary : Colors.transparent,
+          width: 2,
+        ),
+      ),
+      child: CircleAvatar(
+        backgroundColor: isSpeaking
+            ? theme.colorScheme.primaryContainer
+            : (isHost
+                  ? theme.colorScheme.secondaryContainer
+                  : theme.colorScheme.surfaceContainerHighest),
+        child: Icon(
+          isSpeaking ? Icons.volume_up : (isHost ? Icons.star : Icons.person),
+          color: isSpeaking
+              ? theme.colorScheme.primary
+              : (isHost
+                    ? theme.colorScheme.onSecondaryContainer
+                    : theme.colorScheme.onSurfaceVariant),
+          size: 20,
+        ),
+      ),
     );
   }
 }

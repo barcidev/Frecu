@@ -29,6 +29,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(TalkMode.openMic);
+    LocaleSettings.setLocale(AppLocale.es);
   });
 
   group('Voice UI and mic controls', () {
@@ -45,14 +46,11 @@ void main() {
       speakingPeersController = StreamController<Set<String>>.broadcast();
       talkModeController = StreamController<TalkMode>.broadcast();
 
-      LocaleSettings.setLocale(AppLocale.es);
-
       when(() => roomRepository.watchStatus())
           .thenAnswer((_) => Stream.value(const RoomStatus.connected()));
       when(() => roomRepository.watchParticipants()).thenAnswer(
-        (_) => Stream.value([
-          const Participant(id: 'peer-2', displayName: 'Bob', isSpeaking: true),
-        ]),
+        (_) =>
+            Stream.value([const Participant(id: 'peer-2', displayName: 'Bob')]),
       );
 
       when(() => voiceRepository.initializeAudio())
@@ -111,6 +109,46 @@ void main() {
       expect(find.text(t.room.openMic), findsOneWidget);
       expect(find.byIcon(Icons.mic), findsOneWidget);
     });
+
+    // AC2
+    testWidgets(
+      'AC2: RoomPage activates speaking indicator and subtitle when participant speaks',
+      (tester) async {
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Bob'), findsOneWidget);
+        expect(
+          find.byKey(const Key('speaking_indicator_peer-2')),
+          findsNothing,
+        );
+
+        // Remote peer starts speaking
+        speakingPeersController.add({'peer-2'});
+        await tester.pumpAndSettle();
+
+        expect(
+          find.byKey(const Key('speaking_indicator_peer-2')),
+          findsOneWidget,
+        );
+        expect(find.byIcon(Icons.volume_up), findsOneWidget);
+        expect(find.text(t.room.speaking), findsWidgets);
+
+        // Remote peer stops speaking
+        speakingPeersController.add({});
+        await tester.pumpAndSettle();
+
+        expect(
+          find.byKey(const Key('speaking_indicator_peer-2')),
+          findsNothing,
+        );
+        expect(find.byIcon(Icons.volume_up), findsNothing);
+      },
+    );
 
     // AC3
     testWidgets('AC3: RoomPage allows muting mic and updates talk status', (
