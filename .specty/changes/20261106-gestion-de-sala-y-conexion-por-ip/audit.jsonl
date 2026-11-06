@@ -1,0 +1,3 @@
+{"ts":"2026-11-06T11:03:18.256Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/gestion-de-sala-y-conexion-por-ip","epic":"20261106-prueba-de-concepto-de-audio","slice":"C2"}}
+{"ts":"2026-11-06T11:04:29.593Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d","size":"L","warnings":0}}
+{"ts":"2026-11-06T11:04:35.176Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d","channel":"delegated","delegated":true}}

@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "20261106-gestion-de-sala-y-conexion-por-ip",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/gestion-de-sala-y-conexion-por-ip",
+  "baseCommit": "09ba8eef2de152db33e771bee4afa264c90f6375",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "12 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:7cc17378b647ddbf730092070db1a0c0bc75ea5e1436785018b69b070a8f04eb",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:717033bb64158381112ecb4a2e4ad91929285e33910bbb4be68832eb9b6ce3dc",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:4c6eb7770f72768d0711eee57671584c574615ee73432cffac98c2af74b082c1",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d",
+    "at": "2026-11-06T11:04:35.150Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
