@@ -6,6 +6,13 @@
   "branch": "feature/descubrimiento-local-mdns-y-codigo-de-acceso",
   "baseCommit": "1bb8589a32b2c137cc92c20a72f50fe42a4396de",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:3a46963176538452575519f0a0094dc658f81bb87252dabfe667784b6bf90056",
+    "at": "2026-11-06T14:51:27.777Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 16,
@@ -41,12 +48,6 @@
     "T": 3,
     "R": 1
   },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:3a46963176538452575519f0a0094dc658f81bb87252dabfe667784b6bf90056",
-    "at": "2026-11-06T14:51:27.777Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T14:52:41.128Z"
 }
