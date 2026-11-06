@@ -67,7 +67,7 @@ Permitir a los participantes descubrir automáticamente las frecus activas en la
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/lobby/domain/discovery_usecases_test.dart
   - type: build
-- [ ] T2: Implementar MdnsDataSource y DiscoveryRepositoryImpl con pruebas.
+- [x] T2: Implementar MdnsDataSource y DiscoveryRepositoryImpl con pruebas.
   - files: lib/features/lobby/data/datasources/mdns_datasource.dart, lib/features/lobby/data/repositories/discovery_repository_impl.dart, test/features/lobby/data/discovery_repository_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/lobby/data/discovery_repository_test.dart

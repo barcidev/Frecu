@@ -40,15 +40,26 @@
   "tasks": {
     "T1": {
       "status": "done",
+      "baseCommit": "f92a5f88c0b4084a2301fc92584783b3a20e16db",
+      "attempts": 1,
+      "startedAt": "2026-11-06T14:52:53.022Z",
+      "doneAt": "2026-11-06T15:25:37.150Z",
+      "summary": "Configurar dependencia nsd, entidad NearbyRoom, contrato DiscoveryRepository y casos de uso con pruebas",
       "scopeExtra": [
         ".flutter-plugins-dependencies",
         "test/features/lobby/domain/discovery_usecases_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/lobby/data/discovery_repository_test.dart"
       ],
       "attempts": 1,
-      "baseCommit": "f92a5f88c0b4084a2301fc92584783b3a20e16db",
-      "startedAt": "2026-11-06T14:52:53.022Z",
-      "doneAt": "2026-11-06T15:25:37.150Z",
-      "summary": "Configurar dependencia nsd, entidad NearbyRoom, contrato DiscoveryRepository y casos de uso con pruebas"
+      "baseCommit": "d0efbaf4085bbe540485167781bf983291a81dcb",
+      "startedAt": "2026-11-06T15:25:37.889Z",
+      "doneAt": "2026-11-06T15:42:51.195Z",
+      "summary": "Implementar MdnsDataSource y DiscoveryRepositoryImpl con pruebas"
     }
   },
   "pending": {
@@ -60,10 +71,10 @@
     "AC": 3,
     "T": 3,
     "R": 1,
-    "S": 2
+    "S": 3
   },
   "lockedTests": {
-    "test/features/lobby/data/discovery_repository_test.dart": "sha256:135fecc6b2a157a44febfc9ae8951d4ab2c0741145c5efe6c5055d63c346fc2b",
+    "test/features/lobby/data/discovery_repository_test.dart": "sha256:91d4225809e27dd8ac600c4a8784a71d4481b69d7d128bf5a2c48be775b54861",
     "test/features/lobby/domain/discovery_usecases_test.dart": "sha256:08f695c9ab7b2e1557f4612d859fb422cee42da0b14c33ed4037428e328b0960",
     "test/features/lobby/presentation/discovery_flow_test.dart": "sha256:0c0991de4b3ce7de28a6c0a605059c80f01f2b6a21d80783b41824b96c66a482"
   }
