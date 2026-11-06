@@ -53,3 +53,25 @@ Permitir a los participantes encontrar y unirse a salas activas (frecus) en la m
 ## Riesgos
 
 - R1: Algunos routers o hotspots móviles aíslan a los clientes o bloquean el tráfico multicast DNS (mDNS) — mitigación: el código QR actúa como mecanismo de respaldo infalible con conexión directa punto a punto por IP.
+
+## Cierre
+
+### Resumen
+
+Se completó en su totalidad la épica de **Fase 2: Descubrimiento y unión** a través de sus dos cortes verticales planificados:
+- **Corte C1 (Descubrimiento local mDNS y código de acceso)**: Anuncio automático del servicio `_frecu._tcp` con atributos TXT (`roomId`, `name`, `v`), descubrimiento reactivo en `LobbyPage` mediante Stream de `NearbyRoom`, y unión protegida por PIN de 4 dígitos.
+- **Corte C2 (Invitación y escaneo por código QR)**: Generación del código QR de invitación con formato URI `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>` accesible desde la barra superior de `RoomPage`, y escaneo autónomo en `ScanQrPage` mediante `mobile_scanner` con parseo y unión automática sin introducción manual de IP ni PIN.
+- Toda la funcionalidad fue cubierta con pruebas unitarias y de widget en Flutter (41 pruebas en total pasando exitosamente) y 0 advertencias de análisis estático con `very_good_analysis`.
+
+### Desviaciones
+
+- Ninguna sobre la arquitectura ni sobre el alcance comprometido. Los dos cortes se entregaron siguiendo estrictamente la especificación y el diseño Clean Architecture previsto.
+
+### Decisiones
+
+- **Respaldo con QR**: El escaneo de QR funciona como mecanismo infalible de unión en redes locales donde el punto de acceso WiFi o Hotspot bloquee paquetes multicast mDNS.
+- **Privacidad del código de acceso en mDNS**: El código PIN no se incluye en los registros TXT de mDNS públicos; se solicita interactivamente al usuario en el lobby al seleccionar la sala descubierta, o se autocompleta de manera segura si se escanea el QR físico de la sala.
+
+### Pendientes
+
+- **Fase 3 (Topología mesh para hasta 6 participantes)**: Extender la señalización y conexiones WebRTC de topología 1-a-1 a una malla completa (mesh) de hasta 6 participantes conectados concurrentemente.

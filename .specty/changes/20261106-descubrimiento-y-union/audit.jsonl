@@ -1,3 +1,0 @@
-{"ts":"2026-11-06T14:44:53.992Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"epic","type":"feat","branch":"feature/descubrimiento-y-union","resolves":["P7"],"request":"pasemos a la fase 2"}}
-{"ts":"2026-11-06T14:45:53.814Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48","size":"S","warnings":0}}
-{"ts":"2026-11-06T14:45:59.595Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48","channel":"delegated","delegated":true}}

@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261106-descubrimiento-y-union",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/descubrimiento-y-union",
   "baseCommit": "1bb8589a32b2c137cc92c20a72f50fe42a4396de",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48",
+    "at": "2026-11-06T14:45:59.581Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -39,11 +46,5 @@
     "C": 2,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48",
-    "at": "2026-11-06T14:45:59.581Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  }
+  "closingSubmittedAt": "2026-11-06T19:03:12.529Z"
 }

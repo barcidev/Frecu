@@ -1,0 +1,7 @@
+{"ts":"2026-11-06T14:44:53.992Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"epic","type":"feat","branch":"feature/descubrimiento-y-union","resolves":["P7"],"request":"pasemos a la fase 2"}}
+{"ts":"2026-11-06T14:45:53.814Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48","size":"S","warnings":0}}
+{"ts":"2026-11-06T14:45:59.595Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48","channel":"delegated","delegated":true}}
+{"ts":"2026-11-06T19:00:27.450Z","actor":"specty","event":"epic.slicesDone","data":{"slices":{"C1":"20261106-descubrimiento-local-mdns-y-codigo-de-acceso","C2":"20261107-invitacion-y-escaneo-por-codigo-qr"}}}
+{"ts":"2026-11-06T19:00:35.775Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":1,"delegated":true}}
+{"ts":"2026-11-06T19:03:12.531Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:5f36f457d1f6c6079ded226aecb517142368af3cac673509313a15f1df0a6037","size":"S","warnings":0}}
+{"ts":"2026-11-06T19:03:17.728Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
