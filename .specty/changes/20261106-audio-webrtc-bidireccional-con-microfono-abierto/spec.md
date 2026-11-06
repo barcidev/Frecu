@@ -74,7 +74,7 @@ Establecer la transmisión de audio bidireccional punto a punto (WebRTC mesh) en
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/data/voice_repository_test.dart
   - type: feat
-- [ ] T3: Proveedores de Riverpod (VoiceNotifier), controles en RoomPage y pruebas de interfaz de habla.
+- [x] T3: Proveedores de Riverpod (VoiceNotifier), controles en RoomPage y pruebas de interfaz de habla.
   - files: lib/features/room/presentation/providers/voice_provider.dart, lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/voice_flow_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter analyze && fvm flutter test

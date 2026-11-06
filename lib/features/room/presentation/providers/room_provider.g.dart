@@ -8,6 +8,58 @@ part of 'room_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Cliente de señalización WebSocket compartido.
+
+@ProviderFor(signalingClient)
+final signalingClientProvider = SignalingClientProvider._();
+
+/// Cliente de señalización WebSocket compartido.
+
+final class SignalingClientProvider
+    extends
+        $FunctionalProvider<
+          SignalingClientDataSource,
+          SignalingClientDataSource,
+          SignalingClientDataSource
+        >
+    with $Provider<SignalingClientDataSource> {
+  /// Cliente de señalización WebSocket compartido.
+  SignalingClientProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'signalingClientProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$signalingClientHash();
+
+  @$internal
+  @override
+  $ProviderElement<SignalingClientDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SignalingClientDataSource create(Ref ref) {
+    return signalingClient(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SignalingClientDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SignalingClientDataSource>(value),
+    );
+  }
+}
+
+String _$signalingClientHash() => r'52ee2a32cec51314ad03c66a3b98970915a38929';
+
 /// Proveedor global singleton del repositorio de sala.
 
 @ProviderFor(roomRepository)
@@ -52,7 +104,7 @@ final class RoomRepositoryProvider
   }
 }
 
-String _$roomRepositoryHash() => r'3921103a3ede6ad8a191b1be957565d9408b93db';
+String _$roomRepositoryHash() => r'02958fd9b7b773443ecf40bebf22a589a46468cc';
 
 /// Stream de los participantes de la sala activa.
 

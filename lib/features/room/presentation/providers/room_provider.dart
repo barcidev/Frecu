@@ -12,11 +12,19 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'room_provider.g.dart';
 
+/// Cliente de señalización WebSocket compartido.
+@Riverpod(keepAlive: true)
+SignalingClientDataSource signalingClient(Ref ref) {
+  final client = SignalingClientDataSource();
+  ref.onDispose(client.dispose);
+  return client;
+}
+
 /// Proveedor global singleton del repositorio de sala.
 @Riverpod(keepAlive: true)
 RoomRepository roomRepository(Ref ref) {
   final server = SignalingServerDataSource();
-  final client = SignalingClientDataSource();
+  final client = ref.watch(signalingClientProvider);
   final repository = RoomRepositoryImpl(
     serverDataSource: server,
     clientDataSource: client,
