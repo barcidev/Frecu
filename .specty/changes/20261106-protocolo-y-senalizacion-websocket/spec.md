@@ -56,7 +56,7 @@ Implementar la infraestructura de señalización local para la prueba de concept
   - ac: AC1
   - verify: fvm flutter pub get && fvm flutter test test/features/room/domain/entities_test.dart
   - type: build
-- [ ] T2: Implementar modelo SignalingMessage con Freezed y pruebas de serialización JSON.
+- [x] T2: Implementar modelo SignalingMessage con Freezed y pruebas de serialización JSON.
   - files: lib/features/room/data/models/signaling_message.dart, test/features/room/data/signaling_message_test.dart
   - ac: AC1
   - verify: fvm dart run build_runner build -d && fvm flutter test test/features/room/data/signaling_message_test.dart

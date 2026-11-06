@@ -35,6 +35,11 @@
   "tasks": {
     "T1": {
       "status": "done",
+      "baseCommit": "9aa7fd551c78b86c6aa67cafbef24fcd2efabc58",
+      "attempts": 1,
+      "startedAt": "2026-11-06T10:04:42.165Z",
+      "doneAt": "2026-11-06T10:13:18.000Z",
+      "summary": "Configurar dependencias en pubspec.yaml y entidades de dominio de Room con tests unitarios",
       "scopeExtra": [
         "lib/features/room/domain/entities/participant.freezed.dart",
         "lib/features/room/domain/entities/participant.g.dart",
@@ -42,12 +47,19 @@
         "lib/features/room/domain/entities/room.g.dart",
         "lib/features/room/domain/entities/room_status.freezed.dart",
         "test/features/room/domain/entities_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/room/data/signaling_message_test.dart",
+        "test/features/room/data/signaling_server_test.dart"
       ],
       "attempts": 1,
-      "baseCommit": "9aa7fd551c78b86c6aa67cafbef24fcd2efabc58",
-      "startedAt": "2026-11-06T10:04:42.165Z",
-      "doneAt": "2026-11-06T10:13:18.000Z",
-      "summary": "Configurar dependencias en pubspec.yaml y entidades de dominio de Room con tests unitarios"
+      "baseCommit": "b1147654eaad7436e6aef4e2379500b5e29df77e",
+      "startedAt": "2026-11-06T10:13:18.899Z",
+      "doneAt": "2026-11-06T10:37:30.150Z",
+      "summary": "Implementar SignalingMessage con Freezed union serializable para todos los tipos de mensaje del protocolo y pruebas unitarias"
     }
   },
   "pending": {
@@ -59,10 +71,10 @@
     "AC": 1,
     "T": 3,
     "R": 1,
-    "S": 2
+    "S": 3
   },
   "lockedTests": {
-    "test/features/room/data/signaling_message_test.dart": "sha256:12019a721ff959b5ddf6a9e8f17e067db26ee8da8616b29e45dae56e6ee18462",
+    "test/features/room/data/signaling_message_test.dart": "sha256:967ad7f8194c3d45200dce52daa71cb6ad44f31573aabc69ee8947ce43ec16a1",
     "test/features/room/data/signaling_server_test.dart": "sha256:cdc35f3537a196b9d792b0596702c4a285fa995d7cb666f8b091f9deb316484e",
     "test/features/room/domain/entities_test.dart": "sha256:4e4c3108f652952b32174cbf50c0761212d6c61b102fd88d23a2a56571e0a134"
   }
