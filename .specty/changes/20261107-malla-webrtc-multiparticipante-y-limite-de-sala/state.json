@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-malla-webrtc-multiparticipante-y-limite-de-sala",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/malla-webrtc-multiparticipante-y-limite-de-sala",
   "baseCommit": "dd92192fcdea287fb6ee7c9cc4ee321d2e384256",
   "revision": 1,
@@ -47,6 +47,10 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T19:39:22.980Z"
+  "lockedTests": {
+    "test/features/room/data/signaling_server_test.dart": "sha256:ce389f883d4cde4af85cde3e28a9b718b586d1b732d826819968f215ca504b1e",
+    "test/features/room/data/voice_repository_test.dart": "sha256:a2886817e5a93089b5ef6e823869798a81b8d15d016d36832649f9c1daa2f296",
+    "test/features/lobby/presentation/room_full_flow_test.dart": "sha256:17d2ec2222e29cceffe0cd9da81c5dac4415157a6d03a928547261c7935aa589",
+    "test/features/room/data/peer_connection_datasource_test.dart": "sha256:47be1620a96f691cee7bc6d58b7efd4caa1a0c846201fb77acce709f03789bef"
+  }
 }
