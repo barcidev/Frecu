@@ -61,7 +61,7 @@ Implementar la infraestructura de señalización local para la prueba de concept
   - ac: AC1
   - verify: fvm dart run build_runner build -d && fvm flutter test test/features/room/data/signaling_message_test.dart
   - type: feat
-- [ ] T3: Implementar SignalingServerDataSource, SignalingClientDataSource y pruebas de integración de servidor/cliente WebSocket.
+- [x] T3: Implementar SignalingServerDataSource, SignalingClientDataSource y pruebas de integración de servidor/cliente WebSocket.
   - files: lib/features/room/data/datasources/signaling_server_datasource.dart, lib/features/room/data/datasources/signaling_client_datasource.dart, test/features/room/data/signaling_server_test.dart
   - ac: AC1
   - verify: fvm flutter analyze && fvm flutter test

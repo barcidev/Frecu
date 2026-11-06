@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signaling_message.freezed.dart';
 part 'signaling_message.g.dart';

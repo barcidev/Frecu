@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261106-protocolo-y-senalizacion-websocket",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/protocolo-y-senalizacion-websocket",
   "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
   "revision": 1,
@@ -51,15 +51,28 @@
     },
     "T2": {
       "status": "done",
+      "baseCommit": "b1147654eaad7436e6aef4e2379500b5e29df77e",
+      "attempts": 1,
+      "startedAt": "2026-11-06T10:13:18.899Z",
+      "doneAt": "2026-11-06T10:37:30.150Z",
+      "summary": "Implementar SignalingMessage con Freezed union serializable para todos los tipos de mensaje del protocolo y pruebas unitarias",
       "scopeExtra": [
+        "test/features/room/data/signaling_message_test.dart",
+        "test/features/room/data/signaling_server_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/data/models/signaling_message.dart",
         "test/features/room/data/signaling_message_test.dart",
         "test/features/room/data/signaling_server_test.dart"
       ],
       "attempts": 1,
-      "baseCommit": "b1147654eaad7436e6aef4e2379500b5e29df77e",
-      "startedAt": "2026-11-06T10:13:18.899Z",
-      "doneAt": "2026-11-06T10:37:30.150Z",
-      "summary": "Implementar SignalingMessage con Freezed union serializable para todos los tipos de mensaje del protocolo y pruebas unitarias"
+      "baseCommit": "08c04142e847ebf542e2c5d1a8964aff1bc59cbf",
+      "startedAt": "2026-11-06T10:37:30.492Z",
+      "doneAt": "2026-11-06T11:01:29.250Z",
+      "summary": "Implementar SignalingServerDataSource, SignalingClientDataSource y pruebas de integración de servidor/cliente WebSocket"
     }
   },
   "pending": {
@@ -71,11 +84,11 @@
     "AC": 1,
     "T": 3,
     "R": 1,
-    "S": 3
+    "S": 5
   },
   "lockedTests": {
-    "test/features/room/data/signaling_message_test.dart": "sha256:967ad7f8194c3d45200dce52daa71cb6ad44f31573aabc69ee8947ce43ec16a1",
-    "test/features/room/data/signaling_server_test.dart": "sha256:cdc35f3537a196b9d792b0596702c4a285fa995d7cb666f8b091f9deb316484e",
+    "test/features/room/data/signaling_message_test.dart": "sha256:45207f38a5fe0f4dfe0fff59d6027311031fb5633cd4b7d0bee9c2a85925b63c",
+    "test/features/room/data/signaling_server_test.dart": "sha256:34d0d4a843b17162076d169b2e651b15636e05ac12c7f7e2881edd0f481e9cb1",
     "test/features/room/domain/entities_test.dart": "sha256:4e4c3108f652952b32174cbf50c0761212d6c61b102fd88d23a2a56571e0a134"
   }
 }

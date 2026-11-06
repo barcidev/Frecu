@@ -18,7 +18,6 @@ void main() {
       const join = SignalingMessage.join(
         displayName: 'Bob',
         accessCode: '1234',
-        protocolVersion: 1,
       );
       expect(join.toJson()['type'], 'join');
       expect(roundTrip(join), join);
