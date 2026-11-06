@@ -39,14 +39,25 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "test/features/room/domain/usecases_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "7626b301aa80679090f1e86637649f5553c95b17",
+      "attempts": 1,
       "startedAt": "2026-11-06T11:07:04.092Z",
       "doneAt": "2026-11-06T11:15:16.050Z",
-      "summary": "Contratos de dominio RoomRepository y casos de uso CreateRoom, JoinRoom y LeaveRoom con pruebas unitarias"
+      "summary": "Contratos de dominio RoomRepository y casos de uso CreateRoom, JoinRoom y LeaveRoom con pruebas unitarias",
+      "scopeExtra": [
+        "test/features/room/domain/usecases_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/room/data/room_repository_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "89354dee505b669c64485586d192505a9780a1be",
+      "startedAt": "2026-11-06T11:15:16.455Z",
+      "doneAt": "2026-11-06T12:47:26.435Z",
+      "summary": "Implementar RoomRepositoryImpl con resolución de IP local y tests de integración de WebSocket"
     }
   },
   "pending": {
@@ -58,10 +69,10 @@
     "AC": 3,
     "T": 3,
     "R": 1,
-    "S": 1
+    "S": 2
   },
   "lockedTests": {
-    "test/features/room/data/room_repository_test.dart": "sha256:8f133e4a3e23717517743cb59d63ccd036b949633c2d13842ead721cd6cc55ba",
+    "test/features/room/data/room_repository_test.dart": "sha256:b1416ee04abe91f6ad3f9bf18130cd8a2f4d1f88e4ecbd945ccfd8222e0c48cc",
     "test/features/room/domain/usecases_test.dart": "sha256:8cc11d6e4d8ef8c397e1c6f5bc7c62a81050ab492429011b9aa451ccbbe04244",
     "test/features/room/presentation/room_flow_test.dart": "sha256:0fc549f081348bbffb4fe4b069ea34232abea37b105d457ae265e7a61ab7aa81"
   }

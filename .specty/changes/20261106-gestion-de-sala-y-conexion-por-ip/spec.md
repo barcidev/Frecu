@@ -61,7 +61,7 @@ Permitir que el usuario anfitrión cree una frecu viendo su dirección IP local 
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/domain/usecases_test.dart
   - type: feat
-- [ ] T2: Implementación de RoomRepositoryImpl con resolución de IP local y tests de integración.
+- [x] T2: Implementación de RoomRepositoryImpl con resolución de IP local y tests de integración.
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_repository_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/data/room_repository_test.dart
