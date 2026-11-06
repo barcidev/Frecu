@@ -67,3 +67,27 @@ Habilitar la topología de malla WebRTC completa (mesh) de hasta 6 participantes
 ## Riesgos
 
 - R1: La topología de malla WebRTC con 6 nodos requiere N*(N-1)/2 = 15 conexiones bidireccionales en total — mitigación: audio mono sin video a bajo bitrate y cancelación de eco de hardware reduce el consumo de CPU y memoria.
+
+## Cierre
+
+### Resumen
+
+Se completó con éxito el corte C1 (Malla WebRTC multiparticipante y límite de sala) para conversaciones de voz en red local sin internet:
+
+- Se verificó y consolidó el servidor de señalización `SignalingServerDataSource` para la gestión de hasta 6 participantes concurrentes, enrutando ofertas, respuestas e ICE entre pares múltiples y emitiendo el rechazo estricto con motivo `roomFull` al intentar unirse un 7mo participante.
+- Se consolidó la gestión concurrente de hasta 5 `RTCPeerConnection`s simultáneas por cliente en `PeerConnectionDataSource` y `VoiceRepositoryImpl` para formar una malla WebRTC completa.
+- Se implementó la extensión de presentación `FailureLocalization` para mapear fallas del dominio a mensajes localizados legibles, integrándola en `LobbyPage` y `ScanQrPage` para presentar la notificación amigable de sala llena (`t.errors.roomFull`).
+- Las 46 pruebas del conjunto (unitarias y de UI) pasan satisfactoriamente con 0 advertencias de `flutter analyze`.
+
+### Desviaciones
+
+- Se ampliaron los alcances S1 y S2 para incluir `signaling_server_datasource.dart` y `peer_connection_datasource.dart`, junto con `test/flutter_test_config.dart` para configuración del arnés de pruebas.
+
+### Decisiones
+
+- Las fallas se exponen en la interfaz a través de la extensión `FailureLocalization` manteniendo la capa de `domain` pura y libre de dependencias de Flutter o Slang.
+- La emisión de `rejected` en `SignalingServerDataSource` se envía tanto al canal WebSocket del cliente rechazado como al stream local `messages` para observabilidad y pruebas.
+
+### Pendientes
+
+- Corte C2: Lista reactiva de participantes e indicador de habla en tiempo real en `RoomPage`.

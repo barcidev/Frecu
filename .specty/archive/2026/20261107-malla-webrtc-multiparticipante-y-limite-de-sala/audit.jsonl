@@ -17,3 +17,6 @@
 {"ts":"2026-11-06T20:00:08.917Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T3","baseCommit":"409f543abcefd7fb988bfca5ec2594f05edca09e"}}
 {"ts":"2026-11-06T20:04:29.124Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter test test/features/lobby/presentation/room_full_flow_test.dart","exit":0,"ms":3562,"tree":"sha256:4bbcebc1b0d492cd8ef2bca8eae139b6e0ad297e36dc6c12963caa817489947e"}}
 {"ts":"2026-11-06T20:04:29.209Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Notificación de sala llena en LobbyPage y ScanQrPage mediante FailureLocalization"}}
+{"ts":"2026-11-06T20:11:03.996Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:ed8805250edc2c29f4d6ac529acde178c1df0e95cd866695df0e3efc9d7672ab","size":"M","warnings":0}}
+{"ts":"2026-11-06T20:11:12.191Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":2,"delegated":true}}
+{"ts":"2026-11-06T20:11:12.260Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}

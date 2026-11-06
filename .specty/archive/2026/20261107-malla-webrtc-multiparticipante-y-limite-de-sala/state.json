@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-malla-webrtc-multiparticipante-y-limite-de-sala",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/malla-webrtc-multiparticipante-y-limite-de-sala",
   "baseCommit": "dd92192fcdea287fb6ee7c9cc4ee321d2e384256",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:2d32b74f7d264f853b3204e4c3243e9aa557737444ef175850461c9959d8f51d",
@@ -62,12 +62,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "409f543abcefd7fb988bfca5ec2594f05edca09e",
+      "attempts": 1,
       "startedAt": "2026-11-06T20:00:08.907Z",
       "doneAt": "2026-11-06T20:04:29.207Z",
-      "summary": "Notificación de sala llena en LobbyPage y ScanQrPage mediante FailureLocalization"
+      "summary": "Notificación de sala llena en LobbyPage y ScanQrPage mediante FailureLocalization",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -81,6 +81,7 @@
     "R": 1,
     "S": 2
   },
+  "closingSubmittedAt": "2026-11-06T20:11:03.996Z",
   "lockedTests": {
     "test/features/room/data/signaling_server_test.dart": "sha256:ce389f883d4cde4af85cde3e28a9b718b586d1b732d826819968f215ca504b1e",
     "test/features/room/data/voice_repository_test.dart": "sha256:a2886817e5a93089b5ef6e823869798a81b8d15d016d36832649f9c1daa2f296",
