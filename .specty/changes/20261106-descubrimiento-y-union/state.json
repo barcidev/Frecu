@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261106-descubrimiento-y-union",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/descubrimiento-y-union",
+  "baseCommit": "1bb8589a32b2c137cc92c20a72f50fe42a4396de",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:502d1ac59c3a2b20ae403f60f85227bbd988752d720a71e312b30cc8e5bddfe3",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:98e4c7d48c42b1ca0cdbae87acdd456ac7f52bb38183166daf74c0a4a0f90f95",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:383a84cb7c2dba0c9d3c8bbe79ea0764050d76880abcc0c81ea035e412f7256f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 5,
+    "C": 2,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:36a41c57e60b21629e878097dcf407f7253cf1ccd498cf38624c2c2623d18e48",
+    "at": "2026-11-06T14:45:59.581Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
