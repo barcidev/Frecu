@@ -39,14 +39,25 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "test/features/room/domain/voice_usecases_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "1ab9138ccef85cb6f6a87d376ec9657ec13fdf8f",
+      "attempts": 1,
       "startedAt": "2026-11-06T13:50:13.113Z",
       "doneAt": "2026-11-06T14:02:49.788Z",
-      "summary": "Configurar dependencias en pubspec.yaml, TalkMode, VoiceRepository y casos de uso con pruebas unitarias"
+      "summary": "Configurar dependencias en pubspec.yaml, TalkMode, VoiceRepository y casos de uso con pruebas unitarias",
+      "scopeExtra": [
+        "test/features/room/domain/voice_usecases_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/room/data/voice_repository_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "3ea957b29f4e138a0d6ac24d3358dbe6974e04a5",
+      "startedAt": "2026-11-06T14:02:50.586Z",
+      "doneAt": "2026-11-06T14:17:41.479Z",
+      "summary": "Implementar datasources de AudioSession, PeerConnection y VoiceRepositoryImpl con pruebas"
     }
   },
   "pending": {
@@ -58,10 +69,10 @@
     "AC": 3,
     "T": 3,
     "R": 1,
-    "S": 1
+    "S": 2
   },
   "lockedTests": {
-    "test/features/room/data/voice_repository_test.dart": "sha256:af1cfb4d29b36b200a747eeab1b1af079e6ab250093b9e33325a63980dd8d29f",
+    "test/features/room/data/voice_repository_test.dart": "sha256:36e0a2e9b5635fcef7f22ba6abf6a7ff81c6edd20f5d32f17779189186e10d76",
     "test/features/room/domain/voice_usecases_test.dart": "sha256:5ea01764e5679e577f8b42e1153a711abffcf33a580a04c9e381f93404e94b45",
     "test/features/room/presentation/voice_flow_test.dart": "sha256:11c6056c3013b3c4b023be52bfc38ad0da6a789f84fe7329a47b5f003f80de92"
   }

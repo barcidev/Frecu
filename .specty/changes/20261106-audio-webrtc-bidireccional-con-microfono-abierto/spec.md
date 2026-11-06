@@ -69,7 +69,7 @@ Establecer la transmisión de audio bidireccional punto a punto (WebRTC mesh) en
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/domain/voice_usecases_test.dart
   - type: build
-- [ ] T2: Implementar datasources de AudioSession, PeerConnection y VoiceRepositoryImpl con pruebas.
+- [x] T2: Implementar datasources de AudioSession, PeerConnection y VoiceRepositoryImpl con pruebas.
   - files: lib/features/room/data/datasources/audio_session_datasource.dart, lib/features/room/data/datasources/peer_connection_datasource.dart, lib/features/room/data/repositories/voice_repository_impl.dart, test/features/room/data/voice_repository_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/data/voice_repository_test.dart
