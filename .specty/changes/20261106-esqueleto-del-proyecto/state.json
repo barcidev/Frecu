@@ -6,6 +6,13 @@
   "branch": "feature/esqueleto-del-proyecto",
   "baseCommit": "1ec7aabe718e7a3019230e986728fea38dd66b38",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:fc168ec9c69abacb684505b312884b718ce4436943c2c64fcc093d2b9a505867",
+    "at": "2026-11-06T08:32:12.098Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "ui"
+  },
   "size": {
     "level": "M",
     "score": 10,
@@ -41,12 +48,6 @@
     "T": 3,
     "R": 1
   },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:fc168ec9c69abacb684505b312884b718ce4436943c2c64fcc093d2b9a505867",
-    "at": "2026-11-06T08:32:12.098Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "ui"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T08:36:22.541Z"
 }
