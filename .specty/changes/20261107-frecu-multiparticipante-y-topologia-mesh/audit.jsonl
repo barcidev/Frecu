@@ -1,3 +1,0 @@
-{"ts":"2026-11-06T19:07:34.736Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"epic","type":"feat","branch":"feature/frecu-multiparticipante-y-topologia-mesh","resolves":["P12","P8"]}}
-{"ts":"2026-11-06T19:08:29.934Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:24c0e86e6813f3901df9310ef31382cb7db4716d2c5c4588fe46f4c7d6554dc9","size":"S","warnings":0}}
-{"ts":"2026-11-06T19:09:02.910Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:24c0e86e6813f3901df9310ef31382cb7db4716d2c5c4588fe46f4c7d6554dc9","channel":"delegated","delegated":true}}

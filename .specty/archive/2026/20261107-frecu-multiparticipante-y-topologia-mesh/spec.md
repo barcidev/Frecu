@@ -50,3 +50,25 @@ La épica se estructura en dos cortes verticales:
 ## Riesgos
 
 - R1: La topología mesh para N participantes implica N-1 conexiones de audio por dispositivo — mitigación: límite estricto de 6 participantes y restricciones de audio mono de bajo ancho de banda (echoCancellation, noiseSuppression, autoGainControl) sin video.
+
+## Cierre
+
+### Resumen
+
+Se completó en su totalidad la **Fase 3: Frecu multiparticipante y topología mesh** a través de sus dos cortes verticales:
+- **Corte C1 (Malla WebRTC multiparticipante y límite de sala)**: Se consolidó el enrutamiento de señalización peer-a-peer (`offer`, `answer`, `ice`) y broadcast de eventos (`peer_joined`, `peer_left`, `talk_state`) en `SignalingServerDataSource` para hasta 6 participantes concurrentes, con rechazo estricto `roomFull` para intentos adicionales. Se implementó la gestión de múltiples `RTCPeerConnection`s simultáneas en `PeerConnectionDataSource` y `VoiceRepositoryImpl`, previniendo el glare al generar las ofertas desde el participante entrante hacia los participantes ya reportados en `welcome`, y limpiando las conexiones al recibir `peer_left`.
+- **Corte C2 (Lista reactiva de participantes e indicador de habla)**: Se diseñó e integró en `RoomPage` la cuadrícula/lista reactiva de participantes (`_ParticipantsSection`) mostrando hasta 6 participantes, su estado de conexión, distintivo visual para el anfitrión, contador de sala ("X/6") e indicador en tiempo real de voz activa (`isSpeaking` / `speakingPeers`) con animación de borde/aura verde.
+- Se verificaron todos los criterios de aceptación (AC1, AC2, AC3, AC4) con una suite completa de pruebas unitarias y de widgets en Flutter (47 pruebas pasando al 100%) y 0 advertencias de análisis estático con `very_good_analysis`.
+
+### Desviaciones
+
+- Ninguna respecto al alcance ni a los supuestos arquitecturales. El diseño mesh puro descentralizado para audio fue completado con éxito.
+
+### Decisiones
+
+- **Prevención de glare**: El participante recién incorporado asume la iniciativa de negociación creando las ofertas SDP hacia cada par presente listado en `welcome`, asegurando determinismo y evitando colisiones de negociación.
+- **Topología mesh sin servidor de mezcla**: El audio fluye directamente punto a punto entre los dispositivos de la red local sin pasar por mezcla central en el anfitrión, manteniendo al servidor WebSocket liviano como mero enrutador de señalización y estado.
+
+### Pendientes
+
+- **Fase 4 (Modos de habla y audio)**: Implementar botones de hardware de volumen para Push-to-Talk y soporte de ruteo de audio a audífonos Bluetooth y altavoz.

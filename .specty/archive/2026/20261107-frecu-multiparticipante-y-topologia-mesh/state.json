@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261107-frecu-multiparticipante-y-topologia-mesh",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/frecu-multiparticipante-y-topologia-mesh",
   "baseCommit": "dd92192fcdea287fb6ee7c9cc4ee321d2e384256",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:24c0e86e6813f3901df9310ef31382cb7db4716d2c5c4588fe46f4c7d6554dc9",
+    "at": "2026-11-06T19:09:02.884Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -39,11 +46,5 @@
     "C": 2,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:24c0e86e6813f3901df9310ef31382cb7db4716d2c5c4588fe46f4c7d6554dc9",
-    "at": "2026-11-06T19:09:02.884Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  }
+  "closingSubmittedAt": "2026-11-06T20:57:30.452Z"
 }
