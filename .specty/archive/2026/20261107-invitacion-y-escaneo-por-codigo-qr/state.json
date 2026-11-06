@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "id": "20261107-invitacion-y-escaneo-por-codigo-qr",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/invitacion-y-escaneo-por-codigo-qr",
+  "baseCommit": "4ed616dd21ceb83e1ece9d040d75277bc4d827b2",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:512edd0794fe95e609891cd50666ae67e95118b01afcabc7125225899f106b48",
+    "at": "2026-11-06T16:40:33.150Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos",
+      "2 módulos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f82b523d4bbf23a70d2e50ec8c65a41919353446fe68854726d99415968ff555",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:4b3b998cad50aeee267c2c144d288cf6d6de4ecc73ab51e676697c2b3348a4b5",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:71a342215eba83a1e4fbe03af6f98beaf057d274e54b887a43aff10226d8cb7b",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "2872e7d82d78b0e71a18a8b774bbada809161c84",
+      "attempts": 1,
+      "startedAt": "2026-11-06T16:44:24.967Z",
+      "doneAt": "2026-11-06T17:17:19.805Z",
+      "summary": "Configuradas dependencias qr_flutter y mobile_scanner, entidad RoomInvite y casos de uso BuildInviteQr y ParseInviteFromQr con pruebas unitarias pasando.",
+      "scopeExtra": [
+        "lib/features/room/domain/entities/room_invite.freezed.dart",
+        "lib/features/room/domain/entities/room_invite.g.dart",
+        "test/features/room/domain/invite_qr_usecases_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "c64ecd119283770ac1d1148efb18a2ce330421cd",
+      "attempts": 1,
+      "startedAt": "2026-11-06T17:17:20.206Z",
+      "doneAt": "2026-11-06T18:16:45.570Z",
+      "summary": "Implementado botón de código QR en AppBar de RoomPage y diálogo _InviteQrDialog con visualización de QrImageView y formato frecu://join con pruebas de widget pasando.",
+      "scopeExtra": [
+        "test/features/room/presentation/invite_qr_dialog_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "be72de25c995db9080f422c1a5c381a7955f3073",
+      "attempts": 1,
+      "startedAt": "2026-11-06T18:16:46.601Z",
+      "doneAt": "2026-11-06T18:58:58.136Z",
+      "summary": "Implementado escaneo con mobile_scanner en ScanQrPage, parseo de URI frecu://join y navegación automática con unión a la sala tras verificación completa de análisis y pruebas.",
+      "scopeExtra": [
+        "test/features/lobby/presentation/scan_qr_page_test.dart",
+        "lib/features/lobby/presentation/pages/lobby_page.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 5,
+    "T": 3,
+    "R": 1,
+    "S": 6
+  },
+  "closingSubmittedAt": "2026-11-06T18:59:37.294Z",
+  "lockedTests": {
+    "test/features/lobby/presentation/scan_qr_page_test.dart": "sha256:d9021884c1728d1692cba75e2af2ce093bb247ee81c2e8e9c2dce512d87d7d13",
+    "test/features/room/domain/invite_qr_usecases_test.dart": "sha256:f6abd70f29bf035377e8700c7af3026bf2f7e1e2d64f4a68f4ca0ccc2334f0d8",
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:ca42ae3186a7d311d6be70bdc1fbe29cd0e632a3ef33a5e981cdb0b2e3a24d67"
+  }
+}
