@@ -58,7 +58,7 @@ Permitir al anfitrión generar y mostrar un código QR de invitación con los pa
 
 ## Tareas
 
-- [ ] T1: Dependencias, entidad RoomInvite y casos de uso BuildInviteQr y ParseInviteFromQr con pruebas unitarias.
+- [x] T1: Dependencias, entidad RoomInvite y casos de uso BuildInviteQr y ParseInviteFromQr con pruebas unitarias.
   - files: pubspec.yaml, lib/features/room/domain/entities/room_invite.dart, lib/features/room/domain/usecases/build_invite_qr.dart, lib/features/lobby/domain/usecases/parse_invite_from_qr.dart, test/features/room/domain/invite_qr_usecases_test.dart
   - ac: AC4, AC5
   - verify: fvm flutter test test/features/room/domain/invite_qr_usecases_test.dart
