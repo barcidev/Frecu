@@ -50,7 +50,7 @@ Proporcionar a los usuarios de una frecu activa una visualización clara y react
   - files: lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC3
   - verify: fvm flutter test test/features/room/presentation/room_flow_test.dart
-- [ ] T2: Indicador y animación de habla en tiempo real para participantes
+- [x] T2: Indicador y animación de habla en tiempo real para participantes
   - files: lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/voice_flow_test.dart
   - ac: AC2
   - verify: fvm flutter test test/features/room/presentation/voice_flow_test.dart
