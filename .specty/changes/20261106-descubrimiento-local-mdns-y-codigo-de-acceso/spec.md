@@ -72,7 +72,7 @@ Permitir a los participantes descubrir automáticamente las frecus activas en la
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/lobby/data/discovery_repository_test.dart
   - type: feat
-- [ ] T3: Proveedores de Riverpod, integración en LobbyPage y manejo de PIN con pruebas UI.
+- [x] T3: Proveedores de Riverpod, integración en LobbyPage y manejo de PIN con pruebas UI.
   - files: lib/features/lobby/presentation/providers/discovery_provider.dart, lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/room/presentation/pages/create_room_page.dart, test/features/lobby/presentation/discovery_flow_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter analyze && fvm flutter test

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -46,6 +47,11 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
 
     switch (result) {
       case Success(:final data):
+        unawaited(
+          ref
+              .read(discoveryRepositoryProvider)
+              .publishRoom(roomId: data.id, name: data.name, port: data.port),
+        );
         unawaited(context.router.replace(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
         ScaffoldMessenger.of(context)
