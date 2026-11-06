@@ -62,7 +62,7 @@ Permitir a los participantes descubrir automáticamente las frecus activas en la
 
 ## Tareas
 
-- [ ] T1: Configurar dependencia nsd, entidad NearbyRoom, contrato DiscoveryRepository y casos de uso con pruebas.
+- [x] T1: Configurar dependencia nsd, entidad NearbyRoom, contrato DiscoveryRepository y casos de uso con pruebas.
   - files: pubspec.yaml, lib/features/lobby/domain/entities/nearby_room.dart, lib/features/lobby/domain/repositories/discovery_repository.dart, lib/features/lobby/domain/usecases/discovery_usecases.dart, test/features/lobby/domain/discovery_usecases_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/lobby/domain/discovery_usecases_test.dart
