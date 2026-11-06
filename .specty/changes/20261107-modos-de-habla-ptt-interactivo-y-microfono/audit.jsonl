@@ -1,0 +1,3 @@
+{"ts":"2026-11-06T23:13:16.338Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/modos-de-habla-ptt-interactivo-y-microfono","epic":"20261107-modos-de-habla-y-ruteo-de-audio","slice":"C2"}}
+{"ts":"2026-11-06T23:36:18.279Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:1ccf606a306e89dd58f515bef64804436e4fa416b033a09dc76ead413c984388","size":"L","warnings":0}}
+{"ts":"2026-11-06T23:36:23.301Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:1ccf606a306e89dd58f515bef64804436e4fa416b033a09dc76ead413c984388","channel":"delegated","delegated":true}}

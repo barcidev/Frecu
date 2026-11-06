@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261107-modos-de-habla-ptt-interactivo-y-microfono",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/modos-de-habla-ptt-interactivo-y-microfono",
+  "baseCommit": "865389242bb880ea33e5242f1e719c3612cfcb86",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "11 archivos",
+      "2 módulos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:5e156396c3f65d15abebb2256dace883b8024dd3ce64b05dcd25d458de6d405c",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:83bd8a4a98d5dc3136ccc2696e480fe28858dee7caa070bc8d67d6a150bff1b2",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:6409e865747f8250a57e3f616af480ba7506704bd4e1ad36b32654bf3d1a5f41",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 4,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1ccf606a306e89dd58f515bef64804436e4fa416b033a09dc76ead413c984388",
+    "at": "2026-11-06T23:36:23.286Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
