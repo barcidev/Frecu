@@ -55,7 +55,7 @@ Habilitar la topología de malla WebRTC completa (mesh) de hasta 6 participantes
   - files: test/features/room/data/signaling_server_test.dart
   - ac: AC1, AC4
   - verify: fvm flutter test test/features/room/data/signaling_server_test.dart
-- [ ] T2: Malla WebRTC multiparticipante (hasta 5 conexiones simultáneas) en PeerConnectionDataSource y VoiceRepository
+- [x] T2: Malla WebRTC multiparticipante (hasta 5 conexiones simultáneas) en PeerConnectionDataSource y VoiceRepository
   - files: test/features/room/data/peer_connection_datasource_test.dart, test/features/room/data/voice_repository_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/data/peer_connection_datasource_test.dart test/features/room/data/voice_repository_test.dart

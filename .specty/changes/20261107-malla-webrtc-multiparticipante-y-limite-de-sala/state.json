@@ -39,14 +39,26 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "lib/features/room/data/datasources/signaling_server_datasource.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "0224bf7824250c0c7d845638a0a1592f422581e5",
+      "attempts": 1,
       "startedAt": "2026-11-06T19:39:32.077Z",
       "doneAt": "2026-11-06T19:41:20.720Z",
-      "summary": "Señalización multipar hasta 6 participantes, enrutamiento punto a punto y emisión de rechazo por roomFull"
+      "summary": "Señalización multipar hasta 6 participantes, enrutamiento punto a punto y emisión de rechazo por roomFull",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_server_datasource.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/peer_connection_datasource.dart",
+        "test/flutter_test_config.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "b6b0aeb8370d51f20eb9e3fc1ffa38ffe12eaab0",
+      "startedAt": "2026-11-06T19:41:21.131Z",
+      "doneAt": "2026-11-06T20:00:08.306Z",
+      "summary": "Malla WebRTC multiparticipante para hasta 5 conexiones concurrentes en PeerConnectionDataSource"
     }
   },
   "pending": {
@@ -58,7 +70,7 @@
     "AC": 4,
     "T": 3,
     "R": 1,
-    "S": 1
+    "S": 2
   },
   "lockedTests": {
     "test/features/room/data/signaling_server_test.dart": "sha256:ce389f883d4cde4af85cde3e28a9b718b586d1b732d826819968f215ca504b1e",
