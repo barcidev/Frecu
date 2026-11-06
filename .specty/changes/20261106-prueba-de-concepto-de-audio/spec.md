@@ -23,24 +23,28 @@ Implementar la Fase 1 de Frecu: prueba de concepto de voz grupal offline entre d
 
 ## Criterios de aceptación
 
-- AC1: CUANDO el anfitrión crea una sala ENTONCES se inicia el servidor WebSocket de señalización en el puerto 47800 y se muestra su dirección IP local para permitir la conexión.
-- AC2: CUANDO un participante introduce la IP del anfitrión y solicita unirse ENTONCES el cliente WebSocket se conecta, valida el protocolo con mensajes `join`/`welcome` y la sala queda en estado `connected` con ambos participantes.
+- AC1: CUANDO el anfitrión inicia la sala ENTONCES se ejecuta el servidor WebSocket de señalización en el puerto 47800 y responde a los mensajes de protocolo local.
+- AC2: CUANDO un participante introduce la IP del anfitrión y solicita unirse ENTONCES el cliente WebSocket se conecta, valida el protocolo con mensajes `join`/`welcome` y la interfaz refleja el estado conectado de ambos participantes.
 - AC3: CUANDO ambos dispositivos se encuentran conectados en la sala ENTONCES se negocia una conexión WebRTC punto a punto con pistas de audio locales y se establece transmisión bidireccional en modo micrófono abierto.
 - AC4: CUANDO un participante o el anfitrión decide salir de la sala ENTONCES se cierran limpiamente las conexiones WebRTC, los WebSockets y se liberan las sesiones de audio.
 
 ## Diseño
 
-- La épica se divide en dos cortes verticales:
-  1. **C1 (Señalización y sala)**: Dominio de Room, DTOs de señalización, servidor Shelf WebSocket en anfitrión, cliente WebSocket con loopback para anfitrión, y UI para crear sala o unirse por IP manual con lista de participantes y estados de conexión.
-  2. **C2 (Audio WebRTC bidireccional)**: Conexión RTCPeerConnection mesh offline (`iceServers: []`), configuración de `audio_session` (categoría `playAndRecord`, modo `voiceChat`), negociación de SDP/ICE vía señalización existente, y captura/reproducción de micrófono abierto.
+- La épica se divide en tres cortes verticales de tamaño controlado:
+  1. **C1 (Protocolo y señalización WebSocket)**: Entidades base de Room, DTOs de señalización Freezed, servidor Shelf WebSocket y cliente WebSocket con loopback para anfitrión.
+  2. **C2 (Gestión de sala y conexión por IP)**: Repositorio de sala, notifiers de Riverpod y pantallas de anfitrión/participante para crear sala con IP visible o unirse ingresando IP a mano.
+  3. **C3 (Audio WebRTC bidireccional)**: Conexión RTCPeerConnection mesh offline (`iceServers: []`), `audio_session` en modo voiceChat, negociación SDP/ICE y transmisión con micrófono abierto.
 
 ## Cortes
 
-- C1: Señalización WebSocket y gestión de sala
-  - ac: AC1, AC2
-- C2: Audio WebRTC bidireccional con micrófono abierto
-  - ac: AC3, AC4
+- C1: Protocolo y señalización WebSocket
+  - ac: AC1
+- C2: Gestión de sala y conexión por IP
+  - ac: AC2
   - depends: C1
+- C3: Audio WebRTC bidireccional con micrófono abierto
+  - ac: AC3, AC4
+  - depends: C2
 
 ## Riesgos
 

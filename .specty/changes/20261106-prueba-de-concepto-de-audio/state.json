@@ -5,7 +5,14 @@
   "phase": "implementing",
   "branch": "feature/prueba-de-concepto-de-audio-2",
   "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:6fdefbc96a49f760fe65d73ae4c3107367629730e89b6395c769dbd847f1a14c",
+    "at": "2026-11-06T10:00:43.595Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -36,14 +43,7 @@
   "maxIds": {
     "A": 3,
     "AC": 4,
-    "C": 2,
+    "C": 3,
     "R": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:b1387e781ad0dc87ba56a4c49530df62db9e825cc551ec735fc9df57fcc84e42",
-    "at": "2026-11-06T09:49:06.816Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
