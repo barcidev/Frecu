@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-lista-reactiva-de-participantes-e-indicador-de",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/lista-reactiva-de-participantes-e-indicador-de",
   "baseCommit": "72a8d56739d239ec06dc44d717cbf755581d518e",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:bbec9b39e3d3954467fa96791d39767a7f09e2588b81d99bf4b85f2861fc0a39",
@@ -47,12 +47,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "11eab25ca3bb5961587a3100fc775eeb185623a2",
+      "attempts": 1,
       "startedAt": "2026-11-06T20:51:19.544Z",
       "doneAt": "2026-11-06T20:53:27.154Z",
-      "summary": "Indicador y animación de habla en tiempo real para participantes"
+      "summary": "Indicador y animación de habla en tiempo real para participantes",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -65,6 +65,7 @@
     "T": 2,
     "R": 1
   },
+  "closingSubmittedAt": "2026-11-06T20:54:37.703Z",
   "lockedTests": {
     "test/features/room/presentation/room_flow_test.dart": "sha256:a6c433302fac41e8c65c85a5aa42b12681da0564d43826c9c308498175829c63",
     "test/features/room/presentation/voice_flow_test.dart": "sha256:de5e6065b3b35f342db5dc1d76e2f9d9369dcbd63f6c711dd7b6b8fcdb6fc643"

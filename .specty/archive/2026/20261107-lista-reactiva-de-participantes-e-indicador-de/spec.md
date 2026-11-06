@@ -58,3 +58,27 @@ Proporcionar a los usuarios de una frecu activa una visualización clara y react
 ## Riesgos
 
 - R1: Parpadeos visuales al cambiar rápidamente el estado de habla (talk_state) — mitigación: uso de transiciones suaves con AnimatedContainer y estado derivado eficiente en memoria sin recreaciones innecesarias de árbol de widgets.
+
+## Cierre
+
+### Resumen
+
+Se completó con éxito el corte C2 (Lista reactiva de participantes e indicador de habla) de la épica de multiparticipante y topología mesh:
+
+- Se implementaron componentes de interfaz reactivos en `RoomPage` (`_ParticipantsHeader`, `_ParticipantsList`, `_ParticipantTile` y `_ParticipantAvatar`), reflejando la ocupación de sala con contador explícito `(${participants.length}/${NetworkConstants.maxParticipants})` y distinguiendo visualmente al anfitrión de la sala con un badge con icono de estrella.
+- Se integró el indicador de habla animado en tiempo real en los avatares y tarjetas de participantes con transiciones suaves (`AnimatedContainer`), icono de volumen y subtítulo localizado `t.room.speaking`, sincronizándose de forma reactiva con el conjunto de `speakingPeers` y el estado del micrófono.
+- Se verificó que las listas y contadores se actualizan dinámicamente tanto al unirse nuevos pares (`peer_joined`) como al desconectarse o abandonar la sala (`peer_left`).
+- Todo el conjunto de pruebas del proyecto (48 pruebas unitarias y de integración UI) pasa con éxito y sin advertencias en `flutter analyze`.
+
+### Desviaciones
+
+- Ninguna. La implementación siguió puntualmente el diseño y las tareas planificadas.
+
+### Decisiones
+
+- Se separaron los widgets privados en componentes pequeños (`_ParticipantsHeader`, `_ParticipantsList`, `_ParticipantTile`, `_ParticipantAvatar`), manteniendo la complejidad ciclomática de cada método por debajo de 5 y su extensión menor a 40 líneas.
+- La reactividad de los participantes e indicador de habla se desacopló apoyándose en los providers ya establecidos `roomParticipantsProvider` y `voiceNotifierProvider`, evitando efectos secundarios imperativos o mutaciones de estado manuales.
+
+### Pendientes
+
+- La épica `20261107-frecu-multiparticipante-y-topologia-mesh` completa con este corte sus dos slices planificados (C1 y C2).

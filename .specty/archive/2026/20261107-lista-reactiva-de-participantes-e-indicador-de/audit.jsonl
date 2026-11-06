@@ -9,3 +9,6 @@
 {"ts":"2026-11-06T20:51:19.545Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T2","baseCommit":"11eab25ca3bb5961587a3100fc775eeb185623a2"}}
 {"ts":"2026-11-06T20:53:27.153Z","actor":"specty","event":"task.verified","data":{"task":"T2","cmd":"fvm flutter test test/features/room/presentation/voice_flow_test.dart","exit":0,"ms":6371,"tree":"sha256:59d2777b02e6860eb7dcbdca73c08fa47374447b1289928f2c8b256229d2a619"}}
 {"ts":"2026-11-06T20:53:27.155Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T2","summary":"Indicador y animación de habla en tiempo real para participantes"}}
+{"ts":"2026-11-06T20:54:37.703Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:9c14283ebb65d4b66c97a47079e6b186aeee80914fa96640d04560a888bfd8d0","size":"S","warnings":0}}
+{"ts":"2026-11-06T20:55:05.477Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":2,"delegated":true}}
+{"ts":"2026-11-06T20:55:05.532Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
