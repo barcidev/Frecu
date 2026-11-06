@@ -1,0 +1,4 @@
+{"ts":"2026-11-06T14:46:08.121Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/descubrimiento-local-mdns-y-codigo-de-acceso","epic":"20261106-descubrimiento-y-union","slice":"C1"}}
+{"ts":"2026-11-06T14:47:09.445Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:4c27b2575e3ceaa82b7ea671b9c7f3e74c5247b61e2b449399e13e6033ac37a3","size":"L","warnings":1}}
+{"ts":"2026-11-06T14:51:21.010Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:3a46963176538452575519f0a0094dc658f81bb87252dabfe667784b6bf90056","size":"L","warnings":0}}
+{"ts":"2026-11-06T14:51:27.816Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":2,"hash":"sha256:3a46963176538452575519f0a0094dc658f81bb87252dabfe667784b6bf90056","channel":"delegated","delegated":true}}

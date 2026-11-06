@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261106-descubrimiento-local-mdns-y-codigo-de-acceso",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/descubrimiento-local-mdns-y-codigo-de-acceso",
+  "baseCommit": "1bb8589a32b2c137cc92c20a72f50fe42a4396de",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 16,
+    "adjust": 0,
+    "reasons": [
+      "12 archivos",
+      "2 módulos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:08420656ea341f9fa4fa6c5bfe98e3377557fd81a5dc7a525e3d3f53a050564f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:d19350dc5ef644e12b255426d9c8404e1a67c569f699fa470cd8222566978465",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:06c8105614e68e8c26cd1efbec6f72022e4b14c16bedeba07a3fc0a5fb829736",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:3a46963176538452575519f0a0094dc658f81bb87252dabfe667784b6bf90056",
+    "at": "2026-11-06T14:51:27.777Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
