@@ -46,7 +46,7 @@ Proporcionar a los usuarios de una frecu activa una visualización clara y react
 
 ## Tareas
 
-- [ ] T1: Componentes de UI reactivos en RoomPage con contador de ocupación y distintivo de anfitrión
+- [x] T1: Componentes de UI reactivos en RoomPage con contador de ocupación y distintivo de anfitrión
   - files: lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC3
   - verify: fvm flutter test test/features/room/presentation/room_flow_test.dart

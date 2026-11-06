@@ -35,7 +35,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "c14cedbaa55de33c12656a9d73328e97e5858842",
+      "startedAt": "2026-11-06T20:48:32.475Z",
+      "doneAt": "2026-11-06T20:51:19.071Z",
+      "summary": "Componentes de UI reactivos en RoomPage con contador de ocupación y distintivo de anfitrión"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
