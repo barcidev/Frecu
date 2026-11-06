@@ -124,18 +124,51 @@ class RoomRouteArgs {
 
 /// generated route for
 /// [_i5.ScanQrPage]
-class ScanQrRoute extends _i7.PageRouteInfo<void> {
-  const ScanQrRoute({List<_i7.PageRouteInfo>? children})
-    : super(ScanQrRoute.name, initialChildren: children);
+class ScanQrRoute extends _i7.PageRouteInfo<ScanQrRouteArgs> {
+  ScanQrRoute({
+    _i8.Key? key,
+    _i5.ScannerWidgetBuilder? scannerBuilder,
+    List<_i7.PageRouteInfo>? children,
+  }) : super(
+         ScanQrRoute.name,
+         args: ScanQrRouteArgs(key: key, scannerBuilder: scannerBuilder),
+         initialChildren: children,
+       );
 
   static const String name = 'ScanQrRoute';
 
   static _i7.PageInfo page = _i7.PageInfo(
     name,
     builder: (data) {
-      return const _i5.ScanQrPage();
+      final args = data.argsAs<ScanQrRouteArgs>(
+        orElse: () => const ScanQrRouteArgs(),
+      );
+      return _i5.ScanQrPage(key: args.key, scannerBuilder: args.scannerBuilder);
     },
   );
+}
+
+class ScanQrRouteArgs {
+  const ScanQrRouteArgs({this.key, this.scannerBuilder});
+
+  final _i8.Key? key;
+
+  final _i5.ScannerWidgetBuilder? scannerBuilder;
+
+  @override
+  String toString() {
+    return 'ScanQrRouteArgs{key: $key, scannerBuilder: $scannerBuilder}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ScanQrRouteArgs) return false;
+    return key == other.key && scannerBuilder == other.scannerBuilder;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ scannerBuilder.hashCode;
 }
 
 /// generated route for

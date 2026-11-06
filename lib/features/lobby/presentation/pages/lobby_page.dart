@@ -64,7 +64,7 @@ class LobbyPage extends ConsumerWidget {
             OutlinedButton.icon(
               icon: const Icon(Icons.qr_code_scanner),
               label: Text(t.lobby.scanQr),
-              onPressed: () => context.router.push(const ScanQrRoute()),
+              onPressed: () => context.router.push(ScanQrRoute()),
             ),
             const SizedBox(height: 24),
             Text(

@@ -68,7 +68,7 @@ Permitir al anfitrión generar y mostrar un código QR de invitación con los pa
   - ac: AC4
   - verify: fvm flutter test test/features/room/presentation/invite_qr_dialog_test.dart
   - type: feat
-- [ ] T3: Escáner de QR en ScanQrPage con unión automática a la sala y verificación completa.
+- [x] T3: Escáner de QR en ScanQrPage con unión automática a la sala y verificación completa.
   - files: lib/features/lobby/presentation/pages/scan_qr_page.dart, test/features/lobby/presentation/scan_qr_page_test.dart
   - ac: AC5
   - verify: fvm flutter analyze && fvm flutter test
