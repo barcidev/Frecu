@@ -179,6 +179,48 @@ void main() {
       },
     );
 
+    // AC1
+    test('AC1: welcome message with multiple existing participants creates offers to all peers', () async {
+      final pcDataSource = createPeerConnectionDataSource();
+      final repository = createRepository(pcDataSource);
+
+      await repository.initializeAudio();
+
+      const participants = [
+        Participant(id: 'peer_1', displayName: 'P1', isHost: true),
+        Participant(id: 'peer_2', displayName: 'P2'),
+        Participant(id: 'peer_3', displayName: 'P3'),
+        Participant(id: 'peer_4', displayName: 'P4'),
+        Participant(id: 'peer_5', displayName: 'P5'),
+      ];
+
+      signalingStreamController.add(
+        const SignalingMessage.welcome(
+          peerId: 'peer_6',
+          participants: participants,
+        ),
+      );
+
+      await pumpEventQueue();
+
+      final offerMsgs = sentMessages
+          .whereType<SignalingOfferMessage>()
+          .toList();
+      expect(offerMsgs.length, 5);
+      expect(offerMsgs.map((m) => m.to).toSet(), {
+        'peer_1',
+        'peer_2',
+        'peer_3',
+        'peer_4',
+        'peer_5',
+      });
+      for (final msg in offerMsgs) {
+        expect(msg.from, 'peer_6');
+      }
+
+      await repository.dispose();
+    });
+
     // AC2
     test(
       'AC2: startTalking enables audio track and sends talk_state true',
