@@ -6,6 +6,13 @@
   "branch": "feature/modos-de-habla-ptt-interactivo-y-microfono",
   "baseCommit": "865389242bb880ea33e5242f1e719c3612cfcb86",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1ccf606a306e89dd58f515bef64804436e4fa416b033a09dc76ead413c984388",
+    "at": "2026-11-06T23:36:23.286Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 14,
@@ -41,12 +48,6 @@
     "T": 4,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:1ccf606a306e89dd58f515bef64804436e4fa416b033a09dc76ead413c984388",
-    "at": "2026-11-06T23:36:23.286Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T23:47:29.590Z"
 }
