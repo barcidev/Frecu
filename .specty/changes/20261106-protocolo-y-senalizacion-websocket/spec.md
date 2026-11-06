@@ -51,7 +51,7 @@ Implementar la infraestructura de señalización local para la prueba de concept
 
 ## Tareas
 
-- [ ] T1: Configurar dependencias en pubspec.yaml y entidades de dominio de Room con pruebas unitarias.
+- [x] T1: Configurar dependencias en pubspec.yaml y entidades de dominio de Room con pruebas unitarias.
   - files: pubspec.yaml, lib/features/room/domain/entities/participant.dart, lib/features/room/domain/entities/room.dart, lib/features/room/domain/entities/room_status.dart, test/features/room/domain/entities_test.dart
   - ac: AC1
   - verify: fvm flutter pub get && fvm flutter test test/features/room/domain/entities_test.dart
