@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261106-descubrimiento-local-mdns-y-codigo-de-acceso",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/descubrimiento-local-mdns-y-codigo-de-acceso",
   "baseCommit": "1bb8589a32b2c137cc92c20a72f50fe42a4396de",
   "revision": 2,
@@ -48,6 +48,9 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T14:52:41.128Z"
+  "lockedTests": {
+    "test/features/lobby/data/discovery_repository_test.dart": "sha256:135fecc6b2a157a44febfc9ae8951d4ab2c0741145c5efe6c5055d63c346fc2b",
+    "test/features/lobby/domain/discovery_usecases_test.dart": "sha256:ad64c2ca146ebf499f0570fddbf93a502071c073d5730cbfbf41153971d7d980",
+    "test/features/lobby/presentation/discovery_flow_test.dart": "sha256:0c0991de4b3ce7de28a6c0a605059c80f01f2b6a21d80783b41824b96c66a482"
+  }
 }
