@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "id": "20261107-ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
+  "baseCommit": "113417268568c506c991ea9c082d2f79109f0f03",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f51610955f7aa548e64ecc07202023095769191bb38de614076b13fe14fe9dcf",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:0f1549deaa1ec74d202c5f9f8f7f552f6d8943deb114ec81049a8824cbbe689f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 2,
+    "T": 4,
+    "R": 1
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:2f7f7f715c0ed5d0fc6af484a8d99d0336366e044cacc3756999baa0b901aa79",
+    "at": "2026-11-06T21:22:11.959Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
