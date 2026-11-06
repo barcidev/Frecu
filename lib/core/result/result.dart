@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:frecu/core/error/failure.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'result.freezed.dart';
 
@@ -21,14 +21,9 @@ sealed class Result<T> with _$Result<T> {
   bool get isFailure => this is FailureResult<T>;
 
   /// Retorna el dato si fue exitoso, o null si fue fallido.
-  T? get dataOrNull => when(
-        success: (data) => data,
-        failure: (_) => null,
-      );
+  T? get dataOrNull => when(success: (data) => data, failure: (_) => null);
 
   /// Retorna la falla si fue fallido, o null si fue exitoso.
-  Failure? get failureOrNull => when(
-        success: (_) => null,
-        failure: (failure) => failure,
-      );
+  Failure? get failureOrNull =>
+      when(success: (_) => null, failure: (failure) => failure);
 }

@@ -71,7 +71,7 @@ Crear el andamiaje del proyecto Flutter Frecu (Fase 0) con Clean Architecture po
   - ac: AC1, AC2
   - verify: fvm dart run build_runner build -d && fvm dart run slang && fvm flutter test test/core
   - type: feat
-- [ ] T3: Implementar capa de aplicación (AppRouter, guards, tema, app.dart, bootstrap, main), páginas base de features y prueba de widget/arranque.
+- [x] T3: Implementar capa de aplicación (AppRouter, guards, tema, app.dart, bootstrap, main), páginas base de features y prueba de widget/arranque.
   - files: lib/app/**, lib/features/**, lib/bootstrap.dart, lib/main.dart, test/app_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter analyze && fvm flutter test

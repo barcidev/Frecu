@@ -3,12 +3,7 @@ import 'package:logger/logger.dart';
 /// Wrapper centralizado para emisión de logs estructurados en toda la app.
 abstract final class AppLogger {
   static final Logger _logger = Logger(
-    printer: PrettyPrinter(
-      methodCount: 0,
-      errorMethodCount: 5,
-      lineLength: 80,
-      colors: true,
-    ),
+    printer: PrettyPrinter(methodCount: 0, lineLength: 80),
   );
 
   /// Nivel debug.

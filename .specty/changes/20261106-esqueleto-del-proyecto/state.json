@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261106-esqueleto-del-proyecto",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/esqueleto-del-proyecto",
   "baseCommit": "1ec7aabe718e7a3019230e986728fea38dd66b38",
   "revision": 2,
@@ -49,17 +49,33 @@
     },
     "T2": {
       "status": "done",
+      "baseCommit": "a181a26a687d3126b49607704028d895ab350eb5",
+      "attempts": 2,
+      "startedAt": "2026-11-06T08:42:32.307Z",
+      "doneAt": "2026-11-06T08:56:37.698Z",
+      "summary": "Implementar Result, Failure, logger, usecase, constants, slang i18n y tests de core",
       "scopeExtra": [
         "pubspec.yaml",
         "pubspec.lock",
         "build.yaml",
         "test/core/result_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [
+        "test/app_test.dart",
+        "lib/core/logging/app_logger.dart",
+        "lib/core/result/result.dart",
+        "lib/core/usecase/usecase.dart",
+        "pubspec.yaml",
+        "pubspec.lock"
       ],
-      "attempts": 2,
-      "baseCommit": "a181a26a687d3126b49607704028d895ab350eb5",
-      "startedAt": "2026-11-06T08:42:32.307Z",
-      "doneAt": "2026-11-06T08:56:37.698Z",
-      "summary": "Implementar Result, Failure, logger, usecase, constants, slang i18n y tests de core"
+      "attempts": 1,
+      "baseCommit": "2eeeff1982d5c2aeb02d79e9a0d51c76ff2e3271",
+      "startedAt": "2026-11-06T08:56:38.086Z",
+      "doneAt": "2026-11-06T09:36:50.443Z",
+      "summary": "Implementar AppRouter, guards, tema, FrecuApp, bootstrap, main y páginas base de features"
     }
   },
   "pending": {
@@ -71,10 +87,10 @@
     "AC": 3,
     "T": 3,
     "R": 1,
-    "S": 2
+    "S": 4
   },
   "lockedTests": {
-    "test/app_test.dart": "sha256:484959ecc67ed01a17c11d0fdef69f673b8a62a5ee92f7d902a22bc647b4dd47",
+    "test/app_test.dart": "sha256:05dc34752035e5a72cd43079e903a812baf1a967b419fd397815ace28d554ca8",
     "test/core/result_test.dart": "sha256:e35dcb4a92d66f5cd6da2698af4cd017f3cbf6988047bb947798efed5fd018eb"
   }
 }
