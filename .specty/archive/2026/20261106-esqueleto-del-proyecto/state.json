@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261106-esqueleto-del-proyecto",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/esqueleto-del-proyecto",
   "baseCommit": "1ec7aabe718e7a3019230e986728fea38dd66b38",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:fc168ec9c69abacb684505b312884b718ce4436943c2c64fcc093d2b9a505867",
@@ -63,6 +63,11 @@
     },
     "T3": {
       "status": "done",
+      "baseCommit": "2eeeff1982d5c2aeb02d79e9a0d51c76ff2e3271",
+      "attempts": 1,
+      "startedAt": "2026-11-06T08:56:38.086Z",
+      "doneAt": "2026-11-06T09:36:50.443Z",
+      "summary": "Implementar AppRouter, guards, tema, FrecuApp, bootstrap, main y páginas base de features",
       "scopeExtra": [
         "test/app_test.dart",
         "lib/core/logging/app_logger.dart",
@@ -70,12 +75,7 @@
         "lib/core/usecase/usecase.dart",
         "pubspec.yaml",
         "pubspec.lock"
-      ],
-      "attempts": 1,
-      "baseCommit": "2eeeff1982d5c2aeb02d79e9a0d51c76ff2e3271",
-      "startedAt": "2026-11-06T08:56:38.086Z",
-      "doneAt": "2026-11-06T09:36:50.443Z",
-      "summary": "Implementar AppRouter, guards, tema, FrecuApp, bootstrap, main y páginas base de features"
+      ]
     }
   },
   "pending": {
@@ -89,6 +89,7 @@
     "R": 1,
     "S": 4
   },
+  "closingSubmittedAt": "2026-11-06T09:38:25.532Z",
   "lockedTests": {
     "test/app_test.dart": "sha256:05dc34752035e5a72cd43079e903a812baf1a967b419fd397815ace28d554ca8",
     "test/core/result_test.dart": "sha256:e35dcb4a92d66f5cd6da2698af4cd017f3cbf6988047bb947798efed5fd018eb"

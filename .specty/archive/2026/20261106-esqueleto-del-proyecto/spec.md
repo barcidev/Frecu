@@ -80,3 +80,30 @@ Crear el andamiaje del proyecto Flutter Frecu (Fase 0) con Clean Architecture po
 ## Riesgos
 
 - R1: Incompatibilidad entre versiones recientes de plugins generadores en Dart 3 — mitigación: verificar versiones compatibles y estables en pub.dev.
+
+## Cierre
+
+### Resumen
+
+Se completó con éxito el andamiaje del proyecto Flutter Frecu (Fase 0) siguiendo Clean Architecture por feature:
+
+- Base de dependencias y configuración estricta de análisis con `very_good_analysis`.
+- Contratos de núcleo (`Result<T>`, `Failure`, `AppLogger`, `UseCase`, constantes de red).
+- Internacionalización con Slang (`es` base y `en` secundario).
+- Navegación declarativa con AutoRoute y `PermissionsGuard`.
+- Tema visual Material 3 (claro y oscuro).
+- `bootstrap.dart`, `main.dart` y vistas base de las features `permissions`, `lobby`, `room` y `settings`.
+- Pruebas unitarias y de widgets con cobertura total de los criterios de aceptación AC1, AC2 y AC3.
+
+### Desviaciones
+
+Ninguna. La estructura y los componentes implementados corresponden exactamente al diseño planificado en la especificación.
+
+### Decisiones
+
+- D1: Uso de `abstract class UseCase<T, Params>` con getter `name` para cumplir estrictamente con la regla `one_member_abstracts` del linter sin necesidad de ignorar advertencias.
+- D2: Uso de `flutter_localizations` vía SDK de Flutter para garantizar la correcta localización de componentes Material junto a Slang.
+
+### Pendientes
+
+- Fase 1: Implementación de la prueba de concepto de audio (2 teléfonos) con servidor de señalización WebSocket en host y conexión WebRTC mesh punto a punto.
