@@ -1,1 +1,9 @@
 /.worktrees/
+.fvm/
+.fvmrc
+.idea/
+*.iml
+.metadata
+.dart_tool/
+.packages
+build/

@@ -1,9 +1,10 @@
 # Glosario del dominio
 
-<!--
-Una línea por término del dominio, con su nombre en el código si lo tiene:
-
-- **Pedido** (`Order`): lo que un cliente compra en una visita.
-
-Las tarjetas de Specty traen la definición de los términos que usa cada tarea. Escribe los que un agente podría nombrar mal.
--->
+- **Frecu** (`Room`): Sala de voz activa.
+- **Anfitrión** (`Host`): Teléfono que crea la frecu y corre el servidor de señalización. También es participante.
+- **Participante** (`Participant` / `Peer`): Cualquier teléfono dentro de la frecu, incluido el anfitrión.
+- **PTT** (`pushToTalk`): Push-to-talk: el micrófono solo transmite mientras se mantiene presionado el botón.
+- **Micrófono abierto** (`openMic`): El micrófono transmite de forma continua.
+- **Código de acceso** (`accessCode`): PIN de 4 dígitos que protege la frecu de desconocidos en la misma red.
+- **Invitación** (`RoomInvite`): Datos de conexión que viajan en mDNS y QR (`host`, `port`, `roomId`, `accessCode`).
+- **Estado de sala** (`RoomStatus`): `idle`, `connecting`, `connected`, `reconnecting`, `closed(reason)`.

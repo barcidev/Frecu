@@ -61,7 +61,7 @@ Crear el andamiaje del proyecto Flutter Frecu (Fase 0) con Clean Architecture po
 
 ## Tareas
 
-- [ ] T1: Inicializar el proyecto Flutter, configurar pubspec.yaml con dependencias base, analysis_options.yaml y slang.yaml.
+- [x] T1: Inicializar el proyecto Flutter, configurar pubspec.yaml con dependencias base, analysis_options.yaml y slang.yaml.
   - files: pubspec.yaml, analysis_options.yaml, slang.yaml, build.yaml
   - ac: AC1
   - verify: fvm flutter pub get
