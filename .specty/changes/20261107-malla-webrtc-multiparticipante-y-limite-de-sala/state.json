@@ -36,7 +36,19 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_server_datasource.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "0224bf7824250c0c7d845638a0a1592f422581e5",
+      "startedAt": "2026-11-06T19:39:32.077Z",
+      "doneAt": "2026-11-06T19:41:20.720Z",
+      "summary": "Señalización multipar hasta 6 participantes, enrutamiento punto a punto y emisión de rechazo por roomFull"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -45,7 +57,8 @@
     "A": 3,
     "AC": 4,
     "T": 3,
-    "R": 1
+    "R": 1,
+    "S": 1
   },
   "lockedTests": {
     "test/features/room/data/signaling_server_test.dart": "sha256:ce389f883d4cde4af85cde3e28a9b718b586d1b732d826819968f215ca504b1e",

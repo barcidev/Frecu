@@ -138,19 +138,17 @@ class SignalingServerDataSource {
     String code,
   ) {
     if (code != _accessCode) {
-      _sendToChannel(
-        channel,
-        const SignalingMessage.rejected(reason: 'invalidAccessCode'),
-      );
+      const rejected = SignalingMessage.rejected(reason: 'invalidAccessCode');
+      _messagesController.add(rejected);
+      _sendToChannel(channel, rejected);
       unawaited(channel.sink.close());
       return null;
     }
 
     if (_participants.length >= NetworkConstants.maxParticipants) {
-      _sendToChannel(
-        channel,
-        const SignalingMessage.rejected(reason: 'roomFull'),
-      );
+      const rejected = SignalingMessage.rejected(reason: 'roomFull');
+      _messagesController.add(rejected);
+      _sendToChannel(channel, rejected);
       unawaited(channel.sink.close());
       return null;
     }

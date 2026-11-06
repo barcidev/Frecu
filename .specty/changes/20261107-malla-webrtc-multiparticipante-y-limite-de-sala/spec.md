@@ -51,7 +51,7 @@ Habilitar la topología de malla WebRTC completa (mesh) de hasta 6 participantes
 
 ## Tareas
 
-- [ ] T1: Señalización multipar y límite de sala en servidor con pruebas unitarias exhaustivas
+- [x] T1: Señalización multipar y límite de sala en servidor con pruebas unitarias exhaustivas
   - files: test/features/room/data/signaling_server_test.dart
   - ac: AC1, AC4
   - verify: fvm flutter test test/features/room/data/signaling_server_test.dart
