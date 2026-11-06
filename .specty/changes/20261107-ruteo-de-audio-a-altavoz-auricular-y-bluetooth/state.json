@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
   "baseCommit": "113417268568c506c991ea9c082d2f79109f0f03",
   "revision": 2,
@@ -44,6 +44,10 @@
     "T": 4,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T21:25:52.450Z"
+  "lockedTests": {
+    "test/features/room/data/voice_repository_test.dart": "sha256:19381e07d53d67aa20ce7c948004be14937b6eb58ddabde106bf6a5058a9b1bd",
+    "test/features/room/domain/entities_test.dart": "sha256:9568428bebce6e606571858c9fb029c6cf40d4aa4952fbd72f5b1d5a84a15587",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:0559b84a58f1fe9358e8e13919934604846b82954d7eacb918a47af8ba225506",
+    "test/features/room/domain/audio_route_usecases_test.dart": "sha256:32c8409cd9076c36ca58958cdabeaed422f4e8e53a0f7bf6fe2198059e7cc0a6"
+  }
 }
