@@ -1,0 +1,56 @@
+{
+  "app": {
+    "title": "Frecu"
+  },
+  "lobby": {
+    "title": "Frecu",
+    "createRoom": "Crear frecu",
+    "scanQr": "Escanear QR",
+    "joinRoom": "Unirse a frecu",
+    "nearbyRooms": "Frecus cercanas",
+    "noRoomsNearby": "No se encontraron frecus en la red",
+    "accessCode": "Código de acceso",
+    "roomName": "Nombre de la frecu",
+    "yourName": "Tu nombre visible"
+  },
+  "room": {
+    "title": "Frecu activa",
+    "leave": "Salir de la frecu",
+    "participants": "Participantes",
+    "pushToTalk": "Mantén presionado para hablar",
+    "openMic": "Micrófono abierto",
+    "speaker": "Altavoz",
+    "bluetooth": "Bluetooth",
+    "speaking": "Hablando",
+    "muted": "Silenciado",
+    "host": "Anfitrión",
+    "roomClosed": "La frecu fue cerrada por el anfitrión"
+  },
+  "permissions": {
+    "title": "Permisos requeridos",
+    "description": "Frecu necesita permisos para comunicarse sin internet.",
+    "microphone": "Micrófono",
+    "microphoneDesc": "Transmite tu voz a los participantes de la frecu.",
+    "nearbyDevices": "Red local y dispositivos cercanos",
+    "nearbyDevicesDesc": "Descubre y conecta con otros teléfonos en la misma red.",
+    "notifications": "Notificaciones",
+    "notificationsDesc": "Mantiene la frecu activa en segundo plano con pantalla apagada.",
+    "grant": "Conceder permisos",
+    "granted": "Permisos concedidos"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "displayName": "Nombre visible",
+    "defaultTalkMode": "Modo de habla por defecto",
+    "language": "Idioma"
+  },
+  "errors": {
+    "network": "Error de red local",
+    "permissionDenied": "Permiso denegado",
+    "roomFull": "La frecu está llena (máximo 6 participantes)",
+    "invalidAccessCode": "Código de acceso inválido",
+    "hostUnreachable": "El anfitrión no responde",
+    "audio": "Error en el subsistema de audio",
+    "unexpected": "Error inesperado"
+  }
+}

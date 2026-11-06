@@ -1,0 +1,56 @@
+{
+  "app": {
+    "title": "Frecu"
+  },
+  "lobby": {
+    "title": "Frecu",
+    "createRoom": "Create room",
+    "scanQr": "Scan QR",
+    "joinRoom": "Join room",
+    "nearbyRooms": "Nearby rooms",
+    "noRoomsNearby": "No rooms found on local network",
+    "accessCode": "Access code",
+    "roomName": "Room name",
+    "yourName": "Your display name"
+  },
+  "room": {
+    "title": "Active room",
+    "leave": "Leave room",
+    "participants": "Participants",
+    "pushToTalk": "Hold to talk",
+    "openMic": "Open microphone",
+    "speaker": "Speaker",
+    "bluetooth": "Bluetooth",
+    "speaking": "Speaking",
+    "muted": "Muted",
+    "host": "Host",
+    "roomClosed": "Room has been closed by host"
+  },
+  "permissions": {
+    "title": "Required permissions",
+    "description": "Frecu needs permissions to communicate without internet.",
+    "microphone": "Microphone",
+    "microphoneDesc": "Transmits your voice to other peers in the room.",
+    "nearbyDevices": "Local network & nearby devices",
+    "nearbyDevicesDesc": "Discovers and connects with nearby phones on the network.",
+    "notifications": "Notifications",
+    "notificationsDesc": "Keeps the intercom active in background with screen off.",
+    "grant": "Grant permissions",
+    "granted": "Permissions granted"
+  },
+  "settings": {
+    "title": "Settings",
+    "displayName": "Display name",
+    "defaultTalkMode": "Default talk mode",
+    "language": "Language"
+  },
+  "errors": {
+    "network": "Local network error",
+    "permissionDenied": "Required permission denied",
+    "roomFull": "Room is full (max 6 participants)",
+    "invalidAccessCode": "Invalid access code",
+    "hostUnreachable": "Host is unreachable",
+    "audio": "Audio subsystem error",
+    "unexpected": "Unexpected error"
+  }
+}

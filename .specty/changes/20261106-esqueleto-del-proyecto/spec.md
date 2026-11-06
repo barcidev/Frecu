@@ -66,7 +66,7 @@ Crear el andamiaje del proyecto Flutter Frecu (Fase 0) con Clean Architecture po
   - ac: AC1
   - verify: fvm flutter pub get
   - type: build
-- [ ] T2: Implementar contratos del núcleo (Result, Failure, logger, usecase, constants), traducciones i18n (es/en) y sus pruebas unitarias.
+- [x] T2: Implementar contratos del núcleo (Result, Failure, logger, usecase, constants), traducciones i18n (es/en) y sus pruebas unitarias.
   - files: lib/core/**, lib/i18n/**, test/core/**
   - ac: AC1, AC2
   - verify: fvm dart run build_runner build -d && fvm dart run slang && fvm flutter test test/core

@@ -40,12 +40,26 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "9e06f474075cdb6e8280cafd092087860d9081b0",
+      "attempts": 1,
       "startedAt": "2026-11-06T08:37:47.809Z",
       "doneAt": "2026-11-06T08:42:31.598Z",
-      "summary": "Inicializar proyecto Flutter, configurar pubspec.yaml, analysis_options.yaml, slang.yaml y build.yaml"
+      "summary": "Inicializar proyecto Flutter, configurar pubspec.yaml, analysis_options.yaml, slang.yaml y build.yaml",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "pubspec.yaml",
+        "pubspec.lock",
+        "build.yaml",
+        "test/core/result_test.dart"
+      ],
+      "attempts": 2,
+      "baseCommit": "a181a26a687d3126b49607704028d895ab350eb5",
+      "startedAt": "2026-11-06T08:42:32.307Z",
+      "doneAt": "2026-11-06T08:56:37.698Z",
+      "summary": "Implementar Result, Failure, logger, usecase, constants, slang i18n y tests de core"
     }
   },
   "pending": {
@@ -56,10 +70,11 @@
     "A": 3,
     "AC": 3,
     "T": 3,
-    "R": 1
+    "R": 1,
+    "S": 2
   },
   "lockedTests": {
     "test/app_test.dart": "sha256:484959ecc67ed01a17c11d0fdef69f673b8a62a5ee92f7d902a22bc647b4dd47",
-    "test/core/result_test.dart": "sha256:8cf03deb877046b06ce13b38e8f210daf87f26e50925a7c5a5a1cdad50b9f130"
+    "test/core/result_test.dart": "sha256:e35dcb4a92d66f5cd6da2698af4cd017f3cbf6988047bb947798efed5fd018eb"
   }
 }
