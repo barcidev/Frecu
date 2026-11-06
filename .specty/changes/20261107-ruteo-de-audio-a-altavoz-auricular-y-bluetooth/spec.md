@@ -61,7 +61,7 @@ Se aplica Clean Architecture por feature:
 
 ## Tareas
 
-- [ ] T1: Entidad AudioRoute y contrato VoiceRepository en domain
+- [x] T1: Entidad AudioRoute y contrato VoiceRepository en domain
   - files: lib/features/room/domain/entities/audio_route.dart, lib/features/room/domain/repositories/voice_repository.dart, test/features/room/domain/entities_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/domain/entities_test.dart
