@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "20261106-audio-webrtc-bidireccional-con-microfono-abierto",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/audio-webrtc-bidireccional-con-microfono-abierto",
+  "baseCommit": "30429030ac8db6db932aed47eb1b98fb540e5b1e",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "12 archivos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:61f52b8da3d887eae806d27defa46183ae1bd83414fc21e5e964c2370ab35a99",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:a789caf4dafb95bacda6b3cbb29d13b93aee7871f052cf998d013a37e24d2886",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:6b1e90929b99b81e289b20c2d98bf890e29c34253ce9be8174b1fbb436ad00bc",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:1ac4831f074d2903278574581a18e0bcd4c8fe3b02e9beec717922a6453415ae",
+    "at": "2026-11-06T13:49:09.038Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
