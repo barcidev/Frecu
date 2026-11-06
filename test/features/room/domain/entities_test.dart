@@ -1,13 +1,14 @@
-// AC1: CUANDO el anfitrión inicia la sala ENTONCES se ejecuta el servidor WebSocket de señalización en el puerto 47800 y responde a los mensajes de protocolo local.
+// AC1: CUANDO el usuario conmuta la salida de audio entre altavoz, auricular y Bluetooth ENTONCES la sesión de audio redirige la salida al dispositivo seleccionado y actualiza el icono de ruta de audio en tiempo real.
+// AC2: CUANDO se conecta o desconecta un accesorio de audio (auriculares cableados o Bluetooth) ENTONCES el sistema detecta el cambio de periférico y actualiza la ruta de audio activa.
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 
 void main() {
   group('Room domain entities', () {
-    // AC1
-    test('AC1: entities instantiate and serialize correctly', () {
+    test('entities instantiate and serialize correctly', () {
       final now = DateTime(2026, 11, 6, 12);
       const participant = Participant(
         id: 'peer-1',
@@ -52,6 +53,18 @@ void main() {
       expect(
         statusClosed.maybeWhen(closed: (reason) => reason, orElse: () => ''),
         'host_left',
+      );
+    });
+
+    // AC1
+    test('AC1: AudioRoute contains speaker, earpiece, and bluetooth', () {
+      expect(
+        AudioRoute.values,
+        containsAll([
+          AudioRoute.speaker,
+          AudioRoute.earpiece,
+          AudioRoute.bluetooth,
+        ]),
       );
     });
   });

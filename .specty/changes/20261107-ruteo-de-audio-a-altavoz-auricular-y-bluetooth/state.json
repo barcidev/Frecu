@@ -6,6 +6,13 @@
   "branch": "feature/ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
   "baseCommit": "113417268568c506c991ea9c082d2f79109f0f03",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:2f7f7f715c0ed5d0fc6af484a8d99d0336366e044cacc3756999baa0b901aa79",
+    "at": "2026-11-06T21:22:11.959Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -37,12 +44,6 @@
     "T": 4,
     "R": 1
   },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:2f7f7f715c0ed5d0fc6af484a8d99d0336366e044cacc3756999baa0b901aa79",
-    "at": "2026-11-06T21:22:11.959Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T21:25:52.450Z"
 }
