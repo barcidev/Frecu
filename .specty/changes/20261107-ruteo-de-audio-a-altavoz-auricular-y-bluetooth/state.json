@@ -45,12 +45,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "16e2b5508c129ad24c2d76c5d2f7fdb4c5edd766",
+      "attempts": 1,
       "startedAt": "2026-11-06T21:27:41.947Z",
       "doneAt": "2026-11-06T21:28:38.215Z",
-      "summary": "Implementación de los casos de uso SetAudioRoute y SetSpeakerOn"
+      "summary": "Implementación de los casos de uso SetAudioRoute y SetSpeakerOn",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "af00f9f1e5c832648646dd14ecdfde0a4ffddd11",
+      "startedAt": "2026-11-06T21:28:38.982Z",
+      "doneAt": "2026-11-06T21:32:14.735Z",
+      "summary": "Integración de AudioDevice y ruteo dinámico en AudioSessionDataSource y VoiceRepositoryImpl"
     }
   },
   "pending": {

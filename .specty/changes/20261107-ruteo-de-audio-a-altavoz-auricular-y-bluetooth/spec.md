@@ -69,7 +69,7 @@ Se aplica Clean Architecture por feature:
   - files: lib/features/room/domain/usecases/set_audio_route.dart, lib/features/room/domain/usecases/set_speaker_on.dart, lib/features/room/domain/usecases/voice_usecases.dart, test/features/room/domain/audio_route_usecases_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/domain/audio_route_usecases_test.dart
-- [ ] T3: Integración de AudioDevice y ruteo en AudioSessionDataSource y VoiceRepositoryImpl
+- [x] T3: Integración de AudioDevice y ruteo en AudioSessionDataSource y VoiceRepositoryImpl
   - files: lib/features/room/data/datasources/audio_session_datasource.dart, lib/features/room/data/repositories/voice_repository_impl.dart, test/features/room/data/voice_repository_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/room/data/voice_repository_test.dart
