@@ -4,3 +4,7 @@
 {"ts":"2026-11-06T09:59:10.492Z","actor":"agent","tool":"antigravity","event":"adjust.requested","data":{"request":"Dividir en tres cortes: C1 Señalización WebSocket y protocolo, C2 Gestión de sala y unión por IP, C3 Audio WebRTC bidireccional"}}
 {"ts":"2026-11-06T10:00:36.521Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:6fdefbc96a49f760fe65d73ae4c3107367629730e89b6395c769dbd847f1a14c","size":"S","warnings":0}}
 {"ts":"2026-11-06T10:00:43.608Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":2,"hash":"sha256:6fdefbc96a49f760fe65d73ae4c3107367629730e89b6395c769dbd847f1a14c","channel":"delegated","delegated":true}}
+{"ts":"2026-11-06T14:35:50.525Z","actor":"specty","event":"epic.slicesDone","data":{"slices":{"C1":"20261106-protocolo-y-senalizacion-websocket","C2":"20261106-gestion-de-sala-y-conexion-por-ip","C3":"20261106-audio-webrtc-bidireccional-con-microfono-abierto"}}}
+{"ts":"2026-11-06T14:35:57.756Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":2,"delegated":true}}
+{"ts":"2026-11-06T14:36:39.970Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":3,"hash":"sha256:150b3239b8a4a47bd5f566f3afe8a467f320eaa9cac6d630782303b1b28f38ad","size":"S","warnings":0}}
+{"ts":"2026-11-06T14:36:44.898Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}

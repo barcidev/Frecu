@@ -49,3 +49,30 @@ Implementar la Fase 1 de Frecu: prueba de concepto de voz grupal offline entre d
 ## Riesgos
 
 - R1: El emulador o simulador puede no contar con dispositivos físicos de audio — mitigación: abstraer el acceso a hardware en datasources para permitir pruebas unitarias con transporte simulado y dobles de prueba.
+
+## Cierre
+
+### Resumen
+
+Se completaron satisfactoriamente los 3 cortes verticales de la Fase 1 (Prueba de concepto de audio):
+
+- **C1**: Implementación de entidades de dominio de sala y participantes, modelos de mensajes de señalización con discriminador Freezed, servidor Shelf WebSocket en puerto 47800 y cliente WebSocket reactivo.
+- **C2**: Repositorio de sala, detección automática de IP local IPv4 del anfitrión, providers de Riverpod (`RoomNotifier`) y pantallas `CreateRoomPage`, `LobbyPage` (modal de unión por IP) y `RoomPage`.
+- **C3**: Configuración de `audio_session`, `PeerConnectionDataSource` para WebRTC mesh local con candidatos directos (`iceServers: []`), `VoiceRepositoryImpl` para control de transmisión/muteo sin renegociación WebRTC, `VoiceNotifier` y controles de interfaz de micrófono en `RoomPage`.
+- Todos los criterios de aceptación (AC1 a AC4) quedaron verificados con 29 pruebas automatizadas pasando con éxito.
+
+### Desviaciones
+
+- Ninguna respecto al alcance planificado de la Fase 1. Las ampliaciones menores de alcance durante las tareas correspondieron al desacoplamiento para inyección de dependencias (`signalingClientProvider`).
+
+### Decisiones
+
+- Se adoptó una arquitectura estricta Clean Architecture por feature (`domain`, `data`, `presentation`), manteniendo `domain` libre de plugins nativos o dependencias de Flutter.
+- WebRTC opera exclusivamente con candidatos ICE de red de área local (`iceServers: []`) sin servidores STUN ni TURN externos para garantizar funcionamiento 100% autónomo sobre Hotspot.
+- La gestión de estado y DI se basa en la sintaxis de generador de Riverpod (`@riverpod`, `Notifier`), y la inmutabilidad en Freezed 3 (`sealed class`).
+
+### Pendientes
+
+- Fase 2: Descubrimiento de salas por mDNS (`nsd`) y respaldo por código QR (`mobile_scanner` / `qr_flutter`).
+- Fase 2/3: Soporte para más de 2 participantes en malla completa (hasta 6) y modo PTT con botones de hardware.
+- Fase 5: Servicio foreground en Android para mantener transmisión con pantalla apagada.

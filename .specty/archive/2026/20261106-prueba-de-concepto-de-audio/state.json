@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261106-prueba-de-concepto-de-audio",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/prueba-de-concepto-de-audio-2",
   "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:6fdefbc96a49f760fe65d73ae4c3107367629730e89b6395c769dbd847f1a14c",
@@ -45,5 +45,6 @@
     "AC": 4,
     "C": 3,
     "R": 1
-  }
+  },
+  "closingSubmittedAt": "2026-11-06T14:36:39.968Z"
 }
