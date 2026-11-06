@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-invitacion-y-escaneo-por-codigo-qr",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/invitacion-y-escaneo-por-codigo-qr",
   "baseCommit": "4ed616dd21ceb83e1ece9d040d75277bc4d827b2",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:512edd0794fe95e609891cd50666ae67e95118b01afcabc7125225899f106b48",
@@ -64,15 +64,15 @@
     },
     "T3": {
       "status": "done",
+      "baseCommit": "be72de25c995db9080f422c1a5c381a7955f3073",
+      "attempts": 1,
+      "startedAt": "2026-11-06T18:16:46.601Z",
+      "doneAt": "2026-11-06T18:58:58.136Z",
+      "summary": "Implementado escaneo con mobile_scanner en ScanQrPage, parseo de URI frecu://join y navegación automática con unión a la sala tras verificación completa de análisis y pruebas.",
       "scopeExtra": [
         "test/features/lobby/presentation/scan_qr_page_test.dart",
         "lib/features/lobby/presentation/pages/lobby_page.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "be72de25c995db9080f422c1a5c381a7955f3073",
-      "startedAt": "2026-11-06T18:16:46.601Z",
-      "doneAt": "2026-11-06T18:58:58.136Z",
-      "summary": "Implementado escaneo con mobile_scanner en ScanQrPage, parseo de URI frecu://join y navegación automática con unión a la sala tras verificación completa de análisis y pruebas."
+      ]
     }
   },
   "pending": {
@@ -86,6 +86,7 @@
     "R": 1,
     "S": 6
   },
+  "closingSubmittedAt": "2026-11-06T18:59:37.294Z",
   "lockedTests": {
     "test/features/lobby/presentation/scan_qr_page_test.dart": "sha256:d9021884c1728d1692cba75e2af2ce093bb247ee81c2e8e9c2dce512d87d7d13",
     "test/features/room/domain/invite_qr_usecases_test.dart": "sha256:f6abd70f29bf035377e8700c7af3026bf2f7e1e2d64f4a68f4ca0ccc2334f0d8",

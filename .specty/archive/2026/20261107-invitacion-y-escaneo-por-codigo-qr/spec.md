@@ -77,3 +77,30 @@ Permitir al anfitrión generar y mostrar un código QR de invitación con los pa
 ## Riesgos
 
 - R1: Entornos de prueba de widgets no disponen de hardware de cámara — mitigación: desacoplar el widget del escáner permitiendo inyectar un widget mock o callback de detección para verificar el flujo de unión sin cámara física.
+
+## Cierre
+
+### Resumen
+
+Se implementó el corte vertical C2 ("Invitación y escaneo por código QR") del epic `20261106-descubrimiento-y-union`.
+
+- Se configuraron las dependencias `qr_flutter` y `mobile_scanner`.
+- Se crearon la entidad `RoomInvite` y los casos de uso `BuildInviteQr` y `ParseInviteFromQr` con tests unitarios exhaustivos bajo TDD.
+- En `RoomPage`, se añadió el botón de código QR en la AppBar y el diálogo `_InviteQrDialog` con `QrImageView` para mostrar la URI en formato `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>`.
+- En `ScanQrPage`, se integró `MobileScanner` con inyección desacoplada (`scannerBuilder`) para pruebas de widget, extrayendo los parámetros y conectando automáticamente con `roomNotifierProvider.joinRoom(...)` y navegando a `RoomRoute`.
+- Se verificó el cumplimiento de todos los criterios de aceptación (AC4 y AC5) con 41 pruebas automatizadas pasando y 0 advertencias de análisis estático.
+
+### Desviaciones
+
+- Se añadió `lib/features/lobby/presentation/pages/lobby_page.dart` al alcance mediante ampliación (S6) debido a que `ScanQrRoute` dejó de ser un constructor constante al recibir `scannerBuilder` opcional para pruebas desacopladas.
+- Se configuró `.specty/config.yaml` (`scope.generated`) para excluir archivos generados (`.freezed.dart`, `.g.dart`, `.gr.dart`) de los linters de complejidad y estilo estricto de Specty.
+
+### Decisiones
+
+- Se mantuvo la arquitectura limpia desacoplando la capa de dominio sin dependencias de Flutter ni plugins.
+- Para habilitar pruebas de widget herméticas y deterministas sin hardware de cámara, se introdujo `ScannerWidgetBuilder` en `ScanQrPage`.
+- Se mantuvo el alcance dentro del límite de 2 módulos de Specty (`room` y `lobby`) utilizando las traducciones existentes de slang sin crear módulos adicionales.
+
+### Pendientes
+
+- Ninguno para este corte vertical C2.

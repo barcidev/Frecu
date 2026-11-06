@@ -24,3 +24,6 @@
 {"ts":"2026-11-06T18:34:29.382Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"scope.decided","data":{"id":"S6","decision":"approved","delegated":true}}
 {"ts":"2026-11-06T18:58:58.055Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter analyze && fvm flutter test","exit":0,"ms":9637,"tree":"sha256:72ad0109d496b406ef2ef2baaf463150f95aefb87671164c925ef50c548ab16c"}}
 {"ts":"2026-11-06T18:58:58.138Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Implementado escaneo con mobile_scanner en ScanQrPage, parseo de URI frecu://join y navegación automática con unión a la sala tras verificación completa de análisis y pruebas."}}
+{"ts":"2026-11-06T18:59:03.390Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":1,"delegated":true}}
+{"ts":"2026-11-06T18:59:37.295Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:94fab987838c4bf56bfba441fdfc7705f5fb289155fc1d72f220d05ff178996d","size":"L","warnings":0}}
+{"ts":"2026-11-06T18:59:41.565Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
