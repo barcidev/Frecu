@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261106-descubrimiento-local-mdns-y-codigo-de-acceso",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/descubrimiento-local-mdns-y-codigo-de-acceso",
   "baseCommit": "1bb8589a32b2c137cc92c20a72f50fe42a4396de",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:3a46963176538452575519f0a0094dc658f81bb87252dabfe667784b6bf90056",
@@ -63,15 +63,15 @@
     },
     "T3": {
       "status": "done",
+      "baseCommit": "05a02e0f837d837f307ac8a8dcec2c77b6b972fd",
+      "attempts": 1,
+      "startedAt": "2026-11-06T15:42:51.989Z",
+      "doneAt": "2026-11-06T16:26:05.216Z",
+      "summary": "Proveedores de Riverpod, integración en LobbyPage y manejo de PIN con pruebas UI",
       "scopeExtra": [
         "lib/features/lobby/presentation/pages/create_room_page.dart",
         "test/features/lobby/presentation/discovery_flow_test.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "05a02e0f837d837f307ac8a8dcec2c77b6b972fd",
-      "startedAt": "2026-11-06T15:42:51.989Z",
-      "doneAt": "2026-11-06T16:26:05.216Z",
-      "summary": "Proveedores de Riverpod, integración en LobbyPage y manejo de PIN con pruebas UI"
+      ]
     }
   },
   "pending": {
@@ -85,6 +85,7 @@
     "R": 1,
     "S": 5
   },
+  "closingSubmittedAt": "2026-11-06T16:27:40.376Z",
   "lockedTests": {
     "test/features/lobby/data/discovery_repository_test.dart": "sha256:91d4225809e27dd8ac600c4a8784a71d4481b69d7d128bf5a2c48be775b54861",
     "test/features/lobby/domain/discovery_usecases_test.dart": "sha256:08f695c9ab7b2e1557f4612d859fb422cee42da0b14c33ed4037428e328b0960",

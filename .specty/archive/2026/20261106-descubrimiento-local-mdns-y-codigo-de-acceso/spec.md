@@ -81,3 +81,29 @@ Permitir a los participantes descubrir automáticamente las frecus activas en la
 ## Riesgos
 
 - R1: El emulador o entorno de pruebas puede no tener soporte mDNS nativo — mitigación: abstraer el plugin nsd con fábricas y dobles de prueba para verificar registro y descubrimiento sin red física.
+
+## Cierre
+
+### Resumen
+
+Se implementó el descubrimiento local automático de frecus mediante mDNS y la unión por PIN de 4 dígitos:
+- Se incorporó la dependencia nsd para registro y descubrimiento de servicios _frecu._tcp con atributos TXT (roomId, name, v).
+- Se definió la entidad NearbyRoom, el contrato DiscoveryRepository y los casos de uso PublishRoom, StopPublishingRoom y DiscoverRooms.
+- Se implementó MdnsDataSource con funciones inyectables para pruebas y manejo de eventos found/lost, junto con DiscoveryRepositoryImpl.
+- Se integró Riverpod (discoveryRepositoryProvider, nearbyRoomsProvider) y se adaptó LobbyPage con la lista reactiva de salas cercanas y el diálogo de ingreso de PIN (_PinJoinDialog).
+- Se integró la publicación mDNS en CreateRoomPage al crear una sala como anfitrión.
+- Se verificaron los criterios AC1, AC2 y AC3 con 35 pruebas unitarias y de integración UI pasando con 0 advertencias de análisis estático.
+
+### Desviaciones
+
+- Se añadió a la tarea T3 el archivo lib/features/lobby/presentation/pages/create_room_page.dart (aprobado bajo S4) ya que la página de creación de sala residía en la feature de lobby en la arquitectura del proyecto.
+- Se ajustó el estado de carga inicial en _NearbyRoomsList para evitar temporizadores infinitos de CircularProgressIndicator durante la ejecución de pruebas con pumpAndSettle().
+
+### Decisiones
+
+- Los atributos TXT de mDNS no incluyen el código de acceso (PIN) para preservar la privacidad de la sala frente a escaneos pasivos en la red; el PIN se solicita interactivamente al usuario en el lobby.
+- Se encapsuló nsd en MdnsDataSource mediante delegados funcionales inyectables, permitiendo pruebas unitarias deterministas y completas sin requerir dependencias de red física o simuladores externos.
+
+### Pendientes
+
+- Implementación del corte C2: Generación de código QR para invitación y escaneo con cámara como mecanismo alternativo de respaldo.
