@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/ruteo-de-audio-a-altavoz-auricular-y-bluetooth",
   "baseCommit": "113417268568c506c991ea9c082d2f79109f0f03",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:2f7f7f715c0ed5d0fc6af484a8d99d0336366e044cacc3756999baa0b901aa79",
@@ -63,17 +63,17 @@
     },
     "T4": {
       "status": "done",
+      "baseCommit": "800c7888fd942dfc41a8b7daef180e50c641b476",
+      "attempts": 1,
+      "startedAt": "2026-11-06T21:32:15.615Z",
+      "doneAt": "2026-11-06T23:04:58.257Z",
+      "summary": "Proveedores de estado en voice_provider y control visual con icono dinámico en RoomPage",
       "scopeExtra": [
         "lib/features/room/presentation/providers/voice_provider.g.dart",
         "lib/i18n/strings.g.dart",
         "lib/i18n/strings_en.g.dart",
         "lib/i18n/strings_es.g.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "800c7888fd942dfc41a8b7daef180e50c641b476",
-      "startedAt": "2026-11-06T21:32:15.615Z",
-      "doneAt": "2026-11-06T23:04:58.257Z",
-      "summary": "Proveedores de estado en voice_provider y control visual con icono dinámico en RoomPage"
+      ]
     }
   },
   "pending": {
@@ -87,6 +87,7 @@
     "R": 1,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-06T23:12:18.038Z",
   "lockedTests": {
     "test/features/room/data/voice_repository_test.dart": "sha256:19381e07d53d67aa20ce7c948004be14937b6eb58ddabde106bf6a5058a9b1bd",
     "test/features/room/domain/entities_test.dart": "sha256:9568428bebce6e606571858c9fb029c6cf40d4aa4952fbd72f5b1d5a84a15587",

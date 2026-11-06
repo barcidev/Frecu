@@ -8,3 +8,4 @@
 - **Código de acceso** (`accessCode`): PIN de 4 dígitos que protege la frecu de desconocidos en la misma red.
 - **Invitación** (`RoomInvite`): Datos de conexión que viajan en mDNS y QR (`host`, `port`, `roomId`, `accessCode`).
 - **Estado de sala** (`RoomStatus`): `idle`, `connecting`, `connected`, `reconnecting`, `closed(reason)`.
+- **Ruta de audio** (`AudioRoute`): Salida del sonido (`speaker`, `earpiece`, `bluetooth`).

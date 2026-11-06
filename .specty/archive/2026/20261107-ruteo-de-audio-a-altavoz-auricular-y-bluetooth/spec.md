@@ -81,3 +81,27 @@ Se aplica Clean Architecture por feature:
 ## Riesgos
 
 - R1: El comportamiento de conmutación Bluetooth puede variar según la plataforma nativa y permisos — mitigación: delegar en `Helper.setSpeakerphoneOn` de WebRTC y `audio_session`, con fallback automático a altavoz ante errores o desconexión.
+
+## Cierre
+
+### Resumen
+
+Se implementó el ruteo dinámico de salida de audio entre altavoz, auricular y dispositivos Bluetooth:
+- Se creó la entidad `AudioRoute` (`speaker`, `earpiece`, `bluetooth`) en Dart puro sin dependencias de plataforma, y se enriqueció `VoiceRepository` con `setAudioRoute`, `setSpeakerOn`, `watchAudioRoute` y `watchAvailableAudioRoutes`.
+- Se implementaron los casos de uso `SetAudioRoute` y `SetSpeakerOn`.
+- Se integró la gestión de periféricos de audio en `AudioSessionDataSource` y `VoiceRepositoryImpl` mediante el flujo de dispositivos de `audio_session` y control nativo de altavoz, detectando conexiones/desconexiones de periféricos y realizando fallback seguro a altavoz.
+- Se conectó el estado reactivo en `voice_provider` (`audioRoute`, `availableAudioRoutes` y `cycleAudioRoute()`) y se añadió el botón de acción con icono dinámico en la barra superior de `RoomPage` (`Icons.volume_up`, `Icons.phone_in_talk`, `Icons.bluetooth_audio`).
+- Se verificaron los criterios AC1 y AC2 con 55 pruebas pasando exitosamente y 0 errores de análisis estático con `very_good_analysis`.
+
+### Desviaciones
+
+- Ninguna respecto al plan. Se aprobó la solicitud de alcance S1 para incluir los archivos de código generado por `build_runner` y `slang` para proveedores y textos en i18n.
+
+### Decisiones
+
+- Se priorizó altavoz (`AudioRoute.speaker`) como la ruta predeterminada de salida de audio al entrar a la frecu para asegurar que todos los participantes escuchen con claridad las transmisiones inmediatas.
+- Ante la desconexión imprevista de un auricular o periférico Bluetooth activo, el sistema conmuta automáticamente a altavoz (`fallback`) para evitar que la salida de audio quede silenciada en el auricular interno sin advertencia previa.
+
+### Pendientes
+
+- Corte C2: Modos de habla PTT interactivo (gesto táctil y teclas de hardware de volumen) y selector de modo de habla por defecto en ajustes.

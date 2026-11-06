@@ -18,3 +18,6 @@
 {"ts":"2026-11-06T23:03:37.481Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"scope.decided","data":{"id":"S1","decision":"approved","delegated":true}}
 {"ts":"2026-11-06T23:04:58.137Z","actor":"specty","event":"task.verified","data":{"task":"T4","cmd":"fvm flutter test test/features/room/presentation/voice_flow_test.dart","exit":0,"ms":4977,"tree":"sha256:e5830d55301aa98cf101f88ee96f39ba8353a5f002b8cca75fd307628d7038e1"}}
 {"ts":"2026-11-06T23:04:58.259Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T4","summary":"Proveedores de estado en voice_provider y control visual con icono dinámico en RoomPage","longFiles":[{"path":"lib/features/room/presentation/pages/room_page.dart","lines":391,"before":367,"limit":300,"severity":"warning"}]}}
+{"ts":"2026-11-06T23:12:18.038Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":3,"hash":"sha256:c14bc1f83aec0f94e75b7a40720b1a58f3ed1c2687bc4a8da968f984ab392885","size":"L","warnings":0}}
+{"ts":"2026-11-06T23:12:23.099Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":3,"delegated":true}}
+{"ts":"2026-11-06T23:12:23.168Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
