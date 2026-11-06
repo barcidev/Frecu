@@ -75,3 +75,27 @@ Permitir que el usuario anfitrión cree una frecu viendo su dirección IP local 
 ## Riesgos
 
 - R1: La IP local puede no estar disponible si el hotspot o WiFi no se han activado todavía — mitigación: retornar null o dirección por defecto ('192.168.43.1') e informar al usuario en la interfaz.
+
+## Cierre
+
+### Resumen
+
+Se completó con éxito el Corte C2 ("Gestión de sala y conexión por IP") del Epic de prueba de concepto de audio:
+
+- Capa de dominio: Contrato `RoomRepository` y casos de uso `CreateRoom`, `JoinRoom` y `LeaveRoom` en Dart puro sin dependencias de plataforma, con pruebas unitarias exhaustivas con `mocktail`.
+- Capa de datos: `RoomRepositoryImpl` que orquesta `SignalingServerDataSource` (anfitrión) y `SignalingClientDataSource` (participantes y loopback), resolución de IP local mediante `NetworkInterface.list()` con fallback seguro a la subred de hotspot estándar (`192.168.43.1`), y pruebas de integración reactivas.
+- Capa de presentación: Proveedores Riverpod (`RoomNotifier`, `roomRepositoryProvider`, `roomParticipantsProvider`, `roomStatusProvider`, `localIpProvider`), actualización de `CreateRoomPage` (mostrando IP local y PIN), `LobbyPage` (con modal para unirse por IP) y `RoomPage` (visualización de detalles de conexión, lista de participantes en tiempo real y salida limpia).
+- Suite completa de pruebas en verde (21/21 tests pasando) y 0 incidencias en el análisis estático (`fvm flutter analyze`).
+
+### Desviaciones
+
+- El archivo generado por `build_runner` (`lib/features/room/presentation/providers/room_provider.g.dart`) se incluyó en el alcance de T3 y se actualizó `.specty/config.yaml` (`scope.generated`) para que las reglas de calidad ignoren directivas de analizador en código generado.
+
+### Decisiones
+
+- Los widgets `CreateRoomPage`, `LobbyPage` y `RoomPage` se modularizaron en componentes privados (`_RoomInfoCard`, `_ParticipantsList`, `_JoinRoomDialog`, `_buildIpBadge`) para asegurar que ninguna función supere las 50 líneas de código y mantener una alta legibilidad.
+- La navegación en los flujos asíncronos de creación y unión utiliza `unawaited` y comprobaciones de `context.mounted` para cumplir estrictamente con las reglas de linting de Flutter y Very Good Analysis.
+
+### Pendientes
+
+- Integración de audio WebRTC bidireccional y sesión de micrófono abierto/PTT sobre la sala conectada (Corte C3).

@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261106-gestion-de-sala-y-conexion-por-ip",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/gestion-de-sala-y-conexion-por-ip",
   "baseCommit": "09ba8eef2de152db33e771bee4afa264c90f6375",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d",
@@ -61,15 +61,15 @@
     },
     "T3": {
       "status": "done",
+      "baseCommit": "ddaba09c0e9b79c4df933b70157b95b66b964694",
+      "attempts": 1,
+      "startedAt": "2026-11-06T12:47:26.825Z",
+      "doneAt": "2026-11-06T13:43:56.532Z",
+      "summary": "Proveedores de Riverpod RoomNotifier, actualización de UI en CreateRoomPage, LobbyPage y RoomPage, y pruebas de flujo",
       "scopeExtra": [
         "test/features/room/presentation/room_flow_test.dart",
         "lib/features/room/presentation/providers/room_provider.g.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "ddaba09c0e9b79c4df933b70157b95b66b964694",
-      "startedAt": "2026-11-06T12:47:26.825Z",
-      "doneAt": "2026-11-06T13:43:56.532Z",
-      "summary": "Proveedores de Riverpod RoomNotifier, actualización de UI en CreateRoomPage, LobbyPage y RoomPage, y pruebas de flujo"
+      ]
     }
   },
   "pending": {
@@ -83,6 +83,7 @@
     "R": 1,
     "S": 4
   },
+  "closingSubmittedAt": "2026-11-06T13:44:45.408Z",
   "lockedTests": {
     "test/features/room/data/room_repository_test.dart": "sha256:b1416ee04abe91f6ad3f9bf18130cd8a2f4d1f88e4ecbd945ccfd8222e0c48cc",
     "test/features/room/domain/usecases_test.dart": "sha256:8cc11d6e4d8ef8c397e1c6f5bc7c62a81050ab492429011b9aa451ccbbe04244",

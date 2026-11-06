@@ -20,3 +20,6 @@
 {"ts":"2026-11-06T13:40:21.077Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"scope.decided","data":{"id":"S4","decision":"approved","delegated":true}}
 {"ts":"2026-11-06T13:43:56.403Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter analyze && fvm flutter test","exit":0,"ms":6380,"tree":"sha256:a560938f12d172ec348cd12d5ad8e1ee024a80015df54e9ea58493bf8c96e293"}}
 {"ts":"2026-11-06T13:43:56.535Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Proveedores de Riverpod RoomNotifier, actualización de UI en CreateRoomPage, LobbyPage y RoomPage, y pruebas de flujo"}}
+{"ts":"2026-11-06T13:44:09.692Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":1,"delegated":true}}
+{"ts":"2026-11-06T13:44:45.409Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:a2a010d50a1c050e7f15459c8842f79b93dff2b2823a67178db21e5cf80047e7","size":"L","warnings":0}}
+{"ts":"2026-11-06T13:44:56.163Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
