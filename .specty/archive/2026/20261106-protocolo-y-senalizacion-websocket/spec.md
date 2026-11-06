@@ -70,3 +70,30 @@ Implementar la infraestructura de señalización local para la prueba de concept
 ## Riesgos
 
 - R1: El puerto 47800 podría estar ocupado si un test anterior no liberó el socket — mitigación: asegurar cierre explícito (`close`) en `tearDown` de los tests y reintentos con puertos libres en pruebas.
+
+## Cierre
+
+### Resumen
+
+Se implementó con éxito la infraestructura completa del protocolo y señalización WebSocket (Corte C1 del Epic de prueba de concepto de audio):
+
+- Entidades de dominio puras en Dart: `Participant`, `Room` y `RoomStatus` con soporte de inmutabilidad y serialización.
+- Modelo `SignalingMessage` con Freezed (`@Freezed(unionKey: 'type')`) que modela los 12 tipos de mensaje del protocolo de señalización (`join`, `welcome`, `rejected`, `peer_joined`, `peer_left`, `offer`, `answer`, `ice`, `talk_state`, `ping`, `pong`, `room_closed`).
+- `SignalingServerDataSource`: Servidor Shelf WebSocket que escucha en el puerto 47800 (o configurable en tests), valida el código de acceso, limita la capacidad máxima de participantes, asigna identificadores y enruta mensajes punto a punto y broadcast.
+- `SignalingClientDataSource`: Cliente reactivo basado en `WebSocketChannel` con gestión de streams de mensajes y estados de conexión.
+- Suite de pruebas completa pasando al 100% (12/12 tests unitarios e integrados) y 0 incidencias de linter (`very_good_analysis`).
+
+### Desviaciones
+
+- En `SignalingMessage`, para evitar un defecto en la generación de constructores de Freezed 3 (`final String? $type` inválido en Dart y listas inmutables en constructores generados), se incluyó `@Default('<type>') String type` en cada constructor y `makeCollectionsUnmodifiable: false`.
+- En `.specty/config.yaml`, se añadió explícitamente `scope.generated: ["**/*.g.dart", "**/*.freezed.dart", "**/*.gr.dart"]` para que Specty excluya los artefactos generados de las reglas estrictas de código manual.
+
+### Decisiones
+
+- Las funciones de `SignalingServerDataSource` se estructuraron de forma modular en helpers (`_onClientData`, `_processJoin`, `_routeAndReturn`) para mantener cada función por debajo del límite de 50 líneas impuesto por los estándares de calidad.
+- El servidor soporta asignación de puerto dinámico (`port: 0`) para garantizar aislamiento y evitar colisiones de puertos durante la ejecución concurrente de tests automatizados.
+
+### Pendientes
+
+- Integración en la capa de datos y repositorios de `Room` con conexión por IP manual en la interfaz de usuario (Corte C2).
+- Gestión de pistas y negociación WebRTC mesh punto a punto (Corte C3).

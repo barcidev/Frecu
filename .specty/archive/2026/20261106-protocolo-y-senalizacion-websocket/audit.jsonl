@@ -22,3 +22,6 @@
 {"ts":"2026-11-06T10:59:31.149Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"scope.decided","data":{"id":"S5","decision":"approved","unlock":["test/features/room/data/signaling_server_test.dart"],"task":"T3"}}
 {"ts":"2026-11-06T11:01:28.900Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter analyze && fvm flutter test","exit":0,"ms":9563,"tree":"sha256:c91a64b8fff47cae90639de4af6353999cdbe7ef017f6ac70425a5b7ab94cee1"}}
 {"ts":"2026-11-06T11:01:29.315Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Implementar SignalingServerDataSource, SignalingClientDataSource y pruebas de integración de servidor/cliente WebSocket"}}
+{"ts":"2026-11-06T11:01:35.531Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":1,"delegated":true}}
+{"ts":"2026-11-06T11:02:42.908Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:ade0a0ff63afab6cd551ee2ef1d0c667561da505f35cdfda473f80b9f24bf8c3","size":"L","warnings":0}}
+{"ts":"2026-11-06T11:02:47.123Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
