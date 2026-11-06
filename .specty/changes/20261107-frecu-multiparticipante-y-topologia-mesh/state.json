@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261107-frecu-multiparticipante-y-topologia-mesh",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/frecu-multiparticipante-y-topologia-mesh",
+  "baseCommit": "dd92192fcdea287fb6ee7c9cc4ee321d2e384256",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:b16786f6686306f66d642a74f2784084cf03c3b01bedc0b29a5ec2f956dc73a7",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:1d79507c3bbe1fb905ccb4b5f896f9e258c7a54fee727e7158f629659e390f8d",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:e6bb5616bff3cfbe2b5e3ca7d0452dfe77be18df78ec6197ed9b194375e8d7f2",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 4,
+    "C": 2,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:24c0e86e6813f3901df9310ef31382cb7db4716d2c5c4588fe46f4c7d6554dc9",
+    "at": "2026-11-06T19:09:02.884Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
