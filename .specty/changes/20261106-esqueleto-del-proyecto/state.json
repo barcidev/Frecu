@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261106-esqueleto-del-proyecto",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/esqueleto-del-proyecto",
+  "baseCommit": "1ec7aabe718e7a3019230e986728fea38dd66b38",
+  "revision": 2,
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "6 archivos",
+      "2 módulos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:b2822d9d889893e0221025921f5525142523fa943aaeca4cbd6ce67b8535d961",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:ce26679d0b3595479341e39c32bf8ce44cb7ca374443f297b7db1c966249720e",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:6772336651034de6bcea620f5f466c0fd71fccfe2978c2a988374d33d380f018",
+      "decision": "confirmed"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:fc168ec9c69abacb684505b312884b718ce4436943c2c64fcc093d2b9a505867",
+    "at": "2026-11-06T08:32:12.098Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "ui"
+  },
+  "testCycle": "feature"
+}

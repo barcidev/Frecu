@@ -1,0 +1,13 @@
+[
+  {
+    "id": "c1",
+    "revision": 1,
+    "anchor": {
+      "item": "A1"
+    },
+    "author": "Jorge Palacio Barcinilla",
+    "body": "Usa Flutter 3.47.9 via fvn y dart 3.13.7",
+    "createdAt": "2026-11-06T08:30:18.642Z",
+    "resolvedInRevision": 2
+  }
+]

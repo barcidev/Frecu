@@ -1,0 +1,10 @@
+{"ts":"2026-11-06T08:05:47.880Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/esqueleto-del-proyecto","request":"si procede","bootstrap":true}}
+{"ts":"2026-11-06T08:16:20.312Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:bde7894532de157b55c1f46905f82d37e42230e8b2b9a02a3429651e7b3e7f30","size":"M","warnings":0}}
+{"ts":"2026-11-06T08:26:01.904Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"assumption.decided","data":{"item":"A1","decision":"rejected","comment":"Flutter 3.47.9 via fvn y dart 3.13.7"}}
+{"ts":"2026-11-06T08:26:14.767Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"assumption.decided","data":{"item":"A2","decision":"confirmed"}}
+{"ts":"2026-11-06T08:26:21.592Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"assumption.decided","data":{"item":"A3","decision":"confirmed"}}
+{"ts":"2026-11-06T08:26:30.325Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"assumption.decided","data":{"rejected":["A1"]}}
+{"ts":"2026-11-06T08:27:28.452Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"assumption.decided","data":{"rejected":["A1"]}}
+{"ts":"2026-11-06T08:31:35.608Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:fc168ec9c69abacb684505b312884b718ce4436943c2c64fcc093d2b9a505867","size":"M","warnings":0}}
+{"ts":"2026-11-06T08:31:51.076Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"assumption.decided","data":{"item":"A1","decision":"confirmed"}}
+{"ts":"2026-11-06T08:32:12.109Z","actor":"human","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":2,"hash":"sha256:fc168ec9c69abacb684505b312884b718ce4436943c2c64fcc093d2b9a505867","channel":"ui"}}
