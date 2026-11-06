@@ -6,6 +6,13 @@
   "branch": "feature/gestion-de-sala-y-conexion-por-ip",
   "baseCommit": "09ba8eef2de152db33e771bee4afa264c90f6375",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d",
+    "at": "2026-11-06T11:04:35.150Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 14,
@@ -40,12 +47,6 @@
     "T": 3,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d",
-    "at": "2026-11-06T11:04:35.150Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-06T11:05:16.667Z"
 }
