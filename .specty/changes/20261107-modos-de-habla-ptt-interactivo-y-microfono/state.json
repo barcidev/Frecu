@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-modos-de-habla-ptt-interactivo-y-microfono",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/modos-de-habla-ptt-interactivo-y-microfono",
   "baseCommit": "865389242bb880ea33e5242f1e719c3612cfcb86",
   "revision": 1,
@@ -48,6 +48,7 @@
     "T": 4,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T23:47:29.590Z"
+  "lockedTests": {
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:acf94caad22f8647542e6a4008ce72075e18dbb19e58b2691dddfab30fe32020"
+  }
 }
