@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-invitacion-y-escaneo-por-codigo-qr",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/invitacion-y-escaneo-por-codigo-qr",
   "baseCommit": "4ed616dd21ceb83e1ece9d040d75277bc4d827b2",
   "revision": 1,
@@ -48,6 +48,9 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T16:44:18.331Z"
+  "lockedTests": {
+    "test/features/lobby/presentation/scan_qr_page_test.dart": "sha256:aafd0d91e4a47c84247359e034049ad290610ccfc24dfe3a72bc5e14de6e7af6",
+    "test/features/room/domain/invite_qr_usecases_test.dart": "sha256:cddd39b71ee8a9d19456548f0fca69804e3b780703fe901ed0e413d23149f1c2",
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:2f572f1a243b4ff82014175dc2be7e5b6e37ab9159001f2b752e074a082d8880"
+  }
 }
