@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "20261106-protocolo-y-senalizacion-websocket",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/protocolo-y-senalizacion-websocket",
+  "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:ff0d74bea9c9a6115e20a6696f1802b03719a3e9f8b46ce50ffabe5cc704a8e2",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:5d6ee22aac7b9ecee8033baeb88394a09e3802b6bd30e04a3b19b1331879b7e3",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 1,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2a1808575bb08c1f0d5b1a489e02a14a86941df4da7005b4f358ada598cbdb37",
+    "at": "2026-11-06T10:01:57.724Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
