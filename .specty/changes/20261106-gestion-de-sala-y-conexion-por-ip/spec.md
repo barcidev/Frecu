@@ -66,7 +66,7 @@ Permitir que el usuario anfitrión cree una frecu viendo su dirección IP local 
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/data/room_repository_test.dart
   - type: feat
-- [ ] T3: Proveedores de Riverpod (RoomNotifier), actualización de UI en CreateRoomPage, LobbyPage y RoomPage, y pruebas de flujo.
+- [x] T3: Proveedores de Riverpod (RoomNotifier), actualización de UI en CreateRoomPage, LobbyPage y RoomPage, y pruebas de flujo.
   - files: lib/features/room/presentation/providers/room_provider.dart, lib/features/lobby/presentation/pages/create_room_page.dart, lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter analyze && fvm flutter test
