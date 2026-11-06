@@ -8,6 +8,7 @@ import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -173,8 +174,9 @@ class _PinJoinDialogState extends ConsumerState<_PinJoinDialog> {
       case Success(:final data):
         unawaited(context.router.push(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(failure.toString())));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.toLocalizedMessage())));
     }
   }
 
@@ -253,8 +255,9 @@ class _JoinRoomDialogState extends ConsumerState<_JoinRoomDialog> {
       case Success(:final data):
         unawaited(context.router.push(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(failure.toString())));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.toLocalizedMessage())));
     }
   }
 

@@ -59,7 +59,7 @@ Habilitar la topología de malla WebRTC completa (mesh) de hasta 6 participantes
   - files: test/features/room/data/peer_connection_datasource_test.dart, test/features/room/data/voice_repository_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/data/peer_connection_datasource_test.dart test/features/room/data/voice_repository_test.dart
-- [ ] T3: Notificación de sala llena en la interfaz de usuario al recibir roomFull
+- [x] T3: Notificación de sala llena en la interfaz de usuario al recibir roomFull
   - files: lib/features/room/presentation/extensions/failure_extension.dart, lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/lobby/presentation/pages/scan_qr_page.dart, test/features/lobby/presentation/room_full_flow_test.dart
   - ac: AC4
   - verify: fvm flutter test test/features/lobby/presentation/room_full_flow_test.dart

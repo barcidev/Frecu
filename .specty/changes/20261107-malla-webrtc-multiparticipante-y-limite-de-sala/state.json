@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-malla-webrtc-multiparticipante-y-limite-de-sala",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/malla-webrtc-multiparticipante-y-limite-de-sala",
   "baseCommit": "dd92192fcdea287fb6ee7c9cc4ee321d2e384256",
   "revision": 1,
@@ -50,15 +50,24 @@
     },
     "T2": {
       "status": "done",
+      "baseCommit": "b6b0aeb8370d51f20eb9e3fc1ffa38ffe12eaab0",
+      "attempts": 1,
+      "startedAt": "2026-11-06T19:41:21.131Z",
+      "doneAt": "2026-11-06T20:00:08.306Z",
+      "summary": "Malla WebRTC multiparticipante para hasta 5 conexiones concurrentes en PeerConnectionDataSource",
       "scopeExtra": [
         "lib/features/room/data/datasources/peer_connection_datasource.dart",
         "test/flutter_test_config.dart"
-      ],
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
       "attempts": 1,
-      "baseCommit": "b6b0aeb8370d51f20eb9e3fc1ffa38ffe12eaab0",
-      "startedAt": "2026-11-06T19:41:21.131Z",
-      "doneAt": "2026-11-06T20:00:08.306Z",
-      "summary": "Malla WebRTC multiparticipante para hasta 5 conexiones concurrentes en PeerConnectionDataSource"
+      "baseCommit": "409f543abcefd7fb988bfca5ec2594f05edca09e",
+      "startedAt": "2026-11-06T20:00:08.907Z",
+      "doneAt": "2026-11-06T20:04:29.207Z",
+      "summary": "Notificación de sala llena en LobbyPage y ScanQrPage mediante FailureLocalization"
     }
   },
   "pending": {

@@ -7,6 +7,7 @@ import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/usecases/parse_invite_from_qr.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
+import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -74,7 +75,7 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage> {
           unawaited(context.router.replace(RoomRoute(roomId: data.id)));
         } on Object catch (_) {}
       case FailureResult(:final failure):
-        _showError(failure.toString());
+        _showError(failure.toLocalizedMessage());
     }
   }
 
