@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "id": "20261106-gestion-de-sala-y-conexion-por-ip",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/gestion-de-sala-y-conexion-por-ip",
+  "baseCommit": "09ba8eef2de152db33e771bee4afa264c90f6375",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b7e02b88d0beff7bbbb6abb3b9549e47e8415ccfe36741b72e85eb56bbb2320d",
+    "at": "2026-11-06T11:04:35.150Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "12 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:7cc17378b647ddbf730092070db1a0c0bc75ea5e1436785018b69b070a8f04eb",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:717033bb64158381112ecb4a2e4ad91929285e33910bbb4be68832eb9b6ce3dc",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:4c6eb7770f72768d0711eee57671584c574615ee73432cffac98c2af74b082c1",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "7626b301aa80679090f1e86637649f5553c95b17",
+      "attempts": 1,
+      "startedAt": "2026-11-06T11:07:04.092Z",
+      "doneAt": "2026-11-06T11:15:16.050Z",
+      "summary": "Contratos de dominio RoomRepository y casos de uso CreateRoom, JoinRoom y LeaveRoom con pruebas unitarias",
+      "scopeExtra": [
+        "test/features/room/domain/usecases_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "89354dee505b669c64485586d192505a9780a1be",
+      "attempts": 1,
+      "startedAt": "2026-11-06T11:15:16.455Z",
+      "doneAt": "2026-11-06T12:47:26.435Z",
+      "summary": "Implementar RoomRepositoryImpl con resolución de IP local y tests de integración de WebSocket",
+      "scopeExtra": [
+        "test/features/room/data/room_repository_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "ddaba09c0e9b79c4df933b70157b95b66b964694",
+      "attempts": 1,
+      "startedAt": "2026-11-06T12:47:26.825Z",
+      "doneAt": "2026-11-06T13:43:56.532Z",
+      "summary": "Proveedores de Riverpod RoomNotifier, actualización de UI en CreateRoomPage, LobbyPage y RoomPage, y pruebas de flujo",
+      "scopeExtra": [
+        "test/features/room/presentation/room_flow_test.dart",
+        "lib/features/room/presentation/providers/room_provider.g.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 3,
+    "R": 1,
+    "S": 4
+  },
+  "closingSubmittedAt": "2026-11-06T13:44:45.408Z",
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:b1416ee04abe91f6ad3f9bf18130cd8a2f4d1f88e4ecbd945ccfd8222e0c48cc",
+    "test/features/room/domain/usecases_test.dart": "sha256:8cc11d6e4d8ef8c397e1c6f5bc7c62a81050ab492429011b9aa451ccbbe04244",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:c7d6b460440efb96238fefb7c1b15e9f2edda9811d51221dea4c72c670152591"
+  }
+}

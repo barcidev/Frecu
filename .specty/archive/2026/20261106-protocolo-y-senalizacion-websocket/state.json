@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "id": "20261106-protocolo-y-senalizacion-websocket",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/protocolo-y-senalizacion-websocket",
+  "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2a1808575bb08c1f0d5b1a489e02a14a86941df4da7005b4f358ada598cbdb37",
+    "at": "2026-11-06T10:01:57.724Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:ff0d74bea9c9a6115e20a6696f1802b03719a3e9f8b46ce50ffabe5cc704a8e2",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:5d6ee22aac7b9ecee8033baeb88394a09e3802b6bd30e04a3b19b1331879b7e3",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "9aa7fd551c78b86c6aa67cafbef24fcd2efabc58",
+      "attempts": 1,
+      "startedAt": "2026-11-06T10:04:42.165Z",
+      "doneAt": "2026-11-06T10:13:18.000Z",
+      "summary": "Configurar dependencias en pubspec.yaml y entidades de dominio de Room con tests unitarios",
+      "scopeExtra": [
+        "lib/features/room/domain/entities/participant.freezed.dart",
+        "lib/features/room/domain/entities/participant.g.dart",
+        "lib/features/room/domain/entities/room.freezed.dart",
+        "lib/features/room/domain/entities/room.g.dart",
+        "lib/features/room/domain/entities/room_status.freezed.dart",
+        "test/features/room/domain/entities_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "b1147654eaad7436e6aef4e2379500b5e29df77e",
+      "attempts": 1,
+      "startedAt": "2026-11-06T10:13:18.899Z",
+      "doneAt": "2026-11-06T10:37:30.150Z",
+      "summary": "Implementar SignalingMessage con Freezed union serializable para todos los tipos de mensaje del protocolo y pruebas unitarias",
+      "scopeExtra": [
+        "test/features/room/data/signaling_message_test.dart",
+        "test/features/room/data/signaling_server_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "08c04142e847ebf542e2c5d1a8964aff1bc59cbf",
+      "attempts": 1,
+      "startedAt": "2026-11-06T10:37:30.492Z",
+      "doneAt": "2026-11-06T11:01:29.250Z",
+      "summary": "Implementar SignalingServerDataSource, SignalingClientDataSource y pruebas de integración de servidor/cliente WebSocket",
+      "scopeExtra": [
+        "lib/features/room/data/models/signaling_message.dart",
+        "test/features/room/data/signaling_message_test.dart",
+        "test/features/room/data/signaling_server_test.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 1,
+    "T": 3,
+    "R": 1,
+    "S": 5
+  },
+  "closingSubmittedAt": "2026-11-06T11:02:42.907Z",
+  "lockedTests": {
+    "test/features/room/data/signaling_message_test.dart": "sha256:45207f38a5fe0f4dfe0fff59d6027311031fb5633cd4b7d0bee9c2a85925b63c",
+    "test/features/room/data/signaling_server_test.dart": "sha256:34d0d4a843b17162076d169b2e651b15636e05ac12c7f7e2881edd0f481e9cb1",
+    "test/features/room/domain/entities_test.dart": "sha256:4e4c3108f652952b32174cbf50c0761212d6c61b102fd88d23a2a56571e0a134"
+  }
+}

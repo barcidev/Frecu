@@ -1,0 +1,151 @@
+import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
+import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
+import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
+import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
+import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'voice_provider.g.dart';
+
+/// Estado inmutable de voz y micrófono de la sala.
+class VoiceState {
+  /// Constructor con valores por defecto.
+  const VoiceState({
+    this.isTalking = false,
+    this.talkMode = TalkMode.pushToTalk,
+    this.speakingPeers = const {},
+    this.isInitialized = false,
+  });
+
+  /// Indica si el micrófono local está transmitiendo audio.
+  final bool isTalking;
+
+  /// Modo de habla activo (PTT o micrófono abierto).
+  final TalkMode talkMode;
+
+  /// Conjunto de identificadores de participantes remotos hablando.
+  final Set<String> speakingPeers;
+
+  /// Indica si la sesión de audio ya fue inicializada.
+  final bool isInitialized;
+
+  /// Crea una copia del estado con los campos proporcionados.
+  VoiceState copyWith({
+    bool? isTalking,
+    TalkMode? talkMode,
+    Set<String>? speakingPeers,
+    bool? isInitialized,
+  }) {
+    return VoiceState(
+      isTalking: isTalking ?? this.isTalking,
+      talkMode: talkMode ?? this.talkMode,
+      speakingPeers: speakingPeers ?? this.speakingPeers,
+      isInitialized: isInitialized ?? this.isInitialized,
+    );
+  }
+}
+
+/// Proveedor global singleton del repositorio de voz.
+@Riverpod(keepAlive: true)
+VoiceRepository voiceRepository(Ref ref) {
+  final signaling = ref.watch(signalingClientProvider);
+  final audioSession = AudioSessionDataSource();
+  final peerConnection = PeerConnectionDataSource(signalingClient: signaling);
+  final repository = VoiceRepositoryImpl(
+    audioSessionDataSource: audioSession,
+    peerConnectionDataSource: peerConnection,
+    signalingClientDataSource: signaling,
+  );
+  ref.onDispose(repository.dispose);
+  return repository;
+}
+
+/// Stream reactivo de si el usuario local está transmitiendo audio.
+@riverpod
+Stream<bool> isTalking(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchIsTalking();
+}
+
+/// Stream reactivo de los participantes remotos que están hablando.
+@riverpod
+Stream<Set<String>> speakingPeers(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchSpeakingPeers();
+}
+
+/// Stream reactivo del modo de habla actual.
+@riverpod
+Stream<TalkMode> talkMode(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchTalkMode();
+}
+
+/// Alias para consistencia de nomenclatura con la clase Notifier.
+VoiceNotifierProvider get voiceNotifierProvider => voiceProvider;
+
+/// Gestor de estado del micrófono y transmisión de voz.
+@Riverpod(keepAlive: true)
+class VoiceNotifier extends _$VoiceNotifier {
+  @override
+  VoiceState build() {
+    final repository = ref.watch(voiceRepositoryProvider);
+
+    final talkingSub = repository.watchIsTalking().listen((talking) {
+      state = state.copyWith(isTalking: talking);
+    });
+    final speakingSub = repository.watchSpeakingPeers().listen((peers) {
+      state = state.copyWith(speakingPeers: peers);
+    });
+    final modeSub = repository.watchTalkMode().listen((mode) {
+      state = state.copyWith(talkMode: mode);
+    });
+
+    ref.onDispose(() {
+      talkingSub.cancel();
+      speakingSub.cancel();
+      modeSub.cancel();
+    });
+
+    return const VoiceState();
+  }
+
+  /// Inicializa la captura y sesión de audio con permisos.
+  Future<Result<void>> initialize() async {
+    final repository = ref.read(voiceRepositoryProvider);
+    final result = await repository.initializeAudio();
+    if (result.isSuccess) {
+      state = state.copyWith(isInitialized: true);
+    }
+    return result;
+  }
+
+  /// Inicia la transmisión de voz en el canal WebRTC.
+  Future<Result<void>> startTalking() async {
+    final repository = ref.read(voiceRepositoryProvider);
+    return repository.startTalking();
+  }
+
+  /// Silencia el micrófono y detiene la transmisión de voz.
+  Future<Result<void>> stopTalking() async {
+    final repository = ref.read(voiceRepositoryProvider);
+    return repository.stopTalking();
+  }
+
+  /// Alterna el estado del micrófono (silenciar / transmitir).
+  Future<Result<void>> toggleMicrophone() async {
+    if (state.isTalking) {
+      return stopTalking();
+    } else {
+      return startTalking();
+    }
+  }
+
+  /// Cambia el modo de habla (PTT o micrófono abierto).
+  Future<Result<void>> setTalkMode(TalkMode mode) async {
+    final repository = ref.read(voiceRepositoryProvider);
+    return repository.setTalkMode(mode);
+  }
+}
