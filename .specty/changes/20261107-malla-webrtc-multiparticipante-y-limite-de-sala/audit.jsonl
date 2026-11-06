@@ -1,0 +1,3 @@
+{"ts":"2026-11-06T19:09:33.553Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/malla-webrtc-multiparticipante-y-limite-de-sala","epic":"20261107-frecu-multiparticipante-y-topologia-mesh","slice":"C1"}}
+{"ts":"2026-11-06T19:19:37.452Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:2d32b74f7d264f853b3204e4c3243e9aa557737444ef175850461c9959d8f51d","size":"M","warnings":0}}
+{"ts":"2026-11-06T19:19:42.809Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:2d32b74f7d264f853b3204e4c3243e9aa557737444ef175850461c9959d8f51d","channel":"delegated","delegated":true}}
