@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261106-protocolo-y-senalizacion-websocket",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/protocolo-y-senalizacion-websocket",
   "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
   "revision": 1,
@@ -43,6 +43,9 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T10:04:16.508Z"
+  "lockedTests": {
+    "test/features/room/data/signaling_message_test.dart": "sha256:12019a721ff959b5ddf6a9e8f17e067db26ee8da8616b29e45dae56e6ee18462",
+    "test/features/room/data/signaling_server_test.dart": "sha256:cdc35f3537a196b9d792b0596702c4a285fa995d7cb666f8b091f9deb316484e",
+    "test/features/room/domain/entities_test.dart": "sha256:cd442032b8c64ac3a69eb580cf3666ca8e11c848e82a6e3fc6a069ab491dcdf4"
+  }
 }
