@@ -36,7 +36,19 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/room/domain/voice_usecases_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "1ab9138ccef85cb6f6a87d376ec9657ec13fdf8f",
+      "startedAt": "2026-11-06T13:50:13.113Z",
+      "doneAt": "2026-11-06T14:02:49.788Z",
+      "summary": "Configurar dependencias en pubspec.yaml, TalkMode, VoiceRepository y casos de uso con pruebas unitarias"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -45,11 +57,12 @@
     "A": 3,
     "AC": 3,
     "T": 3,
-    "R": 1
+    "R": 1,
+    "S": 1
   },
   "lockedTests": {
     "test/features/room/data/voice_repository_test.dart": "sha256:af1cfb4d29b36b200a747eeab1b1af079e6ab250093b9e33325a63980dd8d29f",
-    "test/features/room/domain/voice_usecases_test.dart": "sha256:c465c753f5bf64f035c0e013b6689e4853ea7b1ca5df5fb2fa384a4bf0230d51",
+    "test/features/room/domain/voice_usecases_test.dart": "sha256:5ea01764e5679e577f8b42e1153a711abffcf33a580a04c9e381f93404e94b45",
     "test/features/room/presentation/voice_flow_test.dart": "sha256:11c6056c3013b3c4b023be52bfc38ad0da6a789f84fe7329a47b5f003f80de92"
   }
 }

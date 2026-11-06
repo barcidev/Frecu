@@ -64,7 +64,7 @@ Establecer la transmisión de audio bidireccional punto a punto (WebRTC mesh) en
 
 ## Tareas
 
-- [ ] T1: Configurar dependencias en pubspec.yaml, TalkMode, VoiceRepository y casos de uso con pruebas unitarias.
+- [x] T1: Configurar dependencias en pubspec.yaml, TalkMode, VoiceRepository y casos de uso con pruebas unitarias.
   - files: pubspec.yaml, lib/features/room/domain/entities/talk_mode.dart, lib/features/room/domain/repositories/voice_repository.dart, lib/features/room/domain/usecases/voice_usecases.dart, test/features/room/domain/voice_usecases_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/domain/voice_usecases_test.dart
