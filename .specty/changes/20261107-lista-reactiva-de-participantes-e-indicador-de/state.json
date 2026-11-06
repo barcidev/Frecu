@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-lista-reactiva-de-participantes-e-indicador-de",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/lista-reactiva-de-participantes-e-indicador-de",
   "baseCommit": "72a8d56739d239ec06dc44d717cbf755581d518e",
   "revision": 1,
@@ -46,6 +46,8 @@
     "T": 2,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-06T20:42:03.074Z"
+  "lockedTests": {
+    "test/features/room/presentation/room_flow_test.dart": "sha256:a6c433302fac41e8c65c85a5aa42b12681da0564d43826c9c308498175829c63",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:de5e6065b3b35f342db5dc1d76e2f9d9369dcbd63f6c711dd7b6b8fcdb6fc643"
+  }
 }
