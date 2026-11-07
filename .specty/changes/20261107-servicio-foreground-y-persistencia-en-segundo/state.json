@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261107-servicio-foreground-y-persistencia-en-segundo",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/servicio-foreground-y-persistencia-en-segundo",
+  "baseCommit": "ff96b0a595b239916eb43f1fb310bd76523a9c6d",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos",
+      "2 módulos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f88ed81cc1c515a5f34d0236bd3d856fac12e54ca5acb24948405e8a507ade42",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:7253553ec78cec05808d202e02148b25f0744225d00c86bf9ce18293cb36f0e0",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:c350c9c34542b183c094f2b754f85c0a893e84ef805489bb046f6ff69f688770",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 1,
+    "T": 2,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:20e5e95a93bc81c65cca49b158fcf341495ea3f53bef98bb4aa75f009db0e900",
+    "at": "2026-11-07T04:57:49.012Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
