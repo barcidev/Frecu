@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "baseCommit": "2408d791f5d9b74e31affbfeb8df7079d6afefc4",
   "revision": 1,
@@ -59,6 +59,8 @@
     "T": 2,
     "R": 2
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T17:05:01.290Z"
+  "lockedTests": {
+    "test/features/settings/presentation/settings_name_test.dart": "sha256:82f6cfb73aa9411b6729f8c97086b56ddbcc1e4ef4caee16fb12b3480d7cba4a",
+    "test/features/settings/presentation/settings_page_test.dart": "sha256:7ebbbaafe77ffce62c4a8fa7e747e0c244fe765e77ac6f6ccf499c64f0a5299b"
+  }
 }
