@@ -24,6 +24,7 @@ dependencies:
   permission_handler: ^13.0.2
   qr_flutter: ^4.1.0
   riverpod_annotation: ^4.0.0
+  shared_preferences: ^2.5.6
   shelf: ^1.4.3
   shelf_web_socket: ^3.0.0
   slang: ^4.4.1
@@ -39,7 +40,27 @@ dev_dependencies:
   json_serializable: ^6.9.5
   mocktail: ^1.0.4
   riverpod_generator: ^4.0.0
+  shared_preferences_platform_interface: ^2.4.2
   very_good_analysis: ^7.0.0
 
 flutter:
   uses-material-design: true
+
+  # Licencias OFL de las fuentes empaquetadas.
+  assets:
+    - assets/fonts/archivo/OFL.txt
+    - assets/fonts/martianmono/OFL.txt
+    - assets/fonts/doto/OFL.txt
+
+  # Fuentes variables de Portadora (google/fonts, OFL). Los nombres coinciden
+  # con `FrFonts`; los ejes los mueve `FrType` con `fontVariations`.
+  fonts:
+    - family: Archivo
+      fonts:
+        - asset: assets/fonts/archivo/Archivo.ttf
+    - family: Martian Mono
+      fonts:
+        - asset: assets/fonts/martianmono/MartianMono.ttf
+    - family: Doto
+      fonts:
+        - asset: assets/fonts/doto/Doto.ttf

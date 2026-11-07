@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "id": "20261107-widgets-de-control-frpinfield-frkeypad",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/widgets-de-control-frpinfield-frkeypad",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c7783b91aea19ab95dd66bb0d6e2e29e699bd4f61130d7208b6c28b6e585087a",
+    "at": "2026-11-07T11:01:26.452Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:837ecea8f8812892c46bafd620b8d9c33b17ec97f971e801165898b4ebcadd38",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:b7fdef99958999efb0dbea26a17dd14ca1fca378890b72692a2512da7dbb14ff",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:ee33e62ca9f075bed82441015454cd4f960b4fd8b61e44fae7c919acf6512ed8",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:f370e63eceda38c5702e9e70e6f5ba1169c1cefb4ce16971e401b6ba367df42f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "b1475aae06279457b470eae3cab08a4da8af650d",
+      "attempts": 1,
+      "startedAt": "2026-11-07T11:13:48.614Z",
+      "doneAt": "2026-11-07T11:17:32.849Z",
+      "summary": "FrPinField (celdas Doto 64×78, cursor que parpadea con FrLoop, aparición con resorte organic, busy con latido escalonado, ok con ola, error con temblor, solo lectura) y FrKeypad (teclas de 56 px con FrPressable a 0,93, función opcional y borrar con etiqueta accesible), con movimiento reducido",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "b2a849c4661c78eccef4df5de4bd1c9911b251b3",
+      "attempts": 1,
+      "startedAt": "2026-11-07T11:17:33.770Z",
+      "doneAt": "2026-11-07T11:21:20.710Z",
+      "summary": "FrSegmented<T> con pulgar de resorte organic que se estira y variante de señal, y FrToggle con perilla de resorte que se estira al presionar y Semantics toggled; ambos al 38 % sin onChanged y sin resorte con movimiento reducido",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "dcead94f8e6bf0deba91a02851824b2a5380e592",
+      "attempts": 1,
+      "startedAt": "2026-11-07T11:21:21.888Z",
+      "doneAt": "2026-11-07T11:23:15.462Z",
+      "summary": "FrPill con punto y halo que late (2,4 s; 1,1 s en aviso; sin halo apagada) o arco que gira si está ocupada, y FrTag de 20 px en neutro, señal y aviso; de día ningún texto ni trazo usa signal y con movimiento reducido el halo se apaga",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 7,
+    "T": 3,
+    "R": 2
+  },
+  "closingSubmittedAt": "2026-11-07T11:23:47.647Z",
+  "lockedTests": {
+    "test/core/design/widgets/fr_pill_test.dart": "sha256:601a3b78bd5d8e0178924ca6d5bce79611fa46b4c3c926791fe0645c0659fcaf",
+    "test/core/design/widgets/fr_pin_field_test.dart": "sha256:ed56295732bb9d81ad4d066c6504bd0cb90b9f325005f2b11a0c0f42d8dcf76b",
+    "test/core/design/widgets/fr_segmented_test.dart": "sha256:3712f43d1a381cc93af1f0a7c58c320300cb2bfeb95bff8e7e557ed5b0d5a788"
+  }
+}
