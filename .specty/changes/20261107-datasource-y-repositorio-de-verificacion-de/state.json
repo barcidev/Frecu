@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-datasource-y-repositorio-de-verificacion-de",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/datasource-y-repositorio-de-verificacion-de",
   "baseCommit": "cb3fae623a91c4bc89f6b45571e04faf708ba8f7",
   "revision": 1,
@@ -41,6 +41,10 @@
     "AC": 6,
     "T": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T09:27:26.408Z"
+  "lockedTests": {
+    "test/features/permissions/data/permission_datasource_test.dart": "sha256:7b123f0d7c8b49a97a50e9f4960bb95d743b29e8177446f074b91c973e1555c4",
+    "test/features/permissions/data/permission_repository_impl_test.dart": "sha256:a4cd2e21f4853c02ff55a31f760fa7513730177963dc5dba2419e3a7238c117d",
+    "test/features/permissions/domain/app_permission_test.dart": "sha256:015d24af298742899072ab261224cd2e1ff4d2f1d3849370d4d25ee9e73a5aa9",
+    "test/features/permissions/presentation/permission_provider_test.dart": "sha256:5a3a0858efc2189361864bc1c48509db6b51a5f60df7c48c14ff67ba5567140b"
+  }
 }
