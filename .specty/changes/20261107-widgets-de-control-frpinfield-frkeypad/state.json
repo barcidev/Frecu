@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-widgets-de-control-frpinfield-frkeypad",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/widgets-de-control-frpinfield-frkeypad",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -50,6 +50,9 @@
     "T": 3,
     "R": 2
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T11:13:30.590Z"
+  "lockedTests": {
+    "test/core/design/widgets/fr_pill_test.dart": "sha256:601a3b78bd5d8e0178924ca6d5bce79611fa46b4c3c926791fe0645c0659fcaf",
+    "test/core/design/widgets/fr_pin_field_test.dart": "sha256:ed56295732bb9d81ad4d066c6504bd0cb90b9f325005f2b11a0c0f42d8dcf76b",
+    "test/core/design/widgets/fr_segmented_test.dart": "sha256:3712f43d1a381cc93af1f0a7c58c320300cb2bfeb95bff8e7e557ed5b0d5a788"
+  }
 }
