@@ -63,7 +63,7 @@ La app tiene su propio set de íconos de Portadora: los 37 íconos del prototipo
   - files: lib/core/design/icons/fr_icon_data.dart, lib/core/design/icons/fr_icons.dart, lib/core/design/icons/fr_icon.dart, test/core/design/icons/fr_icons_test.dart, test/core/design/icons/fr_icon_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/core/design/icons
-- [ ] T3: `FrButton.drawn` y `FrIconButton.drawn`
+- [x] T3: `FrButton.drawn` y `FrIconButton.drawn`
   - files: lib/core/design/widgets/fr_button.dart, lib/core/design/widgets/fr_icon_button.dart, test/core/design/icons/fr_icon_test.dart
   - ac: AC4
   - verify: flutter analyze && flutter test test/core/design

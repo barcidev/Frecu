@@ -1,6 +1,5 @@
 // AC2: CUANDO se dibuja un ícono de `FrIcons` ENTONCES su trazado sale en código de los trazos del prototipo (37 íconos, de `mic` a `dot`), cabe en la rejilla de 24 y respeta su geometría (por ejemplo, el arco del micrófono baja hasta y = 18 y el círculo de `info` ocupa de 3 a 21), sin fuentes de íconos, assets ni red.
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

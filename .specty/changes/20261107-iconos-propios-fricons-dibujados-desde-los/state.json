@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-iconos-propios-fricons-dibujados-desde-los",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/iconos-propios-fricons-dibujados-desde-los",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -51,15 +51,24 @@
     },
     "T2": {
       "status": "done",
+      "baseCommit": "25db96c40f4c85618f7091a97940b4da95ae1cd3",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:06:35.664Z",
+      "doneAt": "2026-11-07T16:09:18.626Z",
+      "summary": "FrIconData con formas rect/circle/path y geometría en caché, catálogo FrIcons con los 37 íconos del prototipo y FrIcon/FrIconPainter con IconTheme y trazo redondo; adelanta .drawn de los botones porque fr_icon_test lo carga.",
       "scopeExtra": [
         "lib/core/design/widgets/fr_button.dart",
         "lib/core/design/widgets/fr_icon_button.dart"
-      ],
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
       "attempts": 1,
-      "baseCommit": "25db96c40f4c85618f7091a97940b4da95ae1cd3",
-      "startedAt": "2026-11-07T16:06:35.664Z",
-      "doneAt": "2026-11-07T16:09:18.626Z",
-      "summary": "FrIconData con formas rect/circle/path y geometría en caché, catálogo FrIcons con los 37 íconos del prototipo y FrIcon/FrIconPainter con IconTheme y trazo redondo; adelanta .drawn de los botones porque fr_icon_test lo carga."
+      "baseCommit": "f7da6a8b5a06ee14605679f925df3766e354a6b1",
+      "startedAt": "2026-11-07T16:09:19.715Z",
+      "doneAt": "2026-11-07T17:15:57.090Z",
+      "summary": "FrButton.drawn y FrIconButton.drawn (adelantados en T2) dibujan íconos de FrIcons a 22 px con el primer plano de su variante; los constructores con IconData no cambian."
     }
   },
   "pending": {
