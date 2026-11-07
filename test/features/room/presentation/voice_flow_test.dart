@@ -1,6 +1,8 @@
 // AC1: CUANDO el usuario se encuentra en modo PTT y mantiene presionado el botón de hablar (`onPointerDown`) ENTONCES se activa la transmisión de voz (`startTalking()`) y el botón refleja visualmente el estado de habla hasta que el usuario lo suelta o cancela la pulsación (`onPointerUp`/`onPointerCancel`), silenciando el micrófono (`stopTalking()`).
 // AC2: CUANDO el usuario selecciona el modo de micrófono abierto (`openMic`) en la sala ENTONCES el modo se actualiza a `openMic` y el botón de micrófono permite alternar la transmisión continua (conmutar silencio/habla con un solo toque).
 // AC3: CUANDO el usuario cambia de modo de habla de micrófono abierto transmitiendo a PTT ENTONCES la transmisión continua se detiene de inmediato silenciando el micrófono.
+// AC2 (C4): CUANDO alguien habla ENTONCES su etiqueta en la malla dice «Hablando».
+// AC6 (C4): CUANDO el usuario está en la frecu activa ENTONCES el PTT, el micrófono abierto, el cambio de modo y el ciclo de ruta de audio funcionan como antes sobre la malla; con tema claro, el texto «Hablando» del micrófono abierto va en `signalFg`, nunca en verde sobre blanco.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
+import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
@@ -18,12 +21,19 @@ import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockRoomRepository extends Mock implements RoomRepository {}
 
 class MockVoiceRepository extends Mock implements VoiceRepository {}
+
+void reduceMotion(WidgetTester tester) {
+  tester.platformDispatcher.accessibilityFeaturesTestValue =
+      const FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -107,6 +117,7 @@ void main() {
     testWidgets(
       'AC1: PTT mode starts talking on pointer down and stops talking on pointer up or cancel',
       (tester) async {
+        reduceMotion(tester);
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -151,6 +162,7 @@ void main() {
     testWidgets(
       'AC2: selecting openMic mode updates talk mode and allows toggling mic with single tap',
       (tester) async {
+        reduceMotion(tester);
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -196,6 +208,7 @@ void main() {
     testWidgets(
       'AC3: switching from openMic to PTT mode while talking stops transmission and silences mic',
       (tester) async {
+        reduceMotion(tester);
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -220,6 +233,7 @@ void main() {
     testWidgets('RoomPage shows mic open and active speaking indicator', (
       tester,
     ) async {
+      reduceMotion(tester);
       final router = AppRouter();
       await tester.pumpWidget(createTestApp(router));
       await tester.pumpAndSettle();
@@ -241,6 +255,7 @@ void main() {
     testWidgets(
       'RoomPage activates speaking indicator and subtitle when participant speaks',
       (tester) async {
+        reduceMotion(tester);
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -263,7 +278,7 @@ void main() {
           findsOneWidget,
         );
         expect(find.byIcon(Icons.volume_up), findsWidgets);
-        expect(find.text(t.room.speaking), findsWidgets);
+        expect(find.text(t.room.speaking.toUpperCase()), findsOneWidget);
 
         // Remote peer stops speaking
         speakingPeersController.add({});
@@ -279,6 +294,7 @@ void main() {
     testWidgets(
       'Tapping audio route button switches audio route and updates icon dynamically',
       (tester) async {
+        reduceMotion(tester);
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -340,6 +356,7 @@ void main() {
     testWidgets(
       'Audio route changes dynamically when accessory is disconnected or route stream emits',
       (tester) async {
+        reduceMotion(tester);
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -372,6 +389,37 @@ void main() {
           ),
           findsOneWidget,
         );
+      },
+    );
+
+    // AC6
+    testWidgets(
+      'AC6: de día el «Hablando» del micrófono abierto va en signalFg y no en '
+      'verde',
+      (tester) async {
+        reduceMotion(tester);
+        tester.platformDispatcher.platformBrightnessTestValue =
+            Brightness.light;
+        addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        talkModeController.add(TalkMode.openMic);
+        isTalkingController.add(true);
+        await tester.pumpAndSettle();
+
+        final talking = find.descendant(
+          of: find.byType(MicControlSection),
+          matching: find.text(t.room.speaking),
+        );
+        expect(talking, findsOneWidget);
+        final color = tester.widget<Text>(talking).style?.color;
+        expect(color, FrColors.light.signalFg);
+        expect(color, isNot(FrColors.light.signal));
       },
     );
   });

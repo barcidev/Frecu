@@ -6,6 +6,13 @@
   "branch": "feature/malla-hexagonal-de-la-frecu-activa-con-firmas-y",
   "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:58e0cf3af2aa53eb5f0d6efe910ca5252e208c8b450707e5ac8e17cbb9a8b2f5",
+    "at": "2026-11-07T17:34:26.433Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 17,
@@ -56,12 +63,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:58e0cf3af2aa53eb5f0d6efe910ca5252e208c8b450707e5ac8e17cbb9a8b2f5",
-    "at": "2026-11-07T17:34:26.433Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T17:48:16.027Z"
 }

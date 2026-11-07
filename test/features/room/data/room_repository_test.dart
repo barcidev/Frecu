@@ -330,5 +330,188 @@ void main() {
         verify(mockForeground.stopService).called(1);
       },
     );
+
+    // AC7
+    test(
+      'AC7: al crear la frecu localParticipantId es el peerId de la bienvenida '
+      'y vuelve a null al salir',
+      () async {
+        expect(hostRepository.localParticipantId, isNull);
+
+        final participantsCompleter = Completer<List<Participant>>();
+        final sub = hostRepository.watchParticipants().listen((participants) {
+          if (participants.isNotEmpty && !participantsCompleter.isCompleted) {
+            participantsCompleter.complete(participants);
+          }
+        });
+
+        final result = await hostRepository.createRoom(
+          name: 'Moto Rutas',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+        );
+        expect(result.isSuccess, isTrue);
+
+        final participants = await participantsCompleter.future.timeout(
+          const Duration(seconds: 3),
+        );
+        final localId = hostRepository.localParticipantId;
+        expect(localId, isNotNull);
+        final me = participants.singleWhere((p) => p.id == localId);
+        expect(me.displayName, 'HostAlice');
+        expect(me.isHost, isTrue);
+
+        await hostRepository.leaveRoom();
+        expect(hostRepository.localParticipantId, isNull);
+
+        await sub.cancel();
+      },
+    );
+
+    // AC7
+    test(
+      'AC7: al unirse localParticipantId es el id que el anfitrión asignó al '
+      'participante propio',
+      () async {
+        final createResult = await hostRepository.createRoom(
+          name: 'Moto Rutas',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+        );
+        final room = createResult.dataOrNull!;
+
+        final participantsCompleter = Completer<List<Participant>>();
+        final sub = peerRepository.watchParticipants().listen((participants) {
+          if (participants.length == 2 && !participantsCompleter.isCompleted) {
+            participantsCompleter.complete(participants);
+          }
+        });
+
+        final joinResult = await peerRepository.joinRoom(
+          hostAddress: '127.0.0.1',
+          port: room.port,
+          accessCode: '1234',
+          displayName: 'PeerBob',
+        );
+        expect(joinResult.isSuccess, isTrue);
+
+        final participants = await participantsCompleter.future.timeout(
+          const Duration(seconds: 3),
+        );
+        final localId = peerRepository.localParticipantId;
+        expect(localId, isNotNull);
+        expect(localId, isNot(hostRepository.localParticipantId));
+        final me = participants.singleWhere((p) => p.id == localId);
+        expect(me.displayName, 'PeerBob');
+        expect(me.isHost, isFalse);
+
+        await sub.cancel();
+      },
+    );
+
+    // AC7
+    test(
+      'AC7: al reconectar localParticipantId pasa al nuevo peerId que asigna '
+      'el anfitrión',
+      () async {
+        final createResult = await hostRepository.createRoom(
+          name: 'Moto Rutas',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+        );
+        final room = createResult.dataOrNull!;
+
+        await peerRepository.joinRoom(
+          hostAddress: '127.0.0.1',
+          port: room.port,
+          accessCode: '1234',
+          displayName: 'PeerBob',
+        );
+        final firstId = peerRepository.localParticipantId;
+        expect(firstId, isNotNull);
+
+        var sawReconnecting = false;
+        final reconnectedCompleter = Completer<void>();
+        final sub = peerRepository.watchStatus().listen((status) {
+          status.maybeWhen(
+            reconnecting: () => sawReconnecting = true,
+            connected: () {
+              if (sawReconnecting && !reconnectedCompleter.isCompleted) {
+                reconnectedCompleter.complete();
+              }
+            },
+            orElse: () {},
+          );
+        });
+
+        await peerClient.disconnect();
+        await reconnectedCompleter.future.timeout(const Duration(seconds: 5));
+
+        final newId = peerRepository.localParticipantId;
+        expect(newId, isNotNull);
+        expect(newId, isNot(firstId));
+
+        await sub.cancel();
+      },
+    );
+
+    // AC7
+    test('AC7: cuando el anfitrión cierra la frecu localParticipantId del '
+        'participante vuelve a null', () async {
+      final createResult = await hostRepository.createRoom(
+        name: 'Moto Rutas',
+        accessCode: '1234',
+        displayName: 'HostAlice',
+      );
+      final room = createResult.dataOrNull!;
+
+      await peerRepository.joinRoom(
+        hostAddress: '127.0.0.1',
+        port: room.port,
+        accessCode: '1234',
+        displayName: 'PeerBob',
+      );
+      expect(peerRepository.localParticipantId, isNotNull);
+
+      final closedCompleter = Completer<void>();
+      final sub = peerRepository.watchStatus().listen((status) {
+        status.maybeWhen(
+          closed: (_) {
+            if (!closedCompleter.isCompleted) closedCompleter.complete();
+          },
+          orElse: () {},
+        );
+      });
+
+      await hostRepository.leaveRoom();
+      await closedCompleter.future.timeout(const Duration(seconds: 5));
+
+      expect(peerRepository.localParticipantId, isNull);
+
+      await sub.cancel();
+    });
+
+    // AC7
+    test(
+      'AC7: si el anfitrión rechaza la unión localParticipantId queda en null',
+      () async {
+        final createResult = await hostRepository.createRoom(
+          name: 'Moto Rutas',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+        );
+        final room = createResult.dataOrNull!;
+
+        final joinResult = await peerRepository.joinRoom(
+          hostAddress: '127.0.0.1',
+          port: room.port,
+          accessCode: '0000',
+          displayName: 'PeerBob',
+        );
+
+        expect(joinResult.isSuccess, isFalse);
+        expect(peerRepository.localParticipantId, isNull);
+      },
+    );
   });
 }
