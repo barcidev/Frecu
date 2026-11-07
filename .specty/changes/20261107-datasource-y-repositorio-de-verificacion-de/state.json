@@ -6,6 +6,13 @@
   "branch": "feature/datasource-y-repositorio-de-verificacion-de",
   "baseCommit": "cb3fae623a91c4bc89f6b45571e04faf708ba8f7",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b7904b8fb876d2dfb9dfac195bfa94ab74c9f0a4cded9673a3428e5897e57bb1",
+    "at": "2026-11-07T09:22:23.682Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 10,
@@ -34,12 +41,6 @@
     "AC": 6,
     "T": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:b7904b8fb876d2dfb9dfac195bfa94ab74c9f0a4cded9673a3428e5897e57bb1",
-    "at": "2026-11-07T09:22:23.682Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T09:27:26.408Z"
 }
