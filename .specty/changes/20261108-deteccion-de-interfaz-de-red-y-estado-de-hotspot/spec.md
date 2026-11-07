@@ -46,7 +46,7 @@ Implementar la feature `features/network` para la detección autónoma de interf
 
 ## Tareas
 
-- [ ] T1: Entidad de dominio NetworkState y contrato NetworkRepository con pruebas
+- [x] T1: Entidad de dominio NetworkState y contrato NetworkRepository con pruebas
   - files: lib/features/network/domain/entities/network_state.dart, lib/features/network/domain/entities/network_state.freezed.dart, lib/features/network/domain/repositories/network_repository.dart, test/features/network/domain/network_state_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/network/domain/

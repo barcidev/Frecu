@@ -35,7 +35,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "5d2cdb2117c2b115341bdcba3789f084077732f5",
+      "startedAt": "2026-11-07T16:28:06.296Z",
+      "doneAt": "2026-11-07T16:30:15.588Z",
+      "summary": "Implementadas entidades de dominio NetworkState con Freezed 3 y contrato NetworkRepository"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
