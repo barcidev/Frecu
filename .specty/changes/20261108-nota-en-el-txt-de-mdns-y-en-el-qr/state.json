@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "id": "20261108-nota-en-el-txt-de-mdns-y-en-el-qr",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/nota-en-el-txt-de-mdns-y-en-el-qr",
+  "baseCommit": "42ba219cc58eb501c27338cfd4eba54506e25932",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:e5c71ae696d754e1ee75947773933121707493d1820e9fd5f382b9da0d56987f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a393b8f37383e3c50dcf9c45c5ee4f03ed540747895dbd84a553a305813c3bb6",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:72fc33bcfd8c67950120c9940755a46edf13d3b8e2d968e209805eb3513547f4",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:e7eb21c8433dd559a38cd1b4298170e9769714f853ead6be61d8364ea411c5ef",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:c1a467fa661baf22d7879754c56b5f337ee6933a8b2189c0f0c8bc49e931de16",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 5,
+    "T": 4,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:d45d87ba3fa6c40a837f243a3a721c37394e7bd79ccd3e5e07a3bbf645916317",
+    "at": "2026-11-07T16:57:47.871Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
