@@ -6,6 +6,13 @@
   "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
   "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c17de10525cfc0ea7c1cced5741a4fca6053b09c156d000b2c3c36d70bc75e42",
+    "at": "2026-11-07T17:23:30.007Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 9,
@@ -44,12 +51,6 @@
     "T": 4,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:c17de10525cfc0ea7c1cced5741a4fca6053b09c156d000b2c3c36d70bc75e42",
-    "at": "2026-11-07T17:23:30.007Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T17:25:43.336Z"
 }

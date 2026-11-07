@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 
 void main() {
   group('Signaling Server & Protocol', () {
@@ -363,6 +364,47 @@ void main() {
       );
       expect(leftPeerId, isNotEmpty);
 
+      await sub.cancel();
+    });
+    test('AC2: signaling server includes active RoomNote in welcome message upon valid join', () async {
+      const activeNote = RoomNote(semitone: 7);
+      await server.start(
+        accessCode: '1234',
+        host: '127.0.0.1',
+        port: 0,
+        note: activeNote,
+      );
+
+      final serverUri = Uri.parse('ws://127.0.0.1:${server.port}');
+      await client1.connect(serverUri);
+
+      final welcomeCompleter = Completer<SignalingWelcomeMessage>();
+      final sub = client1.messages.listen((msg) {
+        msg.maybeWhen(
+          welcome: (peerId, participants, note, _) {
+            welcomeCompleter.complete(
+              SignalingWelcomeMessage(
+                peerId: peerId,
+                participants: participants,
+                note: note,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      });
+
+      client1.send(
+        const SignalingMessage.join(
+          displayName: 'GuestBob',
+          accessCode: '1234',
+        ),
+      );
+
+      final welcome = await welcomeCompleter.future.timeout(
+        const Duration(seconds: 3),
+      );
+      expect(welcome.note, activeNote);
       await sub.cancel();
     });
   });
