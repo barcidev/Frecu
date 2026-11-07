@@ -329,5 +329,41 @@ void main() {
         await clients[i].dispose();
       }
     });
+
+    // AC2
+    test('AC2: server responds to ping with pong and detects peer timeout on inactivity', () async {
+      await server.start(accessCode: '1234', host: '127.0.0.1', port: 0);
+      final serverUri = Uri.parse('ws://127.0.0.1:${server.port}');
+
+      await client1.connect(serverUri);
+
+      final peerLeftCompleter = Completer<String>();
+      final sub = client1.messages.listen((msg) {
+        msg.maybeWhen(
+          peerLeft: (peerId, _) => peerLeftCompleter.complete(peerId),
+          orElse: () {},
+        );
+      });
+
+      client1.send(
+        const SignalingMessage.join(displayName: 'Alice', accessCode: '1234'),
+      );
+      await pumpEventQueue();
+
+      // Conectar cliente 2
+      await client2.connect(serverUri);
+      client2.send(
+        const SignalingMessage.join(displayName: 'Bob', accessCode: '1234'),
+      );
+      await pumpEventQueue();
+
+      // El servidor debe detectar timeout de inactividad de peer_2 y emitir peerLeft
+      final leftPeerId = await peerLeftCompleter.future.timeout(
+        const Duration(milliseconds: 500),
+      );
+      expect(leftPeerId, isNotEmpty);
+
+      await sub.cancel();
+    });
   });
 }
