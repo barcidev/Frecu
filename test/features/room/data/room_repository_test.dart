@@ -4,11 +4,16 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockForegroundServiceDataSource extends Mock
+    implements ForegroundServiceDataSource {}
 
 void main() {
   group('RoomRepository integration', () {
@@ -159,6 +164,170 @@ void main() {
         expect(remaining.first.displayName, 'HostAlice');
 
         await hostSub.cancel();
+      },
+    );
+
+    // AC2
+    test(
+      'AC2: peer repository transitions to reconnecting when connection drops',
+      () async {
+        final createResult = await hostRepository.createRoom(
+          name: 'Moto Rutas',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+        );
+        final room = createResult.dataOrNull!;
+
+        await peerRepository.joinRoom(
+          hostAddress: '127.0.0.1',
+          port: room.port,
+          accessCode: '1234',
+          displayName: 'PeerBob',
+        );
+
+        final reconnectingCompleter = Completer<void>();
+        final sub = peerRepository.watchStatus().listen((status) {
+          status.maybeWhen(
+            reconnecting: () {
+              if (!reconnectingCompleter.isCompleted) {
+                reconnectingCompleter.complete();
+              }
+            },
+            orElse: () {},
+          );
+        });
+
+        // Simular caída abrupta desconectando el socket del cliente sin llamar a leaveRoom
+        await peerClient.disconnect();
+
+        await reconnectingCompleter.future.timeout(const Duration(seconds: 3));
+
+        await sub.cancel();
+      },
+    );
+
+    // AC3
+    test('AC3: peer automatically reconnects with backoff and restores connected state when host is available', () async {
+      final createResult = await hostRepository.createRoom(
+        name: 'Moto Rutas',
+        accessCode: '1234',
+        displayName: 'HostAlice',
+      );
+      final room = createResult.dataOrNull!;
+
+      await peerRepository.joinRoom(
+        hostAddress: '127.0.0.1',
+        port: room.port,
+        accessCode: '1234',
+        displayName: 'PeerBob',
+      );
+
+      final statusEvents = <RoomStatus>[];
+      final sub = peerRepository.watchStatus().listen(statusEvents.add);
+
+      // Provocar desconexión del cliente
+      await peerClient.disconnect();
+
+      // Esperar a que entre en reconnecting y luego vuelva a connected
+      final reconnectedCompleter = Completer<void>();
+      final subReconnected = peerRepository.watchStatus().listen((status) {
+        status.maybeWhen(
+          connected: () {
+            if (statusEvents.any(
+              (s) => s.maybeWhen(reconnecting: () => true, orElse: () => false),
+            )) {
+              if (!reconnectedCompleter.isCompleted) {
+                reconnectedCompleter.complete();
+              }
+            }
+          },
+          orElse: () {},
+        );
+      });
+
+      await reconnectedCompleter.future.timeout(const Duration(seconds: 5));
+
+      await sub.cancel();
+      await subReconnected.cancel();
+    });
+
+    // AC4
+    test(
+      'AC4: peer transitions to closed when host leaves or server stops',
+      () async {
+        final createResult = await hostRepository.createRoom(
+          name: 'Moto Rutas',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+        );
+        final room = createResult.dataOrNull!;
+
+        await peerRepository.joinRoom(
+          hostAddress: '127.0.0.1',
+          port: room.port,
+          accessCode: '1234',
+          displayName: 'PeerBob',
+        );
+
+        final closedCompleter = Completer<String>();
+        final sub = peerRepository.watchStatus().listen((status) {
+          status.maybeWhen(
+            closed: (reason) {
+              if (!closedCompleter.isCompleted) {
+                closedCompleter.complete(reason);
+              }
+            },
+            orElse: () {},
+          );
+        });
+
+        // Host sale de la frecu
+        await hostRepository.leaveRoom();
+
+        final reason = await closedCompleter.future.timeout(
+          const Duration(seconds: 3),
+        );
+        expect(reason, isNotEmpty);
+
+        await sub.cancel();
+      },
+    );
+
+    // AC1: Foreground service integration
+    test(
+      'AC1: starts foreground service on createRoom and stops on leaveRoom',
+      () async {
+        final mockForeground = MockForegroundServiceDataSource();
+        when(
+          () => mockForeground.startService(
+            roomName: any(named: 'roomName'),
+            status: any(named: 'status'),
+          ),
+        ).thenAnswer((_) async {});
+        when(mockForeground.stopService).thenAnswer((_) async {});
+
+        final repo = RoomRepositoryImpl(
+          serverDataSource: hostServer,
+          clientDataSource: hostClient,
+          foregroundServiceDataSource: mockForeground,
+          networkInterfacesProvider: () async => [],
+        );
+
+        final createResult = await repo.createRoom(
+          name: 'Frecu Foreground',
+          accessCode: '9999',
+          displayName: 'HostUser',
+        );
+        expect(createResult.isSuccess, isTrue);
+        verify(
+          () => mockForeground.startService(
+            roomName: 'Frecu Foreground',
+            status: 'Conectado',
+          ),
+        ).called(1);
+
+        await repo.leaveRoom();
+        verify(mockForeground.stopService).called(1);
       },
     );
   });

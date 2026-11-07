@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "id": "20261107-tokens-tema-claro-y-oscuro-y-tipografias",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/tokens-tema-claro-y-oscuro-y-tipografias",
+  "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:09b9798f2a43364f7542dede49284c2a567d4ff0f2582ddd05ba0650428588d0",
+    "at": "2026-11-07T04:23:05.319Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:67cb6b684c4cb333eb436598ba6ecc8af02a4a1648251c42da358c662343ea30",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:e31f2f274bcaeb8229c33c9a33b299a1e1001be6fcf402b37b616f18f2ff94d3",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:566ac0721db7bed8583b06607db99af2010d9c36e6decbc870ea5ae85ee8035e",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:78553c89ae68931cc1394a8f20fba75638054cf262d931750067feb864d40094",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "d9301d2de1b90e9570ea50e3d882d30a01146db2",
+      "attempts": 1,
+      "startedAt": "2026-11-07T04:49:15.053Z",
+      "doneAt": "2026-11-07T04:54:13.577Z",
+      "summary": "FrColors (ThemeExtension) con los tokens de noche y día de base.css, canales p1–p5, copyWith y lerp compactos por orden de tokens; contraste verificado en ambos temas.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "1965c1857b493c8269d790a55f5d5a84c355c493",
+      "attempts": 1,
+      "startedAt": "2026-11-07T04:54:15.285Z",
+      "doneAt": "2026-11-07T04:57:15.044Z",
+      "summary": "FrType (Archivo, Martian Mono y Doto con ejes wght/wdth/ROND), FrSpace, FrRadii y FrMotion (duraciones, curvas y resortes) como ThemeExtension; FrColors.lerp devuelve el destino exacto en t=1, cubierto por un test nuevo.",
+      "scopeExtra": [
+        "lib/core/design/tokens/fr_colors.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "e82359e721ed7d0585e9198f597f96a6d70b1cb5",
+      "attempts": 1,
+      "startedAt": "2026-11-07T04:57:16.378Z",
+      "doneAt": "2026-11-07T05:12:30.095Z",
+      "summary": "AppTheme.light/dark desde los tokens (ColorScheme, TextTheme y componentes Material con RoundedSuperellipseBorder; letra de señal en signalFg) y FrTheme con context.fr; arquitectura.md suma core/design.",
+      "scopeExtra": [
+        "test/core/design/fr_tokens_test.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 2,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T05:12:57.252Z",
+  "lockedTests": {
+    "test/app/theme/app_theme_test.dart": "sha256:3bd6400763832de57664d4e855635d377f1e819d8e74ce37e066fac8d03fe392",
+    "test/core/design/fr_colors_test.dart": "sha256:9eb15c278578fc22be30cbdbd9e2f4f4161bb1f84f59c2412923ffd176219507",
+    "test/core/design/fr_tokens_test.dart": "sha256:32de54d4896644409732720aa3237c8c49d0306f384c4e1450c1f17774cd219c"
+  }
+}

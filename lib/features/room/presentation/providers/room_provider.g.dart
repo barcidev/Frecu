@@ -60,6 +60,60 @@ final class SignalingClientProvider
 
 String _$signalingClientHash() => r'52ee2a32cec51314ad03c66a3b98970915a38929';
 
+/// Datasource del servicio en primer plano para persistencia.
+
+@ProviderFor(foregroundServiceDataSource)
+final foregroundServiceDataSourceProvider =
+    ForegroundServiceDataSourceProvider._();
+
+/// Datasource del servicio en primer plano para persistencia.
+
+final class ForegroundServiceDataSourceProvider
+    extends
+        $FunctionalProvider<
+          ForegroundServiceDataSource,
+          ForegroundServiceDataSource,
+          ForegroundServiceDataSource
+        >
+    with $Provider<ForegroundServiceDataSource> {
+  /// Datasource del servicio en primer plano para persistencia.
+  ForegroundServiceDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'foregroundServiceDataSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$foregroundServiceDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ForegroundServiceDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ForegroundServiceDataSource create(Ref ref) {
+    return foregroundServiceDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ForegroundServiceDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ForegroundServiceDataSource>(value),
+    );
+  }
+}
+
+String _$foregroundServiceDataSourceHash() =>
+    r'55cf259449923a19e379e87d604d46ad00a450bd';
+
 /// Proveedor global singleton del repositorio de sala.
 
 @ProviderFor(roomRepository)
@@ -104,7 +158,7 @@ final class RoomRepositoryProvider
   }
 }
 
-String _$roomRepositoryHash() => r'02958fd9b7b773443ecf40bebf22a589a46468cc';
+String _$roomRepositoryHash() => r'd84ca6682c7660e5e196898c8a5ace7665a5f07d';
 
 /// Stream de los participantes de la sala activa.
 

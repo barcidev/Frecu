@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_qr_dialog.dart';
@@ -27,6 +28,8 @@ class RoomPage extends ConsumerStatefulWidget {
 }
 
 class _RoomPageState extends ConsumerState<RoomPage> {
+  bool _isDialogShowing = false;
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +49,30 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     await showDialog<void>(
       context: context,
       builder: (ctx) => InviteQrDialog(room: room),
+    );
+  }
+
+  void _showRoomClosedDialog(BuildContext context, String reason) {
+    if (_isDialogShowing || !mounted) return;
+    _isDialogShowing = true;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(t.room.title),
+        content: Text(t.room.roomClosed),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.of(dialogCtx).pop();
+              _isDialogShowing = false;
+              await _handleLeave();
+            },
+            child: Text(t.room.accept),
+          ),
+        ],
+      ),
     );
   }
 
@@ -100,6 +127,18 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     final statusAsync = ref.watch(roomStatusProvider);
     final voiceState = ref.watch(voiceNotifierProvider);
     final participantsCount = participantsAsync.value?.length ?? 0;
+
+    ref.listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
+      final status = next.value;
+      if (status != null) {
+        status.maybeWhen(
+          closed: (reason) {
+            _showRoomClosedDialog(context, reason);
+          },
+          orElse: () {},
+        );
+      }
+    });
 
     return Scaffold(
       appBar: _buildAppBar(context, room, voiceState.audioRoute),

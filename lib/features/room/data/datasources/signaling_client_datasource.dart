@@ -1,17 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 /// Cliente WebSocket para conectarse al servidor de señalización de una sala.
 class SignalingClientDataSource {
-  /// Constructor.
-  SignalingClientDataSource();
+  /// Constructor con intervalos de heartbeat configurables.
+  SignalingClientDataSource({
+    this.heartbeatInterval = NetworkConstants.heartbeatInterval,
+    this.peerTimeout = NetworkConstants.peerTimeout,
+  });
+
+  /// Intervalo entre envíos periódicos de ping.
+  final Duration heartbeatInterval;
+
+  /// Tiempo máximo sin actividad antes de desconectar.
+  final Duration peerTimeout;
 
   WebSocketChannel? _channel;
   StreamSubscription<dynamic>? _subscription;
+  Timer? _heartbeatTimer;
+  Timer? _watchdogTimer;
+  DateTime? _lastReceivedTime;
 
   final StreamController<SignalingMessage> _messagesController =
       StreamController<SignalingMessage>.broadcast();
@@ -35,25 +48,13 @@ class SignalingClientDataSource {
     try {
       _channel = WebSocketChannel.connect(uri);
       await _channel!.ready;
+      _lastReceivedTime = DateTime.now();
+      _startHeartbeatTimers();
       _connectionStateController.add(true);
       AppLogger.i('Connected to signaling server at $uri');
 
       _subscription = _channel!.stream.listen(
-        (data) {
-          try {
-            final jsonMap = jsonDecode(data as String) as Map<String, dynamic>;
-            final message = SignalingMessage.fromJson(jsonMap);
-            _messagesController.add(message);
-          } on Object catch (e, stackTrace) {
-            AppLogger.e(
-              'Failed to parse signaling message: $data',
-
-              e,
-
-              stackTrace,
-            );
-          }
-        },
+        _onDataReceived,
         onDone: () {
           AppLogger.i('Signaling client stream closed');
           _handleDisconnected();
@@ -66,13 +67,53 @@ class SignalingClientDataSource {
     } on Object catch (e, stackTrace) {
       AppLogger.e(
         'Failed to connect to signaling server at $uri',
-
         e,
-
         stackTrace,
       );
       _handleDisconnected();
       rethrow;
+    }
+  }
+
+  void _startHeartbeatTimers() {
+    _heartbeatTimer?.cancel();
+    _watchdogTimer?.cancel();
+
+    _heartbeatTimer = Timer.periodic(heartbeatInterval, (_) {
+      if (isConnected) {
+        send(
+          SignalingMessage.ping(
+            timestamp: DateTime.now().millisecondsSinceEpoch,
+          ),
+        );
+      }
+    });
+
+    _watchdogTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _checkWatchdogTimeout();
+    });
+  }
+
+  void _checkWatchdogTimeout() {
+    if (!isConnected || _lastReceivedTime == null) return;
+    final elapsed = DateTime.now().difference(_lastReceivedTime!);
+    if (elapsed > peerTimeout) {
+      AppLogger.w(
+        'Signaling client heartbeat watchdog timeout: '
+        '$elapsed > $peerTimeout',
+      );
+      _handleDisconnected();
+    }
+  }
+
+  void _onDataReceived(dynamic data) {
+    _lastReceivedTime = DateTime.now();
+    try {
+      final jsonMap = jsonDecode(data as String) as Map<String, dynamic>;
+      final message = SignalingMessage.fromJson(jsonMap);
+      _messagesController.add(message);
+    } on Object catch (e, stackTrace) {
+      AppLogger.e('Failed to parse signaling message: $data', e, stackTrace);
     }
   }
 
@@ -92,10 +133,19 @@ class SignalingClientDataSource {
   }
 
   void _handleDisconnected() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+    _watchdogTimer?.cancel();
+    _watchdogTimer = null;
+    _lastReceivedTime = null;
+
+    final wasConnected = _channel != null;
     _channel = null;
     _subscription?.cancel();
     _subscription = null;
-    _connectionStateController.add(false);
+    if (wasConnected) {
+      _connectionStateController.add(false);
+    }
   }
 
   /// Desconecta el cliente del servidor.

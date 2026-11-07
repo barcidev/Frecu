@@ -25,7 +25,9 @@
     "speaking": "Hablando",
     "muted": "Silenciado",
     "host": "Anfitrión",
-    "roomClosed": "La frecu fue cerrada por el anfitrión"
+    "roomClosed": "La frecu fue cerrada por el anfitrión",
+    "reconnecting": "Reconectando...",
+    "accept": "Aceptar"
   },
   "permissions": {
     "title": "Permisos requeridos",

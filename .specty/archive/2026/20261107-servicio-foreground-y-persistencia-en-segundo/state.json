@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "id": "20261107-servicio-foreground-y-persistencia-en-segundo",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/servicio-foreground-y-persistencia-en-segundo",
+  "baseCommit": "ff96b0a595b239916eb43f1fb310bd76523a9c6d",
+  "revision": 3,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:1e142999e7a6b6e8b10c64e10f47d9bf8a061f1809393ab77f01d6a5ea985b75",
+    "at": "2026-11-07T05:19:57.141Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 11,
+    "adjust": 0,
+    "reasons": [
+      "7 archivos",
+      "2 módulos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f88ed81cc1c515a5f34d0236bd3d856fac12e54ca5acb24948405e8a507ade42",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:7253553ec78cec05808d202e02148b25f0744225d00c86bf9ce18293cb36f0e0",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:c350c9c34542b183c094f2b754f85c0a893e84ef805489bb046f6ff69f688770",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "cc84957054294075f742d27fce375d8d59104d31",
+      "attempts": 1,
+      "startedAt": "2026-11-07T05:05:36.560Z",
+      "doneAt": "2026-11-07T05:11:07.769Z",
+      "summary": "Dependencia flutter_foreground_task, configuración de Android y ForegroundServiceDataSource wrapper",
+      "scopeExtra": [
+        ".flutter-plugins-dependencies"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "9a683d2fea1e5d61714659666a05db69aec58474",
+      "attempts": 1,
+      "startedAt": "2026-11-07T05:11:09.104Z",
+      "doneAt": "2026-11-07T08:44:38.285Z",
+      "summary": "Conexión del ciclo de vida del foreground service en RoomRepositoryImpl y proveedores de Riverpod",
+      "scopeExtra": [
+        "pubspec.yaml",
+        "lib/features/room/presentation/providers/room_provider.g.dart",
+        "test/features/room/presentation/invite_qr_dialog_test.dart",
+        "test/features/room/presentation/voice_flow_test.dart",
+        "test/features/room/data/room_repository_test.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 1,
+    "T": 2,
+    "R": 1,
+    "S": 5
+  },
+  "closingSubmittedAt": "2026-11-07T08:45:45.467Z",
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:cf6ab89e91c16bfc5b2822015bd9195fda7d5ab5691da438416066b16e13916b",
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:be431bb967d8ceeaf69cb68c63f7d52715258e2ef45be0e7dd8c6df1acfe6dc1",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:134e8d98e46aa7afdff1333a2eabb60d07df465c28e21341477758783e23ecde",
+    "test/features/room/data/foreground_service_datasource_test.dart": "sha256:8a3f57b78cd9d7caf8acca6a607e3ad3ab0e7309b663b269885242ecaafce825"
+  }
+}
