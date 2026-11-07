@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-servicio-foreground-y-persistencia-en-segundo",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/servicio-foreground-y-persistencia-en-segundo",
   "baseCommit": "ff96b0a595b239916eb43f1fb310bd76523a9c6d",
   "revision": 1,
@@ -48,6 +48,10 @@
     "T": 2,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T05:05:27.791Z"
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:eecd90dc387300acf52f93ff80ac250ca90fd8ebd131d38a6cea5db636d7cea1",
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:868f38e7f1cf82380f826443377e890a7e156f1a048bda776e5fa614a946352d",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:a8852be74544de816dc159528a27f3f8964caa772e82ebc3ef561c28bf1c21ab",
+    "test/features/room/data/foreground_service_datasource_test.dart": "sha256:8a3f57b78cd9d7caf8acca6a607e3ad3ab0e7309b663b269885242ecaafce825"
+  }
 }
