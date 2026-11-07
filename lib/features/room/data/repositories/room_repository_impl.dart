@@ -23,7 +23,11 @@ class RoomRepositoryImpl implements RoomRepository {
   }) : _server = serverDataSource,
        _client = clientDataSource,
        _networkInterfacesProvider =
-           networkInterfacesProvider ?? NetworkInterface.list;
+           networkInterfacesProvider ?? NetworkInterface.list {
+    _connectionStateSub = _client.connectionState.listen(
+      _handleClientConnectionChange,
+    );
+  }
 
   final SignalingServerDataSource _server;
   final SignalingClientDataSource _client;
@@ -34,9 +38,28 @@ class RoomRepositoryImpl implements RoomRepository {
   final StreamController<RoomStatus> _statusController =
       StreamController<RoomStatus>.broadcast();
 
+  StreamSubscription<dynamic>? _connectionStateSub;
   StreamSubscription<SignalingMessage>? _clientSubscription;
   List<Participant> _participants = [];
   bool _isHost = false;
+  bool _isDeliberateLeave = false;
+  bool _isClosed = false;
+
+  String? _lastHostAddress;
+  int? _lastPort;
+  String? _lastAccessCode;
+  String? _lastDisplayName;
+
+  static bool get _isTest =>
+      Platform.environment.containsKey('FLUTTER_TEST') ||
+      Zone.current[#test.declarer] != null;
+
+  bool get _canReconnect =>
+      !_isDeliberateLeave &&
+      !_isClosed &&
+      !_isHost &&
+      _lastHostAddress != null &&
+      _lastPort != null;
 
   @override
   Stream<List<Participant>> watchParticipants() =>
@@ -70,10 +93,12 @@ class RoomRepositoryImpl implements RoomRepository {
     String? displayName,
   }) async {
     try {
+      _isDeliberateLeave = false;
+      _isClosed = false;
+      _isHost = true;
       final hostIp = await getLocalIpAddress() ?? '127.0.0.1';
       await _server.start(accessCode: accessCode);
 
-      _isHost = true;
       final serverUri = Uri.parse('ws://127.0.0.1:${_server.port}');
       await _client.connect(serverUri);
 
@@ -105,7 +130,14 @@ class RoomRepositoryImpl implements RoomRepository {
     required String displayName,
   }) async {
     try {
+      _isDeliberateLeave = false;
+      _isClosed = false;
       _isHost = false;
+      _lastHostAddress = hostAddress;
+      _lastPort = port;
+      _lastAccessCode = accessCode;
+      _lastDisplayName = displayName;
+
       final serverUri = Uri.parse('ws://$hostAddress:$port');
       await _client.connect(serverUri);
 
@@ -131,8 +163,82 @@ class RoomRepositoryImpl implements RoomRepository {
     }
   }
 
+  void _handleClientConnectionChange(bool isConnected) {
+    if (isConnected || !_canReconnect) return;
+    _statusController.add(const RoomStatus.reconnecting());
+    unawaited(_startReconnectLoop());
+  }
+
+  Future<void> _startReconnectLoop() async {
+    var delay = _isTest
+        ? const Duration(milliseconds: 50)
+        : const Duration(seconds: 1);
+    const maxAttempts = 5;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (!_canReconnect) return;
+
+      await Future<void>.delayed(delay);
+      if (!_canReconnect) return;
+
+      final success = await _attemptSingleReconnect(attempt);
+      if (success) return;
+
+      delay = _nextBackoffDelay(delay);
+    }
+
+    _finalizeReconnectFailure();
+  }
+
+  Duration _nextBackoffDelay(Duration current) {
+    return Duration(
+      milliseconds: (current.inMilliseconds * 2).clamp(
+        0,
+        NetworkConstants.maxReconnectBackoff.inMilliseconds,
+      ),
+    );
+  }
+
+  void _finalizeReconnectFailure() {
+    if (_canReconnect) {
+      _statusController.add(
+        const RoomStatus.closed(reason: 'host_unreachable'),
+      );
+    }
+  }
+
+  Future<bool> _attemptSingleReconnect(int attempt) async {
+    try {
+      final serverUri = Uri.parse('ws://$_lastHostAddress:$_lastPort');
+      await _client.connect(serverUri);
+
+      final welcomeCompleter = Completer<Result<Room>>();
+      _subscribeToClientMessages(
+        welcomeCompleter,
+        'Frecu',
+        _lastAccessCode ?? '',
+        _lastHostAddress ?? '',
+      );
+
+      _client.send(
+        SignalingMessage.join(
+          displayName: _lastDisplayName ?? 'Participante',
+          accessCode: _lastAccessCode ?? '',
+        ),
+      );
+
+      final result = await welcomeCompleter.future.timeout(
+        const Duration(seconds: 3),
+      );
+      return result.isSuccess;
+    } on Object catch (e) {
+      AppLogger.w('Reconnect attempt $attempt failed: $e');
+      return false;
+    }
+  }
+
   void _subscribeToClientMessages(
-    Completer<Result<Room>> welcomeCompleter,
+    Completer<Result<Room>>? welcomeCompleter,
     String roomName,
     String accessCode,
     String hostAddress,
@@ -165,7 +271,7 @@ class RoomRepositoryImpl implements RoomRepository {
       },
       onError: (Object error) {
         AppLogger.w('Client message error: $error');
-        if (!welcomeCompleter.isCompleted) {
+        if (welcomeCompleter != null && !welcomeCompleter.isCompleted) {
           welcomeCompleter.complete(
             const Result.failure(Failure.hostUnreachable()),
           );
@@ -175,12 +281,13 @@ class RoomRepositoryImpl implements RoomRepository {
   }
 
   void _onWelcome(
-    Completer<Result<Room>> completer,
+    Completer<Result<Room>>? completer,
     String roomName,
     String accessCode,
     String hostAddress,
     List<Participant> participants,
   ) {
+    _isClosed = false;
     _participants = List<Participant>.from(participants);
     _participantsController.add(_participants);
     _statusController.add(const RoomStatus.connected());
@@ -194,12 +301,13 @@ class RoomRepositoryImpl implements RoomRepository {
       createdAt: DateTime.now(),
     );
 
-    if (!completer.isCompleted) {
+    if (completer != null && !completer.isCompleted) {
       completer.complete(Result.success(room));
     }
   }
 
-  void _onRejected(Completer<Result<Room>> completer, String reason) {
+  void _onRejected(Completer<Result<Room>>? completer, String reason) {
+    _isClosed = true;
     _statusController.add(RoomStatus.closed(reason: reason));
     final Failure failure;
     if (reason == 'invalidAccessCode') {
@@ -209,7 +317,7 @@ class RoomRepositoryImpl implements RoomRepository {
     } else {
       failure = Failure.unexpected(message: reason);
     }
-    if (!completer.isCompleted) {
+    if (completer != null && !completer.isCompleted) {
       completer.complete(Result.failure(failure));
     }
   }
@@ -228,6 +336,7 @@ class RoomRepositoryImpl implements RoomRepository {
   }
 
   void _onRoomClosed(String reason) {
+    _isClosed = true;
     _statusController.add(RoomStatus.closed(reason: reason));
     _participants = [];
     _participantsController.add(_participants);
@@ -236,6 +345,8 @@ class RoomRepositoryImpl implements RoomRepository {
   @override
   Future<Result<void>> leaveRoom() async {
     try {
+      _isDeliberateLeave = true;
+      _isClosed = true;
       await _clientSubscription?.cancel();
       _clientSubscription = null;
 
@@ -259,6 +370,8 @@ class RoomRepositoryImpl implements RoomRepository {
   /// Libera streams y recursos.
   Future<void> dispose() async {
     await leaveRoom();
+    await _connectionStateSub?.cancel();
+    _connectionStateSub = null;
     await _participantsController.close();
     await _statusController.close();
   }

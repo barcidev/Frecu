@@ -63,7 +63,7 @@ Implementar el monitoreo continuo de conexión mediante heartbeats periódicos (
   - files: lib/features/room/data/datasources/signaling_client_datasource.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/signaling_server_test.dart
   - ac: AC2
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-heartbeats-reconexion-con-backoff-y-cierre-de' && fvm flutter test test/features/room/data/signaling_server_test.dart
-- [ ] T2: Reconexión automática con backoff exponencial y propagación de cierre de sala en RoomRepositoryImpl
+- [x] T2: Reconexión automática con backoff exponencial y propagación de cierre de sala en RoomRepositoryImpl
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_repository_test.dart
   - ac: AC2, AC3, AC4
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-heartbeats-reconexion-con-backoff-y-cierre-de' && fvm flutter test test/features/room/data/room_repository_test.dart
