@@ -58,7 +58,7 @@ Se aplica Clean Architecture por feature, respetando Dart puro en `domain`, inmu
 
 ## Tareas
 
-- [ ] T1: Componentes modulares de RoomPage para información, participantes y QR
+- [x] T1: Componentes modulares de RoomPage para información, participantes y QR
   - files: lib/features/room/presentation/widgets/room_info_card.dart, lib/features/room/presentation/widgets/participants_list.dart, lib/features/room/presentation/widgets/invite_qr_dialog.dart, lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/room/presentation/room_flow_test.dart

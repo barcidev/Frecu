@@ -37,7 +37,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "4ed00fb529e3cad0b1ff6c6caf96da56042e1945",
+      "startedAt": "2026-11-06T23:48:24.718Z",
+      "doneAt": "2026-11-07T00:14:23.507Z",
+      "summary": "Extracción de widgets modulares reduciendo room_page.dart a 185 líneas"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
