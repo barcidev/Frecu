@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-fuentes-archivo-martian-mono-y-doto",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/fuentes-archivo-martian-mono-y-doto",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -51,6 +51,7 @@
     "T": 1,
     "R": 2
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T11:01:52.529Z"
+  "lockedTests": {
+    "test/core/design/fr_fonts_assets_test.dart": "sha256:6c81cc2327399bc28c4cbd6a894607b3c876785cd89ce6330b162aff497c4395"
+  }
 }
