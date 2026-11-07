@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261107-segundo-plano-y-resiliencia",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/segundo-plano-y-resiliencia",
+  "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:de9a3349defdd6c2866e6313b36a0b37e49bf7489a78191900d16ecbc06f389a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:0b5c1de030d7dddc7d47f1c3f9b1c5f5b53169f7b6c7c3f6d48615dad779272e",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:3e76f38eae1579dc7d75ecd6ce0ba64627e5eeea7499a53e9dabc94ae688c279",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 4,
+    "C": 2,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e735d8cff9e07e595721e50046283c34f0bf515dfbef2b0373edd3971bad59d9",
+    "at": "2026-11-07T03:32:20.184Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
