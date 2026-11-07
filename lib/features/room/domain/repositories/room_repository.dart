@@ -29,6 +29,10 @@ abstract interface class RoomRepository {
   /// Stream reactivo del estado de la frecu.
   Stream<RoomStatus> watchStatus();
 
+  /// Id que el anfitrión asignó a este teléfono en la última bienvenida
+  /// (cambia al reconectar), o `null` sin frecu activa.
+  String? get localParticipantId;
+
   /// Obtiene la dirección IP local de la interfaz de red activa.
   Future<String?> getLocalIpAddress();
 }

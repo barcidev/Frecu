@@ -78,7 +78,7 @@ Referencia: `drawMesh`, `meshSlots`, `drawSig` y `easeInOut` de `engine.js`; `me
 
 ## Tareas
 
-- [ ] T1: Id del participante local en el repositorio de sala
+- [x] T1: Id del participante local en el repositorio de sala
   - files: lib/features/room/domain/repositories/room_repository.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_repository_test.dart
   - ac: AC7
   - verify: flutter test test/features/room/data/room_repository_test.dart
@@ -89,7 +89,7 @@ Referencia: `drawMesh`, `meshSlots`, `drawSig` y `easeInOut` de `engine.js`; `me
 - [ ] T3: Frecu activa con cabecera de nota, malla y controles actuales
   - files: lib/features/room/presentation/widgets/room_header.dart, lib/features/room/presentation/pages/room_page.dart, lib/features/room/presentation/widgets/mic_control_section.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/room_flow_test.dart, test/features/room/presentation/voice_flow_test.dart
   - ac: AC1, AC5, AC6
-  - verify: flutter test test/features/room test/features/lobby && flutter analyze
+  - verify: flutter analyze && flutter test test/features/room test/features/lobby
 
 ## Riesgos
 

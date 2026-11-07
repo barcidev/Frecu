@@ -49,6 +49,7 @@ class RoomRepositoryImpl implements RoomRepository {
   bool _isHost = false;
   bool _isDeliberateLeave = false;
   bool _isClosed = false;
+  String? _localParticipantId;
 
   String? _lastHostAddress;
   int? _lastPort;
@@ -66,6 +67,9 @@ class RoomRepositoryImpl implements RoomRepository {
       !_isHost &&
       _lastHostAddress != null &&
       _lastPort != null;
+
+  @override
+  String? get localParticipantId => _localParticipantId;
 
   @override
   Stream<List<Participant>> watchParticipants() =>
@@ -215,6 +219,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   void _finalizeReconnectFailure() {
     if (_canReconnect) {
+      _localParticipantId = null;
       unawaited(_foregroundService.stopService());
       _statusController.add(
         const RoomStatus.closed(reason: 'host_unreachable'),
@@ -263,6 +268,7 @@ class RoomRepositoryImpl implements RoomRepository {
       (message) {
         message.when(
           welcome: (peerId, participants, _) {
+            _localParticipantId = peerId;
             _onWelcome(
               welcomeCompleter,
               roomName,
@@ -326,6 +332,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   void _onRejected(Completer<Result<Room>>? completer, String reason) {
     _isClosed = true;
+    _localParticipantId = null;
     unawaited(_foregroundService.stopService());
     _statusController.add(RoomStatus.closed(reason: reason));
     final Failure failure;
@@ -356,6 +363,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   void _onRoomClosed(String reason) {
     _isClosed = true;
+    _localParticipantId = null;
     unawaited(_foregroundService.stopService());
     _statusController.add(RoomStatus.closed(reason: reason));
     _participants = [];
@@ -367,6 +375,7 @@ class RoomRepositoryImpl implements RoomRepository {
     try {
       _isDeliberateLeave = true;
       _isClosed = true;
+      _localParticipantId = null;
       await _clientSubscription?.cancel();
       _clientSubscription = null;
 
