@@ -246,11 +246,11 @@ return roomClosed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String displayName,  String accessCode,  int protocolVersion,  String type)?  join,TResult Function( String peerId,  List<Participant> participants,  String type)?  welcome,TResult Function( String reason,  String type)?  rejected,TResult Function( Participant participant,  String type)?  peerJoined,TResult Function( String peerId,  String type)?  peerLeft,TResult Function( String from,  String to,  String sdp,  String type)?  offer,TResult Function( String from,  String to,  String sdp,  String type)?  answer,TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult Function( String peerId,  bool isSpeaking,  String type)?  talkState,TResult Function( int timestamp,  String type)?  ping,TResult Function( int timestamp,  String type)?  pong,TResult Function( String reason,  String type)?  roomClosed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String displayName,  String accessCode,  int protocolVersion,  String type)?  join,TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note,  String type)?  welcome,TResult Function( String reason,  String type)?  rejected,TResult Function( Participant participant,  String type)?  peerJoined,TResult Function( String peerId,  String type)?  peerLeft,TResult Function( String from,  String to,  String sdp,  String type)?  offer,TResult Function( String from,  String to,  String sdp,  String type)?  answer,TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult Function( String peerId,  bool isSpeaking,  String type)?  talkState,TResult Function( int timestamp,  String type)?  ping,TResult Function( int timestamp,  String type)?  pong,TResult Function( String reason,  String type)?  roomClosed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
 return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.type);case SignalingWelcomeMessage() when welcome != null:
-return welcome(_that.peerId,_that.participants,_that.type);case SignalingRejectedMessage() when rejected != null:
+return welcome(_that.peerId,_that.participants,_that.note,_that.type);case SignalingRejectedMessage() when rejected != null:
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage() when peerJoined != null:
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage() when peerLeft != null:
 return peerLeft(_that.peerId,_that.type);case SignalingOfferMessage() when offer != null:
@@ -278,11 +278,11 @@ return roomClosed(_that.reason,_that.type);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String displayName,  String accessCode,  int protocolVersion,  String type)  join,required TResult Function( String peerId,  List<Participant> participants,  String type)  welcome,required TResult Function( String reason,  String type)  rejected,required TResult Function( Participant participant,  String type)  peerJoined,required TResult Function( String peerId,  String type)  peerLeft,required TResult Function( String from,  String to,  String sdp,  String type)  offer,required TResult Function( String from,  String to,  String sdp,  String type)  answer,required TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)  ice,required TResult Function( String peerId,  bool isSpeaking,  String type)  talkState,required TResult Function( int timestamp,  String type)  ping,required TResult Function( int timestamp,  String type)  pong,required TResult Function( String reason,  String type)  roomClosed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String displayName,  String accessCode,  int protocolVersion,  String type)  join,required TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note,  String type)  welcome,required TResult Function( String reason,  String type)  rejected,required TResult Function( Participant participant,  String type)  peerJoined,required TResult Function( String peerId,  String type)  peerLeft,required TResult Function( String from,  String to,  String sdp,  String type)  offer,required TResult Function( String from,  String to,  String sdp,  String type)  answer,required TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)  ice,required TResult Function( String peerId,  bool isSpeaking,  String type)  talkState,required TResult Function( int timestamp,  String type)  ping,required TResult Function( int timestamp,  String type)  pong,required TResult Function( String reason,  String type)  roomClosed,}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage():
 return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.type);case SignalingWelcomeMessage():
-return welcome(_that.peerId,_that.participants,_that.type);case SignalingRejectedMessage():
+return welcome(_that.peerId,_that.participants,_that.note,_that.type);case SignalingRejectedMessage():
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage():
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage():
 return peerLeft(_that.peerId,_that.type);case SignalingOfferMessage():
@@ -306,11 +306,11 @@ return roomClosed(_that.reason,_that.type);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String displayName,  String accessCode,  int protocolVersion,  String type)?  join,TResult? Function( String peerId,  List<Participant> participants,  String type)?  welcome,TResult? Function( String reason,  String type)?  rejected,TResult? Function( Participant participant,  String type)?  peerJoined,TResult? Function( String peerId,  String type)?  peerLeft,TResult? Function( String from,  String to,  String sdp,  String type)?  offer,TResult? Function( String from,  String to,  String sdp,  String type)?  answer,TResult? Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult? Function( String peerId,  bool isSpeaking,  String type)?  talkState,TResult? Function( int timestamp,  String type)?  ping,TResult? Function( int timestamp,  String type)?  pong,TResult? Function( String reason,  String type)?  roomClosed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String displayName,  String accessCode,  int protocolVersion,  String type)?  join,TResult? Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note,  String type)?  welcome,TResult? Function( String reason,  String type)?  rejected,TResult? Function( Participant participant,  String type)?  peerJoined,TResult? Function( String peerId,  String type)?  peerLeft,TResult? Function( String from,  String to,  String sdp,  String type)?  offer,TResult? Function( String from,  String to,  String sdp,  String type)?  answer,TResult? Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult? Function( String peerId,  bool isSpeaking,  String type)?  talkState,TResult? Function( int timestamp,  String type)?  ping,TResult? Function( int timestamp,  String type)?  pong,TResult? Function( String reason,  String type)?  roomClosed,}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
 return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.type);case SignalingWelcomeMessage() when welcome != null:
-return welcome(_that.peerId,_that.participants,_that.type);case SignalingRejectedMessage() when rejected != null:
+return welcome(_that.peerId,_that.participants,_that.note,_that.type);case SignalingRejectedMessage() when rejected != null:
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage() when peerJoined != null:
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage() when peerLeft != null:
 return peerLeft(_that.peerId,_that.type);case SignalingOfferMessage() when offer != null:
@@ -407,11 +407,12 @@ as String,
 @JsonSerializable()
 
 class SignalingWelcomeMessage implements SignalingMessage {
-  const SignalingWelcomeMessage({required this.peerId, required this.participants, this.type = 'welcome'});
+  const SignalingWelcomeMessage({required this.peerId, required this.participants, @RoomNoteConverter() this.note, this.type = 'welcome'});
   factory SignalingWelcomeMessage.fromJson(Map<String, dynamic> json) => _$SignalingWelcomeMessageFromJson(json);
 
  final  String peerId;
  final  List<Participant> participants;
+@RoomNoteConverter() final  RoomNote? note;
 @override@JsonKey() final  String type;
 
 /// Create a copy of SignalingMessage
@@ -427,16 +428,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingWelcomeMessage&&(identical(other.peerId, peerId) || other.peerId == peerId)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingWelcomeMessage&&(identical(other.peerId, peerId) || other.peerId == peerId)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.note, note) || other.note == note)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,peerId,const DeepCollectionEquality().hash(participants),type);
+int get hashCode => Object.hash(runtimeType,peerId,const DeepCollectionEquality().hash(participants),note,type);
 
 @override
 String toString() {
-  return 'SignalingMessage.welcome(peerId: $peerId, participants: $participants, type: $type)';
+  return 'SignalingMessage.welcome(peerId: $peerId, participants: $participants, note: $note, type: $type)';
 }
 
 
@@ -447,11 +448,11 @@ abstract mixin class $SignalingWelcomeMessageCopyWith<$Res> implements $Signalin
   factory $SignalingWelcomeMessageCopyWith(SignalingWelcomeMessage value, $Res Function(SignalingWelcomeMessage) _then) = _$SignalingWelcomeMessageCopyWithImpl;
 @override @useResult
 $Res call({
- String peerId, List<Participant> participants, String type
+ String peerId, List<Participant> participants,@RoomNoteConverter() RoomNote? note, String type
 });
 
 
-
+$RoomNoteCopyWith<$Res>? get note;
 
 }
 /// @nodoc
@@ -464,16 +465,29 @@ class _$SignalingWelcomeMessageCopyWithImpl<$Res>
 
 /// Create a copy of SignalingMessage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? peerId = null,Object? participants = null,Object? type = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? peerId = null,Object? participants = null,Object? note = freezed,Object? type = null,}) {
   return _then(SignalingWelcomeMessage(
 peerId: null == peerId ? _self.peerId : peerId // ignore: cast_nullable_to_non_nullable
 as String,participants: null == participants ? _self.participants : participants // ignore: cast_nullable_to_non_nullable
-as List<Participant>,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as List<Participant>,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as RoomNote?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
 
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RoomNoteCopyWith<$Res>? get note {
+    if (_self.note == null) {
+    return null;
+  }
 
+  return $RoomNoteCopyWith<$Res>(_self.note!, (value) {
+    return _then(_self.copyWith(note: value));
+  });
+}
 }
 
 /// @nodoc

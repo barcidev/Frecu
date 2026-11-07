@@ -11,6 +11,7 @@ import 'package:frecu/features/room/data/datasources/signaling_server_datasource
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 
@@ -97,6 +98,7 @@ class RoomRepositoryImpl implements RoomRepository {
     required String name,
     required String accessCode,
     String? displayName,
+    RoomNote? note,
   }) async {
     try {
       _isDeliberateLeave = false;
@@ -104,7 +106,7 @@ class RoomRepositoryImpl implements RoomRepository {
       _isHost = true;
       _lastRoomName = name;
       final hostIp = await getLocalIpAddress() ?? '127.0.0.1';
-      await _server.start(accessCode: accessCode);
+      await _server.start(accessCode: accessCode, note: note);
 
       final serverUri = Uri.parse('ws://127.0.0.1:${_server.port}');
       await _client.connect(serverUri);
@@ -262,13 +264,14 @@ class RoomRepositoryImpl implements RoomRepository {
     _clientSubscription = _client.messages.listen(
       (message) {
         message.when(
-          welcome: (peerId, participants, _) {
+          welcome: (peerId, participants, note, _) {
             _onWelcome(
               welcomeCompleter,
               roomName,
               accessCode,
               hostAddress,
               participants,
+              note,
             );
           },
           rejected: (reason, _) => _onRejected(welcomeCompleter, reason),
@@ -301,6 +304,7 @@ class RoomRepositoryImpl implements RoomRepository {
     String accessCode,
     String hostAddress,
     List<Participant> participants,
+    RoomNote? note,
   ) {
     _isClosed = false;
     _participants = List<Participant>.from(participants);
@@ -317,6 +321,7 @@ class RoomRepositoryImpl implements RoomRepository {
       port: _server.isRunning ? _server.port : NetworkConstants.signalingPort,
       accessCode: accessCode,
       createdAt: DateTime.now(),
+      note: note,
     );
 
     if (completer != null && !completer.isCompleted) {

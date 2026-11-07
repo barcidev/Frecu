@@ -65,7 +65,7 @@ Permitir que la nota musical (RoomNote) de una sala (frecu) viaje dentro del men
 
 ## Tareas
 
-- [ ] T1: Modelado y serialización de RoomNote en SignalingMessage.welcome
+- [x] T1: Modelado y serialización de RoomNote en SignalingMessage.welcome
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/peer_connection_datasource.dart, lib/features/room/data/repositories/voice_repository_impl.dart, test/features/room/data/signaling_message_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/data/signaling_message_test.dart

@@ -212,7 +212,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
 
   void _handleSignalingMessage(SignalingMessage msg) {
     msg.when(
-      welcome: (peerId, participants, _) =>
+      welcome: (peerId, participants, _, __) =>
           _handleWelcome(peerId, participants),
       talkState: (peerId, isSpeaking, _) =>
           _handleTalkState(peerId, isSpeaking),

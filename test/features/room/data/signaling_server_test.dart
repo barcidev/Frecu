@@ -39,7 +39,7 @@ void main() {
       final welcomeCompleter = Completer<SignalingWelcomeMessage>();
       final sub = client1.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (peerId, participants, _) {
+          welcome: (peerId, participants, _, __) {
             welcomeCompleter.complete(
               SignalingWelcomeMessage(
                 peerId: peerId,
@@ -110,7 +110,7 @@ void main() {
       final c1PeerJoinedCompleter = Completer<String>();
       final c1Sub = client1.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (peerId, _, __) => c1WelcomeCompleter.complete(peerId),
+          welcome: (peerId, _, __, ___) => c1WelcomeCompleter.complete(peerId),
           peerJoined: (p, _) => c1PeerJoinedCompleter.complete(p.id),
           orElse: () {},
         );
@@ -129,7 +129,7 @@ void main() {
       final c2OfferCompleter = Completer<SignalingOfferMessage>();
       final c2Sub = client2.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (peerId, _, __) => c2WelcomeCompleter.complete(peerId),
+          welcome: (peerId, _, __, ___) => c2WelcomeCompleter.complete(peerId),
           offer: (from, to, sdp, _) => c2OfferCompleter.complete(
             SignalingOfferMessage(from: from, to: to, sdp: sdp),
           ),
@@ -185,7 +185,7 @@ void main() {
         final welcomeCompleter = Completer<String>();
         final sub = client.messages.listen((msg) {
           msg.maybeWhen(
-            welcome: (peerId, participants, _) {
+            welcome: (peerId, participants, _, __) {
               expect(participants.length, i + 1);
               welcomeCompleter.complete(peerId);
             },
@@ -252,7 +252,7 @@ void main() {
         final welcomeCompleter = Completer<void>();
         final sub = client.messages.listen((msg) {
           msg.maybeWhen(
-            welcome: (_, __, ___) => welcomeCompleter.complete(),
+            welcome: (_, __, ___, ____) => welcomeCompleter.complete(),
             orElse: () {},
           );
         });
@@ -308,7 +308,7 @@ void main() {
       final welcome8Completer = Completer<void>();
       final sub8 = client8.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (_, __, ___) => welcome8Completer.complete(),
+          welcome: (_, __, ___, ____) => welcome8Completer.complete(),
           orElse: () {},
         );
       });

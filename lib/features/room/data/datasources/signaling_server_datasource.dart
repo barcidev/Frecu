@@ -6,6 +6,7 @@ import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -24,6 +25,7 @@ class SignalingServerDataSource {
   String _accessCode = '';
   int _peerCounter = 0;
   Timer? _watchdogTimer;
+  RoomNote? _note;
 
   final Map<String, WebSocketChannel> _clientChannels = {};
   final Map<String, Participant> _participants = {};
@@ -57,15 +59,20 @@ class SignalingServerDataSource {
   /// Lista de participantes actualmente registrados en el servidor.
   List<Participant> get participants => _participants.values.toList();
 
+  /// Nota musical de la sala si está configurada.
+  RoomNote? get note => _note;
+
   /// Inicia el servidor de señalización.
   Future<void> start({
     required String accessCode,
     String host = '0.0.0.0',
     int port = NetworkConstants.signalingPort,
+    RoomNote? note,
   }) async {
     if (isRunning) return;
 
     _accessCode = accessCode;
+    _note = note;
     _participants.clear();
     _clientChannels.clear();
     _peerLastSeen.clear();
@@ -158,7 +165,7 @@ class SignalingServerDataSource {
       return message.when(
         join: (displayName, code, version, type) =>
             _processJoin(channel, displayName, code),
-        welcome: (_, __, ___) => null,
+        welcome: (_, __, ___, ____) => null,
         rejected: (_, __) => null,
         peerJoined: (_, __) => null,
         peerLeft: (_, __) => null,
@@ -232,6 +239,7 @@ class SignalingServerDataSource {
       SignalingMessage.welcome(
         peerId: peerId,
         participants: _participants.values.toList(),
+        note: _note,
       ),
     );
 
@@ -291,6 +299,7 @@ class SignalingServerDataSource {
     _watchdogTimer?.cancel();
     _watchdogTimer = null;
     _peerLastSeen.clear();
+    _note = null;
 
     _broadcast(SignalingMessage.roomClosed(reason: reason));
 

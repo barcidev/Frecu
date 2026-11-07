@@ -107,8 +107,7 @@ void main() {
           {'id': 'peer-1', 'displayName': 'Alice', 'isHost': true},
         ],
       };
-      final deserializedLegacy = SignalingMessage.fromJson(legacyJson);
-      deserializedLegacy.maybeWhen(
+      SignalingMessage.fromJson(legacyJson).maybeWhen(
         welcome: (peerId, participants, deserializedNote, _) {
           expect(peerId, 'peer-3');
           expect(deserializedNote, isNull);
@@ -122,8 +121,7 @@ void main() {
         'participants': <Map<String, dynamic>>[],
         'note': null,
       };
-      final deserializedNull = SignalingMessage.fromJson(nullNoteJson);
-      deserializedNull.maybeWhen(
+      SignalingMessage.fromJson(nullNoteJson).maybeWhen(
         welcome: (peerId, participants, deserializedNote, _) {
           expect(deserializedNote, isNull);
         },
@@ -136,8 +134,7 @@ void main() {
         'participants': <Map<String, dynamic>>[],
         'note': 99,
       };
-      final deserializedInvalid = SignalingMessage.fromJson(invalidNoteJson);
-      deserializedInvalid.maybeWhen(
+      SignalingMessage.fromJson(invalidNoteJson).maybeWhen(
         welcome: (peerId, participants, deserializedNote, _) {
           expect(deserializedNote, isNull);
         },
