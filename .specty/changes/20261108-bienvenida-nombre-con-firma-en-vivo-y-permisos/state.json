@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-bienvenida-nombre-con-firma-en-vivo-y-permisos",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/bienvenida-nombre-con-firma-en-vivo-y-permisos",
   "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
   "revision": 1,
@@ -63,6 +63,10 @@
     "T": 3,
     "R": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T17:51:01.262Z"
+  "lockedTests": {
+    "test/app_test.dart": "sha256:aee8d9aadb1be197d5854c3d7f52250c927b9d6d4f4df5d555f61275ad3368aa",
+    "test/features/permissions/presentation/name_step_test.dart": "sha256:ff94bed4334342a9bd343ddab4b822b97f0e5093534c8082fa2347b963f3ca2f",
+    "test/features/permissions/presentation/permissions_step_test.dart": "sha256:ead26abc6bad7735cd4bc890ef0a71f7f8b08c26defdb0d3dde6f2b6f530b316",
+    "test/features/permissions/presentation/welcome_test.dart": "sha256:f5fca442778d5766d992dc87e37d6efa7ceb4a355c33065be74d255ffa5c9dd6"
+  }
 }
