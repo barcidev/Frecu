@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "20261107-nombrado-de-parametros-booleanos-en-ruteo-de",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/nombrado-de-parametros-booleanos-en-ruteo-de",
+  "baseCommit": "fcaba01bf2d5f14228a943d6745555acf8badef5",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:65af609bf841faa832d818ab3f97a8db49a5d27dec4ddf0054a3dcc8d3738bfb",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 1,
+    "AC": 1,
+    "T": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:932f888f4f876c2264b848f1192a02f7af32c3179e0ef756bd8e8b3360bd7125",
+    "at": "2026-11-07T02:11:12.388Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
