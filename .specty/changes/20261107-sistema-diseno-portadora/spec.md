@@ -47,7 +47,8 @@ Referencia visual y de comportamiento: `docs/diseno/prototipo/index.html` (secci
 - **Preferencias (`features/settings`)**: `PreferencesRepository` en `domain` (Dart puro) con nombre, modo de habla por defecto y modo de tema. Implementación con `shared_preferences` en `data` y providers `@riverpod` (`Notifier`/`AsyncNotifier`).
 - **Widgets base (`lib/core/design/widgets/`)**: `FrButton`, `FrIconButton`, `FrField`, `FrPinField` + `FrKeypad`, `FrSegmented`, `FrToggle`, `FrPill`, `FrTag`, `FrBanner`, `FrToast`, `FrSheet`, `StatusIsland`, `WaveLoader`, `SignalSignature`, íconos `FrIcons` y las transiciones onda, deslizamiento, hoja y expansión (`CustomRoute` de auto_route).
 - **Nota (`features/room/domain`)**: entidad `RoomNote` (nombre, octava, clase de altura, semitono, Hz) y caso de uso puro `AssignRoomNote(createdAt, notasCercanas)` con pruebas de las 24 posiciones y de los choques. `Room`, `NearbyRoom` y `RoomInvite` suman una nota opcional. `MdnsDataSource` publica y lee `n`, y `BuildInviteQr`/`ParseInviteFromQr` agregan y leen `n`. Se actualiza `docs/protocolo.md`.
-- **Pantallas**: bienvenida, nombre y permisos (C2); inicio con sintonizador, hojas de código e IP, escáner, guía de punto de acceso y nueva frecu (C3); frecu activa, cierre y Ajustes completos (C4). Todo el texto sale de slang (`t.<clave>`), con pantallas `@RoutePage()`.
+- **Pantallas**: bienvenida, nombre y permisos (C12, C13); Ajustes (C8); inicio con sintonizador (C15); hojas de código e IP y escáner (C16); guía de punto de acceso y nueva frecu (C17); frecu activa (C4, C18) e invitación, ruta, salir y cierre (C19). Todo el texto sale de slang (`t.<clave>`), con pantallas `@RoutePage()`.
+- **Tamaño de los cortes**: Specty admite hasta dos módulos por cambio, así que cada corte toca como mucho dos de `lib/core`, `lib/app`, una feature, `lib/i18n` y los assets. Los íconos `FrIcons` se dibujan desde los trazos SVG del prototipo en código (sin fuente de íconos), así que funcionan sin conexión.
 
 ## Cortes
 
@@ -56,16 +57,60 @@ Referencia visual y de comportamiento: `docs/diseno/prototipo/index.html` (secci
 - C2: Widgets base, bienvenida y nombre una sola vez
   - ac: AC3, AC8
   - depends: C1
-- C3: Inicio y unión con la nota de cada frecu
-  - ac: AC4, AC5, AC6
-  - depends: C2
-- C4: Frecu activa
+- C3: Nota de cada frecu en el dominio (`RoomNote`, `AssignRoomNote` y nota opcional en `Room`, `NearbyRoom` y `RoomInvite`)
+  - ac: AC4
+- C4: Malla hexagonal de la frecu activa con firmas y nota en la cabecera
   - ac: AC7
+  - depends: C10, C11, C14
+- C5: Fuentes Archivo, Martian Mono y Doto empaquetadas en assets
+  - ac: AC2
+  - depends: C1
+- C6: Preferencias guardadas: nombre, tema y modo de habla por defecto (`features/settings` con `shared_preferences`)
+  - ac: AC1, AC3
+  - depends: C5
+- C7: Tema guardado aplicado al arrancar (`app.dart` y `bootstrap.dart`)
+  - ac: AC1
+  - depends: C6
+- C8: Ajustes con nombre, tema Auto/Claro/Oscuro y modo de habla por defecto
+  - ac: AC1, AC3
+  - depends: C7, C9
+- C9: Widgets de control: `FrPinField`, `FrKeypad`, `FrSegmented`, `FrToggle`, `FrPill` y `FrTag`
+  - ac: AC8
+  - depends: C2
+- C10: Superficies y transiciones: `FrScaffold` con grano y retícula, `FrSheet`, `FrBanner`, `FrToast`, `StatusIsland` y transiciones onda, deslizamiento, hoja y expansión
+  - ac: AC8
+  - depends: C2
+- C11: Íconos propios `FrIcons` dibujados desde los trazos del prototipo
+  - ac: AC2
+  - depends: C2
+- C12: Bienvenida, nombre con firma en vivo y permisos
+  - ac: AC3, AC8
+  - depends: C6, C10, C11
+- C13: Primera apertura y nombre guardado al crear o unirse a una frecu
+  - ac: AC3
+  - depends: C12
+- C14: Nota en el TXT de mDNS y en el QR
+  - ac: AC5
   - depends: C3
+- C15: Inicio con sintonizador de dos octavas y lista de frecus cercanas
+  - ac: AC6
+  - depends: C9, C13, C14
+- C16: Unión por código de acceso, IP y escáner QR
+  - ac: AC6
+  - depends: C15
+- C17: Nueva frecu con reloj de quintas y guía de punto de acceso
+  - ac: AC4, AC6
+  - depends: C15
+- C18: Núcleo PTT, isla de estado y modo de habla en la frecu activa
+  - ac: AC7
+  - depends: C4, C9
+- C19: Hojas de invitación, ruta de audio y salir, y pantalla de cierre
+  - ac: AC7
+  - depends: C18
 
 ## Riesgos
 
 - R1: Rendimiento de los pintores animados en teléfonos de gama media — mitigación: un `Ticker` por pantalla, `RepaintBoundary`, pausa fuera de pantalla y perfilado en un dispositivo real en C2.
-- R2: Choque con la épica abierta "Segundo plano y resiliencia", cuyo cambio "Heartbeats, reconexión con backoff y cierre de frecu" toca `RoomPage` y `room_provider` — mitigación: C4 empieza cuando ese cambio se cierre y dibuja sus estados `reconnecting` y `closed` en la isla de estado.
-- R3: Peso de las fuentes variables — mitigación: incluir solo los ejes y rangos usados y revisar el tamaño del APK en C1.
+- R2: La épica "Segundo plano y resiliencia" ya cerró sus cambios sobre `RoomPage` y `room_provider` — mitigación: C4, C18 y C19 parten de develop actualizado y dibujan los estados `reconnecting` y `closed` que dejó en la isla de estado.
+- R3: Peso de las fuentes variables — mitigación: incluir solo los ejes y rangos usados y revisar el tamaño del APK en C5.
 - R4: Contraste del verde en tema claro — mitigación: `signalFg` en tinta de día y una prueba que verifique el contraste mínimo de los pares texto/fondo de ambos temas.

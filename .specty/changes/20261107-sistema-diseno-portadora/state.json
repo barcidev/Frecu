@@ -5,7 +5,14 @@
   "phase": "implementing",
   "branch": "feature/sistema-diseno-portadora",
   "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:7f255441b7a2d3e4aff04cbab8c34f67a55636e2ec88ea75082dd79d636211e7",
+    "at": "2026-11-07T10:55:04.621Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -52,14 +59,7 @@
   "maxIds": {
     "A": 7,
     "AC": 8,
-    "C": 4,
+    "C": 19,
     "R": 4
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:88bf30ca0c85ef25d9f840eeb213fd482fea527b186b73ce489cb947190b32e5",
-    "at": "2026-11-07T03:54:51.747Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
