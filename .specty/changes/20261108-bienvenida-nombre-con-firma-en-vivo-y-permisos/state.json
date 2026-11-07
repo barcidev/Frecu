@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "20261108-bienvenida-nombre-con-firma-en-vivo-y-permisos",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/bienvenida-nombre-con-firma-en-vivo-y-permisos",
+  "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 16,
+    "adjust": 0,
+    "reasons": [
+      "14 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:2c515a159bf7cc3e3eecb730de3ce8a281f64ddb87fd2d590ee423e79b66412a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:66968204f67e3da6cbb71766404b7d717f513e55f4fe474623405b4932e21dfc",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:1cfe0d5bca6b86eb185e9e8a9585c1635d401486404759dcda2fe0dd69da6007",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:065b0642c4d7479659f091f23a1ba7348cf0ae0bfd594fe0cee3fb959b30fcb9",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:33d5bcd9a9616d3bb43a96e609f004fd725d6bc3312755f4de10561f07a66f45",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:50555789f5f8d5518ef00a51b4a108b5b9605cb95f4365c6d19a966f7af5ae68",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:d2e49fd5888caf86a12da62c7204075b8cb1295c832dbcd781c7260aedf339a6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 10,
+    "T": 3,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:7856f025fc74fe596673a7c0d3cd8bafbc29eb56e1ca479e6a0cb3e0f9684ed9",
+    "at": "2026-11-07T17:31:00.647Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
