@@ -73,3 +73,33 @@ Sustituir el tema Material genérico (semilla teal) por los tokens de Portadora 
 
 - R1: Componentes Material que pintan texto con `primary` dejarían verde ilegible de día — mitigación: sobrescribir esos temas con `signalFg` y comprobarlo en `app_theme_test.dart`.
 - R2: Las pruebas de widgets existentes podrían depender del aspecto Material anterior — mitigación: la verificación de T3 corre toda la suite.
+
+## Cierre
+
+### Resumen
+
+- `lib/core/design/tokens/`: `FrColors` (noche y día de `base.css`, un solo verde #C4E05C, `signalFg` en tinta de día, canales `p1`–`p5`), `FrType` (Archivo, Martian Mono y Doto con ejes `wght`, `wdth` y `ROND`), `FrSpace`, `FrRadii` y `FrMotion` (duraciones, curvas y resortes `press`, `flow` y `organic`), todos `ThemeExtension`.
+- `lib/core/design/fr_theme.dart`: `FrTheme` y `context.fr`.
+- `AppTheme.light` y `AppTheme.dark` salen de los mismos tokens: `ColorScheme`, `TextTheme` y componentes Material (botones, segmentado, campos, tarjetas, listas, hojas, diálogos, avisos, chips, interruptores y progreso) con `RoundedSuperellipseBorder`. La app sigue el tema del sistema.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (85 tests), con contraste ≥ 4,5:1 de los pares de texto en ambos temas.
+
+### Desviaciones
+
+- El corte se estrechó: la primera versión superaba el límite de Specty (8 módulos, máximo 2). Las fuentes en `assets/fonts/`, la preferencia de tema con `shared_preferences`, su aplicación en `app.dart`/`bootstrap.dart` y el selector en Ajustes quedan para cortes nuevos de la épica (mensaje dejado a la épica; memoria P21).
+- `FrType` usa el peso exacto (`FontWeight(720)`, etc.) y no el nombrado más cercano (A2): en Flutter 3.47 `FontWeight` admite cualquier valor y mueve el eje `wght`. Además declara `FontVariation.weight`.
+- `copyWith` y `lerp` de las extensiones recorren los tokens en orden (`_values`), con tablas `// dart format off`, para cumplir los límites de líneas (50) y complejidad (10) por función.
+- `FrColors.lerp` devuelve el juego destino exacto en t = 1, porque `Color.lerp(x, null, 1)` deja un color transparente en `signalMark` y `ledRing`; lo cubre el test nuevo `test/core/design/fr_colors_order_test.dart` (ampliación de alcance en T2).
+- Desbloqueo S1: se quitó una importación innecesaria de `test/core/design/fr_tokens_test.dart` que marcaba `flutter analyze`; no cambió ninguna aserción.
+
+### Decisiones
+
+- `primary` = `signal` (relleno) y todo lo que usa la señal como letra (botón de texto, cursor, selección, progreso, acción de aviso) usa `signalFg`. El borde de foco de los campos es `ledRing` de día (tinta) y `signal` de noche.
+- Botones con alto mínimo de 56 dp; el segmentado seleccionado usa `bg3`/`tx1`, como el pulgar `.seg-thumb` del prototipo.
+- `FrMotion.standard` es `static final` porque `SpringDescription.withDampingRatio` no es constante.
+- `FrTheme.of` usa los tokens de Portadora según el brillo si un tema no registra las extensiones.
+
+### Pendientes
+
+- Cortes nuevos de la épica para fuentes empaquetadas, preferencia de tema guardada, tema guardado al arrancar y selector en Ajustes (P21).
+- De día, las pantallas actuales que pintan iconos o bordes con `colorScheme.primary` (`mic_control_section.dart`, `participants_list.dart`) muestran el verde sobre blanco con poco contraste hasta que C4 las rediseñe con `signalFg`.
+- `lib/app/theme/app_theme.dart` llega a 301 líneas: cuando C2 sume temas de componentes, mover `_Buttons`, `_Surfaces` y `_Controls` a `lib/app/theme/component_themes.dart`.
