@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261107-iconos-propios-fricons-dibujados-desde-los",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/iconos-propios-fricons-dibujados-desde-los",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:27e8a2da2ccd579404b58e039cc9783637617383faffb44af9fb9b1e411480d4",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:2a3bd610e9717056600674044e34891b4775420fc61c35f4e432faaad2179e09",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:022851c9083317b8748a1e5a56bf84ca2b4d9ca1de5d14e8652b672c35f83fd1",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:33547228f2ca4b21dd9d4716ef1af8c399bf866baa6c608f36fedbc1e2b32ebb",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2d4b2ed0425270b6a2c50fe94ae215ecfd619f0b2c062b2601654d56d3e8f5a7",
+    "at": "2026-11-07T11:01:19.164Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
