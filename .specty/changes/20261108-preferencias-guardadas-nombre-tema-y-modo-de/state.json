@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "id": "20261108-preferencias-guardadas-nombre-tema-y-modo-de",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/preferencias-guardadas-nombre-tema-y-modo-de",
+  "baseCommit": "4ec5f1f87e33a578c3e4bcd7f869ff8fedbb49f9",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 11,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:a006e4fc3b8737fde3f83b3bcb3a129368854db3de32422fabf5491e8d3f68b9",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:76235ae14735bdb141683cd28fcc11e4ca009b3ffab86a71c1742f2bd4bb937b",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:48eedee846867efae0a52ece60be14981eb26178688aab2d6c44c6b554ec77f6",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:6a9d9908514e5360718a8fc1d58ce4fb7777e1aed690a94f9d275a03b5c5dfe5",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:9aa15e373d616c0f5bcf800c1680a81a9117696564f194b37afdcd6c2a820532",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 4,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:9a174d3b9d0d9ee2276e905dbeb3b0346f66a344e1bcf68a1d37039fbacd036c",
+    "at": "2026-11-07T16:09:29.664Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
