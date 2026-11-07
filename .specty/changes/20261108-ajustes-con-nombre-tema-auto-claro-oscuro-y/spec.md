@@ -75,7 +75,7 @@ Referencia: pantalla `settings` de `docs/diseno/prototipo/screens.js` con `.grou
   - files: lib/features/settings/presentation/pages/settings_page.dart, lib/features/settings/presentation/widgets/settings_group.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/settings/presentation/settings_page_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/settings/presentation/settings_page_test.dart
-- [ ] T2: Nombre con su firma y hoja para cambiarlo
+- [x] T2: Nombre con su firma y hoja para cambiarlo
   - files: lib/features/settings/presentation/pages/settings_page.dart, lib/features/settings/presentation/widgets/profile_card.dart, lib/features/settings/presentation/widgets/edit_name_sheet.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/settings/presentation/settings_name_test.dart
   - ac: AC5, AC6, AC7
   - verify: flutter analyze && flutter test

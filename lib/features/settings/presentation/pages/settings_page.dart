@@ -11,10 +11,12 @@ import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:frecu/features/settings/presentation/widgets/edit_name_sheet.dart';
+import 'package:frecu/features/settings/presentation/widgets/profile_card.dart';
 import 'package:frecu/features/settings/presentation/widgets/settings_group.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Ajustes: modo de habla por defecto y tema.
+/// Ajustes: nombre visible con su firma, modo de habla por defecto y tema.
 ///
 /// Cada cambio se guarda en las preferencias; el tema cambia toda la app al
 /// instante y, si algo no se pudo guardar, avisa y deja lo guardado.
@@ -37,6 +39,13 @@ class SettingsPage extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.only(bottom: 32),
               children: [
+                ProfileCard(
+                  name: preferences.displayName,
+                  onEdit: () => EditNameSheet.show(
+                    context,
+                    current: preferences.displayName,
+                  ),
+                ),
                 SettingsSectionLabel(t.settings.voice),
                 _TalkModeGroup(preferences.defaultTalkMode),
                 SettingsSectionLabel(t.settings.appearance),

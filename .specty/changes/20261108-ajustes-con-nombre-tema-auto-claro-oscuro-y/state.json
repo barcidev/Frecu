@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "baseCommit": "2408d791f5d9b74e31affbfeb8df7079d6afefc4",
   "revision": 1,
@@ -51,12 +51,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d0b5c97696307f5cee43c4273a7c861777d8ed5b",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:05:17.239Z",
       "doneAt": "2026-11-07T17:07:23.025Z",
-      "summary": "Ajustes en Portadora: cabecera con Atrás, secciones Voz (modo de habla PTT/Abierto) y Apariencia (tema Auto/Claro/Oscuro) con FrSegmented sobre preferencesProvider, aviso FrToast si no se guarda, pie y textos de settings en slang (es y en); grupo, fila y etiqueta de sección en settings_group.dart."
+      "summary": "Ajustes en Portadora: cabecera con Atrás, secciones Voz (modo de habla PTT/Abierto) y Apariencia (tema Auto/Claro/Oscuro) con FrSegmented sobre preferencesProvider, aviso FrToast si no se guarda, pie y textos de settings en slang (es y en); grupo, fila y etiqueta de sección en settings_group.dart.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "95febd914c6675738f5e8e20840fbe86cfa4b134",
+      "startedAt": "2026-11-07T17:07:24.348Z",
+      "doneAt": "2026-11-07T17:09:08.611Z",
+      "summary": "ProfileCard con la firma del nombre (o «Sin nombre») y Editar; EditNameSheet con firma en vivo, campo limitado a displayNameMaxLength y Guardar solo si normalizeDisplayName acepta el texto (runes), con errores de largo y de guardado."
     }
   },
   "pending": {
