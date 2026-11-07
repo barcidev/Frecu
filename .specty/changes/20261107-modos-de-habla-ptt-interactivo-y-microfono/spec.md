@@ -70,7 +70,7 @@ Se aplica Clean Architecture por feature, respetando Dart puro en `domain`, inmu
   - files: lib/features/room/presentation/widgets/mic_control_section.dart, lib/features/room/presentation/pages/room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/voice_flow_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/presentation/voice_flow_test.dart
-- [ ] T4: Regeneración de clases de localización con slang
+- [x] T4: Regeneración de clases de localización con slang
   - files: lib/i18n/strings.g.dart, lib/i18n/strings_en.g.dart, lib/i18n/strings_es.g.dart, test/features/room/presentation/voice_flow_test.dart
   - ac: AC2
   - verify: fvm flutter test test/features/room/presentation/voice_flow_test.dart

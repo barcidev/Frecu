@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-modos-de-habla-ptt-interactivo-y-microfono",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/modos-de-habla-ptt-interactivo-y-microfono",
   "baseCommit": "865389242bb880ea33e5242f1e719c3612cfcb86",
   "revision": 1,
@@ -58,12 +58,21 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "19dce3d419dc5abe184b73c3743940e3b690531c",
+      "attempts": 1,
       "startedAt": "2026-11-07T00:52:16.283Z",
       "doneAt": "2026-11-07T01:49:39.286Z",
-      "summary": "Control de modos de habla y sección de micrófono modular MicControlSection"
+      "summary": "Control de modos de habla y sección de micrófono modular MicControlSection",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "a16a011976f045b80213d55594017551204b86f8",
+      "startedAt": "2026-11-07T01:49:39.667Z",
+      "doneAt": "2026-11-07T01:50:30.748Z",
+      "summary": "Regeneración de archivos generados de traducción con slang"
     }
   },
   "pending": {
