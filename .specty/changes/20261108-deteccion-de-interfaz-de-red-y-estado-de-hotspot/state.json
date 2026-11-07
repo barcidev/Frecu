@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261108-deteccion-de-interfaz-de-red-y-estado-de-hotspot",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
+  "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
+  "revision": 2,
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f3b1da01a8baff68b1cf99805dcd42b6b061f526bb824647a9f6d62baa357807",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:ced626e5d8fc6f1f0f1771ce2c65b830ee60328dca425bd5c63d19e6d858d0af",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:44eab3f828c54b18fc6527d9b419d23c98df0ba71d0b2abfab04d60a6181927e",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 7,
+    "T": 3
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00",
+    "at": "2026-11-07T16:25:03.550Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}

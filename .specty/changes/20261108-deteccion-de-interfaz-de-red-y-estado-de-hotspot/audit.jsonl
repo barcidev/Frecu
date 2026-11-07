@@ -1,0 +1,4 @@
+{"ts":"2026-11-07T16:21:26.190Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot","request":"procede"}}
+{"ts":"2026-11-07T16:24:30.788Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:14add5ddee815901265499a833aa5b35ee157f2221368957a419e84804a7a3b0","size":"M","warnings":1}}
+{"ts":"2026-11-07T16:24:54.881Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00","size":"M","warnings":0}}
+{"ts":"2026-11-07T16:25:03.593Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":2,"hash":"sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00","channel":"delegated","delegated":true}}
