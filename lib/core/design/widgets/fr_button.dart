@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
 import 'package:frecu/core/design/widgets/wave_loader.dart';
 
@@ -45,7 +47,25 @@ class FrButton extends StatelessWidget {
     this.loading = false,
     this.expand = false,
     super.key,
-  });
+  }) : drawnIcon = null,
+       drawnTrailingIcon = null;
+
+  /// Crea un botón con [label] y los íconos propios [icon] y [trailingIcon]
+  /// de `FrIcons`.
+  const FrButton.drawn({
+    required this.label,
+    required this.onPressed,
+    this.variant = FrButtonVariant.primary,
+    this.size = FrButtonSize.regular,
+    FrIconData? icon,
+    FrIconData? trailingIcon,
+    this.loading = false,
+    this.expand = false,
+    super.key,
+  }) : drawnIcon = icon,
+       drawnTrailingIcon = trailingIcon,
+       icon = null,
+       trailingIcon = null;
 
   /// Texto del botón.
   final String label;
@@ -64,6 +84,12 @@ class FrButton extends StatelessWidget {
 
   /// Ícono después del texto.
   final IconData? trailingIcon;
+
+  /// Ícono propio antes del texto, en lugar de [icon].
+  final FrIconData? drawnIcon;
+
+  /// Ícono propio después del texto, en lugar de [trailingIcon].
+  final FrIconData? drawnTrailingIcon;
 
   /// Muestra la onda de carga y no responde.
   final bool loading;
@@ -253,18 +279,23 @@ class _ButtonBody extends StatelessWidget {
       color: style.foreground,
       fontSize: _small ? 14.5 : null,
     );
-    final leading = button.icon;
-    final trailing = button.trailingIcon;
+    final leading = _glyph(button.icon, button.drawnIcon);
+    final trailing = _glyph(button.trailingIcon, button.drawnTrailingIcon);
     return [
-      if (leading != null) ...[
-        Icon(leading, size: 22, color: style.foreground),
-        const SizedBox(width: 10),
-      ],
+      if (leading != null) ...[leading, const SizedBox(width: 10)],
       Text(button.label, style: text, maxLines: 1, softWrap: false),
-      if (trailing != null) ...[
-        const SizedBox(width: 10),
-        Icon(trailing, size: 22, color: style.foreground),
-      ],
+      if (trailing != null) ...[const SizedBox(width: 10), trailing],
     ];
+  }
+
+  /// Ícono de Material o propio, a 22 px con el primer plano del estilo.
+  Widget? _glyph(IconData? material, FrIconData? drawn) {
+    if (drawn != null) {
+      return FrIcon(drawn, size: 22, color: style.foreground);
+    }
+    if (material != null) {
+      return Icon(material, size: 22, color: style.foreground);
+    }
+    return null;
   }
 }

@@ -42,12 +42,24 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "4dccc65a4e136e850fd1e2972309226fc439a74c",
+      "attempts": 1,
       "startedAt": "2026-11-07T11:08:35.964Z",
       "doneAt": "2026-11-07T16:06:35.021Z",
-      "summary": "Parser propio del atributo d de SVG a segmentos absolutos (todos los comandos, números compactos, errores con posición) y buildSvgPath con arcos por Path.arcToPoint; test de arcos corregido por la persona."
+      "summary": "Parser propio del atributo d de SVG a segmentos absolutos (todos los comandos, números compactos, errores con posición) y buildSvgPath con arcos por Path.arcToPoint; test de arcos corregido por la persona.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/core/design/widgets/fr_button.dart",
+        "lib/core/design/widgets/fr_icon_button.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "25db96c40f4c85618f7091a97940b4da95ae1cd3",
+      "startedAt": "2026-11-07T16:06:35.664Z",
+      "doneAt": "2026-11-07T16:09:18.626Z",
+      "summary": "FrIconData con formas rect/circle/path y geometría en caché, catálogo FrIcons con los 37 íconos del prototipo y FrIcon/FrIconPainter con IconTheme y trazo redondo; adelanta .drawn de los botones porque fr_icon_test lo carga."
     }
   },
   "pending": {
