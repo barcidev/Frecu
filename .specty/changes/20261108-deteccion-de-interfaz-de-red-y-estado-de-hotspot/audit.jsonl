@@ -18,3 +18,4 @@
 {"ts":"2026-11-07T17:01:15.888Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T3","baseCommit":"74adf7dc836853fd0e8dacac8a3c4103ab0d22d3"}}
 {"ts":"2026-11-07T17:04:22.821Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter test test/features/network/ && fvm flutter analyze","exit":0,"ms":15282,"tree":"sha256:41f80149ef57ed8b1f8b8fc448680db2203198848e7f96470bc1b710bd6f2803"}}
 {"ts":"2026-11-07T17:04:23.330Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Implementados providers de Riverpod para datasource, repositorio y stream de red con generación de código"}}
+{"ts":"2026-11-07T17:05:57.991Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":4,"hash":"sha256:748a991d86ad51c24760731e489395e616140c534df55dfcdcbb6061b3cc8db8","size":"M","warnings":0}}

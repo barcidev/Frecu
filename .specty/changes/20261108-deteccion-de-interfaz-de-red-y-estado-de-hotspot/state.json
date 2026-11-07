@@ -5,7 +5,7 @@
   "phase": "acceptance",
   "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
-  "revision": 3,
+  "revision": 4,
   "approved": {
     "revision": 3,
     "hash": "sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00",
@@ -59,12 +59,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "74adf7dc836853fd0e8dacac8a3c4103ab0d22d3",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:01:15.883Z",
       "doneAt": "2026-11-07T17:04:23.301Z",
-      "summary": "Implementados providers de Riverpod para datasource, repositorio y stream de red con generación de código"
+      "summary": "Implementados providers de Riverpod para datasource, repositorio y stream de red con generación de código",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -82,5 +82,6 @@
     "test/features/network/data/network_repository_impl_test.dart": "sha256:1398e23a38200083495602745fa312153ef38d764077d76eb612c3083d398bc3",
     "test/features/network/domain/network_state_test.dart": "sha256:ac4e4c5093f5f9fa0bbe3d4d24630a283ce63ebee050b7239d24d9f6581685f1",
     "test/features/network/presentation/network_provider_test.dart": "sha256:f61bd884b426fbd2d88d3c95d997c0273b6afeb8c6f4006a2ba87ea26b07265c"
-  }
+  },
+  "closingSubmittedAt": "2026-11-07T17:05:57.990Z"
 }

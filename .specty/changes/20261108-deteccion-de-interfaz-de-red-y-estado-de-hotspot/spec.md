@@ -58,3 +58,26 @@ Implementar la feature `features/network` para la detección autónoma de interf
   - files: lib/features/network/presentation/providers/network_provider.dart, lib/features/network/presentation/providers/network_provider.g.dart, test/features/network/presentation/network_provider_test.dart
   - ac: AC6, AC7
   - verify: fvm flutter test test/features/network/ && fvm flutter analyze
+
+## Cierre
+
+### Resumen
+
+Se implementó con éxito la feature `features/network` encargada de la detección autónoma de interfaces de red locales activas:
+1. **Dominio**: Entidad inmutable sellada `NetworkState` (`disconnected` y `connected` con `ipAddress`, `interfaceName` e `isHotspot`) usando Freezed 3, junto al contrato abstracto en Dart puro `NetworkRepository` con `getNetworkState()` y `watchNetworkState()`.
+2. **Datos**: `NetworkInterfaceDataSource` parametrizable sobre `NetworkInterface.list()` para inspeccionar direcciones IPv4 no loopback, y `NetworkRepositoryImpl` con manejo funcional de errores mediante `Result<NetworkState>`, detección heurística de rangos comunes de Hotspot (`192.168.43.x`, `172.20.10.x`, `192.168.49.x` o interfaces AP) y sondeo periódico reactivo con filtrado de duplicados continuos.
+3. **Presentación**: Providers de Riverpod (`networkInterfaceDataSourceProvider`, `networkRepositoryProvider`, `networkStateStreamProvider`) generados con `@riverpod`.
+4. **Pruebas**: Suite de pruebas unitarias exhaustivas con `mocktail` y Riverpod en `test/features/network/` logrando el 100% de aprobación.
+
+### Desviaciones
+
+- Se desbloquearon y actualizaron los tests de datasource y repositorio mediante la solicitud S1 para reflejar que en el SDK Dart 3 `NetworkInterface.addresses` retorna `List<InterfaceAddress>` en lugar de `List<InternetAddress>`.
+
+### Decisiones
+
+- Se utilizó `Raw<Stream<NetworkState>>` en el provider reactivo para exponer directamente el stream al consumidor sin forzar la envoltura en `AsyncValue`.
+- Se aplicó inyección de funciones delegadas en `NetworkInterfaceDataSource` para garantizar tests deterministas y aislados del sistema operativo.
+
+### Pendientes
+
+- Ninguno en este módulo.
