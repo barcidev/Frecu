@@ -43,3 +43,22 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Licencias OFL de las fuentes empaquetadas.
+  assets:
+    - assets/fonts/archivo/OFL.txt
+    - assets/fonts/martianmono/OFL.txt
+    - assets/fonts/doto/OFL.txt
+
+  # Fuentes variables de Portadora (google/fonts, OFL). Los nombres coinciden
+  # con `FrFonts`; los ejes los mueve `FrType` con `fontVariations`.
+  fonts:
+    - family: Archivo
+      fonts:
+        - asset: assets/fonts/archivo/Archivo.ttf
+    - family: Martian Mono
+      fonts:
+        - asset: assets/fonts/martianmono/MartianMono.ttf
+    - family: Doto
+      fonts:
+        - asset: assets/fonts/doto/Doto.ttf

@@ -51,7 +51,7 @@ Empaquetar en `assets/fonts/` las fuentes variables Archivo, Martian Mono y Doto
 
 ## Tareas
 
-- [ ] T1: Fuentes variables y licencias en assets declaradas en `pubspec.yaml`
+- [x] T1: Fuentes variables y licencias en assets declaradas en `pubspec.yaml`
   - files: assets/fonts/archivo/Archivo.ttf, assets/fonts/archivo/OFL.txt, assets/fonts/martianmono/MartianMono.ttf, assets/fonts/martianmono/OFL.txt, assets/fonts/doto/Doto.ttf, assets/fonts/doto/OFL.txt, pubspec.yaml, test/core/design/fr_fonts_assets_test.dart
   - ac: AC1, AC2, AC3
   - verify: flutter test

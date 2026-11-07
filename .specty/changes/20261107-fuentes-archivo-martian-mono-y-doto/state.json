@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-fuentes-archivo-martian-mono-y-doto",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/fuentes-archivo-martian-mono-y-doto",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -40,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "b9c47ce7af1e82fbec198c3917a06d40b9e88226",
+      "startedAt": "2026-11-07T11:02:08.606Z",
+      "doneAt": "2026-11-07T11:03:53.949Z",
+      "summary": "Archivo, Martian Mono y Doto variables (google/fonts, sin modificar; hash de blob git verificado) en assets/fonts/<familia>/ con su OFL.txt; pubspec.yaml declara las tres familias con los nombres de FrFonts y las licencias como assets. Peso: 1.263.980 bytes sin comprimir (~339 KiB con deflate)."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
