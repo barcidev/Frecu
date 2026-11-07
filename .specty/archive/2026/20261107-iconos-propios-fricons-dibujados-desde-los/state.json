@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-iconos-propios-fricons-dibujados-desde-los",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/iconos-propios-fricons-dibujados-desde-los",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:2d4b2ed0425270b6a2c50fe94ae215ecfd619f0b2c062b2601654d56d3e8f5a7",
@@ -63,12 +63,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "f7da6a8b5a06ee14605679f925df3766e354a6b1",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:09:19.715Z",
       "doneAt": "2026-11-07T17:15:57.090Z",
-      "summary": "FrButton.drawn y FrIconButton.drawn (adelantados en T2) dibujan íconos de FrIcons a 22 px con el primer plano de su variante; los constructores con IconData no cambian."
+      "summary": "FrButton.drawn y FrIconButton.drawn (adelantados en T2) dibujan íconos de FrIcons a 22 px con el primer plano de su variante; los constructores con IconData no cambian.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -81,6 +81,7 @@
     "T": 3,
     "R": 2
   },
+  "closingSubmittedAt": "2026-11-07T17:16:13.242Z",
   "lockedTests": {
     "test/core/design/icons/fr_icon_test.dart": "sha256:1d1fd2e87f00b652914fad28b5412632110eabd71d2b4b32efc3f567b2237688"
   }

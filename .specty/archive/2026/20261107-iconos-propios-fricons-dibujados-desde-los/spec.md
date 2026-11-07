@@ -72,3 +72,31 @@ La app tiene su propio set de íconos de Portadora: los 37 íconos del prototipo
 
 - R1: Diferencias sutiles entre el arco de Skia y el del navegador — mitigación: pruebas de geometría con límites calculados a mano para arcos pequeños, grandes y con bandera de barrido distinta.
 - R2: C9 y C10 trabajan en paralelo en `lib/core/design/` — mitigación: solo archivos nuevos en `icons/`, y en los botones únicamente constructores añadidos sin cambiar el comportamiento existente.
+
+## Cierre
+
+### Resumen
+
+- `lib/core/design/icons/svg_path_parser.dart`: parser propio del atributo `d` de SVG (M, L, H, V, C, S, Q, T, A y Z absolutos y relativos, repeticiones implícitas, números compactos y banderas pegadas) a segmentos absolutos `sealed`, con `FormatException` en la posición del error; `buildSvgPath` los vuelca en un `Path` y delega los arcos en `Path.arcToPoint`.
+- `lib/core/design/icons/fr_icon_data.dart` y `fr_icons.dart`: `FrIconData` con formas `FrIconPath`, `FrIconRect` y `FrIconCircle` copiadas tal cual del objeto `ICONS` del prototipo (37 íconos, de `mic` a `dot`), con su geometría calculada una vez y guardada en un `Expando`.
+- `lib/core/design/icons/fr_icon.dart`: `FrIcon` y `FrIconPainter`, con tamaño, color y opacidad de `IconTheme` como `Icon`, trazo redondo y el grosor del prototipo según el tamaño (`FrIcon.strokeFor`), y relleno solo en las formas con relleno.
+- `FrButton.drawn` y `FrIconButton.drawn` dibujan íconos de `FrIcons` a 22 px con el primer plano de su variante; los constructores con `IconData` no cambian.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde.
+
+### Desviaciones
+
+- `FrButton.drawn` y `FrIconButton.drawn` se hicieron en T2 (con `specty scope add`) y no en T3, porque la verificación de T2 cargaba `fr_icon_test.dart`, que también prueba AC4 y no compilaba sin ellos. T3 solo verificó.
+- Desbloqueo 1, aplicado por la persona: en `test/core/design/icons/svg_path_parser_test.dart`, las dos aserciones de largo de arco comparaban con π·r exacto a 0,02, pero `PathMetrics` mide las curvas con tramos rectos de tolerancia fija (un `addOval` nativo de radio 6,5 mide 0,9745·2πr). Ahora comparan con el largo de un `Path.arcTo` nativo del mismo círculo, con tolerancia 1e-3.
+- Desbloqueo 2, aplicado por la persona: en `test/core/design/icons/fr_icons_test.dart` se borró `import 'dart:ui';`, que `flutter analyze` marcaba como innecesario; no cambió ninguna aserción.
+- `_run` y `_number` del parser se partieron en métodos más pequeños para cumplir la complejidad máxima de `specty check`.
+
+### Decisiones
+
+- Los arcos no se convierten a curvas: `Path.arcToPoint` ya sigue la semántica SVG (barrido 1 = horario en pantalla, radios que se agrandan), y las pruebas de geometría lo confirman (A1).
+- El catálogo se generó leyendo `ICONS` del prototipo con un script de un solo uso, para no transcribir trazos a mano; los trazos quedan como texto `const` y se traducen a `Path` la primera vez que se dibujan.
+- Como `Icon`, la opacidad de `IconTheme` se aplica también a un color propio.
+- `svg_path_parser.dart` supera las 300 líneas (323) y se deja entero: solo contiene los tipos de segmento y su lector.
+
+### Pendientes
+
+- Cambiar los íconos Material de las pantallas y widgets por `FrIcons` en sus cortes (C12 a C19; `FrKeypad` de C9 en P40).
