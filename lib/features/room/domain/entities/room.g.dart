@@ -14,6 +14,7 @@ _Room _$RoomFromJson(Map<String, dynamic> json) => _Room(
   accessCode: json['accessCode'] as String,
   createdAt: DateTime.parse(json['createdAt'] as String),
   maxParticipants: (json['maxParticipants'] as num?)?.toInt() ?? 6,
+  note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
 );
 
 Map<String, dynamic> _$RoomToJson(_Room instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$RoomToJson(_Room instance) => <String, dynamic>{
   'accessCode': instance.accessCode,
   'createdAt': instance.createdAt.toIso8601String(),
   'maxParticipants': instance.maxParticipants,
+  'note': const RoomNoteConverter().toJson(instance.note),
 };

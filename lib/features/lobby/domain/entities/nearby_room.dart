@@ -1,3 +1,4 @@
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'nearby_room.freezed.dart';
@@ -13,6 +14,9 @@ sealed class NearbyRoom with _$NearbyRoom {
     required String hostAddress,
     required int port,
     @Default(1) int protocolVersion,
+
+    /// Nota musical anunciada por el anfitrión; nula si no la publica.
+    @RoomNoteConverter() RoomNote? note,
   }) = _NearbyRoom;
 
   /// Crea una instancia desde un mapa JSON.
