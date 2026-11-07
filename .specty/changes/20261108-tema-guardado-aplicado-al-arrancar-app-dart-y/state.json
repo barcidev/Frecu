@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-tema-guardado-aplicado-al-arrancar-app-dart-y",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/tema-guardado-aplicado-al-arrancar-app-dart-y",
   "baseCommit": "90d2de1a0dce9fdad28df5aee5b57e1e47de1821",
   "revision": 1,
@@ -55,6 +55,9 @@
     "T": 2,
     "R": 2
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T16:34:58.998Z"
+  "lockedTests": {
+    "test/flutter_test_config.dart": "sha256:8680ee894a489284d414a88079439901142f08cb3acf7a26c531b62025a2acf1",
+    "test/app/saved_theme_test.dart": "sha256:7d56d9d879d5471d6c940b125f621be5adc94a6e2168472acfb064d1fd26df8d",
+    "test/bootstrap_test.dart": "sha256:020628d67cd5cad828e7edf3002ae71ada7d3ec981c4d1f1a1e800ef4c1b88c1"
+  }
 }
