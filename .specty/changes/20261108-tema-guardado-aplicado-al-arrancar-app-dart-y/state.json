@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-tema-guardado-aplicado-al-arrancar-app-dart-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/tema-guardado-aplicado-al-arrancar-app-dart-y",
   "baseCommit": "90d2de1a0dce9fdad28df5aee5b57e1e47de1821",
   "revision": 1,
@@ -47,14 +47,23 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "test/bootstrap_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "ae2d5cd3c48abd63d27d7dd68609034cc0053431",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:35:13.997Z",
       "doneAt": "2026-11-07T16:44:17.692Z",
-      "summary": "createAppContainer() en bootstrap.dart lee las preferencias antes de runApp (si falla, lo registra y sigue) y la app se monta con UncontrolledProviderScope sobre ese contenedor. S1: import de flutter_riverpod que faltaba en el test."
+      "summary": "createAppContainer() en bootstrap.dart lee las preferencias antes de runApp (si falla, lo registra y sigue) y la app se monta con UncontrolledProviderScope sobre ese contenedor. S1: import de flutter_riverpod que faltaba en el test.",
+      "scopeExtra": [
+        "test/bootstrap_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "d9111dfab94859f6c1b0eb5dcf5240f6d496f1c0",
+      "startedAt": "2026-11-07T16:44:18.552Z",
+      "doneAt": "2026-11-07T16:45:43.302Z",
+      "summary": "FrecuApp pasa a ConsumerStatefulWidget, observa solo themePreference con select y pasa themeMode a MaterialApp.router (Auto → system); las pruebas usan almacenamiento en memoria por defecto."
     }
   },
   "pending": {

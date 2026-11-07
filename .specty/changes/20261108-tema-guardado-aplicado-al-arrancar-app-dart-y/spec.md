@@ -53,7 +53,7 @@ Que la app abra con el tema guardado (Auto, Claro u Oscuro) desde el primer cuad
   - files: lib/bootstrap.dart, test/bootstrap_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/bootstrap_test.dart
-- [ ] T2: Tema guardado aplicado en `app.dart`
+- [x] T2: Tema guardado aplicado en `app.dart`
   - files: lib/app/app.dart, test/flutter_test_config.dart, test/app/saved_theme_test.dart
   - ac: AC1, AC2, AC3
   - verify: flutter analyze && flutter test
