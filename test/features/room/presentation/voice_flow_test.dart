@@ -1,6 +1,6 @@
-// AC1: CUANDO un participante se une a la sala del anfitrión ENTONCES se negocia automáticamente una conexión WebRTC mesh directa (SDP offer/answer e ICE local) entre ambos extremos sin servidores STUN/TURN.
-// AC2: CUANDO ambos extremos tienen el micrófono activado en modo abierto ENTONCES la captura local de audio transmite en tiempo real hacia el otro teléfono y se emite señalización de estado de habla (`talk_state`).
-// AC3: CUANDO un participante silencia su micrófono ENTONCES se desactiva la pista local de audio (`track.enabled = false`) sin renegociar la sesión WebRTC y se notifica a la sala el cese de habla.
+// AC1: CUANDO el usuario se encuentra en modo PTT y mantiene presionado el botón de hablar (`onPointerDown`) ENTONCES se activa la transmisión de voz (`startTalking()`) y el botón refleja visualmente el estado de habla hasta que el usuario lo suelta o cancela la pulsación (`onPointerUp`/`onPointerCancel`), silenciando el micrófono (`stopTalking()`).
+// AC2: CUANDO el usuario selecciona el modo de micrófono abierto (`openMic`) en la sala ENTONCES el modo se actualiza a `openMic` y el botón de micrófono permite alternar la transmisión continua (conmutar silencio/habla con un solo toque).
+// AC3: CUANDO el usuario cambia de modo de habla de micrófono abierto transmitiendo a PTT ENTONCES la transmisión continua se detiene de inmediato silenciando el micrófono.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -29,6 +30,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(TalkMode.openMic);
+    registerFallbackValue(TalkMode.pushToTalk);
+    registerFallbackValue(AudioRoute.speaker);
     LocaleSettings.setLocale(AppLocale.es);
   });
 
@@ -38,6 +41,8 @@ void main() {
     late StreamController<bool> isTalkingController;
     late StreamController<Set<String>> speakingPeersController;
     late StreamController<TalkMode> talkModeController;
+    late StreamController<AudioRoute> audioRouteController;
+    late StreamController<Set<AudioRoute>> availableRoutesController;
 
     setUp(() {
       roomRepository = MockRoomRepository();
@@ -45,6 +50,8 @@ void main() {
       isTalkingController = StreamController<bool>.broadcast();
       speakingPeersController = StreamController<Set<String>>.broadcast();
       talkModeController = StreamController<TalkMode>.broadcast();
+      audioRouteController = StreamController<AudioRoute>.broadcast();
+      availableRoutesController = StreamController<Set<AudioRoute>>.broadcast();
 
       when(() => roomRepository.watchStatus())
           .thenAnswer((_) => Stream.value(const RoomStatus.connected()));
@@ -61,11 +68,17 @@ void main() {
           .thenAnswer((_) => speakingPeersController.stream);
       when(() => voiceRepository.watchTalkMode())
           .thenAnswer((_) => talkModeController.stream);
+      when(() => voiceRepository.watchAudioRoute())
+          .thenAnswer((_) => audioRouteController.stream);
+      when(() => voiceRepository.watchAvailableAudioRoutes())
+          .thenAnswer((_) => availableRoutesController.stream);
       when(() => voiceRepository.startTalking())
           .thenAnswer((_) async => const Result<void>.success(null));
       when(() => voiceRepository.stopTalking())
           .thenAnswer((_) async => const Result<void>.success(null));
       when(() => voiceRepository.setTalkMode(any()))
+          .thenAnswer((_) async => const Result<void>.success(null));
+      when(() => voiceRepository.setAudioRoute(any()))
           .thenAnswer((_) async => const Result<void>.success(null));
       when(() => voiceRepository.dispose()).thenAnswer((_) async {});
     });
@@ -74,6 +87,8 @@ void main() {
       await isTalkingController.close();
       await speakingPeersController.close();
       await talkModeController.close();
+      await audioRouteController.close();
+      await availableRoutesController.close();
     });
 
     Widget createTestApp(AppRouter router) {
@@ -88,8 +103,120 @@ void main() {
       );
     }
 
+    // AC1
+    testWidgets(
+      'AC1: PTT mode starts talking on pointer down and stops talking on pointer up or cancel',
+      (tester) async {
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        talkModeController.add(TalkMode.pushToTalk);
+        isTalkingController.add(false);
+        await tester.pumpAndSettle();
+
+        final pttButton = find.byKey(const Key('ptt_button'));
+        expect(pttButton, findsOneWidget);
+
+        // Pointer down -> starts talking
+        final gesture = await tester.startGesture(tester.getCenter(pttButton));
+        await tester.pump();
+        verify(() => voiceRepository.startTalking()).called(1);
+
+        // While pressed, simulated stream update to talking
+        isTalkingController.add(true);
+        await tester.pump();
+        expect(find.text(t.room.speaking), findsWidgets);
+
+        // Pointer up -> stops talking
+        await gesture.up();
+        await tester.pump();
+        verify(() => voiceRepository.stopTalking()).called(1);
+
+        // Test cancel
+        final gesture2 = await tester.startGesture(tester.getCenter(pttButton));
+        await tester.pump();
+        verify(() => voiceRepository.startTalking()).called(1);
+
+        await gesture2.cancel();
+        await tester.pump();
+        verify(() => voiceRepository.stopTalking()).called(1);
+      },
+    );
+
     // AC2
-    testWidgets('AC2: RoomPage shows mic open and active speaking indicator', (
+    testWidgets(
+      'AC2: selecting openMic mode updates talk mode and allows toggling mic with single tap',
+      (tester) async {
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        talkModeController.add(TalkMode.pushToTalk);
+        isTalkingController.add(false);
+        await tester.pumpAndSettle();
+
+        final openMicSegment = find.byKey(const Key('mode_open_mic'));
+        expect(openMicSegment, findsOneWidget);
+
+        await tester.tap(openMicSegment);
+        await tester.pumpAndSettle();
+        verify(() => voiceRepository.setTalkMode(TalkMode.openMic)).called(1);
+
+        // Mode changes to openMic
+        talkModeController.add(TalkMode.openMic);
+        await tester.pumpAndSettle();
+
+        final micButton = find.byKey(const Key('mic_toggle_button'));
+        expect(micButton, findsOneWidget);
+
+        // Tap to start talking continuously
+        await tester.tap(micButton);
+        await tester.pumpAndSettle();
+        verify(() => voiceRepository.startTalking()).called(1);
+
+        // State updates to talking
+        isTalkingController.add(true);
+        await tester.pumpAndSettle();
+
+        // Tap again to mute
+        await tester.tap(micButton);
+        await tester.pumpAndSettle();
+        verify(() => voiceRepository.stopTalking()).called(1);
+      },
+    );
+
+    // AC3
+    testWidgets(
+      'AC3: switching from openMic to PTT mode while talking stops transmission and silences mic',
+      (tester) async {
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        talkModeController.add(TalkMode.openMic);
+        isTalkingController.add(true);
+        await tester.pumpAndSettle();
+
+        final pttSegment = find.byKey(const Key('mode_ptt'));
+        expect(pttSegment, findsOneWidget);
+
+        await tester.tap(pttSegment);
+        await tester.pumpAndSettle();
+        verify(() => voiceRepository.setTalkMode(TalkMode.pushToTalk)).called(1);
+      },
+    );
+
+    testWidgets('RoomPage shows mic open and active speaking indicator', (
       tester,
     ) async {
       final router = AppRouter();
@@ -105,14 +232,13 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Bob'), findsOneWidget);
-      expect(find.byIcon(Icons.volume_up), findsOneWidget);
-      expect(find.text(t.room.openMic), findsOneWidget);
+      expect(find.byIcon(Icons.volume_up), findsWidgets);
+      expect(find.text(t.room.openMic), findsWidgets);
       expect(find.byIcon(Icons.mic), findsOneWidget);
     });
 
-    // AC2
     testWidgets(
-      'AC2: RoomPage activates speaking indicator and subtitle when participant speaks',
+      'RoomPage activates speaking indicator and subtitle when participant speaks',
       (tester) async {
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
@@ -135,7 +261,7 @@ void main() {
           find.byKey(const Key('speaking_indicator_peer-2')),
           findsOneWidget,
         );
-        expect(find.byIcon(Icons.volume_up), findsOneWidget);
+        expect(find.byIcon(Icons.volume_up), findsWidgets);
         expect(find.text(t.room.speaking), findsWidgets);
 
         // Remote peer stops speaking
@@ -146,38 +272,106 @@ void main() {
           find.byKey(const Key('speaking_indicator_peer-2')),
           findsNothing,
         );
-        expect(find.byIcon(Icons.volume_up), findsNothing);
       },
     );
 
-    // AC3
-    testWidgets('AC3: RoomPage allows muting mic and updates talk status', (
-      tester,
-    ) async {
-      final router = AppRouter();
-      await tester.pumpWidget(createTestApp(router));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'Tapping audio route button switches audio route and updates icon dynamically',
+      (tester) async {
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
 
-      unawaited(router.push(RoomRoute(roomId: 'room-123')));
-      await tester.pumpAndSettle();
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
 
-      isTalkingController.add(true);
-      talkModeController.add(TalkMode.openMic);
-      await tester.pumpAndSettle();
+        audioRouteController.add(AudioRoute.speaker);
+        availableRoutesController.add({
+          AudioRoute.speaker,
+          AudioRoute.earpiece,
+          AudioRoute.bluetooth,
+        });
+        await tester.pumpAndSettle();
 
-      final micButton = find.byKey(const Key('mic_toggle_button'));
-      expect(micButton, findsOneWidget);
+        final routeButton = find.byKey(const Key('audio_route_button'));
+        expect(routeButton, findsOneWidget);
 
-      await tester.tap(micButton);
-      await tester.pumpAndSettle();
+        // Initial route: speaker (volume_up)
+        expect(
+          find.descendant(
+            of: routeButton,
+            matching: find.byIcon(Icons.volume_up),
+          ),
+          findsOneWidget,
+        );
 
-      verify(() => voiceRepository.stopTalking()).called(1);
+        // Tap to cycle route
+        await tester.tap(routeButton);
+        await tester.pumpAndSettle();
+        verify(() => voiceRepository.setAudioRoute(any())).called(1);
 
-      isTalkingController.add(false);
-      await tester.pumpAndSettle();
+        // Simulated state change to bluetooth
+        audioRouteController.add(AudioRoute.bluetooth);
+        await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.mic_off), findsOneWidget);
-      expect(find.text(t.room.muted), findsOneWidget);
-    });
+        expect(
+          find.descendant(
+            of: routeButton,
+            matching: find.byIcon(Icons.bluetooth_audio),
+          ),
+          findsOneWidget,
+        );
+
+        // Simulated state change to earpiece
+        audioRouteController.add(AudioRoute.earpiece);
+        await tester.pumpAndSettle();
+
+        expect(
+          find.descendant(
+            of: routeButton,
+            matching: find.byIcon(Icons.phone_in_talk),
+          ),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'Audio route changes dynamically when accessory is disconnected or route stream emits',
+      (tester) async {
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        final routeButton = find.byKey(const Key('audio_route_button'));
+
+        // Accessory connected: route is bluetooth
+        audioRouteController.add(AudioRoute.bluetooth);
+        await tester.pumpAndSettle();
+
+        expect(
+          find.descendant(
+            of: routeButton,
+            matching: find.byIcon(Icons.bluetooth_audio),
+          ),
+          findsOneWidget,
+        );
+
+        // Accessory disconnected: fallback to speaker
+        audioRouteController.add(AudioRoute.speaker);
+        await tester.pumpAndSettle();
+
+        expect(
+          find.descendant(
+            of: routeButton,
+            matching: find.byIcon(Icons.volume_up),
+          ),
+          findsOneWidget,
+        );
+      },
+    );
   });
 }

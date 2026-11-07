@@ -3,6 +3,9 @@ import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 
+export 'set_audio_route.dart';
+export 'set_speaker_on.dart';
+
 /// Caso de uso para iniciar la transmisión de voz.
 final class StartTalking implements UseCase<void, NoParams> {
   /// Constructor con inyección de repositorio.

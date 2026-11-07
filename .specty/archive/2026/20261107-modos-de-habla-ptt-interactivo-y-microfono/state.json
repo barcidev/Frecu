@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "id": "20261107-modos-de-habla-ptt-interactivo-y-microfono",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/modos-de-habla-ptt-interactivo-y-microfono",
+  "baseCommit": "865389242bb880ea33e5242f1e719c3612cfcb86",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1ccf606a306e89dd58f515bef64804436e4fa416b033a09dc76ead413c984388",
+    "at": "2026-11-06T23:36:23.286Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "11 archivos",
+      "2 módulos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:5e156396c3f65d15abebb2256dace883b8024dd3ce64b05dcd25d458de6d405c",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:83bd8a4a98d5dc3136ccc2696e480fe28858dee7caa070bc8d67d6a150bff1b2",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:6409e865747f8250a57e3f616af480ba7506704bd4e1ad36b32654bf3d1a5f41",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "4ed00fb529e3cad0b1ff6c6caf96da56042e1945",
+      "attempts": 1,
+      "startedAt": "2026-11-06T23:48:24.718Z",
+      "doneAt": "2026-11-07T00:14:23.507Z",
+      "summary": "Extracción de widgets modulares reduciendo room_page.dart a 185 líneas",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "704405710a72f265113972e9ff2d6ebed127a08b",
+      "attempts": 1,
+      "startedAt": "2026-11-07T00:14:23.933Z",
+      "doneAt": "2026-11-07T00:52:15.902Z",
+      "summary": "Creación del widget interactivo PttButton con detección de onPointerDown, onPointerUp y onPointerCancel",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "19dce3d419dc5abe184b73c3743940e3b690531c",
+      "attempts": 1,
+      "startedAt": "2026-11-07T00:52:16.283Z",
+      "doneAt": "2026-11-07T01:49:39.286Z",
+      "summary": "Control de modos de habla y sección de micrófono modular MicControlSection",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "baseCommit": "a16a011976f045b80213d55594017551204b86f8",
+      "attempts": 1,
+      "startedAt": "2026-11-07T01:49:39.667Z",
+      "doneAt": "2026-11-07T01:50:30.748Z",
+      "summary": "Regeneración de archivos generados de traducción con slang",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 4,
+    "R": 1
+  },
+  "closingSubmittedAt": "2026-11-07T01:53:11.611Z",
+  "lockedTests": {
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:acf94caad22f8647542e6a4008ce72075e18dbb19e58b2691dddfab30fe32020"
+  }
+}

@@ -1,8 +1,9 @@
-// AC1: CUANDO un participante se une a la sala del anfitrión ENTONCES se negocia automáticamente una conexión WebRTC mesh directa (SDP offer/answer e ICE local) entre ambos extremos sin servidores STUN/TURN.
-// AC2: CUANDO ambos extremos tienen el micrófono activado en modo abierto ENTONCES la captura local de audio transmite en tiempo real hacia el otro teléfono y se emite señalización de estado de habla (`talk_state`).
+// AC1: CUANDO el usuario conmuta la salida de audio entre altavoz, auricular y Bluetooth ENTONCES la sesión de audio redirige la salida al dispositivo seleccionado y actualiza el icono de ruta de audio en tiempo real.
+// AC2: CUANDO se conecta o desconecta un accesorio de audio (auriculares cableados o Bluetooth) ENTONCES el sistema detecta el cambio de periférico y actualiza la ruta de audio activa.
 // AC3: CUANDO un participante silencia su micrófono ENTONCES se desactiva la pista local de audio (`track.enabled = false`) sin renegociar la sesión WebRTC y se notifica a la sala el cese de habla.
 import 'dart:async';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
@@ -10,6 +11,7 @@ import 'package:frecu/features/room/data/datasources/peer_connection_datasource.
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
+import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:mocktail/mocktail.dart';
@@ -39,6 +41,7 @@ void main() {
     registerFallbackValue(RTCIceCandidate('candidate', '0', 0));
     registerFallbackValue(FakeMediaStreamTrack());
     registerFallbackValue(FakeMediaStream());
+    registerFallbackValue(AudioRoute.speaker);
   });
 
   group('VoiceRepository integration', () {
@@ -72,6 +75,14 @@ void main() {
 
       when(() => mockAudioSession.activate()).thenAnswer((_) async {});
       when(() => mockAudioSession.deactivate()).thenAnswer((_) async {});
+      when(() => mockAudioSession.devicesStream)
+          .thenAnswer((_) => const Stream.empty());
+      when(() => mockAudioSession.getDevices())
+          .thenAnswer((_) async => <AudioDevice>{});
+      when(() => mockAudioSession.setSpeakerphoneOn(any()))
+          .thenAnswer((_) async {});
+      when(() => mockAudioSession.setSpeakerphoneOnButPreferBluetooth())
+          .thenAnswer((_) async {});
 
       when(() => mockAudioTrack.enabled).thenAnswer((_) => isTrackEnabled);
       when(() => mockAudioTrack.enabled = any()).thenAnswer((invocation) {
@@ -288,6 +299,65 @@ void main() {
         expect(talkStateMsgs.last.isSpeaking, isFalse);
         expect(await repository.watchIsTalking().first, isFalse);
 
+        await repository.dispose();
+      },
+    );
+
+    // AC1
+    test('AC1: setAudioRoute switches audio routing between speaker, earpiece and bluetooth', () async {
+      final pcDataSource = createPeerConnectionDataSource();
+      final repository = createRepository(pcDataSource);
+
+      final resSpeaker = await repository.setAudioRoute(AudioRoute.speaker);
+      expect(resSpeaker.isSuccess, isTrue);
+      expect(await repository.watchAudioRoute().first, AudioRoute.speaker);
+      verify(() => mockAudioSession.setSpeakerphoneOn(true)).called(1);
+
+      final resEarpiece = await repository.setAudioRoute(AudioRoute.earpiece);
+      expect(resEarpiece.isSuccess, isTrue);
+      expect(await repository.watchAudioRoute().first, AudioRoute.earpiece);
+      verify(() => mockAudioSession.setSpeakerphoneOn(false)).called(1);
+
+      final resBt = await repository.setAudioRoute(AudioRoute.bluetooth);
+      expect(resBt.isSuccess, isTrue);
+      expect(await repository.watchAudioRoute().first, AudioRoute.bluetooth);
+      verify(() => mockAudioSession.setSpeakerphoneOnButPreferBluetooth())
+          .called(1);
+
+      await repository.dispose();
+    });
+
+    // AC2
+    test(
+      'AC2: audio accessory disconnect triggers safe fallback to speaker route',
+      () async {
+        final devicesController =
+            StreamController<Set<AudioDevice>>.broadcast();
+        when(() => mockAudioSession.devicesStream)
+            .thenAnswer((_) => devicesController.stream);
+
+        final pcDataSource = createPeerConnectionDataSource();
+        final repository = createRepository(pcDataSource);
+
+        await repository.setAudioRoute(AudioRoute.bluetooth);
+        expect(await repository.watchAudioRoute().first, AudioRoute.bluetooth);
+
+        // Accessory disconnected: stream emits device set without bluetooth
+        devicesController.add({
+          AudioDevice(
+            id: 'speaker',
+            name: 'Speaker',
+            type: AudioDeviceType.builtInSpeaker,
+            isInput: false,
+            isOutput: true,
+          ),
+        });
+        await pumpEventQueue();
+
+        // Safe fallback to speaker
+        expect(await repository.watchAudioRoute().first, AudioRoute.speaker);
+
+        await devicesController.close();
         await repository.dispose();
       },
     );
