@@ -45,7 +45,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "8611ee692d6511df98c1c8bcff164f1481ee1855",
+      "startedAt": "2026-11-07T17:05:20.972Z",
+      "doneAt": "2026-11-07T17:05:40.781Z",
+      "summary": "MdnsDataSource publica n (semitono) en el TXT solo si hay nota y la lee con int.tryParse y RoomNote.tryFromSemitone (utf8 con allowMalformed): ausente o inválida es sin nota. DiscoveryRepository.publishRoom, su implementación y PublishRoomParams suman RoomNote? note opcional."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

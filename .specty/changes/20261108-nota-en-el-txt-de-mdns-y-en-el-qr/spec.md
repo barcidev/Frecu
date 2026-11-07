@@ -66,7 +66,7 @@ La nota de cada frecu (`RoomNote`, C3) empieza a viajar por la red: el anfitrió
 
 ## Tareas
 
-- [ ] T1: Clave `n` en el TXT de mDNS al publicar y al descubrir
+- [x] T1: Clave `n` en el TXT de mDNS al publicar y al descubrir
   - files: lib/features/lobby/data/datasources/mdns_datasource.dart, lib/features/lobby/domain/repositories/discovery_repository.dart, lib/features/lobby/data/repositories/discovery_repository_impl.dart, lib/features/lobby/domain/usecases/discovery_usecases.dart, test/features/lobby/data/mdns_note_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/features/lobby/data/mdns_note_test.dart test/features/lobby/data/discovery_repository_test.dart test/features/lobby/domain/discovery_usecases_test.dart
