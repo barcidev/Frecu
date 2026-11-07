@@ -55,16 +55,27 @@
   "tasks": {
     "T1": {
       "status": "done",
+      "baseCommit": "f03f9e46d42100614b8419cc2c058f4f9920a1e7",
+      "attempts": 1,
+      "startedAt": "2026-11-07T23:48:14.541Z",
+      "doneAt": "2026-11-07T23:55:47.295Z",
+      "summary": "LobbyTuner de dos octavas con picos, aguja con resorte y lectura (pintor en lobby_tuner_painter.dart, teclado y TunerNeedle en tuner_keyboard.dart), RoomNoteLabels/RoomNoteText y textos nuevos en es/en; NearbyRoomTile entra porque la prueba lo importa.",
       "scopeExtra": [
         "lib/features/lobby/presentation/widgets/nearby_room_tile.dart",
         "lib/features/lobby/presentation/widgets/tuner_keyboard.dart",
         "lib/features/lobby/presentation/widgets/lobby_tuner_painter.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/lobby/presentation/widgets/lobby_sections.dart"
       ],
       "attempts": 1,
-      "baseCommit": "f03f9e46d42100614b8419cc2c058f4f9920a1e7",
-      "startedAt": "2026-11-07T23:48:14.541Z",
-      "doneAt": "2026-11-07T23:55:47.295Z",
-      "summary": "LobbyTuner de dos octavas con picos, aguja con resorte y lectura (pintor en lobby_tuner_painter.dart, teclado y TunerNeedle en tuner_keyboard.dart), RoomNoteLabels/RoomNoteText y textos nuevos en es/en; NearbyRoomTile entra porque la prueba lo importa."
+      "baseCommit": "976e47679000114d364da08b0d88cce40cd8e895",
+      "startedAt": "2026-11-07T23:55:47.798Z",
+      "doneAt": "2026-11-07T23:57:43.433Z",
+      "summary": "LobbyPage en Portadora: cabecera con red y Ajustes, encabezado con el número, sintonizador, lista de NearbyRoomTile con elección, búsqueda vacía, aviso sin red y dock (secciones en lobby_sections.dart)."
     }
   },
   "pending": {
@@ -76,7 +87,7 @@
     "AC": 7,
     "T": 3,
     "R": 3,
-    "S": 2
+    "S": 3
   },
   "lockedTests": {
     "test/app/saved_theme_test.dart": "sha256:0acdc0d97581504236b6dba0ed44620b754df76104c1eceb043b8e47a6d02da9",

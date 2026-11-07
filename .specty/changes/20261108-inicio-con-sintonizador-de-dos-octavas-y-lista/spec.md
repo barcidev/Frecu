@@ -87,7 +87,7 @@ Referencia: `V.lobby` de `screens.js`; `drawTuner`, `keyX`, `WHITE`, `drawSpark`
   - files: lib/features/lobby/presentation/widgets/lobby_tuner.dart, lib/features/lobby/presentation/widgets/room_note_label.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC7
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart --name AC7
-- [ ] T2: Inicio con cabecera, lista de frecus, estados y dock
+- [x] T2: Inicio con cabecera, lista de frecus, estados y dock
   - files: lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/lobby/presentation/widgets/nearby_room_tile.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5, AC6
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart
