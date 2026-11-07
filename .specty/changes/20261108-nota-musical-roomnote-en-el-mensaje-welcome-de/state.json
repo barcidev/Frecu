@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nota-musical-roomnote-en-el-mensaje-welcome-de",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
   "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
   "revision": 2,
@@ -68,12 +68,21 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "aeda5ea3f622dce93741c3c2ea95b710025c8f19",
+      "attempts": 1,
       "startedAt": "2026-11-07T18:34:15.215Z",
       "doneAt": "2026-11-07T18:34:36.166Z",
-      "summary": "Propagar note en createRoom y asignar nota recibida en welcome en RoomRepositoryImpl"
+      "summary": "Propagar note en createRoom y asignar nota recibida en welcome en RoomRepositoryImpl",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "f7505a648f21480cf1f7e5e5d67a0900b9b316c3",
+      "startedAt": "2026-11-07T18:34:36.689Z",
+      "doneAt": "2026-11-07T18:35:59.551Z",
+      "summary": "Documentar el campo note en el mensaje welcome de señalización en docs/protocolo.md"
     }
   },
   "pending": {
