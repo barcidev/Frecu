@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
-import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_qr_dialog.dart';
+import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
 import 'package:frecu/features/room/presentation/widgets/participants_list.dart';
 import 'package:frecu/features/room/presentation/widgets/room_info_card.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -118,7 +118,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                 speakingPeers: voiceState.speakingPeers,
               ),
             ),
-            _MicControlSection(voiceState: voiceState),
+            MicControlSection(voiceState: voiceState),
             const SizedBox(height: 12),
             FilledButton.icon(
               icon: const Icon(Icons.call_end),
@@ -127,62 +127,6 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                 backgroundColor: Theme.of(context).colorScheme.error,
               ),
               onPressed: _handleLeave,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _MicControlSection extends ConsumerWidget {
-  const _MicControlSection({required this.voiceState});
-
-  final VoiceState voiceState;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isTalking = voiceState.isTalking;
-    final theme = Theme.of(context);
-
-    return Card(
-      color: isTalking ? theme.colorScheme.primaryContainer : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  isTalking ? t.room.speaking : t.room.muted,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isTalking ? theme.colorScheme.primary : null,
-                  ),
-                ),
-                Text(
-                  voiceState.talkMode == TalkMode.openMic
-                      ? t.room.openMic
-                      : t.room.pushToTalk,
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-            FilledButton.icon(
-              key: const Key('mic_toggle_button'),
-              icon: Icon(isTalking ? Icons.mic : Icons.mic_off),
-              label: Text(isTalking ? t.room.muted : t.room.speaking),
-              style: FilledButton.styleFrom(
-                backgroundColor: isTalking
-                    ? theme.colorScheme.error
-                    : theme.colorScheme.primary,
-              ),
-              onPressed: () {
-                ref.read(voiceNotifierProvider.notifier).toggleMicrophone();
-              },
             ),
           ],
         ),

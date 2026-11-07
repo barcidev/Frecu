@@ -9,3 +9,6 @@
 {"ts":"2026-11-07T00:14:23.933Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T2","baseCommit":"704405710a72f265113972e9ff2d6ebed127a08b"}}
 {"ts":"2026-11-07T00:52:15.821Z","actor":"specty","event":"task.verified","data":{"task":"T2","cmd":"fvm flutter test test/features/room/presentation/widgets/ptt_button_test.dart","exit":0,"ms":2855,"tree":"sha256:ecca1f598d5b0850922265d3cfc7bb3b89ed3903035930f1af46fae9a4fe8319"}}
 {"ts":"2026-11-07T00:52:15.904Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T2","summary":"Creación del widget interactivo PttButton con detección de onPointerDown, onPointerUp y onPointerCancel"}}
+{"ts":"2026-11-07T00:52:16.283Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T3","baseCommit":"19dce3d419dc5abe184b73c3743940e3b690531c"}}
+{"ts":"2026-11-07T01:49:39.215Z","actor":"specty","event":"task.verified","data":{"task":"T3","cmd":"fvm flutter test test/features/room/presentation/voice_flow_test.dart","exit":0,"ms":3131,"tree":"sha256:fc021e179837941f08db95023fda9dac419668cbdf97735912857290f015d1fe"}}
+{"ts":"2026-11-07T01:49:39.287Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T3","summary":"Control de modos de habla y sección de micrófono modular MicControlSection"}}

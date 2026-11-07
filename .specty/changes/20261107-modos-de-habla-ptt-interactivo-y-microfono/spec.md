@@ -66,7 +66,7 @@ Se aplica Clean Architecture por feature, respetando Dart puro en `domain`, inmu
   - files: lib/features/room/presentation/widgets/ptt_button.dart, test/features/room/presentation/widgets/ptt_button_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/presentation/widgets/ptt_button_test.dart
-- [ ] T3: Control de modos de habla y sección de micrófono en RoomPage
+- [x] T3: Control de modos de habla y sección de micrófono en RoomPage
   - files: lib/features/room/presentation/widgets/mic_control_section.dart, lib/features/room/presentation/pages/room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/voice_flow_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/room/presentation/voice_flow_test.dart

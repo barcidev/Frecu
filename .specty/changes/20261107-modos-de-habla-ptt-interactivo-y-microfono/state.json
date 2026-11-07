@@ -49,12 +49,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "704405710a72f265113972e9ff2d6ebed127a08b",
+      "attempts": 1,
       "startedAt": "2026-11-07T00:14:23.933Z",
       "doneAt": "2026-11-07T00:52:15.902Z",
-      "summary": "Creación del widget interactivo PttButton con detección de onPointerDown, onPointerUp y onPointerCancel"
+      "summary": "Creación del widget interactivo PttButton con detección de onPointerDown, onPointerUp y onPointerCancel",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "19dce3d419dc5abe184b73c3743940e3b690531c",
+      "startedAt": "2026-11-07T00:52:16.283Z",
+      "doneAt": "2026-11-07T01:49:39.286Z",
+      "summary": "Control de modos de habla y sección de micrófono modular MicControlSection"
     }
   },
   "pending": {
