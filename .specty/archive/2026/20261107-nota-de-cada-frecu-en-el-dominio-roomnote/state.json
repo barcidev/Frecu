@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "id": "20261107-nota-de-cada-frecu-en-el-dominio-roomnote",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/nota-de-cada-frecu-en-el-dominio-roomnote",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:86dc385a2640f3c1b20352d1cc48022d0738bebecc2d7e273f513c3f44c1efa7",
+    "at": "2026-11-07T11:00:57.940Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:36e01026ea3ec4de8570045a049ce1a01f406dc868279320eee6d4561fdc856c",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:10bc22e52f1142145e2b34b0b949db3f7f1fe645c65761652cab60dae2f602b7",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:a6eade309659ee1f75abb386d6d5ca54e0bcb8661c20ee5fb919113977b74a20",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:1cd61fdb909143f717c7a4ee50868de44a5341146d0290a4d3825cda1a1788b3",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:b146ce2fc49385b5851e21ee8dafd726878b41108703771e1b3f196b0d9f6967",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "0588e8c4594205750e5c994372cf007e61baf948",
+      "attempts": 1,
+      "startedAt": "2026-11-07T11:06:51.865Z",
+      "doneAt": "2026-11-07T16:45:14.508Z",
+      "summary": "RoomNote (Freezed 3, solo semitono 0–23 con @Assert): pitchClass, octave, midi, name en solfeo, fifthsPosition y hz (La4 = 440 Hz); circleOfFifths, semitoneCount, tryFromSemitone y RoomNoteConverter (JSON como semitono; inválido = sin nota). S1: scope.generated con *.g.dart y *.freezed.dart.",
+      "scopeExtra": [
+        ".specty/config.yaml"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "15fb198b30547396539d4923ceaf4b6164e10377",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:45:15.380Z",
+      "doneAt": "2026-11-07T16:45:53.683Z",
+      "summary": "AssignRoomNote (UseCase con assign síncrono): hora local mod 12 sobre el círculo de quintas, octava 4 o 5 según la mitad del día; salta las quintas ocupadas de la misma octava con vuelta de Fa a Do y, si las 12 lo están, deja la de su hora.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "66eb881c5938d9a53a116e66ab5f38071b3c10f9",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:45:54.491Z",
+      "doneAt": "2026-11-07T16:47:23.256Z",
+      "summary": "Room, RoomInvite y NearbyRoom suman @RoomNoteConverter() RoomNote? note (JSON como semitono; ausente o inválido = sin nota), regenerados con build_runner; docs/dominio.md suma Nota (RoomNote).",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 4,
+    "T": 3,
+    "R": 2,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T16:47:56.304Z",
+  "lockedTests": {
+    "test/features/lobby/domain/nearby_room_note_test.dart": "sha256:46e763e7d2e3695607458ee398a3c5f7cb07c9cc5a2054d43ffe6482f7ae1225",
+    "test/features/room/domain/assign_room_note_test.dart": "sha256:acea7a5a6de3dc72533427c8a6784dcb00aa81f8184800c8d86fef0ea0ec9af9",
+    "test/features/room/domain/room_note_fields_test.dart": "sha256:88063423d67e34f6b0c284729a846bfff089c8041db1984dbb2ce66de257b771",
+    "test/features/room/domain/room_note_test.dart": "sha256:bf3f09328febb621e94647b1790f337ce2ae0414f48e50ca00c71d3a33140b08"
+  }
+}

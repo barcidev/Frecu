@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Room {
 
- String get id; String get name; String get hostAddress; int get port; String get accessCode; DateTime get createdAt; int get maxParticipants;
+ String get id; String get name; String get hostAddress; int get port; String get accessCode; DateTime get createdAt; int get maxParticipants;/// Nota musical de la frecu, calculada con su hora de apertura.
+@RoomNoteConverter() RoomNote? get note;
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $RoomCopyWith<Room> get copyWith => _$RoomCopyWithImpl<Room>(this as Room, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants);
+int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note);
 
 @override
 String toString() {
-  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants)';
+  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note)';
 }
 
 
@@ -48,11 +49,11 @@ abstract mixin class $RoomCopyWith<$Res>  {
   factory $RoomCopyWith(Room value, $Res Function(Room) _then) = _$RoomCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants
+ String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note
 });
 
 
-
+$RoomNoteCopyWith<$Res>? get note;
 
 }
 /// @nodoc
@@ -65,7 +66,7 @@ class _$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -74,10 +75,23 @@ as String,port: null == port ? _self.port : port // ignore: cast_nullable_to_non
 as int,accessCode: null == accessCode ? _self.accessCode : accessCode // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,maxParticipants: null == maxParticipants ? _self.maxParticipants : maxParticipants // ignore: cast_nullable_to_non_nullable
-as int,
+as int,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as RoomNote?,
   ));
 }
+/// Create a copy of Room
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RoomNoteCopyWith<$Res>? get note {
+    if (_self.note == null) {
+    return null;
+  }
 
+  return $RoomNoteCopyWith<$Res>(_self.note!, (value) {
+    return _then(_self.copyWith(note: value));
+  });
+}
 }
 
 
@@ -156,10 +170,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants);case _:
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note);case _:
   return orElse();
 
 }
@@ -177,10 +191,10 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note)  $default,) {final _that = this;
 switch (_that) {
 case _Room():
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants);}
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -194,10 +208,10 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note)?  $default,) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants);case _:
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note);case _:
   return null;
 
 }
@@ -209,7 +223,7 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 @JsonSerializable()
 
 class _Room implements Room {
-  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6});
+  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note});
   factory _Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
 @override final  String id;
@@ -219,6 +233,8 @@ class _Room implements Room {
 @override final  String accessCode;
 @override final  DateTime createdAt;
 @override@JsonKey() final  int maxParticipants;
+/// Nota musical de la frecu, calculada con su hora de apertura.
+@override@RoomNoteConverter() final  RoomNote? note;
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +249,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants);
+int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note);
 
 @override
 String toString() {
-  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants)';
+  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note)';
 }
 
 
@@ -253,11 +269,11 @@ abstract mixin class _$RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
   factory _$RoomCopyWith(_Room value, $Res Function(_Room) _then) = __$RoomCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants
+ String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note
 });
 
 
-
+@override $RoomNoteCopyWith<$Res>? get note;
 
 }
 /// @nodoc
@@ -270,7 +286,7 @@ class __$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,}) {
   return _then(_Room(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -279,11 +295,24 @@ as String,port: null == port ? _self.port : port // ignore: cast_nullable_to_non
 as int,accessCode: null == accessCode ? _self.accessCode : accessCode // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,maxParticipants: null == maxParticipants ? _self.maxParticipants : maxParticipants // ignore: cast_nullable_to_non_nullable
-as int,
+as int,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as RoomNote?,
   ));
 }
 
+/// Create a copy of Room
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RoomNoteCopyWith<$Res>? get note {
+    if (_self.note == null) {
+    return null;
+  }
 
+  return $RoomNoteCopyWith<$Res>(_self.note!, (value) {
+    return _then(_self.copyWith(note: value));
+  });
+}
 }
 
 // dart format on
