@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261107-widgets-de-control-frpinfield-frkeypad",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/widgets-de-control-frpinfield-frkeypad",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:837ecea8f8812892c46bafd620b8d9c33b17ec97f971e801165898b4ebcadd38",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:b7fdef99958999efb0dbea26a17dd14ca1fca378890b72692a2512da7dbb14ff",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:ee33e62ca9f075bed82441015454cd4f960b4fd8b61e44fae7c919acf6512ed8",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:f370e63eceda38c5702e9e70e6f5ba1169c1cefb4ce16971e401b6ba367df42f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 7,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c7783b91aea19ab95dd66bb0d6e2e29e699bd4f61130d7208b6c28b6e585087a",
+    "at": "2026-11-07T11:01:26.452Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
