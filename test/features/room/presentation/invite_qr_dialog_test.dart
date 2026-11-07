@@ -99,7 +99,9 @@ void main() {
         expect(find.text('Código QR de invitación'), findsOneWidget);
         expect(find.byType(QrImageView), findsOneWidget);
         expect(
-          find.text('frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788'),
+          find.text(
+            'frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788',
+          ),
           findsOneWidget,
         );
       },

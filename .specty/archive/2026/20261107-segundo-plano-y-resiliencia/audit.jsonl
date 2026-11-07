@@ -1,0 +1,7 @@
+{"ts":"2026-11-07T03:12:15.155Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"epic","type":"feat","branch":"feature/segundo-plano-y-resiliencia","resolves":["P20","P6","P9"]}}
+{"ts":"2026-11-07T03:32:14.779Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:e735d8cff9e07e595721e50046283c34f0bf515dfbef2b0373edd3971bad59d9","size":"S","warnings":0}}
+{"ts":"2026-11-07T03:32:20.197Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:e735d8cff9e07e595721e50046283c34f0bf515dfbef2b0373edd3971bad59d9","channel":"delegated","delegated":true}}
+{"ts":"2026-11-07T08:46:22.394Z","actor":"specty","event":"epic.slicesDone","data":{"slices":{"C1":"20261107-heartbeats-reconexion-con-backoff-y-cierre-de","C2":"20261107-servicio-foreground-y-persistencia-en-segundo"}}}
+{"ts":"2026-11-07T08:46:37.603Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":1,"delegated":true}}
+{"ts":"2026-11-07T08:47:29.112Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:783b366c93849776ba83d13dd5c1a11d617be04f792d1791b05ba5ea7ebeeaea","size":"S","warnings":0}}
+{"ts":"2026-11-07T08:47:39.831Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}

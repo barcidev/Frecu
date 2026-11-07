@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
@@ -20,14 +21,24 @@ SignalingClientDataSource signalingClient(Ref ref) {
   return client;
 }
 
+/// Datasource del servicio en primer plano para persistencia.
+@Riverpod(keepAlive: true)
+ForegroundServiceDataSource foregroundServiceDataSource(Ref ref) {
+  final dataSource = ForegroundServiceDataSource();
+  unawaited(dataSource.init());
+  return dataSource;
+}
+
 /// Proveedor global singleton del repositorio de sala.
 @Riverpod(keepAlive: true)
 RoomRepository roomRepository(Ref ref) {
   final server = SignalingServerDataSource();
   final client = ref.watch(signalingClientProvider);
+  final foregroundService = ref.watch(foregroundServiceDataSourceProvider);
   final repository = RoomRepositoryImpl(
     serverDataSource: server,
     clientDataSource: client,
+    foregroundServiceDataSource: foregroundService,
   );
   ref.onDispose(repository.dispose);
   return repository;

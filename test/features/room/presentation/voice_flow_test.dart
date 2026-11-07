@@ -212,7 +212,8 @@ void main() {
 
         await tester.tap(pttSegment);
         await tester.pumpAndSettle();
-        verify(() => voiceRepository.setTalkMode(TalkMode.pushToTalk)).called(1);
+        verify(() => voiceRepository.setTalkMode(TalkMode.pushToTalk))
+            .called(1);
       },
     );
 
