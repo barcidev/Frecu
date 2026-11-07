@@ -59,7 +59,7 @@ Implementar el monitoreo continuo de conexión mediante heartbeats periódicos (
 
 ## Tareas
 
-- [ ] T1: Monitoreo de liveness con heartbeats y watchdog en SignalingClientDataSource y SignalingServerDataSource
+- [x] T1: Monitoreo de liveness con heartbeats y watchdog en SignalingClientDataSource y SignalingServerDataSource
   - files: lib/features/room/data/datasources/signaling_client_datasource.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/signaling_server_test.dart
   - ac: AC2
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-heartbeats-reconexion-con-backoff-y-cierre-de' && fvm flutter test test/features/room/data/signaling_server_test.dart

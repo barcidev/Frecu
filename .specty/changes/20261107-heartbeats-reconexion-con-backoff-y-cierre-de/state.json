@@ -40,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 3,
+      "baseCommit": "f175a4d324d5473a1516ff66d496863754cb9dc4",
+      "startedAt": "2026-11-07T04:07:17.116Z",
+      "doneAt": "2026-11-07T04:34:05.834Z",
+      "summary": "Implementación de heartbeats periódicos y watchdog de inactividad de pares en SignalingClientDataSource y SignalingServerDataSource"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
