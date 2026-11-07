@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-primera-apertura-y-nombre-guardado-al-crear-o",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/primera-apertura-y-nombre-guardado-al-crear-o",
   "baseCommit": "e046736d5c01fd4cb824e898c02657a6f2672e85",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:3ef0fc3904fa0e69292e2bf4f8d0f78f4abe7e87616894d56c71cffaebeb780b",
@@ -56,12 +56,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "0049b90f006931a04b20967e5e705601a986ba15",
+      "attempts": 1,
       "startedAt": "2026-11-07T18:16:10.279Z",
       "doneAt": "2026-11-07T18:18:10.539Z",
-      "summary": "Extensión SavedDisplayName en lobby: los diálogos de unión por código e IP pierden el campo del nombre y, como el escáner QR, se unen con el nombre guardado (o «Participante» si aún no hay); crear una frecu pasa el nombre guardado como anfitrión"
+      "summary": "Extensión SavedDisplayName en lobby: los diálogos de unión por código e IP pierden el campo del nombre y, como el escáner QR, se unen con el nombre guardado (o «Participante» si aún no hay); crear una frecu pasa el nombre guardado como anfitrión",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -74,6 +74,7 @@
     "T": 2,
     "R": 2
   },
+  "closingSubmittedAt": "2026-11-07T18:18:41.766Z",
   "lockedTests": {
     "test/app/first_open_test.dart": "sha256:0014971f5870a97c025935313d6af2b9930dc605c9338bfef8004809fa92aac9",
     "test/features/lobby/presentation/saved_name_test.dart": "sha256:d0b6d8e0b185500fe59e9561f6ea54e5e82155994b343dd69ac34e292ae4c73c"

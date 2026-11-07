@@ -71,3 +71,30 @@ Que el recorrido de la primera vez (bienvenida, nombre y permisos, C12) se abra 
 
 - R1: Si la decisión se tomara en cada navegación al inicio, terminar el recorrido con un permiso negado devolvería al recorrido sin fin — mitigación: se toma solo con el enlace inicial y la prueba de AC4 termina el recorrido negando un permiso.
 - R2: Al abrir, la primera pantalla espera la lectura de los permisos (un canal de plataforma) antes de dibujarse — mitigación: las preferencias ya están precargadas y solo se leen los permisos si hay nombre; es una lectura local de milisegundos.
+
+## Cierre
+
+### Resumen
+
+- `lib/app/needs_onboarding_provider.dart`: `needsOnboardingProvider` responde si hace falta el recorrido de la primera vez: sin nombre guardado, o con algún permiso de `onboardingPermissions` pendiente (sin pedir, o negado una vez con el sistema dispuesto a pedirlo otra vez). Uno negado para siempre no cuenta. Los permisos solo se leen si hay nombre.
+- `lib/app/app.dart`: sin router inyectado, `FrecuApp` pasa a `config` un `deepLinkBuilder` que, solo para el enlace inicial, lee una vez el provider con `ref.listenManual` (y cierra la suscripción) y abre `PermissionsRoute` o el inicio; si la lectura falla, lo registra y va al inicio. Al decidirse una sola vez por apertura, terminar el recorrido con un permiso negado deja el inicio como única pantalla y no lo reabre.
+- `lib/features/lobby`: extensión `SavedDisplayName` sobre `WidgetRef` (`savedDisplayName` y `joinDisplayName`). Los diálogos de unión por código y por IP de `lobby_page.dart` ya no tienen campo ni controlador del nombre; ellos y `ScanQrPage` se unen con el nombre guardado (o «Participante» si aún no hay), y `CreateRoomPage` pasa el nombre guardado como anfitrión. Se lee al tocar el botón, así que vale el último cambiado en Ajustes.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (394), con 10 pruebas nuevas: 5 de la primera apertura (`test/app/first_open_test.dart`) y 5 del nombre guardado (`test/features/lobby/presentation/saved_name_test.dart`). Las pruebas existentes no cambiaron.
+
+### Desviaciones
+
+- Ninguna respecto a la spec aprobada. Antes de aprobarla, la decisión pasó de `PermissionsGuard` (`lib/app/router`) al `deepLinkBuilder` de `lib/app/app.dart`, porque tocar el router, `lib/app` y `lobby` sumaba tres módulos.
+
+### Decisiones
+
+- Con nombre guardado y algún permiso por pedir, el recorrido se abre desde la bienvenida con el nombre ya escrito, porque saltar a los permisos exige cambiar `PermissionsPage`.
+- Un router inyectado en `FrecuApp` (pruebas) abre su ruta sin comprobar la primera apertura; así las pruebas que montan la app con `AppRouter()` siguen igual.
+- Sin nombre guardado (solo si falla el almacenamiento), unirse usa «Participante» y crear deja el «Anfitrión» del repositorio, como antes.
+- El modo de habla por defecto (P49) no se aplica aquí: corresponde al entrar a la frecu, en `features/room` (C18).
+
+### Pendientes
+
+- Ir directo al paso de permisos cuando ya hay nombre guardado y falta pedir alguno: hace falta un paso inicial en `PermissionsPage` (`features/permissions`) y regenerar `app_router.gr.dart`; hoy el recorrido empieza en la bienvenida con el nombre ya escrito.
+- Usar `defaultTalkMode` de las preferencias al entrar a una frecu (`features/room`, C18).
+- `PermissionsGuard` ya no decide nada en producción (la primera ruta la decide `deepLinkBuilder` en `app.dart`): quitarlo, junto con su uso en `test/app_test.dart` (`hasPermissions: false`), en un corte que toque `lib/app/router`.
+- `lobby.yourName` de slang quedó sin uso: quitarlo de `lib/i18n` (`es` y `en`) en C15 o C16; el nombre de reserva «Participante» es texto fijo en español.
