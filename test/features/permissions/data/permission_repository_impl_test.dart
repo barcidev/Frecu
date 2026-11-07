@@ -12,6 +12,10 @@ void main() {
   late MockPermissionDataSource mockDataSource;
   late PermissionRepositoryImpl repository;
 
+  setUpAll(() {
+    registerFallbackValue(Permission.microphone);
+  });
+
   setUp(() {
     mockDataSource = MockPermissionDataSource();
     repository = PermissionRepositoryImpl(dataSource: mockDataSource);

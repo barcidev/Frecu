@@ -47,7 +47,7 @@ Implementar la arquitectura de verificación y solicitud de permisos para la apl
   - files: lib/features/permissions/domain/entities/app_permission.dart, lib/features/permissions/domain/repositories/permission_repository.dart, test/features/permissions/domain/app_permission_test.dart
   - ac: AC1, AC4
   - verify: fvm flutter test test/features/permissions/domain/
-- [ ] T2: Datasource e implementación del repositorio con pruebas unitarias
+- [x] T2: Datasource e implementación del repositorio con pruebas unitarias
   - files: lib/features/permissions/data/datasources/permission_datasource.dart, lib/features/permissions/data/repositories/permission_repository_impl.dart, test/features/permissions/data/permission_datasource_test.dart, test/features/permissions/data/permission_repository_impl_test.dart
   - ac: AC1, AC2, AC3, AC4, AC6
   - verify: fvm flutter test test/features/permissions/data/
