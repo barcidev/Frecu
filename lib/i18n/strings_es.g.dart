@@ -198,14 +198,47 @@ class Translations$settings$es {
 	/// es: 'Ajustes'
 	String get title => 'Ajustes';
 
+	/// es: 'Atrás'
+	String get back => 'Atrás';
+
 	/// es: 'Nombre visible'
 	String get displayName => 'Nombre visible';
+
+	/// es: 'Sin nombre'
+	String get noName => 'Sin nombre';
+
+	/// es: 'Editar'
+	String get edit => 'Editar';
+
+	late final Translations$settings$editName$es editName = Translations$settings$editName$es.internal(_root);
+
+	/// es: 'Voz'
+	String get voice => 'Voz';
 
 	/// es: 'Modo de habla por defecto'
 	String get defaultTalkMode => 'Modo de habla por defecto';
 
-	/// es: 'Idioma'
-	String get language => 'Idioma';
+	/// es: 'Se aplica al entrar a cada frecu.'
+	String get defaultTalkModeHelp => 'Se aplica al entrar a cada frecu.';
+
+	late final Translations$settings$talkMode$es talkMode = Translations$settings$talkMode$es.internal(_root);
+
+	/// es: 'Apariencia'
+	String get appearance => 'Apariencia';
+
+	/// es: 'Tema'
+	String get theme => 'Tema';
+
+	/// es: 'Auto sigue al teléfono'
+	String get themeHelp => 'Auto sigue al teléfono';
+
+	late final Translations$settings$themeMode$es themeMode = Translations$settings$themeMode$es.internal(_root);
+
+	/// es: 'No se pudo guardar'
+	String get saveError => 'No se pudo guardar';
+
+	/// es: '100 % local · sin internet'
+	String get footer => '100 % local · sin internet';
 }
 
 // Path: errors
@@ -236,6 +269,66 @@ class Translations$errors$es {
 
 	/// es: 'Error inesperado'
 	String get unexpected => 'Error inesperado';
+}
+
+// Path: settings.editName
+class Translations$settings$editName$es {
+	Translations$settings$editName$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Tu nombre'
+	String get title => 'Tu nombre';
+
+	/// es: 'Así te verán y escucharán en cada frecu.'
+	String get message => 'Así te verán y escucharán en cada frecu.';
+
+	/// es: 'Escribe tu nombre'
+	String get hint => 'Escribe tu nombre';
+
+	/// es: 'Guardar'
+	String get save => 'Guardar';
+
+	/// es: 'Usa como máximo $max caracteres.'
+	String tooLong({required Object max}) => 'Usa como máximo ${max} caracteres.';
+
+	/// es: 'No se pudo guardar el nombre. Intenta otra vez.'
+	String get saveError => 'No se pudo guardar el nombre. Intenta otra vez.';
+}
+
+// Path: settings.talkMode
+class Translations$settings$talkMode$es {
+	Translations$settings$talkMode$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'PTT'
+	String get pushToTalk => 'PTT';
+
+	/// es: 'Abierto'
+	String get openMic => 'Abierto';
+}
+
+// Path: settings.themeMode
+class Translations$settings$themeMode$es {
+	Translations$settings$themeMode$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Auto'
+	String get auto => 'Auto';
+
+	/// es: 'Claro'
+	String get light => 'Claro';
+
+	/// es: 'Oscuro'
+	String get dark => 'Oscuro';
 }
 
 /// The flat map containing all translations for locale <es>.
@@ -281,9 +374,29 @@ extension on Translations {
 			'permissions.grant' => 'Conceder permisos',
 			'permissions.granted' => 'Permisos concedidos',
 			'settings.title' => 'Ajustes',
+			'settings.back' => 'Atrás',
 			'settings.displayName' => 'Nombre visible',
+			'settings.noName' => 'Sin nombre',
+			'settings.edit' => 'Editar',
+			'settings.editName.title' => 'Tu nombre',
+			'settings.editName.message' => 'Así te verán y escucharán en cada frecu.',
+			'settings.editName.hint' => 'Escribe tu nombre',
+			'settings.editName.save' => 'Guardar',
+			'settings.editName.tooLong' => ({required Object max}) => 'Usa como máximo ${max} caracteres.',
+			'settings.editName.saveError' => 'No se pudo guardar el nombre. Intenta otra vez.',
+			'settings.voice' => 'Voz',
 			'settings.defaultTalkMode' => 'Modo de habla por defecto',
-			'settings.language' => 'Idioma',
+			'settings.defaultTalkModeHelp' => 'Se aplica al entrar a cada frecu.',
+			'settings.talkMode.pushToTalk' => 'PTT',
+			'settings.talkMode.openMic' => 'Abierto',
+			'settings.appearance' => 'Apariencia',
+			'settings.theme' => 'Tema',
+			'settings.themeHelp' => 'Auto sigue al teléfono',
+			'settings.themeMode.auto' => 'Auto',
+			'settings.themeMode.light' => 'Claro',
+			'settings.themeMode.dark' => 'Oscuro',
+			'settings.saveError' => 'No se pudo guardar',
+			'settings.footer' => '100 % local · sin internet',
 			'errors.network' => 'Error de red local',
 			'errors.permissionDenied' => 'Permiso denegado',
 			'errors.roomFull' => 'La frecu está llena (máximo 6 participantes)',

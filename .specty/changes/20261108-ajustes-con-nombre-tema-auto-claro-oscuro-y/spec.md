@@ -71,7 +71,7 @@ Referencia: pantalla `settings` de `docs/diseno/prototipo/screens.js` con `.grou
 
 ## Tareas
 
-- [ ] T1: Ajustes con tema y modo de habla por defecto
+- [x] T1: Ajustes con tema y modo de habla por defecto
   - files: lib/features/settings/presentation/pages/settings_page.dart, lib/features/settings/presentation/widgets/settings_group.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/settings/presentation/settings_page_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/settings/presentation/settings_page_test.dart
