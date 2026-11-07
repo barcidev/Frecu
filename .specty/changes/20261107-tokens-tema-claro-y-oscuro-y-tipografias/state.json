@@ -6,6 +6,13 @@
   "branch": "feature/tokens-tema-claro-y-oscuro-y-tipografias",
   "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:09b9798f2a43364f7542dede49284c2a567d4ff0f2582ddd05ba0650428588d0",
+    "at": "2026-11-07T04:23:05.319Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 12,
@@ -44,12 +51,6 @@
     "T": 3,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:09b9798f2a43364f7542dede49284c2a567d4ff0f2582ddd05ba0650428588d0",
-    "at": "2026-11-07T04:23:05.319Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T04:25:03.848Z"
 }
