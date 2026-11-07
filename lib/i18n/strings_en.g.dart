@@ -125,9 +125,21 @@ class _Translations$settings$en extends Translations$settings$es {
 
 	// Translations
 	@override String get title => 'Settings';
+	@override String get back => 'Back';
 	@override String get displayName => 'Display name';
+	@override String get noName => 'No name';
+	@override String get edit => 'Edit';
+	@override late final _Translations$settings$editName$en editName = _Translations$settings$editName$en._(_root);
+	@override String get voice => 'Voice';
 	@override String get defaultTalkMode => 'Default talk mode';
-	@override String get language => 'Language';
+	@override String get defaultTalkModeHelp => 'Applies every time you join a frecu.';
+	@override late final _Translations$settings$talkMode$en talkMode = _Translations$settings$talkMode$en._(_root);
+	@override String get appearance => 'Appearance';
+	@override String get theme => 'Theme';
+	@override String get themeHelp => 'Auto follows your phone';
+	@override late final _Translations$settings$themeMode$en themeMode = _Translations$settings$themeMode$en._(_root);
+	@override String get saveError => 'Couldn\'t save';
+	@override String get footer => '100% local · no internet';
 }
 
 // Path: errors
@@ -144,6 +156,44 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get hostUnreachable => 'Host is unreachable';
 	@override String get audio => 'Audio subsystem error';
 	@override String get unexpected => 'Unexpected error';
+}
+
+// Path: settings.editName
+class _Translations$settings$editName$en extends Translations$settings$editName$es {
+	_Translations$settings$editName$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Your name';
+	@override String get message => 'This is how people will see and hear you in every frecu.';
+	@override String get hint => 'Type your name';
+	@override String get save => 'Save';
+	@override String tooLong({required Object max}) => 'Use ${max} characters at most.';
+	@override String get saveError => 'Couldn\'t save your name. Try again.';
+}
+
+// Path: settings.talkMode
+class _Translations$settings$talkMode$en extends Translations$settings$talkMode$es {
+	_Translations$settings$talkMode$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get pushToTalk => 'PTT';
+	@override String get openMic => 'Open';
+}
+
+// Path: settings.themeMode
+class _Translations$settings$themeMode$en extends Translations$settings$themeMode$es {
+	_Translations$settings$themeMode$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get auto => 'Auto';
+	@override String get light => 'Light';
+	@override String get dark => 'Dark';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -189,9 +239,29 @@ extension on TranslationsEn {
 			'permissions.grant' => 'Grant permissions',
 			'permissions.granted' => 'Permissions granted',
 			'settings.title' => 'Settings',
+			'settings.back' => 'Back',
 			'settings.displayName' => 'Display name',
+			'settings.noName' => 'No name',
+			'settings.edit' => 'Edit',
+			'settings.editName.title' => 'Your name',
+			'settings.editName.message' => 'This is how people will see and hear you in every frecu.',
+			'settings.editName.hint' => 'Type your name',
+			'settings.editName.save' => 'Save',
+			'settings.editName.tooLong' => ({required Object max}) => 'Use ${max} characters at most.',
+			'settings.editName.saveError' => 'Couldn\'t save your name. Try again.',
+			'settings.voice' => 'Voice',
 			'settings.defaultTalkMode' => 'Default talk mode',
-			'settings.language' => 'Language',
+			'settings.defaultTalkModeHelp' => 'Applies every time you join a frecu.',
+			'settings.talkMode.pushToTalk' => 'PTT',
+			'settings.talkMode.openMic' => 'Open',
+			'settings.appearance' => 'Appearance',
+			'settings.theme' => 'Theme',
+			'settings.themeHelp' => 'Auto follows your phone',
+			'settings.themeMode.auto' => 'Auto',
+			'settings.themeMode.light' => 'Light',
+			'settings.themeMode.dark' => 'Dark',
+			'settings.saveError' => 'Couldn\'t save',
+			'settings.footer' => '100% local · no internet',
 			'errors.network' => 'Local network error',
 			'errors.permissionDenied' => 'Required permission denied',
 			'errors.roomFull' => 'Room is full (max 6 participants)',

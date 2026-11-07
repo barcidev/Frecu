@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "20261107-datasource-y-repositorio-de-verificacion-de",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/datasource-y-repositorio-de-verificacion-de",
+  "baseCommit": "cb3fae623a91c4bc89f6b45571e04faf708ba8f7",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b7904b8fb876d2dfb9dfac195bfa94ab74c9f0a4cded9673a3428e5897e57bb1",
+    "at": "2026-11-07T09:22:23.682Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:7c7cc420ec2b26607cab3d45d14fe87d886a3219a41a21dacdf2190658922407",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:1e67ec7b920d8a9ea4bbe954e5a01dbd4dc5a0f702d0f108f3ba864b765d7619",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "bbc54507f5cb2f5f180dd5c04efd7cfd0770179b",
+      "attempts": 1,
+      "startedAt": "2026-11-07T09:27:53.175Z",
+      "doneAt": "2026-11-07T09:31:43.899Z",
+      "summary": "Definir enums AppPermission y AppPermissionStatus y contrato PermissionRepository",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "914baedc5b2137a1eab00e28a3f8b964c4de2ce6",
+      "attempts": 1,
+      "startedAt": "2026-11-07T09:31:44.521Z",
+      "doneAt": "2026-11-07T09:41:18.887Z",
+      "summary": "Implementar PermissionDataSource y PermissionRepositoryImpl con manejo funcional de Result y pruebas unitarias",
+      "scopeExtra": [
+        "test/features/permissions/data/permission_repository_impl_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "362e74102498b891008bfa821ceff983f19017db",
+      "attempts": 1,
+      "startedAt": "2026-11-07T09:41:19.470Z",
+      "doneAt": "2026-11-07T16:04:58.209Z",
+      "summary": "Proveedores de Riverpod para PermissionDataSource y PermissionRepository con tests",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 6,
+    "T": 3,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T16:05:23.362Z",
+  "lockedTests": {
+    "test/features/permissions/data/permission_datasource_test.dart": "sha256:7b123f0d7c8b49a97a50e9f4960bb95d743b29e8177446f074b91c973e1555c4",
+    "test/features/permissions/data/permission_repository_impl_test.dart": "sha256:b673c03f74ebd151e32dc495e257761a0fa9da881565973fd07b06992cc4bbbe",
+    "test/features/permissions/domain/app_permission_test.dart": "sha256:015d24af298742899072ab261224cd2e1ff4d2f1d3849370d4d25ee9e73a5aa9",
+    "test/features/permissions/presentation/permission_provider_test.dart": "sha256:5a3a0858efc2189361864bc1c48509db6b51a5f60df7c48c14ff67ba5567140b"
+  }
+}

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   final storage = <String, dynamic>{};
@@ -22,6 +24,11 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   }
 
   Mock.throwOnMissingStub(exceptionBuilder: handler);
+
+  // Las pruebas que montan la app leen las preferencias guardadas sin el
+  // plugin nativo: por defecto, un almacenamiento en memoria vacío.
+  SharedPreferencesAsyncPlatform.instance =
+      InMemorySharedPreferencesAsync.empty();
 
   await testMain();
 }

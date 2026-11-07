@@ -2,6 +2,7 @@ import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 
 /// Caso de uso para observar salas cercanas descubiertas por mDNS.
 class DiscoverRooms {
@@ -21,6 +22,7 @@ class PublishRoomParams {
     required this.roomId,
     required this.name,
     required this.port,
+    this.note,
   });
 
   /// Identificador único de la sala.
@@ -31,6 +33,9 @@ class PublishRoomParams {
 
   /// Puerto del servicio WebSocket.
   final int port;
+
+  /// Nota de la frecu; nula si no tiene.
+  final RoomNote? note;
 }
 
 /// Caso de uso para publicar la sala en mDNS como anfitrión.
@@ -41,8 +46,13 @@ class PublishRoom extends UseCase<void, PublishRoomParams> {
   final DiscoveryRepository _repository;
 
   @override
-  Future<Result<void>> call(PublishRoomParams params) => _repository
-      .publishRoom(roomId: params.roomId, name: params.name, port: params.port);
+  Future<Result<void>> call(PublishRoomParams params) =>
+      _repository.publishRoom(
+        roomId: params.roomId,
+        name: params.name,
+        port: params.port,
+        note: params.note,
+      );
 }
 
 /// Caso de uso para detener el anuncio mDNS de la sala.

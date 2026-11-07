@@ -43,9 +43,35 @@
   },
   "settings": {
     "title": "Ajustes",
+    "back": "Atrás",
     "displayName": "Nombre visible",
+    "noName": "Sin nombre",
+    "edit": "Editar",
+    "editName": {
+      "title": "Tu nombre",
+      "message": "Así te verán y escucharán en cada frecu.",
+      "hint": "Escribe tu nombre",
+      "save": "Guardar",
+      "tooLong": "Usa como máximo $max caracteres.",
+      "saveError": "No se pudo guardar el nombre. Intenta otra vez."
+    },
+    "voice": "Voz",
     "defaultTalkMode": "Modo de habla por defecto",
-    "language": "Idioma"
+    "defaultTalkModeHelp": "Se aplica al entrar a cada frecu.",
+    "talkMode": {
+      "pushToTalk": "PTT",
+      "openMic": "Abierto"
+    },
+    "appearance": "Apariencia",
+    "theme": "Tema",
+    "themeHelp": "Auto sigue al teléfono",
+    "themeMode": {
+      "auto": "Auto",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "saveError": "No se pudo guardar",
+    "footer": "100 % local · sin internet"
   },
   "errors": {
     "network": "Error de red local",

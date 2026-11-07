@@ -323,7 +323,7 @@ final class RoomNotifierProvider
   }
 }
 
-String _$roomNotifierHash() => r'3c2840bec22951ebe828bf30d0d525022028da70';
+String _$roomNotifierHash() => r'9eec2981ea50c0a731392d4f3aa17d569dfb22bc';
 
 /// Gestor del ciclo de vida y estado de la sala activa.
 

@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "id": "20261108-ajustes-con-nombre-tema-auto-claro-oscuro-y",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/ajustes-con-nombre-tema-auto-claro-oscuro-y",
+  "baseCommit": "2408d791f5d9b74e31affbfeb8df7079d6afefc4",
+  "revision": 3,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:ceb4d3012c49f3d7dafb65b25d97415c74ca21e388776f074ae37560f77a362b",
+    "at": "2026-11-07T16:55:52.022Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f6c04604ff5fc7aee9ea431766951dab1c4119d123e6728d0b4a9f8eaf2d35dc",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:7e6e47ce3babe4172f4f38649449930e89670d7a92ebdf49b31e59e691a2b351",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:d7e3e2af4a2e9106e924cbe98a02e227ff23b6ee73662ab1d6733fc9127838c9",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:f539dfefcb338791c81f20b6a05d0079237b4a34d1623b394a0efe6efd66185d",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:b13a0600fbab4ca1b374321f51ac01180aceea853b9d3694032bda5182bd58a2",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:52db9328d880b1e7b919a27544e58b5c5da2b584906b2ba39a059e7bc02244b6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "d0b5c97696307f5cee43c4273a7c861777d8ed5b",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:05:17.239Z",
+      "doneAt": "2026-11-07T17:07:23.025Z",
+      "summary": "Ajustes en Portadora: cabecera con Atrás, secciones Voz (modo de habla PTT/Abierto) y Apariencia (tema Auto/Claro/Oscuro) con FrSegmented sobre preferencesProvider, aviso FrToast si no se guarda, pie y textos de settings en slang (es y en); grupo, fila y etiqueta de sección en settings_group.dart.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "95febd914c6675738f5e8e20840fbe86cfa4b134",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:07:24.348Z",
+      "doneAt": "2026-11-07T17:09:08.611Z",
+      "summary": "ProfileCard con la firma del nombre (o «Sin nombre») y Editar; EditNameSheet con firma en vivo, campo limitado a displayNameMaxLength y Guardar solo si normalizeDisplayName acepta el texto (runes), con errores de largo y de guardado.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 6,
+    "AC": 7,
+    "T": 2,
+    "R": 2
+  },
+  "closingSubmittedAt": "2026-11-07T17:10:11.778Z",
+  "lockedTests": {
+    "test/features/settings/presentation/settings_name_test.dart": "sha256:82f6cfb73aa9411b6729f8c97086b56ddbcc1e4ef4caee16fb12b3480d7cba4a",
+    "test/features/settings/presentation/settings_page_test.dart": "sha256:7ebbbaafe77ffce62c4a8fa7e747e0c244fe765e77ac6f6ccf499c64f0a5299b"
+  }
+}

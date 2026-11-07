@@ -43,9 +43,35 @@
   },
   "settings": {
     "title": "Settings",
+    "back": "Back",
     "displayName": "Display name",
+    "noName": "No name",
+    "edit": "Edit",
+    "editName": {
+      "title": "Your name",
+      "message": "This is how people will see and hear you in every frecu.",
+      "hint": "Type your name",
+      "save": "Save",
+      "tooLong": "Use $max characters at most.",
+      "saveError": "Couldn't save your name. Try again."
+    },
+    "voice": "Voice",
     "defaultTalkMode": "Default talk mode",
-    "language": "Language"
+    "defaultTalkModeHelp": "Applies every time you join a frecu.",
+    "talkMode": {
+      "pushToTalk": "PTT",
+      "openMic": "Open"
+    },
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeHelp": "Auto follows your phone",
+    "themeMode": {
+      "auto": "Auto",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "saveError": "Couldn't save",
+    "footer": "100% local · no internet"
   },
   "errors": {
     "network": "Local network error",

@@ -7,8 +7,10 @@ import 'package:frecu/features/room/data/datasources/signaling_server_datasource
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
+import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'room_provider.g.dart';
@@ -75,10 +77,14 @@ class RoomNotifier extends _$RoomNotifier {
   Room? build() => null;
 
   /// Crea una nueva frecu como anfitrión.
+  ///
+  /// Calcula su nota una sola vez, con su hora de apertura y las
+  /// [nearbyNotes] de las frecus cercanas, para publicarla.
   Future<Result<Room>> createRoom({
     required String name,
     required String accessCode,
     String? displayName,
+    Iterable<RoomNote> nearbyNotes = const [],
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final result = await repository.createRoom(
@@ -86,18 +92,30 @@ class RoomNotifier extends _$RoomNotifier {
       accessCode: accessCode,
       displayName: displayName,
     );
-    if (result.isSuccess) {
-      state = result.dataOrNull;
+    switch (result) {
+      case Success(:final data):
+        final note = const AssignRoomNote().assign(
+          createdAt: data.createdAt,
+          nearbyNotes: nearbyNotes,
+        );
+        final room = data.copyWith(note: note);
+        state = room;
+        return Result.success(room);
+      case FailureResult():
+        return result;
     }
-    return result;
   }
 
   /// Se une a una frecu remota por IP y código de acceso.
+  ///
+  /// La frecu activa lleva la [note] que trajo la invitación (mDNS o QR), sin
+  /// recalcularla; sin ella, queda sin nota.
   Future<Result<Room>> joinRoom({
     required String hostAddress,
     required int port,
     required String accessCode,
     required String displayName,
+    RoomNote? note,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final result = await repository.joinRoom(
@@ -106,10 +124,14 @@ class RoomNotifier extends _$RoomNotifier {
       accessCode: accessCode,
       displayName: displayName,
     );
-    if (result.isSuccess) {
-      state = result.dataOrNull;
+    switch (result) {
+      case Success(:final data):
+        final room = data.copyWith(note: note);
+        state = room;
+        return Result.success(room);
+      case FailureResult():
+        return result;
     }
-    return result;
   }
 
   /// Abandona la frecu activa.

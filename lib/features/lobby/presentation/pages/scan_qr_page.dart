@@ -64,6 +64,7 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage> {
           port: invite.port,
           accessCode: invite.accessCode,
           displayName: 'Participante',
+          note: invite.note,
         );
 
     if (!mounted) return;

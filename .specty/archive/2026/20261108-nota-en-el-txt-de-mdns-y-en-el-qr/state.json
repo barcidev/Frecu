@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "id": "20261108-nota-en-el-txt-de-mdns-y-en-el-qr",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/nota-en-el-txt-de-mdns-y-en-el-qr",
+  "baseCommit": "42ba219cc58eb501c27338cfd4eba54506e25932",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:d45d87ba3fa6c40a837f243a3a721c37394e7bd79ccd3e5e07a3bbf645916317",
+    "at": "2026-11-07T16:57:47.871Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:e5c71ae696d754e1ee75947773933121707493d1820e9fd5f382b9da0d56987f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a393b8f37383e3c50dcf9c45c5ee4f03ed540747895dbd84a553a305813c3bb6",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:72fc33bcfd8c67950120c9940755a46edf13d3b8e2d968e209805eb3513547f4",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:e7eb21c8433dd559a38cd1b4298170e9769714f853ead6be61d8364ea411c5ef",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:c1a467fa661baf22d7879754c56b5f337ee6933a8b2189c0f0c8bc49e931de16",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "8611ee692d6511df98c1c8bcff164f1481ee1855",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:05:20.972Z",
+      "doneAt": "2026-11-07T17:05:40.781Z",
+      "summary": "MdnsDataSource publica n (semitono) en el TXT solo si hay nota y la lee con int.tryParse y RoomNote.tryFromSemitone (utf8 con allowMalformed): ausente o inválida es sin nota. DiscoveryRepository.publishRoom, su implementación y PublishRoomParams suman RoomNote? note opcional.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "8f2d4222a02897e0fc834ba1a62e0355a09d84fc",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:05:41.596Z",
+      "doneAt": "2026-11-07T17:05:56.908Z",
+      "summary": "BuildInviteQr añade n=<semitono> al final de la URI solo si la invitación tiene nota (sin nota, la URI no cambia). ParseInviteFromQr lee n con int.tryParse y RoomNote.tryFromSemitone: ausente o inválido deja la invitación válida y sin nota.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "7f3570a21405b5e7bd22d3791312e6a445f82a54",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:05:58.076Z",
+      "doneAt": "2026-11-07T17:07:53.242Z",
+      "summary": "RoomNotifier.createRoom suma nearbyNotes y asigna una vez la nota con AssignRoomNote sobre Room.createdAt; joinRoom suma RoomNote? note y la copia a la frecu activa sin recalcularla. RoomRepository y CreateRoom no cambian.",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "baseCommit": "8c67173d910e59937a0ea1d8d250ed77d357e730",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:07:54.700Z",
+      "doneAt": "2026-11-07T17:09:26.785Z",
+      "summary": "CreateRoomPage pasa las notas de las frecus cercanas a createRoom y publica con data.note; InviteQrDialog arma el QR con room.note; LobbyPage (PIN) y ScanQrPage se unen con la nota de la invitación. docs/protocolo.md describe n.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 5,
+    "T": 4,
+    "R": 3
+  },
+  "closingSubmittedAt": "2026-11-07T17:10:16.430Z",
+  "lockedTests": {
+    "test/features/lobby/data/mdns_note_test.dart": "sha256:c6466c47db5835a4afe7a3f2c0ad2ed6df013f172cc135c8a2be911fdabab7d0",
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a99af132af970703bca3fa4b1043d6bd87ad86818b6aea426d8feefabc978dc5",
+    "test/features/room/domain/invite_qr_note_test.dart": "sha256:e06b5ccf827f2884e8872af3f6262f7c6b2e15f3fc39da67a25c036773488784",
+    "test/features/room/presentation/room_note_provider_test.dart": "sha256:d0e1a00c429db5e080efada58a6cff9b16f84fbf42958cb90d8df30fcdaf32f1"
+  }
+}

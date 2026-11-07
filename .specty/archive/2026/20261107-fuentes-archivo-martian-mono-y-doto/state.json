@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "id": "20261107-fuentes-archivo-martian-mono-y-doto",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/fuentes-archivo-martian-mono-y-doto",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c638c2b7a99c8728071464e4b4dacbbca133b62fe727affb67e2cbff02c001a3",
+    "at": "2026-11-07T11:00:05.230Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:23b5891703109494d0a06883f396bce8cb6ff74e5e45160651c19e559a64fe6a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:bdd9f1948e64dd54a3394f06209ac796479600877c5321c88fdc063fc10ce17c",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:8e0793e5eb89821d536e40320abb453f1f9ee906ad74113cb8ec54b653a6469c",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:31e3e971d2c2a8e8d2773a4c467bfe049b6a67d519cd2600c55bd3d53c4973fb",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "b9c47ce7af1e82fbec198c3917a06d40b9e88226",
+      "attempts": 1,
+      "startedAt": "2026-11-07T11:02:08.606Z",
+      "doneAt": "2026-11-07T11:03:53.949Z",
+      "summary": "Archivo, Martian Mono y Doto variables (google/fonts, sin modificar; hash de blob git verificado) en assets/fonts/<familia>/ con su OFL.txt; pubspec.yaml declara las tres familias con los nombres de FrFonts y las licencias como assets. Peso: 1.263.980 bytes sin comprimir (~339 KiB con deflate).",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 3,
+    "T": 1,
+    "R": 2
+  },
+  "closingSubmittedAt": "2026-11-07T11:07:34.422Z",
+  "lockedTests": {
+    "test/core/design/fr_fonts_assets_test.dart": "sha256:6c81cc2327399bc28c4cbd6a894607b3c876785cd89ce6330b162aff497c4395"
+  }
+}
