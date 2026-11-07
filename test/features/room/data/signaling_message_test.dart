@@ -1,9 +1,10 @@
-// AC1: CUANDO el anfitrión inicia la sala ENTONCES se ejecuta el servidor WebSocket de señalización en el puerto 47800 y responde a los mensajes de protocolo local.
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 
 void main() {
   group('SignalingMessage protocol serialization', () {
@@ -13,7 +14,6 @@ void main() {
       return SignalingMessage.fromJson(map) as T;
     }
 
-    // AC1
     test('AC1: serializes and deserializes all message variants', () {
       const join = SignalingMessage.join(
         displayName: 'Bob',
@@ -86,6 +86,68 @@ void main() {
       const roomClosed = SignalingMessage.roomClosed(reason: 'host_left');
       expect(roomClosed.toJson()['type'], 'room_closed');
       expect(roundTrip(roomClosed), roomClosed);
+    });
+
+    test('AC1: welcome message serializes RoomNote and deserializes without note for v=1 backward compatibility', () {
+      const participant = Participant(id: 'peer-1', displayName: 'Alice');
+      const note = RoomNote(semitone: 16);
+      const welcomeWithNote = SignalingMessage.welcome(
+        peerId: 'peer-2',
+        participants: [participant],
+        note: note,
+      );
+      final json = welcomeWithNote.toJson();
+      expect(json['note'], 16);
+      expect(roundTrip(welcomeWithNote), welcomeWithNote);
+
+      final legacyJson = {
+        'type': 'welcome',
+        'peerId': 'peer-3',
+        'participants': [
+          {'id': 'peer-1', 'displayName': 'Alice', 'isHost': true},
+        ],
+      };
+      SignalingMessage.fromJson(legacyJson).maybeWhen(
+        welcome: (peerId, participants, deserializedNote, _) {
+          expect(peerId, 'peer-3');
+          expect(deserializedNote, isNull);
+        },
+        orElse: () => fail('Se esperaba SignalingWelcomeMessage'),
+      );
+
+      final nullNoteJson = {
+        'type': 'welcome',
+        'peerId': 'peer-4',
+        'participants': <Map<String, dynamic>>[],
+        'note': null,
+      };
+      SignalingMessage.fromJson(nullNoteJson).maybeWhen(
+        welcome: (peerId, participants, deserializedNote, _) {
+          expect(deserializedNote, isNull);
+        },
+        orElse: () => fail('Se esperaba SignalingWelcomeMessage'),
+      );
+
+      final invalidNoteJson = {
+        'type': 'welcome',
+        'peerId': 'peer-5',
+        'participants': <Map<String, dynamic>>[],
+        'note': 99,
+      };
+      SignalingMessage.fromJson(invalidNoteJson).maybeWhen(
+        welcome: (peerId, participants, deserializedNote, _) {
+          expect(deserializedNote, isNull);
+        },
+        orElse: () => fail('Se esperaba SignalingWelcomeMessage'),
+      );
+    });
+
+    test('AC5: protocolo.md documents additive note in welcome message maintaining v=1', () {
+      final docFile = File('docs/protocolo.md');
+      expect(docFile.existsSync(), isTrue);
+      final content = docFile.readAsStringSync();
+      expect(content, contains('welcome'));
+      expect(content, contains('note'));
     });
   });
 }

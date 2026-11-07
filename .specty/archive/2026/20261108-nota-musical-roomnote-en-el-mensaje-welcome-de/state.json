@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "id": "20261108-nota-musical-roomnote-en-el-mensaje-welcome-de",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
+  "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
+  "revision": 3,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:6987cfabe76fb1bc10ba454d16eddcb55fc501835f6090c48227cbe31346abf7",
+    "at": "2026-11-07T17:35:15.970Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 11,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:29cce7319a7980d96a6a5897b9ab4f14ae2d2bba50f21916d18cb80cb8719e62",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:d702e9c4c1662935203ff3d6fdcdc0363627d81b9719e2a6394c0fa84963202b",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:31f3875d771a41140cb24ec61bb1caaeced5e808ea16fdb53d08ef6ff8dd79f6",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:6959148a24145ac64b7d6b73cc8a67915c0e832af5a9ece96ef4ab862573fa1a",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "30059fe20a483eb368ff8ecc095e287d6f3fa8be",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:26:29.055Z",
+      "doneAt": "2026-11-07T18:33:42.430Z",
+      "summary": "Modelado y serialización de RoomNote en SignalingMessage.welcome",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_server_datasource.dart",
+        "lib/features/room/data/repositories/room_repository_impl.dart",
+        "lib/features/room/domain/repositories/room_repository.dart",
+        "lib/features/room/domain/usecases/create_room.dart",
+        "test/features/room/data/signaling_server_test.dart",
+        "test/features/room/data/signaling_message_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "40f9c0fac2790984a0b942e0f2af841c5c871503",
+      "attempts": 1,
+      "startedAt": "2026-11-07T18:33:43.045Z",
+      "doneAt": "2026-11-07T18:34:14.772Z",
+      "summary": "Configurar RoomNote en start de SignalingServerDataSource y enviarla en el mensaje welcome",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "aeda5ea3f622dce93741c3c2ea95b710025c8f19",
+      "attempts": 1,
+      "startedAt": "2026-11-07T18:34:15.215Z",
+      "doneAt": "2026-11-07T18:34:36.166Z",
+      "summary": "Propagar note en createRoom y asignar nota recibida en welcome en RoomRepositoryImpl",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "baseCommit": "f7505a648f21480cf1f7e5e5d67a0900b9b316c3",
+      "attempts": 1,
+      "startedAt": "2026-11-07T18:34:36.689Z",
+      "doneAt": "2026-11-07T18:35:59.551Z",
+      "summary": "Documentar el campo note en el mensaje welcome de señalización en docs/protocolo.md",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 5,
+    "T": 4,
+    "R": 2,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T18:37:05.296Z",
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:3263a2ee33220fe7a9c1c3ca39a8eb501496d9940052441096f4340b97c72394",
+    "test/features/room/data/signaling_message_test.dart": "sha256:558d96f8c597640bbebd28414fd4e853ca04e112ce701c3ea593ac64ecfb1fd3",
+    "test/features/room/data/signaling_server_test.dart": "sha256:b98b0f0449bb8905a424634d1c7223374d4daf21d8e6444e05ac790a4914e1e5"
+  }
+}

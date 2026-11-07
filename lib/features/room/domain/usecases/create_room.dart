@@ -1,6 +1,7 @@
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 
 /// Parámetros para crear una frecu.
@@ -10,6 +11,7 @@ final class CreateRoomParams {
     required this.name,
     required this.accessCode,
     this.displayName,
+    this.note,
   });
 
   /// Nombre de la frecu.
@@ -20,6 +22,9 @@ final class CreateRoomParams {
 
   /// Nombre del anfitrión mostrado a los participantes.
   final String? displayName;
+
+  /// Nota musical de la frecu si está asignada.
+  final RoomNote? note;
 }
 
 /// Caso de uso para crear una nueva frecu como anfitrión.
@@ -38,6 +43,7 @@ final class CreateRoom implements UseCase<Room, CreateRoomParams> {
       name: params.name,
       accessCode: params.accessCode,
       displayName: params.displayName,
+      note: params.note,
     );
   }
 }
