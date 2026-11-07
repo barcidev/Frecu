@@ -94,6 +94,8 @@ class _Translations$room$en extends Translations$room$es {
 	@override String get muted => 'Muted';
 	@override String get host => 'Host';
 	@override String get roomClosed => 'Room has been closed by host';
+	@override String get reconnecting => 'Reconnecting...';
+	@override String get accept => 'Accept';
 }
 
 // Path: permissions
@@ -174,6 +176,8 @@ extension on TranslationsEn {
 			'room.muted' => 'Muted',
 			'room.host' => 'Host',
 			'room.roomClosed' => 'Room has been closed by host',
+			'room.reconnecting' => 'Reconnecting...',
+			'room.accept' => 'Accept',
 			'permissions.title' => 'Required permissions',
 			'permissions.description' => 'Frecu needs permissions to communicate without internet.',
 			'permissions.microphone' => 'Microphone',

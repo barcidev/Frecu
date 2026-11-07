@@ -231,5 +231,69 @@ void main() {
         await participantsController.close();
       },
     );
+
+    // AC3
+    testWidgets(
+      'AC3: RoomPage displays reconnecting status when connection drops',
+      (tester) async {
+        final statusController = StreamController<RoomStatus>.broadcast();
+        when(() => repository.watchParticipants())
+            .thenAnswer((_) => Stream.value([]));
+        when(() => repository.watchStatus())
+            .thenAnswer((_) => statusController.stream);
+
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        statusController.add(const RoomStatus.reconnecting());
+        await tester.pumpAndSettle();
+
+        expect(find.textContaining('Reconectando'), findsOneWidget);
+
+        await statusController.close();
+      },
+    );
+
+    // AC4
+    testWidgets(
+      'AC4: RoomPage displays dialog and returns to Lobby when room is closed',
+      (tester) async {
+        final statusController = StreamController<RoomStatus>.broadcast();
+        when(() => repository.watchParticipants())
+            .thenAnswer((_) => Stream.value([]));
+        when(() => repository.watchStatus())
+            .thenAnswer((_) => statusController.stream);
+        when(() => repository.leaveRoom())
+            .thenAnswer((_) async => const Result<void>.success(null));
+
+        final router = AppRouter();
+        await tester.pumpWidget(createTestApp(router));
+        await tester.pumpAndSettle();
+
+        unawaited(router.push(RoomRoute(roomId: 'room-123')));
+        await tester.pumpAndSettle();
+
+        statusController.add(const RoomStatus.closed(reason: 'host_closed'));
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text('La frecu fue cerrada por el anfitrión'),
+          findsOneWidget,
+        );
+
+        final acceptButton = find.widgetWithText(TextButton, 'Aceptar');
+        expect(acceptButton, findsOneWidget);
+        await tester.tap(acceptButton);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Frecus cercanas'), findsOneWidget);
+
+        await statusController.close();
+      },
+    );
   });
 }
