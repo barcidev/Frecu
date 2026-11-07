@@ -100,3 +100,40 @@ Referencia: pantallas `welcome`, `name` y `perms` de `docs/diseno/prototipo/scre
 - R1: La bienvenida anima 7 bucles a la vez (la malla y 6 firmas) — mitigación: `RepaintBoundary` en cada firma, repintado por `Listenable` sin reconstruir y pausa de los pasos que quedan debajo (`TickerMode` del `Navigator` anidado); el perfilado en un teléfono real sigue en P33.
 - R2: El gesto de volver del sistema podría cerrar la ruta entera en vez de volver un paso — mitigación: `NavigatorPopHandler` sobre el `Navigator` anidado y una prueba con `handlePopRoute`.
 - R3: Con el teclado abierto el paso del nombre no cabe en 844 px — mitigación: contenido desplazable con relleno inferior del alto del dock.
+
+## Cierre
+
+### Resumen
+
+- `permissions_page.dart`: `PermissionsRoute` es ahora el recorrido de la primera vez, en un `Navigator` anidado con `NavigatorPopHandler`: bienvenida → nombre → permisos con `FrPageRoute` (onda, o fundido con movimiento reducido); Atrás y el gesto de volver regresan un paso sin perder el nombre escrito, y Continuar deja `LobbyRoute` como única pantalla. No se tocó `lib/app/router`.
+- `welcome_mesh.dart` y `welcome_step.dart`: la malla de `drawOrbit` (6 lugares con su firma sobre una elipse, enlaces, paquetes desde quien habla y turno de 2,6 s) con un solo `FrLoop` para el pintor y un `Flow`, y la bienvenida con el aviso, el título, el texto y Empezar.
+- `name_step.dart`: escenario de la firma (círculo, anillo de marcas y leyenda) con la `SignalSignature` de 210 px que sigue al texto y habla con `frVoice(t) * 0.55`; `FrField` limitado a `Preferences.displayNameMaxLength`, Continuar solo si `normalizeDisplayName` acepta el texto, guardado con `setDisplayName` y errores del largo y del guardado en el campo (P48).
+- `onboarding_permissions_provider.dart`, `permission_row.dart` y `permissions_step.dart`: `OnboardingPermissions` lee los estados, pide uno por uno los que faltan, relee al volver a la app y abre los ajustes; filas pendiente, concedido (marca de señal con resorte `organic`) y negado (borde de alerta y «Ajustes»); Conceder permisos o Continuar.
+- `onboarding_layout.dart`: línea superior con pasos y contador, título y texto, y contenido desplazable sobre el dock.
+- `lib/i18n`: textos del recorrido bajo `permissions` en `es` y `en`; se quitó `permissions.granted`.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (384), con 34 pruebas nuevas (8 de la bienvenida, 11 del nombre y 15 de los permisos) y `test/app_test.dart` esperando la bienvenida.
+
+### Desviaciones
+
+- El estado `OnboardingPermissionsState` usa `@Freezed(makeCollectionsUnmodifiable: false)`: con la vista inmodificable, Freezed 3.2.6-dev.1 generaba un parámetro `final` en el constructor que el compilador rechaza.
+- Con movimiento reducido Flutter acorta las animaciones implícitas, así que la marca de concedido aparece casi al instante con un fundido; la prueba de AC10 comprueba que nunca escala.
+- El nombre escrito lo guarda la página (no el paso) para no perderlo al volver a la bienvenida; se llena una vez con el nombre guardado.
+- La línea superior mide 50 px (10 + 40) en vez de 44, porque el botón Atrás compacto mide 40 px.
+- «Pasa a los permisos» (AC5) y Atrás desde los permisos (AC3) se prueban en `permissions_step_test.dart`, porque el paso de permisos llegó en T3; mientras tanto, Empezar (T1) y Continuar del nombre (T2) no avanzaban.
+- El `build` de `PermissionsStep` se partió en `_PermissionRows` y `_CameraNote` por el máximo de 50 líneas por función.
+
+### Decisiones
+
+- En iOS no se pide `bluetoothConnect` (no hay permiso de ejecución para la red local ni para audífonos Bluetooth) y la fila cuenta como concedida.
+- Al leer, `denied` es pendiente y `permanentlyDenied` o `restricted` es negado; tras pedirlo, lo que no queda concedido es negado (también si la solicitud falla). Releer no baja un negado a pendiente y no corre mientras se piden.
+- Tras pedir los permisos, Continuar aparece aunque alguno se haya negado; la fila negada ofrece «Ajustes».
+- La firma de cada lugar de la malla sigue usando su propio `FrLoop`, pero su nivel de voz sale del tiempo de la malla, así que quien habla y su firma van juntos.
+- El contador usa `t.permissions.stepOf(current:, total:)` con dos dígitos.
+
+### Pendientes
+
+- C13: decidir cuándo abrir el recorrido; hoy siempre empieza en la bienvenida. Para ir directo a los permisos cuando ya hay nombre haría falta un paso inicial en `PermissionsPage` (y regenerar `app_router.gr.dart`).
+- Arranque del prototipo (splash nativo e intro de la portadora que se pliega en la firma): no está en ningún corte de la épica.
+- Al terminar, el inicio entra sin la onda: depende de conectar las transiciones al router (P53).
+- Perfilar la bienvenida (la malla y 6 firmas animadas) en un Android de gama media (P33).
+- Cinco archivos de develop no pasan `dart format` y hacen fallar la verificación `format` de `specty check`: `network_state.dart`, `permission_repository_impl.dart`, `fr_colors_order_test.dart`, `permission_datasource_test.dart` y `permission_repository_impl_test.dart`.
