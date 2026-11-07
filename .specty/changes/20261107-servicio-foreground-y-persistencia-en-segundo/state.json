@@ -6,6 +6,13 @@
   "branch": "feature/servicio-foreground-y-persistencia-en-segundo",
   "baseCommit": "ff96b0a595b239916eb43f1fb310bd76523a9c6d",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:20e5e95a93bc81c65cca49b158fcf341495ea3f53bef98bb4aa75f009db0e900",
+    "at": "2026-11-07T04:57:49.012Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 13,
@@ -41,12 +48,6 @@
     "T": 2,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:20e5e95a93bc81c65cca49b158fcf341495ea3f53bef98bb4aa75f009db0e900",
-    "at": "2026-11-07T04:57:49.012Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T05:05:27.791Z"
 }

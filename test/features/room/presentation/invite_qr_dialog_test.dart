@@ -1,3 +1,5 @@
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
+
 // AC4: CUANDO el anfitrión consulta la información de invitación de la frecu ENTONCES se genera y muestra un código QR con el formato URI `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>`.
 import 'dart:async';
 
@@ -99,7 +101,9 @@ void main() {
         expect(find.text('Código QR de invitación'), findsOneWidget);
         expect(find.byType(QrImageView), findsOneWidget);
         expect(
-          find.text('frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788'),
+          find.text(
+            'frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788',
+          ),
           findsOneWidget,
         );
       },

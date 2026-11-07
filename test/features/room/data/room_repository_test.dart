@@ -8,7 +8,16 @@ import 'package:frecu/features/room/data/datasources/signaling_client_datasource
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
+
+import '../presentation/invite_qr_dialog_test.dart' as _invite_test;
+import '../presentation/voice_flow_test.dart' as _voice_test;
+
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockForegroundServiceDataSource extends Mock
+    implements ForegroundServiceDataSource {}
 
 void main() {
   group('RoomRepository integration', () {
@@ -285,6 +294,44 @@ void main() {
         expect(reason, isNotEmpty);
 
         await sub.cancel();
+      },
+    );
+
+    // AC1: Foreground service integration
+    test(
+      'AC1: starts foreground service on createRoom and stops on leaveRoom',
+      () async {
+        final mockForeground = MockForegroundServiceDataSource();
+        when(
+          () => mockForeground.startService(
+            roomName: any(named: 'roomName'),
+            status: any(named: 'status'),
+          ),
+        ).thenAnswer((_) async {});
+        when(() => mockForeground.stopService()).thenAnswer((_) async {});
+
+        final repo = RoomRepositoryImpl(
+          serverDataSource: hostServer,
+          clientDataSource: hostClient,
+          foregroundServiceDataSource: mockForeground,
+          networkInterfacesProvider: () async => [],
+        );
+
+        final createResult = await repo.createRoom(
+          name: 'Frecu Foreground',
+          accessCode: '9999',
+          displayName: 'HostUser',
+        );
+        expect(createResult.isSuccess, isTrue);
+        verify(
+          () => mockForeground.startService(
+            roomName: 'Frecu Foreground',
+            status: 'Conectado',
+          ),
+        ).called(1);
+
+        await repo.leaveRoom();
+        verify(() => mockForeground.stopService()).called(1);
       },
     );
   });
