@@ -3,3 +3,5 @@
 {"ts":"2026-11-07T02:01:15.477Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:70b2c0f7437842037f3292ab31851890e59275d32c8a89c548941024985100b8","channel":"delegated","delegated":true}}
 {"ts":"2026-11-07T02:01:41.187Z","actor":"agent","tool":"antigravity","event":"tests.proposed","data":{"count":1,"files":["test/linter_config_test.dart"],"red":[{"cmd":"fvm flutter analyze && fvm flutter test","exit":1}]}}
 {"ts":"2026-11-07T02:01:41.188Z","actor":"specty","event":"tests.locked","data":{"count":1,"files":["test/linter_config_test.dart"]}}
+{"ts":"2026-11-07T02:01:41.599Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T1","baseCommit":"bbbb6f12a64ac5a17be1838dd0c2143e7bd9a30c"}}
+{"ts":"2026-11-07T02:08:14.004Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.cancelled","data":{"reason":"Revertir quick fix para implementar como refactor sin crear tests ficticios","delegated":true}}

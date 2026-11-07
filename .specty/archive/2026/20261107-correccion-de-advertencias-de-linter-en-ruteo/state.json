@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-correccion-de-advertencias-de-linter-en-ruteo",
   "kind": "quick",
-  "phase": "implementing",
+  "phase": "cancelled",
   "branch": "feature/correccion-de-advertencias-de-linter-en-ruteo",
   "baseCommit": "fcaba01bf2d5f14228a943d6745555acf8badef5",
   "revision": 1,
@@ -22,7 +22,15 @@
     ]
   },
   "items": {},
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "active",
+      "baseCommit": "bbbb6f12a64ac5a17be1838dd0c2143e7bd9a30c",
+      "attempts": 0,
+      "startedAt": "2026-11-07T02:01:41.599Z",
+      "scopeExtra": []
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
