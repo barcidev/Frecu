@@ -55,3 +55,21 @@ Implementar la arquitectura de verificación y solicitud de permisos para la apl
   - files: lib/features/permissions/presentation/providers/permission_provider.dart, lib/features/permissions/presentation/providers/permission_provider.g.dart, test/features/permissions/presentation/permission_provider_test.dart
   - ac: AC5, AC6
   - verify: dart run build_runner build -d && fvm flutter test test/features/permissions/presentation/ && fvm flutter analyze
+
+## Cierre
+
+### Resumen
+Se implementó con éxito la arquitectura de permisos en `features/permissions`:
+1. **Dominio**: Enums `AppPermission` (`microphone`, `camera`, `notification`, `bluetoothConnect`) y `AppPermissionStatus`, junto con el contrato abstracto `PermissionRepository` (Dart puro sin dependencias de Flutter o plugins).
+2. **Datos**: `PermissionDataSource` como wrapper parametrizable sobre `permission_handler` y `PermissionRepositoryImpl` con mapeo exhaustivo y manejo funcional de errores mediante `Result`.
+3. **Presentación**: Proveedores globales de Riverpod (`permissionDataSourceProvider`, `permissionRepositoryProvider`) generados con `@riverpod`.
+4. **Pruebas**: Cobertura exhaustiva de tests unitarios con `mocktail` para dominio, datasource, repositorio y providers.
+
+### Desviaciones
+- Ninguna sobre la funcionalidad planificada. Se configuraron patrones de archivos generados en `.specty/config.yaml` (`**/*.g.dart`) para la validación estricta de Specty.
+
+### Decisiones
+- Se utilizó inyección de funciones delegadas en `PermissionDataSource` para permitir testing unitario determinista y sin canales de plataforma en las suites de pruebas.
+
+### Pendientes
+- Ninguno en este cambio.

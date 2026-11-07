@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-datasource-y-repositorio-de-verificacion-de",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/datasource-y-repositorio-de-verificacion-de",
   "baseCommit": "cb3fae623a91c4bc89f6b45571e04faf708ba8f7",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:b7904b8fb876d2dfb9dfac195bfa94ab74c9f0a4cded9673a3428e5897e57bb1",
@@ -54,12 +54,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "362e74102498b891008bfa821ceff983f19017db",
+      "attempts": 1,
       "startedAt": "2026-11-07T09:41:19.470Z",
       "doneAt": "2026-11-07T16:04:58.209Z",
-      "summary": "Proveedores de Riverpod para PermissionDataSource y PermissionRepository con tests"
+      "summary": "Proveedores de Riverpod para PermissionDataSource y PermissionRepository con tests",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -72,6 +72,7 @@
     "T": 3,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-07T16:05:23.362Z",
   "lockedTests": {
     "test/features/permissions/data/permission_datasource_test.dart": "sha256:7b123f0d7c8b49a97a50e9f4960bb95d743b29e8177446f074b91c973e1555c4",
     "test/features/permissions/data/permission_repository_impl_test.dart": "sha256:b673c03f74ebd151e32dc495e257761a0fa9da881565973fd07b06992cc4bbbe",
