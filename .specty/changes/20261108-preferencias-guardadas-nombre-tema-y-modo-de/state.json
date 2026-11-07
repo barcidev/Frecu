@@ -47,12 +47,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "56e96cbde2a2af758b4fa6f6cad93fa543727397",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:12:18.763Z",
       "doneAt": "2026-11-07T16:13:48.935Z",
-      "summary": "Dominio de settings: enum ThemePreference, entidad Freezed Preferences (sin nombre, Auto y PTT reusando TalkMode de room) con normalizeDisplayName (1 a 20 caracteres) y contrato PreferencesRepository; saveDisplayName devuelve Result<String>."
+      "summary": "Dominio de settings: enum ThemePreference, entidad Freezed Preferences (sin nombre, Auto y PTT reusando TalkMode de room) con normalizeDisplayName (1 a 20 caracteres) y contrato PreferencesRepository; saveDisplayName devuelve Result<String>.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "18573f04c0b34395fe59d99ff7792e8c6efd44fb",
+      "startedAt": "2026-11-07T16:13:50.200Z",
+      "doneAt": "2026-11-07T16:15:21.686Z",
+      "summary": "PreferencesRepositoryImpl con SharedPreferencesAsync: claves settings.*, enums por name con valor por defecto si no se reconocen, nombre normalizado y fallos del plugin como Failure.unexpected. Añade shared_preferences y, de desarrollo, su platform_interface."
     }
   },
   "pending": {
