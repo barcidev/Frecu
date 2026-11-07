@@ -6,6 +6,13 @@
   "branch": "feature/widgets-de-control-frpinfield-frkeypad",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c7783b91aea19ab95dd66bb0d6e2e29e699bd4f61130d7208b6c28b6e585087a",
+    "at": "2026-11-07T11:01:26.452Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 9,
@@ -43,12 +50,6 @@
     "T": 3,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:c7783b91aea19ab95dd66bb0d6e2e29e699bd4f61130d7208b6c28b6e585087a",
-    "at": "2026-11-07T11:01:26.452Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T11:13:30.590Z"
 }
