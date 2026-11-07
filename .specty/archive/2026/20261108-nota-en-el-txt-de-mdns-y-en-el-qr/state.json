@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nota-en-el-txt-de-mdns-y-en-el-qr",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/nota-en-el-txt-de-mdns-y-en-el-qr",
   "baseCommit": "42ba219cc58eb501c27338cfd4eba54506e25932",
   "revision": 2,
@@ -93,11 +93,11 @@
     "T": 4,
     "R": 3
   },
+  "closingSubmittedAt": "2026-11-07T17:10:16.430Z",
   "lockedTests": {
     "test/features/lobby/data/mdns_note_test.dart": "sha256:c6466c47db5835a4afe7a3f2c0ad2ed6df013f172cc135c8a2be911fdabab7d0",
     "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a99af132af970703bca3fa4b1043d6bd87ad86818b6aea426d8feefabc978dc5",
     "test/features/room/domain/invite_qr_note_test.dart": "sha256:e06b5ccf827f2884e8872af3f6262f7c6b2e15f3fc39da67a25c036773488784",
     "test/features/room/presentation/room_note_provider_test.dart": "sha256:d0e1a00c429db5e080efada58a6cff9b16f84fbf42958cb90d8df30fcdaf32f1"
-  },
-  "closingSubmittedAt": "2026-11-07T17:10:16.430Z"
+  }
 }
