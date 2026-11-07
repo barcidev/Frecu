@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "baseCommit": "2408d791f5d9b74e31affbfeb8df7079d6afefc4",
-  "revision": 1,
+  "revision": 3,
   "approved": {
     "revision": 1,
     "hash": "sha256:ceb4d3012c49f3d7dafb65b25d97415c74ca21e388776f074ae37560f77a362b",
@@ -60,12 +60,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "95febd914c6675738f5e8e20840fbe86cfa4b134",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:07:24.348Z",
       "doneAt": "2026-11-07T17:09:08.611Z",
-      "summary": "ProfileCard con la firma del nombre (o «Sin nombre») y Editar; EditNameSheet con firma en vivo, campo limitado a displayNameMaxLength y Guardar solo si normalizeDisplayName acepta el texto (runes), con errores de largo y de guardado."
+      "summary": "ProfileCard con la firma del nombre (o «Sin nombre») y Editar; EditNameSheet con firma en vivo, campo limitado a displayNameMaxLength y Guardar solo si normalizeDisplayName acepta el texto (runes), con errores de largo y de guardado.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -78,6 +78,7 @@
     "T": 2,
     "R": 2
   },
+  "closingSubmittedAt": "2026-11-07T17:10:11.778Z",
   "lockedTests": {
     "test/features/settings/presentation/settings_name_test.dart": "sha256:82f6cfb73aa9411b6729f8c97086b56ddbcc1e4ef4caee16fb12b3480d7cba4a",
     "test/features/settings/presentation/settings_page_test.dart": "sha256:7ebbbaafe77ffce62c4a8fa7e747e0c244fe765e77ac6f6ccf499c64f0a5299b"
