@@ -63,3 +63,21 @@ Garantizar que una frecu activa permanezca conectada y transmitiendo/recibiendo 
 ## Riesgos
 
 - R1: Agresividad de los fabricantes de Android en la gestión de batería que matan procesos en segundo plano — mitigación: Foreground Service con notificación permanente, wake lock controlado y tipo de servicio `microphone`.
+
+## Cierre
+
+### Resumen
+
+Se integró satisfactoriamente el plugin `flutter_foreground_task` y se implementó `ForegroundServiceDataSource` para persistir la sala en segundo plano con notificación persistente ("Frecu activa", nombre de sala y estado). Se conectó el ciclo de vida del servicio en `RoomRepositoryImpl` y en los proveedores de Riverpod (`foregroundServiceDataSourceProvider`), iniciando el servicio al conectar la sala, actualizándolo a "Reconectando..." ante desconexiones transitorias y deteniéndolo limpiamente al abandonar o cerrarse la sala.
+
+### Desviaciones
+
+- Se corrigieron imports no utilizados en tests preexistentes (`invite_qr_dialog_test.dart` y `voice_flow_test.dart`) mediante peticiones de scope (`S3`, `S4`, `S5`) que quedaron solventadas e integradas limpiamente en T2.
+
+### Decisiones
+
+- Se configuró el Foreground Service con tipo `microphone`, notificación de baja intrusión y wake lock para asegurar la retención de sockets TCP/WebSocket y pistas WebRTC cuando la app pasa a segundo plano o se apaga la pantalla.
+
+### Pendientes
+
+- Ninguno en este corte vertical.

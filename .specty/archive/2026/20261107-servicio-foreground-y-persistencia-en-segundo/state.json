@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-servicio-foreground-y-persistencia-en-segundo",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/servicio-foreground-y-persistencia-en-segundo",
   "baseCommit": "ff96b0a595b239916eb43f1fb310bd76523a9c6d",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:1e142999e7a6b6e8b10c64e10f47d9bf8a061f1809393ab77f01d6a5ea985b75",
@@ -51,18 +51,18 @@
     },
     "T2": {
       "status": "done",
+      "baseCommit": "9a683d2fea1e5d61714659666a05db69aec58474",
+      "attempts": 1,
+      "startedAt": "2026-11-07T05:11:09.104Z",
+      "doneAt": "2026-11-07T08:44:38.285Z",
+      "summary": "Conexión del ciclo de vida del foreground service en RoomRepositoryImpl y proveedores de Riverpod",
       "scopeExtra": [
         "pubspec.yaml",
         "lib/features/room/presentation/providers/room_provider.g.dart",
         "test/features/room/presentation/invite_qr_dialog_test.dart",
         "test/features/room/presentation/voice_flow_test.dart",
         "test/features/room/data/room_repository_test.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "9a683d2fea1e5d61714659666a05db69aec58474",
-      "startedAt": "2026-11-07T05:11:09.104Z",
-      "doneAt": "2026-11-07T08:44:38.285Z",
-      "summary": "Conexión del ciclo de vida del foreground service en RoomRepositoryImpl y proveedores de Riverpod"
+      ]
     }
   },
   "pending": {
@@ -76,6 +76,7 @@
     "R": 1,
     "S": 5
   },
+  "closingSubmittedAt": "2026-11-07T08:45:45.467Z",
   "lockedTests": {
     "test/features/room/data/room_repository_test.dart": "sha256:cf6ab89e91c16bfc5b2822015bd9195fda7d5ab5691da438416066b16e13916b",
     "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:be431bb967d8ceeaf69cb68c63f7d52715258e2ef45be0e7dd8c6df1acfe6dc1",
