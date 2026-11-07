@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "20261107-widgets-base-bienvenida-y-nombre-una-sola-vez",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/widgets-base-bienvenida-y-nombre-una-sola-vez",
+  "baseCommit": "901bbb4c7af61049dfcfa9d7699c212fa58cdd1c",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 15,
+    "adjust": 0,
+    "reasons": [
+      "14 archivos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f4541dde98e5630c6dd861d5f1cdf0dd5decc192dff26e9e5633fae3bb9fb1f4",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:e4e11f0fcbee967a797d824bb2b2a8c9fad3bd54f94f46cb28edf437eb3f0999",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:0741ec1a85b5e7b3286dc942926cda8c537ad5fd9292b6ed562f45ecd0241264",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 5,
+    "T": 4,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e11d0f7be3753437e2b782e671976003326c312a3062891514597da91726148d",
+    "at": "2026-11-07T08:48:57.497Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
