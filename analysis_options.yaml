@@ -5,6 +5,8 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+  errors:
+    experimental_member_use: ignore
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
@@ -17,3 +19,4 @@ analyzer:
 linter:
   rules:
     lines_longer_than_80_chars: false
+    avoid_positional_boolean_parameters: false
