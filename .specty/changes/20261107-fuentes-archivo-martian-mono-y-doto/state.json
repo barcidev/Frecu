@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "20261107-fuentes-archivo-martian-mono-y-doto",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/fuentes-archivo-martian-mono-y-doto",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "cambia dependencias"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:23b5891703109494d0a06883f396bce8cb6ff74e5e45160651c19e559a64fe6a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:bdd9f1948e64dd54a3394f06209ac796479600877c5321c88fdc063fc10ce17c",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:8e0793e5eb89821d536e40320abb453f1f9ee906ad74113cb8ec54b653a6469c",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:31e3e971d2c2a8e8d2773a4c467bfe049b6a67d519cd2600c55bd3d53c4973fb",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 3,
+    "T": 1,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c638c2b7a99c8728071464e4b4dacbbca133b62fe727affb67e2cbff02c001a3",
+    "at": "2026-11-07T11:00:05.230Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
