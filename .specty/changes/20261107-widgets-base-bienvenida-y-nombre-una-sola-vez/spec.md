@@ -74,7 +74,7 @@ Crear los widgets base de Portadora que usan la bienvenida, el nombre y los perm
 
 ## Tareas
 
-- [ ] T1: Movimiento reducido, bucle, curva de resorte y ruido del prototipo
+- [x] T1: Movimiento reducido, bucle, curva de resorte y ruido del prototipo
   - files: lib/core/design/motion/reduced_motion.dart, lib/core/design/motion/fr_spring_curve.dart, lib/core/design/motion/fr_noise.dart, test/core/design/motion/fr_motion_tools_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/core/design/motion/fr_motion_tools_test.dart

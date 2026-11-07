@@ -36,7 +36,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "5e0b5330a2b2e0597d0dfe061f0d3720d81cb250",
+      "startedAt": "2026-11-07T09:01:19.144Z",
+      "doneAt": "2026-11-07T09:02:38.125Z",
+      "summary": "fr_noise (FNV-1a, mulberry32, Perlin 2D y voz simulada idénticos a engine.js), FrSpringCurve para animaciones implícitas con resorte y FrLoop + context.reduceMotion: un Ticker que se congela con movimiento reducido y se pausa fuera de pantalla."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
