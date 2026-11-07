@@ -74,7 +74,7 @@ La nota de cada frecu (`RoomNote`, C3) empieza a viajar por la red: el anfitrió
   - files: lib/features/room/domain/usecases/build_invite_qr.dart, lib/features/lobby/domain/usecases/parse_invite_from_qr.dart, test/features/room/domain/invite_qr_note_test.dart
   - ac: AC3
   - verify: flutter test test/features/room/domain/invite_qr_note_test.dart test/features/room/domain/invite_qr_usecases_test.dart
-- [ ] T3: Nota asignada al abrir y conservada al unirse en `RoomNotifier`
+- [x] T3: Nota asignada al abrir y conservada al unirse en `RoomNotifier`
   - files: lib/features/room/presentation/providers/room_provider.dart, test/features/room/presentation/room_note_provider_test.dart
   - ac: AC4, AC5
   - verify: flutter test test/features/room/presentation/room_note_provider_test.dart

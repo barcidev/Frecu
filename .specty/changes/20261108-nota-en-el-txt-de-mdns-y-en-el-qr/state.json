@@ -57,12 +57,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "8f2d4222a02897e0fc834ba1a62e0355a09d84fc",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:05:41.596Z",
       "doneAt": "2026-11-07T17:05:56.908Z",
-      "summary": "BuildInviteQr añade n=<semitono> al final de la URI solo si la invitación tiene nota (sin nota, la URI no cambia). ParseInviteFromQr lee n con int.tryParse y RoomNote.tryFromSemitone: ausente o inválido deja la invitación válida y sin nota."
+      "summary": "BuildInviteQr añade n=<semitono> al final de la URI solo si la invitación tiene nota (sin nota, la URI no cambia). ParseInviteFromQr lee n con int.tryParse y RoomNote.tryFromSemitone: ausente o inválido deja la invitación válida y sin nota.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "7f3570a21405b5e7bd22d3791312e6a445f82a54",
+      "startedAt": "2026-11-07T17:05:58.076Z",
+      "doneAt": "2026-11-07T17:07:53.242Z",
+      "summary": "RoomNotifier.createRoom suma nearbyNotes y asigna una vez la nota con AssignRoomNote sobre Room.createdAt; joinRoom suma RoomNote? note y la copia a la frecu activa sin recalcularla. RoomRepository y CreateRoom no cambian."
     }
   },
   "pending": {
