@@ -6,6 +6,13 @@
   "branch": "feature/tema-guardado-aplicado-al-arrancar-app-dart-y",
   "baseCommit": "90d2de1a0dce9fdad28df5aee5b57e1e47de1821",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:14338735cc96fc363435ad51d70212808ad0a876d43428a707d651e0ec1220b2",
+    "at": "2026-11-07T16:30:36.261Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 7,
@@ -48,12 +55,6 @@
     "T": 2,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:14338735cc96fc363435ad51d70212808ad0a876d43428a707d651e0ec1220b2",
-    "at": "2026-11-07T16:30:36.261Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T16:34:58.998Z"
 }
