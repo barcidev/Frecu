@@ -62,7 +62,7 @@ Que el recorrido de la primera vez (bienvenida, nombre y permisos, C12) se abra 
   - files: lib/app/needs_onboarding_provider.dart, lib/app/needs_onboarding_provider.g.dart, lib/app/app.dart, test/app/first_open_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/app/first_open_test.dart test/app_test.dart
-- [ ] T2: Nombre guardado al crear o unirse a una frecu
+- [x] T2: Nombre guardado al crear o unirse a una frecu
   - files: lib/features/lobby/presentation/extensions/display_name_extension.dart, lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/lobby/presentation/pages/scan_qr_page.dart, lib/features/lobby/presentation/pages/create_room_page.dart, test/features/lobby/presentation/saved_name_test.dart
   - ac: AC5, AC6
   - verify: flutter analyze && flutter test

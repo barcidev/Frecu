@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -41,6 +42,7 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
         .createRoom(
           name: _nameController.text.trim(),
           accessCode: _codeController.text.trim(),
+          displayName: ref.savedDisplayName,
           nearbyNotes: nearbyRooms.map((room) => room.note).nonNulls,
         );
 

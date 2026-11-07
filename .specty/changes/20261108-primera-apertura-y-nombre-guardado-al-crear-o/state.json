@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-primera-apertura-y-nombre-guardado-al-crear-o",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/primera-apertura-y-nombre-guardado-al-crear-o",
   "baseCommit": "e046736d5c01fd4cb824e898c02657a6f2672e85",
   "revision": 1,
@@ -47,12 +47,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "e9f5fcc00390d669ade8ce1333124fefbca7f5f2",
+      "attempts": 1,
       "startedAt": "2026-11-07T18:14:28.513Z",
       "doneAt": "2026-11-07T18:16:09.713Z",
-      "summary": "FrecuApp sin router inyectado resuelve la ruta inicial con deepLinkBuilder: needsOnboardingProvider (lib/app) pide el recorrido si no hay nombre guardado o queda algún permiso pendiente; se decide una sola vez por apertura, así que terminar el recorrido con un permiso negado no lo reabre"
+      "summary": "FrecuApp sin router inyectado resuelve la ruta inicial con deepLinkBuilder: needsOnboardingProvider (lib/app) pide el recorrido si no hay nombre guardado o queda algún permiso pendiente; se decide una sola vez por apertura, así que terminar el recorrido con un permiso negado no lo reabre",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "0049b90f006931a04b20967e5e705601a986ba15",
+      "startedAt": "2026-11-07T18:16:10.279Z",
+      "doneAt": "2026-11-07T18:18:10.539Z",
+      "summary": "Extensión SavedDisplayName en lobby: los diálogos de unión por código e IP pierden el campo del nombre y, como el escáner QR, se unen con el nombre guardado (o «Participante» si aún no hay); crear una frecu pasa el nombre guardado como anfitrión"
     }
   },
   "pending": {
