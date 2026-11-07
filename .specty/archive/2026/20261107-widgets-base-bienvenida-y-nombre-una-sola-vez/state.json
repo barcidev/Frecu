@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-widgets-base-bienvenida-y-nombre-una-sola-vez",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/widgets-base-bienvenida-y-nombre-una-sola-vez",
   "baseCommit": "901bbb4c7af61049dfcfa9d7699c212fa58cdd1c",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:e11d0f7be3753437e2b782e671976003326c312a3062891514597da91726148d",
@@ -66,14 +66,14 @@
     },
     "T4": {
       "status": "done",
-      "scopeExtra": [
-        "test/core/design/widgets/fr_field_test.dart"
-      ],
-      "attempts": 2,
       "baseCommit": "829e2ee7e05dc7c5d61320f704b615941c40c18f",
+      "attempts": 2,
       "startedAt": "2026-11-07T09:05:41.022Z",
       "doneAt": "2026-11-07T09:09:18.885Z",
-      "summary": "FrField (etiqueta en mayúsculas, contador n/máx, foco con borde de señal y línea, error en alerta con temblor) y FrSteps (píldora de 22 px con resorte organic); sin temblor ni resorte con movimiento reducido. docs/arquitectura.md con motion/ y widgets/."
+      "summary": "FrField (etiqueta en mayúsculas, contador n/máx, foco con borde de señal y línea, error en alerta con temblor) y FrSteps (píldora de 22 px con resorte organic); sin temblor ni resorte con movimiento reducido. docs/arquitectura.md con motion/ y widgets/.",
+      "scopeExtra": [
+        "test/core/design/widgets/fr_field_test.dart"
+      ]
     }
   },
   "pending": {
@@ -87,6 +87,7 @@
     "R": 2,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-07T09:09:46.695Z",
   "lockedTests": {
     "test/core/design/motion/fr_motion_tools_test.dart": "sha256:a321c6f985fc097f663caf6def8b12699bc851335856fc32c823c3bcc0d85f1e",
     "test/core/design/widgets/fr_button_test.dart": "sha256:1f6c84a7a7db450c26b967381e3976d9f5394f216f7364c34cc939d7528e50df",

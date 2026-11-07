@@ -95,3 +95,34 @@ Crear los widgets base de Portadora que usan la bienvenida, el nombre y los perm
 
 - R1: Los bucles infinitos (firma y onda) impiden que `pumpAndSettle` termine en las pruebas de las pantallas que los usen — mitigación: `FrLoop` se detiene con movimiento reducido y con `TickerMode`; esas pruebas activan "reducir movimiento" con `accessibilityFeaturesTestValue` o avanzan con `pump` y una duración.
 - R2: Coste de la firma por cuadro (220 puntos y 30 tramos de estela) — mitigación: `RepaintBoundary`, repintado por `Listenable` sin reconstruir widgets y pausa fuera de pantalla; el perfilado en un teléfono real queda para la persona.
+
+## Cierre
+
+### Resumen
+
+- `lib/core/design/motion/`: `context.reduceMotion` y `FrLoop` (un `Ticker` por pintor que se congela con movimiento reducido y se pausa fuera de pantalla), `FrSpringCurve` (resortes de `FrMotion` en animaciones implícitas) y `fr_noise.dart` (FNV-1a, mulberry32, Perlin 2D y voz simulada, idénticos a `engine.js`).
+- `lib/core/design/widgets/`: `SignalSignature` (firma de Lissajous desde el nombre, modos `idle`/`speak`/`muted`/`off`/`link`), `WaveLoader`, `FrPressable`, `FrButton` (4 variantes, luz desde el dedo, carga y deshabilitado), `FrIconButton`, `FrField` (etiqueta, contador, foco, error con temblor) y `FrSteps`.
+- `docs/arquitectura.md` documenta `core/design/tokens`, `motion` y `widgets`.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (118 tests), con la firma comparada contra valores calculados con `engine.js`.
+
+### Desviaciones
+
+- El corte se estrechó al módulo `core`: la primera versión (con `PreferencesRepository` y `shared_preferences` en `settings`) daba tamaño XL. Guardar el nombre y el tema, las pantallas de bienvenida, nombre y permisos, el guard de primera apertura y el nombre al crear o unirse quedan para cortes nuevos de la épica (P28, P29).
+- `FrButton` no recorta el texto con elipsis (sin `Flexible`) para poder ir dentro de una `Row` sin ancho acotado.
+- La luz al tacto del botón primario usa `signalHi` al 50 % en lugar del blanco al 50 % del prototipo, para no usar colores sueltos; el botón pequeño usa el radio `m` (16) en lugar de 14, y el `FrIconButton` compacto escala el radio `m` (13,3 en 40 px).
+- `FrSpringCurve` no es `const`: guarda su `SpringSimulation`.
+- Desbloqueo S1: en `test/core/design/widgets/fr_field_test.dart`, `final colors` pasó a `const colors` porque `flutter analyze` marcaba `prefer_const_declarations`; no cambió ninguna aserción.
+
+### Decisiones
+
+- Con movimiento reducido, `FrLoop` congela el tiempo en el último cuadro y, si el sistema vuelve a animar, sigue desde ahí. Los botones no escalan pero responden; el campo no tiembla y su línea aparece con un fundido; los pasos cambian en 160 ms lineales.
+- Foco de `FrField`: de día el borde es `ledRing` (tinta, 1,25 px) y de noche la señal al 55 %, con un halo de 4 px. La píldora de `FrSteps` lleva el anillo `ledRing` de día.
+- Texto del botón `danger` en `alertTx`; la ayuda con error de `FrField` en `alert`, como el prototipo.
+- Un `FrButton` cargando queda deshabilitado para la accesibilidad, pero conserva su etiqueta.
+- `SignalSignature.levelOf` recibe el tiempo del bucle para el nivel simulado (p. ej. `frVoice(t) * 0.55` en la pantalla del nombre).
+
+### Pendientes
+
+- Cortes nuevos de la épica: preferencias de nombre y tema (P28); bienvenida, nombre y permisos, guard de primera apertura y nombre al crear o unirse (P29); widgets restantes, `FrIcons` y transiciones con C3 y C4 (P30).
+- Perfilar `SignalSignature` y `WaveLoader` en un Android de gama media (R1 de la épica): necesita un dispositivo real.
+- `lib/app/theme/app_theme.dart` no se tocó: P26 sigue abierto para cuando se sumen temas de componentes.
