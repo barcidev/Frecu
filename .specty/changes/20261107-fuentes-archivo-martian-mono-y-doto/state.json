@@ -6,6 +6,13 @@
   "branch": "feature/fuentes-archivo-martian-mono-y-doto",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c638c2b7a99c8728071464e4b4dacbbca133b62fe727affb67e2cbff02c001a3",
+    "at": "2026-11-07T11:00:05.230Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 10,
@@ -44,12 +51,6 @@
     "T": 1,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:c638c2b7a99c8728071464e4b4dacbbca133b62fe727affb67e2cbff02c001a3",
-    "at": "2026-11-07T11:00:05.230Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T11:01:52.529Z"
 }
