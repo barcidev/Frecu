@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "20261108-nota-musical-roomnote-en-el-mensaje-welcome-de",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
+  "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:29cce7319a7980d96a6a5897b9ab4f14ae2d2bba50f21916d18cb80cb8719e62",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:d702e9c4c1662935203ff3d6fdcdc0363627d81b9719e2a6394c0fa84963202b",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:31f3875d771a41140cb24ec61bb1caaeced5e808ea16fdb53d08ef6ff8dd79f6",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:6959148a24145ac64b7d6b73cc8a67915c0e832af5a9ece96ef4ab862573fa1a",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 5,
+    "T": 4,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:c17de10525cfc0ea7c1cced5741a4fca6053b09c156d000b2c3c36d70bc75e42",
+    "at": "2026-11-07T17:23:30.007Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
