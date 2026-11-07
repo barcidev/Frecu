@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
   "revision": 3,
@@ -47,15 +47,24 @@
     },
     "T2": {
       "status": "done",
+      "baseCommit": "ac30ea0d7d1cd35f05b8b11c1875d21f99563ae3",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:30:17.614Z",
+      "doneAt": "2026-11-07T17:01:14.383Z",
+      "summary": "Implementado NetworkInterfaceDataSource y NetworkRepositoryImpl con sondeo y detección de hotspot",
       "scopeExtra": [
         "test/features/network/data/network_interface_datasource_test.dart",
         "test/features/network/data/network_repository_impl_test.dart"
-      ],
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
       "attempts": 1,
-      "baseCommit": "ac30ea0d7d1cd35f05b8b11c1875d21f99563ae3",
-      "startedAt": "2026-11-07T16:30:17.614Z",
-      "doneAt": "2026-11-07T17:01:14.383Z",
-      "summary": "Implementado NetworkInterfaceDataSource y NetworkRepositoryImpl con sondeo y detección de hotspot"
+      "baseCommit": "74adf7dc836853fd0e8dacac8a3c4103ab0d22d3",
+      "startedAt": "2026-11-07T17:01:15.883Z",
+      "doneAt": "2026-11-07T17:04:23.301Z",
+      "summary": "Implementados providers de Riverpod para datasource, repositorio y stream de red con generación de código"
     }
   },
   "pending": {

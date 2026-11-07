@@ -54,7 +54,7 @@ Implementar la feature `features/network` para la detección autónoma de interf
   - files: lib/features/network/data/datasources/network_interface_datasource.dart, lib/features/network/data/repositories/network_repository_impl.dart, test/features/network/data/network_interface_datasource_test.dart, test/features/network/data/network_repository_impl_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5
   - verify: fvm flutter test test/features/network/data/
-- [ ] T3: Providers de Riverpod y pruebas de integración
+- [x] T3: Providers de Riverpod y pruebas de integración
   - files: lib/features/network/presentation/providers/network_provider.dart, lib/features/network/presentation/providers/network_provider.g.dart, test/features/network/presentation/network_provider_test.dart
   - ac: AC6, AC7
   - verify: fvm flutter test test/features/network/ && fvm flutter analyze
