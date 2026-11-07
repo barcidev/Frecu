@@ -62,7 +62,7 @@ Se aplica Clean Architecture por feature, respetando Dart puro en `domain`, inmu
   - files: lib/features/room/presentation/widgets/room_info_card.dart, lib/features/room/presentation/widgets/participants_list.dart, lib/features/room/presentation/widgets/invite_qr_dialog.dart, lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC1, AC2
   - verify: fvm flutter test test/features/room/presentation/room_flow_test.dart
-- [ ] T2: Componente interactivo PttButton con eventos de puntero
+- [x] T2: Componente interactivo PttButton con eventos de puntero
   - files: lib/features/room/presentation/widgets/ptt_button.dart, test/features/room/presentation/widgets/ptt_button_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/presentation/widgets/ptt_button_test.dart

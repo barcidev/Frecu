@@ -40,12 +40,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "4ed00fb529e3cad0b1ff6c6caf96da56042e1945",
+      "attempts": 1,
       "startedAt": "2026-11-06T23:48:24.718Z",
       "doneAt": "2026-11-07T00:14:23.507Z",
-      "summary": "Extracción de widgets modulares reduciendo room_page.dart a 185 líneas"
+      "summary": "Extracción de widgets modulares reduciendo room_page.dart a 185 líneas",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "704405710a72f265113972e9ff2d6ebed127a08b",
+      "startedAt": "2026-11-07T00:14:23.933Z",
+      "doneAt": "2026-11-07T00:52:15.902Z",
+      "summary": "Creación del widget interactivo PttButton con detección de onPointerDown, onPointerUp y onPointerCancel"
     }
   },
   "pending": {
