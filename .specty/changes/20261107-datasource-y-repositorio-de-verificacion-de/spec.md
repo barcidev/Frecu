@@ -51,7 +51,7 @@ Implementar la arquitectura de verificación y solicitud de permisos para la apl
   - files: lib/features/permissions/data/datasources/permission_datasource.dart, lib/features/permissions/data/repositories/permission_repository_impl.dart, test/features/permissions/data/permission_datasource_test.dart, test/features/permissions/data/permission_repository_impl_test.dart
   - ac: AC1, AC2, AC3, AC4, AC6
   - verify: fvm flutter test test/features/permissions/data/
-- [ ] T3: Providers de Riverpod y pruebas de integración de dependencias
+- [x] T3: Providers de Riverpod y pruebas de integración de dependencias
   - files: lib/features/permissions/presentation/providers/permission_provider.dart, lib/features/permissions/presentation/providers/permission_provider.g.dart, test/features/permissions/presentation/permission_provider_test.dart
   - ac: AC5, AC6
   - verify: dart run build_runner build -d && fvm flutter test test/features/permissions/presentation/ && fvm flutter analyze

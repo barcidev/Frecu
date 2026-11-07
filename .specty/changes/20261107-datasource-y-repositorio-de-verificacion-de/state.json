@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-datasource-y-repositorio-de-verificacion-de",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/datasource-y-repositorio-de-verificacion-de",
   "baseCommit": "cb3fae623a91c4bc89f6b45571e04faf708ba8f7",
   "revision": 1,
@@ -43,14 +43,23 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [
-        "test/features/permissions/data/permission_repository_impl_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "914baedc5b2137a1eab00e28a3f8b964c4de2ce6",
+      "attempts": 1,
       "startedAt": "2026-11-07T09:31:44.521Z",
       "doneAt": "2026-11-07T09:41:18.887Z",
-      "summary": "Implementar PermissionDataSource y PermissionRepositoryImpl con manejo funcional de Result y pruebas unitarias"
+      "summary": "Implementar PermissionDataSource y PermissionRepositoryImpl con manejo funcional de Result y pruebas unitarias",
+      "scopeExtra": [
+        "test/features/permissions/data/permission_repository_impl_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "362e74102498b891008bfa821ceff983f19017db",
+      "startedAt": "2026-11-07T09:41:19.470Z",
+      "doneAt": "2026-11-07T16:04:58.209Z",
+      "summary": "Proveedores de Riverpod para PermissionDataSource y PermissionRepository con tests"
     }
   },
   "pending": {
