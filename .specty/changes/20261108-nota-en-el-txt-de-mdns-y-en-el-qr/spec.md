@@ -78,7 +78,7 @@ La nota de cada frecu (`RoomNote`, C3) empieza a viajar por la red: el anfitrió
   - files: lib/features/room/presentation/providers/room_provider.dart, test/features/room/presentation/room_note_provider_test.dart
   - ac: AC4, AC5
   - verify: flutter test test/features/room/presentation/room_note_provider_test.dart
-- [ ] T4: Pantallas actuales publican, invitan y se unen con la nota; protocolo documentado
+- [x] T4: Pantallas actuales publican, invitan y se unen con la nota; protocolo documentado
   - files: lib/features/lobby/presentation/pages/create_room_page.dart, lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/lobby/presentation/pages/scan_qr_page.dart, lib/features/room/presentation/widgets/invite_qr_dialog.dart, docs/protocolo.md, test/features/lobby/presentation/room_note_flow_test.dart
   - ac: AC3, AC4, AC5
   - verify: flutter analyze && flutter test

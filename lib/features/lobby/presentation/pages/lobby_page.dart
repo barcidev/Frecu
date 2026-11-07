@@ -164,6 +164,7 @@ class _PinJoinDialogState extends ConsumerState<_PinJoinDialog> {
           port: widget.room.port,
           accessCode: _pinController.text.trim(),
           displayName: _nameController.text.trim(),
+          note: widget.room.note,
         );
 
     if (!mounted) return;

@@ -35,11 +35,13 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
     if (_nameController.text.trim().isEmpty) return;
     setState(() => _isLoading = true);
 
+    final nearbyRooms = ref.read(nearbyRoomsProvider).value ?? const [];
     final result = await ref
         .read(roomNotifierProvider.notifier)
         .createRoom(
           name: _nameController.text.trim(),
           accessCode: _codeController.text.trim(),
+          nearbyNotes: nearbyRooms.map((room) => room.note).nonNulls,
         );
 
     if (!mounted) return;
@@ -50,7 +52,12 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
         unawaited(
           ref
               .read(discoveryRepositoryProvider)
-              .publishRoom(roomId: data.id, name: data.name, port: data.port),
+              .publishRoom(
+                roomId: data.id,
+                name: data.name,
+                port: data.port,
+                note: data.note,
+              ),
         );
         unawaited(context.router.replace(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
@@ -73,6 +80,8 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
   @override
   Widget build(BuildContext context) {
     final localIpAsync = ref.watch(localIpProvider);
+    // Mantiene vivas las frecus cercanas: sus notas no se repiten al crear.
+    ref.watch(nearbyRoomsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(t.lobby.createRoom)),

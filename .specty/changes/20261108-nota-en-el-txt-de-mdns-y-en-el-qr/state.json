@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nota-en-el-txt-de-mdns-y-en-el-qr",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/nota-en-el-txt-de-mdns-y-en-el-qr",
   "baseCommit": "42ba219cc58eb501c27338cfd4eba54506e25932",
   "revision": 1,
@@ -66,12 +66,21 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "7f3570a21405b5e7bd22d3791312e6a445f82a54",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:05:58.076Z",
       "doneAt": "2026-11-07T17:07:53.242Z",
-      "summary": "RoomNotifier.createRoom suma nearbyNotes y asigna una vez la nota con AssignRoomNote sobre Room.createdAt; joinRoom suma RoomNote? note y la copia a la frecu activa sin recalcularla. RoomRepository y CreateRoom no cambian."
+      "summary": "RoomNotifier.createRoom suma nearbyNotes y asigna una vez la nota con AssignRoomNote sobre Room.createdAt; joinRoom suma RoomNote? note y la copia a la frecu activa sin recalcularla. RoomRepository y CreateRoom no cambian.",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "8c67173d910e59937a0ea1d8d250ed77d357e730",
+      "startedAt": "2026-11-07T17:07:54.700Z",
+      "doneAt": "2026-11-07T17:09:26.785Z",
+      "summary": "CreateRoomPage pasa las notas de las frecus cercanas a createRoom y publica con data.note; InviteQrDialog arma el QR con room.note; LobbyPage (PIN) y ScanQrPage se unen con la nota de la invitación. docs/protocolo.md describe n."
     }
   },
   "pending": {

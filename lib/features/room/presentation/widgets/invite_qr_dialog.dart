@@ -19,6 +19,7 @@ class InviteQrDialog extends StatelessWidget {
       port: room.port,
       roomId: room.id,
       accessCode: room.accessCode,
+      note: room.note,
     );
     final qrData = const BuildInviteQr().buildUri(invite);
 
