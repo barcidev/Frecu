@@ -69,7 +69,7 @@ Todos en `lib/core/design/widgets/`, con `context.fr` y sin colores sueltos. Reu
   - files: lib/core/design/widgets/fr_pin_field.dart, lib/core/design/widgets/fr_keypad.dart, test/core/design/widgets/fr_pin_field_test.dart
   - ac: AC1, AC2, AC3, AC7
   - verify: flutter test test/core/design/widgets/fr_pin_field_test.dart
-- [ ] T2: Selector segmentado e interruptor
+- [x] T2: Selector segmentado e interruptor
   - files: lib/core/design/widgets/fr_segmented.dart, lib/core/design/widgets/fr_toggle.dart, test/core/design/widgets/fr_segmented_test.dart
   - ac: AC4, AC5, AC7
   - verify: flutter test test/core/design/widgets/fr_segmented_test.dart

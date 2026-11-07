@@ -42,12 +42,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "b1475aae06279457b470eae3cab08a4da8af650d",
+      "attempts": 1,
       "startedAt": "2026-11-07T11:13:48.614Z",
       "doneAt": "2026-11-07T11:17:32.849Z",
-      "summary": "FrPinField (celdas Doto 64×78, cursor que parpadea con FrLoop, aparición con resorte organic, busy con latido escalonado, ok con ola, error con temblor, solo lectura) y FrKeypad (teclas de 56 px con FrPressable a 0,93, función opcional y borrar con etiqueta accesible), con movimiento reducido"
+      "summary": "FrPinField (celdas Doto 64×78, cursor que parpadea con FrLoop, aparición con resorte organic, busy con latido escalonado, ok con ola, error con temblor, solo lectura) y FrKeypad (teclas de 56 px con FrPressable a 0,93, función opcional y borrar con etiqueta accesible), con movimiento reducido",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "b2a849c4661c78eccef4df5de4bd1c9911b251b3",
+      "startedAt": "2026-11-07T11:17:33.770Z",
+      "doneAt": "2026-11-07T11:21:20.710Z",
+      "summary": "FrSegmented<T> con pulgar de resorte organic que se estira y variante de señal, y FrToggle con perilla de resorte que se estira al presionar y Semantics toggled; ambos al 38 % sin onChanged y sin resorte con movimiento reducido"
     }
   },
   "pending": {
