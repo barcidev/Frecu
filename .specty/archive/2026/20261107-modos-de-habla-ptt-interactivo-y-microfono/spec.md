@@ -78,3 +78,27 @@ Se aplica Clean Architecture por feature, respetando Dart puro en `domain`, inmu
 ## Riesgos
 
 - R1: La cancelación de gestos táctiles (por ejemplo, notificaciones del sistema o scroll) podría dejar el micrófono abierto involuntariamente — mitigación: vincular tanto `onPointerUp` como `onPointerCancel` al método `stopTalking()`.
+
+## Cierre
+
+### Resumen
+
+Se implementó el soporte interactivo para los modos de habla PTT (`pushToTalk`) y micrófono abierto (`openMic`):
+
+- Se modularizó `RoomPage` desacoplando `RoomInfoCard`, `ParticipantsList` e `InviteQrDialog` en componentes dedicados dentro de `lib/features/room/presentation/widgets/`, reduciendo `room_page.dart` de 430 a 137 líneas (muy por debajo del límite de 300 líneas).
+- Se creó el widget `PttButton` con `Listener` para eventos de puntero (`onPointerDown` para iniciar transmisión y `onPointerUp`/`onPointerCancel` para silenciar), proporcionando retroalimentación visual inmediata.
+- Se implementó `MicControlSection` con selector de modo `SegmentedButton` interactivo (`PTT` vs `openMic`), permitiendo alternar el micrófono continuo en `openMic` o mantener pulsado en `PTT`, silenciando automáticamente la transmisión activa al conmutar de `openMic` a `PTT`.
+- Se verificaron todos los criterios de aceptación (AC1, AC2, AC3) con pruebas unitarias y de widgets que pasaron al 100%.
+
+### Desviaciones
+
+- Ninguna respecto a los criterios funcionales planificados. El control del puntero se coordinó entre `PttButton` y `MicControlSection` para reflejar el estado activo de forma inmediata en las pruebas de interacción táctil.
+
+### Decisiones
+
+- Se mantuvo el modo `pushToTalk` como predeterminado para salvaguardar la privacidad del usuario al entrar a cualquier frecu.
+- El manejo de cancelación del puntero (`onPointerCancel`) se enlazó a `stopTalking()` para evitar que el micrófono quede transmitiendo involuntariamente ante interrupciones del sistema o gestos de navegación.
+
+### Pendientes
+
+- Ninguno para el alcance de este corte.
