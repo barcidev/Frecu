@@ -72,7 +72,7 @@ Guardar en el teléfono el nombre visible, el tema (Auto, Claro u Oscuro) y el m
   - files: pubspec.yaml, pubspec.lock, lib/features/settings/data/repositories/preferences_repository_impl.dart, test/features/settings/data/preferences_repository_test.dart
   - ac: AC1, AC2, AC4
   - verify: flutter test test/features/settings/data/preferences_repository_test.dart
-- [ ] T3: Providers de preferencias
+- [x] T3: Providers de preferencias
   - files: lib/features/settings/presentation/providers/preferences_provider.dart, lib/features/settings/presentation/providers/preferences_provider.g.dart, test/features/settings/presentation/preferences_provider_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter analyze && flutter test

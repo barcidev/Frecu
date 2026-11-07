@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-preferencias-guardadas-nombre-tema-y-modo-de",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/preferencias-guardadas-nombre-tema-y-modo-de",
   "baseCommit": "4ec5f1f87e33a578c3e4bcd7f869ff8fedbb49f9",
   "revision": 2,
@@ -56,12 +56,23 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "18573f04c0b34395fe59d99ff7792e8c6efd44fb",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:13:50.200Z",
       "doneAt": "2026-11-07T16:15:21.686Z",
-      "summary": "PreferencesRepositoryImpl con SharedPreferencesAsync: claves settings.*, enums por name con valor por defecto si no se reconocen, nombre normalizado y fallos del plugin como Failure.unexpected. Añade shared_preferences y, de desarrollo, su platform_interface."
+      "summary": "PreferencesRepositoryImpl con SharedPreferencesAsync: claves settings.*, enums por name con valor por defecto si no se reconocen, nombre normalizado y fallos del plugin como Failure.unexpected. Añade shared_preferences y, de desarrollo, su platform_interface.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/settings/data/preferences_repository_test.dart"
+      ],
+      "attempts": 2,
+      "baseCommit": "9e36e05244a362748662763ec2a4f2b999f98120",
+      "startedAt": "2026-11-07T16:15:22.396Z",
+      "doneAt": "2026-11-07T16:21:43.110Z",
+      "summary": "preferencesRepositoryProvider y PreferencesNotifier (AsyncNotifier keepAlive, preferencesProvider): por defecto si falla la lectura; los setters guardan y solo entonces cambian el estado. Quita el import sin uso del test (S1)."
     }
   },
   "pending": {
@@ -72,10 +83,11 @@
     "A": 5,
     "AC": 4,
     "T": 3,
-    "R": 1
+    "R": 1,
+    "S": 1
   },
   "lockedTests": {
-    "test/features/settings/data/preferences_repository_test.dart": "sha256:11248ecdb96ccc05c067c678117d636813d774f975ef413826db80ce862fa4b3",
+    "test/features/settings/data/preferences_repository_test.dart": "sha256:8db2abc5737c4bb9e4c9b30fe01e8b54e3cea58abc83d6483b3db3755cdd8c19",
     "test/features/settings/domain/preferences_test.dart": "sha256:6d7f44ce3fe78738901fb4002ad376a2ac21c0869cc340e3d3db9ce728449b00",
     "test/features/settings/presentation/preferences_provider_test.dart": "sha256:4877917174552cb01661243fb18255c400f1ddd0d1148811384354e0d6e3395d"
   }

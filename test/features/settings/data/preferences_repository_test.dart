@@ -7,7 +7,6 @@ import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
