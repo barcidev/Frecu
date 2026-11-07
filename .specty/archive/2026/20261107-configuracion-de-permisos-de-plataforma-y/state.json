@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261107-configuracion-de-permisos-de-plataforma-y",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "cancelled",
   "branch": "feature/configuracion-de-permisos-de-plataforma-y",
   "baseCommit": "2d6a5a858cc376d67e69e0f5617c11d28c06c162",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:851740f2fed2fd5cc1f7bb2fc78b7d8480365d788ba39f24912acf0cce609832",
+    "at": "2026-11-07T09:00:49.390Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -30,12 +37,5 @@
     "AC": 5,
     "C": 2,
     "R": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:851740f2fed2fd5cc1f7bb2fc78b7d8480365d788ba39f24912acf0cce609832",
-    "at": "2026-11-07T09:00:49.390Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
