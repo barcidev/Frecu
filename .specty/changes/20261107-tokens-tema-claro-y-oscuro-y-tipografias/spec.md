@@ -64,7 +64,7 @@ Sustituir el tema Material genérico (semilla teal) por los tokens de Portadora 
   - files: lib/core/design/tokens/fr_type.dart, lib/core/design/tokens/fr_space.dart, lib/core/design/tokens/fr_radii.dart, lib/core/design/tokens/fr_motion.dart, test/core/design/fr_tokens_test.dart
   - ac: AC4
   - verify: flutter test test/core/design/fr_tokens_test.dart
-- [ ] T3: AppTheme claro y oscuro desde los tokens y acceso con `context.fr`
+- [x] T3: AppTheme claro y oscuro desde los tokens y acceso con `context.fr`
   - files: lib/core/design/fr_theme.dart, lib/app/theme/app_theme.dart, docs/arquitectura.md, test/app/theme/app_theme_test.dart
   - ac: AC1, AC2, AC4
   - verify: flutter test

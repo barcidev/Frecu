@@ -3,7 +3,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/core/design/tokens/fr_motion.dart';
 import 'package:frecu/core/design/tokens/fr_radii.dart';
