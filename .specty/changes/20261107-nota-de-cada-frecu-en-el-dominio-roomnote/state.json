@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "id": "20261107-nota-de-cada-frecu-en-el-dominio-roomnote",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/nota-de-cada-frecu-en-el-dominio-roomnote",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:36e01026ea3ec4de8570045a049ce1a01f406dc868279320eee6d4561fdc856c",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:10bc22e52f1142145e2b34b0b949db3f7f1fe645c65761652cab60dae2f602b7",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:a6eade309659ee1f75abb386d6d5ca54e0bcb8661c20ee5fb919113977b74a20",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:1cd61fdb909143f717c7a4ee50868de44a5341146d0290a4d3825cda1a1788b3",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:b146ce2fc49385b5851e21ee8dafd726878b41108703771e1b3f196b0d9f6967",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 4,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:86dc385a2640f3c1b20352d1cc48022d0738bebecc2d7e273f513c3f44c1efa7",
+    "at": "2026-11-07T11:00:57.940Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
