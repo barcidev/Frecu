@@ -73,7 +73,7 @@ Todos en `lib/core/design/widgets/`, con `context.fr` y sin colores sueltos. Reu
   - files: lib/core/design/widgets/fr_segmented.dart, lib/core/design/widgets/fr_toggle.dart, test/core/design/widgets/fr_segmented_test.dart
   - ac: AC4, AC5, AC7
   - verify: flutter test test/core/design/widgets/fr_segmented_test.dart
-- [ ] T3: Píldora de estado y etiqueta
+- [x] T3: Píldora de estado y etiqueta
   - files: lib/core/design/widgets/fr_pill.dart, lib/core/design/widgets/fr_tag.dart, test/core/design/widgets/fr_pill_test.dart
   - ac: AC6, AC7
   - verify: flutter analyze && flutter test
