@@ -31,7 +31,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "bbc54507f5cb2f5f180dd5c04efd7cfd0770179b",
+      "startedAt": "2026-11-07T09:27:53.175Z",
+      "doneAt": "2026-11-07T09:31:43.899Z",
+      "summary": "Definir enums AppPermission y AppPermissionStatus y contrato PermissionRepository"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

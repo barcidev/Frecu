@@ -43,7 +43,7 @@ Implementar la arquitectura de verificación y solicitud de permisos para la apl
 
 ## Tareas
 
-- [ ] T1: Entidades de dominio y contrato abstracto del repositorio con pruebas
+- [x] T1: Entidades de dominio y contrato abstracto del repositorio con pruebas
   - files: lib/features/permissions/domain/entities/app_permission.dart, lib/features/permissions/domain/repositories/permission_repository.dart, test/features/permissions/domain/app_permission_test.dart
   - ac: AC1, AC4
   - verify: fvm flutter test test/features/permissions/domain/
