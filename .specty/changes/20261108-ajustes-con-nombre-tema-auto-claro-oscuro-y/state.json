@@ -6,6 +6,13 @@
   "branch": "feature/ajustes-con-nombre-tema-auto-claro-oscuro-y",
   "baseCommit": "2408d791f5d9b74e31affbfeb8df7079d6afefc4",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:ceb4d3012c49f3d7dafb65b25d97415c74ca21e388776f074ae37560f77a362b",
+    "at": "2026-11-07T16:55:52.022Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 10,
@@ -52,12 +59,6 @@
     "T": 2,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:ceb4d3012c49f3d7dafb65b25d97415c74ca21e388776f074ae37560f77a362b",
-    "at": "2026-11-07T16:55:52.022Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T17:05:01.290Z"
 }
