@@ -5,20 +5,20 @@
   "phase": "implementing",
   "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
   "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
-  "revision": 1,
+  "revision": 2,
   "approved": {
-    "revision": 1,
-    "hash": "sha256:c17de10525cfc0ea7c1cced5741a4fca6053b09c156d000b2c3c36d70bc75e42",
-    "at": "2026-11-07T17:23:30.007Z",
+    "revision": 2,
+    "hash": "sha256:6987cfabe76fb1bc10ba454d16eddcb55fc501835f6090c48227cbe31346abf7",
+    "at": "2026-11-07T17:35:15.970Z",
     "by": "Jorge Palacio Barcinilla",
     "channel": "delegated"
   },
   "size": {
-    "level": "M",
-    "score": 9,
+    "level": "L",
+    "score": 11,
     "adjust": 0,
     "reasons": [
-      "8 archivos",
+      "10 archivos",
       "4 tareas"
     ]
   },
@@ -40,7 +40,15 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "active",
+      "baseCommit": "30059fe20a483eb368ff8ecc095e287d6f3fa8be",
+      "attempts": 0,
+      "startedAt": "2026-11-07T17:26:29.055Z",
+      "scopeExtra": []
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

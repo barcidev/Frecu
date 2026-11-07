@@ -52,6 +52,8 @@ Permitir que la nota musical (RoomNote) de una sala (frecu) viaje dentro del men
 - modificar lib/features/room/data/models/signaling_message.dart — campo opcional note en welcome con @RoomNoteConverter().
 - modificar lib/features/room/data/models/signaling_message.freezed.dart — código generado por build_runner.
 - modificar lib/features/room/data/models/signaling_message.g.dart — código generado por build_runner.
+- modificar lib/features/room/data/datasources/peer_connection_datasource.dart — adaptar aridad de callback welcome.
+- modificar lib/features/room/data/repositories/voice_repository_impl.dart — adaptar aridad de callback welcome.
 - modificar lib/features/room/data/datasources/signaling_server_datasource.dart — recibir note opcional al iniciar y enviarla en welcome.
 - modificar lib/features/room/domain/repositories/room_repository.dart — parámetro opcional note en createRoom.
 - modificar lib/features/room/domain/usecases/create_room.dart — parámetro opcional note en CreateRoomParams.
@@ -64,7 +66,7 @@ Permitir que la nota musical (RoomNote) de una sala (frecu) viaje dentro del men
 ## Tareas
 
 - [ ] T1: Modelado y serialización de RoomNote en SignalingMessage.welcome
-  - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, test/features/room/data/signaling_message_test.dart
+  - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/peer_connection_datasource.dart, lib/features/room/data/repositories/voice_repository_impl.dart, test/features/room/data/signaling_message_test.dart
   - ac: AC1
   - verify: fvm flutter test test/features/room/data/signaling_message_test.dart
 - [ ] T2: Envío de RoomNote en el mensaje welcome de SignalingServerDataSource
