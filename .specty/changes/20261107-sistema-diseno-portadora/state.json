@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "id": "20261107-sistema-diseno-portadora",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/sistema-diseno-portadora",
+  "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:77a0070fad4d618fae1901a37beb6db340aa02cb5884f2ba9ae38ae9de2994f1",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:65bc2091d7e9b7b0236ec25cacb488c20ae89892032f82f4faaaf0e6e0331e8d",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:201d59527d50a09de7b654f15b207792d754f5bcc04c6f6ab18059e22e4d1afe",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:3842ef42df2f1d9d59e65cb3ec77b999864d7da00137c5c6e752865b0bf17790",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:03cf278dc744052d37200f858d4fd4add14a595f76114247756374d50031e3aa",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:095d4847c84da353b5d6f138fa58d867eff9901c537412a0bfda76a978a88406",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:75a8b146730e68e26142e15ed15c71ddcc35a98a796f7d9c7b55b74c3b027a33",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 8,
+    "C": 4,
+    "R": 4
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:88bf30ca0c85ef25d9f840eeb213fd482fea527b186b73ce489cb947190b32e5",
+    "at": "2026-11-07T03:54:51.747Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
