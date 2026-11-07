@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
 
 /// Estilo de un [FrIconButton].
@@ -22,19 +24,34 @@ enum FrIconButtonVariant {
 /// [selected] lo enciende con la señal. Sin [onPressed] se ve al 38 % y no
 /// responde. [semanticLabel] es obligatoria porque el ícono no se lee.
 class FrIconButton extends StatelessWidget {
-  /// Crea un botón con [icon].
+  /// Crea un botón con el ícono de Material [icon].
   const FrIconButton({
-    required this.icon,
+    required IconData this.icon,
     required this.semanticLabel,
     required this.onPressed,
     this.variant = FrIconButtonVariant.filled,
     this.selected = false,
     this.compact = false,
     super.key,
-  });
+  }) : drawnIcon = null;
 
-  /// Ícono.
-  final IconData icon;
+  /// Crea un botón con el ícono propio [icon] de `FrIcons`.
+  const FrIconButton.drawn({
+    required FrIconData icon,
+    required this.semanticLabel,
+    required this.onPressed,
+    this.variant = FrIconButtonVariant.filled,
+    this.selected = false,
+    this.compact = false,
+    super.key,
+  }) : drawnIcon = icon,
+       icon = null;
+
+  /// Ícono de Material; nulo si el botón se creó con `.drawn`.
+  final IconData? icon;
+
+  /// Ícono propio de `FrIcons`; nulo si el botón usa [icon].
+  final FrIconData? drawnIcon;
 
   /// Etiqueta accesible.
   final String semanticLabel;
@@ -106,7 +123,14 @@ class FrIconButton extends StatelessWidget {
             ),
         ],
       ),
-      child: Icon(icon, size: 22, color: foreground),
+      child: _glyph(foreground),
     );
+  }
+
+  Widget _glyph(Color color) {
+    final drawn = drawnIcon;
+    return drawn == null
+        ? Icon(icon, size: 22, color: color)
+        : FrIcon(drawn, size: 22, color: color);
   }
 }

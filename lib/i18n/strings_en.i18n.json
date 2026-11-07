@@ -30,16 +30,42 @@
     "accept": "Accept"
   },
   "permissions": {
-    "title": "Required permissions",
-    "description": "Frecu needs permissions to communicate without internet.",
+    "back": "Back",
+    "stepOf": "$current / $total",
+    "welcome": {
+      "kicker": "No internet · no coverage",
+      "title": "Your whole group on the same frecu.",
+      "message": "Talk in real time with up to 6 people near you. All they need is a shared Wi-Fi network.",
+      "start": "Get started"
+    },
+    "name": {
+      "title": "What should we call you?",
+      "message": "This is how you'll be seen and heard in every frecu.",
+      "signature": "Your signal signature · born from your name",
+      "label": "Display name",
+      "hint": "Your name",
+      "help": "You can change it anytime in Settings.",
+      "tooLong": "Use $max characters at most.",
+      "saveError": "Couldn't save your name. Please try again.",
+      "next": "Continue"
+    },
+    "title": "Three permissions and you're set.",
+    "description": "Frecu only talks to your local network. Your voice never leaves your group.",
     "microphone": "Microphone",
-    "microphoneDesc": "Transmits your voice to other peers in the room.",
+    "microphoneDesc": "So your group can hear you.",
     "nearbyDevices": "Local network & nearby devices",
-    "nearbyDevicesDesc": "Discovers and connects with nearby phones on the network.",
+    "nearbyDevicesDesc": "To find frecus and use Bluetooth headphones.",
     "notifications": "Notifications",
-    "notificationsDesc": "Keeps the intercom active in background with screen off.",
+    "notificationsDesc": "They keep the frecu alive with the screen off.",
+    "camera": "The camera is only requested when scanning a QR code.",
     "grant": "Grant permissions",
-    "granted": "Permissions granted"
+    "openSettings": "Settings",
+    "finish": "Continue",
+    "status": {
+      "pending": "Pending",
+      "granted": "Granted",
+      "denied": "Denied"
+    }
   },
   "settings": {
     "title": "Settings",

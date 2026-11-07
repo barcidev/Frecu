@@ -7,6 +7,7 @@ import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
+import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -145,13 +146,11 @@ class _PinJoinDialog extends ConsumerStatefulWidget {
 
 class _PinJoinDialogState extends ConsumerState<_PinJoinDialog> {
   final _pinController = TextEditingController(text: '1234');
-  final _nameController = TextEditingController(text: 'Participante');
   bool _isLoading = false;
 
   @override
   void dispose() {
     _pinController.dispose();
-    _nameController.dispose();
     super.dispose();
   }
 
@@ -163,7 +162,7 @@ class _PinJoinDialogState extends ConsumerState<_PinJoinDialog> {
           hostAddress: widget.room.hostAddress,
           port: widget.room.port,
           accessCode: _pinController.text.trim(),
-          displayName: _nameController.text.trim(),
+          displayName: ref.joinDisplayName,
           note: widget.room.note,
         );
 
@@ -193,10 +192,6 @@ class _PinJoinDialogState extends ConsumerState<_PinJoinDialog> {
             decoration: InputDecoration(labelText: t.lobby.accessCode),
             keyboardType: TextInputType.number,
             maxLength: 4,
-          ),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(labelText: t.lobby.yourName),
           ),
         ],
       ),
@@ -231,13 +226,11 @@ class _JoinRoomDialog extends ConsumerStatefulWidget {
 class _JoinRoomDialogState extends ConsumerState<_JoinRoomDialog> {
   final _ipController = TextEditingController(text: '192.168.43.1');
   final _codeController = TextEditingController(text: '1234');
-  final _nameController = TextEditingController(text: 'Participante');
 
   @override
   void dispose() {
     _ipController.dispose();
     _codeController.dispose();
-    _nameController.dispose();
     super.dispose();
   }
 
@@ -249,7 +242,7 @@ class _JoinRoomDialogState extends ConsumerState<_JoinRoomDialog> {
           hostAddress: _ipController.text.trim(),
           port: NetworkConstants.signalingPort,
           accessCode: _codeController.text.trim(),
-          displayName: _nameController.text.trim(),
+          displayName: ref.joinDisplayName,
         );
     if (!mounted) return;
     switch (result) {
@@ -277,10 +270,6 @@ class _JoinRoomDialogState extends ConsumerState<_JoinRoomDialog> {
             controller: _codeController,
             decoration: InputDecoration(labelText: t.lobby.accessCode),
             maxLength: 4,
-          ),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(labelText: t.lobby.yourName),
           ),
         ],
       ),
