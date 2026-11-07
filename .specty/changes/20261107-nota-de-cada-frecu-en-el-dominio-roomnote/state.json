@@ -44,7 +44,19 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        ".specty/config.yaml"
+      ],
+      "attempts": 1,
+      "baseCommit": "0588e8c4594205750e5c994372cf007e61baf948",
+      "startedAt": "2026-11-07T11:06:51.865Z",
+      "doneAt": "2026-11-07T16:45:14.508Z",
+      "summary": "RoomNote (Freezed 3, solo semitono 0–23 con @Assert): pitchClass, octave, midi, name en solfeo, fifthsPosition y hz (La4 = 440 Hz); circleOfFifths, semitoneCount, tryFromSemitone y RoomNoteConverter (JSON como semitono; inválido = sin nota). S1: scope.generated con *.g.dart y *.freezed.dart."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -53,7 +65,8 @@
     "A": 5,
     "AC": 4,
     "T": 3,
-    "R": 2
+    "R": 2,
+    "S": 1
   },
   "lockedTests": {
     "test/features/lobby/domain/nearby_room_note_test.dart": "sha256:46e763e7d2e3695607458ee398a3c5f7cb07c9cc5a2054d43ffe6482f7ae1225",

@@ -63,7 +63,7 @@ Cada frecu tendrá una nota musical calculada con su hora de apertura sobre el c
 
 ## Tareas
 
-- [ ] T1: Entidad `RoomNote` con sus valores derivados
+- [x] T1: Entidad `RoomNote` con sus valores derivados
   - files: lib/features/room/domain/entities/room_note.dart, lib/features/room/domain/entities/room_note.freezed.dart, test/features/room/domain/room_note_test.dart
   - ac: AC2
   - verify: flutter test test/features/room/domain/room_note_test.dart
