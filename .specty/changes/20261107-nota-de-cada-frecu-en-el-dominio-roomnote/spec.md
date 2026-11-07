@@ -67,7 +67,7 @@ Cada frecu tendrá una nota musical calculada con su hora de apertura sobre el c
   - files: lib/features/room/domain/entities/room_note.dart, lib/features/room/domain/entities/room_note.freezed.dart, test/features/room/domain/room_note_test.dart
   - ac: AC2
   - verify: flutter test test/features/room/domain/room_note_test.dart
-- [ ] T2: Caso de uso `AssignRoomNote` con la hora y los choques
+- [x] T2: Caso de uso `AssignRoomNote` con la hora y los choques
   - files: lib/features/room/domain/usecases/assign_room_note.dart, test/features/room/domain/assign_room_note_test.dart
   - ac: AC1, AC3
   - verify: flutter test test/features/room/domain/assign_room_note_test.dart

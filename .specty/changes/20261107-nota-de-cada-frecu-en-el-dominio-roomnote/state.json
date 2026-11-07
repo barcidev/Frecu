@@ -47,14 +47,23 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        ".specty/config.yaml"
-      ],
-      "attempts": 1,
       "baseCommit": "0588e8c4594205750e5c994372cf007e61baf948",
+      "attempts": 1,
       "startedAt": "2026-11-07T11:06:51.865Z",
       "doneAt": "2026-11-07T16:45:14.508Z",
-      "summary": "RoomNote (Freezed 3, solo semitono 0–23 con @Assert): pitchClass, octave, midi, name en solfeo, fifthsPosition y hz (La4 = 440 Hz); circleOfFifths, semitoneCount, tryFromSemitone y RoomNoteConverter (JSON como semitono; inválido = sin nota). S1: scope.generated con *.g.dart y *.freezed.dart."
+      "summary": "RoomNote (Freezed 3, solo semitono 0–23 con @Assert): pitchClass, octave, midi, name en solfeo, fifthsPosition y hz (La4 = 440 Hz); circleOfFifths, semitoneCount, tryFromSemitone y RoomNoteConverter (JSON como semitono; inválido = sin nota). S1: scope.generated con *.g.dart y *.freezed.dart.",
+      "scopeExtra": [
+        ".specty/config.yaml"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "15fb198b30547396539d4923ceaf4b6164e10377",
+      "startedAt": "2026-11-07T16:45:15.380Z",
+      "doneAt": "2026-11-07T16:45:53.683Z",
+      "summary": "AssignRoomNote (UseCase con assign síncrono): hora local mod 12 sobre el círculo de quintas, octava 4 o 5 según la mitad del día; salta las quintas ocupadas de la misma octava con vuelta de Fa a Do y, si las 12 lo están, deja la de su hora."
     }
   },
   "pending": {
