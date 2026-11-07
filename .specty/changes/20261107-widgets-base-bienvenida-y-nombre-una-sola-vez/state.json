@@ -48,12 +48,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "63e3317954f752b7ed9c083ceba61ec594811f4f",
+      "attempts": 1,
       "startedAt": "2026-11-07T09:02:38.736Z",
       "doneAt": "2026-11-07T09:04:06.778Z",
-      "summary": "SignalSignature (SignatureParams.fromName idéntico a sigParams del prototipo; pintor de 220 puntos con ondulación, brillo al hablar, estela y modos idle/speak/muted/off/link) y WaveLoader (dos senos con envolvente), ambos sobre FrLoop con RepaintBoundary y cuadro fijo con movimiento reducido."
+      "summary": "SignalSignature (SignatureParams.fromName idéntico a sigParams del prototipo; pintor de 220 puntos con ondulación, brillo al hablar, estela y modos idle/speak/muted/off/link) y WaveLoader (dos senos con envolvente), ambos sobre FrLoop con RepaintBoundary y cuadro fijo con movimiento reducido.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "8bb908b9611c15ebf75e66fc85d4399ea8bd6f1b",
+      "startedAt": "2026-11-07T09:04:07.414Z",
+      "doneAt": "2026-11-07T09:05:40.322Z",
+      "summary": "FrPressable (resorte press, punto de contacto y semántica; sin escala con movimiento reducido), FrButton (4 variantes, luz radial desde el dedo, carga con WaveLoader, deshabilitado al 38 %) y FrIconButton (0,92 y bg3 al presionar, selected, ghost y danger)."
     }
   },
   "pending": {

@@ -82,7 +82,7 @@ Crear los widgets base de Portadora que usan la bienvenida, el nombre y los perm
   - files: lib/core/design/widgets/signal_signature.dart, lib/core/design/widgets/wave_loader.dart, test/core/design/widgets/signal_signature_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/core/design/widgets/signal_signature_test.dart
-- [ ] T3: Botones con resorte y luz al tacto
+- [x] T3: Botones con resorte y luz al tacto
   - files: lib/core/design/widgets/fr_pressable.dart, lib/core/design/widgets/fr_button.dart, lib/core/design/widgets/fr_icon_button.dart, test/core/design/widgets/fr_button_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/core/design/widgets/fr_button_test.dart
