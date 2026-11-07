@@ -26,7 +26,10 @@ lib/
 │   │   └── guards/                 # PermissionsGuard
 │   └── theme/                      # AppTheme.light / AppTheme.dark desde los tokens de Portadora
 ├── core/
-│   ├── design/                     # tokens de Portadora (FrColors, FrType, FrSpace, FrRadii, FrMotion) y context.fr
+│   ├── design/                     # sistema de diseño Portadora
+│   │   ├── tokens/                 # FrColors, FrType, FrSpace, FrRadii, FrMotion (fr_theme.dart: context.fr)
+│   │   ├── motion/                 # context.reduceMotion, FrLoop, FrSpringCurve, ruido y hash del prototipo
+│   │   └── widgets/                # FrButton, FrIconButton, FrField, FrSteps, SignalSignature, WaveLoader
 │   ├── error/                      # Failure (sealed, freezed)
 │   ├── result/                     # Result<T> (sealed, freezed)
 │   ├── usecase/                    # contrato base UseCase<T, Params>
