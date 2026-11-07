@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "20261108-malla-hexagonal-de-la-frecu-activa-con-firmas-y",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/malla-hexagonal-de-la-frecu-activa-con-firmas-y",
+  "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 17,
+    "adjust": 0,
+    "reasons": [
+      "13 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:6a4f42159d923acda0e394ec8f503baada416cfefa75e424895af4c713a39c14",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a0fd43b42fe3587b9779c832a9a06ab25e75e8e7a32b88bfde248587f8d9a7de",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:832b04957f916e0d9251e88a4cf0ddbdd6fcc8ce4e03ff2ea807ff4bbfde4a6f",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:e97a565131490fdd3974603209f424cf88592d211d23c1b17653abb223f339e8",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:ffca968400ed0fa5452f7a8ff981dcc7043eb6bdaf02306b2d31d378a58d51ee",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:e8bfcbbd28dea35be40e098d1ffd05234d219c6c1dbf3365bcb4d4debf02e952",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:03fd6372a5b334437e361e1ec0bdb5cf04224f7ae4a29535acd6a5cda516b28a",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 7,
+    "T": 3,
+    "R": 3
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:58e0cf3af2aa53eb5f0d6efe910ca5252e208c8b450707e5ac8e17cbb9a8b2f5",
+    "at": "2026-11-07T17:34:26.433Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
