@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-tokens-tema-claro-y-oscuro-y-tipografias",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/tokens-tema-claro-y-oscuro-y-tipografias",
   "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
   "revision": 1,
@@ -51,6 +51,9 @@
     "T": 3,
     "R": 2
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T04:25:03.848Z"
+  "lockedTests": {
+    "test/app/theme/app_theme_test.dart": "sha256:3bd6400763832de57664d4e855635d377f1e819d8e74ce37e066fac8d03fe392",
+    "test/core/design/fr_colors_test.dart": "sha256:9eb15c278578fc22be30cbdbd9e2f4f4161bb1f84f59c2412923ffd176219507",
+    "test/core/design/fr_tokens_test.dart": "sha256:45d98eda978a1bcca61508c2a2307d66e1e158867b29b852d01788b27b6be6ff"
+  }
 }
