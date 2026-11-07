@@ -54,14 +54,23 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [
-        "test/core/design/widgets/fr_scaffold_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "63bf806ba0b2e7b3faa498f6340e0e8604de5a90",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:09:12.201Z",
       "doneAt": "2026-11-07T16:25:34.836Z",
-      "summary": "FrScaffold sobre bg0 con FrBackdrop (retícula de 22 px en ink al 6 % desvanecida al 55 % y grano FrGrain de 128 px sembrado y cacheado), dock con degradado y registro del toque para la onda. Parche S2 aplicado."
+      "summary": "FrScaffold sobre bg0 con FrBackdrop (retícula de 22 px en ink al 6 % desvanecida al 55 % y grano FrGrain de 128 px sembrado y cacheado), dock con degradado y registro del toque para la onda. Parche S2 aplicado.",
+      "scopeExtra": [
+        "test/core/design/widgets/fr_scaffold_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "6d9bf71d498dbfee3ddf0936d85ebed539b79ac7",
+      "startedAt": "2026-11-07T16:25:36.482Z",
+      "doneAt": "2026-11-07T16:27:30.340Z",
+      "summary": "FrSheet (radio 40, asa, cabecera y contenido) y FrSheetRoute como PopupRoute: velo con desenfoque, subida con SpringSimulation(springFlow), bajada en 400 ms y FrTransitions.recede para alejar la pantalla de abajo; fundido de 280 ms con movimiento reducido."
     }
   },
   "pending": {

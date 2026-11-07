@@ -76,7 +76,7 @@ Crear en `lib/core/design/` las superficies de Portadora que usarán las pantall
   - files: lib/core/design/widgets/fr_scaffold.dart, test/core/design/widgets/fr_scaffold_test.dart
   - ac: AC1
   - verify: flutter test test/core/design/widgets/fr_scaffold_test.dart
-- [ ] T3: Hoja elástica con velo
+- [x] T3: Hoja elástica con velo
   - files: lib/core/design/widgets/fr_sheet.dart, test/core/design/widgets/fr_sheet_test.dart
   - ac: AC2, AC6
   - verify: flutter test test/core/design/widgets/fr_sheet_test.dart
