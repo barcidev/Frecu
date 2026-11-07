@@ -43,6 +43,11 @@
   "tasks": {
     "T1": {
       "status": "done",
+      "baseCommit": "30059fe20a483eb368ff8ecc095e287d6f3fa8be",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:26:29.055Z",
+      "doneAt": "2026-11-07T18:33:42.430Z",
+      "summary": "Modelado y serialización de RoomNote en SignalingMessage.welcome",
       "scopeExtra": [
         "lib/features/room/data/datasources/signaling_server_datasource.dart",
         "lib/features/room/data/repositories/room_repository_impl.dart",
@@ -50,12 +55,16 @@
         "lib/features/room/domain/usecases/create_room.dart",
         "test/features/room/data/signaling_server_test.dart",
         "test/features/room/data/signaling_message_test.dart"
-      ],
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
       "attempts": 1,
-      "baseCommit": "30059fe20a483eb368ff8ecc095e287d6f3fa8be",
-      "startedAt": "2026-11-07T17:26:29.055Z",
-      "doneAt": "2026-11-07T18:33:42.430Z",
-      "summary": "Modelado y serialización de RoomNote en SignalingMessage.welcome"
+      "baseCommit": "40f9c0fac2790984a0b942e0f2af841c5c871503",
+      "startedAt": "2026-11-07T18:33:43.045Z",
+      "doneAt": "2026-11-07T18:34:14.772Z",
+      "summary": "Configurar RoomNote en start de SignalingServerDataSource y enviarla en el mensaje welcome"
     }
   },
   "pending": {
