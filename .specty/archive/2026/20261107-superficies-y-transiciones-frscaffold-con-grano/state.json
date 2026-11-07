@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-superficies-y-transiciones-frscaffold-con-grano",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/superficies-y-transiciones-frscaffold-con-grano",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:f3cd751b0c1bc0968a4d130e9b440194258c91570cd1157140f200020717044a",
@@ -74,12 +74,12 @@
     },
     "T4": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d28e2a74b2f238d38c9f848206beccfaf3eca9b5",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:27:32.290Z",
       "doneAt": "2026-11-07T16:30:38.715Z",
-      "summary": "FrBanner (tonos aviso, alerta e info, flotante para eco, cierre que se funde subiendo 6 px), FrToast con showFrToast (entra con springFlow, se va solo y uno nuevo reemplaza al anterior) y StatusIsland siempre oscura con ancho organic y punto que parpadea."
+      "summary": "FrBanner (tonos aviso, alerta e info, flotante para eco, cierre que se funde subiendo 6 px), FrToast con showFrToast (entra con springFlow, se va solo y uno nuevo reemplaza al anterior) y StatusIsland siempre oscura con ancho organic y punto que parpadea.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -93,6 +93,7 @@
     "R": 3,
     "S": 2
   },
+  "closingSubmittedAt": "2026-11-07T16:31:05.896Z",
   "lockedTests": {
     "test/core/design/motion/fr_transitions_test.dart": "sha256:1e3665fa16980842e5f7c644c64b9de3d7ac7187cd95347e963dfcc88f5e393c",
     "test/core/design/widgets/fr_notices_test.dart": "sha256:8628a95b33a650618cc9f899b0bcd95b59a029bd9b25e4c8728270260add4066",

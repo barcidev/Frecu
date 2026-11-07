@@ -90,3 +90,33 @@ Crear en `lib/core/design/` las superficies de Portadora que usarán las pantall
 - R1: El desenfoque del velo y el recorte circular de la onda cuestan en un Android de gama media — mitigación: el recorte se quita (`Clip.none`) al terminar, el oscurecimiento es un velo pintado y el perfilado en un teléfono real queda para la persona (R1 de la épica).
 - R2: `Picture.toImageSync` en las pruebas de widgets — mitigación: la tabla de alfas del grano es una función pura probada aparte y la imagen se crea perezosamente una sola vez.
 - R3: C9 y C11 crean archivos en `lib/core/design/widgets/` en paralelo — mitigación: este corte solo crea archivos nuevos con nombres propios y no toca archivos existentes.
+
+## Cierre
+
+### Resumen
+
+- `lib/core/design/motion/fr_transitions.dart`: `FrTransitions.wave`, `slide`, `expand` y `fade` como `RouteTransitionsBuilder` (sirven en `CustomRoute` de auto_route), `FrPageRoute` con `delegatedTransition` para que la pantalla de abajo se aparte, `FrTransitions.recede` para las hojas y `FrTouchOrigin` para el origen de la onda. Volver saca la pantalla hacia la derecha; con movimiento reducido todo es un fundido de 280 ms.
+- `lib/core/design/widgets/`: `FrScaffold` con `FrBackdrop` (retícula de 22 px y grano `FrGrain` sembrado, creado una vez sin assets) y dock; `FrSheet`, `FrSheetRoute` y `showFrSheet`; `FrBanner` (aviso, alerta, info y flotante para el eco); `FrToast` y `showFrToast`; `StatusIsland` siempre oscura (en línea, al aire, recibiendo, reconectando, conectando y eventos).
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (158 tests).
+
+### Desviaciones
+
+- `FrSheetRoute` es un `PopupRoute` y no un `PageRoute`: el `HeroController` de `MaterialApp` deja fuera de escena el primer cuadro de cualquier `PageRoute`, y una hoja no lleva Hero. Para que una `FrPageRoute` también se aleje bajo la hoja, su `canTransitionTo` acepta rutas con `delegatedTransition`.
+- `FrPageRoute.transition` es obligatorio (sin valor por defecto) y `FrTransitions.recede` es un campo `DelegatedTransitionBuilder`, no un método.
+- Desbloqueo S1 en `test/core/design/motion/fr_transitions_test.dart`: `paints` se convierte a `Matcher`, se agrega un `pump` antes de medir la superficie de la expansión (Hero), y el test de los constructores sueltos con movimiento reducido prueba `FrTransitions.slide` con la animación en 0,5 (pasó de "opacidad entre 0 y 1" a "opacidad 0,5"), porque Flutter acorta 20 veces las rutas normales con "Quitar animaciones".
+- Desbloqueo S2 en `test/core/design/widgets/fr_scaffold_test.dart`: un `pumpAndSettle` tras cambiar de tema, porque `MaterialApp` anima el cambio; no cambió ninguna aserción.
+- Se omitieron el brillo 1,5 de la pantalla que entra en la onda, el `saturate(.8)` del velo y el desenfoque del fundido (filtros de pantalla completa).
+- `fr_transitions.dart` quedó en 499 líneas de código (aviso desde 300); es una sola responsabilidad: las transiciones y sus efectos de salida.
+
+### Decisiones
+
+- Las rutas, el aviso y el toast usan `AnimationBehavior.preserve` para que sus fundidos duren lo indicado aunque el sistema pida quitar animaciones.
+- La isla solo vuelve a entrar cuando cambia el tipo de estado; dentro del mismo estado (contador de "al aire", segundos de reconexión) el texto cambia en su lugar. Con movimiento reducido no usa `AnimatedSize` y el punto queda encendido.
+- El toast va abajo al centro, 112 px sobre el área segura (parámetro `bottom`), ignora los toques y se reemplaza al mostrar otro.
+- El grano se pinta bajo el contenido, en `ink` al 5 % con mezcla normal (A2).
+
+### Pendientes
+
+- Conectar las transiciones al router y usar estas superficies en las pantallas (C4, C12, C15 a C19).
+- Perfilar el desenfoque del velo, el recorte de la onda y el grano en un Android de gama media (R1 de la épica).
+- Cambiar `Icons.close_rounded` del cierre de `FrBanner` por el ícono de `FrIcons` cuando llegue C11.
