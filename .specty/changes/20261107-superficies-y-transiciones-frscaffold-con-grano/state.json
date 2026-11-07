@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "20261107-superficies-y-transiciones-frscaffold-con-grano",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/superficies-y-transiciones-frscaffold-con-grano",
+  "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 11,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:7b87c062e6d65673adc1078163a76f7d8999dee783cedc54185d95df93ea5cd0",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:09b72d141ff5135af2ae66fdcd0f15143b9a13e3d53a17e0ac16685b4641b338",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:89af9ed5ab4cc2bf1e9745e8f32e057e47612b3b6b0d0087b63ec7158bef4544",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:d49bd4104c915ac9ea19aa9de37ce714805599685de06dcafbe8bd9666079036",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 6,
+    "T": 4,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:f3cd751b0c1bc0968a4d130e9b440194258c91570cd1157140f200020717044a",
+    "at": "2026-11-07T11:05:40.951Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
