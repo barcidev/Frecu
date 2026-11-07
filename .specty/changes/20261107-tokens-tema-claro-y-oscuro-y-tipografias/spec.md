@@ -56,7 +56,7 @@ Sustituir el tema Material genérico (semilla teal) por los tokens de Portadora 
 
 ## Tareas
 
-- [ ] T1: Colores de noche y día con contraste verificado
+- [x] T1: Colores de noche y día con contraste verificado
   - files: lib/core/design/tokens/fr_colors.dart, test/core/design/fr_colors_test.dart
   - ac: AC3
   - verify: flutter test test/core/design/fr_colors_test.dart

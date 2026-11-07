@@ -40,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "d9301d2de1b90e9570ea50e3d882d30a01146db2",
+      "startedAt": "2026-11-07T04:49:15.053Z",
+      "doneAt": "2026-11-07T04:54:13.577Z",
+      "summary": "FrColors (ThemeExtension) con los tokens de noche y día de base.css, canales p1–p5, copyWith y lerp compactos por orden de tokens; contraste verificado en ambos temas."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
