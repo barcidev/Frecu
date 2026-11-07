@@ -87,6 +87,21 @@ void expectRect(Rect actual, Rect expected, {double tolerance = 0.02}) {
   expect(actual.bottom, closeTo(expected.bottom, tolerance), reason: 'bottom');
 }
 
+/// Largo de un arco de círculo trazado con `Path.arcTo`.
+///
+/// `PathMetrics` mide las curvas con segmentos rectos, así que el largo de
+/// referencia es el de un arco nativo del mismo círculo y no π·r exacto.
+double arcLength(Offset center, double radius, double start, double sweep) {
+  final path = Path()
+    ..arcTo(
+      Rect.fromCircle(center: center, radius: radius),
+      start,
+      sweep,
+      true,
+    );
+  return path.computeMetrics().single.length;
+}
+
 Matcher formatErrorAt(int offset) =>
     throwsA(isA<FormatException>().having((e) => e.offset, 'offset', offset));
 
@@ -294,7 +309,13 @@ void main() {
     test('AC1: un arco con barrido 0 baja y con barrido 1 sube', () {
       final down = build('M5.5 11.5a6.5 6.5 0 0 0 13 0');
       expectRect(tightBounds(down), const Rect.fromLTRB(5.5, 11.5, 18.5, 18));
-      expect(down.computeMetrics().single.length, closeTo(math.pi * 6.5, 0.02));
+      expect(
+        down.computeMetrics().single.length,
+        closeTo(
+          arcLength(const Offset(12, 11.5), 6.5, math.pi, -math.pi),
+          1e-3,
+        ),
+      );
 
       final up = build('M5.5 11.5a6.5 6.5 0 0 1 13 0');
       expectRect(tightBounds(up), const Rect.fromLTRB(5.5, 5, 18.5, 11.5));
@@ -305,7 +326,10 @@ void main() {
       expectRect(tightBounds(path), const Rect.fromLTRB(5, 5, 15, 15));
       expect(
         path.computeMetrics().single.length,
-        closeTo(1.5 * math.pi * 5, 0.03),
+        closeTo(
+          arcLength(const Offset(10, 10), 5, -math.pi / 2, 1.5 * math.pi),
+          1e-3,
+        ),
       );
     });
 

@@ -39,7 +39,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "4dccc65a4e136e850fd1e2972309226fc439a74c",
+      "startedAt": "2026-11-07T11:08:35.964Z",
+      "doneAt": "2026-11-07T16:06:35.021Z",
+      "summary": "Parser propio del atributo d de SVG a segmentos absolutos (todos los comandos, números compactos, errores con posición) y buildSvgPath con arcos por Path.arcToPoint; test de arcos corregido por la persona."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

@@ -55,7 +55,7 @@ La app tiene su propio set de íconos de Portadora: los 37 íconos del prototipo
 
 ## Tareas
 
-- [ ] T1: Parser propio de trazos SVG
+- [x] T1: Parser propio de trazos SVG
   - files: lib/core/design/icons/svg_path_parser.dart, test/core/design/icons/svg_path_parser_test.dart
   - ac: AC1
   - verify: flutter test test/core/design/icons/svg_path_parser_test.dart
