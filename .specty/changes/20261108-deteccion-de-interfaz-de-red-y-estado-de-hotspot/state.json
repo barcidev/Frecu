@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
   "revision": 2,
@@ -45,6 +45,10 @@
     "AC": 7,
     "T": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T16:27:52.263Z"
+  "lockedTests": {
+    "test/features/network/data/network_interface_datasource_test.dart": "sha256:2b821c094b9260f7262878ea3febd75319a61befdb77efe0378fae661b605ecd",
+    "test/features/network/data/network_repository_impl_test.dart": "sha256:548bfceee1fa8fbd6a346cdc128842f84f4ff47cece65a31f1b2bfe43d77c910",
+    "test/features/network/domain/network_state_test.dart": "sha256:ac4e4c5093f5f9fa0bbe3d4d24630a283ce63ebee050b7239d24d9f6581685f1",
+    "test/features/network/presentation/network_provider_test.dart": "sha256:f61bd884b426fbd2d88d3c95d997c0273b6afeb8c6f4006a2ba87ea26b07265c"
+  }
 }
