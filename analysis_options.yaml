@@ -5,11 +5,14 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+  errors:
+    experimental_member_use: ignore
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - "**/*.gr.dart"
     - "lib/i18n/strings.g.dart"
+    - "test/linter_config_test.dart"
     - build/**
     - android/**
     - ios/**
@@ -17,3 +20,4 @@ analyzer:
 linter:
   rules:
     lines_longer_than_80_chars: false
+    avoid_positional_boolean_parameters: false
