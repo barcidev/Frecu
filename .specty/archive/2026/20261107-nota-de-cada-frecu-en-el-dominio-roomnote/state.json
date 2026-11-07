@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-nota-de-cada-frecu-en-el-dominio-roomnote",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/nota-de-cada-frecu-en-el-dominio-roomnote",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:86dc385a2640f3c1b20352d1cc48022d0738bebecc2d7e273f513c3f44c1efa7",
@@ -67,12 +67,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "66eb881c5938d9a53a116e66ab5f38071b3c10f9",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:45:54.491Z",
       "doneAt": "2026-11-07T16:47:23.256Z",
-      "summary": "Room, RoomInvite y NearbyRoom suman @RoomNoteConverter() RoomNote? note (JSON como semitono; ausente o inválido = sin nota), regenerados con build_runner; docs/dominio.md suma Nota (RoomNote)."
+      "summary": "Room, RoomInvite y NearbyRoom suman @RoomNoteConverter() RoomNote? note (JSON como semitono; ausente o inválido = sin nota), regenerados con build_runner; docs/dominio.md suma Nota (RoomNote).",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -86,6 +86,7 @@
     "R": 2,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-07T16:47:56.304Z",
   "lockedTests": {
     "test/features/lobby/domain/nearby_room_note_test.dart": "sha256:46e763e7d2e3695607458ee398a3c5f7cb07c9cc5a2054d43ffe6482f7ae1225",
     "test/features/room/domain/assign_room_note_test.dart": "sha256:acea7a5a6de3dc72533427c8a6784dcb00aa81f8184800c8d86fef0ea0ec9af9",

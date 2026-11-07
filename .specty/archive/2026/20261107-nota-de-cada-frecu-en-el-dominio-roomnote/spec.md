@@ -80,3 +80,29 @@ Cada frecu tendrá una nota musical calculada con su hora de apertura sobre el c
 
 - R1: `json_serializable` con un conversor anulable podría generar una lectura que falle con `note` ausente — mitigación: las pruebas de AC4 leen JSON sin `note`, con `null` y fuera de rango.
 - R2: Regenerar con `build_runner` podría reescribir otros archivos generados — mitigación: revisar `git status` tras generar y dejar solo los de este alcance.
+
+## Cierre
+
+### Resumen
+
+- `RoomNote` (`features/room/domain/entities/room_note.dart`): Freezed 3 con un único campo `semitone` (0–23, `@Assert`) y derivados `pitchClass`, `octave`, `midi`, `name` (solfeo), `fifthsPosition` y `hz` (La4 = 440 Hz, temperamento igual); constantes `circleOfFifths` y `semitoneCount`, `tryFromSemitone` y `RoomNoteConverter` (JSON como semitono; ausente o fuera de 0–23 = sin nota).
+- `AssignRoomNote` (`features/room/domain/usecases/assign_room_note.dart`): `UseCase` con `assign` síncrono, como `BuildInviteQr`. Hora local mod 12 sobre el círculo de quintas, octava 4 de 0 a 11 h y 5 de 12 a 23 h, minutos ignorados; salta las quintas ocupadas de la misma octava con vuelta de Fa a Do y, si las 12 lo están, deja la de su hora (16:24 → Mi5, 659,26 Hz; 15:05 → La5, 880 Hz).
+- `Room`, `RoomInvite` y `NearbyRoom` suman `@RoomNoteConverter() RoomNote? note`, regenerados con `build_runner`; los constructores existentes no cambian. `docs/dominio.md` suma el término Nota (`RoomNote`).
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (150 tests, 27 nuevos de AC1–AC4).
+
+### Desviaciones
+
+- Ampliación S1 en T1: `.specty/config.yaml` pasa a `scope.generated: ["**/*.g.dart", "**/*.freezed.dart"]`, porque `dart-strict` rechazaba los `// ignore_for_file` y `// ignore:` que Freezed escribe en los `.freezed.dart`. El valor se trajo de develop (commit e8b3a51), así que coincide con él.
+
+### Decisiones
+
+- La nota se guarda solo como semitono; todo lo demás se deriva, así que no puede contradecirse y es la misma forma que viajará como `n` en mDNS y QR (C14).
+- `name` devuelve el solfeo del prototipo (Do, Re♭ … Si); los nombres en inglés y el formato «659,3 Hz» quedan para la presentación con slang.
+- `fifthsPosition` expone la hora del reloj de quintas (0 = 12 h) para el reloj de C17 sin repetir la tabla.
+- `AssignRoomNote` toma `createdAt.toLocal().hour` (A3 de la épica: hora local del anfitrión) y recibe `Iterable<RoomNote>`; quien tenga `NearbyRoom` sin nota pasa `rooms.map((r) => r.note).nonNulls`.
+- El conversor JSON es tolerante: un `note` ausente, nulo o fuera de rango se lee como sin nota, en lugar de fallar.
+
+### Pendientes
+
+- Calcular la nota al crear la frecu (`CreateRoom`/`RoomRepository` con `AssignRoomNote` y las notas de las frecus cercanas) y publicarla: C14 y C17.
+- Mostrar la nota (sintonizador, lista, reloj de quintas, cabecera) y traducir sus nombres al inglés: C4, C15 y C17.
