@@ -24,8 +24,9 @@ lib/
 │   ├── router/
 │   │   ├── app_router.dart         # @AutoRouterConfig
 │   │   └── guards/                 # PermissionsGuard
-│   └── theme/
+│   └── theme/                      # AppTheme.light / AppTheme.dark desde los tokens de Portadora
 ├── core/
+│   ├── design/                     # tokens de Portadora (FrColors, FrType, FrSpace, FrRadii, FrMotion) y context.fr
 │   ├── error/                      # Failure (sealed, freezed)
 │   ├── result/                     # Result<T> (sealed, freezed)
 │   ├── usecase/                    # contrato base UseCase<T, Params>
