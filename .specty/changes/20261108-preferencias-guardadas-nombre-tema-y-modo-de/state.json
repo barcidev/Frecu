@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-preferencias-guardadas-nombre-tema-y-modo-de",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/preferencias-guardadas-nombre-tema-y-modo-de",
   "baseCommit": "4ec5f1f87e33a578c3e4bcd7f869ff8fedbb49f9",
   "revision": 2,
@@ -55,6 +55,9 @@
     "T": 3,
     "R": 1
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T16:12:08.593Z"
+  "lockedTests": {
+    "test/features/settings/data/preferences_repository_test.dart": "sha256:11248ecdb96ccc05c067c678117d636813d774f975ef413826db80ce862fa4b3",
+    "test/features/settings/domain/preferences_test.dart": "sha256:6d7f44ce3fe78738901fb4002ad376a2ac21c0869cc340e3d3db9ce728449b00",
+    "test/features/settings/presentation/preferences_provider_test.dart": "sha256:4877917174552cb01661243fb18255c400f1ddd0d1148811384354e0d6e3395d"
+  }
 }
