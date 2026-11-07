@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "id": "20261108-ajustes-con-nombre-tema-auto-claro-oscuro-y",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/ajustes-con-nombre-tema-auto-claro-oscuro-y",
+  "baseCommit": "2408d791f5d9b74e31affbfeb8df7079d6afefc4",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f6c04604ff5fc7aee9ea431766951dab1c4119d123e6728d0b4a9f8eaf2d35dc",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:7e6e47ce3babe4172f4f38649449930e89670d7a92ebdf49b31e59e691a2b351",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:d7e3e2af4a2e9106e924cbe98a02e227ff23b6ee73662ab1d6733fc9127838c9",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:f539dfefcb338791c81f20b6a05d0079237b4a34d1623b394a0efe6efd66185d",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:b13a0600fbab4ca1b374321f51ac01180aceea853b9d3694032bda5182bd58a2",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:52db9328d880b1e7b919a27544e58b5c5da2b584906b2ba39a059e7bc02244b6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 6,
+    "AC": 7,
+    "T": 2,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:ceb4d3012c49f3d7dafb65b25d97415c74ca21e388776f074ae37560f77a362b",
+    "at": "2026-11-07T16:55:52.022Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
