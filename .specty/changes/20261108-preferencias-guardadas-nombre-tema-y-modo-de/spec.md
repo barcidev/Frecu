@@ -64,7 +64,7 @@ Guardar en el teléfono el nombre visible, el tema (Auto, Claro u Oscuro) y el m
 
 ## Tareas
 
-- [ ] T1: Dominio de preferencias
+- [x] T1: Dominio de preferencias
   - files: lib/features/settings/domain/entities/theme_preference.dart, lib/features/settings/domain/entities/preferences.dart, lib/features/settings/domain/entities/preferences.freezed.dart, lib/features/settings/domain/repositories/preferences_repository.dart, test/features/settings/domain/preferences_test.dart
   - ac: AC1, AC3
   - verify: flutter test test/features/settings/domain/preferences_test.dart

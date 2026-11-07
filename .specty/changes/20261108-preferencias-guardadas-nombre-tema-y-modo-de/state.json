@@ -44,7 +44,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "56e96cbde2a2af758b4fa6f6cad93fa543727397",
+      "startedAt": "2026-11-07T16:12:18.763Z",
+      "doneAt": "2026-11-07T16:13:48.935Z",
+      "summary": "Dominio de settings: enum ThemePreference, entidad Freezed Preferences (sin nombre, Auto y PTT reusando TalkMode de room) con normalizeDisplayName (1 a 20 caracteres) y contrato PreferencesRepository; saveDisplayName devuelve Result<String>."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
