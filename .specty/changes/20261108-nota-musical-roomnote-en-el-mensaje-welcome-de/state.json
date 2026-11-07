@@ -59,12 +59,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "40f9c0fac2790984a0b942e0f2af841c5c871503",
+      "attempts": 1,
       "startedAt": "2026-11-07T18:33:43.045Z",
       "doneAt": "2026-11-07T18:34:14.772Z",
-      "summary": "Configurar RoomNote en start de SignalingServerDataSource y enviarla en el mensaje welcome"
+      "summary": "Configurar RoomNote en start de SignalingServerDataSource y enviarla en el mensaje welcome",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "aeda5ea3f622dce93741c3c2ea95b710025c8f19",
+      "startedAt": "2026-11-07T18:34:15.215Z",
+      "doneAt": "2026-11-07T18:34:36.166Z",
+      "summary": "Propagar note en createRoom y asignar nota recibida en welcome en RoomRepositoryImpl"
     }
   },
   "pending": {

@@ -73,7 +73,7 @@ Permitir que la nota musical (RoomNote) de una sala (frecu) viaje dentro del men
   - files: lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/signaling_server_test.dart
   - ac: AC2
   - verify: fvm flutter test test/features/room/data/signaling_server_test.dart
-- [ ] T3: Propagación de note en createRoom y asignación en _onWelcome de RoomRepositoryImpl
+- [x] T3: Propagación de note en createRoom y asignación en _onWelcome de RoomRepositoryImpl
   - files: lib/features/room/domain/repositories/room_repository.dart, lib/features/room/domain/usecases/create_room.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_repository_test.dart
   - ac: AC3, AC4
   - verify: fvm flutter test test/features/room/data/room_repository_test.dart
