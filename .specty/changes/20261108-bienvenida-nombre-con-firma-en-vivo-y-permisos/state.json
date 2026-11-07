@@ -6,6 +6,13 @@
   "branch": "feature/bienvenida-nombre-con-firma-en-vivo-y-permisos",
   "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:7856f025fc74fe596673a7c0d3cd8bafbc29eb56e1ca479e6a0cb3e0f9684ed9",
+    "at": "2026-11-07T17:31:00.647Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 16,
@@ -56,12 +63,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:7856f025fc74fe596673a7c0d3cd8bafbc29eb56e1ca479e6a0cb3e0f9684ed9",
-    "at": "2026-11-07T17:31:00.647Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T17:51:01.262Z"
 }
