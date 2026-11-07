@@ -5,7 +5,14 @@
   "phase": "implementing",
   "branch": "bugfix/actualizar-compilesdk-a-37-para-compatibilidad",
   "baseCommit": "0c191a26d1c5fc30a5ca3588ebe4687b542c3163",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:be8fd8d87b4071ede138dc80a1e763b26af9cf1ca2d260e52b7acc6bb480f319",
+    "at": "2026-11-07T21:38:45.046Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 3,
@@ -16,19 +23,20 @@
     ]
   },
   "items": {},
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "active",
+      "baseCommit": "335fc2183bd9ef0397c094c2518a10d8b5ffec54",
+      "attempts": 1,
+      "startedAt": "2026-11-07T19:13:51.417Z",
+      "scopeExtra": []
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
   },
   "maxIds": {
     "T": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:1e97375a416b714a3df808675acaf1d23f92891c24272b16785654c2e72b01a0",
-    "at": "2026-11-07T19:13:50.939Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

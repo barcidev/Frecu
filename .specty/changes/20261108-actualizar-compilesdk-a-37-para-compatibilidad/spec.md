@@ -16,4 +16,4 @@ Actualizar `compileSdk` a la versión 37 en `android/app/build.gradle.kts` para 
 
 - [ ] T1: Configurar compileSdk en 37
   - files: android/app/build.gradle.kts
-  - verify: ./gradlew assembleRelease -p android -x lint
+  - verify: ./android/gradlew assembleRelease -p android -x lint
