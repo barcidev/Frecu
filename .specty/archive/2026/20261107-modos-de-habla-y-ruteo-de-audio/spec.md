@@ -50,3 +50,25 @@ La épica se estructura en dos cortes verticales:
 ## Riesgos
 
 - R1: El comportamiento de ruteo Bluetooth varía según el fabricante y versión de Android/iOS — mitigación: configurar `AudioSession` con `AVAudioSessionCategoryOptions.allowBluetooth` y `AndroidAudioUsage.voiceCommunication` para delegar la conmutación a la capa del sistema operativo con fallback seguro a altavoz.
+
+## Cierre
+
+### Resumen
+
+Se completó en su totalidad la **Fase 4: Modos de habla y ruteo de audio** a través de sus dos cortes verticales:
+- **Corte C1 (Ruteo de audio a altavoz, auricular y Bluetooth)**: Conmutación dinámica de ruta de reproducción en `AudioSessionDataSource` y `VoiceRepositoryImpl`, reactividad en `voice_provider` y botón de acción en `RoomPage` con iconos contextuales (`volume_up`, `phone_in_talk`, `bluetooth_audio`) y fallback a altavoz ante desconexiones.
+- **Corte C2 (Modos de habla PTT interactivo y micrófono abierto)**: Implementación de botón PTT táctil/gestual (`Listener` con `onPointerDown` y `onPointerUp`/`onPointerCancel`) con respuesta háptica y animaciones, selector de modo de habla (`TalkMode.pushToTalk` vs `TalkMode.openMic`) conmutando instantáneamente sin renegociaciones WebRTC, y refactorización modular de `RoomPage` extrayendo `_PttButton`, `_OpenMicControl` y `_TalkModeSelector` para preservar la legibilidad y cumplir límites de líneas.
+- Se verificaron todos los criterios de aceptación (AC1, AC2, AC3, AC4) con una suite completa de pruebas unitarias y de widgets en Flutter (61 pruebas pasando al 100%) y 0 advertencias de análisis estático con `very_good_analysis`.
+
+### Desviaciones
+
+- Ninguna respecto al alcance ni diseño previsto.
+
+### Decisiones
+
+- **Control PTT basado en Pointer events**: Se utilizaron eventos `Listener.onPointerDown` y `onPointerUp/Cancel` en lugar de `GestureDetector.onTapDown` para garantizar una respuesta táctil inmediata y segura ante deslizamientos accidentales o cancelaciones del sistema.
+- **Modulación de volumen y silencio sin renegociación**: La activación y corte de voz conmuta puramente `track.enabled` en la pista de audio local, asegurando latencia cero y cero consumo innecesario de señalización.
+
+### Pendientes
+
+- **Fase 5 (Segundo plano y resiliencia)**: Servicio foreground con notificación permanente en Android, background audio en iOS, heartbeats (`ping`/`pong`), reconexión automática con backoff exponencial y gestión robusta de desconexiones imprevistas del anfitrión.

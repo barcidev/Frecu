@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261107-modos-de-habla-y-ruteo-de-audio",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/modos-de-habla-y-ruteo-de-audio",
   "baseCommit": "113417268568c506c991ea9c082d2f79109f0f03",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:19ad277dc9232ff5e67e3e518d9588847d1682a9f458cb592b049a9fdd307909",
+    "at": "2026-11-06T21:14:38.681Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -39,11 +46,5 @@
     "C": 2,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:19ad277dc9232ff5e67e3e518d9588847d1682a9f458cb592b049a9fdd307909",
-    "at": "2026-11-06T21:14:38.681Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  }
+  "closingSubmittedAt": "2026-11-07T01:57:14.327Z"
 }

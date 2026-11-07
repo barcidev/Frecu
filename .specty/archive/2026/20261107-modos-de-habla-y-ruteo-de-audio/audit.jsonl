@@ -1,0 +1,7 @@
+{"ts":"2026-11-06T21:12:35.021Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"epic","type":"feat","branch":"feature/modos-de-habla-y-ruteo-de-audio","resolves":["P15","P5"]}}
+{"ts":"2026-11-06T21:14:32.135Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:19ad277dc9232ff5e67e3e518d9588847d1682a9f458cb592b049a9fdd307909","size":"S","warnings":0}}
+{"ts":"2026-11-06T21:14:38.696Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:19ad277dc9232ff5e67e3e518d9588847d1682a9f458cb592b049a9fdd307909","channel":"delegated","delegated":true}}
+{"ts":"2026-11-07T01:56:20.019Z","actor":"specty","event":"epic.slicesDone","data":{"slices":{"C1":"20261107-ruteo-de-audio-a-altavoz-auricular-y-bluetooth","C2":"20261107-modos-de-habla-ptt-interactivo-y-microfono"}}}
+{"ts":"2026-11-07T01:56:25.822Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":1,"delegated":true}}
+{"ts":"2026-11-07T01:57:14.328Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":2,"hash":"sha256:39081599f63dd1a5a1b2b26954eac41a2e4605dde9ff01036ae9c60d3838da4e","size":"S","warnings":0}}
+{"ts":"2026-11-07T01:57:20.414Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
