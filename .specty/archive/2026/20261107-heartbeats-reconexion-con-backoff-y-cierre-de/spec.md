@@ -75,3 +75,26 @@ Implementar el monitoreo continuo de conexión mediante heartbeats periódicos (
 ## Riesgos
 
 - R1: Reintentos de reconexión rápidos podrían saturar la red o colisionar en reconexiones simultáneas — mitigación: el backoff exponencial con duplicación gradual (1s, 2s, 4s...) y tope de 15 segundos evita tormentas de reconexión.
+
+## Cierre
+
+### Resumen
+
+Se implementó el ciclo completo de heartbeats y resiliencia de conexión para salas de voz locales (Frecu):
+
+1. **Heartbeats y watchdog**: `SignalingClientDataSource` y `SignalingServerDataSource` ahora gestionan intercambio periódico de `ping`/`pong` y watchdogs de inactividad por par, detectando cortes de red con `peerTimeout`.
+2. **Reconexión con backoff**: `RoomRepositoryImpl` maneja transiciones automáticas a `RoomStatus.reconnecting()`, reintentando la conexión con backoff exponencial antes de transicionar a `RoomStatus.closed('host_unreachable')`. Además, difunde y maneja eventos `room_closed`.
+3. **Interfaz de usuario**: `RoomInfoCard` muestra el estado de reconexión de forma visual y reactiva, y `RoomPage` alerta con un diálogo informativo modal ante el cierre de la sala redirigiendo al usuario al lobby.
+
+### Desviaciones
+
+- En `RoomInfoCard`, se optó por un icono estático `Icons.sync` en lugar de un indicador con animación continua indeterminada, garantizando consistencia visual y evitando retenciones de fotogramas en el pipeline de renderizado y pruebas.
+
+### Decisiones
+
+- Intervalos configurables en constructores de datasources para facilitar pruebas unitarias deterministas sin esperas prolongadas.
+- Preservación de parámetros de conexión en memoria en `RoomRepositoryImpl` para habilitar reintentos limpios sin acoplar capas superiores.
+
+### Pendientes
+
+- Ninguno para este corte; el soporte de servicio en segundo plano (foreground service) y pantalla apagada queda programado para el siguiente corte (C2).

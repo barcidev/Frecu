@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-heartbeats-reconexion-con-backoff-y-cierre-de",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/heartbeats-reconexion-con-backoff-y-cierre-de",
   "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:5990dcef9724d71c0c435f9acc110c1d3d8238329b74b225e2d3eb36d4b6ed89",
@@ -61,12 +61,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "412562d317166a7f17ee217a0628a22551b1f28c",
+      "attempts": 1,
       "startedAt": "2026-11-07T04:39:08.675Z",
       "doneAt": "2026-11-07T04:50:20.524Z",
-      "summary": "Visualización de reconexión y diálogo de sala cerrada en RoomPage y RoomInfoCard"
+      "summary": "Visualización de reconexión y diálogo de sala cerrada en RoomPage y RoomInfoCard",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -79,6 +79,7 @@
     "T": 3,
     "R": 1
   },
+  "closingSubmittedAt": "2026-11-07T04:51:08.892Z",
   "lockedTests": {
     "test/features/room/data/room_repository_test.dart": "sha256:936b0d1170d2805c193baf402b9be76236b84408ed45015bc622d704eeb1089d",
     "test/features/room/data/signaling_server_test.dart": "sha256:aa1bb194fb5c98047a4f7dd42d14b90385bebea15e77bcd3946469076cb79fef",
