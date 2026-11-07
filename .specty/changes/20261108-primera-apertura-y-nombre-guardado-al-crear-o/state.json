@@ -44,7 +44,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "e9f5fcc00390d669ade8ce1333124fefbca7f5f2",
+      "startedAt": "2026-11-07T18:14:28.513Z",
+      "doneAt": "2026-11-07T18:16:09.713Z",
+      "summary": "FrecuApp sin router inyectado resuelve la ruta inicial con deepLinkBuilder: needsOnboardingProvider (lib/app) pide el recorrido si no hay nombre guardado o queda algún permiso pendiente; se decide una sola vez por apertura, así que terminar el recorrido con un permiso negado no lo reabre"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

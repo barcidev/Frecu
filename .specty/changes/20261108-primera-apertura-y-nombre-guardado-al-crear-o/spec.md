@@ -58,7 +58,7 @@ Que el recorrido de la primera vez (bienvenida, nombre y permisos, C12) se abra 
 
 ## Tareas
 
-- [ ] T1: Recorrido solo en la primera apertura o con permisos por pedir
+- [x] T1: Recorrido solo en la primera apertura o con permisos por pedir
   - files: lib/app/needs_onboarding_provider.dart, lib/app/needs_onboarding_provider.g.dart, lib/app/app.dart, test/app/first_open_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/app/first_open_test.dart test/app_test.dart
