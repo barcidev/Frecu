@@ -43,14 +43,25 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "test/core/design/motion/fr_transitions_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "003d6ef79ccc38b9b5e98fd8706bac81447fa201",
+      "attempts": 1,
       "startedAt": "2026-11-07T11:19:43.361Z",
       "doneAt": "2026-11-07T16:09:10.555Z",
-      "summary": "FrTransitions (onda, deslizamiento, expansión, fundido y volver) como RouteTransitionsBuilder y FrPageRoute con delegatedTransition y preserve; con movimiento reducido todo es un fundido de 280 ms. Parche S1 aplicado."
+      "summary": "FrTransitions (onda, deslizamiento, expansión, fundido y volver) como RouteTransitionsBuilder y FrPageRoute con delegatedTransition y preserve; con movimiento reducido todo es un fundido de 280 ms. Parche S1 aplicado.",
+      "scopeExtra": [
+        "test/core/design/motion/fr_transitions_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "test/core/design/widgets/fr_scaffold_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "63bf806ba0b2e7b3faa498f6340e0e8604de5a90",
+      "startedAt": "2026-11-07T16:09:12.201Z",
+      "doneAt": "2026-11-07T16:25:34.836Z",
+      "summary": "FrScaffold sobre bg0 con FrBackdrop (retícula de 22 px en ink al 6 % desvanecida al 55 % y grano FrGrain de 128 px sembrado y cacheado), dock con degradado y registro del toque para la onda. Parche S2 aplicado."
     }
   },
   "pending": {
@@ -62,12 +73,12 @@
     "AC": 6,
     "T": 4,
     "R": 3,
-    "S": 1
+    "S": 2
   },
   "lockedTests": {
     "test/core/design/motion/fr_transitions_test.dart": "sha256:1e3665fa16980842e5f7c644c64b9de3d7ac7187cd95347e963dfcc88f5e393c",
     "test/core/design/widgets/fr_notices_test.dart": "sha256:8628a95b33a650618cc9f899b0bcd95b59a029bd9b25e4c8728270260add4066",
-    "test/core/design/widgets/fr_scaffold_test.dart": "sha256:d2b3fb535621f3bc612cafd6f0a17bb6a0a70a9a7187652e703692566f02c914",
+    "test/core/design/widgets/fr_scaffold_test.dart": "sha256:83f35f887600d48d2ccc50836b48c4f93f8d3948861c8c29b033ddb3dbfc4138",
     "test/core/design/widgets/fr_sheet_test.dart": "sha256:7672e33ef344eaa13e1260f4b222b096fb55f9eb95da17cda32042d0694233e1"
   }
 }

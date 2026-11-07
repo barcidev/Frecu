@@ -37,6 +37,8 @@ void main() {
             const FrScaffold(body: Text('Hola')),
             theme: theme,
           );
+          // MaterialApp anima el cambio de tema: se espera a que termine.
+          await tester.pumpAndSettle();
 
           expect(
             tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,

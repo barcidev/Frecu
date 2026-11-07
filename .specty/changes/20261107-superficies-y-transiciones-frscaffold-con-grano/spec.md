@@ -72,7 +72,7 @@ Crear en `lib/core/design/` las superficies de Portadora que usarán las pantall
   - files: lib/core/design/motion/fr_transitions.dart, test/core/design/motion/fr_transitions_test.dart
   - ac: AC3, AC6
   - verify: flutter test test/core/design/motion/fr_transitions_test.dart
-- [ ] T2: `FrScaffold` con retícula y grano
+- [x] T2: `FrScaffold` con retícula y grano
   - files: lib/core/design/widgets/fr_scaffold.dart, test/core/design/widgets/fr_scaffold_test.dart
   - ac: AC1
   - verify: flutter test test/core/design/widgets/fr_scaffold_test.dart
