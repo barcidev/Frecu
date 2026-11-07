@@ -1,0 +1,3 @@
+{"ts":"2026-11-07T02:15:38.573Z","actor":"agent","tool":"antigravity","event":"change.created","data":{"kind":"standard","type":"feat","branch":"feature/configurar-reglas-de-analisis-para-miembros"}}
+{"ts":"2026-11-07T02:16:16.932Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":1,"hash":"sha256:2ed91b86c9486e914028143100f8da28b74c58c4301743b7a48b3b870de74b85","size":"S","warnings":0}}
+{"ts":"2026-11-07T02:16:23.038Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"spec.approved","data":{"revision":1,"hash":"sha256:2ed91b86c9486e914028143100f8da28b74c58c4301743b7a48b3b870de74b85","channel":"delegated","delegated":true}}
