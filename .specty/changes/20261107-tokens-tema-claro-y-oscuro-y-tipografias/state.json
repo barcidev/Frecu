@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "20261107-tokens-tema-claro-y-oscuro-y-tipografias",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/tokens-tema-claro-y-oscuro-y-tipografias",
+  "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:67cb6b684c4cb333eb436598ba6ecc8af02a4a1648251c42da358c662343ea30",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:e31f2f274bcaeb8229c33c9a33b299a1e1001be6fcf402b37b616f18f2ff94d3",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:566ac0721db7bed8583b06607db99af2010d9c36e6decbc870ea5ae85ee8035e",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:78553c89ae68931cc1394a8f20fba75638054cf262d931750067feb864d40094",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:09b9798f2a43364f7542dede49284c2a567d4ff0f2582ddd05ba0650428588d0",
+    "at": "2026-11-07T04:23:05.319Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
