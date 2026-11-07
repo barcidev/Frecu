@@ -40,7 +40,19 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "test/core/design/motion/fr_transitions_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "003d6ef79ccc38b9b5e98fd8706bac81447fa201",
+      "startedAt": "2026-11-07T11:19:43.361Z",
+      "doneAt": "2026-11-07T16:09:10.555Z",
+      "summary": "FrTransitions (onda, deslizamiento, expansión, fundido y volver) como RouteTransitionsBuilder y FrPageRoute con delegatedTransition y preserve; con movimiento reducido todo es un fundido de 280 ms. Parche S1 aplicado."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -49,10 +61,11 @@
     "A": 4,
     "AC": 6,
     "T": 4,
-    "R": 3
+    "R": 3,
+    "S": 1
   },
   "lockedTests": {
-    "test/core/design/motion/fr_transitions_test.dart": "sha256:ba48c56c494ca0b853accc95da115745caa5eac3142d499637cd3978feb13980",
+    "test/core/design/motion/fr_transitions_test.dart": "sha256:1e3665fa16980842e5f7c644c64b9de3d7ac7187cd95347e963dfcc88f5e393c",
     "test/core/design/widgets/fr_notices_test.dart": "sha256:8628a95b33a650618cc9f899b0bcd95b59a029bd9b25e4c8728270260add4066",
     "test/core/design/widgets/fr_scaffold_test.dart": "sha256:d2b3fb535621f3bc612cafd6f0a17bb6a0a70a9a7187652e703692566f02c914",
     "test/core/design/widgets/fr_sheet_test.dart": "sha256:7672e33ef344eaa13e1260f4b222b096fb55f9eb95da17cda32042d0694233e1"

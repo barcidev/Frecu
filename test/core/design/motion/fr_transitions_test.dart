@@ -136,8 +136,9 @@ void main() {
             .ancestor(of: find.byKey(keyB), matching: find.byType(CustomPaint))
             .evaluate()
             .any(
-              (element) => (paints..circle(style: PaintingStyle.stroke))
-                  .matches(element.renderObject, <dynamic, dynamic>{}),
+              (element) =>
+                  ((paints..circle(style: PaintingStyle.stroke)) as Matcher)
+                      .matches(element.renderObject, <dynamic, dynamic>{}),
             );
         expect(ringed, isTrue);
         expect(tester.getRect(find.byKey(keyA)).width, lessThan(800));
@@ -191,6 +192,8 @@ void main() {
         final surface = find.byKey(FrTransitions.expandSurfaceKey);
 
         unawaited(navigator.push(route));
+        await tester.pump();
+        // El primer cuadro de un push deja la ruta fuera de escena (Hero).
         await tester.pump();
 
         expect(tester.getRect(surface), rectMoreOrLessEquals(from, epsilon: 1));
@@ -339,26 +342,29 @@ void main() {
     testWidgets(
       'AC6: los constructores sueltos también son un fundido sin desplazamiento',
       (tester) async {
-        final navigator = await pumpApp(tester, reduceMotion: true);
-
-        unawaited(
-          navigator.push(
-            PageRouteBuilder<void>(
-              transitionDuration: FrTransitions.slideDuration,
-              transitionsBuilder: FrTransitions.slide,
-              pageBuilder: (_, _, _) => page(keyB, Colors.white),
+        // Con movimiento reducido el sistema acorta 20 veces las rutas
+        // normales, así que se prueba el constructor con la animación a medias.
+        tester.platformDispatcher.accessibilityFeaturesTestValue =
+            const FakeAccessibilityFeatures(disableAnimations: true);
+        addTearDown(
+          tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.dark,
+            home: Builder(
+              builder: (context) => FrTransitions.slide(
+                context,
+                const AlwaysStoppedAnimation<double>(0.5),
+                kAlwaysDismissedAnimation,
+                page(keyB, Colors.white),
+              ),
             ),
           ),
         );
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 140));
 
         expect(tester.getRect(find.byKey(keyB)), rectMoreOrLessEquals(screen));
-        final entering = opacityOf(tester, find.byKey(keyB));
-        expect(entering, greaterThan(0));
-        expect(entering, lessThan(1));
-
-        await tester.pumpAndSettle();
+        expect(opacityOf(tester, find.byKey(keyB)), closeTo(0.5, 0.01));
       },
     );
   });

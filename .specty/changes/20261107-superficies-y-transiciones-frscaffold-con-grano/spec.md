@@ -68,7 +68,7 @@ Crear en `lib/core/design/` las superficies de Portadora que usarán las pantall
 
 ## Tareas
 
-- [ ] T1: Transiciones onda, deslizamiento, expansión y fundido
+- [x] T1: Transiciones onda, deslizamiento, expansión y fundido
   - files: lib/core/design/motion/fr_transitions.dart, test/core/design/motion/fr_transitions_test.dart
   - ac: AC3, AC6
   - verify: flutter test test/core/design/motion/fr_transitions_test.dart
