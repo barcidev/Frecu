@@ -64,15 +64,38 @@ class _Translations$lobby$en extends Translations$lobby$es {
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Frecu';
+	@override String get title => 'frecu';
+	@override String get settings => 'Settings';
+	@override String get heading => 'Pick your room';
 	@override String get createRoom => 'Create room';
-	@override String get scanQr => 'Scan QR';
-	@override String get joinRoom => 'Join room';
+	@override String get scanQr => 'Scan';
+	@override String get joinRoom => 'Connect by IP';
 	@override String get nearbyRooms => 'Nearby rooms';
 	@override String get noRoomsNearby => 'No rooms found on local network';
 	@override String get accessCode => 'Access code';
 	@override String get roomName => 'Room name';
 	@override String get yourName => 'Your display name';
+	@override late final _Translations$lobby$network$en network = _Translations$lobby$network$en._(_root);
+	@override late final _Translations$lobby$tuner$en tuner = _Translations$lobby$tuner$en._(_root);
+	@override late final _Translations$lobby$empty$en empty = _Translations$lobby$empty$en._(_root);
+	@override late final _Translations$lobby$offline$en offline = _Translations$lobby$offline$en._(_root);
+	@override List<String> get noteNames => [
+		'C',
+		'D♭',
+		'D',
+		'E♭',
+		'E',
+		'F',
+		'F♯',
+		'G',
+		'A♭',
+		'A',
+		'B♭',
+		'B',
+	];
+	@override String get noNote => '—';
+	@override String hz({required Object value}) => '${value} Hz';
+	@override String get decimalSeparator => '.';
 }
 
 // Path: room
@@ -165,6 +188,56 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get unexpected => 'Unexpected error';
 }
 
+// Path: lobby.network
+class _Translations$lobby$network$en extends Translations$lobby$network$es {
+	_Translations$lobby$network$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get checking => 'Checking network';
+	@override String connected({required Object ip}) => 'Network · ${ip}';
+	@override String get offline => 'No local network';
+}
+
+// Path: lobby.tuner
+class _Translations$lobby$tuner$en extends Translations$lobby$tuner$es {
+	_Translations$lobby$tuner$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get scanning => 'Scanning · _frecu._tcp';
+	@override String get paused => 'Search paused';
+	@override String signals({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n} signal',
+		other: '${n} signals',
+	);
+}
+
+// Path: lobby.empty
+class _Translations$lobby$empty$en extends Translations$lobby$empty$es {
+	_Translations$lobby$empty$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'No signals yet';
+	@override String get message => 'Join the host\'s Wi-Fi or ask them to show you their QR.';
+	@override String get searching => 'Still searching';
+}
+
+// Path: lobby.offline
+class _Translations$lobby$offline$en extends Translations$lobby$offline$es {
+	_Translations$lobby$offline$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'You\'re not on any Wi-Fi network.';
+	@override String get message => 'Join the host\'s hotspot to find rooms.';
+}
+
 // Path: permissions.welcome
 class _Translations$permissions$welcome$en extends Translations$permissions$welcome$es {
 	_Translations$permissions$welcome$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -255,15 +328,43 @@ extension on TranslationsEn {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.title' => 'Frecu',
-			'lobby.title' => 'Frecu',
+			'lobby.title' => 'frecu',
+			'lobby.settings' => 'Settings',
+			'lobby.heading' => 'Pick your room',
 			'lobby.createRoom' => 'Create room',
-			'lobby.scanQr' => 'Scan QR',
-			'lobby.joinRoom' => 'Join room',
+			'lobby.scanQr' => 'Scan',
+			'lobby.joinRoom' => 'Connect by IP',
 			'lobby.nearbyRooms' => 'Nearby rooms',
 			'lobby.noRoomsNearby' => 'No rooms found on local network',
 			'lobby.accessCode' => 'Access code',
 			'lobby.roomName' => 'Room name',
 			'lobby.yourName' => 'Your display name',
+			'lobby.network.checking' => 'Checking network',
+			'lobby.network.connected' => ({required Object ip}) => 'Network · ${ip}',
+			'lobby.network.offline' => 'No local network',
+			'lobby.tuner.scanning' => 'Scanning · _frecu._tcp',
+			'lobby.tuner.paused' => 'Search paused',
+			'lobby.tuner.signals' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: '${n} signal', other: '${n} signals', ), 
+			'lobby.empty.title' => 'No signals yet',
+			'lobby.empty.message' => 'Join the host\'s Wi-Fi or ask them to show you their QR.',
+			'lobby.empty.searching' => 'Still searching',
+			'lobby.offline.title' => 'You\'re not on any Wi-Fi network.',
+			'lobby.offline.message' => 'Join the host\'s hotspot to find rooms.',
+			'lobby.noteNames.0' => 'C',
+			'lobby.noteNames.1' => 'D♭',
+			'lobby.noteNames.2' => 'D',
+			'lobby.noteNames.3' => 'E♭',
+			'lobby.noteNames.4' => 'E',
+			'lobby.noteNames.5' => 'F',
+			'lobby.noteNames.6' => 'F♯',
+			'lobby.noteNames.7' => 'G',
+			'lobby.noteNames.8' => 'A♭',
+			'lobby.noteNames.9' => 'A',
+			'lobby.noteNames.10' => 'B♭',
+			'lobby.noteNames.11' => 'B',
+			'lobby.noNote' => '—',
+			'lobby.hz' => ({required Object value}) => '${value} Hz',
+			'lobby.decimalSeparator' => '.',
 			'room.title' => 'Active room',
 			'room.leave' => 'Leave room',
 			'room.participants' => 'Participants',

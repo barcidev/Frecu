@@ -3,15 +3,43 @@
     "title": "Frecu"
   },
   "lobby": {
-    "title": "Frecu",
+    "title": "frecu",
+    "settings": "Ajustes",
+    "heading": "Elige tu frecu",
     "createRoom": "Crear frecu",
-    "scanQr": "Escanear QR",
-    "joinRoom": "Unirse a frecu",
+    "scanQr": "Escanear",
+    "joinRoom": "Conectar por IP",
     "nearbyRooms": "Frecus cercanas",
     "noRoomsNearby": "No se encontraron frecus en la red",
     "accessCode": "Código de acceso",
     "roomName": "Nombre de la frecu",
-    "yourName": "Tu nombre visible"
+    "yourName": "Tu nombre visible",
+    "network": {
+      "checking": "Buscando red",
+      "connected": "Red · $ip",
+      "offline": "Sin red local"
+    },
+    "tuner": {
+      "scanning": "Escaneando · _frecu._tcp",
+      "paused": "Búsqueda en pausa",
+      "signals": {
+        "one": "$n señal",
+        "other": "$n señales"
+      }
+    },
+    "empty": {
+      "title": "Sin señales por ahora",
+      "message": "Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.",
+      "searching": "La búsqueda sigue activa"
+    },
+    "offline": {
+      "title": "No estás en ninguna red Wi-Fi.",
+      "message": "Únete al punto de acceso del anfitrión para encontrar frecus."
+    },
+    "noteNames": ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Fa♯", "Sol", "La♭", "La", "Si♭", "Si"],
+    "noNote": "—",
+    "hz": "$value Hz",
+    "decimalSeparator": ","
   },
   "room": {
     "title": "Frecu activa",

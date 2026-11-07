@@ -83,7 +83,7 @@ Referencia: `V.lobby` de `screens.js`; `drawTuner`, `keyX`, `WHITE`, `drawSpark`
 
 ## Tareas
 
-- [ ] T1: Sintonizador de dos octavas con los nombres de las notas
+- [x] T1: Sintonizador de dos octavas con los nombres de las notas
   - files: lib/features/lobby/presentation/widgets/lobby_tuner.dart, lib/features/lobby/presentation/widgets/room_note_label.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC7
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart --name AC7
