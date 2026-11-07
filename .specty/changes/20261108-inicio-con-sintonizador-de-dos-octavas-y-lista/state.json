@@ -6,6 +6,13 @@
   "branch": "feature/inicio-con-sintonizador-de-dos-octavas-y-lista",
   "baseCommit": "15711466d5b954b56999789a29a09f6bc3e0ae71",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1b08baaf0f94a0480fd2396c9fb5241763a195022140a6dc04abe2caebdb8da3",
+    "at": "2026-11-07T18:44:27.900Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -56,12 +63,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:1b08baaf0f94a0480fd2396c9fb5241763a195022140a6dc04abe2caebdb8da3",
-    "at": "2026-11-07T18:44:27.900Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T23:47:56.651Z"
 }

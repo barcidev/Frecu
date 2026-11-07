@@ -22,6 +22,11 @@ Future<ThemeData> pumpAppWith(
 ) async {
   tester.platformDispatcher.platformBrightnessTestValue = brightness;
   addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+  // El sintonizador del inicio anima sin fin: con movimiento reducido queda
+  // quieto y pumpAndSettle termina.
+  tester.platformDispatcher.accessibilityFeaturesTestValue =
+      const FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
   await tester.pumpWidget(
     TranslationProvider(
       child: ProviderScope(child: FrecuApp(appRouter: AppRouter())),

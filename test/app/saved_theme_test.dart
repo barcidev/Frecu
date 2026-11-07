@@ -46,6 +46,11 @@ void _setSystemBrightness(WidgetTester tester, Brightness brightness) {
 Future<ProviderContainer> _openApp(WidgetTester tester) async {
   final container = await createAppContainer();
   addTearDown(container.dispose);
+  // El sintonizador del inicio anima sin fin: con movimiento reducido queda
+  // quieto y pumpAndSettle termina.
+  tester.platformDispatcher.accessibilityFeaturesTestValue =
+      const FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
   await tester.pumpWidget(
     TranslationProvider(
       child: UncontrolledProviderScope(

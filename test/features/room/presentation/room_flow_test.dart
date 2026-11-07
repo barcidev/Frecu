@@ -40,6 +40,13 @@ void main() {
     );
 
     setUp(() {
+      // El sintonizador del inicio anima sin fin: con movimiento reducido
+      // queda quieto y pumpAndSettle termina.
+      final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher
+        ..accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(
+          disableAnimations: true,
+        );
+      addTearDown(dispatcher.clearAccessibilityFeaturesTestValue);
       repository = MockRoomRepository();
     });
 
@@ -74,7 +81,7 @@ void main() {
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.widgetWithText(FilledButton, 'Crear frecu'));
+        await tester.tap(find.text(t.lobby.createRoom));
         await tester.pumpAndSettle();
 
         expect(find.text('IP local: 192.168.43.1'), findsOneWidget);
@@ -117,10 +124,7 @@ void main() {
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
 
-        final joinButton = find.widgetWithText(
-          OutlinedButton,
-          'Unirse a frecu',
-        );
+        final joinButton = find.text(t.lobby.joinRoom);
         expect(joinButton, findsOneWidget);
         await tester.tap(joinButton);
         await tester.pumpAndSettle();

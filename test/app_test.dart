@@ -15,6 +15,13 @@ void main() {
     testWidgets(
       'mounts TranslationProvider, ProviderScope and AppRouter navigates to LobbyPage',
       (tester) async {
+        // El sintonizador del inicio anima sin fin: con movimiento reducido
+        // queda quieto y pumpAndSettle termina.
+        tester.platformDispatcher.accessibilityFeaturesTestValue =
+            const FakeAccessibilityFeatures(disableAnimations: true);
+        addTearDown(
+          tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+        );
         final router = AppRouter();
 
         await tester.pumpWidget(

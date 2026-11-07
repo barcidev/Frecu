@@ -33,6 +33,9 @@ class _MockRoomRepository extends Mock implements RoomRepository {}
 
 class _MockVoiceRepository extends Mock implements VoiceRepository {}
 
+/// Etiqueta del campo del nombre que el inicio ya no pide.
+const _nameLabel = 'Tu nombre visible';
+
 const _nearbyRoom = NearbyRoom(
   roomId: 'room-123',
   name: 'Ruta Sur',
@@ -138,6 +141,13 @@ void main() {
     }
 
     Future<ProviderContainer> pumpWith(WidgetTester tester, Widget app) async {
+      // El sintonizador del inicio anima sin fin: con movimiento reducido
+      // queda quieto y pumpAndSettle termina.
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
       final container = await appContainer();
       await tester.pumpWidget(
         TranslationProvider(
@@ -157,7 +167,7 @@ void main() {
     /// El diálogo abierto no tiene campo para el nombre.
     void expectNoNameField() {
       expect(find.byType(AlertDialog), findsOneWidget);
-      expect(find.text(t.lobby.yourName), findsNothing);
+      expect(find.text(_nameLabel), findsNothing);
       expect(
         inDialog(find.widgetWithText(TextField, 'Participante')),
         findsNothing,
@@ -262,10 +272,10 @@ void main() {
       (tester) async {
         await pumpApp(tester);
 
-        await tester.tap(find.widgetWithText(FilledButton, t.lobby.createRoom));
+        await tester.tap(find.text(t.lobby.createRoom));
         await tester.pumpAndSettle();
 
-        expect(find.text(t.lobby.yourName), findsNothing);
+        expect(find.text(_nameLabel), findsNothing);
 
         await tester.tap(find.widgetWithText(FilledButton, t.lobby.createRoom));
         await tester.pumpAndSettle();
