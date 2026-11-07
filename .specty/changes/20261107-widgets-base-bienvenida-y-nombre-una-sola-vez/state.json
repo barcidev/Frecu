@@ -6,6 +6,13 @@
   "branch": "feature/widgets-base-bienvenida-y-nombre-una-sola-vez",
   "baseCommit": "901bbb4c7af61049dfcfa9d7699c212fa58cdd1c",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e11d0f7be3753437e2b782e671976003326c312a3062891514597da91726148d",
+    "at": "2026-11-07T08:48:57.497Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 15,
@@ -40,12 +47,6 @@
     "T": 4,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:e11d0f7be3753437e2b782e671976003326c312a3062891514597da91726148d",
-    "at": "2026-11-07T08:48:57.497Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T08:54:24.042Z"
 }
