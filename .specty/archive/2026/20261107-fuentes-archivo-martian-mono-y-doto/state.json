@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-fuentes-archivo-martian-mono-y-doto",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/fuentes-archivo-martian-mono-y-doto",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:c638c2b7a99c8728071464e4b4dacbbca133b62fe727affb67e2cbff02c001a3",
@@ -43,12 +43,12 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "b9c47ce7af1e82fbec198c3917a06d40b9e88226",
+      "attempts": 1,
       "startedAt": "2026-11-07T11:02:08.606Z",
       "doneAt": "2026-11-07T11:03:53.949Z",
-      "summary": "Archivo, Martian Mono y Doto variables (google/fonts, sin modificar; hash de blob git verificado) en assets/fonts/<familia>/ con su OFL.txt; pubspec.yaml declara las tres familias con los nombres de FrFonts y las licencias como assets. Peso: 1.263.980 bytes sin comprimir (~339 KiB con deflate)."
+      "summary": "Archivo, Martian Mono y Doto variables (google/fonts, sin modificar; hash de blob git verificado) en assets/fonts/<familia>/ con su OFL.txt; pubspec.yaml declara las tres familias con los nombres de FrFonts y las licencias como assets. Peso: 1.263.980 bytes sin comprimir (~339 KiB con deflate).",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -61,6 +61,7 @@
     "T": 1,
     "R": 2
   },
+  "closingSubmittedAt": "2026-11-07T11:07:34.422Z",
   "lockedTests": {
     "test/core/design/fr_fonts_assets_test.dart": "sha256:6c81cc2327399bc28c4cbd6a894607b3c876785cd89ce6330b162aff497c4395"
   }

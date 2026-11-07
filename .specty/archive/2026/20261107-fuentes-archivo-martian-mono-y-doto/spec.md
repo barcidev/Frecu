@@ -60,3 +60,29 @@ Empaquetar en `assets/fonts/` las fuentes variables Archivo, Martian Mono y Doto
 
 - R1: Peso de las fuentes variables en el APK (R3 de la épica): 1,21 MiB sin comprimir (Archivo 643 KiB, Doto 446 KiB, Martian Mono 145 KiB), unos 340 KiB comprimidos — mitigación: sin cursivas; si el APK pesa demasiado, instanciar Archivo a `wdth` 100–125 y `wght` 400–720 en un cambio aparte.
 - R2: Con las fuentes reales, las pruebas de widgets que miden texto podrían cambiar — mitigación: la verificación de T1 corre toda la suite.
+
+## Cierre
+
+### Resumen
+
+- `assets/fonts/archivo/Archivo.ttf`, `assets/fonts/martianmono/MartianMono.ttf` y `assets/fonts/doto/Doto.ttf`: TTF variables de google/fonts (`ofl/archivo`, `ofl/martianmono`, `ofl/doto`) sin modificar, cada uno con su `OFL.txt`. Su hash de blob git coincide con el publicado y las sumas de todas sus tablas son correctas.
+- Ejes empaquetados: Archivo `wght` 100–900 y `wdth` 62–125; Martian Mono `wght` 100–800 y `wdth` 75–112,5; Doto `ROND` 0–100 y `wght` 100–900. Cubren todos los valores de `FrType.standard`.
+- `pubspec.yaml` declara las familias `Archivo`, `Martian Mono` y `Doto` (los nombres de `FrFonts`) con un solo asset cada una y los tres `OFL.txt` como assets. Sin `google_fonts` ni dependencias nuevas; `lib/` no cambia.
+- Peso (R3 de la épica): 1.263.980 bytes sin comprimir, 1,21 MiB (Archivo 658.596, Doto 456.924, Martian Mono 148.460); con deflate -9, unos 347.021 bytes (≈ 339 KiB, Archivo 253.582, Martian Mono 77.325, Doto 16.114). No se midió en un APK real: `flutter build apk --release` falla en esta máquina porque el SDK de Android no tiene la plataforma `android-37` que pide `permission_handler_android`.
+- Verificado: `test/core/design/fr_fonts_assets_test.dart` (AC1–AC3) en verde, `flutter test` completo en verde y `flutter analyze` sin avisos.
+
+### Desviaciones
+
+- Ninguna respecto al plan. T1 tocó 8 archivos (Specty recomienda 5 como máximo) y se mantuvo en una sola tarea: 6 de ellos son copias de fuentes y licencias.
+
+### Decisiones
+
+- Un directorio por familia y archivos renombrados sin corchetes (`Archivo[wdth,wght].ttf` → `Archivo.ttf`) para que las rutas de los assets sean simples.
+- Sin cursivas (`Archivo-Italic`, 724 KiB): la escala de `FrType` no las usa.
+- Sin recortar glifos ni rangos de ejes: los TTF originales se pueden comprobar contra google/fonts y comprimidos suman ≈ 339 KiB.
+- La prueba lee `FontManifest.json` y los TTF con `rootBundle`, el mismo bundle local que usa la app, y recorre la tabla `fvar` y las sumas de las tablas en Dart, sin dependencias nuevas.
+
+### Pendientes
+
+- Registrar las licencias OFL en `LicenseRegistry` para que salgan en la pantalla de licencias (toca `lib/`; P34).
+- Medir el aumento real del APK de release cuando el SDK tenga `android-37` (P36) y, si pesa demasiado, instanciar Archivo a `wdth` 100–125 y `wght` 400–720 (P35).
