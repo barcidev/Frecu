@@ -6,6 +6,13 @@
   "branch": "feature/superficies-y-transiciones-frscaffold-con-grano",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:f3cd751b0c1bc0968a4d130e9b440194258c91570cd1157140f200020717044a",
+    "at": "2026-11-07T11:05:40.951Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 11,
@@ -44,12 +51,6 @@
     "T": 4,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:f3cd751b0c1bc0968a4d130e9b440194258c91570cd1157140f200020717044a",
-    "at": "2026-11-07T11:05:40.951Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T11:18:54.581Z"
 }
