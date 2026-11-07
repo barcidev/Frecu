@@ -1,5 +1,3 @@
-import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
-
 // AC4: CUANDO el anfitrión consulta la información de invitación de la frecu ENTONCES se genera y muestra un código QR con el formato URI `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>`.
 import 'dart:async';
 

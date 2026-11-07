@@ -55,7 +55,7 @@ Garantizar que una frecu activa permanezca conectada y transmitiendo/recibiendo 
   - files: pubspec.yaml, android/app/src/main/AndroidManifest.xml, lib/features/room/data/datasources/foreground_service_datasource.dart, test/features/room/data/foreground_service_datasource_test.dart
   - ac: AC1
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-servicio-foreground-y-persistencia-en-segundo' && fvm flutter test test/features/room/data/foreground_service_datasource_test.dart
-- [ ] T2: Conexión del ciclo de vida del foreground service en RoomRepositoryImpl y proveedores
+- [x] T2: Conexión del ciclo de vida del foreground service en RoomRepositoryImpl y proveedores
   - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/presentation/providers/room_provider.dart, test/features/room/data/room_repository_test.dart
   - ac: AC1
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-servicio-foreground-y-persistencia-en-segundo' && fvm flutter test test/features/room/data/room_repository_test.dart

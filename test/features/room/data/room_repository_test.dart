@@ -4,15 +4,11 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
-import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
-
-import '../presentation/invite_qr_dialog_test.dart' as _invite_test;
-import '../presentation/voice_flow_test.dart' as _voice_test;
-
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -308,7 +304,7 @@ void main() {
             status: any(named: 'status'),
           ),
         ).thenAnswer((_) async {});
-        when(() => mockForeground.stopService()).thenAnswer((_) async {});
+        when(mockForeground.stopService).thenAnswer((_) async {});
 
         final repo = RoomRepositoryImpl(
           serverDataSource: hostServer,
@@ -331,7 +327,7 @@ void main() {
         ).called(1);
 
         await repo.leaveRoom();
-        verify(() => mockForeground.stopService()).called(1);
+        verify(mockForeground.stopService).called(1);
       },
     );
   });

@@ -5,6 +5,7 @@ import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
@@ -19,9 +20,12 @@ class RoomRepositoryImpl implements RoomRepository {
   RoomRepositoryImpl({
     required SignalingServerDataSource serverDataSource,
     required SignalingClientDataSource clientDataSource,
+    ForegroundServiceDataSource? foregroundServiceDataSource,
     Future<List<NetworkInterface>> Function()? networkInterfacesProvider,
   }) : _server = serverDataSource,
        _client = clientDataSource,
+       _foregroundService =
+           foregroundServiceDataSource ?? ForegroundServiceDataSource(),
        _networkInterfacesProvider =
            networkInterfacesProvider ?? NetworkInterface.list {
     _connectionStateSub = _client.connectionState.listen(
@@ -31,6 +35,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   final SignalingServerDataSource _server;
   final SignalingClientDataSource _client;
+  final ForegroundServiceDataSource _foregroundService;
   final Future<List<NetworkInterface>> Function() _networkInterfacesProvider;
 
   final StreamController<List<Participant>> _participantsController =
@@ -49,6 +54,7 @@ class RoomRepositoryImpl implements RoomRepository {
   int? _lastPort;
   String? _lastAccessCode;
   String? _lastDisplayName;
+  String? _lastRoomName;
 
   static bool get _isTest =>
       Platform.environment.containsKey('FLUTTER_TEST') ||
@@ -96,6 +102,7 @@ class RoomRepositoryImpl implements RoomRepository {
       _isDeliberateLeave = false;
       _isClosed = false;
       _isHost = true;
+      _lastRoomName = name;
       final hostIp = await getLocalIpAddress() ?? '127.0.0.1';
       await _server.start(accessCode: accessCode);
 
@@ -137,6 +144,7 @@ class RoomRepositoryImpl implements RoomRepository {
       _lastPort = port;
       _lastAccessCode = accessCode;
       _lastDisplayName = displayName;
+      _lastRoomName = 'Frecu';
 
       final serverUri = Uri.parse('ws://$hostAddress:$port');
       await _client.connect(serverUri);
@@ -166,6 +174,12 @@ class RoomRepositoryImpl implements RoomRepository {
   void _handleClientConnectionChange(bool isConnected) {
     if (isConnected || !_canReconnect) return;
     _statusController.add(const RoomStatus.reconnecting());
+    unawaited(
+      _foregroundService.updateNotification(
+        roomName: _lastRoomName ?? 'Frecu',
+        status: 'Reconectando...',
+      ),
+    );
     unawaited(_startReconnectLoop());
   }
 
@@ -201,6 +215,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   void _finalizeReconnectFailure() {
     if (_canReconnect) {
+      unawaited(_foregroundService.stopService());
       _statusController.add(
         const RoomStatus.closed(reason: 'host_unreachable'),
       );
@@ -291,6 +306,9 @@ class RoomRepositoryImpl implements RoomRepository {
     _participants = List<Participant>.from(participants);
     _participantsController.add(_participants);
     _statusController.add(const RoomStatus.connected());
+    unawaited(
+      _foregroundService.startService(roomName: roomName, status: 'Conectado'),
+    );
 
     final room = Room(
       id: 'room_${DateTime.now().millisecondsSinceEpoch}',
@@ -308,6 +326,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   void _onRejected(Completer<Result<Room>>? completer, String reason) {
     _isClosed = true;
+    unawaited(_foregroundService.stopService());
     _statusController.add(RoomStatus.closed(reason: reason));
     final Failure failure;
     if (reason == 'invalidAccessCode') {
@@ -337,6 +356,7 @@ class RoomRepositoryImpl implements RoomRepository {
 
   void _onRoomClosed(String reason) {
     _isClosed = true;
+    unawaited(_foregroundService.stopService());
     _statusController.add(RoomStatus.closed(reason: reason));
     _participants = [];
     _participantsController.add(_participants);
@@ -349,6 +369,8 @@ class RoomRepositoryImpl implements RoomRepository {
       _isClosed = true;
       await _clientSubscription?.cancel();
       _clientSubscription = null;
+
+      await _foregroundService.stopService();
 
       if (_isHost) {
         await _server.stop();
