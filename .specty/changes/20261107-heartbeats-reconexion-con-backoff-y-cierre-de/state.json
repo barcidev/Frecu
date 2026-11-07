@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "20261107-heartbeats-reconexion-con-backoff-y-cierre-de",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/heartbeats-reconexion-con-backoff-y-cierre-de",
+  "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:e3c1630d5520ad3ac783b437f3b9ef78a6e8bb2a66bd007f64c11c91e9ba7a76",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a07afd97c6f3d650023d51b233c236a5ac43f6dce31f8d59e34641998e081930",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:2442dce0bcad6f6894ad67dfbece59177e72be02ff37df3be3cd29528b4d7735",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:3f4c37dbd9808133542b4639318b0f00a53bd71159840065edaa4c6c192ae379",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:5990dcef9724d71c0c435f9acc110c1d3d8238329b74b225e2d3eb36d4b6ed89",
+    "at": "2026-11-07T03:42:51.435Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
