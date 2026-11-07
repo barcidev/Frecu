@@ -80,3 +80,33 @@ Guardar en el teléfono el nombre visible, el tema (Auto, Claro u Oscuro) y el m
 ## Riesgos
 
 - R1: Las pruebas de widgets existentes que monten algo que lea `preferencesProvider` fallarían sin canal de plataforma — mitigación: en este corte nada de `app.dart` ni de las pantallas lo lee; C7 y C8 sobrescriben el repositorio o usan `InMemorySharedPreferencesAsync` en sus pruebas.
+
+## Cierre
+
+### Resumen
+
+- `features/settings/domain`: enum `ThemePreference` (`auto`, `light`, `dark`), entidad Freezed `Preferences` (nombre nulo, Auto y PTT por defecto) con `displayNameMaxLength = 20` y `normalizeDisplayName`, y contrato `PreferencesRepository`.
+- `features/settings/data`: `PreferencesRepositoryImpl` sobre `SharedPreferencesAsync`, con claves `settings.displayName`, `settings.themePreference` y `settings.defaultTalkMode`; los valores desconocidos se leen como el valor por defecto y los fallos del plugin vuelven como `Failure.unexpected`.
+- `features/settings/presentation/providers`: `preferencesRepositoryProvider` y `PreferencesNotifier` (`AsyncNotifier`, `keepAlive`, provider `preferencesProvider`) con `setDisplayName`, `setThemePreference` y `setDefaultTalkMode`.
+- `pubspec.yaml`: `shared_preferences` y, de desarrollo, `shared_preferences_platform_interface`.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde, con 12 pruebas nuevas en `preferences_test.dart`, `preferences_repository_test.dart` y `preferences_provider_test.dart`.
+
+### Desviaciones
+
+- T1 se dividió en dominio y repositorio (tres tareas en lugar de dos), con una prueba de dominio nueva, para no pasar de 5 archivos por tarea.
+- `saveDisplayName` y `setDisplayName` devuelven `Result<String>` con el nombre guardado (recortado) en lugar de `Result<void>`.
+- El repositorio también valida el nombre (no solo el provider), para que ningún otro llamador guarde un nombre inválido; un nombre guardado inválido se lee como nulo.
+- S1: se quitó el import sin uso de `mocktail` del test aprobado `preferences_repository_test.dart` (solo usa `Fake`, que ya exporta `flutter_test`); `flutter analyze` fallaba por ese aviso. Lo aprobó la persona.
+
+### Decisiones
+
+- `TalkMode` se reutiliza desde `features/room/domain`: la dependencia es de dominio a dominio, como la de `lobby` a `room`.
+- Los cambios se guardan primero y solo entonces cambia el estado; si no se pudo guardar, el estado queda como estaba. Si falla la lectura, el provider expone los valores por defecto y lo registra en el log.
+- El largo del nombre se cuenta en `runes` (puntos de código), no en grafemas, para que el dominio no dependa del paquete `characters`.
+- El campo del repositorio se llama `_storage` para evitar el aviso `prefer_initializing_formals`.
+
+### Pendientes
+
+- C7: traducir `ThemePreference` a `ThemeMode` (`auto` → `system`) y aplicar `preferencesProvider` en `app.dart`; sus pruebas de widgets deben sobrescribir `preferencesRepositoryProvider` o usar `InMemorySharedPreferencesAsync`.
+- C8 y C12: los campos de nombre deben limitar a `Preferences.displayNameMaxLength` y deshabilitar el envío si `normalizeDisplayName` devuelve nulo; un nombre con emojis compuestos puede pasar el límite de 20 de `TextField.maxLength` (que cuenta grafemas) y ser rechazado por contar `runes`.
+- Usar `defaultTalkMode` al entrar a una frecu (`room`) y el nombre guardado al crear o unirse (`lobby`): cortes posteriores de la épica.

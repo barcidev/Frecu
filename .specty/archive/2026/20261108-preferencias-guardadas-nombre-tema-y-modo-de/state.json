@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-preferencias-guardadas-nombre-tema-y-modo-de",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/preferencias-guardadas-nombre-tema-y-modo-de",
   "baseCommit": "4ec5f1f87e33a578c3e4bcd7f869ff8fedbb49f9",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:9a174d3b9d0d9ee2276e905dbeb3b0346f66a344e1bcf68a1d37039fbacd036c",
@@ -65,14 +65,14 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [
-        "test/features/settings/data/preferences_repository_test.dart"
-      ],
-      "attempts": 2,
       "baseCommit": "9e36e05244a362748662763ec2a4f2b999f98120",
+      "attempts": 2,
       "startedAt": "2026-11-07T16:15:22.396Z",
       "doneAt": "2026-11-07T16:21:43.110Z",
-      "summary": "preferencesRepositoryProvider y PreferencesNotifier (AsyncNotifier keepAlive, preferencesProvider): por defecto si falla la lectura; los setters guardan y solo entonces cambian el estado. Quita el import sin uso del test (S1)."
+      "summary": "preferencesRepositoryProvider y PreferencesNotifier (AsyncNotifier keepAlive, preferencesProvider): por defecto si falla la lectura; los setters guardan y solo entonces cambian el estado. Quita el import sin uso del test (S1).",
+      "scopeExtra": [
+        "test/features/settings/data/preferences_repository_test.dart"
+      ]
     }
   },
   "pending": {
@@ -86,6 +86,7 @@
     "R": 1,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-07T16:22:17.974Z",
   "lockedTests": {
     "test/features/settings/data/preferences_repository_test.dart": "sha256:8db2abc5737c4bb9e4c9b30fe01e8b54e3cea58abc83d6483b3db3755cdd8c19",
     "test/features/settings/domain/preferences_test.dart": "sha256:6d7f44ce3fe78738901fb4002ad376a2ac21c0869cc340e3d3db9ce728449b00",

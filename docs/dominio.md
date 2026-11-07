@@ -9,3 +9,5 @@
 - **Invitación** (`RoomInvite`): Datos de conexión que viajan en mDNS y QR (`host`, `port`, `roomId`, `accessCode`).
 - **Estado de sala** (`RoomStatus`): `idle`, `connecting`, `connected`, `reconnecting`, `closed(reason)`.
 - **Ruta de audio** (`AudioRoute`): Salida del sonido (`speaker`, `earpiece`, `bluetooth`).
+- **Preferencias** (`Preferences`): Lo que el teléfono guarda del usuario: nombre visible (`displayName`, nulo si aún no se pidió; de 1 a 20 caracteres), tema (`themePreference`) y modo de habla por defecto (`defaultTalkMode`).
+- **Tema** (`ThemePreference`): `auto` (sigue al sistema), `light` (claro) o `dark` (oscuro).
