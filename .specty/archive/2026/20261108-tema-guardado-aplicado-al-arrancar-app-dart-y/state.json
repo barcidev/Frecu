@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-tema-guardado-aplicado-al-arrancar-app-dart-y",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/tema-guardado-aplicado-al-arrancar-app-dart-y",
   "baseCommit": "90d2de1a0dce9fdad28df5aee5b57e1e47de1821",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:14338735cc96fc363435ad51d70212808ad0a876d43428a707d651e0ec1220b2",
@@ -58,12 +58,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d9111dfab94859f6c1b0eb5dcf5240f6d496f1c0",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:44:18.552Z",
       "doneAt": "2026-11-07T16:45:43.302Z",
-      "summary": "FrecuApp pasa a ConsumerStatefulWidget, observa solo themePreference con select y pasa themeMode a MaterialApp.router (Auto → system); las pruebas usan almacenamiento en memoria por defecto."
+      "summary": "FrecuApp pasa a ConsumerStatefulWidget, observa solo themePreference con select y pasa themeMode a MaterialApp.router (Auto → system); las pruebas usan almacenamiento en memoria por defecto.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -77,6 +77,7 @@
     "R": 2,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-07T16:46:02.475Z",
   "lockedTests": {
     "test/flutter_test_config.dart": "sha256:8680ee894a489284d414a88079439901142f08cb3acf7a26c531b62025a2acf1",
     "test/app/saved_theme_test.dart": "sha256:7d56d9d879d5471d6c940b125f621be5adc94a6e2168472acfb064d1fd26df8d",

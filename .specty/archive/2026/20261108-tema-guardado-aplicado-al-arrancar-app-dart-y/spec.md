@@ -62,3 +62,27 @@ Que la app abra con el tema guardado (Auto, Claro u Oscuro) desde el primer cuad
 
 - R1: Si leer las preferencias se colgara, la app no pasaría de la pantalla de inicio nativa — mitigación: el plugin lee del disco local y sus fallos ya se convierten en valores por defecto; si apareciera, se añade un tiempo máximo en `createAppContainer`.
 - R2: Las pruebas de widgets existentes que montan `FrecuApp` leerían `preferencesProvider` sin plugin de plataforma — mitigación: almacenamiento en memoria global en `test/flutter_test_config.dart` y `flutter test` completo en T2.
+
+## Cierre
+
+### Resumen
+
+- `lib/bootstrap.dart`: `createAppContainer()` crea el `ProviderContainer` de la app y espera `preferencesProvider.future` antes de `runApp`; si la lectura lanza, lo registra con `AppLogger` y devuelve el contenedor igualmente. La app se monta con `TranslationProvider(child: UncontrolledProviderScope(...))`.
+- `lib/app/app.dart`: `FrecuApp` es `ConsumerStatefulWidget`, observa solo `themePreference` con `select` y pasa `themeMode` a `MaterialApp.router` (`auto` → `system`, `light` → `light`, `dark` → `dark`); sin preferencias leídas usa Auto.
+- `test/flutter_test_config.dart`: almacenamiento en memoria vacío por defecto para todas las pruebas.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (194 pruebas), con 4 nuevas en `test/bootstrap_test.dart` y 7 en `test/app/saved_theme_test.dart` (primer cuadro con el tema guardado, Auto, sin nada guardado, fallo de lectura, sin almacenamiento y cambio al instante).
+
+### Desviaciones
+
+- S1: se añadió al test aprobado `test/bootstrap_test.dart` el import de `flutter_riverpod` que faltaba (en Riverpod 3, `AsyncValue.isLoading` es una extensión); el test no compilaba. Lo aprobó la persona.
+
+### Decisiones
+
+- La precarga va en una función pública de `bootstrap.dart` (`createAppContainer`) para poder probarla sin `runApp` ni los manejadores de errores globales.
+- La traducción `ThemePreference` → `ThemeMode` es una función privada de `app.dart`: el dominio sigue sin Flutter y ninguna otra pieza la necesita.
+- Sin tiempo máximo en la precarga: el plugin lee del disco local y sus fallos ya se convierten en valores por defecto (R1).
+- Los cambios de tema en vivo conservan la transición de `AnimatedTheme` de `MaterialApp`.
+
+### Pendientes
+
+- Ninguno nuevo. El selector de tema en Ajustes sigue en C8: basta con llamar a `setThemePreference` y la app cambia sola.
