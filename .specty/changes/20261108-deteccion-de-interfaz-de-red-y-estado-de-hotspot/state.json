@@ -6,6 +6,13 @@
   "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00",
+    "at": "2026-11-07T16:25:03.550Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 9,
@@ -38,12 +45,6 @@
     "AC": 7,
     "T": 3
   },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00",
-    "at": "2026-11-07T16:25:03.550Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T16:27:52.263Z"
 }
