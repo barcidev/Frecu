@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-actualizar-compilesdk-a-37-para-compatibilidad",
   "kind": "quick",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "bugfix/actualizar-compilesdk-a-37-para-compatibilidad",
   "baseCommit": "0c191a26d1c5fc30a5ca3588ebe4687b542c3163",
   "revision": 2,
@@ -25,11 +25,13 @@
   "items": {},
   "tasks": {
     "T1": {
-      "status": "active",
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 2,
       "baseCommit": "335fc2183bd9ef0397c094c2518a10d8b5ffec54",
-      "attempts": 1,
       "startedAt": "2026-11-07T19:13:51.417Z",
-      "scopeExtra": []
+      "doneAt": "2026-11-07T21:38:59.119Z",
+      "summary": "Configurar compileSdk en 37 en android/app/build.gradle.kts"
     }
   },
   "pending": {
