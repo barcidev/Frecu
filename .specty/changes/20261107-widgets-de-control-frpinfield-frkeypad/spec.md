@@ -65,7 +65,7 @@ Todos en `lib/core/design/widgets/`, con `context.fr` y sin colores sueltos. Reu
 
 ## Tareas
 
-- [ ] T1: Código de acceso y teclado
+- [x] T1: Código de acceso y teclado
   - files: lib/core/design/widgets/fr_pin_field.dart, lib/core/design/widgets/fr_keypad.dart, test/core/design/widgets/fr_pin_field_test.dart
   - ac: AC1, AC2, AC3, AC7
   - verify: flutter test test/core/design/widgets/fr_pin_field_test.dart

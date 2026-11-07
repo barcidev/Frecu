@@ -39,7 +39,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "b1475aae06279457b470eae3cab08a4da8af650d",
+      "startedAt": "2026-11-07T11:13:48.614Z",
+      "doneAt": "2026-11-07T11:17:32.849Z",
+      "summary": "FrPinField (celdas Doto 64×78, cursor que parpadea con FrLoop, aparición con resorte organic, busy con latido escalonado, ok con ola, error con temblor, solo lectura) y FrKeypad (teclas de 56 px con FrPressable a 0,93, función opcional y borrar con etiqueta accesible), con movimiento reducido"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
