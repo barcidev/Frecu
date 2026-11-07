@@ -25,7 +25,9 @@
     "speaking": "Speaking",
     "muted": "Muted",
     "host": "Host",
-    "roomClosed": "Room has been closed by host"
+    "roomClosed": "Room has been closed by host",
+    "reconnecting": "Reconnecting...",
+    "accept": "Accept"
   },
   "permissions": {
     "title": "Required permissions",

@@ -67,7 +67,7 @@ Implementar el monitoreo continuo de conexión mediante heartbeats periódicos (
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_repository_test.dart
   - ac: AC2, AC3, AC4
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-heartbeats-reconexion-con-backoff-y-cierre-de' && fvm flutter test test/features/room/data/room_repository_test.dart
-- [ ] T3: Indicadores de reconexión y diálogo de cierre de sala en RoomPage y RoomInfoCard
+- [x] T3: Indicadores de reconexión y diálogo de cierre de sala en RoomPage y RoomInfoCard
   - files: lib/features/room/presentation/pages/room_page.dart, lib/features/room/presentation/widgets/room_info_card.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_en.g.dart, lib/i18n/strings_es.g.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC3, AC4
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-heartbeats-reconexion-con-backoff-y-cierre-de' && fvm flutter test test/features/room/presentation/room_flow_test.dart

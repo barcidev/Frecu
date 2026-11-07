@@ -140,6 +140,12 @@ class Translations$room$es {
 
 	/// es: 'La frecu fue cerrada por el anfitrión'
 	String get roomClosed => 'La frecu fue cerrada por el anfitrión';
+
+	/// es: 'Reconectando...'
+	String get reconnecting => 'Reconectando...';
+
+	/// es: 'Aceptar'
+	String get accept => 'Aceptar';
 }
 
 // Path: permissions
@@ -262,6 +268,8 @@ extension on Translations {
 			'room.muted' => 'Silenciado',
 			'room.host' => 'Anfitrión',
 			'room.roomClosed' => 'La frecu fue cerrada por el anfitrión',
+			'room.reconnecting' => 'Reconectando...',
+			'room.accept' => 'Aceptar',
 			'permissions.title' => 'Permisos requeridos',
 			'permissions.description' => 'Frecu necesita permisos para comunicarse sin internet.',
 			'permissions.microphone' => 'Micrófono',
