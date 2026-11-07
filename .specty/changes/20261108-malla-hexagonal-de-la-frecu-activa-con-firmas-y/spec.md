@@ -82,7 +82,7 @@ Referencia: `drawMesh`, `meshSlots`, `drawSig` y `easeInOut` de `engine.js`; `me
   - files: lib/features/room/domain/repositories/room_repository.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_repository_test.dart
   - ac: AC7
   - verify: flutter test test/features/room/data/room_repository_test.dart
-- [ ] T2: Malla hexagonal con firmas, etiquetas, movimiento y pintor
+- [x] T2: Malla hexagonal con firmas, etiquetas, movimiento y pintor
   - files: lib/features/room/presentation/widgets/room_mesh_scene.dart, lib/features/room/presentation/widgets/room_mesh.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/room_mesh_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/room/presentation/room_mesh_test.dart

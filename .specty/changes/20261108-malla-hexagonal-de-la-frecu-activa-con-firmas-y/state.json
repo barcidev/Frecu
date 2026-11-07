@@ -55,12 +55,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "f50293705f1517e5f75c5ce5f37c57c53261b140",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:48:50.055Z",
       "doneAt": "2026-11-07T17:49:49.995Z",
-      "summary": "RoomRepository expone localParticipantId: RoomRepositoryImpl guarda el peerId de cada welcome (crear, unirse y reconectar) y lo borra al salir, al cerrarse la frecu (roomClosed o fallo de reconexión) y al ser rechazado."
+      "summary": "RoomRepository expone localParticipantId: RoomRepositoryImpl guarda el peerId de cada welcome (crear, unirse y reconectar) y lo borra al salir, al cerrarse la frecu (roomClosed o fallo de reconexión) y al ser rechazado.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "3be957111fbe305bf60d725b447bb0ed36f633c8",
+      "startedAt": "2026-11-07T17:49:50.695Z",
+      "doneAt": "2026-11-07T17:56:54.416Z",
+      "summary": "Escena de la malla (lugares estables, nodos, leyendas, aristas, resorte, voz simulada y paquetes, pintor) y RoomMesh con firmas, marca de anfitrión, etiquetas y lugares libres que invitan; textos room.mesh, room.header y room.noteNames en es y en."
     }
   },
   "pending": {

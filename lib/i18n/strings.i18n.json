@@ -27,7 +27,24 @@
     "host": "Anfitrión",
     "roomClosed": "La frecu fue cerrada por el anfitrión",
     "reconnecting": "Reconectando...",
-    "accept": "Aceptar"
+    "accept": "Aceptar",
+    "noteNames": ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Fa♯", "Sol", "La♭", "La", "Si♭", "Si"],
+    "mesh": {
+      "you": "Tú",
+      "youHost": "Tú · anfitrión",
+      "onAir": "Al aire",
+      "connecting": "Conectando",
+      "reconnecting": "Reconectando",
+      "free": "Libre",
+      "invite": "Invitar"
+    },
+    "header": {
+      "youAreHost": "Eres el anfitrión",
+      "hostedBy": "Anfitrión · $name",
+      "hz": "$value Hz",
+      "note": "Nota $note, $hz Hz",
+      "invite": "Invitar"
+    }
   },
   "permissions": {
     "title": "Permisos requeridos",

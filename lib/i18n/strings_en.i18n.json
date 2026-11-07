@@ -27,7 +27,24 @@
     "host": "Host",
     "roomClosed": "Room has been closed by host",
     "reconnecting": "Reconnecting...",
-    "accept": "Accept"
+    "accept": "Accept",
+    "noteNames": ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"],
+    "mesh": {
+      "you": "You",
+      "youHost": "You · host",
+      "onAir": "On air",
+      "connecting": "Connecting",
+      "reconnecting": "Reconnecting",
+      "free": "Free",
+      "invite": "Invite"
+    },
+    "header": {
+      "youAreHost": "You're the host",
+      "hostedBy": "Host · $name",
+      "hz": "$value Hz",
+      "note": "Note $note, $hz Hz",
+      "invite": "Invite"
+    }
   },
   "permissions": {
     "title": "Required permissions",

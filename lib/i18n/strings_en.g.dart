@@ -96,6 +96,22 @@ class _Translations$room$en extends Translations$room$es {
 	@override String get roomClosed => 'Room has been closed by host';
 	@override String get reconnecting => 'Reconnecting...';
 	@override String get accept => 'Accept';
+	@override List<String> get noteNames => [
+		'C',
+		'D♭',
+		'D',
+		'E♭',
+		'E',
+		'F',
+		'F♯',
+		'G',
+		'A♭',
+		'A',
+		'B♭',
+		'B',
+	];
+	@override late final _Translations$room$mesh$en mesh = _Translations$room$mesh$en._(_root);
+	@override late final _Translations$room$header$en header = _Translations$room$header$en._(_root);
 }
 
 // Path: permissions
@@ -156,6 +172,36 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get hostUnreachable => 'Host is unreachable';
 	@override String get audio => 'Audio subsystem error';
 	@override String get unexpected => 'Unexpected error';
+}
+
+// Path: room.mesh
+class _Translations$room$mesh$en extends Translations$room$mesh$es {
+	_Translations$room$mesh$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get you => 'You';
+	@override String get youHost => 'You · host';
+	@override String get onAir => 'On air';
+	@override String get connecting => 'Connecting';
+	@override String get reconnecting => 'Reconnecting';
+	@override String get free => 'Free';
+	@override String get invite => 'Invite';
+}
+
+// Path: room.header
+class _Translations$room$header$en extends Translations$room$header$es {
+	_Translations$room$header$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get youAreHost => 'You\'re the host';
+	@override String hostedBy({required Object name}) => 'Host · ${name}';
+	@override String hz({required Object value}) => '${value} Hz';
+	@override String note({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz';
+	@override String get invite => 'Invite';
 }
 
 // Path: settings.editName
@@ -228,6 +274,30 @@ extension on TranslationsEn {
 			'room.roomClosed' => 'Room has been closed by host',
 			'room.reconnecting' => 'Reconnecting...',
 			'room.accept' => 'Accept',
+			'room.noteNames.0' => 'C',
+			'room.noteNames.1' => 'D♭',
+			'room.noteNames.2' => 'D',
+			'room.noteNames.3' => 'E♭',
+			'room.noteNames.4' => 'E',
+			'room.noteNames.5' => 'F',
+			'room.noteNames.6' => 'F♯',
+			'room.noteNames.7' => 'G',
+			'room.noteNames.8' => 'A♭',
+			'room.noteNames.9' => 'A',
+			'room.noteNames.10' => 'B♭',
+			'room.noteNames.11' => 'B',
+			'room.mesh.you' => 'You',
+			'room.mesh.youHost' => 'You · host',
+			'room.mesh.onAir' => 'On air',
+			'room.mesh.connecting' => 'Connecting',
+			'room.mesh.reconnecting' => 'Reconnecting',
+			'room.mesh.free' => 'Free',
+			'room.mesh.invite' => 'Invite',
+			'room.header.youAreHost' => 'You\'re the host',
+			'room.header.hostedBy' => ({required Object name}) => 'Host · ${name}',
+			'room.header.hz' => ({required Object value}) => '${value} Hz',
+			'room.header.note' => ({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz',
+			'room.header.invite' => 'Invite',
 			'permissions.title' => 'Required permissions',
 			'permissions.description' => 'Frecu needs permissions to communicate without internet.',
 			'permissions.microphone' => 'Microphone',

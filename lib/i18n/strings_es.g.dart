@@ -146,6 +146,23 @@ class Translations$room$es {
 
 	/// es: 'Aceptar'
 	String get accept => 'Aceptar';
+
+	List<String> get noteNames => [
+		'Do',
+		'Re♭',
+		'Re',
+		'Mi♭',
+		'Mi',
+		'Fa',
+		'Fa♯',
+		'Sol',
+		'La♭',
+		'La',
+		'Si♭',
+		'Si',
+	];
+	late final Translations$room$mesh$es mesh = Translations$room$mesh$es.internal(_root);
+	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
 }
 
 // Path: permissions
@@ -271,6 +288,60 @@ class Translations$errors$es {
 	String get unexpected => 'Error inesperado';
 }
 
+// Path: room.mesh
+class Translations$room$mesh$es {
+	Translations$room$mesh$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Tú'
+	String get you => 'Tú';
+
+	/// es: 'Tú · anfitrión'
+	String get youHost => 'Tú · anfitrión';
+
+	/// es: 'Al aire'
+	String get onAir => 'Al aire';
+
+	/// es: 'Conectando'
+	String get connecting => 'Conectando';
+
+	/// es: 'Reconectando'
+	String get reconnecting => 'Reconectando';
+
+	/// es: 'Libre'
+	String get free => 'Libre';
+
+	/// es: 'Invitar'
+	String get invite => 'Invitar';
+}
+
+// Path: room.header
+class Translations$room$header$es {
+	Translations$room$header$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Eres el anfitrión'
+	String get youAreHost => 'Eres el anfitrión';
+
+	/// es: 'Anfitrión · $name'
+	String hostedBy({required Object name}) => 'Anfitrión · ${name}';
+
+	/// es: '$value Hz'
+	String hz({required Object value}) => '${value} Hz';
+
+	/// es: 'Nota $note, $hz Hz'
+	String note({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz';
+
+	/// es: 'Invitar'
+	String get invite => 'Invitar';
+}
+
 // Path: settings.editName
 class Translations$settings$editName$es {
 	Translations$settings$editName$es.internal(this._root);
@@ -363,6 +434,30 @@ extension on Translations {
 			'room.roomClosed' => 'La frecu fue cerrada por el anfitrión',
 			'room.reconnecting' => 'Reconectando...',
 			'room.accept' => 'Aceptar',
+			'room.noteNames.0' => 'Do',
+			'room.noteNames.1' => 'Re♭',
+			'room.noteNames.2' => 'Re',
+			'room.noteNames.3' => 'Mi♭',
+			'room.noteNames.4' => 'Mi',
+			'room.noteNames.5' => 'Fa',
+			'room.noteNames.6' => 'Fa♯',
+			'room.noteNames.7' => 'Sol',
+			'room.noteNames.8' => 'La♭',
+			'room.noteNames.9' => 'La',
+			'room.noteNames.10' => 'Si♭',
+			'room.noteNames.11' => 'Si',
+			'room.mesh.you' => 'Tú',
+			'room.mesh.youHost' => 'Tú · anfitrión',
+			'room.mesh.onAir' => 'Al aire',
+			'room.mesh.connecting' => 'Conectando',
+			'room.mesh.reconnecting' => 'Reconectando',
+			'room.mesh.free' => 'Libre',
+			'room.mesh.invite' => 'Invitar',
+			'room.header.youAreHost' => 'Eres el anfitrión',
+			'room.header.hostedBy' => ({required Object name}) => 'Anfitrión · ${name}',
+			'room.header.hz' => ({required Object value}) => '${value} Hz',
+			'room.header.note' => ({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz',
+			'room.header.invite' => 'Invitar',
 			'permissions.title' => 'Permisos requeridos',
 			'permissions.description' => 'Frecu necesita permisos para comunicarse sin internet.',
 			'permissions.microphone' => 'Micrófono',
