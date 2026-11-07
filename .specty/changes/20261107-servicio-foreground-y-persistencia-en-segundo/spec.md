@@ -53,7 +53,7 @@ Garantizar que una frecu activa permanezca conectada y transmitiendo/recibiendo 
 
 ## Tareas
 
-- [ ] T1: Dependencia flutter_foreground_task, configuración de Android y ForegroundServiceDataSource wrapper
+- [x] T1: Dependencia flutter_foreground_task, configuración de Android y ForegroundServiceDataSource wrapper
   - files: pubspec.yaml, android/app/src/main/AndroidManifest.xml, lib/features/room/data/datasources/foreground_service_datasource.dart, test/features/room/data/foreground_service_datasource_test.dart
   - ac: AC1
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-servicio-foreground-y-persistencia-en-segundo' && fvm flutter test test/features/room/data/foreground_service_datasource_test.dart
