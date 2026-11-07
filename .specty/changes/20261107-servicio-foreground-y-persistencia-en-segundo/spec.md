@@ -48,8 +48,6 @@ Garantizar que una frecu activa permanezca conectada y transmitiendo/recibiendo 
 - modificar lib/features/room/data/repositories/room_repository_impl.dart — integración de inicio, actualización y parada del servicio foreground
 - modificar lib/features/room/presentation/providers/room_provider.dart — provisión e inyección de ForegroundServiceDataSource
 - modificar test/features/room/data/room_repository_test.dart — pruebas de integración de ciclo de vida del foreground service en RoomRepositoryImpl
-- modificar test/features/room/presentation/invite_qr_dialog_test.dart — formateo de código con dart format
-- modificar test/features/room/presentation/voice_flow_test.dart — formateo de código con dart format
 
 ## Tareas
 
@@ -58,7 +56,7 @@ Garantizar que una frecu activa permanezca conectada y transmitiendo/recibiendo 
   - ac: AC1
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-servicio-foreground-y-persistencia-en-segundo' && fvm flutter test test/features/room/data/foreground_service_datasource_test.dart
 - [ ] T2: Conexión del ciclo de vida del foreground service en RoomRepositoryImpl y proveedores
-  - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/presentation/providers/room_provider.dart, test/features/room/data/room_repository_test.dart, test/features/room/presentation/invite_qr_dialog_test.dart, test/features/room/presentation/voice_flow_test.dart
+  - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/presentation/providers/room_provider.dart, test/features/room/data/room_repository_test.dart
   - ac: AC1
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-servicio-foreground-y-persistencia-en-segundo' && fvm flutter test test/features/room/data/room_repository_test.dart
 

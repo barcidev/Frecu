@@ -5,20 +5,20 @@
   "phase": "implementing",
   "branch": "feature/servicio-foreground-y-persistencia-en-segundo",
   "baseCommit": "ff96b0a595b239916eb43f1fb310bd76523a9c6d",
-  "revision": 1,
+  "revision": 2,
   "approved": {
-    "revision": 1,
-    "hash": "sha256:20e5e95a93bc81c65cca49b158fcf341495ea3f53bef98bb4aa75f009db0e900",
-    "at": "2026-11-07T04:57:49.012Z",
+    "revision": 2,
+    "hash": "sha256:1e142999e7a6b6e8b10c64e10f47d9bf8a061f1809393ab77f01d6a5ea985b75",
+    "at": "2026-11-07T05:19:57.141Z",
     "by": "Jorge Palacio Barcinilla",
     "channel": "delegated"
   },
   "size": {
     "level": "L",
-    "score": 13,
+    "score": 11,
     "adjust": 0,
     "reasons": [
-      "9 archivos",
+      "7 archivos",
       "2 módulos",
       "cambia dependencias"
     ]
@@ -40,14 +40,24 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        ".flutter-plugins-dependencies"
-      ],
-      "attempts": 1,
       "baseCommit": "cc84957054294075f742d27fce375d8d59104d31",
+      "attempts": 1,
       "startedAt": "2026-11-07T05:05:36.560Z",
       "doneAt": "2026-11-07T05:11:07.769Z",
-      "summary": "Dependencia flutter_foreground_task, configuración de Android y ForegroundServiceDataSource wrapper"
+      "summary": "Dependencia flutter_foreground_task, configuración de Android y ForegroundServiceDataSource wrapper",
+      "scopeExtra": [
+        ".flutter-plugins-dependencies"
+      ]
+    },
+    "T2": {
+      "status": "active",
+      "baseCommit": "9a683d2fea1e5d61714659666a05db69aec58474",
+      "attempts": 0,
+      "startedAt": "2026-11-07T05:11:09.104Z",
+      "scopeExtra": [
+        "pubspec.yaml",
+        "lib/features/room/presentation/providers/room_provider.g.dart"
+      ]
     }
   },
   "pending": {
@@ -59,7 +69,7 @@
     "AC": 1,
     "T": 2,
     "R": 1,
-    "S": 1
+    "S": 2
   },
   "lockedTests": {
     "test/features/room/data/room_repository_test.dart": "sha256:eecd90dc387300acf52f93ff80ac250ca90fd8ebd131d38a6cea5db636d7cea1",
