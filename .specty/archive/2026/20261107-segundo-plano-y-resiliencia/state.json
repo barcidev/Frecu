@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261107-segundo-plano-y-resiliencia",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/segundo-plano-y-resiliencia",
   "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e735d8cff9e07e595721e50046283c34f0bf515dfbef2b0373edd3971bad59d9",
+    "at": "2026-11-07T03:32:20.184Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -39,11 +46,5 @@
     "C": 2,
     "R": 1
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:e735d8cff9e07e595721e50046283c34f0bf515dfbef2b0373edd3971bad59d9",
-    "at": "2026-11-07T03:32:20.184Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  }
+  "closingSubmittedAt": "2026-11-07T08:47:29.109Z"
 }

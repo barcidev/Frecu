@@ -50,3 +50,20 @@ La épica se estructura en dos cortes verticales:
 ## Riesgos
 
 - R1: Agresividad de los fabricantes de Android en la gestión de batería que matan procesos en segundo plano — mitigación: Foreground Service con notificación permanente, wake lock controlado y `androidAudioFocusGainType: gainTransient` en `audio_session`.
+
+## Cierre
+
+### Resumen
+Se completó con éxito la épica de Segundo plano y resiliencia implementando ambos cortes verticales planificados:
+1. **C1 (Heartbeats, reconexión con backoff y cierre de frecu)**: Monitoreo de liveness mediante ping/pong periódicos cada 5s, detección proactiva de desconexión, estado `RoomStatus.reconnecting`, reconexión automática con backoff exponencial (5 reintentos) y propagación inmediata del cierre de la sala hacia el Lobby cuando el anfitrión abandona la sesión.
+2. **C2 (Servicio foreground y persistencia en segundo plano)**: Integración de `flutter_foreground_task` con configuración nativa de Android (permisos y servicio de tipo `microphone`), wrapper `ForegroundServiceDataSource` con notificación permanente ("Frecu activa", nombre de la sala y estado), y enlace completo del ciclo de vida del servicio al crear/unirse a una frecu, actualizar ante reconexión y detener al salir o cerrarse la sala.
+
+### Desviaciones
+- Ninguna respecto al alcance funcional planificado. Ambos cortes C1 y C2 cumplieron todos sus criterios de aceptación con suites de tests integrales y cero advertencias de análisis.
+
+### Decisiones
+- Se configuró el servicio en primer plano con tipo `microphone` y wake lock para garantizar que los sockets de señalización TCP/WebSocket y las pistas de audio WebRTC permanezcan activos con la pantalla apagada.
+- Se implementó backoff exponencial con jitter para los reintentos de reconexión de señalización evitando colisiones simultáneas.
+
+### Pendientes
+- Ninguno en esta épica. El proyecto queda listo para la siguiente fase.
