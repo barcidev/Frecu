@@ -78,7 +78,7 @@ Crear los widgets base de Portadora que usan la bienvenida, el nombre y los perm
   - files: lib/core/design/motion/reduced_motion.dart, lib/core/design/motion/fr_spring_curve.dart, lib/core/design/motion/fr_noise.dart, test/core/design/motion/fr_motion_tools_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/core/design/motion/fr_motion_tools_test.dart
-- [ ] T2: Firma de señal y loader de onda
+- [x] T2: Firma de señal y loader de onda
   - files: lib/core/design/widgets/signal_signature.dart, lib/core/design/widgets/wave_loader.dart, test/core/design/widgets/signal_signature_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/core/design/widgets/signal_signature_test.dart

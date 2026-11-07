@@ -39,12 +39,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "5e0b5330a2b2e0597d0dfe061f0d3720d81cb250",
+      "attempts": 1,
       "startedAt": "2026-11-07T09:01:19.144Z",
       "doneAt": "2026-11-07T09:02:38.125Z",
-      "summary": "fr_noise (FNV-1a, mulberry32, Perlin 2D y voz simulada idénticos a engine.js), FrSpringCurve para animaciones implícitas con resorte y FrLoop + context.reduceMotion: un Ticker que se congela con movimiento reducido y se pausa fuera de pantalla."
+      "summary": "fr_noise (FNV-1a, mulberry32, Perlin 2D y voz simulada idénticos a engine.js), FrSpringCurve para animaciones implícitas con resorte y FrLoop + context.reduceMotion: un Ticker que se congela con movimiento reducido y se pausa fuera de pantalla.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "63e3317954f752b7ed9c083ceba61ec594811f4f",
+      "startedAt": "2026-11-07T09:02:38.736Z",
+      "doneAt": "2026-11-07T09:04:06.778Z",
+      "summary": "SignalSignature (SignatureParams.fromName idéntico a sigParams del prototipo; pintor de 220 puntos con ondulación, brillo al hablar, estela y modos idle/speak/muted/off/link) y WaveLoader (dos senos con envolvente), ambos sobre FrLoop con RepaintBoundary y cuadro fijo con movimiento reducido."
     }
   },
   "pending": {
