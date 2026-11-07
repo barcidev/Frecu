@@ -90,7 +90,7 @@ Referencia: pantallas `welcome`, `name` y `perms` de `docs/diseno/prototipo/scre
   - files: lib/features/permissions/presentation/widgets/name_step.dart, lib/features/permissions/presentation/pages/permissions_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/permissions/presentation/name_step_test.dart
   - ac: AC3, AC4, AC5, AC6, AC10
   - verify: flutter test test/features/permissions/presentation/name_step_test.dart
-- [ ] T3: Permisos pedidos con su estado y salida al inicio
+- [x] T3: Permisos pedidos con su estado y salida al inicio
   - files: lib/features/permissions/presentation/providers/onboarding_permissions_provider.dart, lib/features/permissions/presentation/providers/onboarding_permissions_provider.g.dart, lib/features/permissions/presentation/providers/onboarding_permissions_provider.freezed.dart, lib/features/permissions/presentation/widgets/permission_row.dart, lib/features/permissions/presentation/widgets/permissions_step.dart, lib/features/permissions/presentation/pages/permissions_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/permissions/presentation/permissions_step_test.dart
   - ac: AC7, AC8, AC9, AC10
   - verify: flutter analyze && flutter test

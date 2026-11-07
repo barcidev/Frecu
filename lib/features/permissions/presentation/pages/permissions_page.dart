@@ -2,15 +2,18 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/motion/fr_transitions.dart';
 import 'package:frecu/features/permissions/presentation/widgets/name_step.dart';
+import 'package:frecu/features/permissions/presentation/widgets/permissions_step.dart';
 import 'package:frecu/features/permissions/presentation/widgets/welcome_step.dart';
 
 /// Recorrido de la primera vez: bienvenida, nombre y permisos.
 ///
 /// Los pasos viven en un [Navigator] propio: avanzar entra con la onda desde
 /// el dedo, y Atrás o el gesto de volver regresan un paso sin perder el
-/// nombre escrito (en la bienvenida, el gesto sale de la ruta).
+/// nombre escrito (en la bienvenida, el gesto sale de la ruta). Al terminar,
+/// el inicio queda como única pantalla.
 @RoutePage()
 class PermissionsPage extends StatefulWidget {
   /// Constructor constante.
@@ -41,8 +44,16 @@ class _PermissionsPageState extends State<PermissionsPage> {
   Widget _welcome(BuildContext _) =>
       WelcomeStep(onStart: () => _push(_nameStep));
 
-  Widget _nameStep(BuildContext _) =>
-      NameStep(controller: _name, onBack: _back, onSaved: () {});
+  Widget _nameStep(BuildContext _) => NameStep(
+    controller: _name,
+    onBack: _back,
+    onSaved: () => _push(_permissions),
+  );
+
+  Widget _permissions(BuildContext _) =>
+      PermissionsStep(onBack: _back, onFinish: _finish);
+
+  void _finish() => unawaited(context.router.replaceAll([const LobbyRoute()]));
 
   @override
   Widget build(BuildContext context) {
