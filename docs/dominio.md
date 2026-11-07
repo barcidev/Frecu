@@ -10,3 +10,5 @@
 - **Nota** (`RoomNote`): Nota musical de cada frecu, su canal reconocible en voz alta ("estamos en Mi"). La asigna `AssignRoomNote` con la hora local de apertura sobre el círculo de quintas (12→Do, 1→Sol, 2→Re … 11→Fa), en octava 4 de 0 a 11 h y en octava 5 de 12 a 23 h; si una frecu cercana ya usa esa nota y octava, avanza a la siguiente quinta libre. Se guarda como semitono desde Do4 (0–23) y es opcional en `Room`, `NearbyRoom` y `RoomInvite`.
 - **Estado de sala** (`RoomStatus`): `idle`, `connecting`, `connected`, `reconnecting`, `closed(reason)`.
 - **Ruta de audio** (`AudioRoute`): Salida del sonido (`speaker`, `earpiece`, `bluetooth`).
+- **Preferencias** (`Preferences`): Lo que el teléfono guarda del usuario: nombre visible (`displayName`, nulo si aún no se pidió; de 1 a 20 caracteres), tema (`themePreference`) y modo de habla por defecto (`defaultTalkMode`).
+- **Tema** (`ThemePreference`): `auto` (sigue al sistema), `light` (claro) o `dark` (oscuro).
