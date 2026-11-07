@@ -373,7 +373,7 @@ void main() {
       'AC5: en inglés la nota sale con su nombre en inglés, F♯5 con 740 Hz',
       (tester) async {
         reduceMotion(tester);
-        LocaleSettings.setLocaleSync(AppLocale.en);
+        await tester.runAsync(() => LocaleSettings.setLocale(AppLocale.en));
         addTearDown(() => LocaleSettings.setLocaleSync(AppLocale.es));
         final semantics = tester.ensureSemantics();
         when(() => repository.watchParticipants())

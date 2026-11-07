@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-malla-hexagonal-de-la-frecu-activa-con-firmas-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/malla-hexagonal-de-la-frecu-activa-con-firmas-y",
   "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
   "revision": 2,
@@ -64,12 +64,25 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "3be957111fbe305bf60d725b447bb0ed36f633c8",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:49:50.695Z",
       "doneAt": "2026-11-07T17:56:54.416Z",
-      "summary": "Escena de la malla (lugares estables, nodos, leyendas, aristas, resorte, voz simulada y paquetes, pintor) y RoomMesh con firmas, marca de anfitrión, etiquetas y lugares libres que invitan; textos room.mesh, room.header y room.noteNames en es y en."
+      "summary": "Escena de la malla (lugares estables, nodos, leyendas, aristas, resorte, voz simulada y paquetes, pintor) y RoomMesh con firmas, marca de anfitrión, etiquetas y lugares libres que invitan; textos room.mesh, room.header y room.noteNames en es y en.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/presentation/widgets/participants_list.dart",
+        "lib/features/room/presentation/widgets/room_info_card.dart",
+        "test/features/room/presentation/room_flow_test.dart"
+      ],
+      "attempts": 2,
+      "baseCommit": "2505bf34aa69ce48132fe0f7cc309307347856ec",
+      "startedAt": "2026-11-07T17:56:55.087Z",
+      "doneAt": "2026-11-07T21:33:53.230Z",
+      "summary": "RoomPage en FrScaffold con RoomHeader (chip de nota y Hz, nombre, anfitrión, ruta, invitar y salir), la malla y los controles actuales; se borran la lista y la tarjeta; «Hablando» del micrófono abierto en signalFg."
     }
   },
   "pending": {
@@ -80,11 +93,12 @@
     "A": 7,
     "AC": 7,
     "T": 3,
-    "R": 3
+    "R": 3,
+    "S": 1
   },
   "lockedTests": {
     "test/features/room/data/room_repository_test.dart": "sha256:1a4c633f93b09381422709e6d9504b3558a97919028bd0b7f94d469c491e19b3",
-    "test/features/room/presentation/room_flow_test.dart": "sha256:dce1540e4a2675680cd75d31fc5f9a82adb0bfffb0f6b7df54337a9119a9a96f",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:01aed6e2792b00de4ce4668a614518e4cde17b2c5f7586fe8e5ab4ed479e7032",
     "test/features/room/presentation/voice_flow_test.dart": "sha256:f2ac54c06322f81395d03f9d76f371744b22f8a15073decf26e6bb51b3e5c344",
     "test/features/room/presentation/room_mesh_test.dart": "sha256:d7fe14e85ecc8ea40d94ad60fc6f4c59865e6dd60f99e7a027ec352f8d06fb31"
   }

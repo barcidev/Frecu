@@ -3,15 +3,16 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/core/design/widgets/fr_scaffold.dart';
+import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_qr_dialog.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
-import 'package:frecu/features/room/presentation/widgets/participants_list.dart';
-import 'package:frecu/features/room/presentation/widgets/room_info_card.dart';
+import 'package:frecu/features/room/presentation/widgets/room_header.dart';
+import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Pantalla de la frecu activa (comunicador de voz).
@@ -76,99 +77,62 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, Room? room, AudioRoute audioRoute) {
-    final IconData routeIcon;
-    final String tooltip;
-    switch (audioRoute) {
-      case AudioRoute.bluetooth:
-        routeIcon = Icons.bluetooth_audio;
-        tooltip = t.room.bluetooth;
-      case AudioRoute.earpiece:
-        routeIcon = Icons.phone_in_talk;
-        tooltip = t.room.earpiece;
-      case AudioRoute.speaker:
-        routeIcon = Icons.volume_up;
-        tooltip = t.room.speaker;
-    }
-
-    return AppBar(
-      title: Text(room?.name ?? t.room.title),
-      actions: [
-        IconButton(
-          key: const Key('audio_route_button'),
-          icon: Icon(routeIcon),
-          tooltip: tooltip,
-          onPressed: () {
-            unawaited(
-              ref.read(voiceNotifierProvider.notifier).cycleAudioRoute(),
-            );
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.qr_code),
-          tooltip: 'Código QR de invitación',
-          onPressed: room != null
-              ? () => _showInviteQrDialog(context, room)
-              : null,
-        ),
-        IconButton(
-          icon: const Icon(Icons.exit_to_app),
-          tooltip: t.room.leave,
-          onPressed: _handleLeave,
-        ),
-      ],
-    );
+  void _listenForClose(BuildContext context) {
+    ref.listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
+      next.value?.maybeWhen(
+        closed: (reason) => _showRoomClosedDialog(context, reason),
+        orElse: () {},
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final room = ref.watch(roomNotifierProvider);
-    final participantsAsync = ref.watch(roomParticipantsProvider);
-    final statusAsync = ref.watch(roomStatusProvider);
+    final participants =
+        ref.watch(roomParticipantsProvider).value ?? const <Participant>[];
+    final status = ref.watch(roomStatusProvider).value;
     final voiceState = ref.watch(voiceNotifierProvider);
-    final participantsCount = participantsAsync.value?.length ?? 0;
+    final localId = ref.watch(roomRepositoryProvider).localParticipantId;
 
-    ref.listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
-      final status = next.value;
-      if (status != null) {
-        status.maybeWhen(
-          closed: (reason) {
-            _showRoomClosedDialog(context, reason);
-          },
-          orElse: () {},
-        );
-      }
-    });
+    _listenForClose(context);
 
-    return Scaffold(
-      appBar: _buildAppBar(context, room, voiceState.audioRoute),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            RoomInfoCard(room: room, statusAsync: statusAsync),
-            const SizedBox(height: 12),
-            ParticipantsHeader(count: participantsCount),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ParticipantsList(
-                participantsAsync: participantsAsync,
+    final onInvite = room == null
+        ? null
+        : () => unawaited(_showInviteQrDialog(context, room));
+
+    return FrScaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          RoomHeader(
+            room: room,
+            participants: participants,
+            localParticipantId: localId,
+            audioRoute: voiceState.audioRoute,
+            onCycleAudioRoute: () => unawaited(
+              ref.read(voiceNotifierProvider.notifier).cycleAudioRoute(),
+            ),
+            onInvite: onInvite,
+            onLeave: () => unawaited(_handleLeave()),
+          ),
+          Expanded(
+            child: Center(
+              child: RoomMesh(
+                participants: participants,
+                localParticipantId: localId,
                 speakingPeers: voiceState.speakingPeers,
+                localTalking: voiceState.isTalking,
+                status: status,
+                onInvite: onInvite,
               ),
             ),
-            MicControlSection(voiceState: voiceState),
-            const SizedBox(height: 12),
-            FilledButton.icon(
-              icon: const Icon(Icons.call_end),
-              label: Text(t.room.leave),
-              style: FilledButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
-              onPressed: _handleLeave,
-            ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: MicControlSection(voiceState: voiceState),
+          ),
+        ],
       ),
     );
   }

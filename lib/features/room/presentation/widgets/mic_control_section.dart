@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/ptt_button.dart';
@@ -70,7 +71,7 @@ class _MicControlSectionState extends ConsumerState<MicControlSection> {
                   isTalking ? t.room.speaking : t.room.muted,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isTalking ? theme.colorScheme.primary : null,
+                    color: isTalking ? context.fr.colors.signalFg : null,
                   ),
                 ),
                 Text(t.room.openMic, style: theme.textTheme.bodySmall),

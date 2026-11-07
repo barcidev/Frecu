@@ -86,7 +86,7 @@ Referencia: `drawMesh`, `meshSlots`, `drawSig` y `easeInOut` de `engine.js`; `me
   - files: lib/features/room/presentation/widgets/room_mesh_scene.dart, lib/features/room/presentation/widgets/room_mesh.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/room_mesh_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/room/presentation/room_mesh_test.dart
-- [ ] T3: Frecu activa con cabecera de nota, malla y controles actuales
+- [x] T3: Frecu activa con cabecera de nota, malla y controles actuales
   - files: lib/features/room/presentation/widgets/room_header.dart, lib/features/room/presentation/pages/room_page.dart, lib/features/room/presentation/widgets/mic_control_section.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/room_flow_test.dart, test/features/room/presentation/voice_flow_test.dart
   - ac: AC1, AC5, AC6
   - verify: flutter analyze && flutter test test/features/room test/features/lobby
