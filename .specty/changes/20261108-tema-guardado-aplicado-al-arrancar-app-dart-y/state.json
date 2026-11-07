@@ -44,7 +44,19 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "test/bootstrap_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "ae2d5cd3c48abd63d27d7dd68609034cc0053431",
+      "startedAt": "2026-11-07T16:35:13.997Z",
+      "doneAt": "2026-11-07T16:44:17.692Z",
+      "summary": "createAppContainer() en bootstrap.dart lee las preferencias antes de runApp (si falla, lo registra y sigue) y la app se monta con UncontrolledProviderScope sobre ese contenedor. S1: import de flutter_riverpod que faltaba en el test."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -53,11 +65,12 @@
     "A": 5,
     "AC": 3,
     "T": 2,
-    "R": 2
+    "R": 2,
+    "S": 1
   },
   "lockedTests": {
     "test/flutter_test_config.dart": "sha256:8680ee894a489284d414a88079439901142f08cb3acf7a26c531b62025a2acf1",
     "test/app/saved_theme_test.dart": "sha256:7d56d9d879d5471d6c940b125f621be5adc94a6e2168472acfb064d1fd26df8d",
-    "test/bootstrap_test.dart": "sha256:020628d67cd5cad828e7edf3002ae71ada7d3ec981c4d1f1a1e800ef4c1b88c1"
+    "test/bootstrap_test.dart": "sha256:e321f6d0f07f8fda02868afcb36be852c6ed2a9302235570028417c7ffbccf6d"
   }
 }

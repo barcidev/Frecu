@@ -49,7 +49,7 @@ Que la app abra con el tema guardado (Auto, Claro u Oscuro) desde el primer cuad
 
 ## Tareas
 
-- [ ] T1: Precarga de preferencias en `bootstrap.dart`
+- [x] T1: Precarga de preferencias en `bootstrap.dart`
   - files: lib/bootstrap.dart, test/bootstrap_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/bootstrap_test.dart

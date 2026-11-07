@@ -1,5 +1,6 @@
 // AC1: CUANDO la app arranca con el tema Claro u Oscuro guardado ENTONCES el primer cuadro ya se pinta con ese tema de Portadora, aunque el sistema esté en el otro, sin pasar por el tema del sistema.
 // AC2: CUANDO el tema guardado es Auto, no hay nada guardado o no se pudieron leer las preferencias ENTONCES la app arranca igual y sigue el tema claro u oscuro del sistema, también si el sistema cambia con la app abierta.
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/bootstrap.dart';
 import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
