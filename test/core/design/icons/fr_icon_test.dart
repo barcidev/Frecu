@@ -36,6 +36,24 @@ RenderObject paintOf(WidgetTester tester, {int index = 0}) =>
           .first,
     );
 
+/// Grosor del primer trazo de línea que pinta el [index]-ésimo `FrIcon`.
+///
+/// `Paint` guarda el grosor en 32 bits, así que se compara con tolerancia.
+double strokeWidthOf(WidgetTester tester, {int index = 0}) {
+  double? width;
+  expect(
+    paintOf(tester, index: index),
+    paints..something((method, arguments) {
+      if (method != #drawPath) return false;
+      final paint = arguments[1] as Paint;
+      if (paint.style != PaintingStyle.stroke) return false;
+      width = paint.strokeWidth;
+      return true;
+    }),
+  );
+  return width!;
+}
+
 bool roundStroke(Symbol method, List<dynamic> arguments) {
   if (method != #drawPath) return false;
   final paint = arguments[1] as Paint;
@@ -55,8 +73,9 @@ void main() {
           paintOf(tester),
           paints
             ..scale(x: 22 / 24, y: 22 / 24)
-            ..path(style: PaintingStyle.stroke, strokeWidth: 1.6, color: ink),
+            ..path(style: PaintingStyle.stroke, color: ink),
         );
+        expect(strokeWidthOf(tester), closeTo(1.6, 1e-6));
         expect(paintOf(tester), paints..something(roundStroke));
       },
     );
@@ -77,16 +96,16 @@ void main() {
       tester,
     ) async {
       await pumpBare(tester, const FrIcon(FrIcons.plus, size: 34, color: ink));
-      expect(paintOf(tester), paints..path(strokeWidth: 1.4));
+      expect(strokeWidthOf(tester), closeTo(1.4, 1e-6));
 
       await pumpBare(tester, const FrIcon(FrIcons.plus, size: 16, color: ink));
-      expect(paintOf(tester), paints..path(strokeWidth: 1.8));
+      expect(strokeWidthOf(tester), closeTo(1.8, 1e-6));
 
       await pumpBare(
         tester,
         const FrIcon(FrIcons.plus, size: 16, color: ink, strokeWidth: 2),
       );
-      expect(paintOf(tester), paints..path(strokeWidth: 2));
+      expect(strokeWidthOf(tester), closeTo(2, 1e-6));
     });
 
     testWidgets('AC3: solo rellena las formas con relleno', (tester) async {
@@ -117,11 +136,9 @@ void main() {
         paintOf(tester),
         paints
           ..scale(x: 30 / 24, y: 30 / 24)
-          ..path(
-            color: const Color(0xFF00FF00).withValues(alpha: 0.5),
-            strokeWidth: 1.5,
-          ),
+          ..path(color: const Color(0xFF00FF00).withValues(alpha: 0.5)),
       );
+      expect(strokeWidthOf(tester), closeTo(1.5, 1e-6));
     });
 
     testWidgets('AC3: sin IconTheme propio usa 24 px y el color por defecto', (
@@ -146,7 +163,8 @@ void main() {
         ),
       );
       expect(tester.getSize(find.byType(FrIcon)), const Size(16, 16));
-      expect(paintOf(tester), paints..path(color: ink, strokeWidth: 1.8));
+      expect(paintOf(tester), paints..path(color: ink));
+      expect(strokeWidthOf(tester), closeTo(1.8, 1e-6));
     });
 
     testWidgets('AC3: con semanticLabel se anuncia con ese texto', (
@@ -190,10 +208,8 @@ void main() {
         expect(icons.map((icon) => icon.icon), [FrIcons.back, FrIcons.close]);
         expect(tester.getSize(find.byType(FrIcon).at(0)), const Size(22, 22));
         expect(tester.getSize(find.byType(FrIcon).at(1)), const Size(22, 22));
-        expect(
-          paintOf(tester),
-          paints..path(color: FrColors.dark.tx1, strokeWidth: 1.6),
-        );
+        expect(paintOf(tester), paints..path(color: FrColors.dark.tx1));
+        expect(strokeWidthOf(tester), closeTo(1.6, 1e-6));
         expect(
           paintOf(tester, index: 1),
           paints..path(color: FrColors.dark.alert),
