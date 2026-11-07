@@ -6,6 +6,13 @@
   "branch": "feature/nota-de-cada-frecu-en-el-dominio-roomnote",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:86dc385a2640f3c1b20352d1cc48022d0738bebecc2d7e273f513c3f44c1efa7",
+    "at": "2026-11-07T11:00:57.940Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 12,
@@ -48,12 +55,6 @@
     "T": 3,
     "R": 2
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:86dc385a2640f3c1b20352d1cc48022d0738bebecc2d7e273f513c3f44c1efa7",
-    "at": "2026-11-07T11:00:57.940Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T11:06:29.707Z"
 }
