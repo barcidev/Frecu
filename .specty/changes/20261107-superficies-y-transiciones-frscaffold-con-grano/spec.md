@@ -80,7 +80,7 @@ Crear en `lib/core/design/` las superficies de Portadora que usarán las pantall
   - files: lib/core/design/widgets/fr_sheet.dart, test/core/design/widgets/fr_sheet_test.dart
   - ac: AC2, AC6
   - verify: flutter test test/core/design/widgets/fr_sheet_test.dart
-- [ ] T4: Aviso, toast e isla de estado
+- [x] T4: Aviso, toast e isla de estado
   - files: lib/core/design/widgets/fr_banner.dart, lib/core/design/widgets/fr_toast.dart, lib/core/design/widgets/status_island.dart, test/core/design/widgets/fr_notices_test.dart
   - ac: AC4, AC5, AC6
   - verify: flutter analyze && flutter test

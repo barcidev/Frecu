@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-superficies-y-transiciones-frscaffold-con-grano",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/superficies-y-transiciones-frscaffold-con-grano",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -65,12 +65,21 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "6d9bf71d498dbfee3ddf0936d85ebed539b79ac7",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:25:36.482Z",
       "doneAt": "2026-11-07T16:27:30.340Z",
-      "summary": "FrSheet (radio 40, asa, cabecera y contenido) y FrSheetRoute como PopupRoute: velo con desenfoque, subida con SpringSimulation(springFlow), bajada en 400 ms y FrTransitions.recede para alejar la pantalla de abajo; fundido de 280 ms con movimiento reducido."
+      "summary": "FrSheet (radio 40, asa, cabecera y contenido) y FrSheetRoute como PopupRoute: velo con desenfoque, subida con SpringSimulation(springFlow), bajada en 400 ms y FrTransitions.recede para alejar la pantalla de abajo; fundido de 280 ms con movimiento reducido.",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "d28e2a74b2f238d38c9f848206beccfaf3eca9b5",
+      "startedAt": "2026-11-07T16:27:32.290Z",
+      "doneAt": "2026-11-07T16:30:38.715Z",
+      "summary": "FrBanner (tonos aviso, alerta e info, flotante para eco, cierre que se funde subiendo 6 px), FrToast con showFrToast (entra con springFlow, se va solo y uno nuevo reemplaza al anterior) y StatusIsland siempre oscura con ancho organic y punto que parpadea."
     }
   },
   "pending": {
