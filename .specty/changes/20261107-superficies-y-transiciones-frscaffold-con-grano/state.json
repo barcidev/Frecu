@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-superficies-y-transiciones-frscaffold-con-grano",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/superficies-y-transiciones-frscaffold-con-grano",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -51,6 +51,10 @@
     "T": 4,
     "R": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T11:18:54.581Z"
+  "lockedTests": {
+    "test/core/design/motion/fr_transitions_test.dart": "sha256:ba48c56c494ca0b853accc95da115745caa5eac3142d499637cd3978feb13980",
+    "test/core/design/widgets/fr_notices_test.dart": "sha256:8628a95b33a650618cc9f899b0bcd95b59a029bd9b25e4c8728270260add4066",
+    "test/core/design/widgets/fr_scaffold_test.dart": "sha256:d2b3fb535621f3bc612cafd6f0a17bb6a0a70a9a7187652e703692566f02c914",
+    "test/core/design/widgets/fr_sheet_test.dart": "sha256:7672e33ef344eaa13e1260f4b222b096fb55f9eb95da17cda32042d0694233e1"
+  }
 }
