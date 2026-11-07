@@ -10,10 +10,8 @@
     "scanQr": "Scan",
     "joinRoom": "Connect by IP",
     "nearbyRooms": "Nearby rooms",
-    "noRoomsNearby": "No rooms found on local network",
     "accessCode": "Access code",
     "roomName": "Room name",
-    "yourName": "Your display name",
     "network": {
       "checking": "Checking network",
       "connected": "Network · $ip",

@@ -91,7 +91,7 @@ Referencia: `V.lobby` de `screens.js`; `drawTuner`, `keyX`, `WHITE`, `drawSpark`
   - files: lib/features/lobby/presentation/pages/lobby_page.dart, lib/features/lobby/presentation/widgets/nearby_room_tile.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5, AC6
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart
-- [ ] T3: Textos sin uso fuera y pruebas existentes con el inicio nuevo
+- [x] T3: Textos sin uso fuera y pruebas existentes con el inicio nuevo
   - files: lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/discovery_flow_test.dart, test/features/lobby/presentation/saved_name_test.dart, test/features/lobby/presentation/room_note_flow_test.dart, test/features/lobby/presentation/room_full_flow_test.dart, test/features/room/presentation/room_flow_test.dart, test/features/room/presentation/voice_flow_test.dart, test/app_test.dart, test/app/theme/app_theme_test.dart, test/app/saved_theme_test.dart
   - ac: AC1, AC4
   - verify: flutter test && flutter analyze

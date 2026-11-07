@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-inicio-con-sintonizador-de-dos-octavas-y-lista",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/inicio-con-sintonizador-de-dos-octavas-y-lista",
   "baseCommit": "15711466d5b954b56999789a29a09f6bc3e0ae71",
   "revision": 1,
@@ -68,14 +68,23 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [
-        "lib/features/lobby/presentation/widgets/lobby_sections.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "976e47679000114d364da08b0d88cce40cd8e895",
+      "attempts": 1,
       "startedAt": "2026-11-07T23:55:47.798Z",
       "doneAt": "2026-11-07T23:57:43.433Z",
-      "summary": "LobbyPage en Portadora: cabecera con red y Ajustes, encabezado con el número, sintonizador, lista de NearbyRoomTile con elección, búsqueda vacía, aviso sin red y dock (secciones en lobby_sections.dart)."
+      "summary": "LobbyPage en Portadora: cabecera con red y Ajustes, encabezado con el número, sintonizador, lista de NearbyRoomTile con elección, búsqueda vacía, aviso sin red y dock (secciones en lobby_sections.dart).",
+      "scopeExtra": [
+        "lib/features/lobby/presentation/widgets/lobby_sections.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "ba932747c49563e12f00d517dad41d018f0476fe",
+      "startedAt": "2026-11-07T23:57:43.926Z",
+      "doneAt": "2026-11-07T23:58:41.803Z",
+      "summary": "Quitados lobby.noRoomsNearby y lobby.yourName de es/en y regenerado slang; las pruebas existentes ya abren el inicio nuevo con movimiento reducido."
     }
   },
   "pending": {

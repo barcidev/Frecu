@@ -10,10 +10,8 @@
     "scanQr": "Escanear",
     "joinRoom": "Conectar por IP",
     "nearbyRooms": "Frecus cercanas",
-    "noRoomsNearby": "No se encontraron frecus en la red",
     "accessCode": "Código de acceso",
     "roomName": "Nombre de la frecu",
-    "yourName": "Tu nombre visible",
     "network": {
       "checking": "Buscando red",
       "connected": "Red · $ip",

@@ -90,17 +90,11 @@ class Translations$lobby$es {
 	/// es: 'Frecus cercanas'
 	String get nearbyRooms => 'Frecus cercanas';
 
-	/// es: 'No se encontraron frecus en la red'
-	String get noRoomsNearby => 'No se encontraron frecus en la red';
-
 	/// es: 'Código de acceso'
 	String get accessCode => 'Código de acceso';
 
 	/// es: 'Nombre de la frecu'
 	String get roomName => 'Nombre de la frecu';
-
-	/// es: 'Tu nombre visible'
-	String get yourName => 'Tu nombre visible';
 
 	late final Translations$lobby$network$es network = Translations$lobby$network$es.internal(_root);
 	late final Translations$lobby$tuner$es tuner = Translations$lobby$tuner$es.internal(_root);
@@ -545,10 +539,8 @@ extension on Translations {
 			'lobby.scanQr' => 'Escanear',
 			'lobby.joinRoom' => 'Conectar por IP',
 			'lobby.nearbyRooms' => 'Frecus cercanas',
-			'lobby.noRoomsNearby' => 'No se encontraron frecus en la red',
 			'lobby.accessCode' => 'Código de acceso',
 			'lobby.roomName' => 'Nombre de la frecu',
-			'lobby.yourName' => 'Tu nombre visible',
 			'lobby.network.checking' => 'Buscando red',
 			'lobby.network.connected' => ({required Object ip}) => 'Red · ${ip}',
 			'lobby.network.offline' => 'Sin red local',
