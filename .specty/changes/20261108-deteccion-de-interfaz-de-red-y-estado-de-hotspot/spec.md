@@ -50,7 +50,7 @@ Implementar la feature `features/network` para la detección autónoma de interf
   - files: lib/features/network/domain/entities/network_state.dart, lib/features/network/domain/entities/network_state.freezed.dart, lib/features/network/domain/repositories/network_repository.dart, test/features/network/domain/network_state_test.dart
   - ac: AC1, AC2, AC3
   - verify: fvm flutter test test/features/network/domain/
-- [ ] T2: Datasource de interfaces de red e implementación del repositorio con pruebas
+- [x] T2: Datasource de interfaces de red e implementación del repositorio con pruebas
   - files: lib/features/network/data/datasources/network_interface_datasource.dart, lib/features/network/data/repositories/network_repository_impl.dart, test/features/network/data/network_interface_datasource_test.dart, test/features/network/data/network_repository_impl_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5
   - verify: fvm flutter test test/features/network/data/

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -13,19 +12,19 @@ class MockNetworkInterfaceDataSource extends Mock
 
 class MockNetworkInterface extends Mock implements NetworkInterface {}
 
-class MockInternetAddress extends Mock implements InternetAddress {}
+class MockInterfaceAddress extends Mock implements InterfaceAddress {}
 
 void main() {
   late MockNetworkInterfaceDataSource mockDataSource;
   late NetworkRepositoryImpl repository;
   late MockNetworkInterface mockInterface;
-  late MockInternetAddress mockAddress;
+  late MockInterfaceAddress mockAddress;
 
   setUp(() {
     mockDataSource = MockNetworkInterfaceDataSource();
     repository = NetworkRepositoryImpl(dataSource: mockDataSource);
     mockInterface = MockNetworkInterface();
-    mockAddress = MockInternetAddress();
+    mockAddress = MockInterfaceAddress();
   });
 
   group('NetworkRepositoryImpl', () {
@@ -52,7 +51,7 @@ void main() {
       expect(result.isSuccess, isTrue);
       final state = result.dataOrNull;
       expect(state, isA<NetworkConnected>());
-      final connected = state as NetworkConnected;
+      final connected = state! as NetworkConnected;
       expect(connected.ipAddress, equals('192.168.1.150'));
       expect(connected.interfaceName, equals('wlan0'));
       expect(connected.isHotspot, isFalse);
@@ -72,7 +71,7 @@ void main() {
       expect(result.isSuccess, isTrue);
       final state = result.dataOrNull;
       expect(state, isA<NetworkConnected>());
-      final connected = state as NetworkConnected;
+      final connected = state! as NetworkConnected;
       expect(connected.isHotspot, isTrue);
     });
 

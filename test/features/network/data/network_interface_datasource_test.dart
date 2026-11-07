@@ -6,15 +6,15 @@ import 'package:mocktail/mocktail.dart';
 
 class MockNetworkInterface extends Mock implements NetworkInterface {}
 
-class MockInternetAddress extends Mock implements InternetAddress {}
+class MockInterfaceAddress extends Mock implements InterfaceAddress {}
 
 void main() {
   late MockNetworkInterface mockInterface;
-  late MockInternetAddress mockAddress;
+  late MockInterfaceAddress mockAddress;
 
   setUp(() {
     mockInterface = MockNetworkInterface();
-    mockAddress = MockInternetAddress();
+    mockAddress = MockInterfaceAddress();
   });
 
   group('NetworkInterfaceDataSource', () {
@@ -50,14 +50,11 @@ void main() {
       'AC4: getInterfaces rethrows exception when interface listing fails',
       () async {
         final dataSource = NetworkInterfaceDataSource(
-          listInterfaces: () async =>
+          listInterfaces: () =>
               throw const SocketException('Platform network failure'),
         );
 
-        expect(
-          () => dataSource.getInterfaces(),
-          throwsA(isA<SocketException>()),
-        );
+        expect(dataSource.getInterfaces, throwsA(isA<SocketException>()));
       },
     );
   });
