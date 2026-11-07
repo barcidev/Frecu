@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-nota-musical-roomnote-en-el-mensaje-welcome-de",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
   "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:6987cfabe76fb1bc10ba454d16eddcb55fc501835f6090c48227cbe31346abf7",
@@ -77,12 +77,12 @@
     },
     "T4": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "f7505a648f21480cf1f7e5e5d67a0900b9b316c3",
+      "attempts": 1,
       "startedAt": "2026-11-07T18:34:36.689Z",
       "doneAt": "2026-11-07T18:35:59.551Z",
-      "summary": "Documentar el campo note en el mensaje welcome de señalización en docs/protocolo.md"
+      "summary": "Documentar el campo note en el mensaje welcome de señalización en docs/protocolo.md",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -96,6 +96,7 @@
     "R": 2,
     "S": 1
   },
+  "closingSubmittedAt": "2026-11-07T18:37:05.296Z",
   "lockedTests": {
     "test/features/room/data/room_repository_test.dart": "sha256:3263a2ee33220fe7a9c1c3ca39a8eb501496d9940052441096f4340b97c72394",
     "test/features/room/data/signaling_message_test.dart": "sha256:558d96f8c597640bbebd28414fd4e853ca04e112ce701c3ea593ac64ecfb1fd3",

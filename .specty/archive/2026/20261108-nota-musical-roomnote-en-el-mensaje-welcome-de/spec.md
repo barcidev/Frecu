@@ -86,3 +86,24 @@ Permitir que la nota musical (RoomNote) de una sala (frecu) viaje dentro del men
 
 - R1: Servidores o clientes sin este cambio omiten el campo note — mitigación: @RoomNoteConverter() maneja de forma natural la ausencia o nulidad de la clave devolviendo null, y SignalingWelcomeMessage define note como opcional y nulleable.
 - R2: Pruebas unitarias existentes de SignalingMessage.welcome o createRoom fallan por diferencias de firma — mitigación: note es un parámetro opcional con nombre (RoomNote? note), sin romper invocaciones previas.
+
+## Cierre
+
+### Resumen
+
+- Se agregó el campo opcional `@RoomNoteConverter() RoomNote? note` a `SignalingMessage.welcome` manteniendo retrocompatibilidad aditiva con `v=1`. Ausente o nulo en el JSON se lee como `null`.
+- Se adaptaron los datasources y repositorios para propagar la `RoomNote` activa: `SignalingServerDataSource.start` recibe `note` opcional y la incluye en todo mensaje `welcome`; `RoomRepositoryImpl.createRoom` y `_onWelcome` asignan la nota recibida a la entidad `Room`.
+- Se adaptaron los callbacks de pattern matching de `welcome` a 4 parámetros en `peer_connection_datasource.dart`, `voice_repository_impl.dart` y en las suites de pruebas.
+- Se documentó el campo `note` en el mensaje `welcome` en `docs/protocolo.md` y se actualizó `docs/dominio.md`.
+
+### Desviaciones
+
+- Se ajustó el alcance en S1 para adaptar la aridad de los callbacks de `welcome` en `peer_connection_datasource.dart`, `voice_repository_impl.dart`, `signaling_server_datasource.dart` y suites de prueba tras añadir el parámetro a `SignalingMessage.welcome` en Freezed.
+
+### Decisiones
+
+- Mantener `note` como campo opcional serializado en formato decimal de semitono (0–23) a través de `RoomNoteConverter`, garantizando total interoperabilidad con clientes o servidores existentes sin incrementar la versión del protocolo.
+
+### Pendientes
+
+- Ninguno. Resuelve P64.

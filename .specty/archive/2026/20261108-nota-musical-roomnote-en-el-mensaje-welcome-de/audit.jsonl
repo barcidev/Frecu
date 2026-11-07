@@ -20,3 +20,6 @@
 {"ts":"2026-11-07T18:34:36.689Z","actor":"agent","tool":"antigravity","event":"task.started","data":{"task":"T4","baseCommit":"f7505a648f21480cf1f7e5e5d67a0900b9b316c3"}}
 {"ts":"2026-11-07T18:35:59.551Z","actor":"specty","event":"task.verified","data":{"task":"T4","cmd":"fvm flutter test test/features/room/data/signaling_server_test.dart","exit":0,"ms":2672,"tree":"sha256:376efc9562f3c928bacb5cf774ce23293074907a5fc785bc18210bd59695776d"}}
 {"ts":"2026-11-07T18:35:59.553Z","actor":"agent","tool":"antigravity","event":"task.completed","data":{"task":"T4","summary":"Documentar el campo note en el mensaje welcome de señalización en docs/protocolo.md"}}
+{"ts":"2026-11-07T18:37:05.300Z","actor":"agent","tool":"antigravity","event":"spec.proposed","data":{"revision":3,"hash":"sha256:4dab0bcb47fd1570889fc962907671395f6b879b978d95f80ddfbc5a5ed56cff","size":"L","warnings":1}}
+{"ts":"2026-11-07T18:37:13.996Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.accepted","data":{"revision":3,"delegated":true}}
+{"ts":"2026-11-07T18:37:14.066Z","actor":"agent","tool":"antigravity","by":"Jorge Palacio Barcinilla","event":"change.closed","data":{"delegated":true}}
