@@ -60,7 +60,7 @@ Sustituir el tema Material genérico (semilla teal) por los tokens de Portadora 
   - files: lib/core/design/tokens/fr_colors.dart, test/core/design/fr_colors_test.dart
   - ac: AC3
   - verify: flutter test test/core/design/fr_colors_test.dart
-- [ ] T2: Escala tipográfica, espacio, radios y movimiento
+- [x] T2: Escala tipográfica, espacio, radios y movimiento
   - files: lib/core/design/tokens/fr_type.dart, lib/core/design/tokens/fr_space.dart, lib/core/design/tokens/fr_radii.dart, lib/core/design/tokens/fr_motion.dart, test/core/design/fr_tokens_test.dart
   - ac: AC4
   - verify: flutter test test/core/design/fr_tokens_test.dart

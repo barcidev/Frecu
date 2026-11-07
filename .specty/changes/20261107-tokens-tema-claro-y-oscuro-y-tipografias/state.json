@@ -43,12 +43,23 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d9301d2de1b90e9570ea50e3d882d30a01146db2",
+      "attempts": 1,
       "startedAt": "2026-11-07T04:49:15.053Z",
       "doneAt": "2026-11-07T04:54:13.577Z",
-      "summary": "FrColors (ThemeExtension) con los tokens de noche y día de base.css, canales p1–p5, copyWith y lerp compactos por orden de tokens; contraste verificado en ambos temas."
+      "summary": "FrColors (ThemeExtension) con los tokens de noche y día de base.css, canales p1–p5, copyWith y lerp compactos por orden de tokens; contraste verificado en ambos temas.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/core/design/tokens/fr_colors.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "1965c1857b493c8269d790a55f5d5a84c355c493",
+      "startedAt": "2026-11-07T04:54:15.285Z",
+      "doneAt": "2026-11-07T04:57:15.044Z",
+      "summary": "FrType (Archivo, Martian Mono y Doto con ejes wght/wdth/ROND), FrSpace, FrRadii y FrMotion (duraciones, curvas y resortes) como ThemeExtension; FrColors.lerp devuelve el destino exacto en t=1, cubierto por un test nuevo."
     }
   },
   "pending": {

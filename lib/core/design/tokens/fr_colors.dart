@@ -334,6 +334,9 @@ class FrColors extends ThemeExtension<FrColors> {
   @override
   FrColors lerp(covariant ThemeExtension<FrColors>? other, double t) {
     if (other is! FrColors) return this;
+    // En los extremos, el juego exacto: `Color.lerp` deja un color transparente
+    // donde el destino es nulo (`signalMark`, `ledRing`).
+    if (t >= 1) return other;
     final to = other._values;
     return FrColors._fromValues([
       for (final (i, from) in _values.indexed) _lerpToken(from, to[i], t),
