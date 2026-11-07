@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nota-musical-roomnote-en-el-mensaje-welcome-de",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/nota-musical-roomnote-en-el-mensaje-welcome-de",
   "baseCommit": "a2eb3d0a0a2648c42e95b37d5571c43bf4b13a0e",
   "revision": 1,
@@ -51,6 +51,9 @@
     "T": 4,
     "R": 2
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-07T17:25:43.336Z"
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:3263a2ee33220fe7a9c1c3ca39a8eb501496d9940052441096f4340b97c72394",
+    "test/features/room/data/signaling_message_test.dart": "sha256:eeaf129aafcdc8b2986efd83a98b0eb2d680c1257f200701de2c5a549558bb65",
+    "test/features/room/data/signaling_server_test.dart": "sha256:5a89987e8180a16b0e5edcc9ef987bd227ede46aedb5b2cafa65c071e4e092a0"
+  }
 }
