@@ -6,6 +6,13 @@
   "branch": "feature/nota-en-el-txt-de-mdns-y-en-el-qr",
   "baseCommit": "42ba219cc58eb501c27338cfd4eba54506e25932",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:d45d87ba3fa6c40a837f243a3a721c37394e7bd79ccd3e5e07a3bbf645916317",
+    "at": "2026-11-07T16:57:47.871Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -49,12 +56,6 @@
     "T": 4,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:d45d87ba3fa6c40a837f243a3a721c37394e7bd79ccd3e5e07a3bbf645916317",
-    "at": "2026-11-07T16:57:47.871Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-07T17:05:11.453Z"
 }
