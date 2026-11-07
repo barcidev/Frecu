@@ -1,31 +1,35 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:frecu/i18n/strings.g.dart';
+import 'package:flutter/widgets.dart';
+import 'package:frecu/core/design/motion/fr_transitions.dart';
+import 'package:frecu/features/permissions/presentation/widgets/welcome_step.dart';
 
-/// Pantalla de onboarding y solicitud de permisos del sistema.
+/// Recorrido de la primera vez: bienvenida, nombre y permisos.
+///
+/// Los pasos viven en un [Navigator] propio que empieza en la bienvenida.
 @RoutePage()
-class PermissionsPage extends StatelessWidget {
+class PermissionsPage extends StatefulWidget {
   /// Constructor constante.
   const PermissionsPage({super.key});
 
   @override
+  State<PermissionsPage> createState() => _PermissionsPageState();
+}
+
+class _PermissionsPageState extends State<PermissionsPage> {
+  final GlobalKey<NavigatorState> _steps = GlobalKey<NavigatorState>();
+
+  Route<void> _route(WidgetBuilder builder) =>
+      FrPageRoute<void>(builder: builder, transition: FrTransition.wave);
+
+  Widget _welcome(BuildContext _) => WelcomeStep(onStart: () {});
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(t.permissions.title)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.security, size: 64),
-              const SizedBox(height: 16),
-              Text(t.permissions.description, textAlign: TextAlign.center),
-              const SizedBox(height: 24),
-              FilledButton(onPressed: () {}, child: Text(t.permissions.grant)),
-            ],
-          ),
-        ),
+    return NavigatorPopHandler<Object?>(
+      onPopWithResult: (_) => _steps.currentState?.maybePop(),
+      child: Navigator(
+        key: _steps,
+        onGenerateInitialRoutes: (_, _) => [_route(_welcome)],
       ),
     );
   }

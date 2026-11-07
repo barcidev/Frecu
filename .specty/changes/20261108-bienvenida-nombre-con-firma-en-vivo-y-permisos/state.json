@@ -52,7 +52,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "c93fe09dc1f245d86798cc52811e2bc987fda4ff",
+      "startedAt": "2026-11-07T17:51:17.262Z",
+      "doneAt": "2026-11-07T17:52:55.241Z",
+      "summary": "Recorrido en un Navigator anidado de PermissionsRoute que empieza en la bienvenida (WelcomeMesh de drawOrbit, WelcomeStep y piezas de onboarding_layout), con todos los textos del recorrido bajo permissions en es y en."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

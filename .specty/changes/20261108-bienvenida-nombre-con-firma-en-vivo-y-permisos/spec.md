@@ -82,7 +82,7 @@ Referencia: pantallas `welcome`, `name` y `perms` de `docs/diseno/prototipo/scre
 
 ## Tareas
 
-- [ ] T1: Recorrido y bienvenida con la malla animada
+- [x] T1: Recorrido y bienvenida con la malla animada
   - files: lib/features/permissions/presentation/widgets/welcome_mesh.dart, lib/features/permissions/presentation/widgets/onboarding_layout.dart, lib/features/permissions/presentation/widgets/welcome_step.dart, lib/features/permissions/presentation/pages/permissions_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/permissions/presentation/welcome_test.dart, test/app_test.dart
   - ac: AC1, AC2, AC10
   - verify: flutter test test/features/permissions/presentation/welcome_test.dart test/app_test.dart
