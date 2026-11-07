@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-widgets-base-bienvenida-y-nombre-una-sola-vez",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/widgets-base-bienvenida-y-nombre-una-sola-vez",
   "baseCommit": "901bbb4c7af61049dfcfa9d7699c212fa58cdd1c",
   "revision": 1,
@@ -57,12 +57,23 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "8bb908b9611c15ebf75e66fc85d4399ea8bd6f1b",
+      "attempts": 1,
       "startedAt": "2026-11-07T09:04:07.414Z",
       "doneAt": "2026-11-07T09:05:40.322Z",
-      "summary": "FrPressable (resorte press, punto de contacto y semántica; sin escala con movimiento reducido), FrButton (4 variantes, luz radial desde el dedo, carga con WaveLoader, deshabilitado al 38 %) y FrIconButton (0,92 y bg3 al presionar, selected, ghost y danger)."
+      "summary": "FrPressable (resorte press, punto de contacto y semántica; sin escala con movimiento reducido), FrButton (4 variantes, luz radial desde el dedo, carga con WaveLoader, deshabilitado al 38 %) y FrIconButton (0,92 y bg3 al presionar, selected, ghost y danger).",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "scopeExtra": [
+        "test/core/design/widgets/fr_field_test.dart"
+      ],
+      "attempts": 2,
+      "baseCommit": "829e2ee7e05dc7c5d61320f704b615941c40c18f",
+      "startedAt": "2026-11-07T09:05:41.022Z",
+      "doneAt": "2026-11-07T09:09:18.885Z",
+      "summary": "FrField (etiqueta en mayúsculas, contador n/máx, foco con borde de señal y línea, error en alerta con temblor) y FrSteps (píldora de 22 px con resorte organic); sin temblor ni resorte con movimiento reducido. docs/arquitectura.md con motion/ y widgets/."
     }
   },
   "pending": {
@@ -73,12 +84,13 @@
     "A": 3,
     "AC": 5,
     "T": 4,
-    "R": 2
+    "R": 2,
+    "S": 1
   },
   "lockedTests": {
     "test/core/design/motion/fr_motion_tools_test.dart": "sha256:a321c6f985fc097f663caf6def8b12699bc851335856fc32c823c3bcc0d85f1e",
     "test/core/design/widgets/fr_button_test.dart": "sha256:1f6c84a7a7db450c26b967381e3976d9f5394f216f7364c34cc939d7528e50df",
-    "test/core/design/widgets/fr_field_test.dart": "sha256:d169ae0253d0140c02ad8615160b536aacd3108dc480b086642227ab9bb23162",
+    "test/core/design/widgets/fr_field_test.dart": "sha256:1a01d96fd88ea5a019570f4cb35743a1efadcc760539397f534b5e0e68c09ead",
     "test/core/design/widgets/signal_signature_test.dart": "sha256:54441c12e91186bc96232cab144bf88aaa1da4b36790c55d1e41c1cb0b955ab0"
   }
 }

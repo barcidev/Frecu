@@ -86,7 +86,7 @@ Crear los widgets base de Portadora que usan la bienvenida, el nombre y los perm
   - files: lib/core/design/widgets/fr_pressable.dart, lib/core/design/widgets/fr_button.dart, lib/core/design/widgets/fr_icon_button.dart, test/core/design/widgets/fr_button_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/core/design/widgets/fr_button_test.dart
-- [ ] T4: Campo de texto, pasos y arquitectura
+- [x] T4: Campo de texto, pasos y arquitectura
   - files: lib/core/design/widgets/fr_field.dart, lib/core/design/widgets/fr_steps.dart, test/core/design/widgets/fr_field_test.dart, docs/arquitectura.md
   - ac: AC2, AC4, AC5
   - verify: flutter analyze && flutter test

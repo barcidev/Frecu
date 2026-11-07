@@ -8,7 +8,7 @@ import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/widgets/fr_field.dart';
 import 'package:frecu/core/design/widgets/fr_steps.dart';
 
-final colors = FrColors.dark;
+const colors = FrColors.dark;
 
 Future<void> pumpHost(
   WidgetTester tester,
