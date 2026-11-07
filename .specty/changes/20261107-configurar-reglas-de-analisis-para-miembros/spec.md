@@ -26,7 +26,7 @@ Actualizar la configuración del analizador estático en `analysis_options.yaml`
 
 ## Tareas
 
-- [ ] T1: Actualizar analysis_options.yaml
+- [x] T1: Actualizar analysis_options.yaml
   - files: analysis_options.yaml
   - ac: AC1
   - verify: fvm flutter analyze
