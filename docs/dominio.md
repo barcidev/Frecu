@@ -7,5 +7,6 @@
 - **Micrófono abierto** (`openMic`): El micrófono transmite de forma continua.
 - **Código de acceso** (`accessCode`): PIN de 4 dígitos que protege la frecu de desconocidos en la misma red.
 - **Invitación** (`RoomInvite`): Datos de conexión que viajan en mDNS y QR (`host`, `port`, `roomId`, `accessCode`).
+- **Nota** (`RoomNote`): Nota musical de cada frecu, su canal reconocible en voz alta ("estamos en Mi"). La asigna `AssignRoomNote` con la hora local de apertura sobre el círculo de quintas (12→Do, 1→Sol, 2→Re … 11→Fa), en octava 4 de 0 a 11 h y en octava 5 de 12 a 23 h; si una frecu cercana ya usa esa nota y octava, avanza a la siguiente quinta libre. Se guarda como semitono desde Do4 (0–23) y es opcional en `Room`, `NearbyRoom` y `RoomInvite`.
 - **Estado de sala** (`RoomStatus`): `idle`, `connecting`, `connected`, `reconnecting`, `closed(reason)`.
 - **Ruta de audio** (`AudioRoute`): Salida del sonido (`speaker`, `earpiece`, `bluetooth`).

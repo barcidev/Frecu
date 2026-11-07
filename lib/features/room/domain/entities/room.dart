@@ -1,3 +1,4 @@
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'room.freezed.dart';
@@ -15,6 +16,9 @@ sealed class Room with _$Room {
     required String accessCode,
     required DateTime createdAt,
     @Default(6) int maxParticipants,
+
+    /// Nota musical de la frecu, calculada con su hora de apertura.
+    @RoomNoteConverter() RoomNote? note,
   }) = _Room;
 
   /// Deserializa desde JSON.

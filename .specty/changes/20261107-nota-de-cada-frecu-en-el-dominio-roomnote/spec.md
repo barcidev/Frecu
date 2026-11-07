@@ -71,7 +71,7 @@ Cada frecu tendrá una nota musical calculada con su hora de apertura sobre el c
   - files: lib/features/room/domain/usecases/assign_room_note.dart, test/features/room/domain/assign_room_note_test.dart
   - ac: AC1, AC3
   - verify: flutter test test/features/room/domain/assign_room_note_test.dart
-- [ ] T3: Nota opcional en `Room`, `RoomInvite` y `NearbyRoom`
+- [x] T3: Nota opcional en `Room`, `RoomInvite` y `NearbyRoom`
   - files: lib/features/room/domain/entities/room.dart, lib/features/room/domain/entities/room.freezed.dart, lib/features/room/domain/entities/room.g.dart, lib/features/room/domain/entities/room_invite.dart, lib/features/room/domain/entities/room_invite.freezed.dart, lib/features/room/domain/entities/room_invite.g.dart, lib/features/lobby/domain/entities/nearby_room.dart, lib/features/lobby/domain/entities/nearby_room.freezed.dart, lib/features/lobby/domain/entities/nearby_room.g.dart, docs/dominio.md, test/features/room/domain/room_note_fields_test.dart, test/features/lobby/domain/nearby_room_note_test.dart
   - ac: AC4
   - verify: flutter analyze && flutter test

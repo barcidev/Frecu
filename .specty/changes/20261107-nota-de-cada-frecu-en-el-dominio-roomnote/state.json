@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-nota-de-cada-frecu-en-el-dominio-roomnote",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/nota-de-cada-frecu-en-el-dominio-roomnote",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
   "revision": 1,
@@ -58,12 +58,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "15fb198b30547396539d4923ceaf4b6164e10377",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:45:15.380Z",
       "doneAt": "2026-11-07T16:45:53.683Z",
-      "summary": "AssignRoomNote (UseCase con assign síncrono): hora local mod 12 sobre el círculo de quintas, octava 4 o 5 según la mitad del día; salta las quintas ocupadas de la misma octava con vuelta de Fa a Do y, si las 12 lo están, deja la de su hora."
+      "summary": "AssignRoomNote (UseCase con assign síncrono): hora local mod 12 sobre el círculo de quintas, octava 4 o 5 según la mitad del día; salta las quintas ocupadas de la misma octava con vuelta de Fa a Do y, si las 12 lo están, deja la de su hora.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "66eb881c5938d9a53a116e66ab5f38071b3c10f9",
+      "startedAt": "2026-11-07T16:45:54.491Z",
+      "doneAt": "2026-11-07T16:47:23.256Z",
+      "summary": "Room, RoomInvite y NearbyRoom suman @RoomNoteConverter() RoomNote? note (JSON como semitono; ausente o inválido = sin nota), regenerados con build_runner; docs/dominio.md suma Nota (RoomNote)."
     }
   },
   "pending": {

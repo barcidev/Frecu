@@ -1,3 +1,4 @@
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'room_invite.freezed.dart';
@@ -12,6 +13,9 @@ sealed class RoomInvite with _$RoomInvite {
     required int port,
     required String roomId,
     required String accessCode,
+
+    /// Nota musical de la frecu; nula si la invitación no la trae.
+    @RoomNoteConverter() RoomNote? note,
   }) = _RoomInvite;
 
   /// Deserializa desde JSON.
