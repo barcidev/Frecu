@@ -82,3 +82,32 @@ Todos en `lib/core/design/widgets/`, con `context.fr` y sin colores sueltos. Reu
 
 - R1: El cursor, `busy` y el halo son bucles infinitos que impiden que `pumpAndSettle` termine en las pruebas de las pantallas — mitigación: usan `FrLoop`, que se detiene con movimiento reducido y con `TickerMode`; esas pruebas avanzan con `pump` y una duración o activan "reducir movimiento".
 - R2: Doto aún no está empaquetada (C5 corre en paralelo) — mitigación: las pruebas miden cajas, colores y estilos, no el dibujo de los glifos.
+
+## Cierre
+
+### Resumen
+
+- `lib/core/design/widgets/`: `FrPinField` (celdas Doto de 64 × 78, cursor que parpadea, dígito nuevo con resorte `organic`, `busy` con latido escalonado, `ok` con ola, `error` con temblor y solo lectura), `FrKeypad` (teclas de 56 px sobre `FrPressable` a 0,93, tecla de función opcional y borrar con etiqueta accesible), `FrSegmented<T>` (pulgar con `SpringSimulation` `organic` que se estira y variante de señal), `FrToggle` (perilla de resorte que se estira al presionar, `Semantics(toggled)`), `FrPill` (punto con halo que late o arco que gira) y `FrTag` (neutro, señal y aviso).
+- Movimiento reducido en los seis: sin resortes, escalas, ola ni temblor; el cursor queda fijo, `busy` quieto en su punto más alto, el halo se apaga y el arco se detiene.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde, con 30 pruebas nuevas en `fr_pin_field_test.dart`, `fr_segmented_test.dart` y `fr_pill_test.dart`.
+
+### Desviaciones
+
+- La píldora ocupada dibuja el anillo fijo al 30 % y el arco al 100 % del tono: en el prototipo ambos van en `warn` pleno y el arco no se distingue. Tampoco lleva halo (el prototipo lo mantiene en `warn busy`).
+- Los dígitos del PIN cambian de color sin transición; el relleno y el borde de las celdas sí se funden en 280 ms (160 ms con movimiento reducido), salvo en `busy` y durante la ola, que se dibujan cuadro a cuadro.
+- La pista de `FrToggle` usa `StadiumBorder` en lugar de `RoundedSuperellipseBorder` para ser una píldora exacta.
+- `FrTag` no recibe ícono: el prototipo no lo usa.
+
+### Decisiones
+
+- `FrPinField` solo dibuja: la pantalla lleva los dígitos y el estado y decide el envío al cuarto dígito. El dígito salta solo cuando `value` crece en uno al final; la ola de `ok` y el temblor de `error` solo al cambiar de estado, no al montarse ya en ese estado.
+- `FrLoop` se monta solo donde hace falta (cursor visible, `busy`, halo y arco), para que `pumpAndSettle` termine en los demás estados.
+- Los resortes del pulgar y de la perilla usan `snapToEnd: true` y conservan la velocidad si se interrumpen.
+- Tocar el segmento ya elegido no llama a `onChanged`. Las teclas de función del teclado siguen transparentes al presionarse, como en el prototipo.
+- El segmentado y el interruptor pintan su borde con `DecoratedBox` (no `Container`) para que no reste espacio al pulgar ni mueva la perilla.
+- `fr_pin_field.dart` queda en 328 líneas: es un solo widget con sus estados; no se divide.
+
+### Pendientes
+
+- Cambiar el ícono Material de borrar de `FrKeypad` (`deleteIcon`) por el de `FrIcons` cuando llegue C11.
+- Usar estos widgets en las pantallas con sus textos de slang: Ajustes (C8), inicio (C15), unión por código (C16), nueva frecu (C17) y modo de habla en la frecu activa (C18).

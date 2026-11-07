@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-widgets-de-control-frpinfield-frkeypad",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/widgets-de-control-frpinfield-frkeypad",
   "baseCommit": "39968e722efe2b592629aec75eae42569cd01adc",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:c7783b91aea19ab95dd66bb0d6e2e29e699bd4f61130d7208b6c28b6e585087a",
@@ -60,12 +60,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "dcead94f8e6bf0deba91a02851824b2a5380e592",
+      "attempts": 1,
       "startedAt": "2026-11-07T11:21:21.888Z",
       "doneAt": "2026-11-07T11:23:15.462Z",
-      "summary": "FrPill con punto y halo que late (2,4 s; 1,1 s en aviso; sin halo apagada) o arco que gira si está ocupada, y FrTag de 20 px en neutro, señal y aviso; de día ningún texto ni trazo usa signal y con movimiento reducido el halo se apaga"
+      "summary": "FrPill con punto y halo que late (2,4 s; 1,1 s en aviso; sin halo apagada) o arco que gira si está ocupada, y FrTag de 20 px en neutro, señal y aviso; de día ningún texto ni trazo usa signal y con movimiento reducido el halo se apaga",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -78,6 +78,7 @@
     "T": 3,
     "R": 2
   },
+  "closingSubmittedAt": "2026-11-07T11:23:47.647Z",
   "lockedTests": {
     "test/core/design/widgets/fr_pill_test.dart": "sha256:601a3b78bd5d8e0178924ca6d5bce79611fa46b4c3c926791fe0645c0659fcaf",
     "test/core/design/widgets/fr_pin_field_test.dart": "sha256:ed56295732bb9d81ad4d066c6504bd0cb90b9f325005f2b11a0c0f42d8dcf76b",
