@@ -5,11 +5,11 @@
   "phase": "implementing",
   "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
   "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
-  "revision": 2,
+  "revision": 3,
   "approved": {
-    "revision": 2,
+    "revision": 3,
     "hash": "sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00",
-    "at": "2026-11-07T16:25:03.550Z",
+    "at": "2026-11-07T16:36:33.461Z",
     "by": "Jorge Palacio Barcinilla",
     "channel": "delegated"
   },
@@ -38,12 +38,19 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "5d2cdb2117c2b115341bdcba3789f084077732f5",
+      "attempts": 1,
       "startedAt": "2026-11-07T16:28:06.296Z",
       "doneAt": "2026-11-07T16:30:15.588Z",
-      "summary": "Implementadas entidades de dominio NetworkState con Freezed 3 y contrato NetworkRepository"
+      "summary": "Implementadas entidades de dominio NetworkState con Freezed 3 y contrato NetworkRepository",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "active",
+      "baseCommit": "ac30ea0d7d1cd35f05b8b11c1875d21f99563ae3",
+      "attempts": 0,
+      "startedAt": "2026-11-07T16:30:17.614Z",
+      "scopeExtra": []
     }
   },
   "pending": {
