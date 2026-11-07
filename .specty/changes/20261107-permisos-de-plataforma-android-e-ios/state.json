@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "id": "20261107-permisos-de-plataforma-android-e-ios",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/permisos-de-plataforma-android-e-ios",
+  "baseCommit": "2d6a5a858cc376d67e69e0f5617c11d28c06c162",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 5,
+    "adjust": 0,
+    "reasons": [
+      "3 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:9efb00e5a5da1c1a523a83243ba9b13e445defb6289b3c1f5d3b964ab4f31862",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:e8225b85471e375df73826a84c2918389db7c8e5695794d6d9976e7cdbc5ef90",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 3,
+    "T": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:69e4f1b7c9750aaf89f7048ccd94431d849699b4a5072d92dc91aac1e12a6bad",
+    "at": "2026-11-07T09:09:49.403Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
