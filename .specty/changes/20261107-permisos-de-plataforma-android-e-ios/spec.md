@@ -33,7 +33,7 @@ Configurar los permisos de plataforma en Android (`AndroidManifest.xml`) e iOS (
 
 ## Tareas
 
-- [ ] T1: Configurar permisos de plataforma Android e iOS con sus pruebas automatizadas
+- [x] T1: Configurar permisos de plataforma Android e iOS con sus pruebas automatizadas
   - files: android/app/src/main/AndroidManifest.xml, ios/Runner/Info.plist, test/platform/platform_manifest_test.dart
   - ac: AC1, AC2, AC3
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-permisos-de-plataforma-android-e-ios' && fvm flutter test test/platform/platform_manifest_test.dart

@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261107-permisos-de-plataforma-android-e-ios",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/permisos-de-plataforma-android-e-ios",
   "baseCommit": "2d6a5a858cc376d67e69e0f5617c11d28c06c162",
   "revision": 1,
@@ -32,7 +32,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "ea6599236e49658ccc7f150d4ead3a21c7ee79d5",
+      "startedAt": "2026-11-07T09:13:45.576Z",
+      "doneAt": "2026-11-07T09:15:34.018Z",
+      "summary": "Configurar permisos de plataforma Android e iOS con sus pruebas automatizadas"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
