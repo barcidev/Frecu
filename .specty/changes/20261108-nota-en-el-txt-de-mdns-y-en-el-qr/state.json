@@ -5,7 +5,7 @@
   "phase": "acceptance",
   "branch": "feature/nota-en-el-txt-de-mdns-y-en-el-qr",
   "baseCommit": "42ba219cc58eb501c27338cfd4eba54506e25932",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:d45d87ba3fa6c40a837f243a3a721c37394e7bd79ccd3e5e07a3bbf645916317",
@@ -75,12 +75,12 @@
     },
     "T4": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "8c67173d910e59937a0ea1d8d250ed77d357e730",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:07:54.700Z",
       "doneAt": "2026-11-07T17:09:26.785Z",
-      "summary": "CreateRoomPage pasa las notas de las frecus cercanas a createRoom y publica con data.note; InviteQrDialog arma el QR con room.note; LobbyPage (PIN) y ScanQrPage se unen con la nota de la invitación. docs/protocolo.md describe n."
+      "summary": "CreateRoomPage pasa las notas de las frecus cercanas a createRoom y publica con data.note; InviteQrDialog arma el QR con room.note; LobbyPage (PIN) y ScanQrPage se unen con la nota de la invitación. docs/protocolo.md describe n.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -98,5 +98,6 @@
     "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a99af132af970703bca3fa4b1043d6bd87ad86818b6aea426d8feefabc978dc5",
     "test/features/room/domain/invite_qr_note_test.dart": "sha256:e06b5ccf827f2884e8872af3f6262f7c6b2e15f3fc39da67a25c036773488784",
     "test/features/room/presentation/room_note_provider_test.dart": "sha256:d0e1a00c429db5e080efada58a6cff9b16f84fbf42958cb90d8df30fcdaf32f1"
-  }
+  },
+  "closingSubmittedAt": "2026-11-07T17:10:16.430Z"
 }

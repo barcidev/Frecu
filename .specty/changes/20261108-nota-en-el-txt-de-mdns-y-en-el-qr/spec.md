@@ -88,3 +88,29 @@ La nota de cada frecu (`RoomNote`, C3) empieza a viajar por la red: el anfitrió
 - R1: Un teléfono con una versión anterior recibe `n` — mitigación: el TXT y el QR solo suman una clave; `MdnsDataSource` y `ParseInviteFromQr` de la versión anterior leen claves por nombre e ignoran las demás, y `v` no cambia.
 - R2: Los mocks de `DiscoveryRepository` de pruebas existentes dejan de casar con `publishRoom` — mitigación: `note` es opcional y nulo por defecto, y ninguna prueba existente crea una frecu con un `DiscoveryRepository` simulado; se corre la suite completa en T4.
 - R3: El descubrimiento aún no encontró las frecus cercanas al pulsar crear y dos frecus quedan con la misma nota — mitigación: se acepta en este corte (A4); C17 puede esperar al descubrimiento antes de mostrar el reloj de quintas.
+
+## Cierre
+
+### Resumen
+
+- mDNS: `MdnsDataSource.publish` suma `n` (semitono en texto decimal) al TXT solo si la frecu tiene nota, y `_buildNearbyRoom` lo lee con `int.tryParse` y `RoomNote.tryFromSemitone` (UTF-8 con `allowMalformed`); ausente, vacío, no entero o fuera de 0–23 deja la frecu cercana sin nota. `DiscoveryRepository.publishRoom`, su implementación y `PublishRoomParams` suman `RoomNote? note` opcional.
+- QR: `BuildInviteQr` añade `&n=<semitono>` al final solo con nota (sin nota la URI no cambia) y `ParseInviteFromQr` lo lee sin añadir fallos nuevos.
+- Nota al abrir y al unirse: `RoomNotifier.createRoom(nearbyNotes:)` asigna la nota una vez con `AssignRoomNote` sobre `Room.createdAt`; `RoomNotifier.joinRoom(note:)` copia la de la invitación sin recalcularla. `CreateRoomPage` pasa las notas de `nearbyRoomsProvider` y publica con la nota; `InviteQrDialog` arma el QR con ella; el diálogo de PIN de `LobbyPage` y `ScanQrPage` se unen con la nota de la invitación.
+- `docs/protocolo.md` describe `n` (rango, opcional, aditivo, `v=1`) y `docs/dominio.md` lo suma a Invitación y Nota.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (279 tests, 23 nuevos de AC1–AC5).
+
+### Desviaciones
+
+- `room_provider.g.dart` se regeneró en T3 (`build_runner`): el hash de `RoomNotifier` cambia con su código aunque la firma de `build` no cambie.
+
+### Decisiones
+
+- La nota se calcula en `RoomNotifier` (presentación) y no en `RoomRepository`/`CreateRoom`, para no cambiar sus contratos ni los mocks de las pruebas existentes; usa `Room.createdAt`, la hora de apertura que pone el repositorio.
+- `n` se lee de forma tolerante: un valor raro nunca invalida la frecu ni la invitación, solo la deja sin nota.
+- Con nota, `n` va al final de la URI del QR, así la URI sin nota es idéntica a la anterior.
+- La unión por IP manual no lleva nota: la nota no viaja en `welcome` (fuera de alcance).
+
+### Pendientes
+
+- Unión por IP manual sin nota: si C16 o C4 deben mostrarla, sumar la nota al mensaje `welcome` de la señalización (P64).
+- C17 debe pasar `nearbyNotes` a `RoomNotifier.createRoom` y conviene que espere al descubrimiento mDNS antes de fijar la nota (P65).
