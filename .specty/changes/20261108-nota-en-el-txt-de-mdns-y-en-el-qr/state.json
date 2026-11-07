@@ -48,12 +48,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "8611ee692d6511df98c1c8bcff164f1481ee1855",
+      "attempts": 1,
       "startedAt": "2026-11-07T17:05:20.972Z",
       "doneAt": "2026-11-07T17:05:40.781Z",
-      "summary": "MdnsDataSource publica n (semitono) en el TXT solo si hay nota y la lee con int.tryParse y RoomNote.tryFromSemitone (utf8 con allowMalformed): ausente o inválida es sin nota. DiscoveryRepository.publishRoom, su implementación y PublishRoomParams suman RoomNote? note opcional."
+      "summary": "MdnsDataSource publica n (semitono) en el TXT solo si hay nota y la lee con int.tryParse y RoomNote.tryFromSemitone (utf8 con allowMalformed): ausente o inválida es sin nota. DiscoveryRepository.publishRoom, su implementación y PublishRoomParams suman RoomNote? note opcional.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "8f2d4222a02897e0fc834ba1a62e0355a09d84fc",
+      "startedAt": "2026-11-07T17:05:41.596Z",
+      "doneAt": "2026-11-07T17:05:56.908Z",
+      "summary": "BuildInviteQr añade n=<semitono> al final de la URI solo si la invitación tiene nota (sin nota, la URI no cambia). ParseInviteFromQr lee n con int.tryParse y RoomNote.tryFromSemitone: ausente o inválido deja la invitación válida y sin nota."
     }
   },
   "pending": {
