@@ -37,3 +37,22 @@ Configurar los permisos de plataforma en Android (`AndroidManifest.xml`) e iOS (
   - files: android/app/src/main/AndroidManifest.xml, ios/Runner/Info.plist, test/platform/platform_manifest_test.dart
   - ac: AC1, AC2, AC3
   - verify: cd '/Users/innovacloud/Jorge Palacio/Proyectos/Frecu/.worktrees/20261107-permisos-de-plataforma-android-e-ios' && fvm flutter test test/platform/platform_manifest_test.dart
+
+## Cierre
+
+### Resumen
+
+Se configuraron los permisos de plataforma requeridos en `android/app/src/main/AndroidManifest.xml` (RECORD_AUDIO, INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, CHANGE_WIFI_MULTICAST_STATE, BLUETOOTH_CONNECT, CAMERA, manteniendo los permisos de foreground task y el ForegroundService preexistente) y en `ios/Runner/Info.plist` (NSMicrophoneUsageDescription, NSLocalNetworkUsageDescription, NSCameraUsageDescription, NSBonjourServices con `_frecu._tcp` y UIBackgroundModes con `audio`). Se crearon pruebas automatizadas en `test/platform/platform_manifest_test.dart` que validan exhaustivamente la existencia y formato de estas directivas en ambos manifiestos.
+
+### Desviaciones
+
+- Ninguna respecto al plan original.
+
+### Decisiones
+
+- Se añadieron explicaciones claras en español en las claves de descripción de uso de iOS (NSMicrophoneUsageDescription, NSLocalNetworkUsageDescription, NSCameraUsageDescription) detallando la finalidad de voz grupal en red local, descubrimiento sin internet y escaneo QR de invitación.
+- Se mantuvo intacta la declaración de `com.pravera.flutter_foreground_task.service.ForegroundService` y sus permisos en AndroidManifest.xml para preservar el servicio en primer plano.
+
+### Pendientes
+
+- Ninguno.

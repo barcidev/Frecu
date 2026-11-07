@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-permisos-de-plataforma-android-e-ios",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/permisos-de-plataforma-android-e-ios",
   "baseCommit": "2d6a5a858cc376d67e69e0f5617c11d28c06c162",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:69e4f1b7c9750aaf89f7048ccd94431d849699b4a5072d92dc91aac1e12a6bad",
@@ -35,12 +35,12 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "ea6599236e49658ccc7f150d4ead3a21c7ee79d5",
+      "attempts": 1,
       "startedAt": "2026-11-07T09:13:45.576Z",
       "doneAt": "2026-11-07T09:15:34.018Z",
-      "summary": "Configurar permisos de plataforma Android e iOS con sus pruebas automatizadas"
+      "summary": "Configurar permisos de plataforma Android e iOS con sus pruebas automatizadas",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -52,6 +52,7 @@
     "AC": 3,
     "T": 1
   },
+  "closingSubmittedAt": "2026-11-07T09:16:04.192Z",
   "lockedTests": {
     "test/platform/platform_manifest_test.dart": "sha256:ad7a6fbf59c1f11652ed646eb96e57b086468ff0d274625847159d342abee28c"
   }
