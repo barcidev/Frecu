@@ -93,9 +93,6 @@ class Translations$lobby$es {
 	/// es: 'Código de acceso'
 	String get accessCode => 'Código de acceso';
 
-	/// es: 'Nombre de la frecu'
-	String get roomName => 'Nombre de la frecu';
-
 	late final Translations$lobby$network$es network = Translations$lobby$network$es.internal(_root);
 	late final Translations$lobby$tuner$es tuner = Translations$lobby$tuner$es.internal(_root);
 	late final Translations$lobby$empty$es empty = Translations$lobby$empty$es.internal(_root);
@@ -799,7 +796,6 @@ extension on Translations {
 			'lobby.joinRoom' => 'Conectar por IP',
 			'lobby.nearbyRooms' => 'Frecus cercanas',
 			'lobby.accessCode' => 'Código de acceso',
-			'lobby.roomName' => 'Nombre de la frecu',
 			'lobby.network.checking' => 'Buscando red',
 			'lobby.network.connected' => ({required Object ip}) => 'Red · ${ip}',
 			'lobby.network.offline' => 'Sin red local',

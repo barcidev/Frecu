@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
@@ -68,12 +68,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d85c4b01f2282ba326e712a6a7d0def38c7daedd",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:37:40.287Z",
       "doneAt": "2026-11-08T00:41:42.144Z",
-      "summary": "CreateRoomPage en dos pasos (Navigator anidado): guía del punto de acceso con ilustración animada y pasos Android/iPhone, y nueva frecu con reloj de quintas, nota, nombre, código generado y Abrir frecu; reloj y generador inyectables."
+      "summary": "CreateRoomPage en dos pasos (Navigator anidado): guía del punto de acceso con ilustración animada y pasos Android/iPhone, y nueva frecu con reloj de quintas, nota, nombre, código generado y Abrir frecu; reloj y generador inyectables.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "04e24f10988c9e3aa24cd9fcf06c2966eaa6efc6",
+      "startedAt": "2026-11-08T00:41:42.821Z",
+      "doneAt": "2026-11-08T00:43:03.132Z",
+      "summary": "Quitado lobby.roomName (solo lo usaba la pantalla de antes) y regenerado slang; room_flow_test, room_note_flow_test y saved_name_test pasan por la guía y Abrir frecu."
     }
   },
   "pending": {

@@ -92,7 +92,7 @@ Referencia: `V.hotspot` y `V.create` de `screens.js`; `drawFifths`, `drawHotspot
   - files: lib/features/lobby/presentation/pages/create_room_page.dart, lib/features/lobby/presentation/widgets/create_room_layout.dart, lib/features/lobby/presentation/widgets/hotspot_guide_step.dart, lib/features/lobby/presentation/widgets/hotspot_illustration.dart, lib/features/lobby/presentation/widgets/new_room_step.dart, lib/features/lobby/presentation/widgets/room_note_label.dart, lib/features/lobby/presentation/providers/new_room_provider.dart, lib/features/lobby/presentation/providers/new_room_provider.g.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/hotspot_guide_test.dart, test/features/lobby/presentation/new_room_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5, AC6
   - verify: flutter test test/features/lobby/presentation/hotspot_guide_test.dart test/features/lobby/presentation/new_room_test.dart
-- [ ] T3: Pruebas existentes con la creación nueva y textos sin uso fuera
+- [x] T3: Pruebas existentes con la creación nueva y textos sin uso fuera
   - files: lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/room/presentation/room_flow_test.dart, test/features/lobby/presentation/room_note_flow_test.dart, test/features/lobby/presentation/saved_name_test.dart
   - ac: AC2, AC5
   - verify: flutter test && flutter analyze

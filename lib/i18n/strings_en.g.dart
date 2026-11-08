@@ -72,7 +72,6 @@ class _Translations$lobby$en extends Translations$lobby$es {
 	@override String get joinRoom => 'Connect by IP';
 	@override String get nearbyRooms => 'Nearby rooms';
 	@override String get accessCode => 'Access code';
-	@override String get roomName => 'Room name';
 	@override late final _Translations$lobby$network$en network = _Translations$lobby$network$en._(_root);
 	@override late final _Translations$lobby$tuner$en tuner = _Translations$lobby$tuner$en._(_root);
 	@override late final _Translations$lobby$empty$en empty = _Translations$lobby$empty$en._(_root);
@@ -498,7 +497,6 @@ extension on TranslationsEn {
 			'lobby.joinRoom' => 'Connect by IP',
 			'lobby.nearbyRooms' => 'Nearby rooms',
 			'lobby.accessCode' => 'Access code',
-			'lobby.roomName' => 'Room name',
 			'lobby.network.checking' => 'Checking network',
 			'lobby.network.connected' => ({required Object ip}) => 'Network · ${ip}',
 			'lobby.network.offline' => 'No local network',
