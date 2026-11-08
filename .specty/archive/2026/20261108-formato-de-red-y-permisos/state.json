@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261108-formato-de-red-y-permisos",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/formato-de-red-y-permisos",
+  "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:68724b6cea09f97e5a9630c61223f975cd0349c4e7307652603d93e140e28b1b",
+    "at": "2026-11-08T01:53:30.918Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 6,
+    "adjust": 0,
+    "reasons": [
+      "4 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:bdef13217331589b0c58c3c21fc6c88629dd9964f34fd9ae4b059014e8c4c0b7",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "248093e94d3981996b3f906ed764448b156eb5fe",
+      "attempts": 2,
+      "startedAt": "2026-11-08T01:53:31.977Z",
+      "doneAt": "2026-11-08T01:57:34.371Z",
+      "summary": "dart format en network_state.dart, permission_repository_impl.dart y las dos pruebas de permisos: solo saltos de línea y comas finales, sin tocar aserciones",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 1,
+    "AC": 1,
+    "T": 1
+  },
+  "closingSubmittedAt": "2026-11-08T01:58:30.902Z"
+}
