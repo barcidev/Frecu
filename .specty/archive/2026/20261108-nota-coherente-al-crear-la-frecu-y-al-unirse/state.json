@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-nota-coherente-al-crear-la-frecu-y-al-unirse",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/nota-coherente-al-crear-la-frecu-y-al-unirse",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:ee1fa246b3c91bdf55271c4069a6f8f04ab039c3a4cd98a4e20bfbaa39780f51",
@@ -69,12 +69,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "71d403d74da9e760b55d3a13c103ff975d2865a1",
+      "attempts": 1,
       "startedAt": "2026-11-08T02:10:21.990Z",
       "doneAt": "2026-11-08T02:13:27.909Z",
-      "summary": "room_flow_test y saved_name_test suman note: any(named: 'note') a los dobles y verificaciones de createRoom, sin tocar aserciones."
+      "summary": "room_flow_test y saved_name_test suman note: any(named: 'note') a los dobles y verificaciones de createRoom, sin tocar aserciones.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -86,5 +86,6 @@
     "AC": 3,
     "T": 3,
     "R": 2
-  }
+  },
+  "closingSubmittedAt": "2026-11-08T02:14:49.269Z"
 }

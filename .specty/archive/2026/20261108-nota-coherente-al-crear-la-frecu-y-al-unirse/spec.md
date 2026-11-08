@@ -84,3 +84,33 @@ Que la frecu suene en la nota que el anfitrión vio en pantalla y que quien se u
 
 - R1: C2 trabaja a la vez en `features/lobby`, y sus pruebas de unión pueden tocar `room_note_flow_test` o `saved_name_test` — mitigación: aquí solo se tocan los dobles de `createRoom` y el reloj, y si chocan al cerrar se resuelve tomando los dos lados.
 - R2: La prueba con red real puede ser inestable — mitigación: corre en 127.0.0.1 en un puerto libre, nunca en el 47800, espera con un límite acotado dentro de `tester.runAsync` y cierra el anfitrión y el invitado al terminar.
+
+## Cierre
+
+### Resumen
+
+- `RoomNotifier.createRoom` recibe `RoomNote? note`: se la da a `RoomRepository.createRoom`, así que el servidor la manda en `welcome`, y la frecu activa la lleva sin recalcularla. Sin nota, la calcula como antes con `createdAt` y `nearbyNotes`.
+- `RoomNotifier.joinRoom` conserva la nota de `welcome`; antes la sobrescribía con la de la invitación, que es nula por IP. Si `welcome` no la trae, vale la de la invitación.
+- «Abrir frecu» de `NewRoomStep` pasa la nota que pinta. `NewRoomHero`, `_HeroBox` y `_NoteReading` pasan a `new_room_hero.dart`, y `new_room_step.dart` baja de 439 a 293 líneas (253 de código).
+- Pruebas nuevas:
+  - `room_note_coherence_test` (5): nota recibida al crear y nota de `welcome` al unirse;
+  - `new_room_note_test` (2): «Abrir frecu» con la hora ya cambiada y tras releerla;
+  - `ip_join_note_test` (1): de punta a punta, con anfitrión y servidor reales en 127.0.0.1 y un puerto libre, unión por la hoja de IP y `RoomNoteChip` «Nota La5, 880 Hz» en la cabecera.
+- `docs/protocolo.md` y `docs/dominio.md` dicen que la frecu abre con la nota que mostró la nueva frecu y que `welcome` manda sobre la invitación.
+- Verificado: `flutter analyze` sin avisos, `flutter test` completo en verde (590 pruebas) y `dart format` sin cambios en los archivos tocados.
+
+### Desviaciones
+
+- `room_provider.g.dart` se regeneró con `build_runner` (cambia el hash de `RoomNotifier`); no estaba en Archivos por ser generado.
+- `new_room_test.dart` queda en 401 líneas de código (aviso desde 400) por las líneas de `note` en sus dobles. No se parte, porque no mezcla responsabilidades.
+
+### Decisiones
+
+- Al unirse, la nota de `welcome` manda sobre la de la invitación (A4).
+- La nueva frecu ya no pasa `nearbyNotes`: con nota, `createRoom` no los usa.
+- La prueba de punta a punta pulsa «Conectar» dentro de `tester.runAsync`, para que la red y sus temporizadores corran con el reloj real. Usa dos subclases de prueba: `_LoopbackServer`, en 127.0.0.1 y el puerto 0, y `_HostPortClient`, que lleva el 47800 fijo de la hoja al puerto del anfitrión.
+
+### Pendientes
+
+- Sin nota, `RoomNotifier.createRoom` la calcula después de crear y el servidor arranca sin ella, así que quien se une por IP no la recibe. La app siempre la pasa desde la nueva frecu; si otro camino crea frecus, habrá que calcularla antes.
+- El comentario de `IpJoinSheet` (`ip_join_sheet.dart`, de C2) dice que se une «sin nota»; ahora la frecu lleva la nota de `welcome`.
