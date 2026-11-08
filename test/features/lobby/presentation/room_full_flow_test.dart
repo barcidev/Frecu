@@ -100,13 +100,17 @@ void main() {
         await tester.tap(find.widgetWithText(NearbyRoomTile, 'Frecu Llena'));
         await tester.pumpAndSettle();
 
-        final joinButton = find.byKey(const Key('pin_join_button'));
-        expect(joinButton, findsOneWidget);
-
-        await tester.tap(joinButton);
+        for (final digit in '1234'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
         await tester.pumpAndSettle();
 
-        expect(find.text(t.errors.roomFull), findsOneWidget);
+        // El aviso de la hoja lleva el mensaje en negrita y la pista.
+        expect(
+          find.textContaining(t.errors.roomFull, findRichText: true),
+          findsOneWidget,
+        );
       },
     );
   });

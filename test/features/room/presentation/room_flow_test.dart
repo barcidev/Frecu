@@ -15,6 +15,7 @@ import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -113,20 +114,21 @@ void main() {
 
         await tester.tap(find.text(t.lobby.createRoom));
         await tester.pumpAndSettle();
+        await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+        await tester.pumpAndSettle();
 
-        expect(find.text('IP local: 192.168.43.1'), findsOneWidget);
-        expect(
-          find.widgetWithText(FilledButton, 'Crear frecu'),
-          findsOneWidget,
-        );
+        expect(find.text(t.lobby.newRoom.open), findsOneWidget);
 
-        await tester.tap(find.widgetWithText(FilledButton, 'Crear frecu'));
+        await tester.tap(find.text(t.lobby.newRoom.open));
         await tester.pumpAndSettle();
 
         verify(
           () => repository.createRoom(
-            name: 'Frecu',
-            accessCode: '1234',
+            name: any(named: 'name', that: isNotEmpty),
+            accessCode: any(
+              named: 'accessCode',
+              that: matches(RegExp(r'^\d{4}$')),
+            ),
             displayName: any(named: 'displayName'),
           ),
         ).called(1);
@@ -159,11 +161,14 @@ void main() {
         await tester.tap(joinButton);
         await tester.pumpAndSettle();
 
-        expect(find.text('IP del anfitrión'), findsOneWidget);
-        final connectButton = find.widgetWithText(FilledButton, 'Conectar');
-        expect(connectButton, findsOneWidget);
-
-        await tester.tap(connectButton);
+        final fields = find.descendant(
+          of: find.byType(IpJoinSheet),
+          matching: find.byType(TextField),
+        );
+        await tester.enterText(fields.first, '192.168.43.1');
+        await tester.enterText(fields.last, '1234');
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(t.lobby.join.ip.connect));
         await tester.pumpAndSettle();
 
         verify(

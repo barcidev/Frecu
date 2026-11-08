@@ -28,8 +28,10 @@ import 'package:frecu/features/lobby/domain/repositories/discovery_repository.da
 import 'package:frecu/features/lobby/presentation/pages/create_room_page.dart';
 import 'package:frecu/features/lobby/presentation/pages/lobby_page.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner.dart';
 import 'package:frecu/features/lobby/presentation/widgets/nearby_room_tile.dart';
+import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
@@ -284,7 +286,7 @@ void main() {
       expect(find.byKey(_scannerStub), findsOneWidget);
     });
 
-    testWidgets('AC1: Conectar por IP abre el diálogo de unión por IP de hoy', (
+    testWidgets('AC1: Conectar por IP abre la hoja de unión por IP', (
       tester,
     ) async {
       await pumpLobby(tester);
@@ -292,8 +294,7 @@ void main() {
       await tester.tap(find.text(t.lobby.joinRoom));
       await tester.pumpAndSettle();
 
-      expect(find.byType(AlertDialog), findsOneWidget);
-      expect(find.text('IP del anfitrión'), findsOneWidget);
+      expect(find.byType(IpJoinSheet), findsOneWidget);
     });
 
     testWidgets(
@@ -406,9 +407,11 @@ void main() {
         expect(_tile(tester, _brigada.name).selected, isFalse);
         expect(_tuner(tester).selected, const RoomNote(semitone: 4));
 
-        final join = find.byKey(const Key('pin_join_button'));
-        expect(join, findsOneWidget);
-        await tester.tap(join);
+        expect(find.byType(PinJoinSheet), findsOneWidget);
+        for (final digit in '1234'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
         await tester.pumpAndSettle();
 
         verify(

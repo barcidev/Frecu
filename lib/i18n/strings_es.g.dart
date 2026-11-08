@@ -72,6 +72,8 @@ class Translations$lobby$es {
 	/// es: 'frecu'
 	String get title => 'frecu';
 
+	late final Translations$lobby$join$es join = Translations$lobby$join$es.internal(_root);
+
 	/// es: 'Ajustes'
 	String get settings => 'Ajustes';
 
@@ -93,13 +95,11 @@ class Translations$lobby$es {
 	/// es: 'Código de acceso'
 	String get accessCode => 'Código de acceso';
 
-	/// es: 'Nombre de la frecu'
-	String get roomName => 'Nombre de la frecu';
-
 	late final Translations$lobby$network$es network = Translations$lobby$network$es.internal(_root);
 	late final Translations$lobby$tuner$es tuner = Translations$lobby$tuner$es.internal(_root);
 	late final Translations$lobby$empty$es empty = Translations$lobby$empty$es.internal(_root);
 	late final Translations$lobby$offline$es offline = Translations$lobby$offline$es.internal(_root);
+	late final Translations$lobby$newRoom$es newRoom = Translations$lobby$newRoom$es.internal(_root);
 	List<String> get noteNames => [
 		'Do',
 		'Re♭',
@@ -334,6 +334,34 @@ class Translations$errors$es {
 	String get unexpected => 'Error inesperado';
 }
 
+// Path: lobby.join
+class Translations$lobby$join$es {
+	Translations$lobby$join$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Cerrar'
+	String get close => 'Cerrar';
+
+	/// es: 'Puerto $port'
+	String port({required Object port}) => 'Puerto ${port}';
+
+	/// es: 'Código incorrecto. Revisa e intenta otra vez.'
+	String get wrongCode => 'Código incorrecto. Revisa e intenta otra vez.';
+
+	/// es: 'Podrás entrar cuando alguien salga.'
+	String get roomFullHint => 'Podrás entrar cuando alguien salga.';
+
+	/// es: 'Revisa que estés en su misma red Wi-Fi.'
+	String get unreachableHint => 'Revisa que estés en su misma red Wi-Fi.';
+
+	late final Translations$lobby$join$pin$es pin = Translations$lobby$join$pin$es.internal(_root);
+	late final Translations$lobby$join$ip$es ip = Translations$lobby$join$ip$es.internal(_root);
+	late final Translations$lobby$join$scan$es scan = Translations$lobby$join$scan$es.internal(_root);
+}
+
 // Path: lobby.network
 class Translations$lobby$network$es {
 	Translations$lobby$network$es.internal(this._root);
@@ -404,6 +432,62 @@ class Translations$lobby$offline$es {
 
 	/// es: 'Únete al punto de acceso del anfitrión para encontrar frecus.'
 	String get message => 'Únete al punto de acceso del anfitrión para encontrar frecus.';
+}
+
+// Path: lobby.newRoom
+class Translations$lobby$newRoom$es {
+	Translations$lobby$newRoom$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Atrás'
+	String get back => 'Atrás';
+
+	/// es: 'Paso $current de $total'
+	String step({required Object current, required Object total}) => 'Paso ${current} de ${total}';
+
+	late final Translations$lobby$newRoom$guide$es guide = Translations$lobby$newRoom$guide$es.internal(_root);
+
+	/// es: 'Nueva frecu'
+	String get title => 'Nueva frecu';
+
+	/// es: 'Tu frecu suena en'
+	String get soundsIn => 'Tu frecu suena en';
+
+	/// es: 'Abierta a las $time'
+	String openedAt({required Object time}) => 'Abierta a las ${time}';
+
+	/// es: 'Nombre de la frecu'
+	String get name => 'Nombre de la frecu';
+
+	/// es: 'Ej. Ruta del domingo'
+	String get nameHint => 'Ej. Ruta del domingo';
+
+	/// es: 'Frecu de $name'
+	String defaultName({required Object name}) => 'Frecu de ${name}';
+
+	/// es: 'Mi frecu'
+	String get untitled => 'Mi frecu';
+
+	/// es: 'Código de acceso'
+	String get code => 'Código de acceso';
+
+	/// es: '4 dígitos'
+	String get codeDigits => '4 dígitos';
+
+	/// es: 'Generar otro'
+	String get regenerate => 'Generar otro';
+
+	/// es: 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.'
+	String get codeHelp => 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.';
+
+	/// es: 'Abrir frecu'
+	String get open => 'Abrir frecu';
+
+	/// es: 'Reloj de quintas: $time, $note'
+	String clockLabel({required Object time, required Object note}) => 'Reloj de quintas: ${time}, ${note}';
 }
 
 // Path: room.mesh
@@ -615,6 +699,134 @@ class Translations$settings$themeMode$es {
 	String get dark => 'Oscuro';
 }
 
+// Path: lobby.join.pin
+class Translations$lobby$join$pin$es {
+	Translations$lobby$join$pin$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Ingresa el código de acceso. Pídeselo al anfitrión.'
+	String get message => 'Ingresa el código de acceso. Pídeselo al anfitrión.';
+
+	/// es: 'Se envía al completar los 4 dígitos'
+	String get autoSend => 'Se envía al completar los 4 dígitos';
+
+	/// es: 'Verificando con el anfitrión…'
+	String get checking => 'Verificando con el anfitrión…';
+
+	/// es: 'Código correcto · entrando'
+	String get correct => 'Código correcto · entrando';
+
+	/// es: 'Borrar'
+	String get delete => 'Borrar';
+
+	/// es: 'Entrarás como'
+	String get joiningAs => 'Entrarás como';
+}
+
+// Path: lobby.join.ip
+class Translations$lobby$join$ip$es {
+	Translations$lobby$join$ip$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Conexión manual'
+	String get kicker => 'Conexión manual';
+
+	/// es: 'Úsalo si la frecu no aparece en la lista.'
+	String get message => 'Úsalo si la frecu no aparece en la lista.';
+
+	/// es: 'IP del anfitrión'
+	String get host => 'IP del anfitrión';
+
+	/// es: 'Sin respuesta en el puerto $port'
+	String noAnswer({required Object port}) => 'Sin respuesta en el puerto ${port}';
+
+	/// es: 'Conectar'
+	String get connect => 'Conectar';
+}
+
+// Path: lobby.join.scan
+class Translations$lobby$join$scan$es {
+	Translations$lobby$join$scan$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Escanear invitación'
+	String get title => 'Escanear invitación';
+
+	/// es: 'QR de la frecu'
+	String get subtitle => 'QR de la frecu';
+
+	/// es: 'Atrás'
+	String get back => 'Atrás';
+
+	/// es: 'Linterna'
+	String get torch => 'Linterna';
+
+	/// es: 'Apunta al QR que muestra el anfitrión en su teléfono.'
+	String get hint => 'Apunta al QR que muestra el anfitrión en su teléfono.';
+
+	/// es: 'Este QR no es una invitación de Frecu.'
+	String get invalid => 'Este QR no es una invitación de Frecu.';
+
+	/// es: 'Frecu encontrada'
+	String get found => 'Frecu encontrada';
+
+	/// es: 'Frecu sin nota'
+	String get noNote => 'Frecu sin nota';
+
+	/// es: 'Unirme'
+	String get join => 'Unirme';
+}
+
+// Path: lobby.newRoom.guide
+class Translations$lobby$newRoom$guide$es {
+	Translations$lobby$newRoom$guide$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Prepara la red'
+	String get title => 'Prepara la red';
+
+	/// es: 'Activa tu punto de acceso'
+	String get heading => 'Activa tu punto de acceso';
+
+	/// es: 'Tu teléfono será la antena del grupo.'
+	String get message => 'Tu teléfono será la antena del grupo.';
+
+	/// es: 'Android'
+	String get android => 'Android';
+
+	/// es: 'iPhone'
+	String get iphone => 'iPhone';
+
+	List<HotspotStep> get androidSteps => [
+		Translations$lobby$newRoom$guide$androidSteps$0$es.internal(_root),
+		Translations$lobby$newRoom$guide$androidSteps$1$es.internal(_root),
+		Translations$lobby$newRoom$guide$androidSteps$2$es.internal(_root),
+	];
+	List<HotspotStep> get iphoneSteps => [
+		Translations$lobby$newRoom$guide$iphoneSteps$0$es.internal(_root),
+		Translations$lobby$newRoom$guide$iphoneSteps$1$es.internal(_root),
+		Translations$lobby$newRoom$guide$iphoneSteps$2$es.internal(_root),
+	];
+
+	/// es: 'Ya está activo'
+	String get ready => 'Ya está activo';
+
+	/// es: 'Ya estamos en la misma Wi-Fi'
+	String get sameWifi => 'Ya estamos en la misma Wi-Fi';
+}
+
 // Path: room.talk.core
 class Translations$room$talk$core$es {
 	Translations$room$talk$core$es.internal(this._root);
@@ -726,6 +938,96 @@ class Translations$room$talk$echo$es {
 	String get dismiss => 'Cerrar aviso';
 }
 
+// Path: lobby.newRoom.guide.androidSteps.0
+class Translations$lobby$newRoom$guide$androidSteps$0$es with HotspotStep {
+	Translations$lobby$newRoom$guide$androidSteps$0$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Abre Ajustes › Zona Wi-Fi'
+	@override String get lead => 'Abre Ajustes › Zona Wi-Fi';
+
+	/// es: ' (el nombre cambia según la marca).'
+	@override String get rest => ' (el nombre cambia según la marca).';
+}
+
+// Path: lobby.newRoom.guide.androidSteps.1
+class Translations$lobby$newRoom$guide$androidSteps$1$es with HotspotStep {
+	Translations$lobby$newRoom$guide$androidSteps$1$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Actívala'
+	@override String get lead => 'Actívala';
+
+	/// es: ' y comparte el nombre y la contraseña con tu grupo.'
+	@override String get rest => ' y comparte el nombre y la contraseña con tu grupo.';
+}
+
+// Path: lobby.newRoom.guide.androidSteps.2
+class Translations$lobby$newRoom$guide$androidSteps$2$es with HotspotStep {
+	Translations$lobby$newRoom$guide$androidSteps$2$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Vuelve a Frecu'
+	@override String get lead => 'Vuelve a Frecu';
+
+	/// es: ' y abre tu frecu. No usa tus datos móviles.'
+	@override String get rest => ' y abre tu frecu. No usa tus datos móviles.';
+}
+
+// Path: lobby.newRoom.guide.iphoneSteps.0
+class Translations$lobby$newRoom$guide$iphoneSteps$0$es with HotspotStep {
+	Translations$lobby$newRoom$guide$iphoneSteps$0$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Abre Ajustes › Punto de acceso personal'
+	@override String get lead => 'Abre Ajustes › Punto de acceso personal';
+
+	/// es: ' y activa «Permitir a otros conectarse».'
+	@override String get rest => ' y activa «Permitir a otros conectarse».';
+}
+
+// Path: lobby.newRoom.guide.iphoneSteps.1
+class Translations$lobby$newRoom$guide$iphoneSteps$1$es with HotspotStep {
+	Translations$lobby$newRoom$guide$iphoneSteps$1$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Comparte la contraseña'
+	@override String get lead => 'Comparte la contraseña';
+
+	/// es: ' con tu grupo y que se unan a tu red.'
+	@override String get rest => ' con tu grupo y que se unan a tu red.';
+}
+
+// Path: lobby.newRoom.guide.iphoneSteps.2
+class Translations$lobby$newRoom$guide$iphoneSteps$2$es with HotspotStep {
+	Translations$lobby$newRoom$guide$iphoneSteps$2$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Mantén Frecu abierta'
+	@override String get lead => 'Mantén Frecu abierta';
+
+	/// es: ' mientras se unen. En iPhone recomendamos que el anfitrión use Android.'
+	@override String get rest => ' mientras se unen. En iPhone recomendamos que el anfitrión use Android.';
+}
+
 /// The flat map containing all translations for locale <es>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -736,6 +1038,31 @@ extension on Translations {
 		return switch (path) {
 			'app.title' => 'Frecu',
 			'lobby.title' => 'frecu',
+			'lobby.join.close' => 'Cerrar',
+			'lobby.join.port' => ({required Object port}) => 'Puerto ${port}',
+			'lobby.join.wrongCode' => 'Código incorrecto. Revisa e intenta otra vez.',
+			'lobby.join.roomFullHint' => 'Podrás entrar cuando alguien salga.',
+			'lobby.join.unreachableHint' => 'Revisa que estés en su misma red Wi-Fi.',
+			'lobby.join.pin.message' => 'Ingresa el código de acceso. Pídeselo al anfitrión.',
+			'lobby.join.pin.autoSend' => 'Se envía al completar los 4 dígitos',
+			'lobby.join.pin.checking' => 'Verificando con el anfitrión…',
+			'lobby.join.pin.correct' => 'Código correcto · entrando',
+			'lobby.join.pin.delete' => 'Borrar',
+			'lobby.join.pin.joiningAs' => 'Entrarás como',
+			'lobby.join.ip.kicker' => 'Conexión manual',
+			'lobby.join.ip.message' => 'Úsalo si la frecu no aparece en la lista.',
+			'lobby.join.ip.host' => 'IP del anfitrión',
+			'lobby.join.ip.noAnswer' => ({required Object port}) => 'Sin respuesta en el puerto ${port}',
+			'lobby.join.ip.connect' => 'Conectar',
+			'lobby.join.scan.title' => 'Escanear invitación',
+			'lobby.join.scan.subtitle' => 'QR de la frecu',
+			'lobby.join.scan.back' => 'Atrás',
+			'lobby.join.scan.torch' => 'Linterna',
+			'lobby.join.scan.hint' => 'Apunta al QR que muestra el anfitrión en su teléfono.',
+			'lobby.join.scan.invalid' => 'Este QR no es una invitación de Frecu.',
+			'lobby.join.scan.found' => 'Frecu encontrada',
+			'lobby.join.scan.noNote' => 'Frecu sin nota',
+			'lobby.join.scan.join' => 'Unirme',
 			'lobby.settings' => 'Ajustes',
 			'lobby.heading' => 'Elige tu frecu',
 			'lobby.createRoom' => 'Crear frecu',
@@ -743,7 +1070,6 @@ extension on Translations {
 			'lobby.joinRoom' => 'Conectar por IP',
 			'lobby.nearbyRooms' => 'Frecus cercanas',
 			'lobby.accessCode' => 'Código de acceso',
-			'lobby.roomName' => 'Nombre de la frecu',
 			'lobby.network.checking' => 'Buscando red',
 			'lobby.network.connected' => ({required Object ip}) => 'Red · ${ip}',
 			'lobby.network.offline' => 'Sin red local',
@@ -755,6 +1081,40 @@ extension on Translations {
 			'lobby.empty.searching' => 'La búsqueda sigue activa',
 			'lobby.offline.title' => 'No estás en ninguna red Wi-Fi.',
 			'lobby.offline.message' => 'Únete al punto de acceso del anfitrión para encontrar frecus.',
+			'lobby.newRoom.back' => 'Atrás',
+			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Paso ${current} de ${total}',
+			'lobby.newRoom.guide.title' => 'Prepara la red',
+			'lobby.newRoom.guide.heading' => 'Activa tu punto de acceso',
+			'lobby.newRoom.guide.message' => 'Tu teléfono será la antena del grupo.',
+			'lobby.newRoom.guide.android' => 'Android',
+			'lobby.newRoom.guide.iphone' => 'iPhone',
+			'lobby.newRoom.guide.androidSteps.0.lead' => 'Abre Ajustes › Zona Wi-Fi',
+			'lobby.newRoom.guide.androidSteps.0.rest' => ' (el nombre cambia según la marca).',
+			'lobby.newRoom.guide.androidSteps.1.lead' => 'Actívala',
+			'lobby.newRoom.guide.androidSteps.1.rest' => ' y comparte el nombre y la contraseña con tu grupo.',
+			'lobby.newRoom.guide.androidSteps.2.lead' => 'Vuelve a Frecu',
+			'lobby.newRoom.guide.androidSteps.2.rest' => ' y abre tu frecu. No usa tus datos móviles.',
+			'lobby.newRoom.guide.iphoneSteps.0.lead' => 'Abre Ajustes › Punto de acceso personal',
+			'lobby.newRoom.guide.iphoneSteps.0.rest' => ' y activa «Permitir a otros conectarse».',
+			'lobby.newRoom.guide.iphoneSteps.1.lead' => 'Comparte la contraseña',
+			'lobby.newRoom.guide.iphoneSteps.1.rest' => ' con tu grupo y que se unan a tu red.',
+			'lobby.newRoom.guide.iphoneSteps.2.lead' => 'Mantén Frecu abierta',
+			'lobby.newRoom.guide.iphoneSteps.2.rest' => ' mientras se unen. En iPhone recomendamos que el anfitrión use Android.',
+			'lobby.newRoom.guide.ready' => 'Ya está activo',
+			'lobby.newRoom.guide.sameWifi' => 'Ya estamos en la misma Wi-Fi',
+			'lobby.newRoom.title' => 'Nueva frecu',
+			'lobby.newRoom.soundsIn' => 'Tu frecu suena en',
+			'lobby.newRoom.openedAt' => ({required Object time}) => 'Abierta a las ${time}',
+			'lobby.newRoom.name' => 'Nombre de la frecu',
+			'lobby.newRoom.nameHint' => 'Ej. Ruta del domingo',
+			'lobby.newRoom.defaultName' => ({required Object name}) => 'Frecu de ${name}',
+			'lobby.newRoom.untitled' => 'Mi frecu',
+			'lobby.newRoom.code' => 'Código de acceso',
+			'lobby.newRoom.codeDigits' => '4 dígitos',
+			'lobby.newRoom.regenerate' => 'Generar otro',
+			'lobby.newRoom.codeHelp' => 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.',
+			'lobby.newRoom.open' => 'Abrir frecu',
+			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Reloj de quintas: ${time}, ${note}',
 			'lobby.noteNames.0' => 'Do',
 			'lobby.noteNames.1' => 'Re♭',
 			'lobby.noteNames.2' => 'Re',

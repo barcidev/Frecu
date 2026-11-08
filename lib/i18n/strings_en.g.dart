@@ -65,6 +65,7 @@ class _Translations$lobby$en extends Translations$lobby$es {
 
 	// Translations
 	@override String get title => 'frecu';
+	@override late final _Translations$lobby$join$en join = _Translations$lobby$join$en._(_root);
 	@override String get settings => 'Settings';
 	@override String get heading => 'Pick your room';
 	@override String get createRoom => 'Create room';
@@ -72,11 +73,11 @@ class _Translations$lobby$en extends Translations$lobby$es {
 	@override String get joinRoom => 'Connect by IP';
 	@override String get nearbyRooms => 'Nearby rooms';
 	@override String get accessCode => 'Access code';
-	@override String get roomName => 'Room name';
 	@override late final _Translations$lobby$network$en network = _Translations$lobby$network$en._(_root);
 	@override late final _Translations$lobby$tuner$en tuner = _Translations$lobby$tuner$en._(_root);
 	@override late final _Translations$lobby$empty$en empty = _Translations$lobby$empty$en._(_root);
 	@override late final _Translations$lobby$offline$en offline = _Translations$lobby$offline$en._(_root);
+	@override late final _Translations$lobby$newRoom$en newRoom = _Translations$lobby$newRoom$en._(_root);
 	@override List<String> get noteNames => [
 		'C',
 		'D♭',
@@ -203,6 +204,23 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get unexpected => 'Unexpected error';
 }
 
+// Path: lobby.join
+class _Translations$lobby$join$en extends Translations$lobby$join$es {
+	_Translations$lobby$join$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get close => 'Close';
+	@override String port({required Object port}) => 'Port ${port}';
+	@override String get wrongCode => 'Wrong code. Check it and try again.';
+	@override String get roomFullHint => 'You can join when someone leaves.';
+	@override String get unreachableHint => 'Make sure you\'re on the same Wi-Fi network.';
+	@override late final _Translations$lobby$join$pin$en pin = _Translations$lobby$join$pin$en._(_root);
+	@override late final _Translations$lobby$join$ip$en ip = _Translations$lobby$join$ip$en._(_root);
+	@override late final _Translations$lobby$join$scan$en scan = _Translations$lobby$join$scan$en._(_root);
+}
+
 // Path: lobby.network
 class _Translations$lobby$network$en extends Translations$lobby$network$es {
 	_Translations$lobby$network$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -251,6 +269,31 @@ class _Translations$lobby$offline$en extends Translations$lobby$offline$es {
 	// Translations
 	@override String get title => 'You\'re not on any Wi-Fi network.';
 	@override String get message => 'Join the host\'s hotspot to find rooms.';
+}
+
+// Path: lobby.newRoom
+class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
+	_Translations$lobby$newRoom$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get back => 'Back';
+	@override String step({required Object current, required Object total}) => 'Step ${current} of ${total}';
+	@override late final _Translations$lobby$newRoom$guide$en guide = _Translations$lobby$newRoom$guide$en._(_root);
+	@override String get title => 'New room';
+	@override String get soundsIn => 'Your room sounds in';
+	@override String openedAt({required Object time}) => 'Opened at ${time}';
+	@override String get name => 'Room name';
+	@override String get nameHint => 'E.g. Sunday ride';
+	@override String defaultName({required Object name}) => '${name}\'s room';
+	@override String get untitled => 'My room';
+	@override String get code => 'Access code';
+	@override String get codeDigits => '4 digits';
+	@override String get regenerate => 'Generate another';
+	@override String get codeHelp => 'Share it only with your group: it keeps strangers on the same network out.';
+	@override String get open => 'Open room';
+	@override String clockLabel({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}';
 }
 
 // Path: room.mesh
@@ -379,6 +422,79 @@ class _Translations$settings$themeMode$en extends Translations$settings$themeMod
 	@override String get dark => 'Dark';
 }
 
+// Path: lobby.join.pin
+class _Translations$lobby$join$pin$en extends Translations$lobby$join$pin$es {
+	_Translations$lobby$join$pin$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get message => 'Enter the access code. Ask the host for it.';
+	@override String get autoSend => 'Sent once all 4 digits are in';
+	@override String get checking => 'Checking with the host…';
+	@override String get correct => 'Code accepted · joining';
+	@override String get delete => 'Delete';
+	@override String get joiningAs => 'You\'ll join as';
+}
+
+// Path: lobby.join.ip
+class _Translations$lobby$join$ip$en extends Translations$lobby$join$ip$es {
+	_Translations$lobby$join$ip$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Manual connection';
+	@override String get message => 'Use it if the room isn\'t on the list.';
+	@override String get host => 'Host IP';
+	@override String noAnswer({required Object port}) => 'No answer on port ${port}';
+	@override String get connect => 'Connect';
+}
+
+// Path: lobby.join.scan
+class _Translations$lobby$join$scan$en extends Translations$lobby$join$scan$es {
+	_Translations$lobby$join$scan$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Scan invite';
+	@override String get subtitle => 'Room QR';
+	@override String get back => 'Back';
+	@override String get torch => 'Flashlight';
+	@override String get hint => 'Point at the QR the host shows on their phone.';
+	@override String get invalid => 'This QR isn\'t a Frecu invite.';
+	@override String get found => 'Room found';
+	@override String get noNote => 'Room without a note';
+	@override String get join => 'Join';
+}
+
+// Path: lobby.newRoom.guide
+class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$guide$es {
+	_Translations$lobby$newRoom$guide$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Set up the network';
+	@override String get heading => 'Turn on your hotspot';
+	@override String get message => 'Your phone will be the group\'s antenna.';
+	@override String get android => 'Android';
+	@override String get iphone => 'iPhone';
+	@override List<HotspotStep> get androidSteps => [
+		_Translations$lobby$newRoom$guide$androidSteps$0$en._(_root),
+		_Translations$lobby$newRoom$guide$androidSteps$1$en._(_root),
+		_Translations$lobby$newRoom$guide$androidSteps$2$en._(_root),
+	];
+	@override List<HotspotStep> get iphoneSteps => [
+		_Translations$lobby$newRoom$guide$iphoneSteps$0$en._(_root),
+		_Translations$lobby$newRoom$guide$iphoneSteps$1$en._(_root),
+		_Translations$lobby$newRoom$guide$iphoneSteps$2$en._(_root),
+	];
+	@override String get ready => 'It\'s on';
+	@override String get sameWifi => 'We\'re already on the same Wi-Fi';
+}
+
 // Path: room.talk.core
 class _Translations$room$talk$core$en extends Translations$room$talk$core$es {
 	_Translations$room$talk$core$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -440,6 +556,72 @@ class _Translations$room$talk$echo$en extends Translations$room$talk$echo$es {
 	@override String get dismiss => 'Dismiss notice';
 }
 
+// Path: lobby.newRoom.guide.androidSteps.0
+class _Translations$lobby$newRoom$guide$androidSteps$0$en extends Translations$lobby$newRoom$guide$androidSteps$0$es with HotspotStep {
+	_Translations$lobby$newRoom$guide$androidSteps$0$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Open Settings › Hotspot';
+	@override String get rest => ' (the name varies by brand).';
+}
+
+// Path: lobby.newRoom.guide.androidSteps.1
+class _Translations$lobby$newRoom$guide$androidSteps$1$en extends Translations$lobby$newRoom$guide$androidSteps$1$es with HotspotStep {
+	_Translations$lobby$newRoom$guide$androidSteps$1$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Turn it on';
+	@override String get rest => ' and share its name and password with your group.';
+}
+
+// Path: lobby.newRoom.guide.androidSteps.2
+class _Translations$lobby$newRoom$guide$androidSteps$2$en extends Translations$lobby$newRoom$guide$androidSteps$2$es with HotspotStep {
+	_Translations$lobby$newRoom$guide$androidSteps$2$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Come back to Frecu';
+	@override String get rest => ' and open your room. It doesn\'t use your mobile data.';
+}
+
+// Path: lobby.newRoom.guide.iphoneSteps.0
+class _Translations$lobby$newRoom$guide$iphoneSteps$0$en extends Translations$lobby$newRoom$guide$iphoneSteps$0$es with HotspotStep {
+	_Translations$lobby$newRoom$guide$iphoneSteps$0$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Open Settings › Personal Hotspot';
+	@override String get rest => ' and turn on “Allow Others to Join”.';
+}
+
+// Path: lobby.newRoom.guide.iphoneSteps.1
+class _Translations$lobby$newRoom$guide$iphoneSteps$1$en extends Translations$lobby$newRoom$guide$iphoneSteps$1$es with HotspotStep {
+	_Translations$lobby$newRoom$guide$iphoneSteps$1$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Share the password';
+	@override String get rest => ' with your group so they join your network.';
+}
+
+// Path: lobby.newRoom.guide.iphoneSteps.2
+class _Translations$lobby$newRoom$guide$iphoneSteps$2$en extends Translations$lobby$newRoom$guide$iphoneSteps$2$es with HotspotStep {
+	_Translations$lobby$newRoom$guide$iphoneSteps$2$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Keep Frecu open';
+	@override String get rest => ' while they join. On iPhone we recommend that the host uses Android.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -450,6 +632,31 @@ extension on TranslationsEn {
 		return switch (path) {
 			'app.title' => 'Frecu',
 			'lobby.title' => 'frecu',
+			'lobby.join.close' => 'Close',
+			'lobby.join.port' => ({required Object port}) => 'Port ${port}',
+			'lobby.join.wrongCode' => 'Wrong code. Check it and try again.',
+			'lobby.join.roomFullHint' => 'You can join when someone leaves.',
+			'lobby.join.unreachableHint' => 'Make sure you\'re on the same Wi-Fi network.',
+			'lobby.join.pin.message' => 'Enter the access code. Ask the host for it.',
+			'lobby.join.pin.autoSend' => 'Sent once all 4 digits are in',
+			'lobby.join.pin.checking' => 'Checking with the host…',
+			'lobby.join.pin.correct' => 'Code accepted · joining',
+			'lobby.join.pin.delete' => 'Delete',
+			'lobby.join.pin.joiningAs' => 'You\'ll join as',
+			'lobby.join.ip.kicker' => 'Manual connection',
+			'lobby.join.ip.message' => 'Use it if the room isn\'t on the list.',
+			'lobby.join.ip.host' => 'Host IP',
+			'lobby.join.ip.noAnswer' => ({required Object port}) => 'No answer on port ${port}',
+			'lobby.join.ip.connect' => 'Connect',
+			'lobby.join.scan.title' => 'Scan invite',
+			'lobby.join.scan.subtitle' => 'Room QR',
+			'lobby.join.scan.back' => 'Back',
+			'lobby.join.scan.torch' => 'Flashlight',
+			'lobby.join.scan.hint' => 'Point at the QR the host shows on their phone.',
+			'lobby.join.scan.invalid' => 'This QR isn\'t a Frecu invite.',
+			'lobby.join.scan.found' => 'Room found',
+			'lobby.join.scan.noNote' => 'Room without a note',
+			'lobby.join.scan.join' => 'Join',
 			'lobby.settings' => 'Settings',
 			'lobby.heading' => 'Pick your room',
 			'lobby.createRoom' => 'Create room',
@@ -457,7 +664,6 @@ extension on TranslationsEn {
 			'lobby.joinRoom' => 'Connect by IP',
 			'lobby.nearbyRooms' => 'Nearby rooms',
 			'lobby.accessCode' => 'Access code',
-			'lobby.roomName' => 'Room name',
 			'lobby.network.checking' => 'Checking network',
 			'lobby.network.connected' => ({required Object ip}) => 'Network · ${ip}',
 			'lobby.network.offline' => 'No local network',
@@ -469,6 +675,40 @@ extension on TranslationsEn {
 			'lobby.empty.searching' => 'Still searching',
 			'lobby.offline.title' => 'You\'re not on any Wi-Fi network.',
 			'lobby.offline.message' => 'Join the host\'s hotspot to find rooms.',
+			'lobby.newRoom.back' => 'Back',
+			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Step ${current} of ${total}',
+			'lobby.newRoom.guide.title' => 'Set up the network',
+			'lobby.newRoom.guide.heading' => 'Turn on your hotspot',
+			'lobby.newRoom.guide.message' => 'Your phone will be the group\'s antenna.',
+			'lobby.newRoom.guide.android' => 'Android',
+			'lobby.newRoom.guide.iphone' => 'iPhone',
+			'lobby.newRoom.guide.androidSteps.0.lead' => 'Open Settings › Hotspot',
+			'lobby.newRoom.guide.androidSteps.0.rest' => ' (the name varies by brand).',
+			'lobby.newRoom.guide.androidSteps.1.lead' => 'Turn it on',
+			'lobby.newRoom.guide.androidSteps.1.rest' => ' and share its name and password with your group.',
+			'lobby.newRoom.guide.androidSteps.2.lead' => 'Come back to Frecu',
+			'lobby.newRoom.guide.androidSteps.2.rest' => ' and open your room. It doesn\'t use your mobile data.',
+			'lobby.newRoom.guide.iphoneSteps.0.lead' => 'Open Settings › Personal Hotspot',
+			'lobby.newRoom.guide.iphoneSteps.0.rest' => ' and turn on “Allow Others to Join”.',
+			'lobby.newRoom.guide.iphoneSteps.1.lead' => 'Share the password',
+			'lobby.newRoom.guide.iphoneSteps.1.rest' => ' with your group so they join your network.',
+			'lobby.newRoom.guide.iphoneSteps.2.lead' => 'Keep Frecu open',
+			'lobby.newRoom.guide.iphoneSteps.2.rest' => ' while they join. On iPhone we recommend that the host uses Android.',
+			'lobby.newRoom.guide.ready' => 'It\'s on',
+			'lobby.newRoom.guide.sameWifi' => 'We\'re already on the same Wi-Fi',
+			'lobby.newRoom.title' => 'New room',
+			'lobby.newRoom.soundsIn' => 'Your room sounds in',
+			'lobby.newRoom.openedAt' => ({required Object time}) => 'Opened at ${time}',
+			'lobby.newRoom.name' => 'Room name',
+			'lobby.newRoom.nameHint' => 'E.g. Sunday ride',
+			'lobby.newRoom.defaultName' => ({required Object name}) => '${name}\'s room',
+			'lobby.newRoom.untitled' => 'My room',
+			'lobby.newRoom.code' => 'Access code',
+			'lobby.newRoom.codeDigits' => '4 digits',
+			'lobby.newRoom.regenerate' => 'Generate another',
+			'lobby.newRoom.codeHelp' => 'Share it only with your group: it keeps strangers on the same network out.',
+			'lobby.newRoom.open' => 'Open room',
+			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}',
 			'lobby.noteNames.0' => 'C',
 			'lobby.noteNames.1' => 'D♭',
 			'lobby.noteNames.2' => 'D',
