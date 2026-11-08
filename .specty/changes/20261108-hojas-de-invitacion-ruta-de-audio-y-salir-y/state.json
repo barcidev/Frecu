@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "baseCommit": "4db5a571a8affd7389b5dec22d1591f65ce265cd",
   "revision": 1,
@@ -71,6 +71,12 @@
     "T": 3,
     "R": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-08T01:23:50.080Z"
+  "lockedTests": {
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a310453eb0ece4c3e58ef5b90674a5348c3495530a57e6d8f69dcaae2646a8e0",
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:970a8a88126596f17eacd90c1f242df89351760c14cf0378c3af400cd436981f",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:b04044be0f227a917ebee8bb2744824a2426bf195389bd6cdeb3086dda243f1c",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:7ecf025cec65e16fdd95745c4c6ad6d3265e9420d3c7976dd7df47d737b50556",
+    "test/features/room/presentation/room_closure_test.dart": "sha256:a355a71ab200085775f39aa2e5108fd7ac8a0100e544e85ad2db214e04c25f55",
+    "test/features/room/presentation/room_sheets_test.dart": "sha256:37feb1cacc6ba5e68293426f5bd212a2a707c1ffa95958c14796a440b02fcb35"
+  }
 }
