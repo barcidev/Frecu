@@ -6,6 +6,13 @@
   "branch": "feature/union-por-codigo-de-acceso-ip-y-escaner-qr",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:113be1056cc158abc22e80e78f65b5f4e3ae7ff1b092a39c2f468b375a5d246d",
+    "at": "2026-11-08T00:23:13.011Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 17,
@@ -56,12 +63,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:113be1056cc158abc22e80e78f65b5f4e3ae7ff1b092a39c2f468b375a5d246d",
-    "at": "2026-11-08T00:23:13.011Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-08T00:39:07.346Z"
 }

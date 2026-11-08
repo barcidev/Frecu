@@ -12,6 +12,7 @@ import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
@@ -147,13 +148,12 @@ void main() {
         await tester.tap(find.text('Frecu mDNS'));
         await tester.pumpAndSettle();
 
-        expect(find.text('Unirse a Frecu mDNS'), findsOneWidget);
-        expect(find.text(t.lobby.accessCode), findsOneWidget);
+        expect(find.byType(PinJoinSheet), findsOneWidget);
 
-        final joinButton = find.byKey(const Key('pin_join_button'));
-        expect(joinButton, findsOneWidget);
-
-        await tester.tap(joinButton);
+        for (final digit in '1234'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
         await tester.pumpAndSettle();
 
         verify(

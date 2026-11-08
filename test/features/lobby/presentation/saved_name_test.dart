@@ -7,6 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
+import 'package:frecu/core/design/widgets/fr_button.dart';
+import 'package:frecu/core/design/widgets/fr_pin_field.dart';
+import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
@@ -161,15 +164,15 @@ void main() {
     Future<ProviderContainer> pumpApp(WidgetTester tester) =>
         pumpWith(tester, FrecuApp(appRouter: AppRouter()));
 
-    Finder inDialog(Finder finder) =>
-        find.descendant(of: find.byType(AlertDialog), matching: finder);
+    Finder inSheet(Finder finder) =>
+        find.descendant(of: find.byType(FrSheet), matching: finder);
 
-    /// El diálogo abierto no tiene campo para el nombre.
+    /// La hoja abierta no tiene campo para el nombre.
     void expectNoNameField() {
-      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.byType(FrSheet), findsOneWidget);
       expect(find.text(_nameLabel), findsNothing);
       expect(
-        inDialog(find.widgetWithText(TextField, 'Participante')),
+        inSheet(find.widgetWithText(TextField, 'Participante')),
         findsNothing,
       );
     }
@@ -178,7 +181,10 @@ void main() {
       await tester.tap(find.text(t.lobby.joinRoom));
       await tester.pumpAndSettle();
       expectNoNameField();
-      await tester.tap(inDialog(find.byType(FilledButton)));
+      await tester.enterText(inSheet(find.byType(TextField)).first, '10.0.0.2');
+      await tester.enterText(inSheet(find.byType(TextField)).last, '1234');
+      await tester.pumpAndSettle();
+      await tester.tap(inSheet(find.byType(FrButton)));
       await tester.pumpAndSettle();
     }
 
@@ -205,10 +211,12 @@ void main() {
         await tester.pumpAndSettle();
 
         expectNoNameField();
-        expect(inDialog(find.text(t.lobby.accessCode)), findsOneWidget);
-        expect(inDialog(find.byType(TextField)), findsOneWidget);
+        expect(inSheet(find.byType(FrPinField)), findsOneWidget);
 
-        await tester.tap(find.byKey(const Key('pin_join_button')));
+        for (final digit in '1234'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
         await tester.pumpAndSettle();
 
         verifyJoinedAs('Ana');
@@ -242,6 +250,8 @@ void main() {
       );
 
       triggerScan!('frecu://join?h=192.168.1.100&p=47800&r=room-qr&c=4321');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(t.lobby.join.scan.join));
       await tester.pumpAndSettle();
 
       verify(

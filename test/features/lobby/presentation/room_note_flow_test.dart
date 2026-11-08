@@ -13,6 +13,7 @@ import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/pages/scan_qr_page.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
@@ -135,6 +136,13 @@ void main() {
     }
 
     Future<void Function(String)> pumpScanner(WidgetTester tester) async {
+      // La retícula del escáner anima sin fin: con movimiento reducido queda
+      // quieta y pumpAndSettle termina.
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
       void Function(String)? triggerScan;
       await tester.pumpWidget(
         withProviders(
@@ -165,7 +173,10 @@ void main() {
 
       await tester.tap(find.text(room.name));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('pin_join_button')));
+      for (final digit in '1234'.split('')) {
+        await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+        await tester.pump();
+      }
       await tester.pumpAndSettle();
     }
 
@@ -277,7 +288,14 @@ void main() {
 
       await tester.tap(find.text(t.lobby.joinRoom));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Conectar'));
+      final fields = find.descendant(
+        of: find.byType(IpJoinSheet),
+        matching: find.byType(TextField),
+      );
+      await tester.enterText(fields.first, '192.168.43.1');
+      await tester.enterText(fields.last, '1234');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(t.lobby.join.ip.connect));
       await tester.pumpAndSettle();
 
       verify(
@@ -299,6 +317,8 @@ void main() {
 
       triggerScan('frecu://join?h=192.168.43.1&p=47800&r=room-123&c=1234&n=7');
       await tester.pumpAndSettle();
+      await tester.tap(find.text(t.lobby.join.scan.join));
+      await tester.pumpAndSettle();
 
       verify(
         () => roomRepository.joinRoom(
@@ -318,6 +338,8 @@ void main() {
         final triggerScan = await pumpScanner(tester);
 
         triggerScan('frecu://join?h=192.168.43.1&p=47800&r=room-123&c=1234');
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(t.lobby.join.scan.join));
         await tester.pumpAndSettle();
 
         verify(
