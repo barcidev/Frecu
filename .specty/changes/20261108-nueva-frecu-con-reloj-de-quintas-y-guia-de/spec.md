@@ -84,7 +84,7 @@ Referencia: `V.hotspot` y `V.create` de `screens.js`; `drawFifths`, `drawHotspot
 
 ## Tareas
 
-- [ ] T1: Reloj del círculo de quintas
+- [x] T1: Reloj del círculo de quintas
   - files: lib/features/lobby/presentation/widgets/fifths_clock.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/fifths_clock_test.dart
   - ac: AC7
   - verify: flutter test test/features/lobby/presentation/fifths_clock_test.dart
