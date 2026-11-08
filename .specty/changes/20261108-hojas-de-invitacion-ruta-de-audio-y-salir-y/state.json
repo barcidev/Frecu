@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "baseCommit": "4db5a571a8affd7389b5dec22d1591f65ce265cd",
   "revision": 1,
@@ -72,12 +72,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "0e0f69e00798745431c13dc9499d9fcd7a0369f4",
+      "attempts": 1,
       "startedAt": "2026-11-08T01:25:52.275Z",
       "doneAt": "2026-11-08T01:26:22.695Z",
-      "summary": "AudioRoutePill (ícono FrIcons, nombre, barras que se mueven al recibir audio y flecha) a la izquierda del selector en la fila de controles (P107); tocarla abre AudioRouteSheet, que elige la ruta con setAudioRoute."
+      "summary": "AudioRoutePill (ícono FrIcons, nombre, barras que se mueven al recibir audio y flecha) a la izquierda del selector en la fila de controles (P107); tocarla abre AudioRouteSheet, que elige la ruta con setAudioRoute.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "28790bfe5aabadcc978f264e63acedd1ba8de6b0",
+      "startedAt": "2026-11-08T01:26:23.084Z",
+      "doneAt": "2026-11-08T01:27:48.399Z",
+      "summary": "LeaveSheet confirma salir (peer vuelve al inicio) o cerrar la frecu; el cierre del anfitrión o recibido cierra las hojas, llama leaveRoom y muestra RoomClosedView con línea plana, motivo, duración, personas y nota; sin diálogo de cierre."
     }
   },
   "pending": {

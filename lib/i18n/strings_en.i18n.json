@@ -119,9 +119,7 @@
     "speaking": "Speaking",
     "muted": "Muted",
     "host": "Host",
-    "roomClosed": "Room has been closed by host",
     "reconnecting": "Reconnecting...",
-    "accept": "Accept",
     "noteNames": ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"],
     "mesh": {
       "you": "You",
@@ -173,6 +171,18 @@
         "hostConfirm": "Close frecu",
         "cancel": "Cancel"
       }
+    },
+    "closure": {
+      "offAir": "Off the air",
+      "noteOffAir": "$note · off the air",
+      "title": "End of transmission",
+      "host": "You closed the frecu. Everyone was disconnected.",
+      "peer": "The host closed the frecu. You can join another one whenever you like.",
+      "lost": "The host's signal was lost. You can join another one whenever you like.",
+      "duration": "Duration",
+      "people": "People",
+      "note": "Note",
+      "home": "Back to home"
     },
     "talk": {
       "modePtt": "PTT",

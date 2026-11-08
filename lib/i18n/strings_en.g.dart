@@ -115,9 +115,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override String get speaking => 'Speaking';
 	@override String get muted => 'Muted';
 	@override String get host => 'Host';
-	@override String get roomClosed => 'Room has been closed by host';
 	@override String get reconnecting => 'Reconnecting...';
-	@override String get accept => 'Accept';
 	@override List<String> get noteNames => [
 		'C',
 		'D♭',
@@ -135,6 +133,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override late final _Translations$room$mesh$en mesh = _Translations$room$mesh$en._(_root);
 	@override late final _Translations$room$header$en header = _Translations$room$header$en._(_root);
 	@override late final _Translations$room$sheets$en sheets = _Translations$room$sheets$en._(_root);
+	@override late final _Translations$room$closure$en closure = _Translations$room$closure$en._(_root);
 	@override late final _Translations$room$talk$en talk = _Translations$room$talk$en._(_root);
 }
 
@@ -338,6 +337,25 @@ class _Translations$room$sheets$en extends Translations$room$sheets$es {
 	@override late final _Translations$room$sheets$invite$en invite = _Translations$room$sheets$invite$en._(_root);
 	@override late final _Translations$room$sheets$route$en route = _Translations$room$sheets$route$en._(_root);
 	@override late final _Translations$room$sheets$leave$en leave = _Translations$room$sheets$leave$en._(_root);
+}
+
+// Path: room.closure
+class _Translations$room$closure$en extends Translations$room$closure$es {
+	_Translations$room$closure$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get offAir => 'Off the air';
+	@override String noteOffAir({required Object note}) => '${note} · off the air';
+	@override String get title => 'End of transmission';
+	@override String get host => 'You closed the frecu. Everyone was disconnected.';
+	@override String get peer => 'The host closed the frecu. You can join another one whenever you like.';
+	@override String get lost => 'The host\'s signal was lost. You can join another one whenever you like.';
+	@override String get duration => 'Duration';
+	@override String get people => 'People';
+	@override String get note => 'Note';
+	@override String get home => 'Back to home';
 }
 
 // Path: room.talk
@@ -802,9 +820,7 @@ extension on TranslationsEn {
 			'room.speaking' => 'Speaking',
 			'room.muted' => 'Muted',
 			'room.host' => 'Host',
-			'room.roomClosed' => 'Room has been closed by host',
 			'room.reconnecting' => 'Reconnecting...',
-			'room.accept' => 'Accept',
 			'room.noteNames.0' => 'C',
 			'room.noteNames.1' => 'D♭',
 			'room.noteNames.2' => 'D',
@@ -856,6 +872,16 @@ extension on TranslationsEn {
 			'room.sheets.leave.hostMany' => ({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.',
 			'room.sheets.leave.hostConfirm' => 'Close frecu',
 			'room.sheets.leave.cancel' => 'Cancel',
+			'room.closure.offAir' => 'Off the air',
+			'room.closure.noteOffAir' => ({required Object note}) => '${note} · off the air',
+			'room.closure.title' => 'End of transmission',
+			'room.closure.host' => 'You closed the frecu. Everyone was disconnected.',
+			'room.closure.peer' => 'The host closed the frecu. You can join another one whenever you like.',
+			'room.closure.lost' => 'The host\'s signal was lost. You can join another one whenever you like.',
+			'room.closure.duration' => 'Duration',
+			'room.closure.people' => 'People',
+			'room.closure.note' => 'Note',
+			'room.closure.home' => 'Back to home',
 			'room.talk.modePtt' => 'PTT',
 			'room.talk.modeOpen' => 'Open',
 			'room.talk.core.hold' => 'Hold',

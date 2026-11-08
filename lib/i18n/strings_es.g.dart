@@ -166,14 +166,8 @@ class Translations$room$es {
 	/// es: 'Anfitrión'
 	String get host => 'Anfitrión';
 
-	/// es: 'La frecu fue cerrada por el anfitrión'
-	String get roomClosed => 'La frecu fue cerrada por el anfitrión';
-
 	/// es: 'Reconectando...'
 	String get reconnecting => 'Reconectando...';
-
-	/// es: 'Aceptar'
-	String get accept => 'Aceptar';
 
 	List<String> get noteNames => [
 		'Do',
@@ -192,6 +186,7 @@ class Translations$room$es {
 	late final Translations$room$mesh$es mesh = Translations$room$mesh$es.internal(_root);
 	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
 	late final Translations$room$sheets$es sheets = Translations$room$sheets$es.internal(_root);
+	late final Translations$room$closure$es closure = Translations$room$closure$es.internal(_root);
 	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
 }
 
@@ -559,6 +554,45 @@ class Translations$room$sheets$es {
 	late final Translations$room$sheets$invite$es invite = Translations$room$sheets$invite$es.internal(_root);
 	late final Translations$room$sheets$route$es route = Translations$room$sheets$route$es.internal(_root);
 	late final Translations$room$sheets$leave$es leave = Translations$room$sheets$leave$es.internal(_root);
+}
+
+// Path: room.closure
+class Translations$room$closure$es {
+	Translations$room$closure$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Fuera del aire'
+	String get offAir => 'Fuera del aire';
+
+	/// es: '$note · fuera del aire'
+	String noteOffAir({required Object note}) => '${note} · fuera del aire';
+
+	/// es: 'Fin de la transmisión'
+	String get title => 'Fin de la transmisión';
+
+	/// es: 'Cerraste la frecu. Todos los participantes fueron desconectados.'
+	String get host => 'Cerraste la frecu. Todos los participantes fueron desconectados.';
+
+	/// es: 'El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.'
+	String get peer => 'El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.';
+
+	/// es: 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.'
+	String get lost => 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.';
+
+	/// es: 'Duración'
+	String get duration => 'Duración';
+
+	/// es: 'Personas'
+	String get people => 'Personas';
+
+	/// es: 'Nota'
+	String get note => 'Nota';
+
+	/// es: 'Volver al inicio'
+	String get home => 'Volver al inicio';
 }
 
 // Path: room.talk
@@ -1263,9 +1297,7 @@ extension on Translations {
 			'room.speaking' => 'Hablando',
 			'room.muted' => 'Silenciado',
 			'room.host' => 'Anfitrión',
-			'room.roomClosed' => 'La frecu fue cerrada por el anfitrión',
 			'room.reconnecting' => 'Reconectando...',
-			'room.accept' => 'Aceptar',
 			'room.noteNames.0' => 'Do',
 			'room.noteNames.1' => 'Re♭',
 			'room.noteNames.2' => 'Re',
@@ -1317,6 +1349,16 @@ extension on Translations {
 			'room.sheets.leave.hostMany' => ({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.',
 			'room.sheets.leave.hostConfirm' => 'Cerrar frecu',
 			'room.sheets.leave.cancel' => 'Cancelar',
+			'room.closure.offAir' => 'Fuera del aire',
+			'room.closure.noteOffAir' => ({required Object note}) => '${note} · fuera del aire',
+			'room.closure.title' => 'Fin de la transmisión',
+			'room.closure.host' => 'Cerraste la frecu. Todos los participantes fueron desconectados.',
+			'room.closure.peer' => 'El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.',
+			'room.closure.lost' => 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.',
+			'room.closure.duration' => 'Duración',
+			'room.closure.people' => 'Personas',
+			'room.closure.note' => 'Nota',
+			'room.closure.home' => 'Volver al inicio',
 			'room.talk.modePtt' => 'PTT',
 			'room.talk.modeOpen' => 'Abierto',
 			'room.talk.core.hold' => 'Mantén',

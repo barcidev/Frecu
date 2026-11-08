@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
@@ -13,13 +16,13 @@ import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
+import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
 import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
-import 'package:frecu/i18n/strings.g.dart';
 
 /// Pantalla de la frecu activa (comunicador de voz).
 @RoutePage()
@@ -35,11 +38,15 @@ class RoomPage extends ConsumerStatefulWidget {
 }
 
 class _RoomPageState extends ConsumerState<RoomPage> {
-  bool _isDialogShowing = false;
-
   /// Lugar de cada participante en la malla, con la misma secuencia que
   /// [RoomMesh], para dar a la isla y al núcleo el color de quien habla.
   Map<String, int> _slots = const {};
+
+  /// Mayor número de personas que hubo a la vez en la malla.
+  int _peak = 0;
+
+  /// Resumen del cierre; mientras no es nulo se ve la pantalla de cierre.
+  RoomClosure? _closure;
 
   @override
   void initState() {
@@ -66,41 +73,54 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     }
   }
 
-  Future<void> _handleLeave() async {
+  /// Confirma la salida con la hoja de salir: quien no es anfitrión vuelve
+  /// al inicio y el anfitrión cierra la frecu y ve la pantalla de cierre.
+  Future<void> _confirmLeave({required bool host, required int others}) async {
+    final confirmed = await LeaveSheet.show(
+      context,
+      host: host,
+      others: others,
+    );
+    if (!confirmed || !mounted) return;
+    if (host) return _close(RoomClosureKind.hostClosed);
     await ref.read(roomNotifierProvider.notifier).leaveRoom();
-    if (mounted) {
-      await context.router.maybePop();
-    }
+    if (mounted) await context.router.maybePop();
   }
 
-  void _showRoomClosedDialog(BuildContext context, String reason) {
-    if (_isDialogShowing || !mounted) return;
-    _isDialogShowing = true;
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogCtx) => AlertDialog(
-        title: Text(t.room.title),
-        content: Text(t.room.roomClosed),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.of(dialogCtx).pop();
-              _isDialogShowing = false;
-              await _handleLeave();
-            },
-            child: Text(t.room.accept),
-          ),
-        ],
+  /// Cierra las hojas abiertas, suelta la frecu y muestra la pantalla de
+  /// cierre de [kind].
+  Future<void> _close(RoomClosureKind kind) async {
+    if (_closure != null || !mounted) return;
+    Navigator.of(context).popUntil((route) => route is! PopupRoute);
+    final room = ref.read(roomNotifierProvider);
+    final createdAt = room?.createdAt;
+    setState(
+      () => _closure = RoomClosure(
+        kind: kind,
+        duration: createdAt == null
+            ? Duration.zero
+            : DateTime.now().difference(createdAt),
+        people: _peak,
+        note: room?.note,
       ),
     );
+    await ref.read(roomNotifierProvider.notifier).leaveRoom();
   }
 
-  void _listenForClose(BuildContext context) {
+  /// Muestra el cierre si la frecu se cierra sin que esta persona salga.
+  void _listenForClose() {
     ref.listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
       next.value?.maybeWhen(
-        closed: (reason) => _showRoomClosedDialog(context, reason),
+        closed: (reason) {
+          if (reason == 'user_left') return;
+          unawaited(
+            _close(
+              reason == 'host_unreachable'
+                  ? RoomClosureKind.lostHost
+                  : RoomClosureKind.closedByHost,
+            ),
+          );
+        },
         orElse: () {},
       );
     });
@@ -118,7 +138,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       participants: participants,
       localId: localId,
     );
-    return RoomTalk.from(
+    final talk = RoomTalk.from(
       status: status,
       mode: voice.talkMode,
       talking: voice.isTalking,
@@ -131,10 +151,29 @@ class _RoomPageState extends ConsumerState<RoomPage> {
         status: status,
       ),
     );
+    _peak = math.max(_peak, talk.count);
+    return talk;
   }
 
   @override
   Widget build(BuildContext context) {
+    _listenForClose();
+    final fr = context.fr;
+    final closure = _closure;
+    return AnimatedSwitcher(
+      duration: context.reduceMotion ? fr.motion.quick : fr.motion.smooth,
+      child: closure == null
+          ? KeyedSubtree(key: const ValueKey('room'), child: _room(context))
+          : RoomClosedView(
+              key: const ValueKey('closure'),
+              closure: closure,
+              onHome: () => unawaited(context.router.maybePop()),
+            ),
+    );
+  }
+
+  /// Frecu activa: isla, cabecera, malla y controles.
+  Widget _room(BuildContext context) {
     final room = ref.watch(roomNotifierProvider);
     final participants =
         ref.watch(roomParticipantsProvider).value ?? const <Participant>[];
@@ -147,9 +186,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       status: status,
       voice: voiceState,
     );
-
-    _listenForClose(context);
-
+    final host = participants.any((p) => p.id == localId && p.isHost);
     final onInvite = room == null
         ? null
         : () => unawaited(InviteSheet.show(context, room));
@@ -164,7 +201,8 @@ class _RoomPageState extends ConsumerState<RoomPage> {
             participants: participants,
             localParticipantId: localId,
             onInvite: onInvite,
-            onLeave: () => unawaited(_handleLeave()),
+            onLeave: () =>
+                unawaited(_confirmLeave(host: host, others: talk.count - 1)),
           ),
           Expanded(
             child: _meshArea(
@@ -175,18 +213,21 @@ class _RoomPageState extends ConsumerState<RoomPage> {
               onInvite,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: MicControlSection(
-              voiceState: voiceState,
-              talk: talk,
-              onRoute: () => unawaited(AudioRouteSheet.show(context)),
-            ),
-          ),
+          _controls(voiceState, talk),
         ],
       ),
     );
   }
+
+  /// Pastilla de ruta, selector de modo y núcleo PTT.
+  Widget _controls(VoiceState voice, RoomTalk talk) => Padding(
+    padding: const EdgeInsets.only(bottom: 16),
+    child: MicControlSection(
+      voiceState: voice,
+      talk: talk,
+      onRoute: () => unawaited(AudioRouteSheet.show(context)),
+    ),
+  );
 
   /// Isla de estado; solo ella se reconstruye con el reloj al aire.
   Widget _island(RoomTalk talk) => Consumer(

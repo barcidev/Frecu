@@ -119,9 +119,7 @@
     "speaking": "Hablando",
     "muted": "Silenciado",
     "host": "Anfitrión",
-    "roomClosed": "La frecu fue cerrada por el anfitrión",
     "reconnecting": "Reconectando...",
-    "accept": "Aceptar",
     "noteNames": ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Fa♯", "Sol", "La♭", "La", "Si♭", "Si"],
     "mesh": {
       "you": "Tú",
@@ -173,6 +171,18 @@
         "hostConfirm": "Cerrar frecu",
         "cancel": "Cancelar"
       }
+    },
+    "closure": {
+      "offAir": "Fuera del aire",
+      "noteOffAir": "$note · fuera del aire",
+      "title": "Fin de la transmisión",
+      "host": "Cerraste la frecu. Todos los participantes fueron desconectados.",
+      "peer": "El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.",
+      "lost": "Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.",
+      "duration": "Duración",
+      "people": "Personas",
+      "note": "Nota",
+      "home": "Volver al inicio"
     },
     "talk": {
       "modePtt": "PTT",
