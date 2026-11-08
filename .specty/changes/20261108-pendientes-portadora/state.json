@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "20261108-pendientes-portadora",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/pendientes-portadora",
+  "baseCommit": "a61f4dce35b702768f872a28618707c24571541a",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:77735266449b5c472769d21cd371f2c35d201359751007cb1a872c09c8dd0290",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:f4ddf5b73bb014cfe294a72bf71aaa06c8cf55289c82b3d47b67ffc591ff4938",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:344f83712e6df551f1fc61245d1b356ae52380dd97be7cdf340b34975f8d4d30",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:5b64820c6aa0dcebfbd5bf838917c6ceec0b54cf07672871efe2712a655bf96f",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:d6a0ac4c5f0ef5008adf0059e295ca63d279dc6837f7d94a1041a2876f5e3ca8",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:6da5a3b52f152f71c1943087e8cd7ec0e77db0de343a9e45a0b805d490d64a38",
+      "decision": "confirmed"
+    },
+    "A7": {
+      "hash": "sha256:6010b59528842dbeabbbe70918cc9a2bd82dcc8462c134f984397269ef705300",
+      "decision": "implicit"
+    },
+    "A8": {
+      "hash": "sha256:689e7d23c03137409240d92f5e64f3f946a1600ee4400e9be367e37515b49325",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 8,
+    "AC": 6,
+    "C": 8,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:bf6580e4e1d127cec1c9a6662dac2d2218e9fe7a2bb8fa07b8c31f8e15059353",
+    "at": "2026-11-08T01:50:37.986Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
