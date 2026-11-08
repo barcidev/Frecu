@@ -2,9 +2,11 @@ import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
+import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:frecu/features/settings/domain/repositories/preferences_repository.dart';
+import 'package:frecu/i18n/strings.g.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,8 +17,19 @@ part 'preferences_provider.g.dart';
 PreferencesRepository preferencesRepository(Ref ref) =>
     PreferencesRepositoryImpl(preferences: SharedPreferencesAsync());
 
-/// Preferencias guardadas del usuario: nombre visible, tema y modo de habla
-/// por defecto.
+/// Aplica [preference] al idioma de la app y devuelve el que queda en uso.
+///
+/// Auto usa el idioma del teléfono; el inglés se carga diferido, así que
+/// hay que esperarlo.
+Future<AppLocale> applyLocalePreference(LocalePreference preference) =>
+    switch (preference) {
+      LocalePreference.auto => LocaleSettings.useDeviceLocale(),
+      LocalePreference.es => LocaleSettings.setLocale(AppLocale.es),
+      LocalePreference.en => LocaleSettings.setLocale(AppLocale.en),
+    };
+
+/// Preferencias guardadas del usuario: nombre visible, tema, modo de habla
+/// por defecto e idioma.
 ///
 /// Si la lectura falla expone los valores por defecto para que la app siga
 /// funcionando. Cada cambio se guarda primero y solo entonces cambia el
@@ -69,6 +82,22 @@ class PreferencesNotifier extends _$PreferencesNotifier {
     final result = await _repository.saveDefaultTalkMode(talkMode);
     if (result.isSuccess) {
       _update((preferences) => preferences.copyWith(defaultTalkMode: talkMode));
+    }
+    return result;
+  }
+
+  /// Guarda el idioma de la app y, solo si se guardó, lo aplica al instante.
+  Future<Result<void>> setLocalePreference(
+    LocalePreference localePreference,
+  ) async {
+    await future;
+    final result = await _repository.saveLocalePreference(localePreference);
+    if (result.isSuccess) {
+      await applyLocalePreference(localePreference);
+      _update(
+        (preferences) =>
+            preferences.copyWith(localePreference: localePreference),
+      );
     }
     return result;
   }

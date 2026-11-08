@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/result/result.dart';
@@ -113,6 +114,35 @@ Stream<bool> isTalking(Ref ref) {
 Stream<Set<String>> speakingPeers(Ref ref) {
   final repository = ref.watch(voiceRepositoryProvider);
   return repository.watchSpeakingPeers();
+}
+
+/// Nivel de la voz propia en la escala del VU ([voiceMeterLevel]). WebRTC
+/// solo se lee mientras alguien lo escucha: la frecu activa.
+@riverpod
+Stream<double> localVoiceLevel(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchLocalLevel().map(voiceMeterLevel);
+}
+
+/// Nivel de la voz recibida de cada participante remoto por su id, en la
+/// escala del VU ([voiceMeterLevel]).
+@riverpod
+Stream<Map<String, double>> peerVoiceLevels(Ref ref) {
+  final repository = ref.watch(voiceRepositoryProvider);
+  return repository.watchPeerLevels().map(
+    (levels) => {
+      for (final MapEntry(:key, :value) in levels.entries)
+        key: voiceMeterLevel(value),
+    },
+  );
+}
+
+/// Pasa el `audioLevel` de WebRTC (amplitud lineal de 0 a 1) a la escala del
+/// VU en decibelios: −48 dB o menos es 0, −24 dB es 0,5 y 0 dB es 1.
+double voiceMeterLevel(double audioLevel) {
+  if (audioLevel <= 0) return 0;
+  final decibels = 20 * math.log(audioLevel) / math.ln10;
+  return (1 + decibels / 48).clamp(0, 1).toDouble();
 }
 
 /// Stream reactivo del modo de habla actual.

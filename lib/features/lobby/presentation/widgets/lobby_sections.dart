@@ -221,9 +221,9 @@ class LobbyOfflineNotice extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 200),
       children: [
-        FrBanner(
+        FrBanner.drawn(
           tone: FrBannerTone.alert,
-          icon: Icons.wifi_off_rounded,
+          icon: FrIcons.wifi,
           title: offline.title,
           message: offline.message,
           actionLabel: offline.openSettings,

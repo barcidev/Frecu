@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
@@ -8,6 +6,8 @@ import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/widgets/signal_signature.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:frecu/features/room/presentation/widgets/room_mesh_labels.dart';
+import 'package:frecu/features/room/presentation/widgets/room_mesh_painter.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -27,6 +27,7 @@ class RoomMesh extends StatefulWidget {
     this.localParticipantId,
     this.speakingPeers = const {},
     this.localTalking = false,
+    this.levels = const {},
     this.status,
     this.onInvite,
     super.key,
@@ -43,6 +44,10 @@ class RoomMesh extends StatefulWidget {
 
   /// La persona propia está transmitiendo.
   final bool localTalking;
+
+  /// Nivel real de la voz de cada persona por id, la propia incluida, de 0
+  /// a 1.
+  final Map<String, double> levels;
 
   /// Estado de la frecu.
   final RoomStatus? status;
@@ -88,6 +93,7 @@ class _RoomMeshState extends State<RoomMesh> {
       localId: widget.localParticipantId,
       speakingPeers: widget.speakingPeers,
       localTalking: widget.localTalking,
+      levels: widget.levels,
       status: widget.status,
     );
     _bornAt.removeWhere((id, _) => !_slots.containsKey(id));
@@ -171,7 +177,7 @@ class _RoomMeshState extends State<RoomMesh> {
           const Positioned(
             left: _nodeBox / 2 + 27 * 0.72 - 9,
             top: _nodeBox / 2 - 27 * 0.72 - 9,
-            child: _HostMark(),
+            child: MeshHostMark(),
           ),
       ],
     );
@@ -214,7 +220,7 @@ class _RoomMeshState extends State<RoomMesh> {
             : ValueKey('mesh_label_${node.id}'),
         center: center,
         top: 33,
-        child: _MeshLabel(
+        child: MeshLabel(
           name: node.name,
           nameColor: onAir ? color : colors.tx1,
           nameWeight: FontWeight.w600,
@@ -235,7 +241,7 @@ class _RoomMeshState extends State<RoomMesh> {
       center: center,
       top: 30,
       // «LIBRE» en mayúsculas y espaciado de etiqueta (`.nl.free b`).
-      child: _MeshLabel(
+      child: MeshLabel(
         name: t.room.mesh.free.toUpperCase(),
         nameColor: colors.tx4,
         nameWeight: FontWeight.w500,
@@ -283,109 +289,4 @@ class _RoomMeshState extends State<RoomMesh> {
     MeshCaption.connecting => t.room.mesh.connecting,
     MeshCaption.reconnecting => t.room.mesh.reconnecting,
   };
-}
-
-/// Nombre de un lugar de la malla y, debajo, su leyenda en `labelS`.
-class _MeshLabel extends StatelessWidget {
-  const _MeshLabel({
-    required this.name,
-    required this.nameColor,
-    required this.nameWeight,
-    this.nameSpacing,
-    this.caption,
-    this.captionColor,
-  });
-
-  final String name;
-  final Color nameColor;
-  final FontWeight nameWeight;
-  final double? nameSpacing;
-  final String? caption;
-  final Color? captionColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final type = context.fr.type;
-    final caption = this.caption;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: type.bodyS.copyWith(
-            fontSize: 12.5,
-            height: 1.15,
-            fontWeight: nameWeight,
-            fontVariations: [
-              FontVariation.weight(nameWeight.value.toDouble()),
-              const FontVariation.width(104),
-            ],
-            letterSpacing: nameSpacing,
-            color: nameColor,
-          ),
-        ),
-        if (caption != null) ...[
-          const SizedBox(height: 3),
-          SizedBox(
-            height: 12,
-            child: Text(
-              caption,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: type.labelS.copyWith(color: captionColor),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-/// Marca de antena del anfitrión: un círculo de 8 en `bg0` con borde `tx2`.
-class _HostMark extends StatelessWidget {
-  const _HostMark();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 18,
-      child: CustomPaint(painter: _HostMarkPainter(context.fr.colors)),
-    );
-  }
-}
-
-class _HostMarkPainter extends CustomPainter {
-  _HostMarkPainter(this.colors);
-
-  final FrColors colors;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2
-      ..strokeCap = StrokeCap.round
-      ..color = colors.tx2.withValues(alpha: 0.9);
-    final top = center.translate(0, -1.5);
-    canvas
-      ..drawCircle(center, 8, Paint()..color = colors.bg0)
-      ..drawCircle(center, 8, stroke)
-      ..drawLine(center.translate(0, 3.5), top, stroke)
-      ..drawArc(
-        Rect.fromCircle(center: top, radius: 3),
-        math.pi * 1.15,
-        math.pi * 0.7,
-        false,
-        stroke,
-      );
-  }
-
-  @override
-  bool shouldRepaint(_HostMarkPainter oldDelegate) =>
-      oldDelegate.colors != colors;
 }

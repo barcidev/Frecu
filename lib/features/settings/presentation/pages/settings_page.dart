@@ -1,26 +1,36 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_segmented.dart';
 import 'package:frecu/core/design/widgets/fr_toast.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/features/settings/presentation/widgets/edit_name_sheet.dart';
+import 'package:frecu/features/settings/presentation/widgets/language_sheet.dart';
+import 'package:frecu/features/settings/presentation/widgets/permissions_row.dart';
 import 'package:frecu/features/settings/presentation/widgets/profile_card.dart';
 import 'package:frecu/features/settings/presentation/widgets/settings_footer.dart';
 import 'package:frecu/features/settings/presentation/widgets/settings_group.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Ajustes: nombre visible con su firma, modo de habla por defecto y tema.
+/// Ajustes: nombre visible con su firma, modo de habla por defecto, idioma y
+/// tema.
 ///
-/// Cada cambio se guarda en las preferencias; el tema cambia toda la app al
-/// instante y, si algo no se pudo guardar, avisa y deja lo guardado.
+/// Cada cambio se guarda en las preferencias; el idioma y el tema cambian
+/// toda la app al instante y, si algo no se pudo guardar, avisa y deja lo
+/// guardado.
 @RoutePage()
 class SettingsPage extends ConsumerWidget {
   /// Constructor constante.
@@ -35,24 +45,31 @@ class SettingsPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _SettingsAppBar(),
+          // Una sola columna corta: se construye entera, también lo que queda
+          // bajo el borde.
           Expanded(
-            child: ListView(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.only(bottom: 32),
-              children: [
-                ProfileCard(
-                  name: preferences.displayName,
-                  onEdit: () => EditNameSheet.show(
-                    context,
-                    current: preferences.displayName,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ProfileCard(
+                    name: preferences.displayName,
+                    onEdit: () => EditNameSheet.show(
+                      context,
+                      current: preferences.displayName,
+                    ),
                   ),
-                ),
-                SettingsSectionLabel(t.settings.voice),
-                _TalkModeGroup(preferences.defaultTalkMode),
-                SettingsSectionLabel(t.settings.appearance),
-                _ThemeGroup(preferences.themePreference),
-                const SizedBox(height: 24),
-                const SettingsFooter(),
-              ],
+                  SettingsSectionLabel(t.settings.voice),
+                  _TalkModeGroup(preferences.defaultTalkMode),
+                  SettingsSectionLabel(t.settings.general),
+                  _GeneralGroup(preferences.localePreference),
+                  SettingsSectionLabel(t.settings.appearance),
+                  _ThemeGroup(preferences.themePreference),
+                  const SizedBox(height: 24),
+                  const SettingsFooter(),
+                ],
+              ),
             ),
           ),
         ],
@@ -70,10 +87,7 @@ Future<void> _saveOrWarn(
   if (result.isSuccess || !context.mounted) return;
   showFrToast(
     context,
-    FrToast.icon(
-      icon: Icons.error_outline_rounded,
-      message: t.settings.saveError,
-    ),
+    FrToast.drawn(icon: FrIcons.alert, message: t.settings.saveError),
   );
 }
 
@@ -91,8 +105,8 @@ class _SettingsAppBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            FrIconButton(
-              icon: Icons.arrow_back_rounded,
+            FrIconButton.drawn(
+              icon: FrIcons.back,
               semanticLabel: t.settings.back,
               variant: FrIconButtonVariant.ghost,
               onPressed: () => context.router.maybePop(),
@@ -146,15 +160,45 @@ class _TalkModeGroup extends ConsumerWidget {
               FrSegment(
                 value: TalkMode.pushToTalk,
                 label: t.settings.talkMode.pushToTalk,
-                icon: const Icon(Icons.touch_app_outlined),
+                icon: const FrIcon(FrIcons.walkie),
               ),
               FrSegment(
                 value: TalkMode.openMic,
                 label: t.settings.talkMode.openMic,
-                icon: const Icon(Icons.mic_none_rounded),
+                icon: const FrIcon(FrIcons.openMic),
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+/// General: el idioma de la app, los permisos y la guía del punto de acceso.
+class _GeneralGroup extends ConsumerWidget {
+  const _GeneralGroup(this.locale);
+
+  final LocalePreference locale;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SettingsGroup(
+      children: [
+        LanguageRow(
+          value: locale,
+          onChanged: (choice) => _saveOrWarn(
+            context,
+            () => ref
+                .read(preferencesProvider.notifier)
+                .setLocalePreference(choice),
+          ),
+        ),
+        const PermissionsRow(),
+        SettingsRow(
+          title: t.settings.hotspotGuide,
+          onPressed: () =>
+              unawaited(context.router.push<void>(const HotspotGuideRoute())),
         ),
       ],
     );

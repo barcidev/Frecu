@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_pin_field.dart';
@@ -460,6 +462,12 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.text(t.errors.network), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is FrIcon && widget.icon == FrIcons.alert,
+        ),
+        findsOneWidget,
+      );
       expect(find.byType(NewRoomStep), findsOneWidget);
       expect(find.byType(RoomPage), findsNothing);
       expect(_openButton(tester).loading, isFalse);

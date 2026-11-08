@@ -61,8 +61,8 @@ final class PreferencesRepositoryProvider
 String _$preferencesRepositoryHash() =>
     r'ef2dfec5d49e2dd41d3cea5e976a7153501a63ea';
 
-/// Preferencias guardadas del usuario: nombre visible, tema y modo de habla
-/// por defecto.
+/// Preferencias guardadas del usuario: nombre visible, tema, modo de habla
+/// por defecto e idioma.
 ///
 /// Si la lectura falla expone los valores por defecto para que la app siga
 /// funcionando. Cada cambio se guarda primero y solo entonces cambia el
@@ -71,16 +71,16 @@ String _$preferencesRepositoryHash() =>
 @ProviderFor(PreferencesNotifier)
 final preferencesProvider = PreferencesNotifierProvider._();
 
-/// Preferencias guardadas del usuario: nombre visible, tema y modo de habla
-/// por defecto.
+/// Preferencias guardadas del usuario: nombre visible, tema, modo de habla
+/// por defecto e idioma.
 ///
 /// Si la lectura falla expone los valores por defecto para que la app siga
 /// funcionando. Cada cambio se guarda primero y solo entonces cambia el
 /// estado; si no se pudo guardar, el estado queda como estaba.
 final class PreferencesNotifierProvider
     extends $AsyncNotifierProvider<PreferencesNotifier, Preferences> {
-  /// Preferencias guardadas del usuario: nombre visible, tema y modo de habla
-  /// por defecto.
+  /// Preferencias guardadas del usuario: nombre visible, tema, modo de habla
+  /// por defecto e idioma.
   ///
   /// Si la lectura falla expone los valores por defecto para que la app siga
   /// funcionando. Cada cambio se guarda primero y solo entonces cambia el
@@ -105,10 +105,10 @@ final class PreferencesNotifierProvider
 }
 
 String _$preferencesNotifierHash() =>
-    r'36381fef525b680ef50e513e35825e6dc3b894bf';
+    r'7d488ca009531c62b7c31d4ffd33d5a2c436464a';
 
-/// Preferencias guardadas del usuario: nombre visible, tema y modo de habla
-/// por defecto.
+/// Preferencias guardadas del usuario: nombre visible, tema, modo de habla
+/// por defecto e idioma.
 ///
 /// Si la lectura falla expone los valores por defecto para que la app siga
 /// funcionando. Cada cambio se guarda primero y solo entonces cambia el

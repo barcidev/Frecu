@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "id": "20261108-nivel-real-de-voz-en-el-nucleo-ptt-y-en-la-malla",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/nivel-real-de-voz-en-el-nucleo-ptt-y-en-la-malla",
+  "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "17 archivos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:1c402eeb736bb671beb662bd9a94dce3438b1e5b922fd61522d3e49baa5bca68",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:05f5596b0b751ef8bb690e7d77f1fefca868d8aec58ca037f0408866203c10ec",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:d33b971d3421670a714bef1c5852bb79e839efd5ea28fc6dcb8550e17abb92a0",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:44bd92ecd901062aa39262ebf0a96032730f35a5a1d587c26d70ca7cba3311c2",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:b1baa912288d8c32ed782ebd686beb20b3117c777d5f5163dc742bcb04c7beab",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:1468e64013f582e0f47ffda417eabc90bcd6effb042f093db4dc4736db2eb118",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:c06535439abca77bacb5a0fee0063e296699addc3cb959890ba61c9ef78bfa54",
+      "decision": "implicit"
+    },
+    "A8": {
+      "hash": "sha256:422c629a46127b45b0b14dd5a9f546c27be449ccf5dff95c5047d10fce3e56d4",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 8,
+    "AC": 4,
+    "T": 4,
+    "R": 3
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:0903c747e67ea3509e3b3dd4666663e93812520f0c33876cd1e50d3aa8930f5d",
+    "at": "2026-11-08T02:06:24.695Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}

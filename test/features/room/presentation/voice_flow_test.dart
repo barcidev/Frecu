@@ -25,8 +25,8 @@ import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/audio_route_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
-import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
 

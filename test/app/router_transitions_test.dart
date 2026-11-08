@@ -30,6 +30,7 @@ void main() {
         ScanQrRoute.name: FrTransition.wave,
         RoomRoute.name: FrTransition.wave,
         SettingsRoute.name: FrTransition.slide,
+        HotspotGuideRoute.name: FrTransition.slide,
       });
       final routes = {
         for (final route in AppRouter().routes) route.name: route,

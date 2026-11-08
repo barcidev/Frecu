@@ -322,6 +322,22 @@
       "pushToTalk": "PTT",
       "openMic": "Abierto"
     },
+    "general": "General",
+    "language": {
+      "title": "Idioma",
+      "message": "Auto usa el idioma del teléfono.",
+      "auto": "Auto",
+      "autoHelp": "Sigue al teléfono",
+      "autoValue": "Auto · $language",
+      "es": "Español",
+      "en": "English"
+    },
+    "permissions": {
+      "title": "Permisos",
+      "subtitle": "Micrófono, red local, notificaciones",
+      "count": "$granted/$total"
+    },
+    "hotspotGuide": "Guía del punto de acceso",
     "appearance": "Apariencia",
     "theme": "Tema",
     "themeHelp": "Auto sigue al teléfono",

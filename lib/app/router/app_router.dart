@@ -7,9 +7,10 @@ import 'package:frecu/core/design/motion/fr_transitions.dart';
 ///
 /// Cada pantalla entra con su transición de Portadora (`FrPageRoute`): la
 /// onda desde el dedo al entrar a un modo (inicio al terminar el recorrido,
-/// crear, escanear y la frecu) y el deslizamiento con paralaje a Ajustes. Al
-/// volver, la pantalla sale hacia la derecha y la de abajo regresa desde el
-/// −28 %. Con movimiento reducido todas son un fundido.
+/// crear, escanear y la frecu) y el deslizamiento con paralaje a Ajustes y
+/// a su guía del punto de acceso. Al volver, la pantalla sale hacia la
+/// derecha y la de abajo regresa desde el −28 %. Con movimiento reducido
+/// todas son un fundido.
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
   /// Constructor con inyección de guards.
@@ -27,6 +28,7 @@ class AppRouter extends RootStackRouter {
     ScanQrRoute.name: FrTransition.wave,
     RoomRoute.name: FrTransition.wave,
     SettingsRoute.name: FrTransition.slide,
+    HotspotGuideRoute.name: FrTransition.slide,
   };
 
   /// Construye la ruta de página de Portadora con [transition] para una
@@ -61,6 +63,7 @@ class AppRouter extends RootStackRouter {
     _route(ScanQrRoute.page, path: '/scan-qr'),
     _route(RoomRoute.page, path: '/room/:roomId'),
     _route(SettingsRoute.page, path: '/settings'),
+    _route(HotspotGuideRoute.page, path: '/settings/hotspot-guide'),
   ];
 
   /// Ruta de [page] con su transición de [transitions].

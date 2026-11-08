@@ -80,17 +80,22 @@ class MicControlSection extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        PttCore(
-          phase: talk.pttPhase(),
-          onAirFor: ref.watch(onAirClockProvider) ?? Duration.zero,
-          speakerName: speaker?.name,
-          speakerColor: speaker == null
-              ? null
-              : meshNodeColor(context.fr.colors, speaker),
-          speakerSeed: (speaker?.slot ?? 0) + 1,
-          onStart: voice.startTalking,
-          onStop: voice.stopTalking,
-          onToggle: voice.toggleMicrophone,
+        // Solo el núcleo se reconstruye con el reloj y los niveles de voz.
+        Consumer(
+          builder: (context, ref, _) => PttCore(
+            phase: talk.pttPhase(),
+            onAirFor: ref.watch(onAirClockProvider) ?? Duration.zero,
+            level: ref.watch(localVoiceLevelProvider).value ?? 0,
+            speakerName: speaker?.name,
+            speakerColor: speaker == null
+                ? null
+                : meshNodeColor(context.fr.colors, speaker),
+            speakerLevel:
+                ref.watch(peerVoiceLevelsProvider).value?[speaker?.id] ?? 0,
+            onStart: voice.startTalking,
+            onStop: voice.stopTalking,
+            onToggle: voice.toggleMicrophone,
+          ),
         ),
       ],
     );
@@ -143,10 +148,10 @@ class _EchoNoticeState extends State<EchoNotice> {
     return AnimatedSwitcher(
       duration: context.reduceMotion ? fr.motion.quick : fr.motion.smooth,
       child: widget.visible && !_dismissed
-          ? FrBanner(
+          ? FrBanner.drawn(
               key: const Key('echo_notice'),
               tone: FrBannerTone.warn,
-              icon: Icons.headphones_rounded,
+              icon: FrIcons.headset,
               title: echo.title,
               message: echo.message,
               floating: true,

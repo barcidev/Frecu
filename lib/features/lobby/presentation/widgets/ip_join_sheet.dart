@@ -152,7 +152,7 @@ class _IpJoinSheetState extends ConsumerState<IpJoinSheet> {
   /// si no es una IPv4 o si el anfitrión no responde.
   Widget _ipField({required bool unreachable}) {
     final join = t.lobby.join;
-    return FrField(
+    return FrField.drawn(
       label: join.ip.host,
       controller: _ip,
       hint: IpJoinSheet.sampleIp,
@@ -162,7 +162,7 @@ class _IpJoinSheetState extends ConsumerState<IpJoinSheet> {
           ? join.ip.noAnswer(port: _port)
           : null,
       mono: true,
-      icon: Icons.hub_outlined,
+      icon: FrIcons.nodes,
       autofocus: true,
       keyboardType: TextInputType.url,
       textInputAction: TextInputAction.next,
@@ -171,13 +171,13 @@ class _IpJoinSheetState extends ConsumerState<IpJoinSheet> {
   }
 
   /// Código de acceso de 4 dígitos; en error si el anfitrión lo rechaza.
-  Widget _codeField({required bool wrongCode}) => FrField(
+  Widget _codeField({required bool wrongCode}) => FrField.drawn(
     label: t.lobby.accessCode,
     controller: _accessCode,
     error: wrongCode ? t.lobby.join.wrongCode : null,
     maxLength: PinJoinSheet.codeLength,
     mono: true,
-    icon: Icons.lock_outline_rounded,
+    icon: FrIcons.lock,
     keyboardType: TextInputType.number,
     textInputAction: TextInputAction.done,
     onChanged: _onChanged,

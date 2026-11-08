@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
+import 'package:frecu/core/design/widgets/fr_pressable.dart';
 
 /// Título de una sección de Ajustes, en mayúsculas (`.set-label`).
 class SettingsSectionLabel extends StatelessWidget {
@@ -77,6 +80,9 @@ class SettingsGroup extends StatelessWidget {
 
 /// Fila de Ajustes (`.row`): título, subtítulo opcional y un control a la
 /// derecha; [below] va debajo, a todo el ancho.
+///
+/// Con [onPressed] toda la fila responde al toque, se anuncia como botón y
+/// termina en un chevron, después de [trailing] (`.rv` del prototipo).
 class SettingsRow extends StatelessWidget {
   /// Crea una fila con [title].
   const SettingsRow({
@@ -84,6 +90,7 @@ class SettingsRow extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.below,
+    this.onPressed,
     super.key,
   });
 
@@ -99,11 +106,16 @@ class SettingsRow extends StatelessWidget {
   /// Control debajo del texto, a todo el ancho.
   final Widget? below;
 
+  /// Acción al tocar la fila; nula si la fila no responde.
+  final VoidCallback? onPressed;
+
   @override
   Widget build(BuildContext context) {
+    final fr = context.fr;
     final trailing = this.trailing;
     final below = this.below;
-    return Column(
+    final onPressed = this.onPressed;
+    final row = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ConstrainedBox(
@@ -112,8 +124,12 @@ class SettingsRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
             child: Row(
               children: [
-                Expanded(child: _texts(context.fr)),
+                Expanded(child: _texts(fr)),
                 if (trailing != null) ...[const SizedBox(width: 12), trailing],
+                if (onPressed != null) ...[
+                  SizedBox(width: trailing == null ? 12 : 8),
+                  FrIcon(FrIcons.chevron, size: 18, color: fr.colors.tx3),
+                ],
               ],
             ),
           ),
@@ -124,6 +140,12 @@ class SettingsRow extends StatelessWidget {
             child: below,
           ),
       ],
+    );
+    if (onPressed == null) return row;
+    return FrPressable(
+      onPressed: onPressed,
+      pressedScale: 0.98,
+      builder: (_, _, _) => row,
     );
   }
 

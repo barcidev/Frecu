@@ -19,7 +19,9 @@ import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/audio_route_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
+import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
 import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
@@ -467,6 +469,13 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     ),
   );
 
+  /// Nivel de voz de cada persona por id: el de los pares y, con [localId],
+  /// el propio.
+  static Map<String, double> _voiceLevels(WidgetRef ref, String? localId) => {
+    ...?ref.watch(peerVoiceLevelsProvider).value,
+    if (localId != null) localId: ref.watch(localVoiceLevelProvider).value ?? 0,
+  };
+
   /// Malla de la frecu con quién habla y, encima, el aviso de eco
   /// (micrófono abierto con altavoz).
   Widget _meshArea(
@@ -480,13 +489,17 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       children: [
         Positioned.fill(
           child: Center(
-            child: RoomMesh(
-              participants: participants,
-              localParticipantId: localId,
-              speakingPeers: voice.speakingPeers,
-              localTalking: voice.isTalking,
-              status: status,
-              onInvite: onInvite,
+            // Solo la malla se reconstruye con los niveles de voz.
+            child: Consumer(
+              builder: (context, ref, _) => RoomMesh(
+                participants: participants,
+                localParticipantId: localId,
+                speakingPeers: voice.speakingPeers,
+                localTalking: voice.isTalking,
+                levels: _voiceLevels(ref, localId),
+                status: status,
+                onInvite: onInvite,
+              ),
             ),
           ),
         ),

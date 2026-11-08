@@ -32,6 +32,7 @@ class HotspotGuideStep extends StatefulWidget {
     required this.onBack,
     required this.onContinue,
     this.onOpenHotspotSettings,
+    this.showStep = true,
     super.key,
   });
 
@@ -44,6 +45,9 @@ class HotspotGuideStep extends StatefulWidget {
   /// Abre los ajustes del punto de acceso de este teléfono; sin él no hay
   /// botón.
   final VoidCallback? onOpenHotspotSettings;
+
+  /// Si muestra «Paso 1 de 2»; falso cuando se abre sola desde Ajustes.
+  final bool showStep;
 
   /// Entrada de los pasos al cambiar de pestaña.
   static const Duration stepsFade = Duration(milliseconds: 420);
@@ -82,7 +86,11 @@ class _HotspotGuideStepState extends State<HotspotGuideStep> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CreateRoomAppBar(step: 1, title: guide.title, onBack: widget.onBack),
+          CreateRoomAppBar(
+            step: widget.showStep ? 1 : null,
+            title: guide.title,
+            onBack: widget.onBack,
+          ),
           Expanded(
             child: CreateRoomScroll(
               dockHeight: CreateRoomScroll.twoButtonDock,

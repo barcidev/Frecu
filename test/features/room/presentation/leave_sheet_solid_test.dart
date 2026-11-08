@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/theme/app_theme.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
-import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
+import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 void main() {

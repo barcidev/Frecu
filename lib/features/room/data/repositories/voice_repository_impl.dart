@@ -9,6 +9,7 @@ import 'package:frecu/features/room/data/datasources/peer_connection_datasource.
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/current_then.dart';
+import 'package:frecu/features/room/data/repositories/voice_level_sampler.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -55,6 +56,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
   final SignalingClientDataSource _signalingClient;
   final Future<bool> Function() _permissionRequester;
   final Future<bool> Function() _settingsOpener;
+  late final VoiceLevelSampler _levels = VoiceLevelSampler(
+    _peerConnection.readVoiceLevels,
+  );
 
   StreamSubscription<SignalingMessage>? _signalingSubscription;
   StreamSubscription<bool>? _connectionSubscription;
@@ -297,6 +301,12 @@ class VoiceRepositoryImpl implements VoiceRepository {
       currentThen(() => _mutedPeers, _mutedPeersController.stream);
 
   @override
+  Stream<double> watchLocalLevel() => _levels.watchLocal();
+
+  @override
+  Stream<Map<String, double>> watchPeerLevels() => _levels.watchPeers();
+
+  @override
   Stream<Map<String, PeerConnectionState>> watchPeerLinks() =>
       currentThen(() => _peerConnection.links, _peerConnection.linkChanges);
 
@@ -488,6 +498,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _connectionSubscription = null;
     await _devicesSubscription?.cancel();
     _devicesSubscription = null;
+    await _levels.dispose();
     await _peerConnection.dispose();
     await _audioSession.deactivate();
     await _isTalkingController.close();

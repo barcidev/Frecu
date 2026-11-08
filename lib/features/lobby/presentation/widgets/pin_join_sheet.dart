@@ -342,9 +342,9 @@ class JoinFailureBanner extends StatelessWidget {
       versionMismatch: () => (join.versionMismatch, join.versionMismatchHint),
       orElse: () => (join.failed, join.failedHint),
     );
-    return FrBanner(
+    return FrBanner.drawn(
       tone: full ? FrBannerTone.warn : FrBannerTone.alert,
-      icon: full ? Icons.group_outlined : Icons.error_outline_rounded,
+      icon: full ? FrIcons.users : FrIcons.alert,
       title: title,
       message: message,
     );

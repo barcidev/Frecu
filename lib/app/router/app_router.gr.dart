@@ -10,28 +10,30 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
-import 'package:auto_route/auto_route.dart' as _i7;
-import 'package:flutter/material.dart' as _i8;
+import 'package:auto_route/auto_route.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 import 'package:frecu/features/lobby/presentation/pages/create_room_page.dart'
     as _i1;
-import 'package:frecu/features/lobby/presentation/pages/lobby_page.dart' as _i2;
+import 'package:frecu/features/lobby/presentation/pages/lobby_page.dart' as _i3;
 import 'package:frecu/features/lobby/presentation/pages/scan_qr_page.dart'
-    as _i5;
-import 'package:frecu/features/permissions/presentation/pages/permissions_page.dart'
-    as _i3;
-import 'package:frecu/features/room/presentation/pages/room_page.dart' as _i4;
-import 'package:frecu/features/settings/presentation/pages/settings_page.dart'
     as _i6;
+import 'package:frecu/features/permissions/presentation/pages/permissions_page.dart'
+    as _i4;
+import 'package:frecu/features/room/presentation/pages/room_page.dart' as _i5;
+import 'package:frecu/features/settings/presentation/pages/hotspot_guide_page.dart'
+    as _i2;
+import 'package:frecu/features/settings/presentation/pages/settings_page.dart'
+    as _i7;
 
 /// generated route for
 /// [_i1.CreateRoomPage]
-class CreateRoomRoute extends _i7.PageRouteInfo<void> {
-  const CreateRoomRoute({List<_i7.PageRouteInfo>? children})
+class CreateRoomRoute extends _i8.PageRouteInfo<void> {
+  const CreateRoomRoute({List<_i8.PageRouteInfo>? children})
     : super(CreateRoomRoute.name, initialChildren: children);
 
   static const String name = 'CreateRoomRoute';
 
-  static _i7.PageInfo page = _i7.PageInfo(
+  static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
       return const _i1.CreateRoomPage();
@@ -40,44 +42,60 @@ class CreateRoomRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.LobbyPage]
-class LobbyRoute extends _i7.PageRouteInfo<void> {
-  const LobbyRoute({List<_i7.PageRouteInfo>? children})
+/// [_i2.HotspotGuidePage]
+class HotspotGuideRoute extends _i8.PageRouteInfo<void> {
+  const HotspotGuideRoute({List<_i8.PageRouteInfo>? children})
+    : super(HotspotGuideRoute.name, initialChildren: children);
+
+  static const String name = 'HotspotGuideRoute';
+
+  static _i8.PageInfo page = _i8.PageInfo(
+    name,
+    builder: (data) {
+      return const _i2.HotspotGuidePage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i3.LobbyPage]
+class LobbyRoute extends _i8.PageRouteInfo<void> {
+  const LobbyRoute({List<_i8.PageRouteInfo>? children})
     : super(LobbyRoute.name, initialChildren: children);
 
   static const String name = 'LobbyRoute';
 
-  static _i7.PageInfo page = _i7.PageInfo(
+  static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i2.LobbyPage();
+      return const _i3.LobbyPage();
     },
   );
 }
 
 /// generated route for
-/// [_i3.PermissionsPage]
-class PermissionsRoute extends _i7.PageRouteInfo<void> {
-  const PermissionsRoute({List<_i7.PageRouteInfo>? children})
+/// [_i4.PermissionsPage]
+class PermissionsRoute extends _i8.PageRouteInfo<void> {
+  const PermissionsRoute({List<_i8.PageRouteInfo>? children})
     : super(PermissionsRoute.name, initialChildren: children);
 
   static const String name = 'PermissionsRoute';
 
-  static _i7.PageInfo page = _i7.PageInfo(
+  static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i3.PermissionsPage();
+      return const _i4.PermissionsPage();
     },
   );
 }
 
 /// generated route for
-/// [_i4.RoomPage]
-class RoomRoute extends _i7.PageRouteInfo<RoomRouteArgs> {
+/// [_i5.RoomPage]
+class RoomRoute extends _i8.PageRouteInfo<RoomRouteArgs> {
   RoomRoute({
     required String roomId,
-    _i8.Key? key,
-    List<_i7.PageRouteInfo>? children,
+    _i9.Key? key,
+    List<_i8.PageRouteInfo>? children,
   }) : super(
          RoomRoute.name,
          args: RoomRouteArgs(roomId: roomId, key: key),
@@ -87,14 +105,14 @@ class RoomRoute extends _i7.PageRouteInfo<RoomRouteArgs> {
 
   static const String name = 'RoomRoute';
 
-  static _i7.PageInfo page = _i7.PageInfo(
+  static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<RoomRouteArgs>(
         orElse: () => RoomRouteArgs(roomId: pathParams.getString('roomId')),
       );
-      return _i4.RoomPage(roomId: args.roomId, key: args.key);
+      return _i5.RoomPage(roomId: args.roomId, key: args.key);
     },
   );
 }
@@ -104,7 +122,7 @@ class RoomRouteArgs {
 
   final String roomId;
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
   @override
   String toString() {
@@ -123,12 +141,12 @@ class RoomRouteArgs {
 }
 
 /// generated route for
-/// [_i5.ScanQrPage]
-class ScanQrRoute extends _i7.PageRouteInfo<ScanQrRouteArgs> {
+/// [_i6.ScanQrPage]
+class ScanQrRoute extends _i8.PageRouteInfo<ScanQrRouteArgs> {
   ScanQrRoute({
-    _i8.Key? key,
-    _i5.ScannerWidgetBuilder? scannerBuilder,
-    List<_i7.PageRouteInfo>? children,
+    _i9.Key? key,
+    _i6.ScannerWidgetBuilder? scannerBuilder,
+    List<_i8.PageRouteInfo>? children,
   }) : super(
          ScanQrRoute.name,
          args: ScanQrRouteArgs(key: key, scannerBuilder: scannerBuilder),
@@ -137,13 +155,13 @@ class ScanQrRoute extends _i7.PageRouteInfo<ScanQrRouteArgs> {
 
   static const String name = 'ScanQrRoute';
 
-  static _i7.PageInfo page = _i7.PageInfo(
+  static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ScanQrRouteArgs>(
         orElse: () => const ScanQrRouteArgs(),
       );
-      return _i5.ScanQrPage(key: args.key, scannerBuilder: args.scannerBuilder);
+      return _i6.ScanQrPage(key: args.key, scannerBuilder: args.scannerBuilder);
     },
   );
 }
@@ -151,9 +169,9 @@ class ScanQrRoute extends _i7.PageRouteInfo<ScanQrRouteArgs> {
 class ScanQrRouteArgs {
   const ScanQrRouteArgs({this.key, this.scannerBuilder});
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
-  final _i5.ScannerWidgetBuilder? scannerBuilder;
+  final _i6.ScannerWidgetBuilder? scannerBuilder;
 
   @override
   String toString() {
@@ -172,17 +190,17 @@ class ScanQrRouteArgs {
 }
 
 /// generated route for
-/// [_i6.SettingsPage]
-class SettingsRoute extends _i7.PageRouteInfo<void> {
-  const SettingsRoute({List<_i7.PageRouteInfo>? children})
+/// [_i7.SettingsPage]
+class SettingsRoute extends _i8.PageRouteInfo<void> {
+  const SettingsRoute({List<_i8.PageRouteInfo>? children})
     : super(SettingsRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRoute';
 
-  static _i7.PageInfo page = _i7.PageInfo(
+  static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i6.SettingsPage();
+      return const _i7.SettingsPage();
     },
   );
 }
