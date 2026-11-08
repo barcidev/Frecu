@@ -7,7 +7,8 @@ import 'package:frecu/i18n/strings.g.dart';
 /// Cabecera de 60 px de la creación de una frecu (`.appbar` con `.ttl`):
 /// Atrás, el paso y el título centrados y un hueco del ancho del botón.
 class CreateRoomAppBar extends StatelessWidget {
-  /// Crea la cabecera del paso [step] con su [title].
+  /// Crea la cabecera del paso [step] con su [title]; sin [step], solo el
+  /// título.
   const CreateRoomAppBar({
     required this.step,
     required this.title,
@@ -18,8 +19,8 @@ class CreateRoomAppBar extends StatelessWidget {
   /// Pasos de la creación: la guía y la nueva frecu.
   static const int steps = 2;
 
-  /// Paso actual, desde 1.
-  final int step;
+  /// Paso actual, desde 1; nulo si la pantalla se abre fuera de la creación.
+  final int? step;
 
   /// Título del paso.
   final String title;
@@ -57,26 +58,27 @@ class CreateRoomAppBar extends StatelessWidget {
 class _StepTitle extends StatelessWidget {
   const _StepTitle({required this.step, required this.title});
 
-  final int step;
+  final int? step;
   final String title;
 
   @override
   Widget build(BuildContext context) {
     final fr = context.fr;
     final c = fr.colors;
-    final label = t.lobby.newRoom.step(
-      current: step,
-      total: CreateRoomAppBar.steps,
-    );
+    final step = this.step;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          label.toUpperCase(),
-          maxLines: 1,
-          style: fr.type.labelS.copyWith(color: c.tx3),
-        ),
-        const SizedBox(height: 3),
+        if (step != null) ...[
+          Text(
+            t.lobby.newRoom
+                .step(current: step, total: CreateRoomAppBar.steps)
+                .toUpperCase(),
+            maxLines: 1,
+            style: fr.type.labelS.copyWith(color: c.tx3),
+          ),
+          const SizedBox(height: 3),
+        ],
         Text(
           title,
           maxLines: 1,

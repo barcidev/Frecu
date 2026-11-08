@@ -15,6 +15,6 @@ class HotspotGuidePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void back() => unawaited(context.router.maybePop());
-    return HotspotGuideStep(onBack: back, onContinue: back);
+    return HotspotGuideStep(onBack: back, onContinue: back, showStep: false);
   }
 }

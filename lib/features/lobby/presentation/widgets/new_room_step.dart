@@ -123,8 +123,8 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
         setState(() => _opening = false);
         showFrToast(
           context,
-          FrToast.icon(
-            icon: Icons.error_outline_rounded,
+          FrToast.drawn(
+            icon: FrIcons.alert,
             message: failure.toLocalizedMessage(),
           ),
         );

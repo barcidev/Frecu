@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/motion/fr_noise.dart';
 import 'package:frecu/core/design/motion/fr_spring_curve.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
@@ -13,6 +15,7 @@ class FrToast extends StatelessWidget {
   /// Toast con [leading] libre.
   const FrToast({required this.message, this.title, this.leading, super.key})
     : icon = null,
+      drawnIcon = null,
       signatureName = null,
       signatureColor = null;
 
@@ -23,6 +26,19 @@ class FrToast extends StatelessWidget {
     this.title,
     super.key,
   }) : leading = null,
+       drawnIcon = null,
+       signatureName = null,
+       signatureColor = null;
+
+  /// Toast con el ícono propio [icon] de `FrIcons` en un círculo de señal.
+  const FrToast.drawn({
+    required FrIconData icon,
+    required this.message,
+    this.title,
+    super.key,
+  }) : drawnIcon = icon,
+       leading = null,
+       icon = null,
        signatureName = null,
        signatureColor = null;
 
@@ -35,6 +51,7 @@ class FrToast extends StatelessWidget {
     super.key,
   }) : leading = null,
        icon = null,
+       drawnIcon = null,
        signatureName = name,
        signatureColor = color;
 
@@ -49,6 +66,9 @@ class FrToast extends StatelessWidget {
 
   /// Ícono a la izquierda, en un círculo de señal.
   final IconData? icon;
+
+  /// Ícono propio a la izquierda, en un círculo de señal.
+  final FrIconData? drawnIcon;
 
   /// Nombre de la firma a la izquierda.
   final String? signatureName;
@@ -145,7 +165,8 @@ class FrToast extends StatelessWidget {
         levelOf: frVoice,
       );
     }
-    if (icon != null) {
+    final drawn = drawnIcon;
+    if (icon != null || drawn != null) {
       return SizedBox.square(
         dimension: 30,
         child: DecoratedBox(
@@ -153,7 +174,11 @@ class FrToast extends StatelessWidget {
             shape: BoxShape.circle,
             color: fr.colors.signal.withValues(alpha: 0.14),
           ),
-          child: Icon(icon, size: 16, color: fr.colors.signalFg),
+          child: Center(
+            child: drawn != null
+                ? FrIcon(drawn, size: 16, color: fr.colors.signalFg)
+                : Icon(icon, size: 16, color: fr.colors.signalFg),
+          ),
         ),
       );
     }
