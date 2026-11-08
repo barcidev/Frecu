@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "id": "20261108-ajustes-con-iconos-propios-e-idioma-guardado",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/ajustes-con-iconos-propios-e-idioma-guardado",
+  "baseCommit": "f7322a7a419739e74589ce8c0753ed26c92da6e7",
+  "revision": 2,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:a3498a74fe0461d21df7216d83d57721e46bb2614e919e5fc0b7f9c0166f379a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:278b2c0c4c5f95a6cbe197242cbbc899656138f65676923254df5ea6a4b2416e",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:e6f875e1875e4ffa5acff6c355a5d12a582210953c698d35ba22c3f9fbf1ce8c",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:5e1b37450a5cb77ee967435baa47dd5f6305f67cac35476987ac649715437aa0",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:6f62d4ec67284f0989fda9fceddb1e39624544b1f0770ef8fcdcc861009fbf37",
+      "decision": "confirmed"
+    },
+    "A6": {
+      "hash": "sha256:0ba70e415bf48ef091f8a994b086d54552816e5c6573949386fc8250500fbaf9",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:8c0da62c610ae11151ce95c4f0f1e6f2b2ef1236d592bf579c7fef99f04e166e",
+      "decision": "implicit"
+    },
+    "A8": {
+      "hash": "sha256:b524f2d9563afa63b87655ddf52f2021f188e880f2bec05fed3c73a869e0969c",
+      "decision": "implicit"
+    },
+    "A9": {
+      "hash": "sha256:f909662876c60bc828b7c954767a9b33df8f5ded3fce8c60bd4b527338f9130e",
+      "decision": "implicit"
+    },
+    "A10": {
+      "hash": "sha256:87fdc14b82c35c0fc6b4912c1d79b775c4f8a2143a99ea8636d39abfd4297b80",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 10,
+    "AC": 5,
+    "T": 4,
+    "R": 3
+  },
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:d895e72a4fd15c824e5de3710507678fa13d85d285b56d6c0440a0e616b44b74",
+    "at": "2026-11-08T02:13:19.056Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}

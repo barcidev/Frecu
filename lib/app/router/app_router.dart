@@ -25,5 +25,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ScanQrRoute.page, path: '/scan-qr'),
     AutoRoute(page: RoomRoute.page, path: '/room/:roomId'),
     AutoRoute(page: SettingsRoute.page, path: '/settings'),
+    AutoRoute(page: HotspotGuideRoute.page, path: '/settings/hotspot-guide'),
   ];
 }

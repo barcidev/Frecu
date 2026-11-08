@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/logging/app_logger.dart';
+import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -19,8 +20,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   };
 
   WidgetsFlutterBinding.ensureInitialized();
-  await LocaleSettings.useDeviceLocale();
   final container = await createAppContainer();
+  await applySavedLocale(container);
 
   final app = await builder();
   runApp(
@@ -44,3 +45,13 @@ Future<ProviderContainer> createAppContainer() async {
   }
   return container;
 }
+
+/// Aplica el idioma guardado en las preferencias ya leídas de [container].
+///
+/// Auto, sin preferencias leídas o con un valor desconocido, usa el idioma
+/// del teléfono.
+Future<AppLocale> applySavedLocale(ProviderContainer container) =>
+    applyLocalePreference(
+      container.read(preferencesProvider).value?.localePreference ??
+          LocalePreference.auto,
+    );

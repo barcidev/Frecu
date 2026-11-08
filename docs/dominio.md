@@ -12,5 +12,6 @@
 - **Ruta de audio** (`AudioRoute`): Salida del sonido (`speaker`, `earpiece`, `bluetooth`).
 - **Estado de red** (`NetworkState`): Condición de conectividad local del dispositivo (`disconnected` o `connected` con IP, interfaz e indicador de hotspot).
 - **Punto de acceso / Hotspot** (`isHotspot`): Modo en el que el dispositivo o la red local opera como router o punto de acceso WiFi portátil sin acceso a internet externo.
-- **Preferencias** (`Preferences`): Lo que el teléfono guarda del usuario: nombre visible (`displayName`, nulo si aún no se pidió; de 1 a 20 caracteres), tema (`themePreference`) y modo de habla por defecto (`defaultTalkMode`).
+- **Preferencias** (`Preferences`): Lo que el teléfono guarda del usuario: nombre visible (`displayName`, nulo si aún no se pidió; de 1 a 20 caracteres), tema (`themePreference`), modo de habla por defecto (`defaultTalkMode`) e idioma (`localePreference`).
 - **Tema** (`ThemePreference`): `auto` (sigue al sistema), `light` (claro) o `dark` (oscuro).
+- **Idioma** (`LocalePreference`): `auto` (sigue al idioma del teléfono, por defecto), `es` (español) o `en` (inglés).

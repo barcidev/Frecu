@@ -59,7 +59,7 @@ final class OnboardingPermissionsProvider
 }
 
 String _$onboardingPermissionsHash() =>
-    r'45733911e21617ce11c6f20bf43d3ca712b8e14c';
+    r'a472a3e37c126f5bce89a019d6b5f1905ba46378';
 
 /// Lee, pide y vuelve a leer los permisos del recorrido.
 ///

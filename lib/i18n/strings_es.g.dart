@@ -282,6 +282,15 @@ class Translations$settings$es {
 
 	late final Translations$settings$talkMode$es talkMode = Translations$settings$talkMode$es.internal(_root);
 
+	/// es: 'General'
+	String get general => 'General';
+
+	late final Translations$settings$language$es language = Translations$settings$language$es.internal(_root);
+	late final Translations$settings$permissions$es permissions = Translations$settings$permissions$es.internal(_root);
+
+	/// es: 'Guía del punto de acceso'
+	String get hotspotGuide => 'Guía del punto de acceso';
+
 	/// es: 'Apariencia'
 	String get appearance => 'Apariencia';
 
@@ -730,6 +739,54 @@ class Translations$settings$talkMode$es {
 
 	/// es: 'Abierto'
 	String get openMic => 'Abierto';
+}
+
+// Path: settings.language
+class Translations$settings$language$es {
+	Translations$settings$language$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Idioma'
+	String get title => 'Idioma';
+
+	/// es: 'Auto usa el idioma del teléfono.'
+	String get message => 'Auto usa el idioma del teléfono.';
+
+	/// es: 'Auto'
+	String get auto => 'Auto';
+
+	/// es: 'Sigue al teléfono'
+	String get autoHelp => 'Sigue al teléfono';
+
+	/// es: 'Auto · $language'
+	String autoValue({required Object language}) => 'Auto · ${language}';
+
+	/// es: 'Español'
+	String get es => 'Español';
+
+	/// es: 'English'
+	String get en => 'English';
+}
+
+// Path: settings.permissions
+class Translations$settings$permissions$es {
+	Translations$settings$permissions$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Permisos'
+	String get title => 'Permisos';
+
+	/// es: 'Micrófono, red local, notificaciones'
+	String get subtitle => 'Micrófono, red local, notificaciones';
+
+	/// es: '$granted/$total'
+	String count({required Object granted, required Object total}) => '${granted}/${total}';
 }
 
 // Path: settings.themeMode
@@ -1432,6 +1489,18 @@ extension on Translations {
 			'settings.defaultTalkModeHelp' => 'Se aplica al entrar a cada frecu.',
 			'settings.talkMode.pushToTalk' => 'PTT',
 			'settings.talkMode.openMic' => 'Abierto',
+			'settings.general' => 'General',
+			'settings.language.title' => 'Idioma',
+			'settings.language.message' => 'Auto usa el idioma del teléfono.',
+			'settings.language.auto' => 'Auto',
+			'settings.language.autoHelp' => 'Sigue al teléfono',
+			'settings.language.autoValue' => ({required Object language}) => 'Auto · ${language}',
+			'settings.language.es' => 'Español',
+			'settings.language.en' => 'English',
+			'settings.permissions.title' => 'Permisos',
+			'settings.permissions.subtitle' => 'Micrófono, red local, notificaciones',
+			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
+			'settings.hotspotGuide' => 'Guía del punto de acceso',
 			'settings.appearance' => 'Apariencia',
 			'settings.theme' => 'Tema',
 			'settings.themeHelp' => 'Auto sigue al teléfono',
