@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
@@ -67,6 +67,12 @@
     "T": 3,
     "R": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-08T00:37:11.482Z"
+  "lockedTests": {
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a382445177ca8d627e8651c34b0b7fb69e29444d6e63a2c78c2d7f0a9b2fc8c3",
+    "test/features/lobby/presentation/saved_name_test.dart": "sha256:7e5e0cdc7c222002e9f03d6608832c6ad6261db7b043ee312a2d5cf7dbd9da01",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:3c7eb930c91934a63272208e5a714b9568446d5c6ef7de4b7287ea4f9e91e905",
+    "test/features/lobby/presentation/fifths_clock_test.dart": "sha256:b4e92444a63bb22f9e7d52945841661f070b7ae9d65537dd7ab58dd778c858f9",
+    "test/features/lobby/presentation/hotspot_guide_test.dart": "sha256:646cbe5bac480d6bf42cb8241c5a051b1cbea7c8dfbbd0e588920fb5901d6d3f",
+    "test/features/lobby/presentation/new_room_test.dart": "sha256:bcf727c52d48b199da458f30bd65d3c094c5c720f95734fcf4d0e62b118c8add"
+  }
 }
