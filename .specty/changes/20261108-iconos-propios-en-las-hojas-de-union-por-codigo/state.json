@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261108-iconos-propios-en-las-hojas-de-union-por-codigo",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/iconos-propios-en-las-hojas-de-union-por-codigo",
+  "baseCommit": "f7322a7a419739e74589ce8c0753ed26c92da6e7",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 4,
+    "adjust": 0,
+    "reasons": [
+      "4 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:bafd4f61d2be38d9491f5efafd6f7e279ed6f96d8e722379bfaa95119c6be8bd",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:e28ccb2b490a152682c200713797adfb024bd7ab152228900f5059f07915e1c7",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:253c3f3c4c46833cbbac3a655c0f7b8a588926fc539d4a16a3ce4bf1353eb7f7",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 1,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:3c7c427d051e3148552e523be3a15084ba5bd669e2a16fc5d6b288d243f1604a",
+    "at": "2026-11-08T02:04:50.969Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
