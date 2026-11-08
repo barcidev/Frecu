@@ -103,3 +103,38 @@ Referencia: `SH.invite`, `SH.route`, `SH.leave`, `leaveCopy`, `V.closed` y `room
 - R1: El QR con un cuadro al centro puede no leerse con IDs largos — mitigación: corrección H (hasta 30 %), el cuadro tapa menos del 7 % del área y la URI es la misma que ya lee `ParseInviteFromQr`.
 - R2: `room_page.dart` crece con las hojas y el cierre — mitigación: las hojas y la vista de cierre viven en sus archivos y la página solo las abre; cada función por debajo de 50 líneas.
 - R3: Las pruebas de otros cortes buscan el diálogo, el botón de ruta y los íconos de Material — mitigación: solo cambian esas búsquedas, con claves estables (`invite_button`, `audio_route_button`, `leave_button`).
+
+## Cierre
+
+### Resumen
+
+- `invite_sheet.dart`: `InviteSheet` con `RoomSheetHeader`, `InviteQr` (marco claro `#F4F6F1` en los dos temas, `QrImageView` de módulos redondos en tinta con corrección H, la firma 2:3 de Frecu sobre un cuadro de tinta al centro y el haz de 3,2 s, quieto con movimiento reducido) y la ficha `RoomFacts` de nota (o «—»), código y anfitrión con su puerto, y el pie con «Frecus cercanas». Se abre desde Invitar de la cabecera y desde los lugares libres; `InviteQrDialog` se borró.
+- `room_sheets.dart`: `RoomSheetHeader`, `AudioRouteSheet` con `AudioRouteOption` (ruta activa marcada, las que no están en `availableAudioRoutes` al 45 % y sin respuesta; elegir llama `setAudioRoute` y cierra) y `LeaveSheet` (texto de quien no es anfitrión, o del anfitrión con las otras n personas, la otra persona o solo).
+- `mic_control_section.dart`: `AudioRoutePill` a la izquierda del selector de hasta 204 px (P107/P103), con ícono `FrIcons`, nombre, barras que se mueven mientras llega audio y flecha; abre la hoja de ruta.
+- `room_header.dart`: Invitar con `FrIcons.qr` y Salir, sin íconos de Material ni botón de ruta (P74); `RoomNoteName` pública con su tamaño.
+- `room_closed_view.dart`: `RoomClosure`, `formatClosureDuration` y `RoomClosedView` con la línea que se aplana (`ClosureLinePainter`, plana con movimiento reducido), la nota fuera del aire, «Fin de la transmisión», el mensaje de cada cierre, duración, personas y nota, y «Volver al inicio».
+- `room_page.dart`: abre las tres hojas; salir sin ser anfitrión llama `leaveRoom` y vuelve al inicio; cerrar como anfitrión o recibir `RoomStatus.closed` (salvo `user_left`) cierra las hojas, guarda el resumen, llama `leaveRoom` y cambia con un fundido a la pantalla de cierre. Sin el diálogo de cierre.
+- Textos `room.sheets.*` y `room.closure.*` en es y en; salen `room.roomClosed` y `room.accept`.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (582 pruebas).
+
+### Desviaciones
+
+- La ficha de la invitación y las estadísticas del cierre comparten `RoomFacts` y `RoomFact` (en `invite_sheet.dart`), para que ninguna función pase de 50 líneas.
+- `room.sheets.invite.qr` se suma a las claves del diseño: es la etiqueta accesible del QR.
+- La hoja de salir y la de ruta quedaron completas en T1, porque `room_sheets_test.dart` las nombra y debe compilar desde la primera tarea; T2 y T3 solo las conectan a la página.
+- `voice_flow_test.dart` y `room_flow_test.dart` además buscan `AudioRouteSheet` y `RoomClosedView`, para que la verificación las nombre al fallar sin el código en la fase de tests.
+
+### Decisiones
+
+- La pantalla de cierre es una vista de `RoomPage` con `AnimatedSwitcher`, no una ruta (A1).
+- La duración va de `Room.createdAt` al cierre y «Personas» es el mayor número de personas que hubo a la vez en la malla (A4).
+- Las barras de la pastilla se mueven solo mientras otra persona habla; quietas en `tx4` en reposo o con movimiento reducido (A6).
+- El botón de cerrar o salir usa `FrButton` `danger` (lavado de alerta) en lugar de la variante sólida del prototipo (A7).
+- `Key('sheet_close')`, `invite_button`, `audio_route_button`, `audio_route_option_<ruta>`, `leave_confirm`, `leave_cancel`, `closure_home`, `closure_duration` y `closure_people` quedan como claves estables para las pruebas.
+
+### Pendientes
+
+- `FrButton` no tiene la variante sólida `danger-solid` del prototipo: la hoja de salir usa `danger` (lavado de alerta); sumarla en `lib/core/design/widgets/fr_button.dart` y usarla en `LeaveSheet`.
+- El QR de la invitación usa ojos cuadrados porque `qr_flutter` 4.1 no tiene ojos de esquina suave como `drawQR`; dibujarlos con un pintor propio sobre `QrCode` si se quiere igual al prototipo.
+- La hoja de ruta dice «Bluetooth» sin el nombre del dispositivo, porque `AudioRoute.bluetooth` no lo trae; sumarlo en la plataforma y en `VoiceState` para mostrar p. ej. «Sena 50S».
+- `room_sheets.dart` tiene 350 líneas de código (aviso desde 300): si crece, pasar `AudioRouteSheet` y `LeaveSheet` a sus propios archivos.

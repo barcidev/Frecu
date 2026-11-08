@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "baseCommit": "4db5a571a8affd7389b5dec22d1591f65ce265cd",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:3d232d6a421b455ae1633f57e98c2b8d7e25844d7b81a29d80066273e1ce59a8",
@@ -81,12 +81,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "28790bfe5aabadcc978f264e63acedd1ba8de6b0",
+      "attempts": 1,
       "startedAt": "2026-11-08T01:26:23.084Z",
       "doneAt": "2026-11-08T01:27:48.399Z",
-      "summary": "LeaveSheet confirma salir (peer vuelve al inicio) o cerrar la frecu; el cierre del anfitrión o recibido cierra las hojas, llama leaveRoom y muestra RoomClosedView con línea plana, motivo, duración, personas y nota; sin diálogo de cierre."
+      "summary": "LeaveSheet confirma salir (peer vuelve al inicio) o cerrar la frecu; el cierre del anfitrión o recibido cierra las hojas, llama leaveRoom y muestra RoomClosedView con línea plana, motivo, duración, personas y nota; sin diálogo de cierre.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -99,6 +99,7 @@
     "T": 3,
     "R": 3
   },
+  "closingSubmittedAt": "2026-11-08T01:28:25.715Z",
   "lockedTests": {
     "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a310453eb0ece4c3e58ef5b90674a5348c3495530a57e6d8f69dcaae2646a8e0",
     "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:970a8a88126596f17eacd90c1f242df89351760c14cf0378c3af400cd436981f",
