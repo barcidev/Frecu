@@ -23,7 +23,13 @@ extension RoomNoteLabels on RoomNote {
 /// en `labelS` y `tx3` abajo.
 class RoomNoteText extends StatelessWidget {
   /// Crea la nota [note] con el nombre a [size] px.
-  const RoomNoteText({required this.note, this.size = 24, super.key});
+  const RoomNoteText({
+    required this.note,
+    this.size = 24,
+    this.octaveSize,
+    this.glow = false,
+    super.key,
+  });
 
   /// Nota que se muestra.
   final RoomNote note;
@@ -31,7 +37,17 @@ class RoomNoteText extends StatelessWidget {
   /// Tamaño del nombre en px.
   final double size;
 
+  /// Tamaño de la octava en px; por defecto, el de `labelS`.
+  final double? octaveSize;
+
+  /// Brillo de señal alrededor del nombre (`.note.big`).
+  final bool glow;
+
   static final RegExp _accidental = RegExp('[♯♭]');
+
+  /// Brillo de señal de `.note.big`.
+  static Shadow _glowOf(Color signal) =>
+      Shadow(color: signal.withValues(alpha: 0.3), blurRadius: 24);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +68,7 @@ class RoomNoteText extends StatelessWidget {
             fontSize: size,
             height: 0.9,
             color: c.tx1,
+            shadows: glow ? [_glowOf(c.signal)] : null,
           ),
         ),
         if (accidental != null)
@@ -68,14 +85,21 @@ class RoomNoteText extends StatelessWidget {
               ),
             ),
           ),
-        Padding(
-          padding: const EdgeInsets.only(left: 2, bottom: 1),
-          child: Text(
-            '${note.octave}',
-            style: fr.type.labelS.copyWith(height: 1, color: c.tx3),
-          ),
-        ),
+        _octave(fr),
       ],
     );
   }
+
+  /// Octava abajo, en `labelS` y `tx3` o a [octaveSize] px.
+  Widget _octave(FrTheme fr) => Padding(
+    padding: EdgeInsets.only(left: 2, bottom: octaveSize == null ? 1 : 4),
+    child: Text(
+      '${note.octave}',
+      style: fr.type.labelS.copyWith(
+        height: 1,
+        fontSize: octaveSize,
+        color: fr.colors.tx3,
+      ),
+    ),
+  );
 }

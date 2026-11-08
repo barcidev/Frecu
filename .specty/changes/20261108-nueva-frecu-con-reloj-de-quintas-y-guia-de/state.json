@@ -59,12 +59,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "26d219405b7131fa2916f59150b167d29cb8f182",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:37:19.755Z",
       "doneAt": "2026-11-08T00:37:39.514Z",
-      "summary": "FifthsClock (port de drawFifths) con funciones puras fifthsAngle, fifthsHourAngle, fifthsMinuteAngle, fifthsLabels y fifthsClockTime; textos de lobby.newRoom en es/en (pasos de la guía con la interfaz HotspotStep) y slang regenerado."
+      "summary": "FifthsClock (port de drawFifths) con funciones puras fifthsAngle, fifthsHourAngle, fifthsMinuteAngle, fifthsLabels y fifthsClockTime; textos de lobby.newRoom en es/en (pasos de la guía con la interfaz HotspotStep) y slang regenerado.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "d85c4b01f2282ba326e712a6a7d0def38c7daedd",
+      "startedAt": "2026-11-08T00:37:40.287Z",
+      "doneAt": "2026-11-08T00:41:42.144Z",
+      "summary": "CreateRoomPage en dos pasos (Navigator anidado): guía del punto de acceso con ilustración animada y pasos Android/iPhone, y nueva frecu con reloj de quintas, nota, nombre, código generado y Abrir frecu; reloj y generador inyectables."
     }
   },
   "pending": {
