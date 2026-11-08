@@ -15,8 +15,6 @@ scope:
   implicitTests: true
   generated: ["**/*.g.dart", "**/*.freezed.dart"]
   autoApprove: tests-and-generated
-policy:
-  tests: contract
 retro:
   mode: agent
 git:
