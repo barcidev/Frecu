@@ -38,3 +38,23 @@ Pasar `dart format` a los cuatro archivos de red y permisos que quedan de P99, p
   - ac: AC1
   - verify: dart format --output=none --set-exit-if-changed lib/features/network/domain/entities/network_state.dart lib/features/permissions/data/repositories/permission_repository_impl.dart test/features/permissions/data/permission_datasource_test.dart test/features/permissions/data/permission_repository_impl_test.dart && flutter analyze && flutter test
   - type: style
+
+## Cierre
+
+### Resumen
+
+- `dart format` pasado a `network_state.dart`, `permission_repository_impl.dart`, `permission_datasource_test.dart` y `permission_repository_impl_test.dart` (parte de P99 que toca a C8).
+- El diff sin espacios solo reparte la firma del constructor de `PermissionRepositoryImpl` y parte en varias líneas los `test(...)` de nombre largo, con su coma final; ninguna aserción cambia.
+- AC1 comprobado: `dart format --set-exit-if-changed` sobre los 4 archivos sale con 0 (0 changed), `flutter analyze` sin problemas y `flutter test` con 582 pruebas en verde.
+
+### Desviaciones
+
+- Ninguna.
+
+### Decisiones
+
+- Tarea de tipo `style` sin fase de pruebas: un cambio de solo formato no admite una prueba que falle sin el código, y AC1 queda como `test: manual`, comprobado por la verificación de la tarea.
+
+### Pendientes
+
+- Ninguno.
