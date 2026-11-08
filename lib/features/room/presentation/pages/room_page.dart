@@ -16,6 +16,7 @@ import 'package:frecu/features/room/presentation/widgets/mic_control_section.dar
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
+import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -176,7 +177,11 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: MicControlSection(voiceState: voiceState, talk: talk),
+            child: MicControlSection(
+              voiceState: voiceState,
+              talk: talk,
+              onRoute: () => unawaited(AudioRouteSheet.show(context)),
+            ),
           ),
         ],
       ),
