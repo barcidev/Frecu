@@ -6,6 +6,13 @@
   "branch": "feature/nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2d7cebdf459708151778bec71b57bd560a6c484decec24747b8c060b6654fd6b",
+    "at": "2026-11-08T00:20:41.857Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -60,12 +67,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:2d7cebdf459708151778bec71b57bd560a6c484decec24747b8c060b6654fd6b",
-    "at": "2026-11-08T00:20:41.857Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-08T00:37:11.482Z"
 }
