@@ -31,6 +31,7 @@ SignalingWelcomeMessage _$SignalingWelcomeMessageFromJson(
   participants: (json['participants'] as List<dynamic>)
       .map((e) => Participant.fromJson(e as Map<String, dynamic>))
       .toList(),
+  note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
   type: json['type'] as String? ?? 'welcome',
 );
 
@@ -39,6 +40,7 @@ Map<String, dynamic> _$SignalingWelcomeMessageToJson(
 ) => <String, dynamic>{
   'peerId': instance.peerId,
   'participants': instance.participants,
+  'note': const RoomNoteConverter().toJson(instance.note),
   'type': instance.type,
 };
 

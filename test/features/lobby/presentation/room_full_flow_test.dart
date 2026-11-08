@@ -11,6 +11,7 @@ import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/nearby_room_tile.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -81,6 +82,13 @@ void main() {
     testWidgets(
       'AC4: LobbyPage displays roomFull localized notification when room is full',
       (tester) async {
+        // El sintonizador del inicio anima sin fin: con movimiento reducido
+        // queda quieto y pumpAndSettle termina.
+        tester.platformDispatcher.accessibilityFeaturesTestValue =
+            const FakeAccessibilityFeatures(disableAnimations: true);
+        addTearDown(
+          tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+        );
         final router = AppRouter();
         await tester.pumpWidget(createTestApp(router));
         await tester.pumpAndSettle();
@@ -88,16 +96,21 @@ void main() {
         nearbyRoomsController.add([testNearbyRoom]);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.text('Frecu Llena'));
+        // La frecu llena sale como tarjeta de frecu cercana del inicio.
+        await tester.tap(find.widgetWithText(NearbyRoomTile, 'Frecu Llena'));
         await tester.pumpAndSettle();
 
-        final joinButton = find.byKey(const Key('pin_join_button'));
-        expect(joinButton, findsOneWidget);
-
-        await tester.tap(joinButton);
+        for (final digit in '1234'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
         await tester.pumpAndSettle();
 
-        expect(find.text(t.errors.roomFull), findsOneWidget);
+        // El aviso de la hoja lleva el mensaje en negrita y la pista.
+        expect(
+          find.textContaining(t.errors.roomFull, findRichText: true),
+          findsOneWidget,
+        );
       },
     );
   });

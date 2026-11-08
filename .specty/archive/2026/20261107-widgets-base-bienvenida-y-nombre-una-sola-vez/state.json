@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "id": "20261107-widgets-base-bienvenida-y-nombre-una-sola-vez",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/widgets-base-bienvenida-y-nombre-una-sola-vez",
+  "baseCommit": "901bbb4c7af61049dfcfa9d7699c212fa58cdd1c",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e11d0f7be3753437e2b782e671976003326c312a3062891514597da91726148d",
+    "at": "2026-11-07T08:48:57.497Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 15,
+    "adjust": 0,
+    "reasons": [
+      "14 archivos",
+      "4 tareas"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f4541dde98e5630c6dd861d5f1cdf0dd5decc192dff26e9e5633fae3bb9fb1f4",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:e4e11f0fcbee967a797d824bb2b2a8c9fad3bd54f94f46cb28edf437eb3f0999",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:0741ec1a85b5e7b3286dc942926cda8c537ad5fd9292b6ed562f45ecd0241264",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "5e0b5330a2b2e0597d0dfe061f0d3720d81cb250",
+      "attempts": 1,
+      "startedAt": "2026-11-07T09:01:19.144Z",
+      "doneAt": "2026-11-07T09:02:38.125Z",
+      "summary": "fr_noise (FNV-1a, mulberry32, Perlin 2D y voz simulada idénticos a engine.js), FrSpringCurve para animaciones implícitas con resorte y FrLoop + context.reduceMotion: un Ticker que se congela con movimiento reducido y se pausa fuera de pantalla.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "63e3317954f752b7ed9c083ceba61ec594811f4f",
+      "attempts": 1,
+      "startedAt": "2026-11-07T09:02:38.736Z",
+      "doneAt": "2026-11-07T09:04:06.778Z",
+      "summary": "SignalSignature (SignatureParams.fromName idéntico a sigParams del prototipo; pintor de 220 puntos con ondulación, brillo al hablar, estela y modos idle/speak/muted/off/link) y WaveLoader (dos senos con envolvente), ambos sobre FrLoop con RepaintBoundary y cuadro fijo con movimiento reducido.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "8bb908b9611c15ebf75e66fc85d4399ea8bd6f1b",
+      "attempts": 1,
+      "startedAt": "2026-11-07T09:04:07.414Z",
+      "doneAt": "2026-11-07T09:05:40.322Z",
+      "summary": "FrPressable (resorte press, punto de contacto y semántica; sin escala con movimiento reducido), FrButton (4 variantes, luz radial desde el dedo, carga con WaveLoader, deshabilitado al 38 %) y FrIconButton (0,92 y bg3 al presionar, selected, ghost y danger).",
+      "scopeExtra": []
+    },
+    "T4": {
+      "status": "done",
+      "baseCommit": "829e2ee7e05dc7c5d61320f704b615941c40c18f",
+      "attempts": 2,
+      "startedAt": "2026-11-07T09:05:41.022Z",
+      "doneAt": "2026-11-07T09:09:18.885Z",
+      "summary": "FrField (etiqueta en mayúsculas, contador n/máx, foco con borde de señal y línea, error en alerta con temblor) y FrSteps (píldora de 22 px con resorte organic); sin temblor ni resorte con movimiento reducido. docs/arquitectura.md con motion/ y widgets/.",
+      "scopeExtra": [
+        "test/core/design/widgets/fr_field_test.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 5,
+    "T": 4,
+    "R": 2,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T09:09:46.695Z",
+  "lockedTests": {
+    "test/core/design/motion/fr_motion_tools_test.dart": "sha256:a321c6f985fc097f663caf6def8b12699bc851335856fc32c823c3bcc0d85f1e",
+    "test/core/design/widgets/fr_button_test.dart": "sha256:1f6c84a7a7db450c26b967381e3976d9f5394f216f7364c34cc939d7528e50df",
+    "test/core/design/widgets/fr_field_test.dart": "sha256:1a01d96fd88ea5a019570f4cb35743a1efadcc760539397f534b5e0e68c09ead",
+    "test/core/design/widgets/signal_signature_test.dart": "sha256:54441c12e91186bc96232cab144bf88aaa1da4b36790c55d1e41c1cb0b955ab0"
+  }
+}

@@ -3,15 +3,109 @@
     "title": "Frecu"
   },
   "lobby": {
-    "title": "Frecu",
+    "title": "frecu",
+    "join": {
+      "close": "Close",
+      "port": "Port $port",
+      "wrongCode": "Wrong code. Check it and try again.",
+      "roomFullHint": "You can join when someone leaves.",
+      "unreachableHint": "Make sure you're on the same Wi-Fi network.",
+      "pin": {
+        "message": "Enter the access code. Ask the host for it.",
+        "autoSend": "Sent once all 4 digits are in",
+        "checking": "Checking with the host…",
+        "correct": "Code accepted · joining",
+        "delete": "Delete",
+        "joiningAs": "You'll join as"
+      },
+      "ip": {
+        "kicker": "Manual connection",
+        "message": "Use it if the room isn't on the list.",
+        "host": "Host IP",
+        "noAnswer": "No answer on port $port",
+        "connect": "Connect"
+      },
+      "scan": {
+        "title": "Scan invite",
+        "subtitle": "Room QR",
+        "back": "Back",
+        "torch": "Flashlight",
+        "hint": "Point at the QR the host shows on their phone.",
+        "invalid": "This QR isn't a Frecu invite.",
+        "found": "Room found",
+        "noNote": "Room without a note",
+        "join": "Join"
+      }
+    },
+    "settings": "Settings",
+    "heading": "Pick your room",
     "createRoom": "Create room",
-    "scanQr": "Scan QR",
-    "joinRoom": "Join room",
+    "scanQr": "Scan",
+    "joinRoom": "Connect by IP",
     "nearbyRooms": "Nearby rooms",
-    "noRoomsNearby": "No rooms found on local network",
     "accessCode": "Access code",
-    "roomName": "Room name",
-    "yourName": "Your display name"
+    "network": {
+      "checking": "Checking network",
+      "connected": "Network · $ip",
+      "offline": "No local network"
+    },
+    "tuner": {
+      "scanning": "Scanning · _frecu._tcp",
+      "paused": "Search paused",
+      "signals": {
+        "one": "$n signal",
+        "other": "$n signals"
+      }
+    },
+    "empty": {
+      "title": "No signals yet",
+      "message": "Join the host's Wi-Fi or ask them to show you their QR.",
+      "searching": "Still searching"
+    },
+    "offline": {
+      "title": "You're not on any Wi-Fi network.",
+      "message": "Join the host's hotspot to find rooms."
+    },
+    "newRoom": {
+      "back": "Back",
+      "step": "Step $current of $total",
+      "guide": {
+        "title": "Set up the network",
+        "heading": "Turn on your hotspot",
+        "message": "Your phone will be the group's antenna.",
+        "android": "Android",
+        "iphone": "iPhone",
+        "androidSteps(interface=HotspotStep)": [
+          { "lead": "Open Settings › Hotspot", "rest": " (the name varies by brand)." },
+          { "lead": "Turn it on", "rest": " and share its name and password with your group." },
+          { "lead": "Come back to Frecu", "rest": " and open your room. It doesn't use your mobile data." }
+        ],
+        "iphoneSteps(interface=HotspotStep)": [
+          { "lead": "Open Settings › Personal Hotspot", "rest": " and turn on “Allow Others to Join”." },
+          { "lead": "Share the password", "rest": " with your group so they join your network." },
+          { "lead": "Keep Frecu open", "rest": " while they join. On iPhone we recommend that the host uses Android." }
+        ],
+        "ready": "It's on",
+        "sameWifi": "We're already on the same Wi-Fi"
+      },
+      "title": "New room",
+      "soundsIn": "Your room sounds in",
+      "openedAt": "Opened at $time",
+      "name": "Room name",
+      "nameHint": "E.g. Sunday ride",
+      "defaultName": "$name's room",
+      "untitled": "My room",
+      "code": "Access code",
+      "codeDigits": "4 digits",
+      "regenerate": "Generate another",
+      "codeHelp": "Share it only with your group: it keeps strangers on the same network out.",
+      "open": "Open room",
+      "clockLabel": "Circle of fifths clock: $time, $note"
+    },
+    "noteNames": ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"],
+    "noNote": "—",
+    "hz": "$value Hz",
+    "decimalSeparator": "."
   },
   "room": {
     "title": "Active room",
@@ -25,25 +119,178 @@
     "speaking": "Speaking",
     "muted": "Muted",
     "host": "Host",
-    "roomClosed": "Room has been closed by host"
+    "reconnecting": "Reconnecting...",
+    "noteNames": ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"],
+    "mesh": {
+      "you": "You",
+      "youHost": "You · host",
+      "onAir": "On air",
+      "connecting": "Connecting",
+      "reconnecting": "Reconnecting",
+      "free": "Free",
+      "invite": "Invite"
+    },
+    "header": {
+      "youAreHost": "You're the host",
+      "hostedBy": "Host · $name",
+      "hz": "$value Hz",
+      "note": "Note $note, $hz Hz",
+      "invite": "Invite"
+    },
+    "sheets": {
+      "close": "Close",
+      "invite": {
+        "kicker": "Invite to the frecu",
+        "title": "Scan to join",
+        "message": "From Frecu › Scan. The QR already includes the code.",
+        "note": "Note",
+        "code": "Code",
+        "host": "Host",
+        "port": "Port $port",
+        "footer": "It also shows up in “$list” for anyone on your network.",
+        "qr": "Invite QR code"
+      },
+      "route": {
+        "kicker": "Audio output",
+        "title": "Where do you listen?",
+        "message": "When you plug in headphones, the audio switches by itself.",
+        "speakerSub": "Hands-free",
+        "earpieceSub": "Phone to your ear",
+        "bluetoothOn": "Connected",
+        "bluetoothOff": "No device",
+        "label": "Audio output: $route"
+      },
+      "leave": {
+        "peerTitle": "Leave the frecu?",
+        "peerMessage": "You can join again with the access code.",
+        "peerConfirm": "Leave the frecu",
+        "hostTitle": "Close the frecu for everyone",
+        "hostAlone": "You're the host. If you leave, the frecu closes.",
+        "hostOne": "You're the host. If you leave, the frecu closes for the other person.",
+        "hostMany": "You're the host. If you leave, the frecu closes for the other $count people.",
+        "hostConfirm": "Close frecu",
+        "cancel": "Cancel"
+      }
+    },
+    "closure": {
+      "offAir": "Off the air",
+      "noteOffAir": "$note · off the air",
+      "title": "End of transmission",
+      "host": "You closed the frecu. Everyone was disconnected.",
+      "peer": "The host closed the frecu. You can join another one whenever you like.",
+      "lost": "The host's signal was lost. You can join another one whenever you like.",
+      "duration": "Duration",
+      "people": "People",
+      "note": "Note",
+      "home": "Back to home"
+    },
+    "talk": {
+      "modePtt": "PTT",
+      "modeOpen": "Open",
+      "core": {
+        "hold": "Hold",
+        "onAir": "On air",
+        "open": "Open",
+        "silence": "Muted",
+        "standby": "Standby",
+        "talk": "Talk"
+      },
+      "hint": {
+        "idle": "Hold to talk",
+        "alone": "Show the QR so your group can join",
+        "receiving": "$name is talking · you can reply",
+        "onAir": "Release to listen",
+        "open": "Tap to mute yourself",
+        "muted": "Tap to turn on your microphone",
+        "connecting": "Connecting to the host…",
+        "reconnecting": "Restoring the connection…"
+      },
+      "island": {
+        "online": "Online · $count/$max",
+        "openMic": "Open mic · $count/$max",
+        "muted": "Muted · $count/$max",
+        "onAir": "On air · $time",
+        "receiving": "$name · talking",
+        "waiting": "On air · waiting for your group",
+        "connecting": "Connecting…",
+        "reconnecting": "Reconnecting…"
+      },
+      "echo": {
+        "title": "Open mic on speaker.",
+        "message": "Use headphones to avoid echo.",
+        "dismiss": "Dismiss notice"
+      }
+    }
   },
   "permissions": {
-    "title": "Required permissions",
-    "description": "Frecu needs permissions to communicate without internet.",
+    "back": "Back",
+    "stepOf": "$current / $total",
+    "welcome": {
+      "kicker": "No internet · no coverage",
+      "title": "Your whole group on the same frecu.",
+      "message": "Talk in real time with up to 6 people near you. All they need is a shared Wi-Fi network.",
+      "start": "Get started"
+    },
+    "name": {
+      "title": "What should we call you?",
+      "message": "This is how you'll be seen and heard in every frecu.",
+      "signature": "Your signal signature · born from your name",
+      "label": "Display name",
+      "hint": "Your name",
+      "help": "You can change it anytime in Settings.",
+      "tooLong": "Use $max characters at most.",
+      "saveError": "Couldn't save your name. Please try again.",
+      "next": "Continue"
+    },
+    "title": "Three permissions and you're set.",
+    "description": "Frecu only talks to your local network. Your voice never leaves your group.",
     "microphone": "Microphone",
-    "microphoneDesc": "Transmits your voice to other peers in the room.",
+    "microphoneDesc": "So your group can hear you.",
     "nearbyDevices": "Local network & nearby devices",
-    "nearbyDevicesDesc": "Discovers and connects with nearby phones on the network.",
+    "nearbyDevicesDesc": "To find frecus and use Bluetooth headphones.",
     "notifications": "Notifications",
-    "notificationsDesc": "Keeps the intercom active in background with screen off.",
+    "notificationsDesc": "They keep the frecu alive with the screen off.",
+    "camera": "The camera is only requested when scanning a QR code.",
     "grant": "Grant permissions",
-    "granted": "Permissions granted"
+    "openSettings": "Settings",
+    "finish": "Continue",
+    "status": {
+      "pending": "Pending",
+      "granted": "Granted",
+      "denied": "Denied"
+    }
   },
   "settings": {
     "title": "Settings",
+    "back": "Back",
     "displayName": "Display name",
+    "noName": "No name",
+    "edit": "Edit",
+    "editName": {
+      "title": "Your name",
+      "message": "This is how people will see and hear you in every frecu.",
+      "hint": "Type your name",
+      "save": "Save",
+      "tooLong": "Use $max characters at most.",
+      "saveError": "Couldn't save your name. Try again."
+    },
+    "voice": "Voice",
     "defaultTalkMode": "Default talk mode",
-    "language": "Language"
+    "defaultTalkModeHelp": "Applies every time you join a frecu.",
+    "talkMode": {
+      "pushToTalk": "PTT",
+      "openMic": "Open"
+    },
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeHelp": "Auto follows your phone",
+    "themeMode": {
+      "auto": "Auto",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "saveError": "Couldn't save",
+    "footer": "100% local · no internet"
   },
   "errors": {
     "network": "Local network error",

@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "id": "20261108-bienvenida-nombre-con-firma-en-vivo-y-permisos",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/bienvenida-nombre-con-firma-en-vivo-y-permisos",
+  "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:7856f025fc74fe596673a7c0d3cd8bafbc29eb56e1ca479e6a0cb3e0f9684ed9",
+    "at": "2026-11-07T17:31:00.647Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 16,
+    "adjust": 0,
+    "reasons": [
+      "14 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:2c515a159bf7cc3e3eecb730de3ce8a281f64ddb87fd2d590ee423e79b66412a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:66968204f67e3da6cbb71766404b7d717f513e55f4fe474623405b4932e21dfc",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:1cfe0d5bca6b86eb185e9e8a9585c1635d401486404759dcda2fe0dd69da6007",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:065b0642c4d7479659f091f23a1ba7348cf0ae0bfd594fe0cee3fb959b30fcb9",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:33d5bcd9a9616d3bb43a96e609f004fd725d6bc3312755f4de10561f07a66f45",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:50555789f5f8d5518ef00a51b4a108b5b9605cb95f4365c6d19a966f7af5ae68",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:d2e49fd5888caf86a12da62c7204075b8cb1295c832dbcd781c7260aedf339a6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "c93fe09dc1f245d86798cc52811e2bc987fda4ff",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:51:17.262Z",
+      "doneAt": "2026-11-07T17:52:55.241Z",
+      "summary": "Recorrido en un Navigator anidado de PermissionsRoute que empieza en la bienvenida (WelcomeMesh de drawOrbit, WelcomeStep y piezas de onboarding_layout), con todos los textos del recorrido bajo permissions en es y en.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "c8a117ca9b62287c14ba97defc9955ef9ac9c466",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:52:55.877Z",
+      "doneAt": "2026-11-07T17:53:35.290Z",
+      "summary": "NameStep con la firma de 210 px que sigue al texto en su escenario, FrField limitado al dominio y guardado con setDisplayName; la página lleva de la bienvenida al nombre y guarda lo escrito al volver.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "3d4b10dc0fe8be6db86bd436a67f98e38048ff81",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:53:35.992Z",
+      "doneAt": "2026-11-07T17:56:38.550Z",
+      "summary": "OnboardingPermissions lee, pide uno por uno y relee al volver a la app (iOS no pide la red local); PermissionRow con estados pendiente, concedido y negado con Ajustes; PermissionsStep y salida al inicio con replaceAll.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 10,
+    "T": 3,
+    "R": 3
+  },
+  "closingSubmittedAt": "2026-11-07T17:57:21.077Z",
+  "lockedTests": {
+    "test/app_test.dart": "sha256:aee8d9aadb1be197d5854c3d7f52250c927b9d6d4f4df5d555f61275ad3368aa",
+    "test/features/permissions/presentation/name_step_test.dart": "sha256:ff94bed4334342a9bd343ddab4b822b97f0e5093534c8082fa2347b963f3ca2f",
+    "test/features/permissions/presentation/permissions_step_test.dart": "sha256:ead26abc6bad7735cd4bc890ef0a71f7f8b08c26defdb0d3dde6f2b6f530b316",
+    "test/features/permissions/presentation/welcome_test.dart": "sha256:f5fca442778d5766d992dc87e37d6efa7ceb4a355c33065be74d255ffa5c9dd6"
+  }
+}

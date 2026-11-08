@@ -1,15 +1,22 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frecu/app/router/app_router.gr.dart';
-import 'package:frecu/core/result/result.dart';
+import 'package:frecu/core/design/motion/fr_transitions.dart';
+import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
-import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:frecu/features/lobby/presentation/providers/new_room_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dart';
+import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Pantalla para crear una nueva frecu como anfitrión.
+/// Crear una frecu como anfitrión, en dos pasos: la guía del punto de acceso
+/// y la nueva frecu con su nota en el reloj de quintas.
+///
+/// Los pasos viven en un [Navigator] propio: seguir entra deslizando, y Atrás
+/// o el gesto de volver regresan a la guía sin perder el nombre ni el código
+/// (en la guía, salen al inicio).
 @RoutePage()
 class CreateRoomPage extends ConsumerStatefulWidget {
   /// Constructor constante.
@@ -20,102 +27,62 @@ class CreateRoomPage extends ConsumerStatefulWidget {
 }
 
 class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
-  final _nameController = TextEditingController(text: 'Frecu');
-  final _codeController = TextEditingController(text: '1234');
-  bool _isLoading = false;
+  final GlobalKey<NavigatorState> _steps = GlobalKey<NavigatorState>();
+  late final TextEditingController _name;
+  late String _code;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = TextEditingController(text: _defaultName());
+    _code = ref.read(accessCodeGeneratorProvider)();
+  }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _codeController.dispose();
+    _name.dispose();
     super.dispose();
   }
 
-  Future<void> _handleCreate() async {
-    if (_nameController.text.trim().isEmpty) return;
-    setState(() => _isLoading = true);
-
-    final result = await ref
-        .read(roomNotifierProvider.notifier)
-        .createRoom(
-          name: _nameController.text.trim(),
-          accessCode: _codeController.text.trim(),
-        );
-
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-
-    switch (result) {
-      case Success(:final data):
-        unawaited(
-          ref
-              .read(discoveryRepositoryProvider)
-              .publishRoom(roomId: data.id, name: data.name, port: data.port),
-        );
-        unawaited(context.router.replace(RoomRoute(roomId: data.id)));
-      case FailureResult(:final failure):
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(failure.toString())));
-    }
+  /// «Frecu de» y el nombre guardado, o «Mi frecu», sin pasar del máximo.
+  String _defaultName() {
+    final saved = ref.savedDisplayName?.trim();
+    final newRoom = t.lobby.newRoom;
+    final name = saved == null || saved.isEmpty
+        ? newRoom.untitled
+        : newRoom.defaultName(name: saved);
+    return name.characters
+        .take(NewRoomStep.maxNameLength)
+        .toString()
+        .trimRight();
   }
 
-  Widget _buildIpBadge(AsyncValue<String?> localIpAsync) {
-    return localIpAsync.when(
-      data: (ip) => Text(
-        'IP local: ${ip ?? "Desconocida"}',
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-    );
-  }
+  Route<void> _route(WidgetBuilder builder) =>
+      FrPageRoute<void>(builder: builder, transition: FrTransition.slide);
+
+  void _back() => unawaited(_steps.currentState?.maybePop());
+
+  Widget _guide(BuildContext _) => HotspotGuideStep(
+    onBack: () => unawaited(context.router.maybePop()),
+    onContinue: () => unawaited(_steps.currentState?.push(_route(_newRoom))),
+  );
+
+  Widget _newRoom(BuildContext _) => NewRoomStep(
+    name: _name,
+    code: _code,
+    onCodeChanged: (code) => _code = code,
+    onBack: _back,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final localIpAsync = ref.watch(localIpProvider);
-
-    return Scaffold(
-      appBar: AppBar(title: Text(t.lobby.createRoom)),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildIpBadge(localIpAsync),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: t.lobby.roomName,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _codeController,
-                decoration: InputDecoration(
-                  labelText: t.lobby.accessCode,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                maxLength: 4,
-              ),
-              const SizedBox(height: 24),
-              FilledButton.icon(
-                onPressed: _isLoading ? null : _handleCreate,
-                icon: _isLoading
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.add_circle_outline),
-                label: Text(t.lobby.createRoom),
-              ),
-            ],
-          ),
-        ),
+    // Mantiene vivas las frecus cercanas: sus notas no se repiten al crear.
+    ref.watch(nearbyRoomsProvider);
+    return NavigatorPopHandler<Object?>(
+      onPopWithResult: (_) => _back(),
+      child: Navigator(
+        key: _steps,
+        onGenerateInitialRoutes: (_, _) => [_route(_guide)],
       ),
     );
   }

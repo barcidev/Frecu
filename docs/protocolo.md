@@ -4,12 +4,21 @@
 
 1. El anfitrión activa su hotspot (manualmente en el MVP) y crea la frecu.
 2. La app del anfitrión levanta un servidor WebSocket en `0.0.0.0:47800` (constante en `core/constants`).
-3. Publica el servicio mDNS `_frecu._tcp` con atributos TXT: `roomId`, `name`, `v` (versión de protocolo).
-4. Muestra un QR con la invitación: `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>`.
+3. Publica el servicio mDNS `_frecu._tcp` con atributos TXT: `roomId`, `name`, `v` (versión de protocolo) y, si la frecu tiene nota, `n`.
+4. Muestra un QR con la invitación: `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>&n=<semitono>` (`&n=…` solo si la frecu tiene nota).
 5. Cada participante descubre la frecu por mDNS o escanea el QR, se conecta al WebSocket y envía `join` con el código de acceso.
 6. La señalización WebRTC (offer, answer, ice) viaja por el WebSocket; el audio viaja directo entre teléfonos.
 
 La IP del anfitrión no es fija (en Android suele ser `192.168.43.1`, pero varía por fabricante y versión). Obtenla siempre de las interfaces de red, nunca la escribas a mano.
+
+## Nota de la frecu (`n`)
+
+Cada frecu puede llevar su nota musical (`RoomNote`) como dato aditivo `n`: el semitono desde Do4 en texto decimal, de `"0"` (Do4) a `"23"` (Si5). Viaja igual en el TXT de mDNS (clave `n`) y en el QR (parámetro `n`, al final de la URI).
+
+- El anfitrión la calcula una sola vez al abrir la frecu, con su hora local y las notas de las frecus cercanas que ya descubrió (`AssignRoomNote`), y la publica en el TXT y en el QR.
+- Quien descubre la frecu o escanea el QR toma esa nota tal cual y nunca la recalcula. Quien se conecta o se une por IP manual recibe la nota en el mensaje `welcome` (`note`) del protocolo de señalización WebSocket.
+- `n` es opcional: si falta, está vacío, no es un entero o está fuera de 0–23, la frecu o la invitación se leen sin nota y la unión funciona igual.
+- Es aditivo, así que la versión del protocolo no cambia (`v=1`): una app anterior ignora `n` y una app nueva lee las invitaciones sin `n` como frecus sin nota.
 
 ## Mensajes de señalización
 
@@ -18,7 +27,7 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 | type | Dirección | Contenido |
 |---|---|---|
 | `join` | cliente → host | displayName, accessCode, protocolVersion |
-| `welcome` | host → cliente | peerId asignado, lista de participantes |
+| `welcome` | host → cliente | peerId asignado, lista de participantes, nota opcional (`note`) |
 | `rejected` | host → cliente | reason (`roomFull`, `invalidAccessCode`, `versionMismatch`) |
 | `peer_joined` | host → todos | participante |
 | `peer_left` | host → todos | peerId |

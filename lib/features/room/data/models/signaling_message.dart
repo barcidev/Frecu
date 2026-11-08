@@ -1,4 +1,5 @@
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signaling_message.freezed.dart';
@@ -19,6 +20,7 @@ sealed class SignalingMessage with _$SignalingMessage {
   const factory SignalingMessage.welcome({
     required String peerId,
     required List<Participant> participants,
+    @RoomNoteConverter() RoomNote? note,
     @Default('welcome') String type,
   }) = SignalingWelcomeMessage;
 

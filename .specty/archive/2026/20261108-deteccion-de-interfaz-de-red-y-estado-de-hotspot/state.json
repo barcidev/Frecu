@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "id": "20261108-deteccion-de-interfaz-de-red-y-estado-de-hotspot",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/deteccion-de-interfaz-de-red-y-estado-de-hotspot",
+  "baseCommit": "5b2b0ebaa0ed480a281241b1250b5a0f85326da3",
+  "revision": 4,
+  "approved": {
+    "revision": 3,
+    "hash": "sha256:7b12f0d9a7d1044df54df1e867f65f193105db3e5b2258f6fb543aab0114ce00",
+    "at": "2026-11-07T16:36:33.461Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "9 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f3b1da01a8baff68b1cf99805dcd42b6b061f526bb824647a9f6d62baa357807",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:ced626e5d8fc6f1f0f1771ce2c65b830ee60328dca425bd5c63d19e6d858d0af",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:44eab3f828c54b18fc6527d9b419d23c98df0ba71d0b2abfab04d60a6181927e",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "5d2cdb2117c2b115341bdcba3789f084077732f5",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:28:06.296Z",
+      "doneAt": "2026-11-07T16:30:15.588Z",
+      "summary": "Implementadas entidades de dominio NetworkState con Freezed 3 y contrato NetworkRepository",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "ac30ea0d7d1cd35f05b8b11c1875d21f99563ae3",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:30:17.614Z",
+      "doneAt": "2026-11-07T17:01:14.383Z",
+      "summary": "Implementado NetworkInterfaceDataSource y NetworkRepositoryImpl con sondeo y detección de hotspot",
+      "scopeExtra": [
+        "test/features/network/data/network_interface_datasource_test.dart",
+        "test/features/network/data/network_repository_impl_test.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "74adf7dc836853fd0e8dacac8a3c4103ab0d22d3",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:01:15.883Z",
+      "doneAt": "2026-11-07T17:04:23.301Z",
+      "summary": "Implementados providers de Riverpod para datasource, repositorio y stream de red con generación de código",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 7,
+    "T": 3,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T17:05:57.990Z",
+  "lockedTests": {
+    "test/features/network/data/network_interface_datasource_test.dart": "sha256:8250d0cad0966bc4f44c013db95c109e2a9910cb720c2951d22388e3cd1a39c6",
+    "test/features/network/data/network_repository_impl_test.dart": "sha256:1398e23a38200083495602745fa312153ef38d764077d76eb612c3083d398bc3",
+    "test/features/network/domain/network_state_test.dart": "sha256:ac4e4c5093f5f9fa0bbe3d4d24630a283ce63ebee050b7239d24d9f6581685f1",
+    "test/features/network/presentation/network_provider_test.dart": "sha256:f61bd884b426fbd2d88d3c95d997c0273b6afeb8c6f4006a2ba87ea26b07265c"
+  },
+  "integration": {
+    "target": "develop",
+    "commit": "42ba219cc58eb501c27338cfd4eba54506e25932",
+    "reason": "conflicts",
+    "conflicts": [
+      "docs/dominio.md"
+    ],
+    "paths": [
+      "docs/dominio.md",
+      "lib/app/app.dart",
+      "lib/bootstrap.dart",
+      "lib/core/design/motion/fr_transitions.dart",
+      "lib/core/design/widgets/fr_banner.dart",
+      "lib/core/design/widgets/fr_scaffold.dart",
+      "lib/core/design/widgets/fr_sheet.dart",
+      "lib/core/design/widgets/fr_toast.dart",
+      "lib/core/design/widgets/status_island.dart",
+      "lib/features/lobby/domain/entities/nearby_room.dart",
+      "lib/features/lobby/domain/entities/nearby_room.freezed.dart",
+      "lib/features/lobby/domain/entities/nearby_room.g.dart",
+      "lib/features/network/data/datasources/network_interface_datasource.dart",
+      "lib/features/network/data/repositories/network_repository_impl.dart",
+      "lib/features/network/domain/entities/network_state.dart",
+      "lib/features/network/domain/entities/network_state.freezed.dart",
+      "lib/features/network/domain/repositories/network_repository.dart",
+      "lib/features/network/presentation/providers/network_provider.dart",
+      "lib/features/network/presentation/providers/network_provider.g.dart",
+      "lib/features/room/domain/entities/room.dart",
+      "lib/features/room/domain/entities/room.freezed.dart",
+      "lib/features/room/domain/entities/room.g.dart",
+      "lib/features/room/domain/entities/room_invite.dart",
+      "lib/features/room/domain/entities/room_invite.freezed.dart",
+      "lib/features/room/domain/entities/room_invite.g.dart",
+      "lib/features/room/domain/entities/room_note.dart",
+      "lib/features/room/domain/entities/room_note.freezed.dart",
+      "lib/features/room/domain/usecases/assign_room_note.dart",
+      "lib/features/settings/data/repositories/preferences_repository_impl.dart",
+      "lib/features/settings/domain/entities/preferences.dart",
+      "lib/features/settings/domain/entities/preferences.freezed.dart",
+      "lib/features/settings/domain/entities/theme_preference.dart",
+      "lib/features/settings/domain/repositories/preferences_repository.dart",
+      "lib/features/settings/presentation/providers/preferences_provider.dart",
+      "lib/features/settings/presentation/providers/preferences_provider.g.dart",
+      "pubspec.lock",
+      "pubspec.yaml",
+      "test/app/saved_theme_test.dart",
+      "test/bootstrap_test.dart",
+      "test/core/design/motion/fr_transitions_test.dart",
+      "test/core/design/widgets/fr_notices_test.dart",
+      "test/core/design/widgets/fr_scaffold_test.dart",
+      "test/core/design/widgets/fr_sheet_test.dart",
+      "test/features/lobby/domain/nearby_room_note_test.dart",
+      "test/features/network/data/network_interface_datasource_test.dart",
+      "test/features/network/data/network_repository_impl_test.dart",
+      "test/features/network/domain/network_state_test.dart",
+      "test/features/network/presentation/network_provider_test.dart",
+      "test/features/room/domain/assign_room_note_test.dart",
+      "test/features/room/domain/room_note_fields_test.dart",
+      "test/features/room/domain/room_note_test.dart",
+      "test/features/settings/data/preferences_repository_test.dart",
+      "test/features/settings/domain/preferences_test.dart",
+      "test/features/settings/presentation/preferences_provider_test.dart",
+      "test/flutter_test_config.dart"
+    ],
+    "at": "2026-11-07T17:07:09.845Z",
+    "resolved": {
+      "commit": "ba0706f",
+      "at": "2026-11-07T17:07:46.094Z"
+    }
+  }
+}

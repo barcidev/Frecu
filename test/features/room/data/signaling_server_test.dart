@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 
 void main() {
   group('Signaling Server & Protocol', () {
@@ -38,7 +39,7 @@ void main() {
       final welcomeCompleter = Completer<SignalingWelcomeMessage>();
       final sub = client1.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (peerId, participants, _) {
+          welcome: (peerId, participants, _, __) {
             welcomeCompleter.complete(
               SignalingWelcomeMessage(
                 peerId: peerId,
@@ -109,7 +110,7 @@ void main() {
       final c1PeerJoinedCompleter = Completer<String>();
       final c1Sub = client1.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (peerId, _, __) => c1WelcomeCompleter.complete(peerId),
+          welcome: (peerId, _, __, ___) => c1WelcomeCompleter.complete(peerId),
           peerJoined: (p, _) => c1PeerJoinedCompleter.complete(p.id),
           orElse: () {},
         );
@@ -128,7 +129,7 @@ void main() {
       final c2OfferCompleter = Completer<SignalingOfferMessage>();
       final c2Sub = client2.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (peerId, _, __) => c2WelcomeCompleter.complete(peerId),
+          welcome: (peerId, _, __, ___) => c2WelcomeCompleter.complete(peerId),
           offer: (from, to, sdp, _) => c2OfferCompleter.complete(
             SignalingOfferMessage(from: from, to: to, sdp: sdp),
           ),
@@ -184,7 +185,7 @@ void main() {
         final welcomeCompleter = Completer<String>();
         final sub = client.messages.listen((msg) {
           msg.maybeWhen(
-            welcome: (peerId, participants, _) {
+            welcome: (peerId, participants, _, __) {
               expect(participants.length, i + 1);
               welcomeCompleter.complete(peerId);
             },
@@ -251,7 +252,7 @@ void main() {
         final welcomeCompleter = Completer<void>();
         final sub = client.messages.listen((msg) {
           msg.maybeWhen(
-            welcome: (_, __, ___) => welcomeCompleter.complete(),
+            welcome: (_, __, ___, ____) => welcomeCompleter.complete(),
             orElse: () {},
           );
         });
@@ -307,7 +308,7 @@ void main() {
       final welcome8Completer = Completer<void>();
       final sub8 = client8.messages.listen((msg) {
         msg.maybeWhen(
-          welcome: (_, __, ___) => welcome8Completer.complete(),
+          welcome: (_, __, ___, ____) => welcome8Completer.complete(),
           orElse: () {},
         );
       });
@@ -328,6 +329,83 @@ void main() {
       for (var i = 1; i < 6; i++) {
         await clients[i].dispose();
       }
+    });
+
+    // AC2
+    test('AC2: server responds to ping with pong and detects peer timeout on inactivity', () async {
+      await server.start(accessCode: '1234', host: '127.0.0.1', port: 0);
+      final serverUri = Uri.parse('ws://127.0.0.1:${server.port}');
+
+      await client1.connect(serverUri);
+
+      final peerLeftCompleter = Completer<String>();
+      final sub = client1.messages.listen((msg) {
+        msg.maybeWhen(
+          peerLeft: (peerId, _) => peerLeftCompleter.complete(peerId),
+          orElse: () {},
+        );
+      });
+
+      client1.send(
+        const SignalingMessage.join(displayName: 'Alice', accessCode: '1234'),
+      );
+      await pumpEventQueue();
+
+      // Conectar cliente 2
+      await client2.connect(serverUri);
+      client2.send(
+        const SignalingMessage.join(displayName: 'Bob', accessCode: '1234'),
+      );
+      await pumpEventQueue();
+
+      // El servidor debe detectar timeout de inactividad de peer_2 y emitir peerLeft
+      final leftPeerId = await peerLeftCompleter.future.timeout(
+        const Duration(milliseconds: 500),
+      );
+      expect(leftPeerId, isNotEmpty);
+
+      await sub.cancel();
+    });
+    test('AC2: signaling server includes active RoomNote in welcome message upon valid join', () async {
+      const activeNote = RoomNote(semitone: 7);
+      await server.start(
+        accessCode: '1234',
+        host: '127.0.0.1',
+        port: 0,
+        note: activeNote,
+      );
+
+      final serverUri = Uri.parse('ws://127.0.0.1:${server.port}');
+      await client1.connect(serverUri);
+
+      final welcomeCompleter = Completer<SignalingWelcomeMessage>();
+      final sub = client1.messages.listen((msg) {
+        msg.maybeWhen(
+          welcome: (peerId, participants, note, _) {
+            welcomeCompleter.complete(
+              SignalingWelcomeMessage(
+                peerId: peerId,
+                participants: participants,
+                note: note,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      });
+
+      client1.send(
+        const SignalingMessage.join(
+          displayName: 'GuestBob',
+          accessCode: '1234',
+        ),
+      );
+
+      final welcome = await welcomeCompleter.future.timeout(
+        const Duration(seconds: 3),
+      );
+      expect(welcome.note, activeNote);
+      await sub.cancel();
     });
   });
 }

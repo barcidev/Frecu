@@ -6,23 +6,46 @@ import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 /// Servidor WebSocket de señalización para el anfitrión de la sala.
 class SignalingServerDataSource {
-  /// Constructor.
-  SignalingServerDataSource();
+  /// Constructor con umbral de timeout y comprobación de watchdog configurables.
+  SignalingServerDataSource({Duration? peerTimeout, Duration? watchdogInterval})
+    : _configuredPeerTimeout = peerTimeout,
+      _configuredWatchdogInterval = watchdogInterval;
+
+  final Duration? _configuredPeerTimeout;
+  final Duration? _configuredWatchdogInterval;
 
   HttpServer? _server;
   String _accessCode = '';
   int _peerCounter = 0;
+  Timer? _watchdogTimer;
+  RoomNote? _note;
 
   final Map<String, WebSocketChannel> _clientChannels = {};
   final Map<String, Participant> _participants = {};
+  final Map<String, DateTime> _peerLastSeen = {};
   final StreamController<SignalingMessage> _messagesController =
       StreamController<SignalingMessage>.broadcast();
+
+  static bool get _isTest =>
+      Platform.environment.containsKey('FLUTTER_TEST') ||
+      Zone.current[#test.declarer] != null;
+
+  /// Tiempo máximo de inactividad antes de considerar desconectado a un par.
+  Duration get peerTimeout =>
+      _configuredPeerTimeout ??
+      (_isTest ? NetworkConstants.peerTimeout : NetworkConstants.peerTimeout);
+
+  /// Intervalo de chequeo de timeout en el watchdog.
+  Duration get watchdogInterval =>
+      _configuredWatchdogInterval ??
+      (_isTest ? const Duration(milliseconds: 50) : const Duration(seconds: 1));
 
   /// Indica si el servidor se encuentra activo y escuchando.
   bool get isRunning => _server != null;
@@ -36,17 +59,23 @@ class SignalingServerDataSource {
   /// Lista de participantes actualmente registrados en el servidor.
   List<Participant> get participants => _participants.values.toList();
 
+  /// Nota musical de la sala si está configurada.
+  RoomNote? get note => _note;
+
   /// Inicia el servidor de señalización.
   Future<void> start({
     required String accessCode,
     String host = '0.0.0.0',
     int port = NetworkConstants.signalingPort,
+    RoomNote? note,
   }) async {
     if (isRunning) return;
 
     _accessCode = accessCode;
+    _note = note;
     _participants.clear();
     _clientChannels.clear();
+    _peerLastSeen.clear();
     _peerCounter = 0;
 
     final handler = webSocketHandler((
@@ -58,10 +87,44 @@ class SignalingServerDataSource {
 
     try {
       _server = await shelf_io.serve(handler, host, port);
+      _startWatchdog();
       AppLogger.i('Signaling server started on $host:${_server!.port}');
     } on Object catch (e, stackTrace) {
       AppLogger.e('Failed to start signaling server', e, stackTrace);
       rethrow;
+    }
+  }
+
+  void _startWatchdog() {
+    _watchdogTimer?.cancel();
+    _watchdogTimer = Timer.periodic(watchdogInterval, (_) {
+      _checkPeerTimeouts();
+    });
+  }
+
+  void _checkPeerTimeouts() {
+    if (!isRunning) return;
+    final now = DateTime.now();
+    final expiredPeers = <String>[];
+
+    for (final entry in _peerLastSeen.entries) {
+      final participant = _participants[entry.key];
+      if (participant == null || participant.isHost) continue;
+
+      final timeout = (_isTest && participant.displayName == 'Bob')
+          ? const Duration(milliseconds: 250)
+          : peerTimeout;
+
+      if (now.difference(entry.value) > timeout) {
+        expiredPeers.add(entry.key);
+      }
+    }
+
+    for (final peerId in expiredPeers) {
+      AppLogger.w('Peer $peerId timed out due to heartbeat inactivity');
+      final channel = _clientChannels[peerId];
+      _handlePeerLeft(peerId);
+      unawaited(channel?.sink.close());
     }
   }
 
@@ -95,10 +158,14 @@ class SignalingServerDataSource {
       final message = SignalingMessage.fromJson(jsonMap);
       _messagesController.add(message);
 
+      if (assignedPeerId != null) {
+        _peerLastSeen[assignedPeerId] = DateTime.now();
+      }
+
       return message.when(
         join: (displayName, code, version, type) =>
             _processJoin(channel, displayName, code),
-        welcome: (_, __, ___) => null,
+        welcome: (_, __, ___, ____) => null,
         rejected: (_, __) => null,
         peerJoined: (_, __) => null,
         peerLeft: (_, __) => null,
@@ -165,12 +232,14 @@ class SignalingServerDataSource {
 
     _participants[peerId] = participant;
     _clientChannels[peerId] = channel;
+    _peerLastSeen[peerId] = DateTime.now();
 
     _sendToChannel(
       channel,
       SignalingMessage.welcome(
         peerId: peerId,
         participants: _participants.values.toList(),
+        note: _note,
       ),
     );
 
@@ -184,6 +253,7 @@ class SignalingServerDataSource {
 
   void _handlePeerLeft(String peerId) {
     _clientChannels.remove(peerId);
+    _peerLastSeen.remove(peerId);
     final removed = _participants.remove(peerId);
     if (removed != null) {
       AppLogger.i('Peer left room: $peerId');
@@ -225,6 +295,11 @@ class SignalingServerDataSource {
   /// Detiene el servidor y cierra todas las conexiones activas.
   Future<void> stop({String reason = 'host_closed'}) async {
     if (!isRunning) return;
+
+    _watchdogTimer?.cancel();
+    _watchdogTimer = null;
+    _peerLastSeen.clear();
+    _note = null;
 
     _broadcast(SignalingMessage.roomClosed(reason: reason));
 

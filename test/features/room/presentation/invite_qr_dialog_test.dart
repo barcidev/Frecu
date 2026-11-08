@@ -15,6 +15,8 @@ import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
+import 'package:frecu/features/room/presentation/widgets/ptt_core.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -65,12 +67,21 @@ void main() {
           .thenAnswer((_) => Stream.value({}));
       when(() => voiceRepository.watchTalkMode())
           .thenAnswer((_) => Stream.value(TalkMode.openMic));
+      when(() => voiceRepository.setTalkMode(TalkMode.pushToTalk))
+          .thenAnswer((_) async => const Result.success(null));
     });
 
     // AC4
     testWidgets(
       'AC4: RoomPage shows QR button and tapping it displays invite QR code',
       (tester) async {
+        // El núcleo PTT anima en reposo: con movimiento reducido queda quieto
+        // y pumpAndSettle termina.
+        tester.platformDispatcher.accessibilityFeaturesTestValue =
+            const FakeAccessibilityFeatures(disableAnimations: true);
+        addTearDown(
+          tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+        );
         final router = AppRouter();
         await tester.pumpWidget(
           TranslationProvider(
@@ -89,18 +100,23 @@ void main() {
 
         unawaited(router.push(RoomRoute(roomId: testRoom.id)));
         await tester.pumpAndSettle();
+        // AC1 y AC5 (C18): la frecu activa muestra el núcleo PTT y, al
+        // entrar, el micrófono abierto vuelve al modo por defecto (PTT).
+        expect(find.byType(PttCore), findsOneWidget);
+        verify(() => voiceRepository.setTalkMode(TalkMode.pushToTalk))
+            .called(1);
 
-        final qrButton = find.byIcon(Icons.qr_code);
+        final qrButton = find.byKey(const Key('invite_button'));
         expect(qrButton, findsOneWidget);
 
         await tester.tap(qrButton);
         await tester.pumpAndSettle();
 
-        expect(find.text('Código QR de invitación'), findsOneWidget);
+        expect(find.text('Escanea para unirte'), findsOneWidget);
         expect(find.byType(QrImageView), findsOneWidget);
         expect(
-          find.text('frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788'),
-          findsOneWidget,
+          tester.widget<InviteQr>(find.byType(InviteQr)).data,
+          'frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788',
         );
       },
     );

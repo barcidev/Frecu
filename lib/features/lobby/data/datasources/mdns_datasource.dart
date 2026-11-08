@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:nsd/nsd.dart' as nsd;
 
 /// Representa el datasource para anuncio y descubrimiento de servicios mDNS.
@@ -45,10 +46,13 @@ class MdnsDataSource {
   Stream<List<NearbyRoom>> get nearbyRooms => _nearbyRoomsController.stream;
 
   /// Publica la sala actual en mDNS con sus atributos TXT.
+  ///
+  /// Si la frecu tiene [note], la suma como `n` (semitono desde Do4, 0–23).
   Future<void> publish({
     required String roomId,
     required String name,
     required int port,
+    RoomNote? note,
   }) async {
     await stopPublishing();
 
@@ -56,6 +60,8 @@ class MdnsDataSource {
       'roomId': Uint8List.fromList(utf8.encode(roomId)),
       'name': Uint8List.fromList(utf8.encode(name)),
       'v': Uint8List.fromList(utf8.encode('1')),
+      if (note != null)
+        'n': Uint8List.fromList(utf8.encode(note.semitone.toString())),
     };
 
     final service = nsd.Service(
@@ -122,6 +128,14 @@ class MdnsDataSource {
     return bytes != null ? utf8.decode(bytes) : null;
   }
 
+  /// Lee la nota `n`; ausente o inválida es sin nota.
+  RoomNote? _extractNote(Map<String, Uint8List?> txt) {
+    final bytes = txt['n'];
+    if (bytes == null) return null;
+    final value = utf8.decode(bytes, allowMalformed: true).trim();
+    return RoomNote.tryFromSemitone(int.tryParse(value));
+  }
+
   NearbyRoom? _buildNearbyRoom(nsd.Service service) {
     final host = _extractHost(service);
     final port = service.port;
@@ -140,6 +154,7 @@ class MdnsDataSource {
       hostAddress: host,
       port: port,
       protocolVersion: version,
+      note: _extractNote(txt),
     );
   }
 

@@ -157,7 +157,7 @@ class PeerConnectionDataSource {
       ice: (from, to, candidate, sdpMid, sdpMLineIndex, _) =>
           _handleIce(from, candidate, sdpMid, sdpMLineIndex),
       peerLeft: (peerId, _) => _closePeer(peerId),
-      welcome: (_, __, ___) {},
+      welcome: (_, __, ___, ____) {},
       rejected: (_, __) {},
       peerJoined: (_, __) {},
       talkState: (_, __, ___) {},

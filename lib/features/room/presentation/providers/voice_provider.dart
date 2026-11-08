@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
@@ -215,5 +216,27 @@ class VoiceNotifier extends _$VoiceNotifier {
     final currentIndex = available.indexOf(state.audioRoute);
     final nextIndex = (currentIndex + 1) % available.length;
     return setAudioRoute(available[nextIndex]);
+  }
+}
+
+/// Tiempo al aire de la transmisión PTT en curso: `Duration.zero` al
+/// empezar, sube cada segundo y vuelve a nulo al soltar o al pasar a
+/// micrófono abierto.
+@riverpod
+class OnAirClock extends _$OnAirClock {
+  @override
+  Duration? build() {
+    final onAir = ref.watch(
+      voiceNotifierProvider.select(
+        (voice) => voice.isTalking && voice.talkMode == TalkMode.pushToTalk,
+      ),
+    );
+    if (!onAir) return null;
+    final timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) => state = Duration(seconds: timer.tick),
+    );
+    ref.onDispose(timer.cancel);
+    return Duration.zero;
   }
 }

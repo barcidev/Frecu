@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "id": "20261108-malla-hexagonal-de-la-frecu-activa-con-firmas-y",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/malla-hexagonal-de-la-frecu-activa-con-firmas-y",
+  "baseCommit": "d7f90d5c359c54688e7ce0e26838d3e9ea4560a6",
+  "revision": 4,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:58e0cf3af2aa53eb5f0d6efe910ca5252e208c8b450707e5ac8e17cbb9a8b2f5",
+    "at": "2026-11-07T17:34:26.433Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 17,
+    "adjust": 0,
+    "reasons": [
+      "13 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:6a4f42159d923acda0e394ec8f503baada416cfefa75e424895af4c713a39c14",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a0fd43b42fe3587b9779c832a9a06ab25e75e8e7a32b88bfde248587f8d9a7de",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:832b04957f916e0d9251e88a4cf0ddbdd6fcc8ce4e03ff2ea807ff4bbfde4a6f",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:e97a565131490fdd3974603209f424cf88592d211d23c1b17653abb223f339e8",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:ffca968400ed0fa5452f7a8ff981dcc7043eb6bdaf02306b2d31d378a58d51ee",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:e8bfcbbd28dea35be40e098d1ffd05234d219c6c1dbf3365bcb4d4debf02e952",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:03fd6372a5b334437e361e1ec0bdb5cf04224f7ae4a29535acd6a5cda516b28a",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "f50293705f1517e5f75c5ce5f37c57c53261b140",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:48:50.055Z",
+      "doneAt": "2026-11-07T17:49:49.995Z",
+      "summary": "RoomRepository expone localParticipantId: RoomRepositoryImpl guarda el peerId de cada welcome (crear, unirse y reconectar) y lo borra al salir, al cerrarse la frecu (roomClosed o fallo de reconexión) y al ser rechazado.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "3be957111fbe305bf60d725b447bb0ed36f633c8",
+      "attempts": 1,
+      "startedAt": "2026-11-07T17:49:50.695Z",
+      "doneAt": "2026-11-07T17:56:54.416Z",
+      "summary": "Escena de la malla (lugares estables, nodos, leyendas, aristas, resorte, voz simulada y paquetes, pintor) y RoomMesh con firmas, marca de anfitrión, etiquetas y lugares libres que invitan; textos room.mesh, room.header y room.noteNames en es y en.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "2505bf34aa69ce48132fe0f7cc309307347856ec",
+      "attempts": 2,
+      "startedAt": "2026-11-07T17:56:55.087Z",
+      "doneAt": "2026-11-07T21:33:53.230Z",
+      "summary": "RoomPage en FrScaffold con RoomHeader (chip de nota y Hz, nombre, anfitrión, ruta, invitar y salir), la malla y los controles actuales; se borran la lista y la tarjeta; «Hablando» del micrófono abierto en signalFg.",
+      "scopeExtra": [
+        "lib/features/room/presentation/widgets/participants_list.dart",
+        "lib/features/room/presentation/widgets/room_info_card.dart",
+        "test/features/room/presentation/room_flow_test.dart"
+      ]
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 7,
+    "T": 3,
+    "R": 3,
+    "S": 2
+  },
+  "closingSubmittedAt": "2026-11-07T21:34:40.617Z",
+  "lockedTests": {
+    "test/features/room/data/room_repository_test.dart": "sha256:a6e82f5265ad22c91ca3579faea667ada813e167874c4e91f342774bd498717e",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:f3690bcb2e2f094c18e8d5dbdffd026b51d4e317cd0a30e94bd1ed4a416099cd",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:f5ebb4d97a9d1d842ddff108b7353fa35e07d685005f06c09b4ac11d1032b156",
+    "test/features/room/presentation/room_mesh_test.dart": "sha256:d7fe14e85ecc8ea40d94ad60fc6f4c59865e6dd60f99e7a027ec352f8d06fb31"
+  },
+  "integration": {
+    "target": "develop",
+    "commit": "44d790759f05f4462e3342b3a8491711bd681869",
+    "reason": "conflicts",
+    "conflicts": [
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_es.g.dart"
+    ],
+    "paths": [
+      "ios/Podfile.lock",
+      "ios/Runner.xcodeproj/project.pbxproj",
+      "ios/Runner.xcworkspace/contents.xcworkspacedata",
+      "lib/features/lobby/presentation/pages/lobby_page.dart",
+      "lib/features/lobby/presentation/widgets/lobby_sections.dart",
+      "lib/features/lobby/presentation/widgets/lobby_tuner.dart",
+      "lib/features/lobby/presentation/widgets/lobby_tuner_painter.dart",
+      "lib/features/lobby/presentation/widgets/nearby_room_tile.dart",
+      "lib/features/lobby/presentation/widgets/room_note_label.dart",
+      "lib/features/lobby/presentation/widgets/tuner_keyboard.dart",
+      "lib/features/room/data/repositories/room_repository_impl.dart",
+      "lib/features/room/domain/repositories/room_repository.dart",
+      "lib/features/room/presentation/pages/room_page.dart",
+      "lib/features/room/presentation/widgets/mic_control_section.dart",
+      "lib/features/room/presentation/widgets/participants_list.dart",
+      "lib/features/room/presentation/widgets/room_header.dart",
+      "lib/features/room/presentation/widgets/room_info_card.dart",
+      "lib/features/room/presentation/widgets/room_mesh.dart",
+      "lib/features/room/presentation/widgets/room_mesh_scene.dart",
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings.i18n.json",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_en.i18n.json",
+      "lib/i18n/strings_es.g.dart",
+      "test/app/saved_theme_test.dart",
+      "test/app/theme/app_theme_test.dart",
+      "test/app_test.dart",
+      "test/features/lobby/presentation/discovery_flow_test.dart",
+      "test/features/lobby/presentation/lobby_page_test.dart",
+      "test/features/lobby/presentation/room_full_flow_test.dart",
+      "test/features/lobby/presentation/room_note_flow_test.dart",
+      "test/features/lobby/presentation/saved_name_test.dart",
+      "test/features/room/data/room_repository_test.dart",
+      "test/features/room/presentation/room_flow_test.dart",
+      "test/features/room/presentation/room_mesh_test.dart",
+      "test/features/room/presentation/voice_flow_test.dart"
+    ],
+    "at": "2026-11-08T00:08:50.804Z",
+    "resolved": {
+      "commit": "4d4efd9",
+      "at": "2026-11-08T00:09:24.925Z"
+    }
+  }
+}

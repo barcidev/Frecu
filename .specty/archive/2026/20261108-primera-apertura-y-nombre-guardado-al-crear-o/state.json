@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "20261108-primera-apertura-y-nombre-guardado-al-crear-o",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/primera-apertura-y-nombre-guardado-al-crear-o",
+  "baseCommit": "e046736d5c01fd4cb824e898c02657a6f2672e85",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:3ef0fc3904fa0e69292e2bf4f8d0f78f4abe7e87616894d56c71cffaebeb780b",
+    "at": "2026-11-07T18:09:24.509Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:3a2e8e6d4aa19024d829222425cf1f725fe346c301bd354564f4963ec7272c43",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:0cad12b9ed7782ce5d1c5d65c4f304d6a8b10bb688ee64df0317ce6d2dce0fbe",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:23708ef1771a76d606f186290b39af223cc5798856cebe7ac284d98e097d72d4",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:0a8f5a2aac92b1da19a0a90ff2e98b1c4d0d05699e0996fdf69edadff2e3243a",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:235657407042a481c423ab26686f98ca8e4f2c6f5613679c66e4bd3a5e19ccbf",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "e9f5fcc00390d669ade8ce1333124fefbca7f5f2",
+      "attempts": 1,
+      "startedAt": "2026-11-07T18:14:28.513Z",
+      "doneAt": "2026-11-07T18:16:09.713Z",
+      "summary": "FrecuApp sin router inyectado resuelve la ruta inicial con deepLinkBuilder: needsOnboardingProvider (lib/app) pide el recorrido si no hay nombre guardado o queda algún permiso pendiente; se decide una sola vez por apertura, así que terminar el recorrido con un permiso negado no lo reabre",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "0049b90f006931a04b20967e5e705601a986ba15",
+      "attempts": 1,
+      "startedAt": "2026-11-07T18:16:10.279Z",
+      "doneAt": "2026-11-07T18:18:10.539Z",
+      "summary": "Extensión SavedDisplayName en lobby: los diálogos de unión por código e IP pierden el campo del nombre y, como el escáner QR, se unen con el nombre guardado (o «Participante» si aún no hay); crear una frecu pasa el nombre guardado como anfitrión",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 6,
+    "T": 2,
+    "R": 2
+  },
+  "closingSubmittedAt": "2026-11-07T18:18:41.766Z",
+  "lockedTests": {
+    "test/app/first_open_test.dart": "sha256:0014971f5870a97c025935313d6af2b9930dc605c9338bfef8004809fa92aac9",
+    "test/features/lobby/presentation/saved_name_test.dart": "sha256:d0b6d8e0b185500fe59e9561f6ea54e5e82155994b343dd69ac34e292ae4c73c"
+  }
+}

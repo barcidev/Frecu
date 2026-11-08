@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "id": "20261108-tema-guardado-aplicado-al-arrancar-app-dart-y",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/tema-guardado-aplicado-al-arrancar-app-dart-y",
+  "baseCommit": "90d2de1a0dce9fdad28df5aee5b57e1e47de1821",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:14338735cc96fc363435ad51d70212808ad0a876d43428a707d651e0ec1220b2",
+    "at": "2026-11-07T16:30:36.261Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 7,
+    "adjust": 0,
+    "reasons": [
+      "5 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:270113413ea9206ff8d322c2abea786d7a65c19434cd4cd4f5bab2a8204cf62d",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:b38ed0e8a767c87bbd4bf910efc5c507d980aa1b4237a55f6f9e7bc7320b73cb",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:38460395d182794d1eebb0798525440c29dd5e3d783d16895b34f24ecca68934",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:8bfa542eb7d5469a82628b01c983597a8d36af4be7b33566d436310642fabe16",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:3cbb8ab1852483f82d19053c3c2476bb1849861fbb551e3b7ae4e326f2c3b9b9",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "ae2d5cd3c48abd63d27d7dd68609034cc0053431",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:35:13.997Z",
+      "doneAt": "2026-11-07T16:44:17.692Z",
+      "summary": "createAppContainer() en bootstrap.dart lee las preferencias antes de runApp (si falla, lo registra y sigue) y la app se monta con UncontrolledProviderScope sobre ese contenedor. S1: import de flutter_riverpod que faltaba en el test.",
+      "scopeExtra": [
+        "test/bootstrap_test.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "d9111dfab94859f6c1b0eb5dcf5240f6d496f1c0",
+      "attempts": 1,
+      "startedAt": "2026-11-07T16:44:18.552Z",
+      "doneAt": "2026-11-07T16:45:43.302Z",
+      "summary": "FrecuApp pasa a ConsumerStatefulWidget, observa solo themePreference con select y pasa themeMode a MaterialApp.router (Auto → system); las pruebas usan almacenamiento en memoria por defecto.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 3,
+    "T": 2,
+    "R": 2,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-07T16:46:02.475Z",
+  "lockedTests": {
+    "test/flutter_test_config.dart": "sha256:8680ee894a489284d414a88079439901142f08cb3acf7a26c531b62025a2acf1",
+    "test/app/saved_theme_test.dart": "sha256:7d56d9d879d5471d6c940b125f621be5adc94a6e2168472acfb064d1fd26df8d",
+    "test/bootstrap_test.dart": "sha256:e321f6d0f07f8fda02868afcb36be852c6ed2a9302235570028417c7ffbccf6d"
+  }
+}

@@ -2,6 +2,7 @@ import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 
 /// Caso de uso para parsear y validar la URI de invitación escaneada desde un QR.
 final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
@@ -42,6 +43,11 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
     return port;
   }
 
+  /// Lee la nota `n`; ausente o inválida es sin nota.
+  RoomNote? _parseNote(String? noteStr) {
+    return RoomNote.tryFromSemitone(int.tryParse(noteStr?.trim() ?? ''));
+  }
+
   Result<RoomInvite> _extractInvite(Uri uri) {
     final host = uri.queryParameters['h']?.trim() ?? '';
     final port = _parsePort(uri.queryParameters['p']);
@@ -66,6 +72,7 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
         port: port,
         roomId: roomId,
         accessCode: accessCode,
+        note: _parseNote(uri.queryParameters['n']),
       ),
     );
   }

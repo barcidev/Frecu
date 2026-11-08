@@ -321,3 +321,69 @@ abstract class _$VoiceNotifier extends $Notifier<VoiceState> {
     return element.handleCreate(ref, build);
   }
 }
+
+/// Tiempo al aire de la transmisión PTT en curso: `Duration.zero` al
+/// empezar, sube cada segundo y vuelve a nulo al soltar o al pasar a
+/// micrófono abierto.
+
+@ProviderFor(OnAirClock)
+final onAirClockProvider = OnAirClockProvider._();
+
+/// Tiempo al aire de la transmisión PTT en curso: `Duration.zero` al
+/// empezar, sube cada segundo y vuelve a nulo al soltar o al pasar a
+/// micrófono abierto.
+final class OnAirClockProvider
+    extends $NotifierProvider<OnAirClock, Duration?> {
+  /// Tiempo al aire de la transmisión PTT en curso: `Duration.zero` al
+  /// empezar, sube cada segundo y vuelve a nulo al soltar o al pasar a
+  /// micrófono abierto.
+  OnAirClockProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'onAirClockProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$onAirClockHash();
+
+  @$internal
+  @override
+  OnAirClock create() => OnAirClock();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Duration? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Duration?>(value),
+    );
+  }
+}
+
+String _$onAirClockHash() => r'6a0761d1a311ff1d55a1fd222f6702d95aa377d5';
+
+/// Tiempo al aire de la transmisión PTT en curso: `Duration.zero` al
+/// empezar, sube cada segundo y vuelve a nulo al soltar o al pasar a
+/// micrófono abierto.
+
+abstract class _$OnAirClock extends $Notifier<Duration?> {
+  Duration? build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<Duration?, Duration?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Duration?, Duration?>,
+              Duration?,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
