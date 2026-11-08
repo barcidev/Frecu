@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/nueva-frecu-con-reloj-de-quintas-y-guia-de",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:2d7cebdf459708151778bec71b57bd560a6c484decec24747b8c060b6654fd6b",
@@ -77,12 +77,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "04e24f10988c9e3aa24cd9fcf06c2966eaa6efc6",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:41:42.821Z",
       "doneAt": "2026-11-08T00:43:03.132Z",
-      "summary": "Quitado lobby.roomName (solo lo usaba la pantalla de antes) y regenerado slang; room_flow_test, room_note_flow_test y saved_name_test pasan por la guía y Abrir frecu."
+      "summary": "Quitado lobby.roomName (solo lo usaba la pantalla de antes) y regenerado slang; room_flow_test, room_note_flow_test y saved_name_test pasan por la guía y Abrir frecu.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -95,6 +95,7 @@
     "T": 3,
     "R": 3
   },
+  "closingSubmittedAt": "2026-11-08T00:43:42.413Z",
   "lockedTests": {
     "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a382445177ca8d627e8651c34b0b7fb69e29444d6e63a2c78c2d7f0a9b2fc8c3",
     "test/features/lobby/presentation/saved_name_test.dart": "sha256:7e5e0cdc7c222002e9f03d6608832c6ad6261db7b043ee312a2d5cf7dbd9da01",

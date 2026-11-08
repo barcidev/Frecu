@@ -102,3 +102,36 @@ Referencia: `V.hotspot` y `V.create` de `screens.js`; `drawFifths`, `drawHotspot
 - R1: C16 corre en paralelo y también toca `features/lobby`, `lib/i18n`, `room_flow_test` y `saved_name_test` — mitigación: los textos van en `lobby.newRoom`, en las pruebas solo cambian las líneas del recorrido de crear y, si al cerrar chocan, los `strings*.g.dart` se regeneran con `dart run slang`.
 - R2: En un teléfono de 360 px el código (286 px) y «Generar otro» no caben — mitigación: el código va en un `FittedBox` que lo encoge.
 - R3: La nota mostrada y la de la frecu creada se calculan con relojes distintos (A2) — mitigación: ambas usan `AssignRoomNote` con las mismas notas cercanas; solo difieren si cambia la hora entre mirar y abrir, y la frecu publica la suya.
+
+## Cierre
+
+### Resumen
+
+- `CreateRoomPage` en dos pasos dentro de un `Navigator` anidado (como `PermissionsPage`): Crear frecu abre la guía del punto de acceso y «Ya está activo» o «Ya estamos en la misma Wi-Fi» deslizan a la nueva frecu; Atrás y el gesto de volver regresan a la guía conservando nombre y código, y Atrás en la guía vuelve al inicio.
+- `HotspotGuideStep`: cabecera «Paso 1 de 2 · Prepara la red», `HotspotIllustration` (port de `drawHotspot` en un `FrLoop`, quieta con movimiento reducido), título y texto, selector Android | iPhone (iPhone en iOS) y los tres pasos numerados con su inicio en negrita.
+- `NewRoomStep`: héroe con `FifthsClock` (port de `drawFifths`, sin bucle) y, a su lado, «Tu frecu suena en», la nota grande, sus Hz y «Abierta a las HH:MM»; la nota sale de `AssignRoomNote` con la hora del reloj inyectable (se relee cada 15 s) y las notas cercanas; nombre «Frecu de <nombre>» o «Mi frecu» (máx. 24), código de 4 cifras de solo lectura con «Generar otro», y «Abrir frecu», que crea, publica con la nota y abre la frecu o avisa con `FrToast`.
+- `newRoomClockProvider` y `accessCodeGeneratorProvider` inyectables; `RoomNoteText` suma `octaveSize` y `glow`; textos en `lobby.newRoom` (es/en) con la interfaz `HotspotStep` para los pasos; se quita `lobby.roomName`.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (491 pruebas), 33 de ellas nuevas (`fifths_clock_test` 7, `hotspot_guide_test` 13, `new_room_test` 13).
+
+### Desviaciones
+
+- `create_room_layout.dart` suma `CreateRoomFitWidth` (como `_FitWidth` de C15): con la fuente de pruebas y en teléfonos estrechos los botones del dock no caben y se encogen en lugar de desbordarse.
+- El lavado radial del héroe se aproxima con un círculo (radio 1,2, parada 0,6) en lugar de la elipse de 120 % × 90 % del prototipo.
+- Para cumplir el máximo de 50 líneas por función, los `build` largos se partieron en `_StepTitle`, `_heading`, `_platformPicker`, `_steps`, `_dock`, `_form`, `_HeroBox`, `_pinRow` y `RoomNoteText._octave`.
+- `room_flow_test` (AC1 de un cambio anterior) deja de buscar «IP local» en la pantalla de crear (A6) y comprueba un nombre no vacío y un código de 4 cifras.
+
+### Decisiones
+
+- Textos en inglés: «Step $current of $total», «Set up the network», «Turn on your hotspot», «Your phone will be the group's antenna.», pasos «Open Settings › Hotspot…» / «Open Settings › Personal Hotspot…», «It's on», «We're already on the same Wi-Fi», «New room», «Your room sounds in», «Opened at $time», «Room name», «E.g. Sunday ride», «$name's room», «My room», «Access code», «4 digits», «Generate another», «Open room».
+- El nombre por defecto se corta a 24 caracteres y sin espacios al final.
+- El reloj enciende la posición de la nota asignada; la aguja de la hora, su eje, las etiquetas encendidas, los anillos y los arcos van en `signalFg`; brillos, punto del teléfono y lavados en `signal`, con los lavados por `washK` (sector 0,14 y héroe 0,12).
+- Los satélites de la ilustración van en posiciones fijas (sin la deriva de ±0,1 rad del prototipo), con `SignalSignature` de 30 px en `p1`, `p2` y `p3`.
+- «Generar otro» gira una vuelta en 700 ms con `easeOut` (sin giro con movimiento reducido).
+
+### Pendientes
+
+- Fila «Guía del punto de acceso» en Ajustes (P62).
+- Saltar la guía si el punto de acceso ya está activo o abrir los ajustes de zona Wi-Fi (necesita un plugin).
+- `new_room_step.dart` tiene 381 líneas de código (aviso desde 300): pasar `NewRoomHero`, `_HeroBox` y `_NoteReading` a `new_room_hero.dart`.
+- La nota mostrada y la de la frecu creada usan relojes distintos (R3): que `RoomNotifier.createRoom` (`features/room`) reciba la hora o la nota de la pantalla.
+- Unificar `lobby.noteNames` con `room.noteNames` (P84/P87).
