@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "20261108-union-por-codigo-de-acceso-ip-y-escaner-qr",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/union-por-codigo-de-acceso-ip-y-escaner-qr",
+  "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 17,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:8f05e4e4a9970cc002ff2946aee26cdd4b279164ae5067872a8ae8451e0466eb",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:d4a7c167d30c95b1d36ccfd90e183efcb57aa241a3807dca6a8f7f71bd6fc32f",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:e4c587692b3778f30e015723c7d4b9f21e11bd1f4cdcc86339fb2e9b0c5232bc",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:9fa4d9c99258a590f25e10cd83a81fba0e249d783e505aacd818d59c898e83ec",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:111ef0b9878b908e1e5625c55bdda01ce757519ea5e9d39cdeb1248b357680ef",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:a7de489bc20ff5f691762697ac9bd618ec903b3c6bd3343f38c8a8a7044def75",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:3a5cb68932d55be552518c7ba8e251c4eab9ca9ed403831b27f0c6c09a0f49b2",
+      "decision": "confirmed"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 8,
+    "T": 3,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:113be1056cc158abc22e80e78f65b5f4e3ae7ff1b092a39c2f468b375a5d246d",
+    "at": "2026-11-08T00:23:13.011Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
