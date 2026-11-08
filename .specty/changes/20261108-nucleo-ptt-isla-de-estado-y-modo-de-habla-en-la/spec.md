@@ -87,7 +87,7 @@ Referencia: `drawPtt` y `voice` de `engine.js`; `pttZone`, `PTT_COPY`, `pttState
   - files: lib/features/room/presentation/widgets/ptt_core.dart, lib/features/room/presentation/widgets/ptt_core_painter.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/ptt_core_test.dart
   - ac: AC1, AC2, AC3, AC7, AC8
   - verify: flutter test test/features/room/presentation/ptt_core_test.dart
-- [ ] T3: Isla, selector, aviso de eco y modo por defecto en la frecu activa
+- [x] T3: Isla, selector, aviso de eco y modo por defecto en la frecu activa
   - files: lib/features/room/presentation/widgets/mic_control_section.dart, lib/features/room/presentation/providers/voice_provider.dart, lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/talk_flow_test.dart, test/features/room/presentation/voice_flow_test.dart, test/features/room/presentation/invite_qr_dialog_test.dart
   - ac: AC1, AC3, AC4, AC5, AC6, AC7, AC8
   - verify: flutter analyze && flutter test test/features/room test/features/lobby

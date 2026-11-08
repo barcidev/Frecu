@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
@@ -60,12 +60,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "7a3f96204a863cca3e1d5383c38e4ffeabc8a135",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:43:11.842Z",
       "doneAt": "2026-11-08T00:44:43.788Z",
-      "summary": "PttCore (presión con varios dedos, conmutador de micrófono abierto, espera al 35 %, tiempo al aire, textos e íconos FrIcons, escala 0,94 con resorte y háptica) y PttCorePainter/PttMotion (ondas, bisel de 72 marcas como VU y anillo líquido, quieto con movimiento reducido)"
+      "summary": "PttCore (presión con varios dedos, conmutador de micrófono abierto, espera al 35 %, tiempo al aire, textos e íconos FrIcons, escala 0,94 con resorte y háptica) y PttCorePainter/PttMotion (ondas, bisel de 72 marcas como VU y anillo líquido, quieto con movimiento reducido)",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "788a5c757562388b5a1e3fd4d6d7cf12715bd98a",
+      "startedAt": "2026-11-08T00:44:44.301Z",
+      "doneAt": "2026-11-08T00:45:54.443Z",
+      "summary": "RoomPage con la isla arriba (reloj OnAirClock al aire), los lugares de la malla para el color de quien habla, el aviso de eco sobre la malla y el modo de habla por defecto de Ajustes al entrar; MicControlSection con FrSegmented PTT | Abierto (FrIcons) y PttCore"
     }
   },
   "pending": {

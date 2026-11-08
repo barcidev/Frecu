@@ -1,126 +1,128 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
+import 'package:frecu/core/design/motion/reduced_motion.dart';
+import 'package:frecu/core/design/widgets/fr_banner.dart';
+import 'package:frecu/core/design/widgets/fr_segmented.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
-import 'package:frecu/features/room/presentation/widgets/ptt_button.dart';
+import 'package:frecu/features/room/presentation/widgets/ptt_core.dart';
+import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
+import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Sección de control de voz que permite conmutar modo de habla y operar el micrófono.
-class MicControlSection extends ConsumerStatefulWidget {
-  /// Constructor constante.
-  const MicControlSection({required this.voiceState, super.key});
+/// Controles de voz de la frecu activa (`.ctrls` y `pttZone` del
+/// prototipo): el selector PTT | Abierto y el núcleo PTT.
+class MicControlSection extends ConsumerWidget {
+  /// Crea los controles con el estado de voz y el de habla.
+  const MicControlSection({
+    required this.voiceState,
+    required this.talk,
+    super.key,
+  });
 
   /// Estado reactivo de voz y audio.
   final VoiceState voiceState;
 
+  /// Estado de habla de la frecu.
+  final RoomTalk talk;
+
+  /// Ancho máximo del selector (`.ctrls .seg`).
+  static const double _selectorWidth = 204;
+
   @override
-  ConsumerState<MicControlSection> createState() => _MicControlSectionState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final voice = ref.read(voiceNotifierProvider.notifier);
+    final speaker = talk.speaker;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 52,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: _selectorWidth),
+              child: _modeSelector(voice),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        PttCore(
+          phase: talk.pttPhase(),
+          onAirFor: ref.watch(onAirClockProvider) ?? Duration.zero,
+          speakerName: speaker?.name,
+          speakerColor: speaker == null
+              ? null
+              : meshNodeColor(context.fr.colors, speaker),
+          speakerSeed: (speaker?.slot ?? 0) + 1,
+          onStart: voice.startTalking,
+          onStop: voice.stopTalking,
+          onToggle: voice.toggleMicrophone,
+        ),
+      ],
+    );
+  }
+
+  Widget _modeSelector(VoiceNotifier voice) => FrSegmented<TalkMode>(
+    value: voiceState.talkMode,
+    onChanged: talk.enabled ? voice.setTalkMode : null,
+    segments: [
+      FrSegment(
+        value: TalkMode.pushToTalk,
+        label: t.room.talk.modePtt,
+        icon: const FrIcon(FrIcons.walkie, key: Key('mode_ptt')),
+      ),
+      FrSegment(
+        value: TalkMode.openMic,
+        label: t.room.talk.modeOpen,
+        icon: const FrIcon(FrIcons.openMic, key: Key('mode_open_mic')),
+      ),
+    ],
+  );
 }
 
-class _MicControlSectionState extends ConsumerState<MicControlSection> {
-  bool _isPointerDown = false;
+/// Aviso de eco (`.echo` del prototipo): micrófono abierto con la salida por
+/// el altavoz. Si se cierra no vuelve hasta que deja de ser [visible].
+class EchoNotice extends StatefulWidget {
+  /// Crea el aviso; se muestra si [visible].
+  const EchoNotice({required this.visible, super.key});
 
-  void _handleStartTalking() {
-    setState(() => _isPointerDown = true);
-    ref.read(voiceNotifierProvider.notifier).startTalking();
-  }
+  /// Hay micrófono abierto y la salida es el altavoz.
+  final bool visible;
 
-  void _handleStopTalking() {
-    setState(() => _isPointerDown = false);
-    ref.read(voiceNotifierProvider.notifier).stopTalking();
-  }
+  @override
+  State<EchoNotice> createState() => _EchoNoticeState();
+}
 
-  Widget _buildModeSelector(ThemeData theme) {
-    return Center(
-      child: SegmentedButton<TalkMode>(
-        key: const Key('talk_mode_segmented_button'),
-        segments: [
-          const ButtonSegment<TalkMode>(
-            value: TalkMode.pushToTalk,
-            label: Text('PTT', key: Key('mode_ptt')),
-            icon: Icon(Icons.touch_app),
-          ),
-          ButtonSegment<TalkMode>(
-            value: TalkMode.openMic,
-            label: Text(t.room.openMic, key: const Key('mode_open_mic')),
-            icon: const Icon(Icons.mic),
-          ),
-        ],
-        selected: {widget.voiceState.talkMode},
-        onSelectionChanged: (selected) {
-          ref.read(voiceNotifierProvider.notifier).setTalkMode(selected.first);
-        },
-      ),
-    );
-  }
+class _EchoNoticeState extends State<EchoNotice> {
+  bool _dismissed = false;
 
-  Widget _buildOpenMicControl(ThemeData theme, bool isTalking) {
-    return Card(
-      color: isTalking ? theme.colorScheme.primaryContainer : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  isTalking ? t.room.speaking : t.room.muted,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isTalking ? context.fr.colors.signalFg : null,
-                  ),
-                ),
-                Text(t.room.openMic, style: theme.textTheme.bodySmall),
-              ],
-            ),
-            FilledButton.icon(
-              key: const Key('mic_toggle_button'),
-              icon: Icon(isTalking ? Icons.mic : Icons.mic_off),
-              label: Text(isTalking ? t.room.muted : t.room.speaking),
-              style: FilledButton.styleFrom(
-                backgroundColor: isTalking
-                    ? theme.colorScheme.error
-                    : theme.colorScheme.primary,
-              ),
-              onPressed: () {
-                ref.read(voiceNotifierProvider.notifier).toggleMicrophone();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+  @override
+  void didUpdateWidget(EchoNotice oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.visible) _dismissed = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isPtt = widget.voiceState.talkMode == TalkMode.pushToTalk;
-    final isTalking = _isPointerDown || widget.voiceState.isTalking;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildModeSelector(theme),
-        const SizedBox(height: 12),
-        if (isPtt)
-          Center(
-            child: PttButton(
-              isTalking: isTalking,
-              onStartTalking: _handleStartTalking,
-              onStopTalking: _handleStopTalking,
-              label: t.room.pushToTalk,
-              activeLabel: t.room.speaking,
-            ),
-          )
-        else
-          _buildOpenMicControl(theme, widget.voiceState.isTalking),
-      ],
+    final fr = context.fr;
+    final echo = t.room.talk.echo;
+    return AnimatedSwitcher(
+      duration: context.reduceMotion ? fr.motion.quick : fr.motion.smooth,
+      child: widget.visible && !_dismissed
+          ? FrBanner(
+              key: const Key('echo_notice'),
+              tone: FrBannerTone.warn,
+              icon: Icons.headphones_rounded,
+              title: echo.title,
+              message: echo.message,
+              floating: true,
+              dismissLabel: echo.dismiss,
+              onDismiss: () => setState(() => _dismissed = true),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }
