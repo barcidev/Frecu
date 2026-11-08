@@ -48,7 +48,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "7abe2f862bde6ec8849dcbc6df652c2d6f8846d7",
+      "startedAt": "2026-11-08T00:42:32.808Z",
+      "doneAt": "2026-11-08T00:43:11.182Z",
+      "summary": "RoomTalk (fases del núcleo y de la isla, quién habla, n, anfitrión solo, formato del tiempo al aire) y RoomStatusIsland con StatusIsland y textos room.talk en es/en"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

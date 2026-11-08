@@ -133,6 +133,7 @@ class _Translations$room$en extends Translations$room$es {
 	];
 	@override late final _Translations$room$mesh$en mesh = _Translations$room$mesh$en._(_root);
 	@override late final _Translations$room$header$en header = _Translations$room$header$en._(_root);
+	@override late final _Translations$room$talk$en talk = _Translations$room$talk$en._(_root);
 }
 
 // Path: permissions
@@ -282,6 +283,21 @@ class _Translations$room$header$en extends Translations$room$header$es {
 	@override String get invite => 'Invite';
 }
 
+// Path: room.talk
+class _Translations$room$talk$en extends Translations$room$talk$es {
+	_Translations$room$talk$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get modePtt => 'PTT';
+	@override String get modeOpen => 'Open';
+	@override late final _Translations$room$talk$core$en core = _Translations$room$talk$core$en._(_root);
+	@override late final _Translations$room$talk$hint$en hint = _Translations$room$talk$hint$en._(_root);
+	@override late final _Translations$room$talk$island$en island = _Translations$room$talk$island$en._(_root);
+	@override late final _Translations$room$talk$echo$en echo = _Translations$room$talk$echo$en._(_root);
+}
+
 // Path: permissions.welcome
 class _Translations$permissions$welcome$en extends Translations$permissions$welcome$es {
 	_Translations$permissions$welcome$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -361,6 +377,67 @@ class _Translations$settings$themeMode$en extends Translations$settings$themeMod
 	@override String get auto => 'Auto';
 	@override String get light => 'Light';
 	@override String get dark => 'Dark';
+}
+
+// Path: room.talk.core
+class _Translations$room$talk$core$en extends Translations$room$talk$core$es {
+	_Translations$room$talk$core$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get hold => 'Hold';
+	@override String get onAir => 'On air';
+	@override String get open => 'Open';
+	@override String get silence => 'Muted';
+	@override String get standby => 'Standby';
+	@override String get talk => 'Talk';
+}
+
+// Path: room.talk.hint
+class _Translations$room$talk$hint$en extends Translations$room$talk$hint$es {
+	_Translations$room$talk$hint$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get idle => 'Hold to talk';
+	@override String get alone => 'Show the QR so your group can join';
+	@override String receiving({required Object name}) => '${name} is talking · you can reply';
+	@override String get onAir => 'Release to listen';
+	@override String get open => 'Tap to mute yourself';
+	@override String get muted => 'Tap to turn on your microphone';
+	@override String get connecting => 'Connecting to the host…';
+	@override String get reconnecting => 'Restoring the connection…';
+}
+
+// Path: room.talk.island
+class _Translations$room$talk$island$en extends Translations$room$talk$island$es {
+	_Translations$room$talk$island$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String online({required Object count, required Object max}) => 'Online · ${count}/${max}';
+	@override String openMic({required Object count, required Object max}) => 'Open mic · ${count}/${max}';
+	@override String muted({required Object count, required Object max}) => 'Muted · ${count}/${max}';
+	@override String onAir({required Object time}) => 'On air · ${time}';
+	@override String receiving({required Object name}) => '${name} · talking';
+	@override String get waiting => 'On air · waiting for your group';
+	@override String get connecting => 'Connecting…';
+	@override String get reconnecting => 'Reconnecting…';
+}
+
+// Path: room.talk.echo
+class _Translations$room$talk$echo$en extends Translations$room$talk$echo$es {
+	_Translations$room$talk$echo$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Open mic on speaker.';
+	@override String get message => 'Use headphones to avoid echo.';
+	@override String get dismiss => 'Dismiss notice';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -445,6 +522,33 @@ extension on TranslationsEn {
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invite',
+			'room.talk.modePtt' => 'PTT',
+			'room.talk.modeOpen' => 'Open',
+			'room.talk.core.hold' => 'Hold',
+			'room.talk.core.onAir' => 'On air',
+			'room.talk.core.open' => 'Open',
+			'room.talk.core.silence' => 'Muted',
+			'room.talk.core.standby' => 'Standby',
+			'room.talk.core.talk' => 'Talk',
+			'room.talk.hint.idle' => 'Hold to talk',
+			'room.talk.hint.alone' => 'Show the QR so your group can join',
+			'room.talk.hint.receiving' => ({required Object name}) => '${name} is talking · you can reply',
+			'room.talk.hint.onAir' => 'Release to listen',
+			'room.talk.hint.open' => 'Tap to mute yourself',
+			'room.talk.hint.muted' => 'Tap to turn on your microphone',
+			'room.talk.hint.connecting' => 'Connecting to the host…',
+			'room.talk.hint.reconnecting' => 'Restoring the connection…',
+			'room.talk.island.online' => ({required Object count, required Object max}) => 'Online · ${count}/${max}',
+			'room.talk.island.openMic' => ({required Object count, required Object max}) => 'Open mic · ${count}/${max}',
+			'room.talk.island.muted' => ({required Object count, required Object max}) => 'Muted · ${count}/${max}',
+			'room.talk.island.onAir' => ({required Object time}) => 'On air · ${time}',
+			'room.talk.island.receiving' => ({required Object name}) => '${name} · talking',
+			'room.talk.island.waiting' => 'On air · waiting for your group',
+			'room.talk.island.connecting' => 'Connecting…',
+			'room.talk.island.reconnecting' => 'Reconnecting…',
+			'room.talk.echo.title' => 'Open mic on speaker.',
+			'room.talk.echo.message' => 'Use headphones to avoid echo.',
+			'room.talk.echo.dismiss' => 'Dismiss notice',
 			'permissions.back' => 'Back',
 			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
 			'permissions.welcome.kicker' => 'No internet · no coverage',

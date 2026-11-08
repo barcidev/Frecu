@@ -79,7 +79,7 @@ Referencia: `drawPtt` y `voice` de `engine.js`; `pttZone`, `PTT_COPY`, `pttState
 
 ## Tareas
 
-- [ ] T1: Estado de habla e isla de estado
+- [x] T1: Estado de habla e isla de estado
   - files: lib/features/room/presentation/widgets/room_talk.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/room_talk_test.dart
   - ac: AC2, AC6, AC7
   - verify: flutter test test/features/room/presentation/room_talk_test.dart

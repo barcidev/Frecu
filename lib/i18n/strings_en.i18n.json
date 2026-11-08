@@ -70,6 +70,43 @@
       "hz": "$value Hz",
       "note": "Note $note, $hz Hz",
       "invite": "Invite"
+    },
+    "talk": {
+      "modePtt": "PTT",
+      "modeOpen": "Open",
+      "core": {
+        "hold": "Hold",
+        "onAir": "On air",
+        "open": "Open",
+        "silence": "Muted",
+        "standby": "Standby",
+        "talk": "Talk"
+      },
+      "hint": {
+        "idle": "Hold to talk",
+        "alone": "Show the QR so your group can join",
+        "receiving": "$name is talking · you can reply",
+        "onAir": "Release to listen",
+        "open": "Tap to mute yourself",
+        "muted": "Tap to turn on your microphone",
+        "connecting": "Connecting to the host…",
+        "reconnecting": "Restoring the connection…"
+      },
+      "island": {
+        "online": "Online · $count/$max",
+        "openMic": "Open mic · $count/$max",
+        "muted": "Muted · $count/$max",
+        "onAir": "On air · $time",
+        "receiving": "$name · talking",
+        "waiting": "On air · waiting for your group",
+        "connecting": "Connecting…",
+        "reconnecting": "Reconnecting…"
+      },
+      "echo": {
+        "title": "Open mic on speaker.",
+        "message": "Use headphones to avoid echo.",
+        "dismiss": "Dismiss notice"
+      }
     }
   },
   "permissions": {

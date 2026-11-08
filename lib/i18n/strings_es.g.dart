@@ -191,6 +191,7 @@ class Translations$room$es {
 	];
 	late final Translations$room$mesh$es mesh = Translations$room$mesh$es.internal(_root);
 	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
+	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
 }
 
 // Path: permissions
@@ -459,6 +460,26 @@ class Translations$room$header$es {
 	String get invite => 'Invitar';
 }
 
+// Path: room.talk
+class Translations$room$talk$es {
+	Translations$room$talk$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'PTT'
+	String get modePtt => 'PTT';
+
+	/// es: 'Abierto'
+	String get modeOpen => 'Abierto';
+
+	late final Translations$room$talk$core$es core = Translations$room$talk$core$es.internal(_root);
+	late final Translations$room$talk$hint$es hint = Translations$room$talk$hint$es.internal(_root);
+	late final Translations$room$talk$island$es island = Translations$room$talk$island$es.internal(_root);
+	late final Translations$room$talk$echo$es echo = Translations$room$talk$echo$es.internal(_root);
+}
+
 // Path: permissions.welcome
 class Translations$permissions$welcome$es {
 	Translations$permissions$welcome$es.internal(this._root);
@@ -594,6 +615,117 @@ class Translations$settings$themeMode$es {
 	String get dark => 'Oscuro';
 }
 
+// Path: room.talk.core
+class Translations$room$talk$core$es {
+	Translations$room$talk$core$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Mantén'
+	String get hold => 'Mantén';
+
+	/// es: 'Al aire'
+	String get onAir => 'Al aire';
+
+	/// es: 'Abierto'
+	String get open => 'Abierto';
+
+	/// es: 'Silencio'
+	String get silence => 'Silencio';
+
+	/// es: 'En espera'
+	String get standby => 'En espera';
+
+	/// es: 'Hablar'
+	String get talk => 'Hablar';
+}
+
+// Path: room.talk.hint
+class Translations$room$talk$hint$es {
+	Translations$room$talk$hint$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Mantén para hablar'
+	String get idle => 'Mantén para hablar';
+
+	/// es: 'Muestra el QR para que tu grupo se una'
+	String get alone => 'Muestra el QR para que tu grupo se una';
+
+	/// es: '$name está hablando · puedes responder'
+	String receiving({required Object name}) => '${name} está hablando · puedes responder';
+
+	/// es: 'Suelta para escuchar'
+	String get onAir => 'Suelta para escuchar';
+
+	/// es: 'Toca para silenciarte'
+	String get open => 'Toca para silenciarte';
+
+	/// es: 'Toca para activar tu micrófono'
+	String get muted => 'Toca para activar tu micrófono';
+
+	/// es: 'Conectando con el anfitrión…'
+	String get connecting => 'Conectando con el anfitrión…';
+
+	/// es: 'Recuperando la conexión…'
+	String get reconnecting => 'Recuperando la conexión…';
+}
+
+// Path: room.talk.island
+class Translations$room$talk$island$es {
+	Translations$room$talk$island$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'En línea · $count/$max'
+	String online({required Object count, required Object max}) => 'En línea · ${count}/${max}';
+
+	/// es: 'Micrófono abierto · $count/$max'
+	String openMic({required Object count, required Object max}) => 'Micrófono abierto · ${count}/${max}';
+
+	/// es: 'Silenciado · $count/$max'
+	String muted({required Object count, required Object max}) => 'Silenciado · ${count}/${max}';
+
+	/// es: 'Al aire · $time'
+	String onAir({required Object time}) => 'Al aire · ${time}';
+
+	/// es: '$name · hablando'
+	String receiving({required Object name}) => '${name} · hablando';
+
+	/// es: 'Al aire · esperando a tu grupo'
+	String get waiting => 'Al aire · esperando a tu grupo';
+
+	/// es: 'Conectando…'
+	String get connecting => 'Conectando…';
+
+	/// es: 'Reconectando…'
+	String get reconnecting => 'Reconectando…';
+}
+
+// Path: room.talk.echo
+class Translations$room$talk$echo$es {
+	Translations$room$talk$echo$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Micrófono abierto con altavoz.'
+	String get title => 'Micrófono abierto con altavoz.';
+
+	/// es: 'Usa audífonos para evitar eco.'
+	String get message => 'Usa audífonos para evitar eco.';
+
+	/// es: 'Cerrar aviso'
+	String get dismiss => 'Cerrar aviso';
+}
+
 /// The flat map containing all translations for locale <es>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -676,6 +808,33 @@ extension on Translations {
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invitar',
+			'room.talk.modePtt' => 'PTT',
+			'room.talk.modeOpen' => 'Abierto',
+			'room.talk.core.hold' => 'Mantén',
+			'room.talk.core.onAir' => 'Al aire',
+			'room.talk.core.open' => 'Abierto',
+			'room.talk.core.silence' => 'Silencio',
+			'room.talk.core.standby' => 'En espera',
+			'room.talk.core.talk' => 'Hablar',
+			'room.talk.hint.idle' => 'Mantén para hablar',
+			'room.talk.hint.alone' => 'Muestra el QR para que tu grupo se una',
+			'room.talk.hint.receiving' => ({required Object name}) => '${name} está hablando · puedes responder',
+			'room.talk.hint.onAir' => 'Suelta para escuchar',
+			'room.talk.hint.open' => 'Toca para silenciarte',
+			'room.talk.hint.muted' => 'Toca para activar tu micrófono',
+			'room.talk.hint.connecting' => 'Conectando con el anfitrión…',
+			'room.talk.hint.reconnecting' => 'Recuperando la conexión…',
+			'room.talk.island.online' => ({required Object count, required Object max}) => 'En línea · ${count}/${max}',
+			'room.talk.island.openMic' => ({required Object count, required Object max}) => 'Micrófono abierto · ${count}/${max}',
+			'room.talk.island.muted' => ({required Object count, required Object max}) => 'Silenciado · ${count}/${max}',
+			'room.talk.island.onAir' => ({required Object time}) => 'Al aire · ${time}',
+			'room.talk.island.receiving' => ({required Object name}) => '${name} · hablando',
+			'room.talk.island.waiting' => 'Al aire · esperando a tu grupo',
+			'room.talk.island.connecting' => 'Conectando…',
+			'room.talk.island.reconnecting' => 'Reconectando…',
+			'room.talk.echo.title' => 'Micrófono abierto con altavoz.',
+			'room.talk.echo.message' => 'Usa audífonos para evitar eco.',
+			'room.talk.echo.dismiss' => 'Cerrar aviso',
 			'permissions.back' => 'Atrás',
 			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
 			'permissions.welcome.kicker' => 'Sin internet · sin cobertura',

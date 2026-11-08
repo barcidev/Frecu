@@ -70,6 +70,43 @@
       "hz": "$value Hz",
       "note": "Nota $note, $hz Hz",
       "invite": "Invitar"
+    },
+    "talk": {
+      "modePtt": "PTT",
+      "modeOpen": "Abierto",
+      "core": {
+        "hold": "Mantén",
+        "onAir": "Al aire",
+        "open": "Abierto",
+        "silence": "Silencio",
+        "standby": "En espera",
+        "talk": "Hablar"
+      },
+      "hint": {
+        "idle": "Mantén para hablar",
+        "alone": "Muestra el QR para que tu grupo se una",
+        "receiving": "$name está hablando · puedes responder",
+        "onAir": "Suelta para escuchar",
+        "open": "Toca para silenciarte",
+        "muted": "Toca para activar tu micrófono",
+        "connecting": "Conectando con el anfitrión…",
+        "reconnecting": "Recuperando la conexión…"
+      },
+      "island": {
+        "online": "En línea · $count/$max",
+        "openMic": "Micrófono abierto · $count/$max",
+        "muted": "Silenciado · $count/$max",
+        "onAir": "Al aire · $time",
+        "receiving": "$name · hablando",
+        "waiting": "Al aire · esperando a tu grupo",
+        "connecting": "Conectando…",
+        "reconnecting": "Reconectando…"
+      },
+      "echo": {
+        "title": "Micrófono abierto con altavoz.",
+        "message": "Usa audífonos para evitar eco.",
+        "dismiss": "Cerrar aviso"
+      }
     }
   },
   "permissions": {
