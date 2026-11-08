@@ -26,6 +26,7 @@ class HotspotGuideStep extends StatefulWidget {
   const HotspotGuideStep({
     required this.onBack,
     required this.onContinue,
+    this.showStep = true,
     super.key,
   });
 
@@ -34,6 +35,9 @@ class HotspotGuideStep extends StatefulWidget {
 
   /// Pasa a la nueva frecu.
   final VoidCallback onContinue;
+
+  /// Si muestra «Paso 1 de 2»; falso cuando se abre sola desde Ajustes.
+  final bool showStep;
 
   @override
   State<HotspotGuideStep> createState() => _HotspotGuideStepState();
@@ -57,7 +61,11 @@ class _HotspotGuideStepState extends State<HotspotGuideStep> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CreateRoomAppBar(step: 1, title: guide.title, onBack: widget.onBack),
+          CreateRoomAppBar(
+            step: widget.showStep ? 1 : null,
+            title: guide.title,
+            onBack: widget.onBack,
+          ),
           Expanded(
             child: CreateRoomScroll(
               dockHeight: CreateRoomScroll.twoButtonDock,

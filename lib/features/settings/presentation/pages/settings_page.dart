@@ -91,31 +91,8 @@ Future<void> _saveOrWarn(
   if (result.isSuccess || !context.mounted) return;
   showFrToast(
     context,
-    FrToast(leading: const _AlertBadge(), message: t.settings.saveError),
+    FrToast.drawn(icon: FrIcons.alert, message: t.settings.saveError),
   );
-}
-
-/// Ícono del aviso de error: `FrIcons.alert` en un círculo de señal, con las
-/// medidas de `FrToast.icon` (`.toast .tic`).
-class _AlertBadge extends StatelessWidget {
-  const _AlertBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.fr.colors;
-    return SizedBox.square(
-      dimension: 30,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: c.signal.withValues(alpha: 0.14),
-        ),
-        child: Center(
-          child: FrIcon(FrIcons.alert, size: 16, color: c.signalFg),
-        ),
-      ),
-    );
-  }
 }
 
 /// Cabecera de 60 px: Atrás, el título centrado y un hueco del ancho del

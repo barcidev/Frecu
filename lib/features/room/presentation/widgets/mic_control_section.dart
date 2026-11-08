@@ -147,10 +147,10 @@ class _EchoNoticeState extends State<EchoNotice> {
     return AnimatedSwitcher(
       duration: context.reduceMotion ? fr.motion.quick : fr.motion.smooth,
       child: widget.visible && !_dismissed
-          ? FrBanner(
+          ? FrBanner.drawn(
               key: const Key('echo_notice'),
               tone: FrBannerTone.warn,
-              icon: Icons.headphones_rounded,
+              icon: FrIcons.headset,
               title: echo.title,
               message: echo.message,
               floating: true,

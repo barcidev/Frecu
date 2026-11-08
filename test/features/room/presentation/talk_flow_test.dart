@@ -13,6 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/widgets/fr_segmented.dart';
 import 'package:frecu/core/design/widgets/status_island.dart';
@@ -301,6 +303,20 @@ void main() {
     mode.add(TalkMode.openMic);
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('echo_notice')), findsOneWidget);
+    final echo = find.byKey(const Key('echo_notice'));
+    expect(
+      find.descendant(
+        of: echo,
+        matching: find.byWidgetPredicate(
+          (widget) => widget is FrIcon && widget.icon == FrIcons.headset,
+        ),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: echo, matching: find.byType(Icon)),
+      findsNothing,
+    );
     expect(
       find.textContaining('Micrófono abierto con altavoz.'),
       findsOneWidget,

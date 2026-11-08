@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
 
 /// Teclado numérico propio de Portadora, de teclas grandes (aptas con
@@ -78,7 +80,7 @@ class FrKeypad extends StatelessWidget {
             function: true,
             semanticLabel: deleteLabel,
             onPressed: onDelete,
-            child: deleteIcon ?? const Icon(Icons.backspace_outlined),
+            child: deleteIcon ?? const FrIcon(FrIcons.backspace),
           ),
         ]),
       ],

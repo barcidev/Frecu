@@ -294,6 +294,11 @@ void main() {
       expect(find.byType(HotspotGuideStep), findsOneWidget);
       expect(find.byType(SettingsPage), findsNothing);
       expect(find.text(t.lobby.newRoom.guide.heading), findsOneWidget);
+      // Sola, sin «Paso 1 de 2» de la creación.
+      expect(
+        find.text(t.lobby.newRoom.step(current: 1, total: 2).toUpperCase()),
+        findsNothing,
+      );
 
       await tester.tap(
         find.byWidgetPredicate(
