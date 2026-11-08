@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
+import 'package:frecu/core/design/widgets/fr_mark_text.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner_painter.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -57,6 +58,12 @@ class _LobbyTunerState extends State<LobbyTuner> {
   void didUpdateWidget(LobbyTuner oldWidget) {
     super.didUpdateWidget(oldWidget);
     _motion.sync(widget.notes, grown: false);
+  }
+
+  @override
+  void dispose() {
+    _motion.dispose();
+    super.dispose();
   }
 
   @override
@@ -191,13 +198,18 @@ class _TunerCaption extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Text(
-          tuner.signals(n: signalCount).toUpperCase(),
-          maxLines: 1,
-          style: signalCount > 0
-              ? caption.copyWith(color: c.signalFg)
-              : caption,
-        ),
+        if (signalCount > 0)
+          FrMarkText(
+            tuner.signals(n: signalCount).toUpperCase(),
+            maxLines: 1,
+            style: caption,
+          )
+        else
+          Text(
+            tuner.signals(n: signalCount).toUpperCase(),
+            maxLines: 1,
+            style: caption,
+          ),
       ],
     );
   }

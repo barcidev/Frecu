@@ -1,6 +1,7 @@
 // AC1: CUANDO el anfitrión toca «Abrir frecu» en la nueva frecu ENTONCES la frecu abierta lleva exactamente la nota que mostraba la pantalla en ese momento, aunque la hora haya cambiado desde que se calculó. La publica con esa nota en mDNS y se la da al servidor para `welcome`, y la cabecera de la frecu activa la muestra.
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
@@ -201,6 +202,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expectOpenedWith(tester, container, _mi4, 'Nota Mi4, 330 Hz');
+      await _unmountRoomPage(tester);
     });
 
     testWidgets('AC1: tras releer la hora Abrir frecu abre en la nota nueva '
@@ -218,6 +220,15 @@ void main() {
       await tester.pumpAndSettle();
 
       expectOpenedWith(tester, container, _mi5, 'Nota Mi5, 659 Hz');
+      await _unmountRoomPage(tester);
     });
   });
+}
+
+/// La prueba termina dentro de la frecu: al desmontarse, `RoomPage` sale de
+/// ella y Riverpod refresca a quien la mira. Se vacía antes de acabar para no
+/// dejar temporizadores pendientes.
+Future<void> _unmountRoomPage(WidgetTester tester) async {
+  await tester.pumpWidget(const SizedBox());
+  await tester.pump(const Duration(milliseconds: 50));
 }

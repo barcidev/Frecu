@@ -37,18 +37,21 @@ class _LoopbackServer extends SignalingServerDataSource {
     String host = '0.0.0.0',
     int port = NetworkConstants.signalingPort,
     RoomNote? note,
+    String? roomName,
   }) {
     return super.start(
       accessCode: accessCode,
       host: '127.0.0.1',
       port: 0,
       note: note,
+      roomName: roomName,
     );
   }
 }
 
-/// Cliente del invitado: la hoja de IP se une en el 47800 fijo, y aquí se
-/// conecta al puerto libre del anfitrión.
+/// Cliente del invitado: la hoja de IP se une a una IP de la red en el 47800
+/// fijo (no admite loopback), y aquí se conecta al anfitrión de la prueba, en
+/// 127.0.0.1 y su puerto libre.
 class _HostPortClient extends SignalingClientDataSource {
   _HostPortClient(this._hostPort);
 
@@ -56,7 +59,7 @@ class _HostPortClient extends SignalingClientDataSource {
 
   @override
   Future<void> connect(Uri uri) =>
-      super.connect(uri.replace(port: _hostPort()));
+      super.connect(uri.replace(host: '127.0.0.1', port: _hostPort()));
 }
 
 void main() {
@@ -162,7 +165,7 @@ void main() {
         of: find.byType(IpJoinSheet),
         matching: find.byType(TextField),
       );
-      await tester.enterText(fields.first, '127.0.0.1');
+      await tester.enterText(fields.first, '192.168.43.1');
       await tester.enterText(fields.last, '1234');
       await tester.pumpAndSettle();
       await tester.runAsync(() async {

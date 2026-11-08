@@ -26,6 +26,8 @@ List<Object?> tokens(FrColors c) => [
   c.alert,
   c.warnTx,
   c.alertTx,
+  c.warnFg,
+  c.alertFg,
   c.scrim,
   c.sheetA,
   c.sheetB,

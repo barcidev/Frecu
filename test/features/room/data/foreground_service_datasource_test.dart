@@ -10,13 +10,13 @@ void main() {
 
       await dataSource.startService(
         roomName: 'Frecu Alpha',
-        status: 'Conectado',
+        status: ForegroundStatus.connected,
       );
       expect(dataSource.isRunning, isTrue);
 
       await dataSource.updateNotification(
         roomName: 'Frecu Alpha',
-        status: 'Reconectando...',
+        status: ForegroundStatus.reconnecting,
       );
       expect(dataSource.isRunning, isTrue);
 

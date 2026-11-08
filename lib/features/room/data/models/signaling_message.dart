@@ -5,6 +5,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'signaling_message.freezed.dart';
 part 'signaling_message.g.dart';
 
+/// Versión del protocolo de señalización que habla esta app (`v` del TXT y
+/// `protocolVersion` del `join`). Los campos aditivos no la cambian.
+const int signalingProtocolVersion = 1;
+
 /// Unión sellada para todos los mensajes de señalización del protocolo Frecu.
 @Freezed(unionKey: 'type', makeCollectionsUnmodifiable: false)
 sealed class SignalingMessage with _$SignalingMessage {
@@ -12,15 +16,18 @@ sealed class SignalingMessage with _$SignalingMessage {
   const factory SignalingMessage.join({
     required String displayName,
     required String accessCode,
-    @Default(1) int protocolVersion,
+    @Default(signalingProtocolVersion) int protocolVersion,
     @Default('join') String type,
   }) = SignalingJoinMessage;
 
-  /// Bienvenida enviada por el anfitrión al participante aceptado.
+  /// Bienvenida enviada por el anfitrión al participante aceptado, con el
+  /// nombre de la frecu (`roomName`, aditivo: nulo si el anfitrión es de una
+  /// versión anterior).
   const factory SignalingMessage.welcome({
     required String peerId,
     required List<Participant> participants,
     @RoomNoteConverter() RoomNote? note,
+    @JsonKey(includeIfNull: false) String? roomName,
     @Default('welcome') String type,
   }) = SignalingWelcomeMessage;
 
@@ -70,11 +77,13 @@ sealed class SignalingMessage with _$SignalingMessage {
     @Default('ice') String type,
   }) = SignalingIceMessage;
 
-  /// Estado de habla (PTT o micrófono activo) de un participante.
+  /// Estado de habla (PTT o micrófono activo) de un participante; `muted`
+  /// (aditivo) es `true` si se silenció en micrófono abierto.
   @FreezedUnionValue('talk_state')
   const factory SignalingMessage.talkState({
     required String peerId,
     required bool isSpeaking,
+    @JsonKey(includeIfNull: false) bool? muted,
     @Default('talk_state') String type,
   }) = SignalingTalkStateMessage;
 

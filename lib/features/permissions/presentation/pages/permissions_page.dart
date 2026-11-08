@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/motion/fr_transitions.dart';
+import 'package:frecu/features/permissions/presentation/providers/onboarding_provider.dart';
 import 'package:frecu/features/permissions/presentation/widgets/name_step.dart';
 import 'package:frecu/features/permissions/presentation/widgets/permissions_step.dart';
 import 'package:frecu/features/permissions/presentation/widgets/welcome_step.dart';
@@ -12,18 +14,19 @@ import 'package:frecu/features/permissions/presentation/widgets/welcome_step.dar
 ///
 /// Los pasos viven en un [Navigator] propio: avanzar entra con la onda desde
 /// el dedo, y Atrás o el gesto de volver regresan un paso sin perder el
-/// nombre escrito (en la bienvenida, el gesto sale de la ruta). Al terminar,
-/// el inicio queda como única pantalla.
+/// nombre escrito (en la bienvenida, el gesto sale de la ruta). Al terminar
+/// se guarda que el recorrido se completó, aunque falte algún permiso, y el
+/// inicio queda como única pantalla.
 @RoutePage()
-class PermissionsPage extends StatefulWidget {
+class PermissionsPage extends ConsumerStatefulWidget {
   /// Constructor constante.
   const PermissionsPage({super.key});
 
   @override
-  State<PermissionsPage> createState() => _PermissionsPageState();
+  ConsumerState<PermissionsPage> createState() => _PermissionsPageState();
 }
 
-class _PermissionsPageState extends State<PermissionsPage> {
+class _PermissionsPageState extends ConsumerState<PermissionsPage> {
   final GlobalKey<NavigatorState> _steps = GlobalKey<NavigatorState>();
   final TextEditingController _name = TextEditingController();
 
@@ -53,7 +56,13 @@ class _PermissionsPageState extends State<PermissionsPage> {
   Widget _permissions(BuildContext _) =>
       PermissionsStep(onBack: _back, onFinish: _finish);
 
-  void _finish() => unawaited(context.router.replaceAll([const LobbyRoute()]));
+  void _finish() => unawaited(_complete());
+
+  Future<void> _complete() async {
+    await ref.read(onboardingCompletedProvider.notifier).markCompleted();
+    if (!mounted) return;
+    await context.router.replaceAll([const LobbyRoute()]);
+  }
 
   @override
   Widget build(BuildContext context) {

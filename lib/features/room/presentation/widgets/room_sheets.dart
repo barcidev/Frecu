@@ -21,12 +21,14 @@ FrIconData audioRouteIcon(AudioRoute route) => switch (route) {
   AudioRoute.bluetooth => FrIcons.headset,
 };
 
-/// Nombre de cada ruta de audio.
-String audioRouteName(AudioRoute route) => switch (route) {
-  AudioRoute.speaker => t.room.speaker,
-  AudioRoute.earpiece => t.room.earpiece,
-  AudioRoute.bluetooth => t.room.bluetooth,
-};
+/// Nombre de cada ruta de audio; la de Bluetooth lleva el nombre del
+/// dispositivo ([deviceName], p. ej. «Sena 50S») si se conoce.
+String audioRouteName(AudioRoute route, {String? deviceName}) =>
+    switch (route) {
+      AudioRoute.speaker => t.room.speaker,
+      AudioRoute.earpiece => t.room.earpiece,
+      AudioRoute.bluetooth => deviceName ?? t.room.bluetooth,
+    };
 
 /// Encabezado de las hojas de la frecu (`.sh-h`): la línea superior, el
 /// título, el mensaje y Cerrar.
@@ -64,14 +66,7 @@ class RoomSheetHeader extends StatelessWidget {
                 style: fr.type.labelS.copyWith(color: c.tx3),
               ),
               const SizedBox(height: 8),
-              Text(
-                title,
-                style: fr.type.titleL.copyWith(
-                  fontSize: 22,
-                  height: 1.15,
-                  color: c.tx1,
-                ),
-              ),
+              Text(title, style: FrSheet.titleStyle(fr)),
               const SizedBox(height: 6),
               Text(
                 message,
@@ -129,6 +124,7 @@ class AudioRouteSheet extends ConsumerWidget {
                   route: route,
                   selected: voice.audioRoute == route,
                   enabled: voice.availableAudioRoutes.contains(route),
+                  deviceName: voice.bluetoothName,
                   onPressed: () => _choose(context, ref, route),
                 ),
             ],
@@ -152,6 +148,7 @@ class AudioRouteOption extends StatelessWidget {
     required this.selected,
     required this.enabled,
     required this.onPressed,
+    this.deviceName,
     super.key,
   });
 
@@ -167,12 +164,21 @@ class AudioRouteOption extends StatelessWidget {
   /// Elige la ruta.
   final VoidCallback onPressed;
 
+  /// Nombre del dispositivo Bluetooth conectado, si hay uno.
+  final String? deviceName;
+
+  /// Nombre del dispositivo, solo si la ruta Bluetooth está disponible.
+  String? get _device =>
+      route == AudioRoute.bluetooth && enabled ? deviceName : null;
+
   String get _detail {
     final copy = t.room.sheets.route;
     return switch (route) {
       AudioRoute.speaker => copy.speakerSub,
       AudioRoute.earpiece => copy.earpieceSub,
-      AudioRoute.bluetooth => enabled ? copy.bluetoothOn : copy.bluetoothOff,
+      AudioRoute.bluetooth when !enabled => copy.bluetoothOff,
+      AudioRoute.bluetooth =>
+        _device == null ? copy.bluetoothOn : copy.bluetoothDevice,
     };
   }
 
@@ -247,7 +253,9 @@ class AudioRouteOption extends StatelessWidget {
     spacing: 4,
     children: [
       Text(
-        audioRouteName(route),
+        audioRouteName(route, deviceName: _device),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: fr.type.body.copyWith(
           fontSize: 15,
           height: 1.2,
@@ -332,7 +340,7 @@ class LeaveSheet extends StatelessWidget {
                 key: const Key('leave_confirm'),
                 label: host ? copy.hostConfirm : copy.peerConfirm,
                 icon: FrIcons.exit,
-                variant: FrButtonVariant.danger,
+                variant: FrButtonVariant.dangerSolid,
                 expand: true,
                 onPressed: () => navigator.pop(true),
               ),

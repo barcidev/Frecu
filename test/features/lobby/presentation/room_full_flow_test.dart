@@ -1,4 +1,4 @@
-// AC4: CUANDO un séptimo participante intenta unirse a una frecu con 6 participantes activos ENTONCES el servidor de señalización rechaza la conexión con motivo `roomFull` y la aplicación del participante muestra la notificación de sala llena.
+// AC4: CUANDO un séptimo participante intenta unirse a una frecu con 6 participantes activos ENTONCES el servidor de señalización rechaza la conexión con motivo `roomFull` y la aplicación del participante muestra la notificación de sala llena del prototipo («Esta frecu está llena (6/6).») sin borrar los dígitos.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
+import 'package:frecu/core/design/widgets/fr_pin_field.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
@@ -108,8 +109,15 @@ void main() {
 
         // El aviso de la hoja lleva el mensaje en negrita y la pista.
         expect(
-          find.textContaining(t.errors.roomFull, findRichText: true),
+          find.textContaining(
+            'Esta frecu está llena (6/6).',
+            findRichText: true,
+          ),
           findsOneWidget,
+        );
+        expect(
+          tester.widget<FrPinField>(find.byType(FrPinField)).value,
+          '1234',
         );
       },
     );

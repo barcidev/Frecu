@@ -9,7 +9,8 @@ enum FrTagTone {
   /// Lavado de señal (más intenso de día) con texto `signalFg`.
   signal,
 
-  /// Lavado de aviso con texto ámbar.
+  /// Lavado de aviso con texto ámbar (`warnFg`: de día, el tono de texto que
+  /// llega a 4,5:1).
   warn,
 }
 
@@ -35,7 +36,7 @@ class FrTag extends StatelessWidget {
         c.signal.withValues(alpha: 0.12 * c.washK),
         c.signalFg,
       ),
-      FrTagTone.warn => (c.warn.withValues(alpha: 0.12), c.warn),
+      FrTagTone.warn => (c.warn.withValues(alpha: 0.12), c.warnFg),
     };
     return DecoratedBox(
       decoration: BoxDecoration(

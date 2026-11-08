@@ -11,6 +11,7 @@ import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/tokens/fr_type.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
+import 'package:frecu/features/lobby/presentation/extensions/nearby_room_extension.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -206,7 +207,7 @@ class _RoomInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          room.name,
+          room.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(

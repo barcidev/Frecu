@@ -118,8 +118,9 @@ class FrBackdrop extends StatelessWidget {
   /// Alto, en fracción de la pantalla, en el que la retícula desaparece.
   static const double gridFade = 0.55;
 
-  /// Opacidad del grano.
-  static const double grainOpacity = 0.05;
+  /// Opacidad del grano: blanco al 4,5 % fundido en `overlay` sobre el fondo
+  /// (`.phone .screen::after` del prototipo).
+  static const double grainOpacity = 0.045;
 
   /// Pinta la retícula.
   final bool showGrid;
@@ -144,6 +145,7 @@ class FrBackdrop extends StatelessWidget {
       size: Size.infinite,
       painter: _BackdropPainter(
         ink: context.fr.colors.ink,
+        ground: context.fr.colors.bg0,
         showGrid: showGrid,
         showGrain: showGrain,
       ),
@@ -154,16 +156,21 @@ class FrBackdrop extends StatelessWidget {
 class _BackdropPainter extends CustomPainter {
   _BackdropPainter({
     required this.ink,
+    required this.ground,
     required this.showGrid,
     required this.showGrain,
   });
 
   final Color ink;
+  final Color ground;
   final bool showGrid;
   final bool showGrain;
 
   @override
   void paint(Canvas canvas, Size size) {
+    // El grano se funde en `overlay` con lo que tiene debajo: el fondo se
+    // pinta en la misma capa para que la mezcla lo vea.
+    if (showGrain) canvas.drawRect(Offset.zero & size, Paint()..color = ground);
     if (showGrid) _paintGrid(canvas, size);
     if (showGrain) {
       canvas.drawRect(
@@ -175,10 +182,11 @@ class _BackdropPainter extends CustomPainter {
             TileMode.repeated,
             Matrix4.identity().storage,
           )
-          ..colorFilter = ColorFilter.mode(
-            ink.withValues(alpha: FrBackdrop.grainOpacity),
+          ..colorFilter = const ColorFilter.mode(
+            Color.fromRGBO(255, 255, 255, FrBackdrop.grainOpacity),
             BlendMode.modulate,
-          ),
+          )
+          ..blendMode = BlendMode.overlay,
       );
     }
   }
@@ -208,12 +216,14 @@ class _BackdropPainter extends CustomPainter {
   @override
   bool shouldRepaint(_BackdropPainter oldDelegate) =>
       oldDelegate.ink != ink ||
+      oldDelegate.ground != ground ||
       oldDelegate.showGrid != showGrid ||
       oldDelegate.showGrain != showGrain;
 }
 
 /// Grano de Portadora: ruido sembrado en un mosaico de 128 × 128 px, igual en
-/// cada arranque, pintado una sola vez y teñido de `ink` al dibujarlo.
+/// cada arranque y pintado una sola vez; se dibuja en blanco fundido en
+/// `overlay`, como el prototipo.
 abstract final class FrGrain {
   /// Lado del mosaico.
   static const int size = 128;
@@ -255,7 +265,7 @@ abstract final class FrGrain {
       ..strokeCap = StrokeCap.square;
     for (final (level, points) in buckets.indexed) {
       if (points.isEmpty) continue;
-      // Máscara blanca: el pintor la tiñe con la tinta del tema.
+      // Máscara blanca: el pintor la funde en `overlay` al 4,5 %.
       paint.color = Color.fromRGBO(
         255,
         255,

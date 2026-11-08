@@ -3,6 +3,7 @@
 // AC3: CUANDO el modo es micrófono abierto ENTONCES el núcleo es un conmutador («Silencio» o «Abierto») y con tema claro las letras sobre la señal van en `signalInk`.
 // AC7: CUANDO la frecu conecta o reconecta ENTONCES el núcleo se ve al 35 %, dice «En espera» y no responde; si había un dedo apoyado se deja de transmitir.
 // AC8: CUANDO el sistema pide reducir el movimiento ENTONCES el núcleo queda quieto, sin barrido, ondas ni escala.
+// F4: CUANDO el núcleo se desmonta con el dedo apoyado ENTONCES deja de transmitir.
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/theme/app_theme.dart';
@@ -395,6 +396,35 @@ void main() {
       await gesture.up();
       await tester.pump();
       expect(calls.stop, 1);
+    });
+
+    testWidgets('F4: si el núcleo se va con el dedo apoyado (p. ej. al '
+        'cerrarse la frecu) deja de transmitir una sola vez', (tester) async {
+      _reduceMotion(tester);
+      final calls = await _pumpCore(tester, PttPhase.idle);
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const Key('ptt_button'))),
+      );
+      await tester.pump();
+      expect(calls.start, 1);
+
+      await tester.pumpWidget(const SizedBox());
+      expect(calls.stop, 1);
+
+      await gesture.up();
+      await tester.pump();
+      expect(calls.stop, 1);
+    });
+
+    testWidgets('F4: si se va sin dedo apoyado no llama a nada', (
+      tester,
+    ) async {
+      _reduceMotion(tester);
+      final calls = await _pumpCore(tester, PttPhase.idle);
+
+      await tester.pumpWidget(const SizedBox());
+      expect(calls.stop, 0);
     });
   });
 }

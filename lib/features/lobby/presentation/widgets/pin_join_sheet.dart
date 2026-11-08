@@ -1,22 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
+import 'package:frecu/core/design/motion/fr_transitions.dart';
 import 'package:frecu/core/design/widgets/fr_banner.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_keypad.dart';
+import 'package:frecu/core/design/widgets/fr_mark_text.dart';
 import 'package:frecu/core/design/widgets/fr_pin_field.dart';
 import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
+import 'package:frecu/features/lobby/presentation/extensions/nearby_room_extension.dart';
+import 'package:frecu/features/lobby/presentation/widgets/join_cancel.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
-import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -24,10 +29,13 @@ import 'package:frecu/i18n/strings.g.dart';
 /// cercana: celdas en matriz de puntos, teclado propio y envío automático al
 /// cuarto dígito.
 ///
-/// Si el anfitrión acepta, se cierra con la frecu activa; si rechaza el
-/// código, las celdas pasan a error y la siguiente tecla empieza otro; si
-/// falla por otro motivo, muestra el aviso y deja las celdas vacías. Mientras
-/// verifica no se cierra.
+/// Si el anfitrión acepta, las celdas se rellenan con la ola de acierto y
+/// «Código correcto · entrando» durante [enterDelay] (lo acorta el
+/// movimiento reducido) y la hoja se cierra con la frecu activa. Si rechaza
+/// el código, las celdas pasan a error con una vibración y la siguiente
+/// tecla empieza otro; si la frecu está llena, el aviso ámbar con los
+/// dígitos aún escritos; si falla por otro motivo, el aviso y las celdas
+/// vacías. Mientras verifica se puede cerrar: cerrar cancela la unión.
 class PinJoinSheet extends ConsumerStatefulWidget {
   /// Crea la hoja para unirse a [room].
   const PinJoinSheet({required this.room, super.key});
@@ -38,6 +46,9 @@ class PinJoinSheet extends ConsumerStatefulWidget {
   /// Dígitos del código de acceso.
   static const int codeLength = 4;
 
+  /// Lo que se ve el acierto antes de entrar a la frecu.
+  static const Duration enterDelay = Duration(milliseconds: 700);
+
   /// Abre la hoja sobre [context]; devuelve la frecu si se unió.
   static Future<Room?> show(BuildContext context, NearbyRoom room) =>
       showFrSheet<Room>(context, builder: (_) => PinJoinSheet(room: room));
@@ -46,14 +57,27 @@ class PinJoinSheet extends ConsumerStatefulWidget {
   ConsumerState<PinJoinSheet> createState() => _PinJoinSheetState();
 }
 
-class _PinJoinSheetState extends ConsumerState<PinJoinSheet> {
+class _PinJoinSheetState extends ConsumerState<PinJoinSheet>
+    with SingleTickerProviderStateMixin {
   String _digits = '';
   FrPinState _state = FrPinState.idle;
+
+  /// Espera de [PinJoinSheet.enterDelay] con el acierto a la vista.
+  late final AnimationController _enter = AnimationController(
+    vsync: this,
+    duration: PinJoinSheet.enterDelay,
+  );
 
   /// Falla que se muestra en un aviso (sala llena, sin respuesta…).
   Failure? _failure;
 
   bool get _locked => _state == FrPinState.busy || _state == FrPinState.ok;
+
+  @override
+  void dispose() {
+    _enter.dispose();
+    super.dispose();
+  }
 
   /// Tras un error o un aviso, la siguiente tecla empieza un código nuevo.
   bool get _restarts => _state == FrPinState.error || _failure != null;
@@ -87,6 +111,7 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet> {
   Future<void> _submit() async {
     setState(() => _state = FrPinState.busy);
     final room = widget.room;
+    final container = ProviderScope.containerOf(context, listen: false);
     final result = await ref
         .read(roomNotifierProvider.notifier)
         .joinRoom(
@@ -96,30 +121,52 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet> {
           displayName: ref.joinDisplayName,
           note: room.note,
         );
-    if (!mounted) return;
+    if (!mounted) return leaveCancelledJoin(container, result);
     switch (result) {
       case Success(:final data):
         setState(() => _state = FrPinState.ok);
-        Navigator.of(context).pop(data);
+        await _enterRoom(data, container);
       case FailureResult(:final failure):
-        setState(() {
-          if (failure == const Failure.invalidAccessCode()) {
-            _state = FrPinState.error;
-          } else {
-            _clear();
-            _failure = failure;
-          }
-        });
+        _fail(failure);
     }
+  }
+
+  /// Deja ver el acierto y cierra la hoja con [room].
+  Future<void> _enterRoom(Room room, ProviderContainer container) async {
+    try {
+      await _enter.forward(from: 0).orCancel;
+    } on TickerCanceled {
+      // La hoja se fue antes de entrar.
+      return leaveCancelledJoin(container, Result.success(room));
+    }
+    if (!mounted) return leaveCancelledJoin(container, Result.success(room));
+    FrExpandOrigin.recordFrom(context);
+    Navigator.of(context).pop(room);
+  }
+
+  void _fail(Failure failure) {
+    if (failure == const Failure.invalidAccessCode()) {
+      unawaited(HapticFeedback.heavyImpact());
+      setState(() => _state = FrPinState.error);
+      return;
+    }
+    // Con la frecu llena los dígitos siguen a la vista; con otro fallo se
+    // vacían para reintentar.
+    final digits = failure == const Failure.roomFull() ? _digits : '';
+    setState(() {
+      _clear();
+      _digits = digits;
+      _failure = failure;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final room = widget.room;
     final note = room.note;
-    final busy = _state == FrPinState.busy;
+    final entering = _state == FrPinState.ok;
     return PopScope(
-      canPop: !busy,
+      canPop: !entering,
       child: SingleChildScrollView(
         child: FrSheet(
           children: [
@@ -128,9 +175,9 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet> {
                 if (note != null) ...[note.label, note.hzText],
                 room.hostAddress,
               ].join(' · '),
-              title: room.name,
+              title: room.title,
               message: t.lobby.join.pin.message,
-              onClose: busy ? null : () => Navigator.of(context).maybePop(),
+              onClose: entering ? null : () => Navigator.of(context).maybePop(),
             ),
             Center(
               child: FrPinField(
@@ -166,18 +213,18 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet> {
       FrPinState.error => (t.lobby.join.wrongCode, c.alert),
       FrPinState.ok => (pin.correct, c.signalFg),
     };
+    final style = fr.type.bodyS.copyWith(
+      height: 1.45,
+      fontWeight: FontWeight.w500,
+      fontVariations: const [FontVariation.weight(500)],
+      color: color,
+    );
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 20),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: fr.type.bodyS.copyWith(
-          height: 1.45,
-          fontWeight: FontWeight.w500,
-          fontVariations: const [FontVariation.weight(500)],
-          color: color,
-        ),
-      ),
+      // El acierto se destaca con la señal: de día, tinta con marcatexto.
+      child: _state == FrPinState.ok
+          ? FrMarkText(text, textAlign: TextAlign.center, style: style)
+          : Text(text, textAlign: TextAlign.center, style: style),
     );
   }
 }
@@ -228,7 +275,7 @@ class JoinSheetHeader extends StatelessWidget {
   /// Mensaje bajo el título.
   final String message;
 
-  /// Cierra la hoja; nulo mientras se une.
+  /// Cierra la hoja; nulo mientras no se puede cerrar.
   final VoidCallback? onClose;
 
   @override
@@ -247,14 +294,7 @@ class JoinSheetHeader extends StatelessWidget {
                 style: fr.type.labelS.copyWith(color: c.tx3),
               ),
               const SizedBox(height: 8),
-              Text(
-                title,
-                style: fr.type.titleL.copyWith(
-                  fontSize: 22,
-                  height: 1.15,
-                  color: c.tx1,
-                ),
-              ),
+              Text(title, style: FrSheet.titleStyle(fr)),
               const SizedBox(height: 6),
               Text(
                 message,
@@ -279,8 +319,10 @@ class JoinSheetHeader extends StatelessWidget {
   }
 }
 
-/// Aviso de una unión que falló: el mensaje de la [failure] de título y una
-/// pista; la sala llena en ámbar y lo demás en alerta.
+/// Aviso de una unión que falló, con un título y una pista para cada
+/// [failure]: la frecu llena («Esta frecu está llena (6/6).») en ámbar; el
+/// anfitrión que no responde y cualquier otro fallo, en alerta y sin el
+/// mensaje técnico.
 class JoinFailureBanner extends StatelessWidget {
   /// Crea el aviso de [failure].
   const JoinFailureBanner({required this.failure, super.key});
@@ -292,16 +334,19 @@ class JoinFailureBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final join = t.lobby.join;
     final full = failure == const Failure.roomFull();
-    final unreachable = failure == const Failure.hostUnreachable();
+    final (title, message) = failure.maybeWhen<(String, String?)>(
+      roomFull: () =>
+          (join.full(max: NetworkConstants.maxParticipants), join.roomFullHint),
+      hostUnreachable: () => (join.unreachable, join.unreachableHint),
+      invalidAccessCode: () => (join.wrongCode, null),
+      versionMismatch: () => (join.versionMismatch, join.versionMismatchHint),
+      orElse: () => (join.failed, join.failedHint),
+    );
     return FrBanner(
       tone: full ? FrBannerTone.warn : FrBannerTone.alert,
       icon: full ? Icons.group_outlined : Icons.error_outline_rounded,
-      title: failure.toLocalizedMessage(),
-      message: full
-          ? join.roomFullHint
-          : unreachable
-          ? join.unreachableHint
-          : null,
+      title: title,
+      message: message,
     );
   }
 }

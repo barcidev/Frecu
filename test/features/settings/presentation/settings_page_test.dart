@@ -22,6 +22,7 @@ import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:frecu/features/settings/presentation/pages/settings_page.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:frecu/features/settings/presentation/widgets/settings_footer.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
@@ -156,7 +157,7 @@ void main() {
       }
       expect(_themeSelector(tester).value, ThemePreference.dark);
 
-      expect(find.text(t.settings.footer), findsOneWidget);
+      expect(find.text(SettingsFooter.textFor(null)), findsOneWidget);
     });
 
     testWidgets('AC1: Atrás vuelve a la pantalla anterior', (tester) async {
@@ -187,7 +188,7 @@ void main() {
       expect(find.text('Theme'), findsOneWidget);
       expect(find.text('LIGHT'), findsOneWidget);
       expect(find.text('DARK'), findsOneWidget);
-      expect(find.text('100% local · no internet'), findsOneWidget);
+      expect(find.text('FRECU · 100% LOCAL · NO INTERNET'), findsOneWidget);
       expect(
         _backButton.evaluate().single.widget,
         isA<FrIconButton>().having(

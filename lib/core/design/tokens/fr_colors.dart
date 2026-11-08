@@ -33,6 +33,8 @@ class FrColors extends ThemeExtension<FrColors> {
     required this.alert,
     required this.warnTx,
     required this.alertTx,
+    required this.warnFg,
+    required this.alertFg,
     required this.scrim,
     required this.sheetA,
     required this.sheetB,
@@ -75,20 +77,22 @@ class FrColors extends ThemeExtension<FrColors> {
         alert: v[20]! as Color,
         warnTx: v[21]! as Color,
         alertTx: v[22]! as Color,
-        scrim: v[23]! as Color,
-        sheetA: v[24]! as Color,
-        sheetB: v[25]! as Color,
-        coreHi: v[26]! as Color,
-        coreLo: v[27]! as Color,
-        touch: v[28]! as Color,
-        shadow: v[29]! as Color,
-        p1: v[30]! as Color,
-        p2: v[31]! as Color,
-        p3: v[32]! as Color,
-        p4: v[33]! as Color,
-        p5: v[34]! as Color,
-        signalMark: v[35] as Color?,
-        ledRing: v[36] as Color?,
+        warnFg: v[23]! as Color,
+        alertFg: v[24]! as Color,
+        scrim: v[25]! as Color,
+        sheetA: v[26]! as Color,
+        sheetB: v[27]! as Color,
+        coreHi: v[28]! as Color,
+        coreLo: v[29]! as Color,
+        touch: v[30]! as Color,
+        shadow: v[31]! as Color,
+        p1: v[32]! as Color,
+        p2: v[33]! as Color,
+        p3: v[34]! as Color,
+        p4: v[35]! as Color,
+        p5: v[36]! as Color,
+        signalMark: v[37] as Color?,
+        ledRing: v[38] as Color?,
       );
 
   /// Noche: grafito casi negro, amable con OLED y con la batería.
@@ -116,6 +120,8 @@ class FrColors extends ThemeExtension<FrColors> {
     alert: Color(0xFFFF5A4E),
     warnTx: Color(0xFFFFE2B8),
     alertTx: Color(0xFFFFD3CF),
+    warnFg: Color(0xFFFFB547),
+    alertFg: Color(0xFFFF5A4E),
     scrim: Color(0x8C020304),
     sheetA: Color(0xFF171B20),
     sheetB: Color(0xFF13161A),
@@ -155,6 +161,8 @@ class FrColors extends ThemeExtension<FrColors> {
     alert: Color(0xFFD2362B),
     warnTx: Color(0xFF5A3700),
     alertTx: Color(0xFF6B1610),
+    warnFg: Color(0xFF5A3700),
+    alertFg: Color(0xFF6B1610),
     scrim: Color(0x47101412),
     sheetA: Color(0xFFFFFFFF),
     sheetB: Color(0xFFF9FAF8),
@@ -240,6 +248,15 @@ class FrColors extends ThemeExtension<FrColors> {
   /// Texto sobre un fondo de alerta.
   final Color alertTx;
 
+  /// Aviso como letra pequeña sobre los fondos de la app y sobre su lavado:
+  /// `warn` de noche; de día, `warnTx`, porque el ámbar no llega a 4,5:1.
+  final Color warnFg;
+
+  /// Alerta como letra pequeña sobre los fondos de la app (la ayuda de un
+  /// error): `alert` de noche; de día, `alertTx`, porque la bengala no llega
+  /// a 4,5:1 sobre `bg0`.
+  final Color alertFg;
+
   /// Velo detrás de hojas y diálogos.
   final Color scrim;
 
@@ -285,16 +302,26 @@ class FrColors extends ThemeExtension<FrColors> {
   /// Canales de los demás participantes, en orden (tú usas la señal).
   List<Color> get channels => [p1, p2, p3, p4, p5];
 
+  /// Brillo (halo, sombra luminosa) de lo que se traza con [stroke], como
+  /// `glow` del prototipo: el de la señal siempre es verde, también de día,
+  /// cuando el trazo es tinta (`signalFg`); los demás brillan en su color.
+  /// Conserva la opacidad de [stroke].
+  Color glowOf(Color stroke) {
+    const rgb = 0x00FFFFFF;
+    final isSignal = stroke.toARGB32() & rgb == signalFg.toARGB32() & rgb;
+    return isSignal ? signal.withValues(alpha: stroke.a) : stroke;
+  }
+
   /// Todos los tokens, en el orden del constructor; los usan `copyWith` y `lerp`.
   List<Object?> get _values => [
     // dart format off
     bg0, bg1, bg2, bg3, bg4, line1,
     line2, line3, spec, tx1, tx2, tx3,
     tx4, signal, signalInk, signalFg, signalHi, ink,
-    washK, warn, alert, warnTx, alertTx, scrim,
-    sheetA, sheetB, coreHi, coreLo, touch, shadow,
-    p1, p2, p3, p4, p5, signalMark,
-    ledRing,
+    washK, warn, alert, warnTx, alertTx, warnFg,
+    alertFg, scrim, sheetA, sheetB, coreHi, coreLo,
+    touch, shadow, p1, p2, p3, p4,
+    p5, signalMark, ledRing,
     // dart format on
   ];
 
@@ -308,11 +335,11 @@ class FrColors extends ThemeExtension<FrColors> {
     Color? spec, Color? tx1, Color? tx2, Color? tx3,
     Color? tx4, Color? signal, Color? signalInk, Color? signalFg,
     Color? signalHi, Color? ink, double? washK, Color? warn,
-    Color? alert, Color? warnTx, Color? alertTx, Color? scrim,
-    Color? sheetA, Color? sheetB, Color? coreHi, Color? coreLo,
-    Color? touch, Color? shadow, Color? p1, Color? p2,
-    Color? p3, Color? p4, Color? p5, Color? signalMark,
-    Color? ledRing,
+    Color? alert, Color? warnTx, Color? alertTx, Color? warnFg,
+    Color? alertFg, Color? scrim, Color? sheetA, Color? sheetB,
+    Color? coreHi, Color? coreLo, Color? touch, Color? shadow,
+    Color? p1, Color? p2, Color? p3, Color? p4,
+    Color? p5, Color? signalMark, Color? ledRing,
     // dart format on
   }) {
     final overrides = <Object?>[
@@ -320,10 +347,10 @@ class FrColors extends ThemeExtension<FrColors> {
       bg0, bg1, bg2, bg3, bg4, line1,
       line2, line3, spec, tx1, tx2, tx3,
       tx4, signal, signalInk, signalFg, signalHi, ink,
-      washK, warn, alert, warnTx, alertTx, scrim,
-      sheetA, sheetB, coreHi, coreLo, touch, shadow,
-      p1, p2, p3, p4, p5, signalMark,
-      ledRing,
+      washK, warn, alert, warnTx, alertTx, warnFg,
+      alertFg, scrim, sheetA, sheetB, coreHi, coreLo,
+      touch, shadow, p1, p2, p3, p4,
+      p5, signalMark, ledRing,
       // dart format on
     ];
     return FrColors._fromValues([

@@ -112,7 +112,46 @@ final class ForegroundServiceDataSourceProvider
 }
 
 String _$foregroundServiceDataSourceHash() =>
-    r'55cf259449923a19e379e87d604d46ad00a450bd';
+    r'a963c648e1ae10bae2de89398365e0188529abb7';
+
+/// Toques en «Salir» de la notificación de la frecu (Android).
+
+@ProviderFor(notificationLeaveRequests)
+final notificationLeaveRequestsProvider = NotificationLeaveRequestsProvider._();
+
+/// Toques en «Salir» de la notificación de la frecu (Android).
+
+final class NotificationLeaveRequestsProvider
+    extends $FunctionalProvider<AsyncValue<int>, int, Stream<int>>
+    with $FutureModifier<int>, $StreamProvider<int> {
+  /// Toques en «Salir» de la notificación de la frecu (Android).
+  NotificationLeaveRequestsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notificationLeaveRequestsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$notificationLeaveRequestsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<int> create(Ref ref) {
+    return notificationLeaveRequests(ref);
+  }
+}
+
+String _$notificationLeaveRequestsHash() =>
+    r'448b80a239bb7ea4796638e61c795b4296e29a02';
 
 /// Proveedor global singleton del repositorio de sala.
 
@@ -323,7 +362,7 @@ final class RoomNotifierProvider
   }
 }
 
-String _$roomNotifierHash() => r'b3d700ce1f81dd7fc8ed2718ed90b1699bbf1375';
+String _$roomNotifierHash() => r'893f07f213af33348c485e13f8290def6d467912';
 
 /// Gestor del ciclo de vida y estado de la sala activa.
 

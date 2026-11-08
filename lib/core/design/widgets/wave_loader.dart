@@ -25,7 +25,8 @@ class WaveLoader extends StatelessWidget {
   /// Alto en px.
   final double height;
 
-  /// Color de la onda; por defecto `signal`.
+  /// Color de la onda; por defecto `signalFg` (la señal como trazo: de día,
+  /// tinta).
   final Color? color;
 
   /// Etiqueta accesible, si el loader no acompaña a otro texto.
@@ -33,7 +34,7 @@ class WaveLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ink = color ?? context.fr.colors.signal;
+    final ink = color ?? context.fr.colors.signalFg;
     final wave = SizedBox(
       width: width,
       height: height,

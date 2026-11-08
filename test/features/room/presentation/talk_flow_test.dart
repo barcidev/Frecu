@@ -27,6 +27,7 @@ import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/ptt_core.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
+import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
@@ -156,6 +157,10 @@ void main() {
       _bob,
       Participant(id: 'peer-3', displayName: 'Leo'),
     ]);
+    await tester.pumpAndSettle();
+    expect(island(tester).label, 'Leo se unió');
+
+    await tester.pump(RoomIslandEvent.duration);
     await tester.pumpAndSettle();
     expect(island(tester).label, 'En línea · 3/6');
   });

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/motion/fr_spring_curve.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
+import 'package:frecu/core/design/widgets/fr_specular.dart';
 
 /// Aspecto de una celda: relleno, borde, color del dígito y sombras.
 typedef _CellLook = ({
@@ -181,26 +182,38 @@ class _FrPinFieldState extends State<FrPinField> with TickerProviderStateMixin {
     final look = _look(fr, index, seconds);
     final waving = _wave.isAnimating && widget.state == FrPinState.ok;
     final instant = widget.state == FrPinState.busy || waving;
-    final cell = AnimatedContainer(
-      key: ValueKey('fr-pin-cell-$index'),
-      duration: instant
-          ? Duration.zero
-          : reduce
-          ? fr.motion.quick
-          : fr.motion.smooth,
-      curve: fr.motion.easeOut,
-      width: _cellWidth,
-      height: _cellHeight,
-      alignment: Alignment.center,
-      decoration: ShapeDecoration(
-        color: look.fill,
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(_radius),
-          side: look.side,
+    final shape = RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.circular(_radius),
+      side: look.side,
+    );
+    // Filo especular solo en la celda en reposo (`.pin i`): la del cursor,
+    // la de solo lectura, la correcta y la de error no lo llevan.
+    final specular =
+        !widget.readOnly &&
+        index != _cursor &&
+        (widget.state == FrPinState.idle || widget.state == FrPinState.busy);
+    final cell = CustomPaint(
+      foregroundPainter: specular
+          ? FrSpecularPainter(shape: shape, color: fr.colors.spec)
+          : null,
+      child: AnimatedContainer(
+        key: ValueKey('fr-pin-cell-$index'),
+        duration: instant
+            ? Duration.zero
+            : reduce
+            ? fr.motion.quick
+            : fr.motion.smooth,
+        curve: fr.motion.easeOut,
+        width: _cellWidth,
+        height: _cellHeight,
+        alignment: Alignment.center,
+        decoration: ShapeDecoration(
+          color: look.fill,
+          shape: shape,
+          shadows: look.shadows,
         ),
-        shadows: look.shadows,
+        child: _content(fr, index, look.ink),
       ),
-      child: _content(fr, index, look.ink),
     );
     final lift = waving ? _lift(fr, _waveProgress(index)) : 0.0;
     final pop = index == _popIndex && _pop.isAnimating

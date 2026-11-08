@@ -234,10 +234,12 @@ class _RoomMeshState extends State<RoomMesh> {
       key: ValueKey('mesh_free_label_$slot'),
       center: center,
       top: 30,
+      // «LIBRE» en mayúsculas y espaciado de etiqueta (`.nl.free b`).
       child: _MeshLabel(
-        name: t.room.mesh.free,
+        name: t.room.mesh.free.toUpperCase(),
         nameColor: colors.tx4,
         nameWeight: FontWeight.w500,
+        nameSpacing: 1.25,
       ),
     ),
     Positioned(
@@ -289,6 +291,7 @@ class _MeshLabel extends StatelessWidget {
     required this.name,
     required this.nameColor,
     required this.nameWeight,
+    this.nameSpacing,
     this.caption,
     this.captionColor,
   });
@@ -296,6 +299,7 @@ class _MeshLabel extends StatelessWidget {
   final String name;
   final Color nameColor;
   final FontWeight nameWeight;
+  final double? nameSpacing;
   final String? caption;
   final Color? captionColor;
 
@@ -319,6 +323,7 @@ class _MeshLabel extends StatelessWidget {
               FontVariation.weight(nameWeight.value.toDouble()),
               const FontVariation.width(104),
             ],
+            letterSpacing: nameSpacing,
             color: nameColor,
           ),
         ),

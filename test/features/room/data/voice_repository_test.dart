@@ -69,6 +69,8 @@ void main() {
 
       when(() => mockSignaling.messages)
           .thenAnswer((_) => signalingStreamController.stream);
+      when(() => mockSignaling.connectionState)
+          .thenAnswer((_) => const Stream<bool>.empty());
       when(() => mockSignaling.send(any())).thenAnswer((invocation) {
         sentMessages.add(invocation.positionalArguments[0] as SignalingMessage);
       });
@@ -239,7 +241,7 @@ void main() {
         final pcDataSource = createPeerConnectionDataSource();
         final repository = createRepository(pcDataSource);
 
-        await repository.initializeAudio(localPeerId: 'my_peer_id');
+        await repository.joinMesh(localPeerId: 'my_peer_id', peerIds: const []);
         await repository.setTalkMode(TalkMode.openMic);
 
         final startResult = await repository.startTalking();
@@ -278,7 +280,7 @@ void main() {
         final pcDataSource = createPeerConnectionDataSource();
         final repository = createRepository(pcDataSource);
 
-        await repository.initializeAudio(localPeerId: 'my_peer_id');
+        await repository.joinMesh(localPeerId: 'my_peer_id', peerIds: const []);
         await repository.startTalking();
         expect(isTrackEnabled, isTrue);
 

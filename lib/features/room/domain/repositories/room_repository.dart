@@ -25,10 +25,12 @@ abstract interface class RoomRepository {
   /// Abandona la frecu activa de forma limpia.
   Future<Result<void>> leaveRoom();
 
-  /// Stream reactivo de la lista de participantes de la frecu.
+  /// Stream reactivo de la lista de participantes de la frecu: empieza con
+  /// la lista actual, así quien la mira después del `welcome` no la pierde.
+  /// Quienes ya estaban van antes que quien llega.
   Stream<List<Participant>> watchParticipants();
 
-  /// Stream reactivo del estado de la frecu.
+  /// Stream reactivo del estado de la frecu: empieza con el estado actual.
   Stream<RoomStatus> watchStatus();
 
   /// Id que el anfitrión asignó a este teléfono en la última bienvenida

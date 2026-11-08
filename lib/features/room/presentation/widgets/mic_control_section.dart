@@ -59,6 +59,7 @@ class MicControlSection extends ConsumerWidget {
                 AudioRoutePill(
                   key: const Key('audio_route_button'),
                   route: voiceState.audioRoute,
+                  deviceName: voiceState.bluetoothName,
                   active: speaker != null,
                   onPressed: onRoute,
                 ),
@@ -97,7 +98,7 @@ class MicControlSection extends ConsumerWidget {
 
   Widget _modeSelector(VoiceNotifier voice) => FrSegmented<TalkMode>(
     value: voiceState.talkMode,
-    onChanged: talk.enabled ? voice.setTalkMode : null,
+    onChanged: talk.enabled ? voice.chooseTalkMode : null,
     segments: [
       FrSegment(
         value: TalkMode.pushToTalk,
@@ -158,18 +159,23 @@ class _EchoNoticeState extends State<EchoNotice> {
 }
 
 /// Pastilla de la salida de audio (`.route` del prototipo): ícono y nombre
-/// de la ruta, barras de actividad y flecha; abre la hoja de ruta.
+/// de la ruta (el del dispositivo Bluetooth si se conoce), barras de
+/// actividad y flecha; abre la hoja de ruta.
 class AudioRoutePill extends StatelessWidget {
   /// Crea la pastilla de [route]; las barras se mueven si [active].
   const AudioRoutePill({
     required this.route,
     required this.active,
     required this.onPressed,
+    this.deviceName,
     super.key,
   });
 
   /// Ruta de audio activa.
   final AudioRoute route;
+
+  /// Nombre del dispositivo Bluetooth conectado, si hay uno.
+  final String? deviceName;
 
   /// Llega audio por la ruta (otra persona habla).
   final bool active;
@@ -181,7 +187,7 @@ class AudioRoutePill extends StatelessWidget {
   Widget build(BuildContext context) {
     final fr = context.fr;
     final c = fr.colors;
-    final name = audioRouteName(route);
+    final name = audioRouteName(route, deviceName: deviceName);
     return FrPressable(
       onPressed: onPressed,
       pressedScale: 0.96,
@@ -208,17 +214,23 @@ class AudioRoutePill extends StatelessWidget {
           spacing: 9,
           children: [
             FrIcon(audioRouteIcon(route), size: 18, color: c.tx1),
-            Text(
-              name,
-              style: fr.type.body.copyWith(
-                fontSize: 13.5,
-                height: 1,
-                fontWeight: FontWeight.w600,
-                fontVariations: const [
-                  FontVariation.weight(600),
-                  FontVariation.width(105),
-                ],
-                color: c.tx1,
+            // Un nombre de Bluetooth largo se corta y no aprieta al selector.
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 112),
+              child: Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: fr.type.body.copyWith(
+                  fontSize: 13.5,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                  fontVariations: const [
+                    FontVariation.weight(600),
+                    FontVariation.width(105),
+                  ],
+                  color: c.tx1,
+                ),
               ),
             ),
             _RouteBars(active: active),

@@ -22,9 +22,11 @@ enum FrPillTone {
 /// Píldora de estado de Portadora: un punto con halo y el texto en
 /// mayúsculas.
 ///
-/// El halo late cada 2,4 s (1,1 s en `warn`); en `off` no hay halo. [busy]
-/// cambia el punto por un anillo con un arco que gira. Con movimiento
-/// reducido el halo se apaga y el arco se detiene; el color del tono sigue.
+/// El halo late cada 2,4 s (1,1 s en `warn`); en `off` no hay halo; en `ok`
+/// es verde también de día (es un brillo, D8). [busy] cambia el punto por un
+/// anillo ámbar de 1,5 px con un arco que gira (`.pill.busy`). Con
+/// movimiento reducido el halo se apaga y el arco se detiene; el color del
+/// tono sigue.
 class FrPill extends StatelessWidget {
   /// Crea una píldora con [label].
   const FrPill({
@@ -68,7 +70,7 @@ class FrPill extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (busy) _BusyDot(color: color) else _dotWithHalo(fr, color),
+              if (busy) _BusyDot(color: c.warn) else _dotWithHalo(fr, color),
               const SizedBox(width: 8),
               Text(
                 label.toUpperCase(),
@@ -106,8 +108,9 @@ class FrPill extends StatelessWidget {
       ),
     );
     if (tone == FrPillTone.off) return dot;
-    // El halo es un trazo: de día va en `signalFg`, nunca en `signal`.
-    final halo = ok ? c.signalFg : color;
+    // El halo es un brillo: en `ok` es el verde también de día
+    // (`.pill.ok .dot { color: var(--signal) }`).
+    final halo = ok ? c.signal : color;
     return Builder(
       builder: (context) => Stack(
         clipBehavior: Clip.none,
@@ -163,7 +166,8 @@ class _Halo extends StatelessWidget {
   }
 }
 
-/// Punto ocupado: anillo tenue con un arco que gira cada 0,9 s.
+/// Punto ocupado: anillo de 1,5 px con un arco que gira cada 0,9 s, los dos
+/// en [color] (`.pill.busy .dot`).
 class _BusyDot extends StatelessWidget {
   const _BusyDot({required this.color});
 
@@ -188,10 +192,7 @@ class _BusyDot extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: color.withValues(alpha: 0.3),
-                  width: 1.5,
-                ),
+                border: Border.all(color: color, width: 1.5),
               ),
             ),
           ),

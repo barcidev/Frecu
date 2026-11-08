@@ -92,6 +92,17 @@ class _PttCoreState extends State<PttCore> {
     }
   }
 
+  @override
+  void dispose() {
+    // Si el núcleo se va con el dedo apoyado (p. ej. al cerrarse la frecu),
+    // deja de transmitir: el `onPointerUp` ya no va a llegar.
+    if (_pressed) {
+      _pointers.clear();
+      widget.onStop();
+    }
+    super.dispose();
+  }
+
   void _down(PointerDownEvent event) {
     if (!widget.phase.isPush) return;
     final first = _pointers.isEmpty;

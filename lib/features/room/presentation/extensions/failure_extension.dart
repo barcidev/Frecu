@@ -13,6 +13,7 @@ extension FailureLocalization on Failure {
       roomFull: () => t.errors.roomFull,
       invalidAccessCode: () => t.errors.invalidAccessCode,
       hostUnreachable: () => t.errors.hostUnreachable,
+      versionMismatch: () => t.errors.versionMismatch,
       audio: (msg) => msg ?? t.errors.audio,
       unexpected: (msg, _) => msg ?? t.errors.unexpected,
     );

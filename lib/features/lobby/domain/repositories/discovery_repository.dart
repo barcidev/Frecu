@@ -1,3 +1,4 @@
+import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -5,6 +6,11 @@ import 'package:frecu/features/room/domain/entities/room_note.dart';
 /// Contrato del repositorio para el descubrimiento y anuncio local de salas.
 abstract interface class DiscoveryRepository {
   /// Stream reactivo de las salas descubiertas activamente en la red local.
+  ///
+  /// Escucharlo busca: al empezar da las frecus que ya conoce y luego cada
+  /// cambio; dejar de escucharlo detiene la búsqueda y la vacía. Si la
+  /// búsqueda no puede empezar, da un error [Failure.network] y sigue
+  /// abierto: volver a escucharlo es reintentar.
   Stream<List<NearbyRoom>> watchNearbyRooms();
 
   /// Anuncia la sala local mediante mDNS en la red con sus atributos y,

@@ -9,6 +9,7 @@ import 'package:frecu/features/lobby/presentation/providers/discovery_provider.d
 import 'package:frecu/features/lobby/presentation/providers/new_room_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
+import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Crear una frecu como anfitrión, en dos pasos: la guía del punto de acceso
@@ -65,6 +66,9 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
   Widget _guide(BuildContext _) => HotspotGuideStep(
     onBack: () => unawaited(context.router.maybePop()),
     onContinue: () => unawaited(_steps.currentState?.push(_route(_newRoom))),
+    onOpenHotspotSettings: () => unawaited(
+      ref.read(systemSettingsRepositoryProvider).openHotspotSettings(),
+    ),
   );
 
   Widget _newRoom(BuildContext _) => NewRoomStep(

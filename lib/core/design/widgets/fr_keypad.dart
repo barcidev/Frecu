@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
+import 'package:frecu/core/design/widgets/fr_specular.dart';
 
 /// Teclado numérico propio de Portadora, de teclas grandes (aptas con
 /// guantes), para escribir el código de un `FrPinField`.
@@ -30,7 +33,7 @@ class FrKeypad extends StatelessWidget {
   /// Etiqueta accesible de borrar.
   final String deleteLabel;
 
-  /// Ícono de borrar; por defecto, el de Material hasta tener `FrIcons`.
+  /// Ícono de borrar; por defecto, `FrIcons.backspace`.
   final Widget? deleteIcon;
 
   /// Contenido de la tecla de función, a la izquierda del 0; sin él, el hueco
@@ -78,7 +81,7 @@ class FrKeypad extends StatelessWidget {
             function: true,
             semanticLabel: deleteLabel,
             onPressed: onDelete,
-            child: deleteIcon ?? const Icon(Icons.backspace_outlined),
+            child: deleteIcon ?? const FrIcon(FrIcons.backspace),
           ),
         ]),
       ],
@@ -136,34 +139,42 @@ class _FrKey extends StatelessWidget {
         : pressed
         ? c.bg3
         : c.bg1;
-    return AnimatedContainer(
-      key: ValueKey('fr-key-$id'),
-      duration: fr.motion.instant,
-      height: height,
-      alignment: Alignment.center,
-      decoration: ShapeDecoration(
-        color: background,
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(fr.radii.m),
-          side: function ? BorderSide.none : BorderSide(color: c.line1),
-        ),
+    final shape = RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.circular(fr.radii.m),
+      side: function ? BorderSide.none : BorderSide(color: c.line1),
+    );
+    // Filo especular en las teclas de dígito (`.keys button`).
+    return CustomPaint(
+      foregroundPainter: function
+          ? null
+          : FrSpecularPainter(shape: shape, color: c.spec),
+      child: AnimatedContainer(
+        key: ValueKey('fr-key-$id'),
+        duration: fr.motion.instant,
+        height: height,
+        alignment: Alignment.center,
+        decoration: ShapeDecoration(color: background, shape: shape),
+        child: _content(fr, ink),
       ),
-      child: IconTheme.merge(
-        data: IconThemeData(color: ink, size: 22),
-        child: DefaultTextStyle.merge(
-          style: fr.type.button.copyWith(
-            fontSize: 24,
-            height: 1,
-            letterSpacing: 0,
-            fontWeight: const FontWeight(560),
-            fontVariations: const [
-              FontVariation.weight(560),
-              FontVariation.width(115),
-            ],
-            color: ink,
-          ),
-          child: child,
+    );
+  }
+
+  Widget _content(FrTheme fr, Color ink) {
+    return IconTheme.merge(
+      data: IconThemeData(color: ink, size: 22),
+      child: DefaultTextStyle.merge(
+        style: fr.type.button.copyWith(
+          fontSize: 24,
+          height: 1,
+          letterSpacing: 0,
+          fontWeight: const FontWeight(560),
+          fontVariations: const [
+            FontVariation.weight(560),
+            FontVariation.width(115),
+          ],
+          color: ink,
         ),
+        child: child,
       ),
     );
   }

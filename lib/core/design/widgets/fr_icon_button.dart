@@ -5,6 +5,7 @@ import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
+import 'package:frecu/core/design/widgets/fr_specular.dart';
 
 /// Estilo de un [FrIconButton].
 enum FrIconButtonVariant {
@@ -103,27 +104,34 @@ class FrIconButton extends StatelessWidget {
         : variant == FrIconButtonVariant.danger
         ? c.alert
         : c.tx1;
-    return AnimatedContainer(
-      duration: fr.motion.instant,
-      width: extent,
-      height: extent,
-      alignment: Alignment.center,
-      decoration: ShapeDecoration(
-        color: background,
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(fr.radii.m * extent / 48),
-          side: side,
+    final shape = RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.circular(fr.radii.m * extent / 48),
+      side: side,
+    );
+    // Filo especular (`.ibtn`), salvo encendido o fantasma.
+    return CustomPaint(
+      foregroundPainter: selected || ghost
+          ? null
+          : FrSpecularPainter(shape: shape, color: c.spec),
+      child: AnimatedContainer(
+        duration: fr.motion.instant,
+        width: extent,
+        height: extent,
+        alignment: Alignment.center,
+        decoration: ShapeDecoration(
+          color: background,
+          shape: shape,
+          shadows: [
+            if (selected)
+              BoxShadow(
+                color: c.signal.withValues(alpha: 0.6),
+                blurRadius: 22,
+                spreadRadius: -6,
+              ),
+          ],
         ),
-        shadows: [
-          if (selected)
-            BoxShadow(
-              color: c.signal.withValues(alpha: 0.6),
-              blurRadius: 22,
-              spreadRadius: -6,
-            ),
-        ],
+        child: _glyph(foreground),
       ),
-      child: _glyph(foreground),
     );
   }
 

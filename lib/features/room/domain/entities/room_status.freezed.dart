@@ -128,13 +128,13 @@ return closed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  connecting,TResult Function()?  connected,TResult Function()?  reconnecting,TResult Function( String reason)?  closed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  connecting,TResult Function()?  connected,TResult Function( Duration? retryIn,  int attempt)?  reconnecting,TResult Function( String reason)?  closed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RoomStatusIdle() when idle != null:
 return idle();case _RoomStatusConnecting() when connecting != null:
 return connecting();case _RoomStatusConnected() when connected != null:
 return connected();case _RoomStatusReconnecting() when reconnecting != null:
-return reconnecting();case _RoomStatusClosed() when closed != null:
+return reconnecting(_that.retryIn,_that.attempt);case _RoomStatusClosed() when closed != null:
 return closed(_that.reason);case _:
   return orElse();
 
@@ -153,13 +153,13 @@ return closed(_that.reason);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  connecting,required TResult Function()  connected,required TResult Function()  reconnecting,required TResult Function( String reason)  closed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  connecting,required TResult Function()  connected,required TResult Function( Duration? retryIn,  int attempt)  reconnecting,required TResult Function( String reason)  closed,}) {final _that = this;
 switch (_that) {
 case _RoomStatusIdle():
 return idle();case _RoomStatusConnecting():
 return connecting();case _RoomStatusConnected():
 return connected();case _RoomStatusReconnecting():
-return reconnecting();case _RoomStatusClosed():
+return reconnecting(_that.retryIn,_that.attempt);case _RoomStatusClosed():
 return closed(_that.reason);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -174,13 +174,13 @@ return closed(_that.reason);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  connecting,TResult? Function()?  connected,TResult? Function()?  reconnecting,TResult? Function( String reason)?  closed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  connecting,TResult? Function()?  connected,TResult? Function( Duration? retryIn,  int attempt)?  reconnecting,TResult? Function( String reason)?  closed,}) {final _that = this;
 switch (_that) {
 case _RoomStatusIdle() when idle != null:
 return idle();case _RoomStatusConnecting() when connecting != null:
 return connecting();case _RoomStatusConnected() when connected != null:
 return connected();case _RoomStatusReconnecting() when reconnecting != null:
-return reconnecting();case _RoomStatusClosed() when closed != null:
+return reconnecting(_that.retryIn,_that.attempt);case _RoomStatusClosed() when closed != null:
 return closed(_that.reason);case _:
   return null;
 
@@ -289,33 +289,69 @@ String toString() {
 
 
 class _RoomStatusReconnecting implements RoomStatus {
-  const _RoomStatusReconnecting();
+  const _RoomStatusReconnecting({this.retryIn, this.attempt = 0});
   
 
+ final  Duration? retryIn;
+@JsonKey() final  int attempt;
 
-
+/// Create a copy of RoomStatus
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RoomStatusReconnectingCopyWith<_RoomStatusReconnecting> get copyWith => __$RoomStatusReconnectingCopyWithImpl<_RoomStatusReconnecting>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoomStatusReconnecting);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RoomStatusReconnecting&&(identical(other.retryIn, retryIn) || other.retryIn == retryIn)&&(identical(other.attempt, attempt) || other.attempt == attempt));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,retryIn,attempt);
 
 @override
 String toString() {
-  return 'RoomStatus.reconnecting()';
+  return 'RoomStatus.reconnecting(retryIn: $retryIn, attempt: $attempt)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$RoomStatusReconnectingCopyWith<$Res> implements $RoomStatusCopyWith<$Res> {
+  factory _$RoomStatusReconnectingCopyWith(_RoomStatusReconnecting value, $Res Function(_RoomStatusReconnecting) _then) = __$RoomStatusReconnectingCopyWithImpl;
+@useResult
+$Res call({
+ Duration? retryIn, int attempt
+});
 
 
+
+
+}
+/// @nodoc
+class __$RoomStatusReconnectingCopyWithImpl<$Res>
+    implements _$RoomStatusReconnectingCopyWith<$Res> {
+  __$RoomStatusReconnectingCopyWithImpl(this._self, this._then);
+
+  final _RoomStatusReconnecting _self;
+  final $Res Function(_RoomStatusReconnecting) _then;
+
+/// Create a copy of RoomStatus
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? retryIn = freezed,Object? attempt = null,}) {
+  return _then(_RoomStatusReconnecting(
+retryIn: freezed == retryIn ? _self.retryIn : retryIn // ignore: cast_nullable_to_non_nullable
+as Duration?,attempt: null == attempt ? _self.attempt : attempt // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

@@ -13,6 +13,7 @@ import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/features/settings/presentation/widgets/edit_name_sheet.dart';
 import 'package:frecu/features/settings/presentation/widgets/profile_card.dart';
+import 'package:frecu/features/settings/presentation/widgets/settings_footer.dart';
 import 'package:frecu/features/settings/presentation/widgets/settings_group.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -29,7 +30,6 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final preferences =
         ref.watch(preferencesProvider).value ?? const Preferences();
-    final fr = context.fr;
     return FrScaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,11 +51,7 @@ class SettingsPage extends ConsumerWidget {
                 SettingsSectionLabel(t.settings.appearance),
                 _ThemeGroup(preferences.themePreference),
                 const SizedBox(height: 24),
-                Text(
-                  t.settings.footer,
-                  textAlign: TextAlign.center,
-                  style: fr.type.labelS.copyWith(color: fr.colors.tx3),
-                ),
+                const SettingsFooter(),
               ],
             ),
           ),
@@ -184,6 +180,7 @@ class _ThemeGroup extends ConsumerWidget {
           trailing: SizedBox(
             width: _selectorWidth,
             child: FrSegmented<ThemePreference>(
+              height: 40,
               value: value,
               onChanged: (theme) => _saveOrWarn(
                 context,

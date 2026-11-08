@@ -17,8 +17,10 @@ final class BuildInviteQr implements UseCase<String, RoomInvite> {
 
   /// Construye de forma sincrónica la URI estándar frecu://join.
   ///
-  /// Si la invitación tiene nota, suma al final `n` con su semitono (0–23).
+  /// Si la invitación tiene nota, suma al final `n` con su semitono (0–23),
+  /// y si tiene nombre, `name` tras ella.
   String buildUri(RoomInvite invite) {
+    final name = invite.name?.trim() ?? '';
     final uri = Uri(
       scheme: 'frecu',
       host: 'join',
@@ -28,6 +30,7 @@ final class BuildInviteQr implements UseCase<String, RoomInvite> {
         'r': invite.roomId,
         'c': invite.accessCode,
         if (invite.note case final note?) 'n': note.semitone.toString(),
+        if (name.isNotEmpty) 'name': name,
       },
     );
     return uri.toString();

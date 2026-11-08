@@ -12,6 +12,7 @@ _RoomInvite _$RoomInviteFromJson(Map<String, dynamic> json) => _RoomInvite(
   roomId: json['roomId'] as String,
   accessCode: json['accessCode'] as String,
   note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
+  name: json['name'] as String?,
 );
 
 Map<String, dynamic> _$RoomInviteToJson(_RoomInvite instance) =>
@@ -21,4 +22,5 @@ Map<String, dynamic> _$RoomInviteToJson(_RoomInvite instance) =>
       'roomId': instance.roomId,
       'accessCode': instance.accessCode,
       'note': const RoomNoteConverter().toJson(instance.note),
+      'name': instance.name,
     };

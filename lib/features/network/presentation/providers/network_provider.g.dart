@@ -166,3 +166,59 @@ final class NetworkStateStreamProvider
 
 String _$networkStateStreamHash() =>
     r'882a0337cf8b33dcdb95431ed2f6e7386f3edf7e';
+
+/// Proveedor de los Ajustes del sistema (Wi-Fi, punto de acceso y los de la
+/// app).
+
+@ProviderFor(systemSettingsRepository)
+final systemSettingsRepositoryProvider = SystemSettingsRepositoryProvider._();
+
+/// Proveedor de los Ajustes del sistema (Wi-Fi, punto de acceso y los de la
+/// app).
+
+final class SystemSettingsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          SystemSettingsRepository,
+          SystemSettingsRepository,
+          SystemSettingsRepository
+        >
+    with $Provider<SystemSettingsRepository> {
+  /// Proveedor de los Ajustes del sistema (Wi-Fi, punto de acceso y los de la
+  /// app).
+  SystemSettingsRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'systemSettingsRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$systemSettingsRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<SystemSettingsRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SystemSettingsRepository create(Ref ref) {
+    return systemSettingsRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SystemSettingsRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SystemSettingsRepository>(value),
+    );
+  }
+}
+
+String _$systemSettingsRepositoryHash() =>
+    r'46be98e6f825445e1ee3a7c48a5ec79ebd7e10e3';

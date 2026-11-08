@@ -124,7 +124,8 @@ void main() {
     });
 
     test(
-      'AC1: la persona propia va al lugar 0 y los demás al primer lugar libre',
+      'AC1: la persona propia va al lugar 0 y los demás al primer lugar libre '
+      'en el orden del prototipo: arriba (3), abajo a la izquierda (1)…',
       () {
         final slots = assignMeshSlots(
           previous: const {},
@@ -132,7 +133,7 @@ void main() {
           localId: 'p-1',
         );
 
-        expect(slots, {'p-1': 0, 'p-2': 1, 'p-3': 2});
+        expect(slots, {'p-1': 0, 'p-2': 3, 'p-3': 1});
       },
     );
 
@@ -141,17 +142,17 @@ void main() {
       'lugar libre',
       () {
         final slots = assignMeshSlots(
-          previous: const {'p-1': 0, 'p-2': 1, 'p-3': 2},
+          previous: const {'p-1': 0, 'p-2': 3, 'p-3': 1},
           participants: const [jorge, leo, sofi],
           localId: 'p-1',
         );
 
-        expect(slots, {'p-1': 0, 'p-3': 2, 'p-4': 1});
+        expect(slots, {'p-1': 0, 'p-3': 1, 'p-4': 3});
       },
     );
 
-    test('AC1: sin id propio los nodos llenan los lugares 1 a 5 y luego el 0, '
-        'hasta 6', () {
+    test('AC1: sin id propio los nodos llenan los lugares 3, 1, 5, 2 y 4 y '
+        'luego el 0, hasta 6', () {
       final many = List.generate(
         7,
         (i) => Participant(id: 'x$i', displayName: 'X$i'),
@@ -163,7 +164,7 @@ void main() {
         localId: null,
       );
 
-      expect(slots, {'x0': 1, 'x1': 2, 'x2': 3, 'x3': 4, 'x4': 5, 'x5': 0});
+      expect(slots, {'x0': 3, 'x1': 1, 'x2': 5, 'x3': 2, 'x4': 4, 'x5': 0});
     });
 
     test(
@@ -176,7 +177,7 @@ void main() {
           localId: 'p-1',
         );
 
-        expect(slots, {'p-1': 0, 'p-2': 1});
+        expect(slots, {'p-1': 0, 'p-2': 3});
       },
     );
 
@@ -536,18 +537,18 @@ void main() {
         );
         expect(
           tester.getCenter(signatureOf('Ana')),
-          offsetMoreOrLessEquals(slotCenter(tester, 1), epsilon: 0.5),
+          offsetMoreOrLessEquals(slotCenter(tester, 3), epsilon: 0.5),
         );
         expect(
           tester.getCenter(signatureOf('Leo')),
-          offsetMoreOrLessEquals(slotCenter(tester, 2), epsilon: 0.5),
+          offsetMoreOrLessEquals(slotCenter(tester, 1), epsilon: 0.5),
         );
 
         expect(find.text('Jorge'), findsOneWidget);
         expect(find.text('Ana'), findsOneWidget);
         expect(find.text('Leo'), findsOneWidget);
         expect(find.text('TÚ · ANFITRIÓN'), findsOneWidget);
-        expect(find.text('Libre'), findsNWidgets(3));
+        expect(find.text('LIBRE'), findsNWidgets(3));
 
         const colors = FrColors.dark;
         expect(signature(tester, 'Jorge').color, colors.signalFg);
@@ -568,10 +569,10 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Ana'), findsNothing);
-        expect(find.text('Libre'), findsNWidgets(4));
+        expect(find.text('LIBRE'), findsNWidgets(4));
         expect(
           tester.getCenter(signatureOf('Leo')),
-          offsetMoreOrLessEquals(slotCenter(tester, 2), epsilon: 0.5),
+          offsetMoreOrLessEquals(slotCenter(tester, 1), epsilon: 0.5),
         );
         expect(signature(tester, 'Leo').color, FrColors.dark.p2);
 
@@ -580,18 +581,18 @@ void main() {
 
         expect(
           tester.getCenter(signatureOf('Sofi')),
-          offsetMoreOrLessEquals(slotCenter(tester, 1), epsilon: 0.5),
+          offsetMoreOrLessEquals(slotCenter(tester, 3), epsilon: 0.5),
         );
         expect(signature(tester, 'Sofi').color, FrColors.dark.p1);
         expect(
           tester.getCenter(signatureOf('Leo')),
-          offsetMoreOrLessEquals(slotCenter(tester, 2), epsilon: 0.5),
+          offsetMoreOrLessEquals(slotCenter(tester, 1), epsilon: 0.5),
         );
       },
     );
 
     testWidgets(
-      'AC1: un lugar libre muestra «Libre» y al tocarlo pide la invitación',
+      'AC1: un lugar libre muestra «LIBRE» y al tocarlo pide la invitación',
       (tester) async {
         reduceMotion(tester);
         var invites = 0;
@@ -602,7 +603,7 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('Libre'), findsNWidgets(5));
+        expect(find.text('LIBRE'), findsNWidgets(5));
         expect(find.byKey(const Key('mesh_free_slot_0')), findsNothing);
         final freeSlot = find.byKey(const Key('mesh_free_slot_3'));
         expect(freeSlot, findsOneWidget);

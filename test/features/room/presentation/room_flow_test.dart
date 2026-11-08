@@ -219,7 +219,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(() => repository.leaveRoom()).called(1);
-        expect(find.text('Frecus cercanas'), findsOneWidget);
+        expect(find.text('FRECUS CERCANAS'), findsOneWidget);
       },
     );
 
@@ -254,7 +254,7 @@ void main() {
         expect(find.text('TÚ'), findsOneWidget);
         expect(find.text('Andrés'), findsOneWidget);
         expect(find.text('ANFITRIÓN'), findsOneWidget);
-        expect(find.text('Libre'), findsNWidgets(4));
+        expect(find.text('LIBRE'), findsNWidgets(4));
 
         await tester.tap(find.byKey(const Key('mesh_free_slot_2')));
         await tester.pumpAndSettle();
@@ -292,7 +292,7 @@ void main() {
       expect(find.text('HostAlice'), findsOneWidget);
       expect(find.text('Bob'), findsOneWidget);
       expect(find.text('ANFITRIÓN'), findsOneWidget);
-      expect(find.text('Libre'), findsNWidgets(4));
+      expect(find.text('LIBRE'), findsNWidgets(4));
 
       participantsController.add([
         const Participant(id: 'host-1', displayName: 'HostAlice', isHost: true),
@@ -301,7 +301,7 @@ void main() {
 
       expect(find.text('Bob'), findsNothing);
       expect(find.text('HostAlice'), findsOneWidget);
-      expect(find.text('Libre'), findsNWidgets(5));
+      expect(find.text('LIBRE'), findsNWidgets(5));
 
       await participantsController.close();
     });
@@ -475,7 +475,7 @@ void main() {
         await tester.tap(find.byKey(const Key('closure_home')));
         await tester.pumpAndSettle();
 
-        expect(find.text('Frecus cercanas'), findsOneWidget);
+        expect(find.text('FRECUS CERCANAS'), findsOneWidget);
 
         await statusController.close();
       },

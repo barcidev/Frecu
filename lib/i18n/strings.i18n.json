@@ -10,6 +10,13 @@
       "wrongCode": "Código incorrecto. Revisa e intenta otra vez.",
       "roomFullHint": "Podrás entrar cuando alguien salga.",
       "unreachableHint": "Revisa que estés en su misma red Wi-Fi.",
+      "defaultName": "Participante",
+      "full": "Esta frecu está llena ($max/$max).",
+      "unreachable": "El anfitrión no responde.",
+      "failed": "No se pudo entrar a la frecu.",
+      "failedHint": "Revisa que estés en su misma red Wi-Fi e intenta otra vez.",
+      "versionMismatch": "Esta frecu usa otra versión de Frecu.",
+      "versionMismatchHint": "Actualiza Frecu en los dos teléfonos.",
       "pin": {
         "message": "Ingresa el código de acceso. Pídeselo al anfitrión.",
         "autoSend": "Se envía al completar los 4 dígitos",
@@ -23,6 +30,7 @@
         "message": "Úsalo si la frecu no aparece en la lista.",
         "host": "IP del anfitrión",
         "noAnswer": "Sin respuesta en el puerto $port",
+        "invalid": "Escribe una IP como $ip.",
         "connect": "Conectar"
       },
       "scan": {
@@ -34,7 +42,15 @@
         "invalid": "Este QR no es una invitación de Frecu.",
         "found": "Frecu encontrada",
         "noNote": "Frecu sin nota",
-        "join": "Unirme"
+        "join": "Unirme",
+        "another": "Escanear otro QR",
+        "camera": {
+          "deniedTitle": "Frecu no tiene acceso a la cámara.",
+          "deniedMessage": "Permítela en Ajustes para escanear la invitación, o conéctate por IP.",
+          "unavailableTitle": "La cámara no está disponible.",
+          "unavailableMessage": "Puedes unirte con la IP del anfitrión.",
+          "openSettings": "Abrir ajustes"
+        }
       }
     },
     "settings": "Ajustes",
@@ -44,6 +60,7 @@
     "joinRoom": "Conectar por IP",
     "nearbyRooms": "Frecus cercanas",
     "accessCode": "Código de acceso",
+    "unnamedRoom": "Frecu sin nombre",
     "network": {
       "checking": "Buscando red",
       "connected": "Red · $ip",
@@ -60,11 +77,13 @@
     "empty": {
       "title": "Sin señales por ahora",
       "message": "Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.",
-      "searching": "La búsqueda sigue activa"
+      "searching": "La búsqueda sigue activa",
+      "failed": "La búsqueda falló · reintentando"
     },
     "offline": {
       "title": "No estás en ninguna red Wi-Fi.",
-      "message": "Únete al punto de acceso del anfitrión para encontrar frecus."
+      "message": "Únete al punto de acceso del anfitrión para encontrar frecus.",
+      "openSettings": "Abrir ajustes de Wi-Fi"
     },
     "newRoom": {
       "back": "Atrás",
@@ -86,7 +105,9 @@
           { "lead": "Mantén Frecu abierta", "rest": " mientras se unen. En iPhone recomendamos que el anfitrión use Android." }
         ],
         "ready": "Ya está activo",
-        "sameWifi": "Ya estamos en la misma Wi-Fi"
+        "sameWifi": "Ya estamos en la misma Wi-Fi",
+        "openSettings": "Abrir ajustes de zona Wi-Fi",
+        "openSettingsIphone": "Abrir Ajustes"
       },
       "title": "Nueva frecu",
       "soundsIn": "Tu frecu suena en",
@@ -158,6 +179,7 @@
         "earpieceSub": "Teléfono en la oreja",
         "bluetoothOn": "Conectado",
         "bluetoothOff": "Sin dispositivo",
+        "bluetoothDevice": "Bluetooth · conectado",
         "label": "Salida de audio: $route"
       },
       "leave": {
@@ -213,13 +235,32 @@
         "receiving": "$name · hablando",
         "waiting": "Al aire · esperando a tu grupo",
         "connecting": "Conectando…",
-        "reconnecting": "Reconectando…"
+        "reconnecting": "Reconectando…",
+        "reconnectingIn": "Reconectando · $seconds s",
+        "joined": "$name se unió",
+        "left": "$name salió",
+        "route": "Audio por $route",
+        "recovered": "Conexión recuperada"
       },
       "echo": {
         "title": "Micrófono abierto con altavoz.",
         "message": "Usa audífonos para evitar eco.",
         "dismiss": "Cerrar aviso"
+      },
+      "mic": {
+        "title": "Tu micrófono no está disponible.",
+        "message": "Escuchas a tu grupo, pero nadie te oye. Revisa el permiso en Ajustes.",
+        "settings": "Abrir ajustes",
+        "dismiss": "Cerrar aviso"
       }
+    },
+    "notification": {
+      "channelName": "Frecu en segundo plano",
+      "channelDescription": "Mantiene activa la conexión de Frecu con la pantalla apagada.",
+      "title": "Frecu activa",
+      "connected": "$room · Conectado",
+      "reconnecting": "$room · Reconectando…",
+      "leave": "Salir de la frecu"
     }
   },
   "permissions": {
@@ -290,7 +331,8 @@
       "dark": "Oscuro"
     },
     "saveError": "No se pudo guardar",
-    "footer": "100 % local · sin internet"
+    "footer": "$app · 100% local · sin internet",
+    "appVersion": "Frecu $version"
   },
   "errors": {
     "network": "Error de red local",
@@ -298,7 +340,16 @@
     "roomFull": "La frecu está llena (máximo 6 participantes)",
     "invalidAccessCode": "Código de acceso inválido",
     "hostUnreachable": "El anfitrión no responde",
+    "versionMismatch": "Esta frecu usa otra versión de Frecu",
     "audio": "Error en el subsistema de audio",
     "unexpected": "Error inesperado"
+  },
+  "splash": {
+    "title": "frecu",
+    "tagline": "Voz de grupo. Sin internet.",
+    "version": "v$version",
+    "localNetwork": "Red local",
+    "mesh": "Malla P2P",
+    "skip": "Toca para entrar"
   }
 }

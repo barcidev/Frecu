@@ -35,6 +35,7 @@ void main() {
         Failure.roomFull(),
         Failure.invalidAccessCode(),
         Failure.hostUnreachable(),
+        Failure.versionMismatch(),
         Failure.audio(message: 'audio error'),
         Failure.unexpected(message: 'crash'),
       ];
@@ -46,6 +47,7 @@ void main() {
           roomFull: () => 'full',
           invalidAccessCode: () => 'invalid',
           hostUnreachable: () => 'unreachable',
+          versionMismatch: () => 'version',
           audio: (msg) => 'audio: $msg',
           unexpected: (msg, err) => 'unexpected: $msg',
         );

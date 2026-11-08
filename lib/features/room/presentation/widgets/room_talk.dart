@@ -1,5 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icon_data.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/tokens/fr_colors.dart';
+import 'package:frecu/core/design/widgets/signal_signature.dart';
 import 'package:frecu/core/design/widgets/status_island.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -106,7 +110,7 @@ class RoomTalk {
     final present = nodes.nonNulls.toList();
     final link =
         status?.maybeWhen(
-          reconnecting: () => TalkLink.reconnecting,
+          reconnecting: (_, _) => TalkLink.reconnecting,
           connecting: () => TalkLink.connecting,
           orElse: () => null,
         ) ??
@@ -173,17 +177,115 @@ String formatOnAir(Duration elapsed) {
   return '$minutes:$seconds';
 }
 
+/// Evento pasajero de la isla (`App.event` del prototipo): alguien se unió
+/// o salió, la salida de audio cambió o volvió la conexión. Dura
+/// [duration] y manda sobre todo menos la reconexión.
+@immutable
+class RoomIslandEvent {
+  /// [name] se unió; su firma va en [color], el de su lugar.
+  const RoomIslandEvent.joined({required this.name, required Color this.color})
+    : kind = RoomIslandEventKind.joined,
+      icon = null;
+
+  /// [name] salió.
+  const RoomIslandEvent.left({required this.name})
+    : kind = RoomIslandEventKind.left,
+      color = null,
+      icon = null;
+
+  /// El audio sale ahora por [name], con el ícono de su ruta.
+  const RoomIslandEvent.route({
+    required this.name,
+    required FrIconData this.icon,
+  }) : kind = RoomIslandEventKind.route,
+       color = null;
+
+  /// Volvió la conexión con el anfitrión.
+  const RoomIslandEvent.recovered()
+    : kind = RoomIslandEventKind.recovered,
+      name = '',
+      color = null,
+      icon = null;
+
+  /// Lo que dura el evento en la isla (2,6 s, como el prototipo).
+  static const Duration duration = Duration(milliseconds: 2600);
+
+  /// Qué pasó.
+  final RoomIslandEventKind kind;
+
+  /// Persona o ruta del evento.
+  final String name;
+
+  /// Color de la firma de quien se unió.
+  final Color? color;
+
+  /// Ícono de la ruta de audio.
+  final FrIconData? icon;
+
+  /// Texto de la isla.
+  String get label {
+    final texts = t.room.talk.island;
+    return switch (kind) {
+      RoomIslandEventKind.joined => texts.joined(name: name),
+      RoomIslandEventKind.left => texts.left(name: name),
+      RoomIslandEventKind.route => texts.route(route: name),
+      RoomIslandEventKind.recovered => texts.recovered,
+    };
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      other is RoomIslandEvent &&
+      other.kind == kind &&
+      other.name == name &&
+      other.color == color &&
+      other.icon == icon;
+
+  @override
+  int get hashCode => Object.hash(kind, name, color, icon);
+}
+
+/// Tipo de [RoomIslandEvent].
+enum RoomIslandEventKind {
+  /// Alguien se unió.
+  joined,
+
+  /// Alguien salió.
+  left,
+
+  /// Cambió la salida de audio.
+  route,
+
+  /// Volvió la conexión.
+  recovered,
+}
+
 /// Isla de estado de la frecu activa (`isleFor` del prototipo): una
 /// [StatusIsland] centrada en una franja de 44 px.
+///
+/// Como `isleSync` del prototipo, la reconexión (con la cuenta atrás
+/// [retryIn]) manda sobre el [event] pasajero, y este sobre el resto.
 class RoomStatusIsland extends StatelessWidget {
   /// Crea la isla de [talk].
-  const RoomStatusIsland({required this.talk, this.onAirFor, super.key});
+  const RoomStatusIsland({
+    required this.talk,
+    this.onAirFor,
+    this.event,
+    this.retryIn,
+    super.key,
+  });
 
   /// Estado de habla de la frecu.
   final RoomTalk talk;
 
   /// Tiempo al aire, si se transmite en PTT.
   final Duration? onAirFor;
+
+  /// Evento pasajero que mostrar, si hay uno.
+  final RoomIslandEvent? event;
+
+  /// Segundos para el próximo intento de reconexión.
+  final int? retryIn;
 
   @override
   Widget build(BuildContext context) {
@@ -201,10 +303,20 @@ class RoomStatusIsland extends StatelessWidget {
     final count = '${talk.count}';
     const max = '$meshSlotCount';
     final speaker = talk.speaker;
-    return switch (talk.islandPhase) {
-      IslandPhase.reconnecting => StatusIsland.reconnecting(
-        label: texts.reconnecting,
-      ),
+    final phase = talk.islandPhase;
+    if (phase == IslandPhase.reconnecting) {
+      final seconds = retryIn;
+      return StatusIsland.reconnecting(
+        label: seconds != null && seconds > 0
+            ? texts.reconnectingIn(seconds: '$seconds')
+            : texts.reconnecting,
+      );
+    }
+    final event = this.event;
+    if (event != null) {
+      return StatusIsland.event(label: event.label, leading: _eventLead(event));
+    }
+    return switch (phase) {
       IslandPhase.connecting => StatusIsland.connecting(
         label: texts.connecting,
       ),
@@ -225,6 +337,30 @@ class RoomStatusIsland extends StatelessWidget {
       IslandPhase.waiting => StatusIsland.online(label: texts.waiting),
       _ => StatusIsland.online(
         label: texts.online(count: count, max: max),
+      ),
+    };
+  }
+
+  /// Lo que va antes del texto del evento; la isla es siempre de noche.
+  static Widget _eventLead(RoomIslandEvent event) {
+    const c = FrColors.dark;
+    return switch (event.kind) {
+      RoomIslandEventKind.joined => SignalSignature(
+        name: event.name,
+        size: 24,
+        color: event.color,
+      ),
+      RoomIslandEventKind.left => Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: FrIcon(FrIcons.exit, size: 16, color: c.tx3),
+      ),
+      RoomIslandEventKind.route => Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: FrIcon(event.icon ?? FrIcons.speaker, size: 16, color: c.signal),
+      ),
+      RoomIslandEventKind.recovered => Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: FrIcon(FrIcons.check, size: 16, color: c.signal),
       ),
     };
   }

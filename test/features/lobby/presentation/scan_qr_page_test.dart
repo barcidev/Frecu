@@ -1,7 +1,9 @@
 // AC6: CUANDO se abre el escáner ENTONCES se ve en tema oscuro la cámara bajo la retícula, arriba Atrás, «Escanear invitación», «QR de la frecu» y Linterna, que se enciende y se apaga, y abajo «Apunta al QR que muestra el anfitrión en su teléfono.» y Conectar por IP, que abre la hoja de AC4 y, al unirse, la frecu activa; CUANDO lee un QR que no es una invitación ENTONCES dice «Este QR no es una invitación de Frecu.» y sigue buscando.
-// AC7: CUANDO el escáner lee una invitación válida ENTONCES la retícula se cierra sobre el código con el check y abajo aparece la tarjeta «Frecu encontrada» con la nota y sus Hz (o «Frecu sin nota») y «<IP> · Puerto <p>» y el botón Unirme, y no atiende otros QR; CUANDO el usuario toca Unirme ENTONCES se une con la IP, el puerto, el código y la nota del QR y el nombre guardado y se abre la frecu activa en lugar del escáner; CUANDO falla ENTONCES se ve el aviso del error sobre la tarjeta y Unirme reintenta.
+// AC7: CUANDO el escáner lee una invitación válida ENTONCES la retícula se cierra sobre el código con el check y abajo aparece la tarjeta «Frecu encontrada», que desenfoca el fondo, con el nombre de la frecu y «<nota> · <IP>» si la invitación trae el nombre (P98), o con la nota y sus Hz (o «Frecu sin nota») y «<IP> · Puerto <p>» si no, y el botón Unirme, y no atiende otros QR; «Escanear otro QR» vuelve a buscar; CUANDO el usuario toca Unirme ENTONCES se une con la IP, el puerto, el código y la nota del QR y el nombre guardado y se abre la frecu activa en lugar del escáner; CUANDO falla ENTONCES se ve el aviso del error sobre la tarjeta y Unirme reintenta.
+// AC9 (P97): CUANDO se niega el permiso de la cámara ENTONCES en lugar de la retícula y la indicación se ve «Frecu no tiene acceso a la cámara.» con su explicación, «Abrir ajustes» (abre los Ajustes de la app) y Conectar por IP, y la linterna no responde; CUANDO no hay cámara ENTONCES «La cámara no está disponible.» con Conectar por IP; CUANDO la cámara vuelve ENTONCES vuelven la retícula y la indicación. La cámara se para cuando la app deja de estar al frente y vuelve al regresar, también al volver de Ajustes, sin pedir el permiso sin fin.
 // AC8: CUANDO la app está en inglés ENTONCES las hojas y el escáner muestran sus textos de la traducción `en`; CUANDO el sistema pide reducir el movimiento ENTONCES la retícula no respira, el haz queda quieto y el escáner no pide cuadros, sin ocultar el cierre sobre el código.
 import 'dart:async';
+import 'dart:ui' show ImageFilter;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/scan_reticle.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
+import 'package:frecu/features/network/domain/repositories/system_settings_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -50,9 +53,10 @@ const _roomStub = Key('room_stub');
 const _invite = 'frecu://join?h=192.168.43.1&p=47800&r=room-qr&c=4827&n=7';
 
 /// Router de la app sin cámara: el escáner lee lo que le pasa la prueba con
-/// [onScan], y la frecu activa se sustituye.
+/// [onScan], la cámara falla con [onIssue], y la frecu activa se sustituye.
 class _TestRouter extends AppRouter {
   void Function(String barcode)? onScan;
+  void Function(ScanCameraIssue? issue)? onIssue;
 
   @override
   List<AutoRoute> get routes => [
@@ -62,8 +66,9 @@ class _TestRouter extends AppRouter {
           page: PageInfo(
             ScanQrRoute.name,
             builder: (_) => ScanQrPage(
-              scannerBuilder: (context, scan) {
+              scannerBuilder: (context, scan, issue) {
                 onScan = scan;
+                onIssue = issue;
                 return const ColoredBox(color: Colors.black, key: _cameraStub);
               },
             ),
@@ -81,6 +86,29 @@ class _TestRouter extends AppRouter {
       else
         route,
   ];
+}
+
+/// Ajustes del sistema que anota cuáles se abren.
+class _FakeSettings implements SystemSettingsRepository {
+  final List<String> opened = [];
+
+  @override
+  Future<Result<void>> openWifiSettings() async {
+    opened.add('wifi');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<void>> openHotspotSettings() async {
+    opened.add('hotspot');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<void>> openAppSettings() async {
+    opened.add('app');
+    return const Result.success(null);
+  }
 }
 
 Room _joined(String id) => Room(
@@ -136,6 +164,7 @@ void main() {
   late _MockDiscoveryRepository discovery;
   late _MockNetworkRepository network;
   late _MockRoomRepository rooms;
+  late _FakeSettings settings;
 
   void answerJoin(Future<Result<Room>> Function() answer) => when(
     () => rooms.joinRoom(
@@ -155,6 +184,7 @@ void main() {
     discovery = _MockDiscoveryRepository();
     network = _MockNetworkRepository();
     rooms = _MockRoomRepository();
+    settings = _FakeSettings();
 
     when(() => discovery.watchNearbyRooms())
         .thenAnswer((_) => Stream.value(const <NearbyRoom>[]));
@@ -193,6 +223,7 @@ void main() {
         discoveryRepositoryProvider.overrideWithValue(discovery),
         networkRepositoryProvider.overrideWithValue(network),
         roomRepositoryProvider.overrideWithValue(rooms),
+        systemSettingsRepositoryProvider.overrideWithValue(settings),
       ],
     );
     addTearDown(container.dispose);
@@ -420,7 +451,7 @@ void main() {
 
         final banner = tester.widget<FrBanner>(find.byType(FrBanner));
         expect(banner.tone, FrBannerTone.alert);
-        expect(banner.title, 'El anfitrión no responde');
+        expect(banner.title, 'El anfitrión no responde.');
         expect(
           tester.getBottomLeft(find.byType(FrBanner)).dy,
           lessThanOrEqualTo(tester.getTopLeft(_button('Unirme')).dy),
@@ -507,6 +538,195 @@ void main() {
         expect(_reticleLoop, findsNothing);
       },
     );
+
+    testWidgets(
+      'AC7: con el nombre en el QR la tarjeta lo muestra, con la nota y la '
+      'IP debajo',
+      (tester) async {
+        final (router, _) = await pumpScanner(tester);
+
+        await scan(tester, router, '$_invite&name=Ruta%20del%20domingo');
+
+        expect(_inScanner(find.text('Ruta del domingo')), findsOneWidget);
+        expect(_inScanner(_label('Sol4 · 192.168.43.1')), findsOneWidget);
+        expect(_inScanner(find.text('Sol4 · 392,0 Hz')), findsNothing);
+      },
+    );
+
+    testWidgets('AC7: la tarjeta desenfoca lo que hay detrás', (tester) async {
+      final (router, _) = await pumpScanner(tester);
+
+      await scan(tester, router, _invite);
+
+      final blur = tester.widget<BackdropFilter>(
+        find.descendant(
+          of: find.byType(ScanFoundCard),
+          matching: find.byType(BackdropFilter),
+        ),
+      );
+      expect(blur.filter, ImageFilter.blur(sigmaX: 14, sigmaY: 14));
+    });
+
+    testWidgets(
+      'AC7: «Escanear otro QR» suelta la invitación y vuelve a buscar',
+      (tester) async {
+        final (router, _) = await pumpScanner(tester);
+        await scan(tester, router, _invite);
+        expect(_reticle(tester).locked, isTrue);
+
+        await tester.tap(_button('Escanear otro QR'));
+        await tester.pumpAndSettle();
+
+        expect(_reticle(tester).locked, isFalse);
+        expect(_inScanner(_label('Frecu encontrada')), findsNothing);
+        expect(
+          _inScanner(
+            find.text('Apunta al QR que muestra el anfitrión en su teléfono.'),
+          ),
+          findsOneWidget,
+        );
+
+        await scan(
+          tester,
+          router,
+          'frecu://join?h=10.0.0.9&p=47801&r=otra&c=1111&n=0',
+        );
+
+        expect(_reticle(tester).locked, isTrue);
+        expect(_inScanner(_label('10.0.0.9 · Puerto 47801')), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'AC9: sin permiso de la cámara se explica en lugar de la retícula, con '
+      'Abrir ajustes y Conectar por IP',
+      (tester) async {
+        final (router, _) = await pumpScanner(tester);
+
+        router.onIssue!(ScanCameraIssue.denied);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(ScanReticle), findsNothing);
+        expect(
+          _inScanner(
+            find.text('Apunta al QR que muestra el anfitrión en su teléfono.'),
+          ),
+          findsNothing,
+        );
+        expect(
+          _inScanner(find.text('Frecu no tiene acceso a la cámara.')),
+          findsOneWidget,
+        );
+        expect(
+          _inScanner(
+            find.text(
+              'Permítela en Ajustes para escanear la invitación, o conéctate '
+              'por IP.',
+            ),
+          ),
+          findsOneWidget,
+        );
+        expect(_inScanner(_iconButton('Atrás')), findsOneWidget);
+        // Sin cámara no hay linterna.
+        expect(
+          tester.widget<FrIconButton>(_iconButton('Linterna')).onPressed,
+          isNull,
+        );
+
+        await tester.tap(_button('Abrir ajustes'));
+        await tester.pumpAndSettle();
+        expect(settings.opened, ['app']);
+
+        await tester.tap(_button('Conectar por IP'));
+        await tester.pumpAndSettle();
+        expect(find.byType(IpJoinSheet), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'AC9: sin cámara lo dice y ofrece solo Conectar por IP; al volver la '
+      'cámara vuelven la retícula y la indicación',
+      (tester) async {
+        final (router, _) = await pumpScanner(tester);
+
+        router.onIssue!(ScanCameraIssue.unavailable);
+        await tester.pumpAndSettle();
+
+        expect(
+          _inScanner(find.text('La cámara no está disponible.')),
+          findsOneWidget,
+        );
+        expect(
+          _inScanner(find.text('Puedes unirte con la IP del anfitrión.')),
+          findsOneWidget,
+        );
+        expect(_button('Abrir ajustes'), findsNothing);
+        expect(_inScanner(_button('Conectar por IP')), findsOneWidget);
+
+        router.onIssue!(null);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(ScanReticle), findsOneWidget);
+        expect(find.text('La cámara no está disponible.'), findsNothing);
+        expect(
+          _inScanner(
+            find.text('Apunta al QR que muestra el anfitrión en su teléfono.'),
+          ),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets('AC9: en inglés el aviso sin cámara sale de la traducción en', (
+      tester,
+    ) async {
+      await _useEnglish(tester);
+      final (router, _) = await pumpScanner(tester);
+
+      router.onIssue!(ScanCameraIssue.denied);
+      await tester.pumpAndSettle();
+
+      expect(find.text("Frecu can't use the camera."), findsOneWidget);
+      expect(_button('Open settings'), findsOneWidget);
+      expect(_button('Connect by IP'), findsOneWidget);
+    });
+  });
+
+  group('ScanCameraLifecycle', () {
+    test('AC9: para la cámara si estaba en marcha y la enciende al volver', () {
+      final lifecycle = ScanCameraLifecycle();
+
+      expect(lifecycle.shouldStop(running: true), isTrue);
+      expect(lifecycle.shouldStart(running: false, starting: false), isTrue);
+      // Una sola vez por pausa.
+      expect(lifecycle.shouldStart(running: false, starting: false), isFalse);
+    });
+
+    test('AC9: si la cámara no estaba en marcha no la toca', () {
+      final lifecycle = ScanCameraLifecycle();
+
+      expect(lifecycle.shouldStop(running: false), isFalse);
+      expect(lifecycle.shouldStart(running: false, starting: false), isFalse);
+    });
+
+    test('AC9: al volver de Ajustes la intenta encender otra vez', () {
+      final lifecycle = ScanCameraLifecycle()..openedSettings();
+
+      expect(lifecycle.shouldStart(running: false, starting: false), isTrue);
+      expect(lifecycle.shouldStart(running: false, starting: false), isFalse);
+    });
+
+    test('AC9: tras negar el permiso no lo vuelve a pedir solo, ni enciende '
+        'una cámara que ya arranca', () {
+      final lifecycle = ScanCameraLifecycle();
+
+      // El diálogo del permiso pasa la app a inactiva y luego la reanuda.
+      expect(lifecycle.shouldStop(running: false), isFalse);
+      expect(lifecycle.shouldStart(running: false, starting: false), isFalse);
+
+      lifecycle.openedSettings();
+      expect(lifecycle.shouldStart(running: false, starting: true), isFalse);
+    });
   });
 }
 

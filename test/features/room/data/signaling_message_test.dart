@@ -108,7 +108,7 @@ void main() {
         ],
       };
       SignalingMessage.fromJson(legacyJson).maybeWhen(
-        welcome: (peerId, participants, deserializedNote, _) {
+        welcome: (peerId, participants, deserializedNote, _, _) {
           expect(peerId, 'peer-3');
           expect(deserializedNote, isNull);
         },
@@ -122,7 +122,7 @@ void main() {
         'note': null,
       };
       SignalingMessage.fromJson(nullNoteJson).maybeWhen(
-        welcome: (peerId, participants, deserializedNote, _) {
+        welcome: (peerId, participants, deserializedNote, _, _) {
           expect(deserializedNote, isNull);
         },
         orElse: () => fail('Se esperaba SignalingWelcomeMessage'),
@@ -135,7 +135,7 @@ void main() {
         'note': 99,
       };
       SignalingMessage.fromJson(invalidNoteJson).maybeWhen(
-        welcome: (peerId, participants, deserializedNote, _) {
+        welcome: (peerId, participants, deserializedNote, _, _) {
           expect(deserializedNote, isNull);
         },
         orElse: () => fail('Se esperaba SignalingWelcomeMessage'),

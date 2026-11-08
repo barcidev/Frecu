@@ -39,6 +39,8 @@ class RoomHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final note = room?.note;
+    // Sin nombre (anfitrión de una versión anterior), el título genérico.
+    final name = room?.name ?? '';
     return SizedBox(
       height: 72,
       child: Padding(
@@ -51,7 +53,7 @@ class RoomHeader extends StatelessWidget {
             ],
             Expanded(
               child: _RoomTitle(
-                name: room?.name ?? t.room.title,
+                name: name.isEmpty ? t.room.title : name,
                 hostLine: _hostLine(),
               ),
             ),

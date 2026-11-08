@@ -16,10 +16,41 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
 
   final MdnsDataSource _mdns;
 
+  /// Streams de [watchNearbyRooms] escuchados ahora: la búsqueda se detiene
+  /// cuando no queda ninguno.
+  int _watchers = 0;
+
   @override
   Stream<List<NearbyRoom>> watchNearbyRooms() {
-    _mdns.startDiscovery().ignore();
-    return _mdns.nearbyRooms;
+    StreamSubscription<List<NearbyRoom>>? rooms;
+    late final StreamController<List<NearbyRoom>> controller;
+    controller = StreamController<List<NearbyRoom>>(
+      onListen: () {
+        _watchers++;
+        rooms = _mdns.nearbyRooms.listen(controller.add);
+        unawaited(_search(controller));
+      },
+      onCancel: () async {
+        _watchers--;
+        await rooms?.cancel();
+        if (_watchers == 0) await _mdns.stopDiscovery();
+      },
+    );
+    return controller.stream;
+  }
+
+  /// Empieza la búsqueda y, si arrancó, da las frecus que ya conoce; si no
+  /// pudo, da el fallo para que el inicio lo muestre y reintente.
+  Future<void> _search(StreamController<List<NearbyRoom>> controller) async {
+    try {
+      await _mdns.startDiscovery();
+      if (!controller.isClosed) controller.add(_mdns.rooms);
+    } on Object catch (e, st) {
+      AppLogger.e('Error starting mDNS discovery', e, st);
+      if (!controller.isClosed) {
+        controller.addError(Failure.network(message: e.toString()), st);
+      }
+    }
   }
 
   @override

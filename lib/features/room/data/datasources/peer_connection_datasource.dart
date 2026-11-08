@@ -4,15 +4,31 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
+import 'package:frecu/features/room/domain/entities/participant.dart';
 
-/// Datasource responsable de gestionar la malla de conexiones WebRTC peer-to-peer.
+/// Datasource responsable de gestionar la malla de conexiones WebRTC
+/// peer-to-peer de la frecu activa.
+///
+/// Escucha la señalización desde que se crea: lo que llega antes de saber el
+/// id local se guarda y se atiende al fijarlo con [attach]. Los mensajes de
+/// cada par se procesan en orden y sus errores se registran; los candidatos
+/// ICE que llegan antes de la descripción remota se aplican después de ella.
+/// Las offers y answers esperan a que se decida el micrófono
+/// ([prepareMedia]) para llevar la pista local.
 class PeerConnectionDataSource {
-  /// Constructor con inyección de cliente de señalización y fábricas opcionales.
+  /// Constructor con inyección de cliente de señalización y fábricas
+  /// opcionales.
   PeerConnectionDataSource({
     required this.signalingClient,
     this.peerConnectionFactory,
     this.userMediaFactory,
-  });
+    this.mediaWaitLimit = const Duration(seconds: 20),
+  }) {
+    _signalingSub = signalingClient.messages.listen(
+      _handleSignalingMessage,
+      onError: (Object error) => AppLogger.w('Signaling error: $error'),
+    );
+  }
 
   /// Cliente WebSocket de señalización.
   final SignalingClientDataSource signalingClient;
@@ -25,13 +41,48 @@ class PeerConnectionDataSource {
   final Future<MediaStream> Function(Map<String, dynamic> constraints)?
   userMediaFactory;
 
+  /// Espera máxima a que se decida el micrófono antes de negociar sin él.
+  final Duration mediaWaitLimit;
+
+  static const Map<String, dynamic> _config = {
+    'iceServers': <Map<String, dynamic>>[],
+    'sdpSemantics': 'unified-plan',
+  };
+
+  static const Map<String, dynamic> _constraints = {
+    'audio': {
+      'echoCancellation': true,
+      'noiseSuppression': true,
+      'autoGainControl': true,
+    },
+    'video': false,
+  };
+
+  /// Mensajes guardados mientras no hay id local.
+  static const int _maxEarlyMessages = 256;
+
   final Map<String, RTCPeerConnection> _peerConnections = {};
   final Map<String, List<RTCIceCandidate>> _pendingIceCandidates = {};
-  final Map<String, bool> _hasRemoteDescription = {};
+  final Set<String> _hasRemoteDescription = {};
+  final Map<String, Future<void>> _queues = {};
+  final Map<String, int> _peerEpochs = {};
+  final List<SignalingMessage> _early = [];
+  final Map<String, PeerConnectionState> _links = {};
+  final StreamController<Map<String, PeerConnectionState>> _linksController =
+      StreamController<Map<String, PeerConnectionState>>.broadcast();
 
   MediaStream? _localStream;
   MediaStreamTrack? _localAudioTrack;
+  Future<void>? _media;
+  Completer<void> _mediaSettled = Completer<void>();
+  int _mediaEpoch = 0;
+  bool _microphoneEnabled = false;
   String _localPeerId = '';
+  int _generation = 0;
+
+  /// Ya hubo una frecu: después de salir, lo que llegue sin id local es de
+  /// la anterior y no se guarda.
+  bool _attachedOnce = false;
   StreamSubscription<SignalingMessage>? _signalingSub;
 
   /// Retorna las conexiones activas por par remoto.
@@ -41,61 +92,102 @@ class PeerConnectionDataSource {
   /// Indica si el micrófono local está actualmente habilitado.
   bool get isMicrophoneEnabled => _localAudioTrack?.enabled ?? false;
 
-  /// Inicializa la captura local de audio y escucha mensajes de señalización.
-  Future<void> initialize({required String localPeerId}) async {
-    _localPeerId = localPeerId;
-    await _setupLocalMedia();
+  /// Hay pista de micrófono capturada en esta frecu.
+  bool get hasMicrophone => _localAudioTrack != null;
 
-    await _signalingSub?.cancel();
-    _signalingSub = signalingClient.messages.listen(_handleSignalingMessage);
+  /// Id local en la frecu activa; vacío sin frecu.
+  String get localPeerId => _localPeerId;
+
+  /// Estado del enlace con cada par remoto.
+  Map<String, PeerConnectionState> get links => Map.unmodifiable(_links);
+
+  /// Cada cambio de [links].
+  Stream<Map<String, PeerConnectionState>> get linkChanges =>
+      _linksController.stream;
+
+  /// Fija el id local de la frecu: desde aquí atiende offers, answers e ICE
+  /// dirigidos a [localPeerId], incluidos los que llegaron antes. Con otro
+  /// id (al reconectar) cierra antes los enlaces del id anterior.
+  void attach(String localPeerId) {
+    if (localPeerId.isEmpty || localPeerId == _localPeerId) return;
+    if (_localPeerId.isNotEmpty) _closeAllPeers();
+    _localPeerId = localPeerId;
+    _attachedOnce = true;
+    final early = List<SignalingMessage>.of(_early);
+    _early.clear();
+    early.forEach(_handleSignalingMessage);
+  }
+
+  /// Decide el micrófono de esta frecu, una sola vez: con [capture] lo
+  /// captura (silenciado); sin él la malla solo escucha.
+  Future<void> prepareMedia({required bool capture}) {
+    final media = _media ??= capture ? _setupLocalMedia() : Future.value();
+    return media.whenComplete(() {
+      if (!_mediaSettled.isCompleted) _mediaSettled.complete();
+    });
   }
 
   Future<void> _setupLocalMedia() async {
-    const constraints = <String, dynamic>{
-      'audio': {
-        'echoCancellation': true,
-        'noiseSuppression': true,
-        'autoGainControl': true,
-      },
-      'video': false,
-    };
-
+    final epoch = _mediaEpoch;
     try {
-      if (userMediaFactory != null) {
-        _localStream = await userMediaFactory!(constraints);
-      } else {
-        _localStream = await navigator.mediaDevices.getUserMedia(constraints);
+      final stream = userMediaFactory != null
+          ? await userMediaFactory!(_constraints)
+          : await navigator.mediaDevices.getUserMedia(_constraints);
+      if (epoch != _mediaEpoch) {
+        await _release(stream);
+        return;
       }
-
-      final audioTracks = _localStream?.getAudioTracks();
-      if (audioTracks != null && audioTracks.isNotEmpty) {
-        _localAudioTrack = audioTracks.first;
-        _localAudioTrack!.enabled = false;
+      _localStream = stream;
+      final audioTracks = stream.getAudioTracks();
+      if (audioTracks.isNotEmpty) {
+        _localAudioTrack = audioTracks.first..enabled = _microphoneEnabled;
       }
     } on Object catch (e, st) {
       AppLogger.w('Failed to acquire user media: $e\n$st');
     }
   }
 
-  /// Establece o silencia el micrófono local y emite `talk_state`.
-  void setMicrophoneEnabled({required bool enabled}) {
-    if (_localAudioTrack != null) {
-      _localAudioTrack!.enabled = enabled;
-    }
-    if (_localPeerId.isNotEmpty) {
-      signalingClient.send(
-        SignalingMessage.talkState(peerId: _localPeerId, isSpeaking: enabled),
-      );
-    }
+  Future<void> _waitForMedia() async {
+    if (_mediaSettled.isCompleted) return;
+    await _mediaSettled.future.timeout(
+      mediaWaitLimit,
+      onTimeout: () => AppLogger.w('Negotiating without a microphone decision'),
+    );
+  }
+
+  /// Habilita o silencia la pista local y, con [announce], emite
+  /// `talk_state` ([muted] si se silenció en micrófono abierto).
+  void setMicrophoneEnabled({
+    required bool enabled,
+    bool muted = false,
+    bool announce = true,
+  }) {
+    _microphoneEnabled = enabled;
+    _localAudioTrack?.enabled = enabled;
+    if (announce) announceTalkState(speaking: enabled, muted: muted);
+  }
+
+  /// Emite el estado de habla propio sin tocar la pista.
+  void announceTalkState({required bool speaking, bool muted = false}) {
+    if (_localPeerId.isEmpty) return;
+    signalingClient.send(
+      SignalingMessage.talkState(
+        peerId: _localPeerId,
+        isSpeaking: speaking,
+        muted: muted ? true : null,
+      ),
+    );
   }
 
   /// Inicia conexión hacia un par remoto generando una oferta SDP.
-  Future<void> connectToPeer(String remotePeerId) async {
-    final pc = await _getOrCreatePeerConnection(remotePeerId);
-    try {
+  Future<void> connectToPeer(String remotePeerId) {
+    return _enqueue(remotePeerId, (token) async {
+      final pc = await _peerConnectionFor(remotePeerId, token);
+      if (pc == null) return;
       final offer = await pc.createOffer();
+      if (!token.isCurrent) return;
       await pc.setLocalDescription(offer);
-
+      if (!token.isCurrent) return;
       signalingClient.send(
         SignalingMessage.offer(
           from: _localPeerId,
@@ -103,79 +195,162 @@ class PeerConnectionDataSource {
           sdp: offer.sdp ?? '',
         ),
       );
-    } on Object catch (e, st) {
-      AppLogger.e('Error creating offer for $remotePeerId', e, st);
-    }
+    });
   }
 
-  Future<RTCPeerConnection> _getOrCreatePeerConnection(
+  /// Encola [task] tras lo pendiente de [peerId]; lo que falle se registra.
+  Future<void> _enqueue(
+    String peerId,
+    Future<void> Function(_PeerToken token) task,
+  ) {
+    final token = _PeerToken(this, peerId);
+    final previous = _queues[peerId] ?? Future<void>.value();
+    final next = previous.then((_) async {
+      if (!token.isCurrent) return;
+      try {
+        await task(token);
+      } on Object catch (e, st) {
+        AppLogger.w('WebRTC negotiation with $peerId failed: $e', e, st);
+      }
+    });
+    _queues[peerId] = next;
+    return next;
+  }
+
+  Future<RTCPeerConnection?> _peerConnectionFor(
     String remotePeerId,
+    _PeerToken token,
   ) async {
     final existing = _peerConnections[remotePeerId];
     if (existing != null) return existing;
 
-    const config = <String, dynamic>{
-      'iceServers': <Map<String, dynamic>>[],
-      'sdpSemantics': 'unified-plan',
-    };
+    await _waitForMedia();
+    if (!token.isCurrent) return null;
 
     final pc = peerConnectionFactory != null
-        ? await peerConnectionFactory!(config)
-        : await createPeerConnection(config);
-
-    _peerConnections[remotePeerId] = pc;
-    _hasRemoteDescription[remotePeerId] = false;
-    _pendingIceCandidates[remotePeerId] = [];
-
-    if (_localStream != null) {
-      for (final track in _localStream!.getTracks()) {
-        await pc.addTrack(track, _localStream!);
-      }
+        ? await peerConnectionFactory!(_config)
+        : await createPeerConnection(_config);
+    if (!token.isCurrent) {
+      unawaited(_closeQuietly(pc));
+      return null;
     }
 
-    pc.onIceCandidate = (candidate) {
-      if (candidate.candidate != null) {
+    _peerConnections[remotePeerId] = pc;
+    _setLink(remotePeerId, PeerConnectionState.connecting);
+
+    pc
+      ..onIceCandidate = (candidate) {
+        final value = candidate.candidate;
+        if (value == null || !identical(_peerConnections[remotePeerId], pc)) {
+          return;
+        }
         signalingClient.send(
           SignalingMessage.ice(
             from: _localPeerId,
             to: remotePeerId,
-            candidate: candidate.candidate!,
+            candidate: value,
             sdpMid: candidate.sdpMid,
             sdpMLineIndex: candidate.sdpMLineIndex,
           ),
         );
       }
-    };
+      ..onIceConnectionState = (state) {
+        if (!identical(_peerConnections[remotePeerId], pc)) return;
+        final link = _linkOf(state);
+        if (link != null) _setLink(remotePeerId, link);
+      };
 
+    final stream = _localStream;
+    final tracks = stream?.getTracks() ?? const <MediaStreamTrack>[];
+    if (stream != null && tracks.isNotEmpty) {
+      for (final track in tracks) {
+        await pc.addTrack(track, stream);
+      }
+    } else {
+      // Sin micrófono la malla igual escucha: sin ninguna sección de medios
+      // la oferta no arrancaría ICE.
+      try {
+        await pc.addTransceiver(
+          kind: RTCRtpMediaType.RTCRtpMediaTypeAudio,
+          init: RTCRtpTransceiverInit(direction: TransceiverDirection.RecvOnly),
+        );
+      } on Object catch (e) {
+        AppLogger.w('Could not add a receive-only audio transceiver: $e');
+      }
+    }
     return pc;
   }
 
+  static PeerConnectionState? _linkOf(RTCIceConnectionState state) =>
+      switch (state) {
+        RTCIceConnectionState.RTCIceConnectionStateNew ||
+        RTCIceConnectionState.RTCIceConnectionStateChecking =>
+          PeerConnectionState.connecting,
+        RTCIceConnectionState.RTCIceConnectionStateConnected ||
+        RTCIceConnectionState.RTCIceConnectionStateCompleted =>
+          PeerConnectionState.connected,
+        RTCIceConnectionState.RTCIceConnectionStateDisconnected =>
+          PeerConnectionState.reconnecting,
+        RTCIceConnectionState.RTCIceConnectionStateFailed ||
+        RTCIceConnectionState.RTCIceConnectionStateClosed =>
+          PeerConnectionState.disconnected,
+        RTCIceConnectionState.RTCIceConnectionStateCount => null,
+      };
+
   void _handleSignalingMessage(SignalingMessage msg) {
-    msg.when(
-      offer: (from, to, sdp, _) => _handleOffer(from, sdp),
-      answer: (from, to, sdp, _) => _handleAnswer(from, sdp),
-      ice: (from, to, candidate, sdpMid, sdpMLineIndex, _) =>
-          _handleIce(from, candidate, sdpMid, sdpMLineIndex),
-      peerLeft: (peerId, _) => _closePeer(peerId),
-      welcome: (_, __, ___, ____) {},
-      rejected: (_, __) {},
-      peerJoined: (_, __) {},
-      talkState: (_, __, ___) {},
-      ping: (_, __) {},
-      pong: (_, __) {},
-      roomClosed: (_, __) {},
-      join: (_, __, ___, ____) {},
-    );
+    switch (msg) {
+      case SignalingOfferMessage(:final from, :final to, :final sdp):
+        if (!_isForMe(msg, to)) return;
+        unawaited(_enqueue(from, (token) => _handleOffer(from, sdp, token)));
+      case SignalingAnswerMessage(:final from, :final to, :final sdp):
+        if (!_isForMe(msg, to)) return;
+        unawaited(_enqueue(from, (token) => _handleAnswer(from, sdp, token)));
+      case SignalingIceMessage(
+        :final from,
+        :final to,
+        :final candidate,
+        :final sdpMid,
+        :final sdpMLineIndex,
+      ):
+        if (!_isForMe(msg, to)) return;
+        final ice = RTCIceCandidate(candidate, sdpMid, sdpMLineIndex);
+        unawaited(_enqueue(from, (token) => _handleIce(from, ice)));
+      case SignalingPeerLeftMessage(:final peerId):
+        _closePeer(peerId);
+      case SignalingJoinMessage() ||
+          SignalingWelcomeMessage() ||
+          SignalingRejectedMessage() ||
+          SignalingPeerJoinedMessage() ||
+          SignalingTalkStateMessage() ||
+          SignalingPingMessage() ||
+          SignalingPongMessage() ||
+          SignalingRoomClosedMessage():
+        break;
+    }
   }
 
-  Future<void> _handleOffer(String from, String sdp) async {
-    final pc = await _getOrCreatePeerConnection(from);
+  /// Si el mensaje va dirigido al id local; sin id aún (antes de la
+  /// primera frecu), lo guarda para atenderlo al fijarlo.
+  bool _isForMe(SignalingMessage msg, String to) {
+    if (_localPeerId.isEmpty) {
+      if (!_attachedOnce && _early.length < _maxEarlyMessages) _early.add(msg);
+      return false;
+    }
+    return to == _localPeerId;
+  }
+
+  Future<void> _handleOffer(String from, String sdp, _PeerToken token) async {
+    final pc = await _peerConnectionFor(from, token);
+    if (pc == null) return;
     await pc.setRemoteDescription(RTCSessionDescription(sdp, 'offer'));
-    _hasRemoteDescription[from] = true;
+    if (!token.isCurrent) return;
+    _hasRemoteDescription.add(from);
     await _flushPendingIce(from, pc);
 
     final answer = await pc.createAnswer();
+    if (!token.isCurrent) return;
     await pc.setLocalDescription(answer);
+    if (!token.isCurrent) return;
 
     signalingClient.send(
       SignalingMessage.answer(
@@ -186,69 +361,140 @@ class PeerConnectionDataSource {
     );
   }
 
-  Future<void> _handleAnswer(String from, String sdp) async {
+  Future<void> _handleAnswer(String from, String sdp, _PeerToken token) async {
     final pc = _peerConnections[from];
-    if (pc != null) {
-      await pc.setRemoteDescription(RTCSessionDescription(sdp, 'answer'));
-      _hasRemoteDescription[from] = true;
-      await _flushPendingIce(from, pc);
-    }
+    if (pc == null) return;
+    await pc.setRemoteDescription(RTCSessionDescription(sdp, 'answer'));
+    if (!token.isCurrent) return;
+    _hasRemoteDescription.add(from);
+    await _flushPendingIce(from, pc);
   }
 
-  Future<void> _handleIce(
-    String from,
-    String candidate,
-    String? sdpMid,
-    int? sdpMLineIndex,
-  ) async {
-    final rtcCandidate = RTCIceCandidate(candidate, sdpMid, sdpMLineIndex);
+  Future<void> _handleIce(String from, RTCIceCandidate candidate) async {
     final pc = _peerConnections[from];
-    final isReady = _hasRemoteDescription[from] ?? false;
-
-    if (pc != null && isReady) {
-      await pc.addCandidate(rtcCandidate);
+    if (pc != null && _hasRemoteDescription.contains(from)) {
+      await pc.addCandidate(candidate);
     } else {
-      _pendingIceCandidates[from] ??= [];
-      _pendingIceCandidates[from]!.add(rtcCandidate);
+      (_pendingIceCandidates[from] ??= []).add(candidate);
     }
   }
 
   Future<void> _flushPendingIce(String peerId, RTCPeerConnection pc) async {
-    final pending = _pendingIceCandidates[peerId];
-    if (pending != null && pending.isNotEmpty) {
-      for (final candidate in pending) {
+    final pending = _pendingIceCandidates.remove(peerId);
+    if (pending == null) return;
+    for (final candidate in pending) {
+      try {
         await pc.addCandidate(candidate);
+      } on Object catch (e) {
+        AppLogger.w('Could not apply an early ICE candidate from $peerId: $e');
       }
-      pending.clear();
     }
   }
 
   void _closePeer(String peerId) {
-    _peerConnections[peerId]?.close();
-    _peerConnections.remove(peerId);
+    _peerEpochs[peerId] = (_peerEpochs[peerId] ?? 0) + 1;
+    _queues.remove(peerId);
     _pendingIceCandidates.remove(peerId);
     _hasRemoteDescription.remove(peerId);
+    final pc = _peerConnections.remove(peerId);
+    if (pc != null) unawaited(_closeQuietly(pc));
+    if (_links.remove(peerId) != null) _emitLinks();
+  }
+
+  /// Cierra todos los enlaces; lo que estaba en curso se descarta.
+  List<Future<void>> _closeAllPeers() {
+    _generation++;
+    final closing = [
+      for (final pc in _peerConnections.values) _closeQuietly(pc),
+    ];
+    _peerConnections.clear();
+    _queues.clear();
+    _peerEpochs.clear();
+    _pendingIceCandidates.clear();
+    _hasRemoteDescription.clear();
+    if (_links.isNotEmpty) {
+      _links.clear();
+      _emitLinks();
+    }
+    return closing;
+  }
+
+  static Future<void> _closeQuietly(RTCPeerConnection pc) async {
+    try {
+      await pc.close();
+    } on Object catch (e) {
+      AppLogger.w('Could not close a peer connection: $e');
+    }
+  }
+
+  static Future<void> _release(MediaStream stream) async {
+    for (final track in stream.getTracks()) {
+      try {
+        await track.stop();
+      } on Object catch (e) {
+        AppLogger.w('Could not stop a local track: $e');
+      }
+    }
+    try {
+      await stream.dispose();
+    } on Object catch (e) {
+      AppLogger.w('Could not dispose the local stream: $e');
+    }
+  }
+
+  void _setLink(String peerId, PeerConnectionState state) {
+    if (_links[peerId] == state) return;
+    _links[peerId] = state;
+    _emitLinks();
+  }
+
+  void _emitLinks() {
+    if (!_linksController.isClosed) {
+      _linksController.add(Map.unmodifiable(_links));
+    }
+  }
+
+  /// Sale de la frecu: cierra todos los enlaces, para y suelta el micrófono
+  /// y olvida el id local, para que la próxima frecu empiece de cero.
+  Future<void> reset() async {
+    final closing = _closeAllPeers();
+    _early.clear();
+    _localPeerId = '';
+    _microphoneEnabled = false;
+    _mediaEpoch++;
+    _media = null;
+    if (!_mediaSettled.isCompleted) _mediaSettled.complete();
+    _mediaSettled = Completer<void>();
+    final stream = _localStream;
+    _localStream = null;
+    _localAudioTrack = null;
+    // Primero el micrófono: que deje de capturar cuanto antes.
+    if (stream != null) await _release(stream);
+    await Future.wait(closing);
   }
 
   /// Cierra todas las conexiones activas y libera medios locales.
   Future<void> dispose() async {
     await _signalingSub?.cancel();
     _signalingSub = null;
-
-    for (final pc in _peerConnections.values) {
-      await pc.close();
-    }
-    _peerConnections.clear();
-    _pendingIceCandidates.clear();
-    _hasRemoteDescription.clear();
-
-    if (_localStream != null) {
-      for (final track in _localStream!.getTracks()) {
-        await track.stop();
-      }
-      await _localStream?.dispose();
-      _localStream = null;
-    }
-    _localAudioTrack = null;
+    await reset();
+    await _linksController.close();
   }
+}
+
+/// Vigencia de una tarea de negociación con un par: deja de valer si la
+/// malla se reinicia o si ese par sale.
+class _PeerToken {
+  _PeerToken(this._owner, this._peerId)
+    : _generation = _owner._generation,
+      _epoch = _owner._peerEpochs[_peerId] ?? 0;
+
+  final PeerConnectionDataSource _owner;
+  final String _peerId;
+  final int _generation;
+  final int _epoch;
+
+  bool get isCurrent =>
+      _generation == _owner._generation &&
+      _epoch == (_owner._peerEpochs[_peerId] ?? 0);
 }

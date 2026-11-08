@@ -14,8 +14,12 @@ sealed class RoomStatus with _$RoomStatus {
   /// Conectado y operativo en la sala.
   const factory RoomStatus.connected() = _RoomStatusConnected;
 
-  /// Reconectando tras pérdida temporal de señal.
-  const factory RoomStatus.reconnecting() = _RoomStatusReconnecting;
+  /// Reconectando tras pérdida temporal de señal: el intento [attempt]
+  /// empieza dentro de [retryIn] (nulo si no se sabe).
+  const factory RoomStatus.reconnecting({
+    Duration? retryIn,
+    @Default(0) int attempt,
+  }) = _RoomStatusReconnecting;
 
   /// Sala cerrada por el anfitrión o desconexión definitiva.
   const factory RoomStatus.closed({required String reason}) = _RoomStatusClosed;

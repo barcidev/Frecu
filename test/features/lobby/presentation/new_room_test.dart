@@ -1,6 +1,6 @@
 // AC3: CUANDO se ve la nueva frecu ENTONCES el reloj de quintas recibe la hora y los minutos actuales y la nota de la frecu, y a su lado se lee «Tu frecu suena en», la nota (nombre en el idioma de la app, alteración y octava), sus Hz con un decimal y el separador del idioma («659,3 Hz», «659.3 Hz») y «Abierta a las HH:MM»; la nota es la de su hora en el círculo de quintas (octava 4 de 0 a 11 h y 5 de 12 a 23 h) y, CUANDO aparece una frecu cercana con esa nota o cambia la hora, ENTONCES pasa a la siguiente quinta libre o a la nota de la nueva hora.
-// AC4: CUANDO se abre la nueva frecu ENTONCES el campo «Nombre de la frecu» trae «Frecu de <nombre guardado>» (o «Mi frecu» sin nombre guardado) con su contador de 24 y el ejemplo «Ej. Ruta del domingo» al vaciarlo, y el código de acceso muestra 4 cifras generadas en celdas de solo lectura con «4 dígitos» y «Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.»; CUANDO toca «Generar otro» ENTONCES el código cambia por uno nuevo.
-// AC5: CUANDO el usuario toca «Abrir frecu» ENTONCES se crea la frecu con el nombre sin espacios sobrantes, el código mostrado, el nombre guardado como anfitrión y las notas de las frecus cercanas, se publica con su nota y se abre la frecu activa; con el nombre vacío el botón no responde; si la creación falla, avisa con el mensaje de la falla y sigue en la nueva frecu.
+// AC4: CUANDO se abre la nueva frecu ENTONCES el campo «Nombre de la frecu» trae «Frecu de <nombre guardado>» (o «Mi frecu» sin nombre guardado) con su contador de 24 y el ejemplo «Ej. Ruta del domingo» al vaciarlo, y el código de acceso muestra 4 cifras generadas en celdas de solo lectura con «4 dígitos» y «Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.»; CUANDO toca «Generar otro» ENTONCES el código cambia por uno nuevo, sus celdas aparecen escalonadas con el pop del prototipo y el botón gira con el resorte `organic`.
+// AC5: CUANDO el usuario toca «Abrir frecu» ENTONCES se crea la frecu con el nombre sin espacios sobrantes, el código mostrado, el nombre guardado como anfitrión y las notas de las frecus cercanas, se publica con su nota y se abre la frecu activa; con el nombre vacío el botón no responde; si la creación falla, avisa con el mensaje de la falla, sigue en la nueva frecu y no deja ningún anuncio mDNS (F7).
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -177,6 +177,8 @@ void main() {
         note: any(named: 'note'),
       ),
     ).thenAnswer((_) async => const Result.success(null));
+    when(() => discovery.stopPublishing())
+        .thenAnswer((_) async => const Result.success(null));
     when(() => network.watchNetworkState())
         .thenAnswer((_) => networkStates.stream);
     when(() => rooms.getLocalIpAddress())
@@ -421,6 +423,7 @@ void main() {
         ).called(1);
         expect(find.byType(RoomPage), findsOneWidget);
         expect(find.byType(NewRoomStep), findsNothing);
+        await _unmountRoomPage(tester);
       },
     );
 
@@ -468,6 +471,8 @@ void main() {
           note: any(named: 'note'),
         ),
       );
+      // F7: sin frecu abierta no queda ningún anuncio en la red.
+      verify(() => discovery.stopPublishing()).called(1);
 
       // El aviso se va solo.
       await tester.pump(const Duration(seconds: 3));
@@ -475,4 +480,12 @@ void main() {
       expect(find.text(t.errors.network), findsNothing);
     });
   });
+}
+
+/// La prueba termina dentro de la frecu: al desmontarse, `RoomPage` sale de
+/// ella y Riverpod refresca a quien la mira. Se vacía antes de acabar para no
+/// dejar temporizadores pendientes.
+Future<void> _unmountRoomPage(WidgetTester tester) async {
+  await tester.pumpWidget(const SizedBox());
+  await tester.pump(const Duration(milliseconds: 50));
 }

@@ -19,7 +19,6 @@ import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/ptt_core.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class MockRoomRepository extends Mock implements RoomRepository {}
 
@@ -113,10 +112,11 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Escanea para unirte'), findsOneWidget);
-        expect(find.byType(QrImageView), findsOneWidget);
+        expect(find.byKey(const Key('invite_qr_code')), findsOneWidget);
         expect(
           tester.widget<InviteQr>(find.byType(InviteQr)).data,
-          'frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788',
+          'frecu://join?h=192.168.1.50&p=47800&r=room-abc-123&c=7788'
+          '&name=Frecu+Anfitri%C3%B3n',
         );
       },
     );

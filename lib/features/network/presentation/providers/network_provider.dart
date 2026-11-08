@@ -1,7 +1,10 @@
 import 'package:frecu/features/network/data/datasources/network_interface_datasource.dart';
+import 'package:frecu/features/network/data/datasources/system_settings_datasource.dart';
 import 'package:frecu/features/network/data/repositories/network_repository_impl.dart';
+import 'package:frecu/features/network/data/repositories/system_settings_repository_impl.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
+import 'package:frecu/features/network/domain/repositories/system_settings_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'network_provider.g.dart';
@@ -25,3 +28,9 @@ Raw<Stream<NetworkState>> networkStateStream(Ref ref) {
   final repository = ref.watch(networkRepositoryProvider);
   return repository.watchNetworkState();
 }
+
+/// Proveedor de los Ajustes del sistema (Wi-Fi, punto de acceso y los de la
+/// app).
+@Riverpod(keepAlive: true)
+SystemSettingsRepository systemSettingsRepository(Ref ref) =>
+    SystemSettingsRepositoryImpl(dataSource: SystemSettingsDataSource());

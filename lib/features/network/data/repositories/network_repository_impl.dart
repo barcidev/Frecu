@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:frecu/core/error/failure.dart';
+import 'package:frecu/core/network/lan_address.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/network/data/datasources/network_interface_datasource.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
@@ -38,13 +39,12 @@ class NetworkRepositoryImpl implements NetworkRepository {
         return const Result.success(NetworkState.disconnected());
       }
 
-      final isHotspot = _detectIsHotspot(
-        activeInfo.ipAddress,
-        activeInfo.interfaceName,
-      );
+      final isHotspot =
+          activeInfo.kind == LanKind.hotspot ||
+          _detectIsHotspot(activeInfo.address, activeInfo.interfaceName);
 
       final state = NetworkState.connected(
-        ipAddress: activeInfo.ipAddress,
+        ipAddress: activeInfo.address,
         interfaceName: activeInfo.interfaceName,
         isHotspot: isHotspot,
       );
@@ -75,18 +75,10 @@ class NetworkRepositoryImpl implements NetworkRepository {
     );
   }
 
-  ({String ipAddress, String interfaceName})? _extractActiveInterfaceInfo(
-    List<NetworkInterface> interfaces,
-  ) {
-    for (final interface in interfaces) {
-      for (final address in interface.addresses) {
-        if (!address.isLoopback && address.type == InternetAddressType.IPv4) {
-          return (ipAddress: address.address, interfaceName: interface.name);
-        }
-      }
-    }
-    return null;
-  }
+  /// La IPv4 de la Wi-Fi o del punto de acceso; con solo datos móviles o
+  /// VPN no hay red local ([selectLanAddress]).
+  LanAddress? _extractActiveInterfaceInfo(List<NetworkInterface> interfaces) =>
+      selectLanAddress(interfaces.map(LanInterface.fromIo));
 
   bool _detectIsHotspot(String ipAddress, String interfaceName) {
     final ipMatches = _hotspotPrefixes.any(ipAddress.startsWith);
