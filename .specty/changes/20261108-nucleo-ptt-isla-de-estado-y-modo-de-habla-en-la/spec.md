@@ -83,7 +83,7 @@ Referencia: `drawPtt` y `voice` de `engine.js`; `pttZone`, `PTT_COPY`, `pttState
   - files: lib/features/room/presentation/widgets/room_talk.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/room_talk_test.dart
   - ac: AC2, AC6, AC7
   - verify: flutter test test/features/room/presentation/room_talk_test.dart
-- [ ] T2: Núcleo PTT con bisel VU, anillo y textos
+- [x] T2: Núcleo PTT con bisel VU, anillo y textos
   - files: lib/features/room/presentation/widgets/ptt_core.dart, lib/features/room/presentation/widgets/ptt_core_painter.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, test/features/room/presentation/ptt_core_test.dart
   - ac: AC1, AC2, AC3, AC7, AC8
   - verify: flutter test test/features/room/presentation/ptt_core_test.dart

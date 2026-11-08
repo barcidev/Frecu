@@ -51,12 +51,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "7abe2f862bde6ec8849dcbc6df652c2d6f8846d7",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:42:32.808Z",
       "doneAt": "2026-11-08T00:43:11.182Z",
-      "summary": "RoomTalk (fases del núcleo y de la isla, quién habla, n, anfitrión solo, formato del tiempo al aire) y RoomStatusIsland con StatusIsland y textos room.talk en es/en"
+      "summary": "RoomTalk (fases del núcleo y de la isla, quién habla, n, anfitrión solo, formato del tiempo al aire) y RoomStatusIsland con StatusIsland y textos room.talk en es/en",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "7a3f96204a863cca3e1d5383c38e4ffeabc8a135",
+      "startedAt": "2026-11-08T00:43:11.842Z",
+      "doneAt": "2026-11-08T00:44:43.788Z",
+      "summary": "PttCore (presión con varios dedos, conmutador de micrófono abierto, espera al 35 %, tiempo al aire, textos e íconos FrIcons, escala 0,94 con resorte y háptica) y PttCorePainter/PttMotion (ondas, bisel de 72 marcas como VU y anillo líquido, quieto con movimiento reducido)"
     }
   },
   "pending": {
