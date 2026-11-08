@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "id": "20261108-hojas-de-invitacion-ruta-de-audio-y-salir-y",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/hojas-de-invitacion-ruta-de-audio-y-salir-y",
+  "baseCommit": "4db5a571a8affd7389b5dec22d1591f65ce265cd",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:66f30104c4278dd6876385215d27a7f831f24b7bec798a38256978cdcc681618",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:e064a3ec3b1685a21c9a1fd667475fff07d41e0cb0484ff5d22f38be85579d49",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:08a08e1b9ced1e07d23daca224e9cebaec042eafee1ada8200e01a8887c534e7",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:1d0c2649cb3038fc77dcf66e2e9f9862e2445d16c05b4952ebf86221e529a1ae",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:2d98044b634814249d6656979b83c2ca5fa638c0a8a4511d1e863bb08d70d938",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:90429acea2bdc661ffe169c9d33cfc632c409163304f2499d64e30cb0964d212",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:0a07237ef905b39b623a26d964d84884f4824f7b33d1ee60ea6689bbcacfeedd",
+      "decision": "implicit"
+    },
+    "A8": {
+      "hash": "sha256:dc5d401ef88cedfa8990157c86feec452ab4880e8e4b46b4235d356335c78757",
+      "decision": "implicit"
+    },
+    "A9": {
+      "hash": "sha256:afdbfd5c6395b151df1d8f968b6c01d9dd9833ef3cc8ce5b50316ff2f13cd991",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 9,
+    "AC": 7,
+    "T": 3,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:3d232d6a421b455ae1633f57e98c2b8d7e25844d7b81a29d80066273e1ce59a8",
+    "at": "2026-11-08T01:11:17.367Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
