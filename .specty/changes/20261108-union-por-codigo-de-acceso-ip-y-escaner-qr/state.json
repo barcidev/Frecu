@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-union-por-codigo-de-acceso-ip-y-escaner-qr",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/union-por-codigo-de-acceso-ip-y-escaner-qr",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
@@ -63,6 +63,14 @@
     "T": 3,
     "R": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-08T00:39:07.346Z"
+  "lockedTests": {
+    "test/features/lobby/presentation/discovery_flow_test.dart": "sha256:a5b0634c1d4db1c138d2af933e50a73d6b96a799931d6e1fcec17271860e3c53",
+    "test/features/lobby/presentation/lobby_page_test.dart": "sha256:61c55bd96c0b53b26df8dbfc42b24fda20c091de2621959a1cb63608c9c8141c",
+    "test/features/lobby/presentation/room_full_flow_test.dart": "sha256:f3b445e04610f61871ed71b12fa0563194e1ca61eec499faf03a7df7644bcb5e",
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:7d8b7cb9dfb8e976b364e1640e6291649a2ce274ef15595359f91ff793124590",
+    "test/features/lobby/presentation/saved_name_test.dart": "sha256:bb348541be5e15ebaecb42a988222ed237b7ce6992fc65eba23403160003b920",
+    "test/features/lobby/presentation/scan_qr_page_test.dart": "sha256:a8b58f94c27d8c42eda894bee3976ca94a0c54eef7576d6bc9a5a9c68266a1dd",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:61230804d0f47b0d46db0ba3ef5302f8d79fb3b41cfd95a6e70195a26fbcf77f",
+    "test/features/lobby/presentation/join_sheets_test.dart": "sha256:0262bda8a63d4ba07cbcd5777ced50aa573e6e1662bf7e768d1c87b9558b65c1"
+  }
 }
