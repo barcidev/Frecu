@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "id": "20261108-retro-428fac8",
+  "kind": "retro",
+  "phase": "done",
+  "baseCommit": "17aa4e038c8b3a50afbbec5de1d485bec293df3a",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 2,
+    "adjust": 0,
+    "reasons": [
+      "2 archivos"
+    ]
+  },
+  "items": {},
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:044942197991108d2cdb2b87d65e1d8a6924589e9762ebbe91348619a91785b3",
+    "at": "2026-11-08T00:07:31.484Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
