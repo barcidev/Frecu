@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "id": "20261108-iconos-propios-en-frfield-y-frbanner-y-formato",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/iconos-propios-en-frfield-y-frbanner-y-formato",
+  "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 5,
+    "adjust": 0,
+    "reasons": [
+      "5 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:0ac55d685e60bcaa5a33d54e3608528c9ca312a00a472a737dff894d2e503fbf",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:f5c38a8675571cc0206a1dc41173e66b5260efb129cc240670c28d87e2314a50",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:687bc7441f7ad9548e1799bd2b19494e07898082b4afd08b53cb18631b965ae6",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:c66a98056cd95b672cf3ff8056c37c557841053300a67ad28964ebdf21c1a097",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:01e87c43bebd69c67ee17362bd1e2638eab0c9e84815b4613ffcbb23f950f71d",
+    "at": "2026-11-08T01:55:09.210Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
