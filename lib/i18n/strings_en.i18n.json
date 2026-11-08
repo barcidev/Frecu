@@ -44,7 +44,6 @@
     "joinRoom": "Connect by IP",
     "nearbyRooms": "Nearby rooms",
     "accessCode": "Access code",
-    "roomName": "Room name",
     "network": {
       "checking": "Checking network",
       "connected": "Network · $ip",
@@ -66,6 +65,42 @@
     "offline": {
       "title": "You're not on any Wi-Fi network.",
       "message": "Join the host's hotspot to find rooms."
+    },
+    "newRoom": {
+      "back": "Back",
+      "step": "Step $current of $total",
+      "guide": {
+        "title": "Set up the network",
+        "heading": "Turn on your hotspot",
+        "message": "Your phone will be the group's antenna.",
+        "android": "Android",
+        "iphone": "iPhone",
+        "androidSteps(interface=HotspotStep)": [
+          { "lead": "Open Settings › Hotspot", "rest": " (the name varies by brand)." },
+          { "lead": "Turn it on", "rest": " and share its name and password with your group." },
+          { "lead": "Come back to Frecu", "rest": " and open your room. It doesn't use your mobile data." }
+        ],
+        "iphoneSteps(interface=HotspotStep)": [
+          { "lead": "Open Settings › Personal Hotspot", "rest": " and turn on “Allow Others to Join”." },
+          { "lead": "Share the password", "rest": " with your group so they join your network." },
+          { "lead": "Keep Frecu open", "rest": " while they join. On iPhone we recommend that the host uses Android." }
+        ],
+        "ready": "It's on",
+        "sameWifi": "We're already on the same Wi-Fi"
+      },
+      "title": "New room",
+      "soundsIn": "Your room sounds in",
+      "openedAt": "Opened at $time",
+      "name": "Room name",
+      "nameHint": "E.g. Sunday ride",
+      "defaultName": "$name's room",
+      "untitled": "My room",
+      "code": "Access code",
+      "codeDigits": "4 digits",
+      "regenerate": "Generate another",
+      "codeHelp": "Share it only with your group: it keeps strangers on the same network out.",
+      "open": "Open room",
+      "clockLabel": "Circle of fifths clock: $time, $note"
     },
     "noteNames": ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"],
     "noNote": "—",

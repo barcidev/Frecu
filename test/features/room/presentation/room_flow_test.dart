@@ -114,20 +114,21 @@ void main() {
 
         await tester.tap(find.text(t.lobby.createRoom));
         await tester.pumpAndSettle();
+        await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+        await tester.pumpAndSettle();
 
-        expect(find.text('IP local: 192.168.43.1'), findsOneWidget);
-        expect(
-          find.widgetWithText(FilledButton, 'Crear frecu'),
-          findsOneWidget,
-        );
+        expect(find.text(t.lobby.newRoom.open), findsOneWidget);
 
-        await tester.tap(find.widgetWithText(FilledButton, 'Crear frecu'));
+        await tester.tap(find.text(t.lobby.newRoom.open));
         await tester.pumpAndSettle();
 
         verify(
           () => repository.createRoom(
-            name: 'Frecu',
-            accessCode: '1234',
+            name: any(named: 'name', that: isNotEmpty),
+            accessCode: any(
+              named: 'accessCode',
+              that: matches(RegExp(r'^\d{4}$')),
+            ),
             displayName: any(named: 'displayName'),
           ),
         ).called(1);

@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "20261108-nueva-frecu-con-reloj-de-quintas-y-guia-de",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/nueva-frecu-con-reloj-de-quintas-y-guia-de",
+  "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2d7cebdf459708151778bec71b57bd560a6c484decec24747b8c060b6654fd6b",
+    "at": "2026-11-08T00:20:41.857Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "16 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:83eef658bd5abddfa526e5d14e288c91be766bd07f55a65bd333835eec3b7e68",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:1370c0292a100e153b6514e52a5d6d5ff77553ff79e6299a3479a0947440363c",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:19de681e694dcabe7b713605b30baff8b07d60f3ce1551d934b8a6c859c1b3b3",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:4064640914d0d16e5c7872251d4de40a325e8d12f5d4544768c8276d5035dab4",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:35b31c93cae9b7c8af56e75b8195f4e7034ce45683f713f4e515047d36ed4b26",
+      "decision": "confirmed"
+    },
+    "A6": {
+      "hash": "sha256:613fcfa8bd6f4d6d12b62f2751a9e27c1280357eb47e67af9b66eb813b7d4827",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:4eb474aebb70afc4e24c9e0ac0f09c93e1263836594cdabe7b0739c8d9c1db92",
+      "decision": "implicit"
+    },
+    "A8": {
+      "hash": "sha256:f975f2dd4d2bda15121b18a7e279356d98f9852552b1c42d04deca1a3758d00b",
+      "decision": "confirmed"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "26d219405b7131fa2916f59150b167d29cb8f182",
+      "attempts": 1,
+      "startedAt": "2026-11-08T00:37:19.755Z",
+      "doneAt": "2026-11-08T00:37:39.514Z",
+      "summary": "FifthsClock (port de drawFifths) con funciones puras fifthsAngle, fifthsHourAngle, fifthsMinuteAngle, fifthsLabels y fifthsClockTime; textos de lobby.newRoom en es/en (pasos de la guía con la interfaz HotspotStep) y slang regenerado.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "d85c4b01f2282ba326e712a6a7d0def38c7daedd",
+      "attempts": 1,
+      "startedAt": "2026-11-08T00:37:40.287Z",
+      "doneAt": "2026-11-08T00:41:42.144Z",
+      "summary": "CreateRoomPage en dos pasos (Navigator anidado): guía del punto de acceso con ilustración animada y pasos Android/iPhone, y nueva frecu con reloj de quintas, nota, nombre, código generado y Abrir frecu; reloj y generador inyectables.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "04e24f10988c9e3aa24cd9fcf06c2966eaa6efc6",
+      "attempts": 1,
+      "startedAt": "2026-11-08T00:41:42.821Z",
+      "doneAt": "2026-11-08T00:43:03.132Z",
+      "summary": "Quitado lobby.roomName (solo lo usaba la pantalla de antes) y regenerado slang; room_flow_test, room_note_flow_test y saved_name_test pasan por la guía y Abrir frecu.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 8,
+    "AC": 7,
+    "T": 3,
+    "R": 3
+  },
+  "closingSubmittedAt": "2026-11-08T00:43:42.413Z",
+  "lockedTests": {
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:a382445177ca8d627e8651c34b0b7fb69e29444d6e63a2c78c2d7f0a9b2fc8c3",
+    "test/features/lobby/presentation/saved_name_test.dart": "sha256:7e5e0cdc7c222002e9f03d6608832c6ad6261db7b043ee312a2d5cf7dbd9da01",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:3c7eb930c91934a63272208e5a714b9568446d5c6ef7de4b7287ea4f9e91e905",
+    "test/features/lobby/presentation/fifths_clock_test.dart": "sha256:b4e92444a63bb22f9e7d52945841661f070b7ae9d65537dd7ab58dd778c858f9",
+    "test/features/lobby/presentation/hotspot_guide_test.dart": "sha256:646cbe5bac480d6bf42cb8241c5a051b1cbea7c8dfbbd0e588920fb5901d6d3f",
+    "test/features/lobby/presentation/new_room_test.dart": "sha256:bcf727c52d48b199da458f30bd65d3c094c5c720f95734fcf4d0e62b118c8add"
+  }
+}

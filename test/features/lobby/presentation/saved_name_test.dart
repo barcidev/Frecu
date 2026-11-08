@@ -285,9 +285,12 @@ void main() {
         await tester.tap(find.text(t.lobby.createRoom));
         await tester.pumpAndSettle();
 
+        await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+        await tester.pumpAndSettle();
+
         expect(find.text(_nameLabel), findsNothing);
 
-        await tester.tap(find.widgetWithText(FilledButton, t.lobby.createRoom));
+        await tester.tap(find.text(t.lobby.newRoom.open));
         await tester.pumpAndSettle();
 
         verify(

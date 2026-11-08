@@ -44,7 +44,6 @@
     "joinRoom": "Conectar por IP",
     "nearbyRooms": "Frecus cercanas",
     "accessCode": "Código de acceso",
-    "roomName": "Nombre de la frecu",
     "network": {
       "checking": "Buscando red",
       "connected": "Red · $ip",
@@ -66,6 +65,42 @@
     "offline": {
       "title": "No estás en ninguna red Wi-Fi.",
       "message": "Únete al punto de acceso del anfitrión para encontrar frecus."
+    },
+    "newRoom": {
+      "back": "Atrás",
+      "step": "Paso $current de $total",
+      "guide": {
+        "title": "Prepara la red",
+        "heading": "Activa tu punto de acceso",
+        "message": "Tu teléfono será la antena del grupo.",
+        "android": "Android",
+        "iphone": "iPhone",
+        "androidSteps(interface=HotspotStep)": [
+          { "lead": "Abre Ajustes › Zona Wi-Fi", "rest": " (el nombre cambia según la marca)." },
+          { "lead": "Actívala", "rest": " y comparte el nombre y la contraseña con tu grupo." },
+          { "lead": "Vuelve a Frecu", "rest": " y abre tu frecu. No usa tus datos móviles." }
+        ],
+        "iphoneSteps(interface=HotspotStep)": [
+          { "lead": "Abre Ajustes › Punto de acceso personal", "rest": " y activa «Permitir a otros conectarse»." },
+          { "lead": "Comparte la contraseña", "rest": " con tu grupo y que se unan a tu red." },
+          { "lead": "Mantén Frecu abierta", "rest": " mientras se unen. En iPhone recomendamos que el anfitrión use Android." }
+        ],
+        "ready": "Ya está activo",
+        "sameWifi": "Ya estamos en la misma Wi-Fi"
+      },
+      "title": "Nueva frecu",
+      "soundsIn": "Tu frecu suena en",
+      "openedAt": "Abierta a las $time",
+      "name": "Nombre de la frecu",
+      "nameHint": "Ej. Ruta del domingo",
+      "defaultName": "Frecu de $name",
+      "untitled": "Mi frecu",
+      "code": "Código de acceso",
+      "codeDigits": "4 dígitos",
+      "regenerate": "Generar otro",
+      "codeHelp": "Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.",
+      "open": "Abrir frecu",
+      "clockLabel": "Reloj de quintas: $time, $note"
     },
     "noteNames": ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Fa♯", "Sol", "La♭", "La", "Si♭", "Si"],
     "noNote": "—",

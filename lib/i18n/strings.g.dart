@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 322 (161 per locale)
+/// Strings: 388 (194 per locale)
 ///
-/// Built on 2026-11-08 at 00:39 UTC
+/// Built on 2026-11-08 at 00:45 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -180,4 +180,41 @@ class AppLocaleUtils extends BaseAppLocaleUtils<AppLocale, Translations> {
 	static AppLocale findDeviceLocale() => instance.findDeviceLocale();
 	static List<Locale> get supportedLocales => instance.supportedLocales;
 	static List<String> get supportedLocalesRaw => instance.supportedLocalesRaw;
+}
+
+// interfaces generated as mixins
+
+mixin HotspotStep {
+	String get lead;
+	String get rest;
+
+	@override
+	bool operator ==(Object other) {
+		if (identical(this, other)) return true;
+		if (other is! HotspotStep) return false;
+
+		final fields = $fields;
+		final otherFields = other.$fields;
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i] != otherFields[i]) return false;
+		}
+
+		return true;
+	}
+
+	@override
+	int get hashCode {
+		final fields = $fields;
+		int result = fields.first.hashCode;
+		for (final element in fields.skip(1)) {
+			result *= element.hashCode;
+		}
+
+		return result;
+	}
+
+	List<Object?> get $fields => [
+		lead,
+		rest,
+	];
 }
