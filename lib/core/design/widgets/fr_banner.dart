@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icon_data.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
 
@@ -23,20 +26,41 @@ enum FrBannerTone {
 /// reducido) y luego llama a [onDismiss]. [floating] lo vuelve opaco y con
 /// sombra para ir sobre la pantalla (aviso de eco).
 class FrBanner extends StatefulWidget {
-  /// Crea un aviso.
+  /// Crea un aviso con el ícono de Material [icon].
   const FrBanner({
+    required IconData this.icon,
     required this.tone,
-    required this.icon,
     required this.title,
     this.message,
     this.actionLabel,
     this.onAction,
     this.onDismiss,
     this.dismissLabel,
-    this.dismissIcon = Icons.close_rounded,
+    this.dismissIcon = FrIcons.close,
     this.floating = false,
     super.key,
-  }) : assert(
+  }) : drawnIcon = null,
+       assert(
+         onDismiss == null || dismissLabel != null,
+         'El cierre necesita una etiqueta accesible.',
+       );
+
+  /// Crea un aviso con el ícono propio [icon] de `FrIcons`.
+  const FrBanner.drawn({
+    required FrIconData icon,
+    required this.tone,
+    required this.title,
+    this.message,
+    this.actionLabel,
+    this.onAction,
+    this.onDismiss,
+    this.dismissLabel,
+    this.dismissIcon = FrIcons.close,
+    this.floating = false,
+    super.key,
+  }) : drawnIcon = icon,
+       icon = null,
+       assert(
          onDismiss == null || dismissLabel != null,
          'El cierre necesita una etiqueta accesible.',
        );
@@ -44,8 +68,11 @@ class FrBanner extends StatefulWidget {
   /// Tono.
   final FrBannerTone tone;
 
-  /// Ícono a la izquierda.
-  final IconData icon;
+  /// Ícono de Material a la izquierda; nulo si el aviso se creó con `.drawn`.
+  final IconData? icon;
+
+  /// Ícono propio de `FrIcons` a la izquierda, en lugar de [icon].
+  final FrIconData? drawnIcon;
 
   /// Título en negrita.
   final String title;
@@ -65,8 +92,8 @@ class FrBanner extends StatefulWidget {
   /// Etiqueta accesible del cierre.
   final String? dismissLabel;
 
-  /// Ícono del cierre.
-  final IconData dismissIcon;
+  /// Ícono propio del cierre; `FrIcons.close` por defecto.
+  final FrIconData dismissIcon;
 
   /// Opaco y con sombra, para flotar sobre la pantalla.
   final bool floating;
@@ -144,10 +171,7 @@ class _FrBannerState extends State<FrBanner>
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 22,
-                child: Icon(widget.icon, size: 18, color: look.icon),
-              ),
+              SizedBox(width: 22, child: _glyph(look.icon)),
               const SizedBox(width: 10),
               Expanded(child: _BannerText(banner: widget)),
               const SizedBox(width: 10),
@@ -162,13 +186,25 @@ class _FrBannerState extends State<FrBanner>
     );
   }
 
+  /// Ícono propio o de Material, a 18 px con [color]; el propio va al
+  /// principio de su columna de 22 px, como en el prototipo.
+  Widget _glyph(Color color) {
+    final drawn = widget.drawnIcon;
+    if (drawn == null) return Icon(widget.icon, size: 18, color: color);
+    return Align(
+      alignment: AlignmentDirectional.topStart,
+      heightFactor: 1,
+      child: FrIcon(drawn, size: 18, color: color),
+    );
+  }
+
   Widget _close(Color color) => FrPressable(
     onPressed: _dismiss,
     semanticLabel: widget.dismissLabel,
     pressedScale: 0.92,
     builder: (context, _, _) => SizedBox.square(
       dimension: 24,
-      child: Icon(widget.dismissIcon, size: 16, color: color),
+      child: Center(child: FrIcon(widget.dismissIcon, size: 16, color: color)),
     ),
   );
 }

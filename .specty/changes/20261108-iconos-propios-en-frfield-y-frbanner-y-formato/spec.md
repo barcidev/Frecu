@@ -53,7 +53,7 @@ Los campos (`FrField`) y los avisos (`FrBanner`) pueden mostrar los íconos dibu
   - files: lib/core/design/widgets/fr_field.dart, test/core/design/widgets/fr_field_drawn_test.dart
   - ac: AC1
   - verify: flutter test test/core/design/widgets/fr_field_drawn_test.dart test/core/design/widgets/fr_field_test.dart
-- [ ] T2: `FrBanner.drawn` y cierre con `FrIcons.close`
+- [x] T2: `FrBanner.drawn` y cierre con `FrIcons.close`
   - files: lib/core/design/widgets/fr_banner.dart, test/core/design/widgets/fr_banner_drawn_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/core/design/widgets/fr_banner_drawn_test.dart test/core/design/widgets/fr_notices_test.dart
