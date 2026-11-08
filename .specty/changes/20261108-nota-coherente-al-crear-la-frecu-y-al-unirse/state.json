@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nota-coherente-al-crear-la-frecu-y-al-unirse",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/nota-coherente-al-crear-la-frecu-y-al-unirse",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
   "revision": 1,
@@ -60,12 +60,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "c8922bbb6192beeeb88f9a02fba465fcd4d87fbd",
+      "attempts": 1,
       "startedAt": "2026-11-08T02:07:25.693Z",
       "doneAt": "2026-11-08T02:10:19.916Z",
-      "summary": "La nueva frecu pasa a createRoom la nota que pinta y su héroe va a new_room_hero.dart. Prueba nueva de Abrir con la hora cambiada; new_room_test y room_note_flow_test se adaptan (import, reloj y note en los dobles)."
+      "summary": "La nueva frecu pasa a createRoom la nota que pinta y su héroe va a new_room_hero.dart. Prueba nueva de Abrir con la hora cambiada; new_room_test y room_note_flow_test se adaptan (import, reloj y note en los dobles).",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "71d403d74da9e760b55d3a13c103ff975d2865a1",
+      "startedAt": "2026-11-08T02:10:21.990Z",
+      "doneAt": "2026-11-08T02:13:27.909Z",
+      "summary": "room_flow_test y saved_name_test suman note: any(named: 'note') a los dobles y verificaciones de createRoom, sin tocar aserciones."
     }
   },
   "pending": {

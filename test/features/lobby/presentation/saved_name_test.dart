@@ -104,6 +104,7 @@ void main() {
           name: any(named: 'name'),
           accessCode: any(named: 'accessCode'),
           displayName: any(named: 'displayName'),
+          note: any(named: 'note'),
         ),
       ).thenAnswer((_) async => Result.success(testRoom));
       when(
@@ -298,6 +299,7 @@ void main() {
             name: any(named: 'name'),
             accessCode: any(named: 'accessCode'),
             displayName: 'Ana',
+            note: any(named: 'note'),
           ),
         ).called(1);
       },

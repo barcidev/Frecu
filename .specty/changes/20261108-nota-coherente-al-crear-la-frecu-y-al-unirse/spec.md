@@ -74,7 +74,7 @@ Que la frecu suene en la nota que el anfitrión vio en pantalla y que quien se u
   - files: lib/features/lobby/presentation/widgets/new_room_step.dart, lib/features/lobby/presentation/widgets/new_room_hero.dart, test/features/lobby/presentation/new_room_note_test.dart, test/features/lobby/presentation/new_room_test.dart, test/features/lobby/presentation/room_note_flow_test.dart
   - ac: AC1, AC3
   - verify: flutter test test/features/lobby/presentation/new_room_note_test.dart test/features/lobby/presentation/new_room_test.dart test/features/lobby/presentation/room_note_flow_test.dart
-- [ ] T3: Pruebas de crear de otros cortes con la nota en los dobles
+- [x] T3: Pruebas de crear de otros cortes con la nota en los dobles
   - files: test/features/room/presentation/room_flow_test.dart, test/features/lobby/presentation/saved_name_test.dart
   - ac: —
   - verify: flutter test && flutter analyze

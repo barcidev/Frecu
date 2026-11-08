@@ -102,6 +102,7 @@ void main() {
             name: any(named: 'name'),
             accessCode: any(named: 'accessCode'),
             displayName: any(named: 'displayName'),
+            note: any(named: 'note'),
           ),
         ).thenAnswer((_) async => Result.success(testRoom));
         when(() => repository.watchParticipants())
@@ -131,6 +132,7 @@ void main() {
               that: matches(RegExp(r'^\d{4}$')),
             ),
             displayName: any(named: 'displayName'),
+            note: any(named: 'note'),
           ),
         ).called(1);
       },
