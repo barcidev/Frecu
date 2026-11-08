@@ -6,6 +6,13 @@
   "branch": "feature/iconos-propios-en-frfield-y-frbanner-y-formato",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:01e87c43bebd69c67ee17362bd1e2638eab0c9e84815b4613ffcbb23f950f71d",
+    "at": "2026-11-08T01:55:09.210Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 5,
@@ -32,7 +39,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "25fe48c84a116497cdc1f101ce240c4c4b3d4f79",
+      "startedAt": "2026-11-08T01:55:10.500Z",
+      "doneAt": "2026-11-08T01:56:34.140Z",
+      "summary": "FrField.drawn guarda el ícono de FrIcons en drawnIcon y lo pinta con FrIcon a 18 px en tx3 antes del texto; el constructor con IconData no cambia. Prueba nueva fr_field_drawn_test.dart."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -42,12 +59,5 @@
     "AC": 4,
     "T": 3,
     "R": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:01e87c43bebd69c67ee17362bd1e2638eab0c9e84815b4613ffcbb23f950f71d",
-    "at": "2026-11-08T01:55:09.210Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

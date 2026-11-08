@@ -49,7 +49,7 @@ Los campos (`FrField`) y los avisos (`FrBanner`) pueden mostrar los íconos dibu
 
 ## Tareas
 
-- [ ] T1: `FrField.drawn` con ícono propio
+- [x] T1: `FrField.drawn` con ícono propio
   - files: lib/core/design/widgets/fr_field.dart, test/core/design/widgets/fr_field_drawn_test.dart
   - ac: AC1
   - verify: flutter test test/core/design/widgets/fr_field_drawn_test.dart test/core/design/widgets/fr_field_test.dart

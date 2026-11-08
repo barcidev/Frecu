@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
 
 /// Campo de texto de Portadora: etiqueta en mayúsculas, contador, foco con la
@@ -28,7 +30,27 @@ class FrField extends StatefulWidget {
     this.keyboardType,
     this.autofocus = false,
     super.key,
-  });
+  }) : drawnIcon = null;
+
+  /// Crea un campo con [label] y el ícono propio [icon] de `FrIcons`.
+  const FrField.drawn({
+    required this.label,
+    this.controller,
+    this.focusNode,
+    this.hint,
+    this.help,
+    this.error,
+    this.maxLength,
+    this.mono = false,
+    FrIconData? icon,
+    this.onChanged,
+    this.onSubmitted,
+    this.textInputAction,
+    this.keyboardType,
+    this.autofocus = false,
+    super.key,
+  }) : drawnIcon = icon,
+       icon = null;
 
   /// Etiqueta; se muestra en mayúsculas.
   final String label;
@@ -54,8 +76,12 @@ class FrField extends StatefulWidget {
   /// Texto en Martian Mono (códigos e IP).
   final bool mono;
 
-  /// Ícono antes del texto.
+  /// Ícono de Material antes del texto; nulo si el campo se creó con
+  /// `.drawn`.
   final IconData? icon;
+
+  /// Ícono propio de `FrIcons` antes del texto, en lugar de [icon].
+  final FrIconData? drawnIcon;
 
   /// Llamado con cada cambio del texto.
   final ValueChanged<String>? onChanged;
@@ -228,16 +254,13 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
   Widget _input(FrTheme fr) {
     final c = fr.colors;
     final max = widget.maxLength;
-    final icon = widget.icon;
+    final glyph = _glyph(c.tx3);
     final style = (widget.mono ? fr.type.data : fr.type.bodyL).copyWith(
       color: c.tx1,
     );
     return Row(
       children: [
-        if (icon != null) ...[
-          Icon(icon, size: 18, color: c.tx3),
-          const SizedBox(width: 10),
-        ],
+        if (glyph != null) ...[glyph, const SizedBox(width: 10)],
         Expanded(
           child: TextField(
             controller: _controller,
@@ -260,6 +283,15 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  /// Ícono propio o de Material, a 18 px con [color].
+  Widget? _glyph(Color color) {
+    final drawn = widget.drawnIcon;
+    if (drawn != null) return FrIcon(drawn, size: 18, color: color);
+    final material = widget.icon;
+    if (material != null) return Icon(material, size: 18, color: color);
+    return null;
   }
 
   /// Línea inferior: se abre desde el centro; con movimiento reducido entra
