@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "id": "20261108-iconos-propios-en-frfield-y-frbanner-y-formato",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/iconos-propios-en-frfield-y-frbanner-y-formato",
+  "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:01e87c43bebd69c67ee17362bd1e2638eab0c9e84815b4613ffcbb23f950f71d",
+    "at": "2026-11-08T01:55:09.210Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 5,
+    "adjust": 0,
+    "reasons": [
+      "5 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:0ac55d685e60bcaa5a33d54e3608528c9ca312a00a472a737dff894d2e503fbf",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:f5c38a8675571cc0206a1dc41173e66b5260efb129cc240670c28d87e2314a50",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:687bc7441f7ad9548e1799bd2b19494e07898082b4afd08b53cb18631b965ae6",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:c66a98056cd95b672cf3ff8056c37c557841053300a67ad28964ebdf21c1a097",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "25fe48c84a116497cdc1f101ce240c4c4b3d4f79",
+      "attempts": 1,
+      "startedAt": "2026-11-08T01:55:10.500Z",
+      "doneAt": "2026-11-08T01:56:34.140Z",
+      "summary": "FrField.drawn guarda el ícono de FrIcons en drawnIcon y lo pinta con FrIcon a 18 px en tx3 antes del texto; el constructor con IconData no cambia. Prueba nueva fr_field_drawn_test.dart.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "d426a29dceb07c75faca3992ff4f0b48e271a724",
+      "attempts": 1,
+      "startedAt": "2026-11-08T01:56:35.151Z",
+      "doneAt": "2026-11-08T01:58:34.820Z",
+      "summary": "FrBanner.drawn pinta el ícono de FrIcons a 18 px con el color del tono; dismissIcon pasa a FrIconData con FrIcons.close por defecto, pintado a 16 px en tx3 en los dos constructores. Prueba nueva fr_banner_drawn_test.dart.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "300046d4d26ed708d8bc224c48d43da7dbdd01cb",
+      "attempts": 1,
+      "startedAt": "2026-11-08T01:58:35.760Z",
+      "doneAt": "2026-11-08T01:59:01.864Z",
+      "summary": "dart format en fr_colors_order_test.dart (un token por línea, sin tocar aserciones); lib/core y test/core quedan con formato limpio.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 1
+  },
+  "closingSubmittedAt": "2026-11-08T01:59:54.335Z"
+}

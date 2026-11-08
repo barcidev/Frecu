@@ -8,9 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 /// Implementación del contrato [PermissionRepository] utilizando [PermissionDataSource].
 class PermissionRepositoryImpl implements PermissionRepository {
   /// Constructor con inyección de [dataSource].
-  const PermissionRepositoryImpl({
-    required PermissionDataSource dataSource,
-  }) : _permissionDataSource = dataSource;
+  const PermissionRepositoryImpl({required PermissionDataSource dataSource})
+    : _permissionDataSource = dataSource;
 
   final PermissionDataSource _permissionDataSource;
 

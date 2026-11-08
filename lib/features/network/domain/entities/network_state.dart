@@ -22,7 +22,7 @@ sealed class NetworkState with _$NetworkState {
 
   /// Indica si el estado de red corresponde a un hotspot activo.
   bool get isHotspot => when(
-        disconnected: () => false,
-        connected: (_, __, isHotspot) => isHotspot,
-      );
+    disconnected: () => false,
+    connected: (_, __, isHotspot) => isHotspot,
+  );
 }
