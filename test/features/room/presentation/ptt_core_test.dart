@@ -35,8 +35,10 @@ Future<_Calls> _pumpCore(
   _Calls? calls,
   ThemeData? theme,
   Duration onAirFor = Duration.zero,
+  double level = 0,
   String? speakerName,
   Color? speakerColor,
+  double speakerLevel = 0,
 }) async {
   final record = calls ?? _Calls();
   await tester.pumpWidget(
@@ -47,8 +49,10 @@ Future<_Calls> _pumpCore(
           child: PttCore(
             phase: phase,
             onAirFor: onAirFor,
+            level: level,
             speakerName: speakerName,
             speakerColor: speakerColor,
+            speakerLevel: speakerLevel,
             onStart: () => record.start++,
             onStop: () => record.stop++,
             onToggle: () => record.toggle++,
@@ -225,7 +229,7 @@ void main() {
     testWidgets('AC8: con movimiento reducido el núcleo no anima ni se '
         'achica', (tester) async {
       _reduceMotion(tester);
-      await _pumpCore(tester, PttPhase.idle);
+      await _pumpCore(tester, PttPhase.idle, level: 0.6);
       expect(
         find.descendant(
           of: find.byType(PttCore),
@@ -240,7 +244,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(_scale(tester), 1);
-      expect(_painter(tester).motion.level, pttReducedLevel);
+      expect(_painter(tester).motion.level, 0.6);
       expect(_painter(tester).motion.ripples, isEmpty);
       expect(_label(tester), 'AL AIRE');
       await gesture.up();
@@ -254,12 +258,13 @@ void main() {
         PttPhase.receiving,
         speakerName: 'Ana',
         speakerColor: FrColors.dark.p2,
+        speakerLevel: 0.6,
       );
 
       expect(_label(tester), 'MANTÉN');
       expect(_hint(tester), 'ANA ESTÁ HABLANDO · PUEDES RESPONDER');
       expect(_painter(tester).look.rxColor, FrColors.dark.p2);
-      expect(_painter(tester).motion.rxLevel, pttReducedLevel);
+      expect(_painter(tester).motion.rxLevel, 0.6);
 
       final gesture = await tester.startGesture(
         tester.getCenter(find.byKey(const Key('ptt_button'))),

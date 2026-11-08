@@ -137,6 +137,96 @@ final class SpeakingPeersProvider
 
 String _$speakingPeersHash() => r'c35086769e29f11e8c45700e7f1413d84e7fb1c8';
 
+/// Nivel de la voz propia en la escala del VU ([voiceMeterLevel]). WebRTC
+/// solo se lee mientras alguien lo escucha: la frecu activa.
+
+@ProviderFor(localVoiceLevel)
+final localVoiceLevelProvider = LocalVoiceLevelProvider._();
+
+/// Nivel de la voz propia en la escala del VU ([voiceMeterLevel]). WebRTC
+/// solo se lee mientras alguien lo escucha: la frecu activa.
+
+final class LocalVoiceLevelProvider
+    extends $FunctionalProvider<AsyncValue<double>, double, Stream<double>>
+    with $FutureModifier<double>, $StreamProvider<double> {
+  /// Nivel de la voz propia en la escala del VU ([voiceMeterLevel]). WebRTC
+  /// solo se lee mientras alguien lo escucha: la frecu activa.
+  LocalVoiceLevelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localVoiceLevelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$localVoiceLevelHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<double> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<double> create(Ref ref) {
+    return localVoiceLevel(ref);
+  }
+}
+
+String _$localVoiceLevelHash() => r'35045d38d67d7016cdbddff651be53b40dd85fb0';
+
+/// Nivel de la voz recibida de cada participante remoto por su id, en la
+/// escala del VU ([voiceMeterLevel]).
+
+@ProviderFor(peerVoiceLevels)
+final peerVoiceLevelsProvider = PeerVoiceLevelsProvider._();
+
+/// Nivel de la voz recibida de cada participante remoto por su id, en la
+/// escala del VU ([voiceMeterLevel]).
+
+final class PeerVoiceLevelsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Map<String, double>>,
+          Map<String, double>,
+          Stream<Map<String, double>>
+        >
+    with
+        $FutureModifier<Map<String, double>>,
+        $StreamProvider<Map<String, double>> {
+  /// Nivel de la voz recibida de cada participante remoto por su id, en la
+  /// escala del VU ([voiceMeterLevel]).
+  PeerVoiceLevelsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'peerVoiceLevelsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$peerVoiceLevelsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<Map<String, double>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<Map<String, double>> create(Ref ref) {
+    return peerVoiceLevels(ref);
+  }
+}
+
+String _$peerVoiceLevelsHash() => r'20170cd572a41a9712d45988eac502989a107cf4';
+
 /// Stream reactivo del modo de habla actual.
 
 @ProviderFor(talkMode)

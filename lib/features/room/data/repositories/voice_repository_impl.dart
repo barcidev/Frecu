@@ -8,6 +8,7 @@ import 'package:frecu/features/room/data/datasources/audio_session_datasource.da
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
+import 'package:frecu/features/room/data/repositories/voice_level_sampler.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -39,6 +40,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
   final PeerConnectionDataSource _peerConnection;
   final SignalingClientDataSource _signalingClient;
   final Future<bool> Function() _permissionRequester;
+  late final VoiceLevelSampler _levels = VoiceLevelSampler(
+    _peerConnection.readVoiceLevels,
+  );
 
   StreamSubscription<SignalingMessage>? _signalingSubscription;
   StreamSubscription<Set<AudioDevice>>? _devicesSubscription;
@@ -172,6 +176,12 @@ class VoiceRepositoryImpl implements VoiceRepository {
   }
 
   @override
+  Stream<double> watchLocalLevel() => _levels.watchLocal();
+
+  @override
+  Stream<Map<String, double>> watchPeerLevels() => _levels.watchPeers();
+
+  @override
   Stream<TalkMode> watchTalkMode() async* {
     yield _talkMode;
     yield* _talkModeController.stream;
@@ -274,6 +284,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _signalingSubscription = null;
     await _devicesSubscription?.cancel();
     _devicesSubscription = null;
+    await _levels.dispose();
     await _peerConnection.dispose();
     await _audioSession.deactivate();
     await _isTalkingController.close();
