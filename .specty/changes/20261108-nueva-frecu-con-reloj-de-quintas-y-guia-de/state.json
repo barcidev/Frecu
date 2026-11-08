@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "20261108-nueva-frecu-con-reloj-de-quintas-y-guia-de",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/nueva-frecu-con-reloj-de-quintas-y-guia-de",
+  "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "16 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:83eef658bd5abddfa526e5d14e288c91be766bd07f55a65bd333835eec3b7e68",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:1370c0292a100e153b6514e52a5d6d5ff77553ff79e6299a3479a0947440363c",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:19de681e694dcabe7b713605b30baff8b07d60f3ce1551d934b8a6c859c1b3b3",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:4064640914d0d16e5c7872251d4de40a325e8d12f5d4544768c8276d5035dab4",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:35b31c93cae9b7c8af56e75b8195f4e7034ce45683f713f4e515047d36ed4b26",
+      "decision": "confirmed"
+    },
+    "A6": {
+      "hash": "sha256:613fcfa8bd6f4d6d12b62f2751a9e27c1280357eb47e67af9b66eb813b7d4827",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:4eb474aebb70afc4e24c9e0ac0f09c93e1263836594cdabe7b0739c8d9c1db92",
+      "decision": "implicit"
+    },
+    "A8": {
+      "hash": "sha256:f975f2dd4d2bda15121b18a7e279356d98f9852552b1c42d04deca1a3758d00b",
+      "decision": "confirmed"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 8,
+    "AC": 7,
+    "T": 3,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2d7cebdf459708151778bec71b57bd560a6c484decec24747b8c060b6654fd6b",
+    "at": "2026-11-08T00:20:41.857Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
