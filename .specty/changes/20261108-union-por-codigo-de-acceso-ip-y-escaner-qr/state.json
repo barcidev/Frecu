@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-union-por-codigo-de-acceso-ip-y-escaner-qr",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/union-por-codigo-de-acceso-ip-y-escaner-qr",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
@@ -66,12 +66,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "5fad70fa60f11fbc9e93c6fb7fd07a5a5a913905",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:41:18.983Z",
       "doneAt": "2026-11-08T00:41:45.112Z",
-      "summary": "Conectar por IP del inicio abre IpJoinSheet (IP con puerto 47800, código de 4 dígitos, errores por campo y aviso) y se quitan los diálogos de Material"
+      "summary": "Conectar por IP del inicio abre IpJoinSheet (IP con puerto 47800, código de 4 dígitos, errores por campo y aviso) y se quitan los diálogos de Material",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "bc8e2a224eecba8aefce5d221b72b6820d105213",
+      "startedAt": "2026-11-08T00:41:45.713Z",
+      "doneAt": "2026-11-08T00:44:09.975Z",
+      "summary": "Escáner en Portadora y tema oscuro: retícula con cierre y check, linterna, QR inválido, Conectar por IP y tarjeta «Frecu encontrada» con Unirme; las pruebas de otros cortes escriben el código, llenan la IP y tocan Unirme"
     }
   },
   "pending": {
