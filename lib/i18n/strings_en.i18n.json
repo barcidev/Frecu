@@ -4,6 +4,39 @@
   },
   "lobby": {
     "title": "frecu",
+    "join": {
+      "close": "Close",
+      "port": "Port $port",
+      "wrongCode": "Wrong code. Check it and try again.",
+      "roomFullHint": "You can join when someone leaves.",
+      "unreachableHint": "Make sure you're on the same Wi-Fi network.",
+      "pin": {
+        "message": "Enter the access code. Ask the host for it.",
+        "autoSend": "Sent once all 4 digits are in",
+        "checking": "Checking with the host…",
+        "correct": "Code accepted · joining",
+        "delete": "Delete",
+        "joiningAs": "You'll join as"
+      },
+      "ip": {
+        "kicker": "Manual connection",
+        "message": "Use it if the room isn't on the list.",
+        "host": "Host IP",
+        "noAnswer": "No answer on port $port",
+        "connect": "Connect"
+      },
+      "scan": {
+        "title": "Scan invite",
+        "subtitle": "Room QR",
+        "back": "Back",
+        "torch": "Flashlight",
+        "hint": "Point at the QR the host shows on their phone.",
+        "invalid": "This QR isn't a Frecu invite.",
+        "found": "Room found",
+        "noNote": "Room without a note",
+        "join": "Join"
+      }
+    },
     "settings": "Settings",
     "heading": "Pick your room",
     "createRoom": "Create room",

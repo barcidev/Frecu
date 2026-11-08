@@ -81,7 +81,7 @@ Referencia: `SH.pin`, `SH.ip` y `V.scan` de `screens.js`; `pinKey`, `renderPin`,
 
 ## Tareas
 
-- [ ] T1: Hoja de código de acceso desde la lista de frecus
+- [x] T1: Hoja de código de acceso desde la lista de frecus
   - files: lib/features/lobby/presentation/widgets/pin_join_sheet.dart, lib/features/lobby/presentation/pages/lobby_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/join_sheets_test.dart
   - ac: AC1, AC2, AC3, AC8
   - verify: flutter test test/features/lobby/presentation/join_sheets_test.dart --name PinJoinSheet

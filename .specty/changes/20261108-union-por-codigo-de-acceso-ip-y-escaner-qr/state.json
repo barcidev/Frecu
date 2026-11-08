@@ -52,7 +52,19 @@
       "decision": "confirmed"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/lobby/presentation/widgets/ip_join_sheet.dart"
+      ],
+      "attempts": 2,
+      "baseCommit": "ed80446e619814a2361ce747025324aa8af69732",
+      "startedAt": "2026-11-08T00:39:15.301Z",
+      "doneAt": "2026-11-08T00:41:18.305Z",
+      "summary": "Hoja de código de acceso (PinJoinSheet) con teclado propio y envío al cuarto dígito, y encabezado y aviso de error comunes; el inicio la abre al tocar una frecu; textos de lobby.join. IpJoinSheet entra ya porque join_sheets_test la importa"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

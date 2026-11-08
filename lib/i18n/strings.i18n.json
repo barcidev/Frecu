@@ -4,6 +4,39 @@
   },
   "lobby": {
     "title": "frecu",
+    "join": {
+      "close": "Cerrar",
+      "port": "Puerto $port",
+      "wrongCode": "Código incorrecto. Revisa e intenta otra vez.",
+      "roomFullHint": "Podrás entrar cuando alguien salga.",
+      "unreachableHint": "Revisa que estés en su misma red Wi-Fi.",
+      "pin": {
+        "message": "Ingresa el código de acceso. Pídeselo al anfitrión.",
+        "autoSend": "Se envía al completar los 4 dígitos",
+        "checking": "Verificando con el anfitrión…",
+        "correct": "Código correcto · entrando",
+        "delete": "Borrar",
+        "joiningAs": "Entrarás como"
+      },
+      "ip": {
+        "kicker": "Conexión manual",
+        "message": "Úsalo si la frecu no aparece en la lista.",
+        "host": "IP del anfitrión",
+        "noAnswer": "Sin respuesta en el puerto $port",
+        "connect": "Conectar"
+      },
+      "scan": {
+        "title": "Escanear invitación",
+        "subtitle": "QR de la frecu",
+        "back": "Atrás",
+        "torch": "Linterna",
+        "hint": "Apunta al QR que muestra el anfitrión en su teléfono.",
+        "invalid": "Este QR no es una invitación de Frecu.",
+        "found": "Frecu encontrada",
+        "noNote": "Frecu sin nota",
+        "join": "Unirme"
+      }
+    },
     "settings": "Ajustes",
     "heading": "Elige tu frecu",
     "createRoom": "Crear frecu",

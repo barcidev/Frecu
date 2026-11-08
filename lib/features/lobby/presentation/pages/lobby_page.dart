@@ -13,8 +13,10 @@ import 'package:frecu/features/lobby/presentation/providers/discovery_provider.d
 import 'package:frecu/features/lobby/presentation/widgets/lobby_sections.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner.dart';
 import 'package:frecu/features/lobby/presentation/widgets/nearby_room_tile.dart';
+import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -24,9 +26,9 @@ import 'package:frecu/i18n/strings.g.dart';
 /// pico por frecu cercana; la lista de frecus o la búsqueda vacía, o el
 /// aviso sin red; y abajo Crear frecu, Escanear y Conectar por IP.
 ///
-/// Tocar una frecu la elige (tarjeta encendida y aguja a su nota) y abre el
-/// diálogo de código; la elección sigue hasta tocar otra o hasta que esa
-/// frecu desaparece de la lista.
+/// Tocar una frecu la elige (tarjeta encendida y aguja a su nota) y abre la
+/// hoja de código ([PinJoinSheet]); la elección sigue hasta tocar otra o
+/// hasta que esa frecu desaparece de la lista.
 @RoutePage()
 class LobbyPage extends ConsumerStatefulWidget {
   /// Constructor constante.
@@ -56,12 +58,16 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
     );
   }
 
+  /// Elige [room] y abre su hoja de código; si se une, la frecu activa.
   Future<void> _select(NearbyRoom room) async {
     setState(() => _selectedRoomId = room.roomId);
-    await showDialog<void>(
-      context: context,
-      builder: (dialogContext) => _PinJoinDialog(room: room),
-    );
+    final joined = await PinJoinSheet.show(context, room);
+    _open(joined);
+  }
+
+  void _open(Room? room) {
+    if (room == null || !mounted) return;
+    unawaited(context.router.push(RoomRoute(roomId: room.id)));
   }
 
   @override
@@ -123,87 +129,6 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
       );
     },
   );
-}
-
-class _PinJoinDialog extends ConsumerStatefulWidget {
-  const _PinJoinDialog({required this.room});
-
-  final NearbyRoom room;
-
-  @override
-  ConsumerState<_PinJoinDialog> createState() => _PinJoinDialogState();
-}
-
-class _PinJoinDialogState extends ConsumerState<_PinJoinDialog> {
-  final _pinController = TextEditingController(text: '1234');
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    _pinController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _handleJoin() async {
-    setState(() => _isLoading = true);
-    final result = await ref
-        .read(roomNotifierProvider.notifier)
-        .joinRoom(
-          hostAddress: widget.room.hostAddress,
-          port: widget.room.port,
-          accessCode: _pinController.text.trim(),
-          displayName: ref.joinDisplayName,
-          note: widget.room.note,
-        );
-
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-    Navigator.of(context).pop();
-
-    switch (result) {
-      case Success(:final data):
-        unawaited(context.router.push(RoomRoute(roomId: data.id)));
-      case FailureResult(:final failure):
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(failure.toLocalizedMessage())));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Unirse a ${widget.room.name}'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _pinController,
-            decoration: InputDecoration(labelText: t.lobby.accessCode),
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
-        ),
-        FilledButton(
-          key: const Key('pin_join_button'),
-          onPressed: _isLoading ? null : _handleJoin,
-          child: _isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Unirse'),
-        ),
-      ],
-    );
-  }
 }
 
 class _JoinRoomDialog extends ConsumerStatefulWidget {

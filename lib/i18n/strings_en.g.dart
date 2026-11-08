@@ -65,6 +65,7 @@ class _Translations$lobby$en extends Translations$lobby$es {
 
 	// Translations
 	@override String get title => 'frecu';
+	@override late final _Translations$lobby$join$en join = _Translations$lobby$join$en._(_root);
 	@override String get settings => 'Settings';
 	@override String get heading => 'Pick your room';
 	@override String get createRoom => 'Create room';
@@ -200,6 +201,23 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get hostUnreachable => 'Host is unreachable';
 	@override String get audio => 'Audio subsystem error';
 	@override String get unexpected => 'Unexpected error';
+}
+
+// Path: lobby.join
+class _Translations$lobby$join$en extends Translations$lobby$join$es {
+	_Translations$lobby$join$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get close => 'Close';
+	@override String port({required Object port}) => 'Port ${port}';
+	@override String get wrongCode => 'Wrong code. Check it and try again.';
+	@override String get roomFullHint => 'You can join when someone leaves.';
+	@override String get unreachableHint => 'Make sure you\'re on the same Wi-Fi network.';
+	@override late final _Translations$lobby$join$pin$en pin = _Translations$lobby$join$pin$en._(_root);
+	@override late final _Translations$lobby$join$ip$en ip = _Translations$lobby$join$ip$en._(_root);
+	@override late final _Translations$lobby$join$scan$en scan = _Translations$lobby$join$scan$en._(_root);
 }
 
 // Path: lobby.network
@@ -363,6 +381,53 @@ class _Translations$settings$themeMode$en extends Translations$settings$themeMod
 	@override String get dark => 'Dark';
 }
 
+// Path: lobby.join.pin
+class _Translations$lobby$join$pin$en extends Translations$lobby$join$pin$es {
+	_Translations$lobby$join$pin$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get message => 'Enter the access code. Ask the host for it.';
+	@override String get autoSend => 'Sent once all 4 digits are in';
+	@override String get checking => 'Checking with the host…';
+	@override String get correct => 'Code accepted · joining';
+	@override String get delete => 'Delete';
+	@override String get joiningAs => 'You\'ll join as';
+}
+
+// Path: lobby.join.ip
+class _Translations$lobby$join$ip$en extends Translations$lobby$join$ip$es {
+	_Translations$lobby$join$ip$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Manual connection';
+	@override String get message => 'Use it if the room isn\'t on the list.';
+	@override String get host => 'Host IP';
+	@override String noAnswer({required Object port}) => 'No answer on port ${port}';
+	@override String get connect => 'Connect';
+}
+
+// Path: lobby.join.scan
+class _Translations$lobby$join$scan$en extends Translations$lobby$join$scan$es {
+	_Translations$lobby$join$scan$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Scan invite';
+	@override String get subtitle => 'Room QR';
+	@override String get back => 'Back';
+	@override String get torch => 'Flashlight';
+	@override String get hint => 'Point at the QR the host shows on their phone.';
+	@override String get invalid => 'This QR isn\'t a Frecu invite.';
+	@override String get found => 'Room found';
+	@override String get noNote => 'Room without a note';
+	@override String get join => 'Join';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -373,6 +438,31 @@ extension on TranslationsEn {
 		return switch (path) {
 			'app.title' => 'Frecu',
 			'lobby.title' => 'frecu',
+			'lobby.join.close' => 'Close',
+			'lobby.join.port' => ({required Object port}) => 'Port ${port}',
+			'lobby.join.wrongCode' => 'Wrong code. Check it and try again.',
+			'lobby.join.roomFullHint' => 'You can join when someone leaves.',
+			'lobby.join.unreachableHint' => 'Make sure you\'re on the same Wi-Fi network.',
+			'lobby.join.pin.message' => 'Enter the access code. Ask the host for it.',
+			'lobby.join.pin.autoSend' => 'Sent once all 4 digits are in',
+			'lobby.join.pin.checking' => 'Checking with the host…',
+			'lobby.join.pin.correct' => 'Code accepted · joining',
+			'lobby.join.pin.delete' => 'Delete',
+			'lobby.join.pin.joiningAs' => 'You\'ll join as',
+			'lobby.join.ip.kicker' => 'Manual connection',
+			'lobby.join.ip.message' => 'Use it if the room isn\'t on the list.',
+			'lobby.join.ip.host' => 'Host IP',
+			'lobby.join.ip.noAnswer' => ({required Object port}) => 'No answer on port ${port}',
+			'lobby.join.ip.connect' => 'Connect',
+			'lobby.join.scan.title' => 'Scan invite',
+			'lobby.join.scan.subtitle' => 'Room QR',
+			'lobby.join.scan.back' => 'Back',
+			'lobby.join.scan.torch' => 'Flashlight',
+			'lobby.join.scan.hint' => 'Point at the QR the host shows on their phone.',
+			'lobby.join.scan.invalid' => 'This QR isn\'t a Frecu invite.',
+			'lobby.join.scan.found' => 'Room found',
+			'lobby.join.scan.noNote' => 'Room without a note',
+			'lobby.join.scan.join' => 'Join',
 			'lobby.settings' => 'Settings',
 			'lobby.heading' => 'Pick your room',
 			'lobby.createRoom' => 'Create room',

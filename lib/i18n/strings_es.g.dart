@@ -72,6 +72,8 @@ class Translations$lobby$es {
 	/// es: 'frecu'
 	String get title => 'frecu';
 
+	late final Translations$lobby$join$es join = Translations$lobby$join$es.internal(_root);
+
 	/// es: 'Ajustes'
 	String get settings => 'Ajustes';
 
@@ -331,6 +333,34 @@ class Translations$errors$es {
 
 	/// es: 'Error inesperado'
 	String get unexpected => 'Error inesperado';
+}
+
+// Path: lobby.join
+class Translations$lobby$join$es {
+	Translations$lobby$join$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Cerrar'
+	String get close => 'Cerrar';
+
+	/// es: 'Puerto $port'
+	String port({required Object port}) => 'Puerto ${port}';
+
+	/// es: 'Código incorrecto. Revisa e intenta otra vez.'
+	String get wrongCode => 'Código incorrecto. Revisa e intenta otra vez.';
+
+	/// es: 'Podrás entrar cuando alguien salga.'
+	String get roomFullHint => 'Podrás entrar cuando alguien salga.';
+
+	/// es: 'Revisa que estés en su misma red Wi-Fi.'
+	String get unreachableHint => 'Revisa que estés en su misma red Wi-Fi.';
+
+	late final Translations$lobby$join$pin$es pin = Translations$lobby$join$pin$es.internal(_root);
+	late final Translations$lobby$join$ip$es ip = Translations$lobby$join$ip$es.internal(_root);
+	late final Translations$lobby$join$scan$es scan = Translations$lobby$join$scan$es.internal(_root);
 }
 
 // Path: lobby.network
@@ -594,6 +624,93 @@ class Translations$settings$themeMode$es {
 	String get dark => 'Oscuro';
 }
 
+// Path: lobby.join.pin
+class Translations$lobby$join$pin$es {
+	Translations$lobby$join$pin$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Ingresa el código de acceso. Pídeselo al anfitrión.'
+	String get message => 'Ingresa el código de acceso. Pídeselo al anfitrión.';
+
+	/// es: 'Se envía al completar los 4 dígitos'
+	String get autoSend => 'Se envía al completar los 4 dígitos';
+
+	/// es: 'Verificando con el anfitrión…'
+	String get checking => 'Verificando con el anfitrión…';
+
+	/// es: 'Código correcto · entrando'
+	String get correct => 'Código correcto · entrando';
+
+	/// es: 'Borrar'
+	String get delete => 'Borrar';
+
+	/// es: 'Entrarás como'
+	String get joiningAs => 'Entrarás como';
+}
+
+// Path: lobby.join.ip
+class Translations$lobby$join$ip$es {
+	Translations$lobby$join$ip$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Conexión manual'
+	String get kicker => 'Conexión manual';
+
+	/// es: 'Úsalo si la frecu no aparece en la lista.'
+	String get message => 'Úsalo si la frecu no aparece en la lista.';
+
+	/// es: 'IP del anfitrión'
+	String get host => 'IP del anfitrión';
+
+	/// es: 'Sin respuesta en el puerto $port'
+	String noAnswer({required Object port}) => 'Sin respuesta en el puerto ${port}';
+
+	/// es: 'Conectar'
+	String get connect => 'Conectar';
+}
+
+// Path: lobby.join.scan
+class Translations$lobby$join$scan$es {
+	Translations$lobby$join$scan$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Escanear invitación'
+	String get title => 'Escanear invitación';
+
+	/// es: 'QR de la frecu'
+	String get subtitle => 'QR de la frecu';
+
+	/// es: 'Atrás'
+	String get back => 'Atrás';
+
+	/// es: 'Linterna'
+	String get torch => 'Linterna';
+
+	/// es: 'Apunta al QR que muestra el anfitrión en su teléfono.'
+	String get hint => 'Apunta al QR que muestra el anfitrión en su teléfono.';
+
+	/// es: 'Este QR no es una invitación de Frecu.'
+	String get invalid => 'Este QR no es una invitación de Frecu.';
+
+	/// es: 'Frecu encontrada'
+	String get found => 'Frecu encontrada';
+
+	/// es: 'Frecu sin nota'
+	String get noNote => 'Frecu sin nota';
+
+	/// es: 'Unirme'
+	String get join => 'Unirme';
+}
+
 /// The flat map containing all translations for locale <es>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -604,6 +721,31 @@ extension on Translations {
 		return switch (path) {
 			'app.title' => 'Frecu',
 			'lobby.title' => 'frecu',
+			'lobby.join.close' => 'Cerrar',
+			'lobby.join.port' => ({required Object port}) => 'Puerto ${port}',
+			'lobby.join.wrongCode' => 'Código incorrecto. Revisa e intenta otra vez.',
+			'lobby.join.roomFullHint' => 'Podrás entrar cuando alguien salga.',
+			'lobby.join.unreachableHint' => 'Revisa que estés en su misma red Wi-Fi.',
+			'lobby.join.pin.message' => 'Ingresa el código de acceso. Pídeselo al anfitrión.',
+			'lobby.join.pin.autoSend' => 'Se envía al completar los 4 dígitos',
+			'lobby.join.pin.checking' => 'Verificando con el anfitrión…',
+			'lobby.join.pin.correct' => 'Código correcto · entrando',
+			'lobby.join.pin.delete' => 'Borrar',
+			'lobby.join.pin.joiningAs' => 'Entrarás como',
+			'lobby.join.ip.kicker' => 'Conexión manual',
+			'lobby.join.ip.message' => 'Úsalo si la frecu no aparece en la lista.',
+			'lobby.join.ip.host' => 'IP del anfitrión',
+			'lobby.join.ip.noAnswer' => ({required Object port}) => 'Sin respuesta en el puerto ${port}',
+			'lobby.join.ip.connect' => 'Conectar',
+			'lobby.join.scan.title' => 'Escanear invitación',
+			'lobby.join.scan.subtitle' => 'QR de la frecu',
+			'lobby.join.scan.back' => 'Atrás',
+			'lobby.join.scan.torch' => 'Linterna',
+			'lobby.join.scan.hint' => 'Apunta al QR que muestra el anfitrión en su teléfono.',
+			'lobby.join.scan.invalid' => 'Este QR no es una invitación de Frecu.',
+			'lobby.join.scan.found' => 'Frecu encontrada',
+			'lobby.join.scan.noNote' => 'Frecu sin nota',
+			'lobby.join.scan.join' => 'Unirme',
 			'lobby.settings' => 'Ajustes',
 			'lobby.heading' => 'Elige tu frecu',
 			'lobby.createRoom' => 'Crear frecu',
