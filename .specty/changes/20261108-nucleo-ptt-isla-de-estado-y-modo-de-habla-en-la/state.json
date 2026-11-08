@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "id": "20261108-nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
+  "kind": "standard",
+  "phase": "testing",
+  "branch": "feature/nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
+  "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 15,
+    "adjust": 0,
+    "reasons": [
+      "13 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:0cdd9403e702c11f89814d62afc24f0d3691dd50382026da4da797ac9ffb3b52",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:129aa9d21db509c91da78542c6fd007d49f86ed07a91097827d73b1cb1550dab",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:a5c58f66e92120a6d6efe112d3adbed191aec0b2275024c46704fe40b3a1dca5",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:43cba24a99ae203b7db6a5fd9a4bae91f50aa3a7a57aeb2c08c8bfbff068e542",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:6a970839d2a52b0068a9f36892b6e24671127c1d08ca9f090d0fa456d206b3dd",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:3e1fa696df0c5251e5000c5f80c775494e21247ebcbffc1b78dbf3785399afaa",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 6,
+    "AC": 8,
+    "T": 3,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:58f2f4a6f733ef08ac542abe6e5335c184c81bf88fc857a824007e2f9f899e52",
+    "at": "2026-11-08T00:27:20.985Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "testCycle": "feature"
+}
