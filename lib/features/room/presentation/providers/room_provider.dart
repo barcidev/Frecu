@@ -78,27 +78,34 @@ class RoomNotifier extends _$RoomNotifier {
 
   /// Crea una nueva frecu como anfitrión.
   ///
-  /// Calcula su nota una sola vez, con su hora de apertura y las
-  /// [nearbyNotes] de las frecus cercanas, para publicarla.
+  /// La frecu lleva la [note] que mostraba la nueva frecu, sin recalcularla,
+  /// y el servidor la envía en `welcome` a quien se une. Sin [note], la
+  /// calcula una sola vez con su hora de apertura y las [nearbyNotes] de las
+  /// frecus cercanas.
   Future<Result<Room>> createRoom({
     required String name,
     required String accessCode,
     String? displayName,
     Iterable<RoomNote> nearbyNotes = const [],
+    RoomNote? note,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final result = await repository.createRoom(
       name: name,
       accessCode: accessCode,
       displayName: displayName,
+      note: note,
     );
     switch (result) {
       case Success(:final data):
-        final note = const AssignRoomNote().assign(
-          createdAt: data.createdAt,
-          nearbyNotes: nearbyNotes,
+        final room = data.copyWith(
+          note:
+              note ??
+              const AssignRoomNote().assign(
+                createdAt: data.createdAt,
+                nearbyNotes: nearbyNotes,
+              ),
         );
-        final room = data.copyWith(note: note);
         state = room;
         return Result.success(room);
       case FailureResult():
@@ -108,8 +115,9 @@ class RoomNotifier extends _$RoomNotifier {
 
   /// Se une a una frecu remota por IP y código de acceso.
   ///
-  /// La frecu activa lleva la [note] que trajo la invitación (mDNS o QR), sin
-  /// recalcularla; sin ella, queda sin nota.
+  /// La frecu activa lleva la nota que el anfitrión envía en `welcome`, también
+  /// al unirse por IP; si no la envía, la [note] que trajo la invitación (mDNS
+  /// o QR), sin recalcularla, y sin ninguna de las dos queda sin nota.
   Future<Result<Room>> joinRoom({
     required String hostAddress,
     required int port,
@@ -126,7 +134,7 @@ class RoomNotifier extends _$RoomNotifier {
     );
     switch (result) {
       case Success(:final data):
-        final room = data.copyWith(note: note);
+        final room = data.copyWith(note: data.note ?? note);
         state = room;
         return Result.success(room);
       case FailureResult():

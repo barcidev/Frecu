@@ -15,8 +15,8 @@ La IP del anfitrión no es fija (en Android suele ser `192.168.43.1`, pero varí
 
 Cada frecu puede llevar su nota musical (`RoomNote`) como dato aditivo `n`: el semitono desde Do4 en texto decimal, de `"0"` (Do4) a `"23"` (Si5). Viaja igual en el TXT de mDNS (clave `n`) y en el QR (parámetro `n`, al final de la URI).
 
-- El anfitrión la calcula una sola vez al abrir la frecu, con su hora local y las notas de las frecus cercanas que ya descubrió (`AssignRoomNote`), y la publica en el TXT y en el QR.
-- Quien descubre la frecu o escanea el QR toma esa nota tal cual y nunca la recalcula. Quien se conecta o se une por IP manual recibe la nota en el mensaje `welcome` (`note`) del protocolo de señalización WebSocket.
+- La nueva frecu la calcula con su hora local y las notas de las frecus cercanas que ya descubrió (`AssignRoomNote`), la muestra y, al tocar Abrir, la frecu se abre con esa misma nota sin recalcularla. El anfitrión la publica en el TXT y en el QR y su servidor la manda en `welcome`.
+- Quien descubre la frecu o escanea el QR toma esa nota tal cual y nunca la recalcula. Quien se conecta o se une por IP manual recibe la nota en el mensaje `welcome` (`note`) del protocolo de señalización WebSocket; si llegan las dos, manda la de `welcome`.
 - `n` es opcional: si falta, está vacío, no es un entero o está fuera de 0–23, la frecu o la invitación se leen sin nota y la unión funciona igual.
 - Es aditivo, así que la versión del protocolo no cambia (`v=1`): una app anterior ignora `n` y una app nueva lee las invitaciones sin `n` como frecus sin nota.
 

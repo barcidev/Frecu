@@ -66,7 +66,7 @@ Que la frecu suene en la nota que el anfitrión vio en pantalla y que quien se u
 
 ## Tareas
 
-- [ ] T1: `RoomNotifier` con la nota de la nueva frecu y la de `welcome`
+- [x] T1: `RoomNotifier` con la nota de la nueva frecu y la de `welcome`
   - files: lib/features/room/presentation/providers/room_provider.dart, test/features/room/presentation/room_note_coherence_test.dart, test/features/room/presentation/ip_join_note_test.dart, docs/protocolo.md, docs/dominio.md
   - ac: AC1, AC2
   - verify: flutter test test/features/room/presentation/room_note_coherence_test.dart test/features/room/presentation/ip_join_note_test.dart test/features/room/presentation/room_note_provider_test.dart
