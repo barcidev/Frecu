@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "id": "20261108-inicio-con-sintonizador-de-dos-octavas-y-lista",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/inicio-con-sintonizador-de-dos-octavas-y-lista",
+  "baseCommit": "15711466d5b954b56999789a29a09f6bc3e0ae71",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1b08baaf0f94a0480fd2396c9fb5241763a195022140a6dc04abe2caebdb8da3",
+    "at": "2026-11-07T18:44:27.900Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "16 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:80d2b9a24c0213f251982d83494112f9df4f8ade88685d8cc08c031c2aad077c",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:8eb49c42bc562bdf83f3aa8e1f1e4f275b67f9919002d5159b6c4b14095ed14a",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:0d5761819e65293b3e3892ac43dd5909d8c7c97f98e527a1e699271d6d5c4481",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:7b03097907d4dcd6611d2de7cd5651326710679779005059c59df7797db05535",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:7e80c89361588909e214c82a94703fdf74ee607ef8e28780db763eca6b6a66b9",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:c77808ec9b3334662dadf282977360e5453e3d231ccc5f381ac9d4ac402f7e0e",
+      "decision": "implicit"
+    },
+    "A7": {
+      "hash": "sha256:ba9005034c8d22713325e9f7558428034c56c05b7c5b3bb3adda2f30260cfb50",
+      "decision": "confirmed"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "f03f9e46d42100614b8419cc2c058f4f9920a1e7",
+      "attempts": 1,
+      "startedAt": "2026-11-07T23:48:14.541Z",
+      "doneAt": "2026-11-07T23:55:47.295Z",
+      "summary": "LobbyTuner de dos octavas con picos, aguja con resorte y lectura (pintor en lobby_tuner_painter.dart, teclado y TunerNeedle en tuner_keyboard.dart), RoomNoteLabels/RoomNoteText y textos nuevos en es/en; NearbyRoomTile entra porque la prueba lo importa.",
+      "scopeExtra": [
+        "lib/features/lobby/presentation/widgets/nearby_room_tile.dart",
+        "lib/features/lobby/presentation/widgets/tuner_keyboard.dart",
+        "lib/features/lobby/presentation/widgets/lobby_tuner_painter.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "976e47679000114d364da08b0d88cce40cd8e895",
+      "attempts": 1,
+      "startedAt": "2026-11-07T23:55:47.798Z",
+      "doneAt": "2026-11-07T23:57:43.433Z",
+      "summary": "LobbyPage en Portadora: cabecera con red y Ajustes, encabezado con el número, sintonizador, lista de NearbyRoomTile con elección, búsqueda vacía, aviso sin red y dock (secciones en lobby_sections.dart).",
+      "scopeExtra": [
+        "lib/features/lobby/presentation/widgets/lobby_sections.dart"
+      ]
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "ba932747c49563e12f00d517dad41d018f0476fe",
+      "attempts": 1,
+      "startedAt": "2026-11-07T23:57:43.926Z",
+      "doneAt": "2026-11-07T23:58:41.803Z",
+      "summary": "Quitados lobby.noRoomsNearby y lobby.yourName de es/en y regenerado slang; las pruebas existentes ya abren el inicio nuevo con movimiento reducido.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 7,
+    "AC": 7,
+    "T": 3,
+    "R": 3,
+    "S": 3
+  },
+  "closingSubmittedAt": "2026-11-07T23:59:21.710Z",
+  "lockedTests": {
+    "test/app/saved_theme_test.dart": "sha256:0acdc0d97581504236b6dba0ed44620b754df76104c1eceb043b8e47a6d02da9",
+    "test/app/theme/app_theme_test.dart": "sha256:177890c6a7e3620de65bc640e8abe3a0185939a302b0b95e4ddfd4e8506cc08e",
+    "test/app_test.dart": "sha256:12847847cea6d68044b3a3c550f19dc5dad6d8a2f68ce71cc754bb02978a44fd",
+    "test/features/lobby/presentation/discovery_flow_test.dart": "sha256:e2c728527b27d9772ec0d23daf15f39c64633329d4676961427e154b5c5cd7d3",
+    "test/features/lobby/presentation/room_full_flow_test.dart": "sha256:318bf2a8024a2f30a65c21e5f9ac5368d9a8ef4ac3a5cecb4a1a114229fe5c3c",
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:4f1fb3bffdd8665cc09b1c5f29d94da3593afdef68b64e94f99975224e64fa75",
+    "test/features/lobby/presentation/saved_name_test.dart": "sha256:417dc2fcfc697a09a7f354d7918b71a6cd24a629f2aa13c711cbe761112700da",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:f0ea13514f605456105f5bb06ff0d097946e3c8c22dbbc4101c426055e341b8a",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:9b5c0e7509626a18af3a6f1f761bb60f143c6d686e0adf15d627a36c31821d6f",
+    "test/features/lobby/presentation/lobby_page_test.dart": "sha256:3cd9adabfee6b59b4954c00c6c0aa1de6caec069e8218a9469acb3d110a5d24b"
+  }
+}

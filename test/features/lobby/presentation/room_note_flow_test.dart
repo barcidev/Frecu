@@ -123,6 +123,13 @@ void main() {
     }
 
     Future<void> pumpApp(WidgetTester tester) async {
+      // El sintonizador del inicio anima sin fin: con movimiento reducido
+      // queda quieto y pumpAndSettle termina.
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
       await tester.pumpWidget(withProviders(FrecuApp(appRouter: AppRouter())));
       await tester.pumpAndSettle();
     }
@@ -180,7 +187,7 @@ void main() {
         ]);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.widgetWithText(FilledButton, t.lobby.createRoom));
+        await tester.tap(find.text(t.lobby.createRoom));
         await tester.pumpAndSettle();
         await tester.tap(find.widgetWithText(FilledButton, t.lobby.createRoom));
         await tester.pumpAndSettle();

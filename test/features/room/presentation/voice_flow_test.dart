@@ -55,6 +55,13 @@ void main() {
     late StreamController<Set<AudioRoute>> availableRoutesController;
 
     setUp(() {
+      // El sintonizador del inicio anima sin fin: con movimiento reducido
+      // queda quieto y pumpAndSettle termina.
+      final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher
+        ..accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(
+          disableAnimations: true,
+        );
+      addTearDown(dispatcher.clearAccessibilityFeaturesTestValue);
       roomRepository = MockRoomRepository();
       voiceRepository = MockVoiceRepository();
       isTalkingController = StreamController<bool>.broadcast();

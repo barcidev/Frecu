@@ -69,23 +69,26 @@ class Translations$lobby$es {
 
 	// Translations
 
-	/// es: 'Frecu'
-	String get title => 'Frecu';
+	/// es: 'frecu'
+	String get title => 'frecu';
+
+	/// es: 'Ajustes'
+	String get settings => 'Ajustes';
+
+	/// es: 'Elige tu frecu'
+	String get heading => 'Elige tu frecu';
 
 	/// es: 'Crear frecu'
 	String get createRoom => 'Crear frecu';
 
-	/// es: 'Escanear QR'
-	String get scanQr => 'Escanear QR';
+	/// es: 'Escanear'
+	String get scanQr => 'Escanear';
 
-	/// es: 'Unirse a frecu'
-	String get joinRoom => 'Unirse a frecu';
+	/// es: 'Conectar por IP'
+	String get joinRoom => 'Conectar por IP';
 
 	/// es: 'Frecus cercanas'
 	String get nearbyRooms => 'Frecus cercanas';
-
-	/// es: 'No se encontraron frecus en la red'
-	String get noRoomsNearby => 'No se encontraron frecus en la red';
 
 	/// es: 'Código de acceso'
 	String get accessCode => 'Código de acceso';
@@ -93,8 +96,33 @@ class Translations$lobby$es {
 	/// es: 'Nombre de la frecu'
 	String get roomName => 'Nombre de la frecu';
 
-	/// es: 'Tu nombre visible'
-	String get yourName => 'Tu nombre visible';
+	late final Translations$lobby$network$es network = Translations$lobby$network$es.internal(_root);
+	late final Translations$lobby$tuner$es tuner = Translations$lobby$tuner$es.internal(_root);
+	late final Translations$lobby$empty$es empty = Translations$lobby$empty$es.internal(_root);
+	late final Translations$lobby$offline$es offline = Translations$lobby$offline$es.internal(_root);
+	List<String> get noteNames => [
+		'Do',
+		'Re♭',
+		'Re',
+		'Mi♭',
+		'Mi',
+		'Fa',
+		'Fa♯',
+		'Sol',
+		'La♭',
+		'La',
+		'Si♭',
+		'Si',
+	];
+
+	/// es: '—'
+	String get noNote => '—';
+
+	/// es: '$value Hz'
+	String hz({required Object value}) => '${value} Hz';
+
+	/// es: ','
+	String get decimalSeparator => ',';
 }
 
 // Path: room
@@ -305,6 +333,78 @@ class Translations$errors$es {
 	String get unexpected => 'Error inesperado';
 }
 
+// Path: lobby.network
+class Translations$lobby$network$es {
+	Translations$lobby$network$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Buscando red'
+	String get checking => 'Buscando red';
+
+	/// es: 'Red · $ip'
+	String connected({required Object ip}) => 'Red · ${ip}';
+
+	/// es: 'Sin red local'
+	String get offline => 'Sin red local';
+}
+
+// Path: lobby.tuner
+class Translations$lobby$tuner$es {
+	Translations$lobby$tuner$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Escaneando · _frecu._tcp'
+	String get scanning => 'Escaneando · _frecu._tcp';
+
+	/// es: 'Búsqueda en pausa'
+	String get paused => 'Búsqueda en pausa';
+
+	/// es: '(one) {$n señal} (other) {$n señales}'
+	String signals({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: '${n} señal',
+		other: '${n} señales',
+	);
+}
+
+// Path: lobby.empty
+class Translations$lobby$empty$es {
+	Translations$lobby$empty$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Sin señales por ahora'
+	String get title => 'Sin señales por ahora';
+
+	/// es: 'Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.'
+	String get message => 'Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.';
+
+	/// es: 'La búsqueda sigue activa'
+	String get searching => 'La búsqueda sigue activa';
+}
+
+// Path: lobby.offline
+class Translations$lobby$offline$es {
+	Translations$lobby$offline$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'No estás en ninguna red Wi-Fi.'
+	String get title => 'No estás en ninguna red Wi-Fi.';
+
+	/// es: 'Únete al punto de acceso del anfitrión para encontrar frecus.'
+	String get message => 'Únete al punto de acceso del anfitrión para encontrar frecus.';
+}
+
 // Path: room.mesh
 class Translations$room$mesh$es {
 	Translations$room$mesh$es.internal(this._root);
@@ -503,15 +603,41 @@ extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.title' => 'Frecu',
-			'lobby.title' => 'Frecu',
+			'lobby.title' => 'frecu',
+			'lobby.settings' => 'Ajustes',
+			'lobby.heading' => 'Elige tu frecu',
 			'lobby.createRoom' => 'Crear frecu',
-			'lobby.scanQr' => 'Escanear QR',
-			'lobby.joinRoom' => 'Unirse a frecu',
+			'lobby.scanQr' => 'Escanear',
+			'lobby.joinRoom' => 'Conectar por IP',
 			'lobby.nearbyRooms' => 'Frecus cercanas',
-			'lobby.noRoomsNearby' => 'No se encontraron frecus en la red',
 			'lobby.accessCode' => 'Código de acceso',
 			'lobby.roomName' => 'Nombre de la frecu',
-			'lobby.yourName' => 'Tu nombre visible',
+			'lobby.network.checking' => 'Buscando red',
+			'lobby.network.connected' => ({required Object ip}) => 'Red · ${ip}',
+			'lobby.network.offline' => 'Sin red local',
+			'lobby.tuner.scanning' => 'Escaneando · _frecu._tcp',
+			'lobby.tuner.paused' => 'Búsqueda en pausa',
+			'lobby.tuner.signals' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n, one: '${n} señal', other: '${n} señales', ), 
+			'lobby.empty.title' => 'Sin señales por ahora',
+			'lobby.empty.message' => 'Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.',
+			'lobby.empty.searching' => 'La búsqueda sigue activa',
+			'lobby.offline.title' => 'No estás en ninguna red Wi-Fi.',
+			'lobby.offline.message' => 'Únete al punto de acceso del anfitrión para encontrar frecus.',
+			'lobby.noteNames.0' => 'Do',
+			'lobby.noteNames.1' => 'Re♭',
+			'lobby.noteNames.2' => 'Re',
+			'lobby.noteNames.3' => 'Mi♭',
+			'lobby.noteNames.4' => 'Mi',
+			'lobby.noteNames.5' => 'Fa',
+			'lobby.noteNames.6' => 'Fa♯',
+			'lobby.noteNames.7' => 'Sol',
+			'lobby.noteNames.8' => 'La♭',
+			'lobby.noteNames.9' => 'La',
+			'lobby.noteNames.10' => 'Si♭',
+			'lobby.noteNames.11' => 'Si',
+			'lobby.noNote' => '—',
+			'lobby.hz' => ({required Object value}) => '${value} Hz',
+			'lobby.decimalSeparator' => ',',
 			'room.title' => 'Frecu activa',
 			'room.leave' => 'Salir de la frecu',
 			'room.participants' => 'Participantes',

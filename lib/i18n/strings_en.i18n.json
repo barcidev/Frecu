@@ -3,15 +3,41 @@
     "title": "Frecu"
   },
   "lobby": {
-    "title": "Frecu",
+    "title": "frecu",
+    "settings": "Settings",
+    "heading": "Pick your room",
     "createRoom": "Create room",
-    "scanQr": "Scan QR",
-    "joinRoom": "Join room",
+    "scanQr": "Scan",
+    "joinRoom": "Connect by IP",
     "nearbyRooms": "Nearby rooms",
-    "noRoomsNearby": "No rooms found on local network",
     "accessCode": "Access code",
     "roomName": "Room name",
-    "yourName": "Your display name"
+    "network": {
+      "checking": "Checking network",
+      "connected": "Network · $ip",
+      "offline": "No local network"
+    },
+    "tuner": {
+      "scanning": "Scanning · _frecu._tcp",
+      "paused": "Search paused",
+      "signals": {
+        "one": "$n signal",
+        "other": "$n signals"
+      }
+    },
+    "empty": {
+      "title": "No signals yet",
+      "message": "Join the host's Wi-Fi or ask them to show you their QR.",
+      "searching": "Still searching"
+    },
+    "offline": {
+      "title": "You're not on any Wi-Fi network.",
+      "message": "Join the host's hotspot to find rooms."
+    },
+    "noteNames": ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"],
+    "noNote": "—",
+    "hz": "$value Hz",
+    "decimalSeparator": "."
   },
   "room": {
     "title": "Active room",

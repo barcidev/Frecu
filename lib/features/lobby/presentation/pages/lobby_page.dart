@@ -5,28 +5,59 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/constants/network_constants.dart';
+import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/lobby_sections.dart';
+import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner.dart';
+import 'package:frecu/features/lobby/presentation/widgets/nearby_room_tile.dart';
+import 'package:frecu/features/network/domain/entities/network_state.dart';
+import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Pantalla principal (Lobby) para crear o unirse a una frecu.
+/// Inicio en Portadora (pantalla `lobby` del prototipo): la marca, el
+/// estado de la red local y Ajustes; el sintonizador de dos octavas con un
+/// pico por frecu cercana; la lista de frecus o la búsqueda vacía, o el
+/// aviso sin red; y abajo Crear frecu, Escanear y Conectar por IP.
+///
+/// Tocar una frecu la elige (tarjeta encendida y aguja a su nota) y abre el
+/// diálogo de código; la elección sigue hasta tocar otra o hasta que esa
+/// frecu desaparece de la lista.
 @RoutePage()
-class LobbyPage extends ConsumerWidget {
+class LobbyPage extends ConsumerStatefulWidget {
   /// Constructor constante.
   const LobbyPage({super.key});
 
-  Future<void> _showJoinDialog(BuildContext context) async {
+  @override
+  ConsumerState<LobbyPage> createState() => _LobbyPageState();
+}
+
+class _LobbyPageState extends ConsumerState<LobbyPage> {
+  /// Estado de la red local; hasta el primer valor no se sabe.
+  late final Stream<NetworkState> _network;
+
+  /// Frecu elegida.
+  String? _selectedRoomId;
+
+  @override
+  void initState() {
+    super.initState();
+    _network = ref.read(networkRepositoryProvider).watchNetworkState();
+  }
+
+  Future<void> _showJoinDialog() async {
     await showDialog<void>(
       context: context,
       builder: (dialogContext) => const _JoinRoomDialog(),
     );
   }
 
-  Future<void> _showPinDialog(BuildContext context, NearbyRoom room) async {
+  Future<void> _select(NearbyRoom room) async {
+    setState(() => _selectedRoomId = room.roomId);
     await showDialog<void>(
       context: context,
       builder: (dialogContext) => _PinJoinDialog(room: room),
@@ -34,105 +65,64 @@ class LobbyPage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final nearbyAsync = ref.watch(nearbyRoomsProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t.lobby.title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.router.push(const SettingsRoute()),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            FilledButton.icon(
-              icon: const Icon(Icons.add_circle_outline),
-              label: Text(t.lobby.createRoom),
-              onPressed: () => context.router.push(const CreateRoomRoute()),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.wifi),
-              label: Text(t.lobby.joinRoom),
-              onPressed: () => _showJoinDialog(context),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.qr_code_scanner),
-              label: Text(t.lobby.scanQr),
-              onPressed: () => context.router.push(ScanQrRoute()),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              t.lobby.nearbyRooms,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: _NearbyRoomsList(
-                nearbyAsync: nearbyAsync,
-                onRoomSelected: (room) => _showPinDialog(context, room),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _NearbyRoomsList extends StatelessWidget {
-  const _NearbyRoomsList({
-    required this.nearbyAsync,
-    required this.onRoomSelected,
-  });
-
-  final AsyncValue<List<NearbyRoom>> nearbyAsync;
-  final ValueChanged<NearbyRoom> onRoomSelected;
-
-  @override
   Widget build(BuildContext context) {
-    return nearbyAsync.when(
-      data: (rooms) {
-        if (rooms.isEmpty) {
-          return Center(
-            child: Text(
-              t.lobby.noRoomsNearby,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          );
-        }
-        return ListView.builder(
-          itemCount: rooms.length,
-          itemBuilder: (context, index) {
-            final room = rooms[index];
-            return Card(
-              child: ListTile(
-                leading: const CircleAvatar(child: Icon(Icons.radio)),
-                title: Text(room.name),
-                subtitle: Text('IP: ${room.hostAddress}'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => onRoomSelected(room),
+    ref.listen(nearbyRoomsProvider, (_, next) {
+      final rooms = next.value ?? const <NearbyRoom>[];
+      if (_selectedRoomId != null &&
+          !rooms.any((room) => room.roomId == _selectedRoomId)) {
+        setState(() => _selectedRoomId = null);
+      }
+    });
+    final rooms = ref.watch(nearbyRoomsProvider).value ?? const <NearbyRoom>[];
+    final selected = rooms
+        .where((room) => room.roomId == _selectedRoomId)
+        .firstOrNull;
+    return StreamBuilder<NetworkState>(
+      stream: _network,
+      builder: (context, snapshot) {
+        final network = snapshot.data;
+        final offline = rooms.isEmpty && network is NetworkDisconnected;
+        return FrScaffold(
+          dock: LobbyDock(onJoinByIp: _showJoinDialog),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              LobbyHeader(network: network),
+              LobbyHeading(count: rooms.length),
+              LobbyTuner(
+                notes: rooms.map((room) => room.note).nonNulls.toList(),
+                signalCount: rooms.length,
+                selected: selected?.note,
+                paused: offline,
               ),
-            );
-          },
+              Expanded(
+                child: rooms.isNotEmpty
+                    ? _roomList(rooms)
+                    : offline
+                    ? const LobbyOfflineNotice()
+                    : const LobbyEmptySearch(),
+              ),
+            ],
+          ),
         );
       },
-      loading: () => Center(
-        child: Text(
-          t.lobby.noRoomsNearby,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ),
-      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
+
+  /// Una tarjeta por frecu cercana; la elegida, encendida.
+  Widget _roomList(List<NearbyRoom> rooms) => ListView.separated(
+    padding: const EdgeInsets.fromLTRB(20, 16, 20, 200),
+    itemCount: rooms.length,
+    separatorBuilder: (_, _) => const SizedBox(height: 10),
+    itemBuilder: (context, index) {
+      final room = rooms[index];
+      return NearbyRoomTile(
+        room: room,
+        selected: room.roomId == _selectedRoomId,
+        onPressed: () => _select(room),
+      );
+    },
+  );
 }
 
 class _PinJoinDialog extends ConsumerStatefulWidget {
