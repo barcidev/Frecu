@@ -18,6 +18,7 @@ import 'package:frecu/features/lobby/domain/repositories/discovery_repository.da
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/lobby/presentation/providers/new_room_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/fifths_clock.dart';
+import 'package:frecu/features/lobby/presentation/widgets/new_room_hero.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
@@ -150,6 +151,7 @@ void main() {
         name: any(named: 'name'),
         accessCode: any(named: 'accessCode'),
         displayName: any(named: 'displayName'),
+        note: any(named: 'note'),
       ),
     ).thenAnswer((_) => answer());
   }
@@ -405,6 +407,7 @@ void main() {
             name: 'Ruta del domingo',
             accessCode: '1593',
             displayName: 'Ana',
+            note: any(named: 'note'),
           ),
         ).called(1);
         // Mi5 ya la usa una frecu cercana: la frecu abierta suena en Si5.
@@ -438,6 +441,7 @@ void main() {
           name: any(named: 'name'),
           accessCode: any(named: 'accessCode'),
           displayName: any(named: 'displayName'),
+          note: any(named: 'note'),
         ),
       );
       expect(find.byType(NewRoomStep), findsOneWidget);

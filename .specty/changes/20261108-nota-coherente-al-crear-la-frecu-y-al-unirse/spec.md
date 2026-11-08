@@ -70,7 +70,7 @@ Que la frecu suene en la nota que el anfitrión vio en pantalla y que quien se u
   - files: lib/features/room/presentation/providers/room_provider.dart, test/features/room/presentation/room_note_coherence_test.dart, test/features/room/presentation/ip_join_note_test.dart, docs/protocolo.md, docs/dominio.md
   - ac: AC1, AC2
   - verify: flutter test test/features/room/presentation/room_note_coherence_test.dart test/features/room/presentation/ip_join_note_test.dart test/features/room/presentation/room_note_provider_test.dart
-- [ ] T2: La nueva frecu abre con la nota que muestra y su héroe en `new_room_hero.dart`
+- [x] T2: La nueva frecu abre con la nota que muestra y su héroe en `new_room_hero.dart`
   - files: lib/features/lobby/presentation/widgets/new_room_step.dart, lib/features/lobby/presentation/widgets/new_room_hero.dart, test/features/lobby/presentation/new_room_note_test.dart, test/features/lobby/presentation/new_room_test.dart, test/features/lobby/presentation/room_note_flow_test.dart
   - ac: AC1, AC3
   - verify: flutter test test/features/lobby/presentation/new_room_note_test.dart test/features/lobby/presentation/new_room_test.dart test/features/lobby/presentation/room_note_flow_test.dart

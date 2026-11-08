@@ -51,12 +51,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d99b86f66898083f7a86cc1e27867b4300026bc8",
+      "attempts": 1,
       "startedAt": "2026-11-08T02:01:40.988Z",
       "doneAt": "2026-11-08T02:07:23.706Z",
-      "summary": "RoomNotifier.createRoom recibe la nota de la nueva frecu, se la da al repositorio (welcome) y la usa sin recalcularla; joinRoom conserva la nota de welcome sobre la de la invitación. Pruebas del notifier y de punta a punta con anfitrión real y unión por la hoja de IP; docs de protocolo y dominio."
+      "summary": "RoomNotifier.createRoom recibe la nota de la nueva frecu, se la da al repositorio (welcome) y la usa sin recalcularla; joinRoom conserva la nota de welcome sobre la de la invitación. Pruebas del notifier y de punta a punta con anfitrión real y unión por la hoja de IP; docs de protocolo y dominio.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "c8922bbb6192beeeb88f9a02fba465fcd4d87fbd",
+      "startedAt": "2026-11-08T02:07:25.693Z",
+      "doneAt": "2026-11-08T02:10:19.916Z",
+      "summary": "La nueva frecu pasa a createRoom la nota que pinta y su héroe va a new_room_hero.dart. Prueba nueva de Abrir con la hora cambiada; new_room_test y room_note_flow_test se adaptan (import, reloj y note en los dobles)."
     }
   },
   "pending": {

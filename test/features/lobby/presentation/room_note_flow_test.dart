@@ -13,6 +13,7 @@ import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/pages/scan_qr_page.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/providers/new_room_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -86,6 +87,7 @@ void main() {
           name: any(named: 'name'),
           accessCode: any(named: 'accessCode'),
           displayName: any(named: 'displayName'),
+          note: any(named: 'note'),
         ),
       ).thenAnswer((_) async => Result.success(testRoom));
       when(
@@ -118,6 +120,8 @@ void main() {
             discoveryRepositoryProvider.overrideWithValue(discoveryRepository),
             roomRepositoryProvider.overrideWithValue(roomRepository),
             voiceRepositoryProvider.overrideWithValue(voiceRepository),
+            // La nueva frecu marca la hora de apertura de testRoom.
+            newRoomClockProvider.overrideWithValue(() => testRoom.createdAt),
           ],
           child: child,
         ),
