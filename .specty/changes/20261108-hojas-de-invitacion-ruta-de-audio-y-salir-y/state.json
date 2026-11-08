@@ -6,6 +6,13 @@
   "branch": "feature/hojas-de-invitacion-ruta-de-audio-y-salir-y",
   "baseCommit": "4db5a571a8affd7389b5dec22d1591f65ce265cd",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:3d232d6a421b455ae1633f57e98c2b8d7e25844d7b81a29d80066273e1ce59a8",
+    "at": "2026-11-08T01:11:17.367Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -64,12 +71,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:3d232d6a421b455ae1633f57e98c2b8d7e25844d7b81a29d80066273e1ce59a8",
-    "at": "2026-11-08T01:11:17.367Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-08T01:23:50.080Z"
 }

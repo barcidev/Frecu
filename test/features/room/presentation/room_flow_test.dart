@@ -23,6 +23,7 @@ import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/presentation/pages/room_page.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
@@ -212,6 +213,8 @@ void main() {
 
         await tester.tap(leaveButton);
         await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('leave_confirm')));
+        await tester.pumpAndSettle();
 
         verify(() => repository.leaveRoom()).called(1);
         expect(find.text('Frecus cercanas'), findsOneWidget);
@@ -254,7 +257,7 @@ void main() {
         await tester.tap(find.byKey(const Key('mesh_free_slot_2')));
         await tester.pumpAndSettle();
 
-        expect(find.text('Código QR de invitación'), findsOneWidget);
+        expect(find.text('Escanea para unirte'), findsOneWidget);
       },
     );
 
@@ -442,7 +445,8 @@ void main() {
 
     // AC4
     testWidgets(
-      'AC4: RoomPage displays dialog and returns to Lobby when room is closed',
+      'AC4: RoomPage shows the end of transmission and returns to Lobby when '
+      'room is closed',
       (tester) async {
         final statusController = StreamController<RoomStatus>.broadcast();
         when(() => repository.watchParticipants())
@@ -462,14 +466,11 @@ void main() {
         statusController.add(const RoomStatus.closed(reason: 'host_closed'));
         await tester.pumpAndSettle();
 
-        expect(
-          find.text('La frecu fue cerrada por el anfitrión'),
-          findsOneWidget,
-        );
+        expect(find.byType(RoomClosedView), findsOneWidget);
+        expect(find.text('Fin de la transmisión'), findsOneWidget);
+        verify(() => repository.leaveRoom()).called(1);
 
-        final acceptButton = find.widgetWithText(TextButton, 'Aceptar');
-        expect(acceptButton, findsOneWidget);
-        await tester.tap(acceptButton);
+        await tester.tap(find.byKey(const Key('closure_home')));
         await tester.pumpAndSettle();
 
         expect(find.text('Frecus cercanas'), findsOneWidget);

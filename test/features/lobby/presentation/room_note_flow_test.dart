@@ -22,6 +22,7 @@ import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -218,14 +219,12 @@ void main() {
           ),
         ).called(1);
 
-        await tester.tap(find.byIcon(Icons.qr_code));
+        await tester.tap(find.byKey(const Key('invite_button')));
         await tester.pumpAndSettle();
 
         expect(
-          find.text(
-            'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=1234&n=11',
-          ),
-          findsOneWidget,
+          tester.widget<InviteQr>(find.byType(InviteQr)).data,
+          'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=1234&n=11',
         );
       },
     );
