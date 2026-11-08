@@ -47,16 +47,42 @@
     }
   },
   "permissions": {
-    "title": "Permisos requeridos",
-    "description": "Frecu necesita permisos para comunicarse sin internet.",
+    "back": "Atrás",
+    "stepOf": "$current / $total",
+    "welcome": {
+      "kicker": "Sin internet · sin cobertura",
+      "title": "Todo tu grupo en la misma frecu.",
+      "message": "Habla en tiempo real con hasta 6 personas cerca de ti. Solo necesitan compartir una red Wi-Fi.",
+      "start": "Empezar"
+    },
+    "name": {
+      "title": "¿Cómo te llamamos?",
+      "message": "Así te verán y escucharán en cada frecu.",
+      "signature": "Tu firma de señal · nace de tu nombre",
+      "label": "Nombre visible",
+      "hint": "Tu nombre",
+      "help": "Puedes cambiarlo cuando quieras en Ajustes.",
+      "tooLong": "Usa como máximo $max caracteres.",
+      "saveError": "No se pudo guardar tu nombre. Inténtalo de nuevo.",
+      "next": "Continuar"
+    },
+    "title": "Tres permisos y listo.",
+    "description": "Frecu solo habla con tu red local. Tu voz nunca sale de tu grupo.",
     "microphone": "Micrófono",
-    "microphoneDesc": "Transmite tu voz a los participantes de la frecu.",
+    "microphoneDesc": "Para que tu grupo te escuche.",
     "nearbyDevices": "Red local y dispositivos cercanos",
-    "nearbyDevicesDesc": "Descubre y conecta con otros teléfonos en la misma red.",
+    "nearbyDevicesDesc": "Para encontrar frecus y usar audífonos Bluetooth.",
     "notifications": "Notificaciones",
-    "notificationsDesc": "Mantiene la frecu activa en segundo plano con pantalla apagada.",
+    "notificationsDesc": "Mantienen la frecu viva con la pantalla apagada.",
+    "camera": "La cámara se pedirá solo al escanear un QR.",
     "grant": "Conceder permisos",
-    "granted": "Permisos concedidos"
+    "openSettings": "Ajustes",
+    "finish": "Continuar",
+    "status": {
+      "pending": "Pendiente",
+      "granted": "Concedido",
+      "denied": "Denegado"
+    }
   },
   "settings": {
     "title": "Ajustes",

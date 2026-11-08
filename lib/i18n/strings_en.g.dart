@@ -121,16 +121,23 @@ class _Translations$permissions$en extends Translations$permissions$es {
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Required permissions';
-	@override String get description => 'Frecu needs permissions to communicate without internet.';
+	@override String get back => 'Back';
+	@override String stepOf({required Object current, required Object total}) => '${current} / ${total}';
+	@override late final _Translations$permissions$welcome$en welcome = _Translations$permissions$welcome$en._(_root);
+	@override late final _Translations$permissions$name$en name = _Translations$permissions$name$en._(_root);
+	@override String get title => 'Three permissions and you\'re set.';
+	@override String get description => 'Frecu only talks to your local network. Your voice never leaves your group.';
 	@override String get microphone => 'Microphone';
-	@override String get microphoneDesc => 'Transmits your voice to other peers in the room.';
+	@override String get microphoneDesc => 'So your group can hear you.';
 	@override String get nearbyDevices => 'Local network & nearby devices';
-	@override String get nearbyDevicesDesc => 'Discovers and connects with nearby phones on the network.';
+	@override String get nearbyDevicesDesc => 'To find frecus and use Bluetooth headphones.';
 	@override String get notifications => 'Notifications';
-	@override String get notificationsDesc => 'Keeps the intercom active in background with screen off.';
+	@override String get notificationsDesc => 'They keep the frecu alive with the screen off.';
+	@override String get camera => 'The camera is only requested when scanning a QR code.';
 	@override String get grant => 'Grant permissions';
-	@override String get granted => 'Permissions granted';
+	@override String get openSettings => 'Settings';
+	@override String get finish => 'Continue';
+	@override late final _Translations$permissions$status$en status = _Translations$permissions$status$en._(_root);
 }
 
 // Path: settings
@@ -202,6 +209,49 @@ class _Translations$room$header$en extends Translations$room$header$es {
 	@override String hz({required Object value}) => '${value} Hz';
 	@override String note({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz';
 	@override String get invite => 'Invite';
+}
+
+// Path: permissions.welcome
+class _Translations$permissions$welcome$en extends Translations$permissions$welcome$es {
+	_Translations$permissions$welcome$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'No internet · no coverage';
+	@override String get title => 'Your whole group on the same frecu.';
+	@override String get message => 'Talk in real time with up to 6 people near you. All they need is a shared Wi-Fi network.';
+	@override String get start => 'Get started';
+}
+
+// Path: permissions.name
+class _Translations$permissions$name$en extends Translations$permissions$name$es {
+	_Translations$permissions$name$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'What should we call you?';
+	@override String get message => 'This is how you\'ll be seen and heard in every frecu.';
+	@override String get signature => 'Your signal signature · born from your name';
+	@override String get label => 'Display name';
+	@override String get hint => 'Your name';
+	@override String get help => 'You can change it anytime in Settings.';
+	@override String tooLong({required Object max}) => 'Use ${max} characters at most.';
+	@override String get saveError => 'Couldn\'t save your name. Please try again.';
+	@override String get next => 'Continue';
+}
+
+// Path: permissions.status
+class _Translations$permissions$status$en extends Translations$permissions$status$es {
+	_Translations$permissions$status$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get pending => 'Pending';
+	@override String get granted => 'Granted';
+	@override String get denied => 'Denied';
 }
 
 // Path: settings.editName
@@ -298,16 +348,36 @@ extension on TranslationsEn {
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invite',
-			'permissions.title' => 'Required permissions',
-			'permissions.description' => 'Frecu needs permissions to communicate without internet.',
+			'permissions.back' => 'Back',
+			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
+			'permissions.welcome.kicker' => 'No internet · no coverage',
+			'permissions.welcome.title' => 'Your whole group on the same frecu.',
+			'permissions.welcome.message' => 'Talk in real time with up to 6 people near you. All they need is a shared Wi-Fi network.',
+			'permissions.welcome.start' => 'Get started',
+			'permissions.name.title' => 'What should we call you?',
+			'permissions.name.message' => 'This is how you\'ll be seen and heard in every frecu.',
+			'permissions.name.signature' => 'Your signal signature · born from your name',
+			'permissions.name.label' => 'Display name',
+			'permissions.name.hint' => 'Your name',
+			'permissions.name.help' => 'You can change it anytime in Settings.',
+			'permissions.name.tooLong' => ({required Object max}) => 'Use ${max} characters at most.',
+			'permissions.name.saveError' => 'Couldn\'t save your name. Please try again.',
+			'permissions.name.next' => 'Continue',
+			'permissions.title' => 'Three permissions and you\'re set.',
+			'permissions.description' => 'Frecu only talks to your local network. Your voice never leaves your group.',
 			'permissions.microphone' => 'Microphone',
-			'permissions.microphoneDesc' => 'Transmits your voice to other peers in the room.',
+			'permissions.microphoneDesc' => 'So your group can hear you.',
 			'permissions.nearbyDevices' => 'Local network & nearby devices',
-			'permissions.nearbyDevicesDesc' => 'Discovers and connects with nearby phones on the network.',
+			'permissions.nearbyDevicesDesc' => 'To find frecus and use Bluetooth headphones.',
 			'permissions.notifications' => 'Notifications',
-			'permissions.notificationsDesc' => 'Keeps the intercom active in background with screen off.',
+			'permissions.notificationsDesc' => 'They keep the frecu alive with the screen off.',
+			'permissions.camera' => 'The camera is only requested when scanning a QR code.',
 			'permissions.grant' => 'Grant permissions',
-			'permissions.granted' => 'Permissions granted',
+			'permissions.openSettings' => 'Settings',
+			'permissions.finish' => 'Continue',
+			'permissions.status.pending' => 'Pending',
+			'permissions.status.granted' => 'Granted',
+			'permissions.status.denied' => 'Denied',
 			'settings.title' => 'Settings',
 			'settings.back' => 'Back',
 			'settings.displayName' => 'Display name',

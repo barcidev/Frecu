@@ -9,6 +9,7 @@ import 'package:frecu/features/room/data/datasources/signaling_client_datasource
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -511,6 +512,43 @@ void main() {
 
         expect(joinResult.isSuccess, isFalse);
         expect(peerRepository.localParticipantId, isNull);
+      },
+    );
+
+    test('AC3: client receives RoomNote from welcome message when joining room', () async {
+        const expectedNote = RoomNote(semitone: 16);
+        final createResult = await hostRepository.createRoom(
+          name: 'Sala con Nota',
+          accessCode: '1234',
+          displayName: 'HostAlice',
+          note: expectedNote,
+        );
+        expect(createResult.isSuccess, isTrue);
+        final hostRoom = createResult.dataOrNull!;
+
+        final joinResult = await peerRepository.joinRoom(
+          hostAddress: '127.0.0.1',
+          port: hostRoom.port,
+          accessCode: '1234',
+          displayName: 'PeerBob',
+        );
+        expect(joinResult.isSuccess, isTrue);
+        final peerRoom = joinResult.dataOrNull!;
+        expect(peerRoom.note, expectedNote);
+      },
+    );
+
+    test('AC4: host passes RoomNote on createRoom and signaling server conveys it', () async {
+        const hostNote = RoomNote(semitone: 21);
+        final createResult = await hostRepository.createRoom(
+          name: 'Sala Nota Host',
+          accessCode: '5678',
+          displayName: 'HostAlice',
+          note: hostNote,
+        );
+        expect(createResult.isSuccess, isTrue);
+        final room = createResult.dataOrNull!;
+        expect(room.note, hostNote);
       },
     );
   });

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/usecases/parse_invite_from_qr.dart';
+import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -63,7 +64,7 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage> {
           hostAddress: invite.host,
           port: invite.port,
           accessCode: invite.accessCode,
-          displayName: 'Participante',
+          displayName: ref.joinDisplayName,
           note: invite.note,
         );
 

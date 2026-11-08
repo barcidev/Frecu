@@ -1,6 +1,7 @@
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 
 /// Contrato del repositorio para la gestión de salas (frecus).
@@ -10,6 +11,7 @@ abstract interface class RoomRepository {
     required String name,
     required String accessCode,
     String? displayName,
+    RoomNote? note,
   });
 
   /// Se une a una frecu existente dada la dirección del anfitrión y credenciales.

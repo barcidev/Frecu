@@ -173,35 +173,52 @@ class Translations$permissions$es {
 
 	// Translations
 
-	/// es: 'Permisos requeridos'
-	String get title => 'Permisos requeridos';
+	/// es: 'Atrás'
+	String get back => 'Atrás';
 
-	/// es: 'Frecu necesita permisos para comunicarse sin internet.'
-	String get description => 'Frecu necesita permisos para comunicarse sin internet.';
+	/// es: '$current / $total'
+	String stepOf({required Object current, required Object total}) => '${current} / ${total}';
+
+	late final Translations$permissions$welcome$es welcome = Translations$permissions$welcome$es.internal(_root);
+	late final Translations$permissions$name$es name = Translations$permissions$name$es.internal(_root);
+
+	/// es: 'Tres permisos y listo.'
+	String get title => 'Tres permisos y listo.';
+
+	/// es: 'Frecu solo habla con tu red local. Tu voz nunca sale de tu grupo.'
+	String get description => 'Frecu solo habla con tu red local. Tu voz nunca sale de tu grupo.';
 
 	/// es: 'Micrófono'
 	String get microphone => 'Micrófono';
 
-	/// es: 'Transmite tu voz a los participantes de la frecu.'
-	String get microphoneDesc => 'Transmite tu voz a los participantes de la frecu.';
+	/// es: 'Para que tu grupo te escuche.'
+	String get microphoneDesc => 'Para que tu grupo te escuche.';
 
 	/// es: 'Red local y dispositivos cercanos'
 	String get nearbyDevices => 'Red local y dispositivos cercanos';
 
-	/// es: 'Descubre y conecta con otros teléfonos en la misma red.'
-	String get nearbyDevicesDesc => 'Descubre y conecta con otros teléfonos en la misma red.';
+	/// es: 'Para encontrar frecus y usar audífonos Bluetooth.'
+	String get nearbyDevicesDesc => 'Para encontrar frecus y usar audífonos Bluetooth.';
 
 	/// es: 'Notificaciones'
 	String get notifications => 'Notificaciones';
 
-	/// es: 'Mantiene la frecu activa en segundo plano con pantalla apagada.'
-	String get notificationsDesc => 'Mantiene la frecu activa en segundo plano con pantalla apagada.';
+	/// es: 'Mantienen la frecu viva con la pantalla apagada.'
+	String get notificationsDesc => 'Mantienen la frecu viva con la pantalla apagada.';
+
+	/// es: 'La cámara se pedirá solo al escanear un QR.'
+	String get camera => 'La cámara se pedirá solo al escanear un QR.';
 
 	/// es: 'Conceder permisos'
 	String get grant => 'Conceder permisos';
 
-	/// es: 'Permisos concedidos'
-	String get granted => 'Permisos concedidos';
+	/// es: 'Ajustes'
+	String get openSettings => 'Ajustes';
+
+	/// es: 'Continuar'
+	String get finish => 'Continuar';
+
+	late final Translations$permissions$status$es status = Translations$permissions$status$es.internal(_root);
 }
 
 // Path: settings
@@ -342,6 +359,81 @@ class Translations$room$header$es {
 	String get invite => 'Invitar';
 }
 
+// Path: permissions.welcome
+class Translations$permissions$welcome$es {
+	Translations$permissions$welcome$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Sin internet · sin cobertura'
+	String get kicker => 'Sin internet · sin cobertura';
+
+	/// es: 'Todo tu grupo en la misma frecu.'
+	String get title => 'Todo tu grupo en la misma frecu.';
+
+	/// es: 'Habla en tiempo real con hasta 6 personas cerca de ti. Solo necesitan compartir una red Wi-Fi.'
+	String get message => 'Habla en tiempo real con hasta 6 personas cerca de ti. Solo necesitan compartir una red Wi-Fi.';
+
+	/// es: 'Empezar'
+	String get start => 'Empezar';
+}
+
+// Path: permissions.name
+class Translations$permissions$name$es {
+	Translations$permissions$name$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: '¿Cómo te llamamos?'
+	String get title => '¿Cómo te llamamos?';
+
+	/// es: 'Así te verán y escucharán en cada frecu.'
+	String get message => 'Así te verán y escucharán en cada frecu.';
+
+	/// es: 'Tu firma de señal · nace de tu nombre'
+	String get signature => 'Tu firma de señal · nace de tu nombre';
+
+	/// es: 'Nombre visible'
+	String get label => 'Nombre visible';
+
+	/// es: 'Tu nombre'
+	String get hint => 'Tu nombre';
+
+	/// es: 'Puedes cambiarlo cuando quieras en Ajustes.'
+	String get help => 'Puedes cambiarlo cuando quieras en Ajustes.';
+
+	/// es: 'Usa como máximo $max caracteres.'
+	String tooLong({required Object max}) => 'Usa como máximo ${max} caracteres.';
+
+	/// es: 'No se pudo guardar tu nombre. Inténtalo de nuevo.'
+	String get saveError => 'No se pudo guardar tu nombre. Inténtalo de nuevo.';
+
+	/// es: 'Continuar'
+	String get next => 'Continuar';
+}
+
+// Path: permissions.status
+class Translations$permissions$status$es {
+	Translations$permissions$status$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Pendiente'
+	String get pending => 'Pendiente';
+
+	/// es: 'Concedido'
+	String get granted => 'Concedido';
+
+	/// es: 'Denegado'
+	String get denied => 'Denegado';
+}
+
 // Path: settings.editName
 class Translations$settings$editName$es {
 	Translations$settings$editName$es.internal(this._root);
@@ -458,16 +550,36 @@ extension on Translations {
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invitar',
-			'permissions.title' => 'Permisos requeridos',
-			'permissions.description' => 'Frecu necesita permisos para comunicarse sin internet.',
+			'permissions.back' => 'Atrás',
+			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
+			'permissions.welcome.kicker' => 'Sin internet · sin cobertura',
+			'permissions.welcome.title' => 'Todo tu grupo en la misma frecu.',
+			'permissions.welcome.message' => 'Habla en tiempo real con hasta 6 personas cerca de ti. Solo necesitan compartir una red Wi-Fi.',
+			'permissions.welcome.start' => 'Empezar',
+			'permissions.name.title' => '¿Cómo te llamamos?',
+			'permissions.name.message' => 'Así te verán y escucharán en cada frecu.',
+			'permissions.name.signature' => 'Tu firma de señal · nace de tu nombre',
+			'permissions.name.label' => 'Nombre visible',
+			'permissions.name.hint' => 'Tu nombre',
+			'permissions.name.help' => 'Puedes cambiarlo cuando quieras en Ajustes.',
+			'permissions.name.tooLong' => ({required Object max}) => 'Usa como máximo ${max} caracteres.',
+			'permissions.name.saveError' => 'No se pudo guardar tu nombre. Inténtalo de nuevo.',
+			'permissions.name.next' => 'Continuar',
+			'permissions.title' => 'Tres permisos y listo.',
+			'permissions.description' => 'Frecu solo habla con tu red local. Tu voz nunca sale de tu grupo.',
 			'permissions.microphone' => 'Micrófono',
-			'permissions.microphoneDesc' => 'Transmite tu voz a los participantes de la frecu.',
+			'permissions.microphoneDesc' => 'Para que tu grupo te escuche.',
 			'permissions.nearbyDevices' => 'Red local y dispositivos cercanos',
-			'permissions.nearbyDevicesDesc' => 'Descubre y conecta con otros teléfonos en la misma red.',
+			'permissions.nearbyDevicesDesc' => 'Para encontrar frecus y usar audífonos Bluetooth.',
 			'permissions.notifications' => 'Notificaciones',
-			'permissions.notificationsDesc' => 'Mantiene la frecu activa en segundo plano con pantalla apagada.',
+			'permissions.notificationsDesc' => 'Mantienen la frecu viva con la pantalla apagada.',
+			'permissions.camera' => 'La cámara se pedirá solo al escanear un QR.',
 			'permissions.grant' => 'Conceder permisos',
-			'permissions.granted' => 'Permisos concedidos',
+			'permissions.openSettings' => 'Ajustes',
+			'permissions.finish' => 'Continuar',
+			'permissions.status.pending' => 'Pendiente',
+			'permissions.status.granted' => 'Concedido',
+			'permissions.status.denied' => 'Denegado',
 			'settings.title' => 'Ajustes',
 			'settings.back' => 'Atrás',
 			'settings.displayName' => 'Nombre visible',
