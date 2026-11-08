@@ -60,7 +60,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "0a500e003ab7b6b80d5018daadfd4b25d0b71269",
+      "startedAt": "2026-11-08T01:23:58.132Z",
+      "doneAt": "2026-11-08T01:25:51.861Z",
+      "summary": "InviteSheet con QR de módulos redondos, firma al centro, haz y ficha RoomFacts; room_sheets.dart con encabezado y hojas de ruta y salir; cabecera con FrIcons.qr sin botón de ruta; RoomNoteName pública; textos room.sheets; se borra InviteQrDialog."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null

@@ -134,6 +134,7 @@ class _Translations$room$en extends Translations$room$es {
 	];
 	@override late final _Translations$room$mesh$en mesh = _Translations$room$mesh$en._(_root);
 	@override late final _Translations$room$header$en header = _Translations$room$header$en._(_root);
+	@override late final _Translations$room$sheets$en sheets = _Translations$room$sheets$en._(_root);
 	@override late final _Translations$room$talk$en talk = _Translations$room$talk$en._(_root);
 }
 
@@ -326,6 +327,19 @@ class _Translations$room$header$en extends Translations$room$header$es {
 	@override String get invite => 'Invite';
 }
 
+// Path: room.sheets
+class _Translations$room$sheets$en extends Translations$room$sheets$es {
+	_Translations$room$sheets$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get close => 'Close';
+	@override late final _Translations$room$sheets$invite$en invite = _Translations$room$sheets$invite$en._(_root);
+	@override late final _Translations$room$sheets$route$en route = _Translations$room$sheets$route$en._(_root);
+	@override late final _Translations$room$sheets$leave$en leave = _Translations$room$sheets$leave$en._(_root);
+}
+
 // Path: room.talk
 class _Translations$room$talk$en extends Translations$room$talk$es {
 	_Translations$room$talk$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -493,6 +507,59 @@ class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$gu
 	];
 	@override String get ready => 'It\'s on';
 	@override String get sameWifi => 'We\'re already on the same Wi-Fi';
+}
+
+// Path: room.sheets.invite
+class _Translations$room$sheets$invite$en extends Translations$room$sheets$invite$es {
+	_Translations$room$sheets$invite$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Invite to the frecu';
+	@override String get title => 'Scan to join';
+	@override String get message => 'From Frecu › Scan. The QR already includes the code.';
+	@override String get note => 'Note';
+	@override String get code => 'Code';
+	@override String get host => 'Host';
+	@override String port({required Object port}) => 'Port ${port}';
+	@override String footer({required Object list}) => 'It also shows up in “${list}” for anyone on your network.';
+	@override String get qr => 'Invite QR code';
+}
+
+// Path: room.sheets.route
+class _Translations$room$sheets$route$en extends Translations$room$sheets$route$es {
+	_Translations$room$sheets$route$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Audio output';
+	@override String get title => 'Where do you listen?';
+	@override String get message => 'When you plug in headphones, the audio switches by itself.';
+	@override String get speakerSub => 'Hands-free';
+	@override String get earpieceSub => 'Phone to your ear';
+	@override String get bluetoothOn => 'Connected';
+	@override String get bluetoothOff => 'No device';
+	@override String label({required Object route}) => 'Audio output: ${route}';
+}
+
+// Path: room.sheets.leave
+class _Translations$room$sheets$leave$en extends Translations$room$sheets$leave$es {
+	_Translations$room$sheets$leave$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get peerTitle => 'Leave the frecu?';
+	@override String get peerMessage => 'You can join again with the access code.';
+	@override String get peerConfirm => 'Leave the frecu';
+	@override String get hostTitle => 'Close the frecu for everyone';
+	@override String get hostAlone => 'You\'re the host. If you leave, the frecu closes.';
+	@override String get hostOne => 'You\'re the host. If you leave, the frecu closes for the other person.';
+	@override String hostMany({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.';
+	@override String get hostConfirm => 'Close frecu';
+	@override String get cancel => 'Cancel';
 }
 
 // Path: room.talk.core
@@ -762,6 +829,33 @@ extension on TranslationsEn {
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invite',
+			'room.sheets.close' => 'Close',
+			'room.sheets.invite.kicker' => 'Invite to the frecu',
+			'room.sheets.invite.title' => 'Scan to join',
+			'room.sheets.invite.message' => 'From Frecu › Scan. The QR already includes the code.',
+			'room.sheets.invite.note' => 'Note',
+			'room.sheets.invite.code' => 'Code',
+			'room.sheets.invite.host' => 'Host',
+			'room.sheets.invite.port' => ({required Object port}) => 'Port ${port}',
+			'room.sheets.invite.footer' => ({required Object list}) => 'It also shows up in “${list}” for anyone on your network.',
+			'room.sheets.invite.qr' => 'Invite QR code',
+			'room.sheets.route.kicker' => 'Audio output',
+			'room.sheets.route.title' => 'Where do you listen?',
+			'room.sheets.route.message' => 'When you plug in headphones, the audio switches by itself.',
+			'room.sheets.route.speakerSub' => 'Hands-free',
+			'room.sheets.route.earpieceSub' => 'Phone to your ear',
+			'room.sheets.route.bluetoothOn' => 'Connected',
+			'room.sheets.route.bluetoothOff' => 'No device',
+			'room.sheets.route.label' => ({required Object route}) => 'Audio output: ${route}',
+			'room.sheets.leave.peerTitle' => 'Leave the frecu?',
+			'room.sheets.leave.peerMessage' => 'You can join again with the access code.',
+			'room.sheets.leave.peerConfirm' => 'Leave the frecu',
+			'room.sheets.leave.hostTitle' => 'Close the frecu for everyone',
+			'room.sheets.leave.hostAlone' => 'You\'re the host. If you leave, the frecu closes.',
+			'room.sheets.leave.hostOne' => 'You\'re the host. If you leave, the frecu closes for the other person.',
+			'room.sheets.leave.hostMany' => ({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.',
+			'room.sheets.leave.hostConfirm' => 'Close frecu',
+			'room.sheets.leave.cancel' => 'Cancel',
 			'room.talk.modePtt' => 'PTT',
 			'room.talk.modeOpen' => 'Open',
 			'room.talk.core.hold' => 'Hold',

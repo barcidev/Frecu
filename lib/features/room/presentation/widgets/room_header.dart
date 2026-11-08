@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
-import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -10,15 +9,13 @@ import 'package:frecu/i18n/strings.g.dart';
 
 /// Cabecera de la frecu activa (`.room-h` del prototipo): el chip con la
 /// nota y sus Hz, el nombre de la frecu con su anfitrión y los botones de
-/// ruta de audio, invitar y salir.
+/// invitar y salir.
 class RoomHeader extends StatelessWidget {
   /// Crea la cabecera de [room].
   const RoomHeader({
     required this.room,
     required this.participants,
     required this.localParticipantId,
-    required this.audioRoute,
-    required this.onCycleAudioRoute,
     required this.onInvite,
     required this.onLeave,
     super.key,
@@ -32,12 +29,6 @@ class RoomHeader extends StatelessWidget {
 
   /// Id de la persona de este teléfono.
   final String? localParticipantId;
-
-  /// Ruta de audio activa.
-  final AudioRoute audioRoute;
-
-  /// Pasa a la siguiente ruta de audio.
-  final VoidCallback onCycleAudioRoute;
 
   /// Abre la invitación QR; nulo si no hay frecu.
   final VoidCallback? onInvite;
@@ -81,23 +72,13 @@ class RoomHeader extends StatelessWidget {
   }
 
   Widget _buttons() {
-    final (routeIcon, routeLabel) = switch (audioRoute) {
-      AudioRoute.bluetooth => (Icons.bluetooth_audio, t.room.bluetooth),
-      AudioRoute.earpiece => (Icons.phone_in_talk, t.room.earpiece),
-      AudioRoute.speaker => (Icons.volume_up, t.room.speaker),
-    };
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: 8,
       children: [
-        FrIconButton(
-          key: const Key('audio_route_button'),
-          icon: routeIcon,
-          semanticLabel: routeLabel,
-          onPressed: onCycleAudioRoute,
-        ),
-        FrIconButton(
-          icon: Icons.qr_code,
+        FrIconButton.drawn(
+          key: const Key('invite_button'),
+          icon: FrIcons.qr,
           semanticLabel: t.room.header.invite,
           onPressed: onInvite,
         ),
@@ -209,7 +190,7 @@ class RoomNoteChip extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.bottomLeft,
-                child: _NoteName(name: name, octave: note.octave),
+                child: RoomNoteName(note: note),
               ),
             ),
           ],
@@ -220,18 +201,24 @@ class RoomNoteChip extends StatelessWidget {
 }
 
 /// Nombre de una nota con la alteración en superíndice y la octava en
-/// subíndice (`.note` del prototipo).
-class _NoteName extends StatelessWidget {
-  const _NoteName({required this.name, required this.octave});
+/// subíndice (`.note` del prototipo), en Doto de [size] px.
+class RoomNoteName extends StatelessWidget {
+  /// Crea el nombre de [note].
+  const RoomNoteName({required this.note, this.size = 22, super.key});
 
   static final RegExp _accidental = RegExp('[♯♭]');
 
-  final String name;
-  final int octave;
+  /// Nota que se nombra.
+  final RoomNote note;
+
+  /// Alto de letra del nombre.
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     final fr = context.fr;
+    final name = t.room.noteNames[note.pitchClass];
+    final octave = note.octave;
     final accidental = _accidental.firstMatch(name)?.group(0);
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -240,15 +227,15 @@ class _NoteName extends StatelessWidget {
         Text(
           name.replaceAll(_accidental, ''),
           style: fr.type.digits.copyWith(
-            fontSize: 22,
+            fontSize: size,
             height: 0.9,
-            letterSpacing: 0.44,
+            letterSpacing: size * 0.02,
             color: fr.colors.tx1,
           ),
         ),
         if (accidental != null)
           Padding(
-            padding: const EdgeInsets.only(left: 1, bottom: 10),
+            padding: EdgeInsets.only(left: 1, bottom: size * 10 / 22),
             child: Text(
               accidental,
               style: fr.type.label.copyWith(
@@ -264,8 +251,9 @@ class _NoteName extends StatelessWidget {
           padding: const EdgeInsets.only(left: 2, bottom: 1),
           child: Text(
             '$octave',
+            // `.note sub`: 9,5 px, y 8 px en el chip de la cabecera.
             style: fr.type.labelS.copyWith(
-              fontSize: 8,
+              fontSize: size > 22 ? 9.5 : 8,
               height: 1,
               color: fr.colors.tx3,
             ),

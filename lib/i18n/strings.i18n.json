@@ -139,6 +139,41 @@
       "note": "Nota $note, $hz Hz",
       "invite": "Invitar"
     },
+    "sheets": {
+      "close": "Cerrar",
+      "invite": {
+        "kicker": "Invitar a la frecu",
+        "title": "Escanea para unirte",
+        "message": "Desde Frecu › Escanear. El QR ya incluye el código.",
+        "note": "Nota",
+        "code": "Código",
+        "host": "Anfitrión",
+        "port": "Puerto $port",
+        "footer": "También aparece en “$list” para quien esté en tu red.",
+        "qr": "Código QR de invitación"
+      },
+      "route": {
+        "kicker": "Salida de audio",
+        "title": "¿Dónde escuchas?",
+        "message": "Al conectar audífonos, el audio cambia solo.",
+        "speakerSub": "Manos libres",
+        "earpieceSub": "Teléfono en la oreja",
+        "bluetoothOn": "Conectado",
+        "bluetoothOff": "Sin dispositivo",
+        "label": "Salida de audio: $route"
+      },
+      "leave": {
+        "peerTitle": "¿Salir de la frecu?",
+        "peerMessage": "Podrás volver a unirte con el código de acceso.",
+        "peerConfirm": "Salir de la frecu",
+        "hostTitle": "Cerrar la frecu para todos",
+        "hostAlone": "Eres el anfitrión. Si sales, la frecu se cierra.",
+        "hostOne": "Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.",
+        "hostMany": "Eres el anfitrión. Si sales, la frecu se cierra para las otras $count personas.",
+        "hostConfirm": "Cerrar frecu",
+        "cancel": "Cancelar"
+      }
+    },
     "talk": {
       "modePtt": "PTT",
       "modeOpen": "Abierto",

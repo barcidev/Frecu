@@ -191,6 +191,7 @@ class Translations$room$es {
 	];
 	late final Translations$room$mesh$es mesh = Translations$room$mesh$es.internal(_root);
 	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
+	late final Translations$room$sheets$es sheets = Translations$room$sheets$es.internal(_root);
 	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
 }
 
@@ -544,6 +545,22 @@ class Translations$room$header$es {
 	String get invite => 'Invitar';
 }
 
+// Path: room.sheets
+class Translations$room$sheets$es {
+	Translations$room$sheets$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Cerrar'
+	String get close => 'Cerrar';
+
+	late final Translations$room$sheets$invite$es invite = Translations$room$sheets$invite$es.internal(_root);
+	late final Translations$room$sheets$route$es route = Translations$room$sheets$route$es.internal(_root);
+	late final Translations$room$sheets$leave$es leave = Translations$room$sheets$leave$es.internal(_root);
+}
+
 // Path: room.talk
 class Translations$room$talk$es {
 	Translations$room$talk$es.internal(this._root);
@@ -825,6 +842,111 @@ class Translations$lobby$newRoom$guide$es {
 
 	/// es: 'Ya estamos en la misma Wi-Fi'
 	String get sameWifi => 'Ya estamos en la misma Wi-Fi';
+}
+
+// Path: room.sheets.invite
+class Translations$room$sheets$invite$es {
+	Translations$room$sheets$invite$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Invitar a la frecu'
+	String get kicker => 'Invitar a la frecu';
+
+	/// es: 'Escanea para unirte'
+	String get title => 'Escanea para unirte';
+
+	/// es: 'Desde Frecu › Escanear. El QR ya incluye el código.'
+	String get message => 'Desde Frecu › Escanear. El QR ya incluye el código.';
+
+	/// es: 'Nota'
+	String get note => 'Nota';
+
+	/// es: 'Código'
+	String get code => 'Código';
+
+	/// es: 'Anfitrión'
+	String get host => 'Anfitrión';
+
+	/// es: 'Puerto $port'
+	String port({required Object port}) => 'Puerto ${port}';
+
+	/// es: 'También aparece en “$list” para quien esté en tu red.'
+	String footer({required Object list}) => 'También aparece en “${list}” para quien esté en tu red.';
+
+	/// es: 'Código QR de invitación'
+	String get qr => 'Código QR de invitación';
+}
+
+// Path: room.sheets.route
+class Translations$room$sheets$route$es {
+	Translations$room$sheets$route$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Salida de audio'
+	String get kicker => 'Salida de audio';
+
+	/// es: '¿Dónde escuchas?'
+	String get title => '¿Dónde escuchas?';
+
+	/// es: 'Al conectar audífonos, el audio cambia solo.'
+	String get message => 'Al conectar audífonos, el audio cambia solo.';
+
+	/// es: 'Manos libres'
+	String get speakerSub => 'Manos libres';
+
+	/// es: 'Teléfono en la oreja'
+	String get earpieceSub => 'Teléfono en la oreja';
+
+	/// es: 'Conectado'
+	String get bluetoothOn => 'Conectado';
+
+	/// es: 'Sin dispositivo'
+	String get bluetoothOff => 'Sin dispositivo';
+
+	/// es: 'Salida de audio: $route'
+	String label({required Object route}) => 'Salida de audio: ${route}';
+}
+
+// Path: room.sheets.leave
+class Translations$room$sheets$leave$es {
+	Translations$room$sheets$leave$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: '¿Salir de la frecu?'
+	String get peerTitle => '¿Salir de la frecu?';
+
+	/// es: 'Podrás volver a unirte con el código de acceso.'
+	String get peerMessage => 'Podrás volver a unirte con el código de acceso.';
+
+	/// es: 'Salir de la frecu'
+	String get peerConfirm => 'Salir de la frecu';
+
+	/// es: 'Cerrar la frecu para todos'
+	String get hostTitle => 'Cerrar la frecu para todos';
+
+	/// es: 'Eres el anfitrión. Si sales, la frecu se cierra.'
+	String get hostAlone => 'Eres el anfitrión. Si sales, la frecu se cierra.';
+
+	/// es: 'Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.'
+	String get hostOne => 'Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.';
+
+	/// es: 'Eres el anfitrión. Si sales, la frecu se cierra para las otras $count personas.'
+	String hostMany({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.';
+
+	/// es: 'Cerrar frecu'
+	String get hostConfirm => 'Cerrar frecu';
+
+	/// es: 'Cancelar'
+	String get cancel => 'Cancelar';
 }
 
 // Path: room.talk.core
@@ -1168,6 +1290,33 @@ extension on Translations {
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invitar',
+			'room.sheets.close' => 'Cerrar',
+			'room.sheets.invite.kicker' => 'Invitar a la frecu',
+			'room.sheets.invite.title' => 'Escanea para unirte',
+			'room.sheets.invite.message' => 'Desde Frecu › Escanear. El QR ya incluye el código.',
+			'room.sheets.invite.note' => 'Nota',
+			'room.sheets.invite.code' => 'Código',
+			'room.sheets.invite.host' => 'Anfitrión',
+			'room.sheets.invite.port' => ({required Object port}) => 'Puerto ${port}',
+			'room.sheets.invite.footer' => ({required Object list}) => 'También aparece en “${list}” para quien esté en tu red.',
+			'room.sheets.invite.qr' => 'Código QR de invitación',
+			'room.sheets.route.kicker' => 'Salida de audio',
+			'room.sheets.route.title' => '¿Dónde escuchas?',
+			'room.sheets.route.message' => 'Al conectar audífonos, el audio cambia solo.',
+			'room.sheets.route.speakerSub' => 'Manos libres',
+			'room.sheets.route.earpieceSub' => 'Teléfono en la oreja',
+			'room.sheets.route.bluetoothOn' => 'Conectado',
+			'room.sheets.route.bluetoothOff' => 'Sin dispositivo',
+			'room.sheets.route.label' => ({required Object route}) => 'Salida de audio: ${route}',
+			'room.sheets.leave.peerTitle' => '¿Salir de la frecu?',
+			'room.sheets.leave.peerMessage' => 'Podrás volver a unirte con el código de acceso.',
+			'room.sheets.leave.peerConfirm' => 'Salir de la frecu',
+			'room.sheets.leave.hostTitle' => 'Cerrar la frecu para todos',
+			'room.sheets.leave.hostAlone' => 'Eres el anfitrión. Si sales, la frecu se cierra.',
+			'room.sheets.leave.hostOne' => 'Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.',
+			'room.sheets.leave.hostMany' => ({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.',
+			'room.sheets.leave.hostConfirm' => 'Cerrar frecu',
+			'room.sheets.leave.cancel' => 'Cancelar',
 			'room.talk.modePtt' => 'PTT',
 			'room.talk.modeOpen' => 'Abierto',
 			'room.talk.core.hold' => 'Mantén',

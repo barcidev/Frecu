@@ -85,7 +85,7 @@ Referencia: `SH.invite`, `SH.route`, `SH.leave`, `leaveCopy`, `V.closed` y `room
 
 ## Tareas
 
-- [ ] T1: Hoja de invitación e Invitar con ícono propio
+- [x] T1: Hoja de invitación e Invitar con ícono propio
   - files: lib/features/room/presentation/widgets/room_sheets.dart, lib/features/room/presentation/widgets/invite_sheet.dart, lib/features/room/presentation/widgets/room_header.dart, lib/features/room/presentation/pages/room_page.dart, lib/features/room/presentation/widgets/invite_qr_dialog.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/room/presentation/room_sheets_test.dart, test/features/room/presentation/invite_qr_dialog_test.dart, test/features/lobby/presentation/room_note_flow_test.dart
   - ac: AC1, AC2, AC7
   - verify: flutter test test/features/room/presentation/room_sheets_test.dart --name Invitar && flutter test test/features/room/presentation/invite_qr_dialog_test.dart test/features/lobby/presentation/room_note_flow_test.dart

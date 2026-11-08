@@ -7,12 +7,11 @@ import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
-import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
-import 'package:frecu/features/room/presentation/widgets/invite_qr_dialog.dart';
+import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
@@ -71,13 +70,6 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     if (mounted) {
       await context.router.maybePop();
     }
-  }
-
-  Future<void> _showInviteQrDialog(BuildContext context, Room room) async {
-    await showDialog<void>(
-      context: context,
-      builder: (ctx) => InviteQrDialog(room: room),
-    );
   }
 
   void _showRoomClosedDialog(BuildContext context, String reason) {
@@ -159,7 +151,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
 
     final onInvite = room == null
         ? null
-        : () => unawaited(_showInviteQrDialog(context, room));
+        : () => unawaited(InviteSheet.show(context, room));
 
     return FrScaffold(
       body: Column(
@@ -170,10 +162,6 @@ class _RoomPageState extends ConsumerState<RoomPage> {
             room: room,
             participants: participants,
             localParticipantId: localId,
-            audioRoute: voiceState.audioRoute,
-            onCycleAudioRoute: () => unawaited(
-              ref.read(voiceNotifierProvider.notifier).cycleAudioRoute(),
-            ),
             onInvite: onInvite,
             onLeave: () => unawaited(_handleLeave()),
           ),

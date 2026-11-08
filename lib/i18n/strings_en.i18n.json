@@ -139,6 +139,41 @@
       "note": "Note $note, $hz Hz",
       "invite": "Invite"
     },
+    "sheets": {
+      "close": "Close",
+      "invite": {
+        "kicker": "Invite to the frecu",
+        "title": "Scan to join",
+        "message": "From Frecu › Scan. The QR already includes the code.",
+        "note": "Note",
+        "code": "Code",
+        "host": "Host",
+        "port": "Port $port",
+        "footer": "It also shows up in “$list” for anyone on your network.",
+        "qr": "Invite QR code"
+      },
+      "route": {
+        "kicker": "Audio output",
+        "title": "Where do you listen?",
+        "message": "When you plug in headphones, the audio switches by itself.",
+        "speakerSub": "Hands-free",
+        "earpieceSub": "Phone to your ear",
+        "bluetoothOn": "Connected",
+        "bluetoothOff": "No device",
+        "label": "Audio output: $route"
+      },
+      "leave": {
+        "peerTitle": "Leave the frecu?",
+        "peerMessage": "You can join again with the access code.",
+        "peerConfirm": "Leave the frecu",
+        "hostTitle": "Close the frecu for everyone",
+        "hostAlone": "You're the host. If you leave, the frecu closes.",
+        "hostOne": "You're the host. If you leave, the frecu closes for the other person.",
+        "hostMany": "You're the host. If you leave, the frecu closes for the other $count people.",
+        "hostConfirm": "Close frecu",
+        "cancel": "Cancel"
+      }
+    },
     "talk": {
       "modePtt": "PTT",
       "modeOpen": "Open",
