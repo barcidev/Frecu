@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
   "kind": "standard",
-  "phase": "testing",
+  "phase": "implementing",
   "branch": "feature/nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
@@ -59,6 +59,11 @@
     "T": 3,
     "R": 3
   },
-  "testCycle": "feature",
-  "testsSubmittedAt": "2026-11-08T00:42:24.304Z"
+  "lockedTests": {
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:9a613fc2dd186194ac73dacf2f5aa62b3236956f3137b6964659ff77d0c4e4c8",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:c13f003dbaf2432436cdcaba6ed227f2fadd37c0bcc6c316ce8a3f883b1a1e8d",
+    "test/features/room/presentation/ptt_core_test.dart": "sha256:704a8bbc88d28f018109764b3dc80981bed0f90b95a0f98db407643c63bb77f9",
+    "test/features/room/presentation/room_talk_test.dart": "sha256:20847143ad67df8d4f9ac7c884509fa71f1f0809eaa2c39c6faf5c8aa58f1598",
+    "test/features/room/presentation/talk_flow_test.dart": "sha256:0dad50723e4307603975e8c7ddcc4bd5fb81a1ecc285a51083e0611ac1e6817c"
+  }
 }
