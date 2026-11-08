@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-union-por-codigo-de-acceso-ip-y-escaner-qr",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/union-por-codigo-de-acceso-ip-y-escaner-qr",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:113be1056cc158abc22e80e78f65b5f4e3ae7ff1b092a39c2f468b375a5d246d",
@@ -75,12 +75,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "bc8e2a224eecba8aefce5d221b72b6820d105213",
+      "attempts": 1,
       "startedAt": "2026-11-08T00:41:45.713Z",
       "doneAt": "2026-11-08T00:44:09.975Z",
-      "summary": "Escáner en Portadora y tema oscuro: retícula con cierre y check, linterna, QR inválido, Conectar por IP y tarjeta «Frecu encontrada» con Unirme; las pruebas de otros cortes escriben el código, llenan la IP y tocan Unirme"
+      "summary": "Escáner en Portadora y tema oscuro: retícula con cierre y check, linterna, QR inválido, Conectar por IP y tarjeta «Frecu encontrada» con Unirme; las pruebas de otros cortes escriben el código, llenan la IP y tocan Unirme",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -93,14 +93,62 @@
     "T": 3,
     "R": 3
   },
+  "closingSubmittedAt": "2026-11-08T00:45:44.358Z",
   "lockedTests": {
     "test/features/lobby/presentation/discovery_flow_test.dart": "sha256:a5b0634c1d4db1c138d2af933e50a73d6b96a799931d6e1fcec17271860e3c53",
     "test/features/lobby/presentation/lobby_page_test.dart": "sha256:61c55bd96c0b53b26df8dbfc42b24fda20c091de2621959a1cb63608c9c8141c",
     "test/features/lobby/presentation/room_full_flow_test.dart": "sha256:f3b445e04610f61871ed71b12fa0563194e1ca61eec499faf03a7df7644bcb5e",
-    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:7d8b7cb9dfb8e976b364e1640e6291649a2ce274ef15595359f91ff793124590",
-    "test/features/lobby/presentation/saved_name_test.dart": "sha256:bb348541be5e15ebaecb42a988222ed237b7ce6992fc65eba23403160003b920",
+    "test/features/lobby/presentation/room_note_flow_test.dart": "sha256:f5d1010424453f619eb841e348c885a9cd379e700aa27680086d3b60e2fd0418",
+    "test/features/lobby/presentation/saved_name_test.dart": "sha256:1420d03a2aa20c379c0c648e16a3370d751bed792ce6494752012e2a0ce635af",
     "test/features/lobby/presentation/scan_qr_page_test.dart": "sha256:a8b58f94c27d8c42eda894bee3976ca94a0c54eef7576d6bc9a5a9c68266a1dd",
-    "test/features/room/presentation/room_flow_test.dart": "sha256:61230804d0f47b0d46db0ba3ef5302f8d79fb3b41cfd95a6e70195a26fbcf77f",
+    "test/features/room/presentation/room_flow_test.dart": "sha256:b500b4a235f0312eb0ae3336f044cb29de4bbcaf44673a432dc96efa5219002d",
     "test/features/lobby/presentation/join_sheets_test.dart": "sha256:0262bda8a63d4ba07cbcd5777ced50aa573e6e1662bf7e768d1c87b9558b65c1"
+  },
+  "integration": {
+    "target": "develop",
+    "commit": "6255bab3dffa70229f0eb1ee768939fc1d729996",
+    "reason": "conflicts",
+    "conflicts": [
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_es.g.dart"
+    ],
+    "paths": [
+      "lib/features/lobby/presentation/pages/create_room_page.dart",
+      "lib/features/lobby/presentation/pages/lobby_page.dart",
+      "lib/features/lobby/presentation/pages/scan_qr_page.dart",
+      "lib/features/lobby/presentation/providers/new_room_provider.dart",
+      "lib/features/lobby/presentation/providers/new_room_provider.g.dart",
+      "lib/features/lobby/presentation/widgets/create_room_layout.dart",
+      "lib/features/lobby/presentation/widgets/fifths_clock.dart",
+      "lib/features/lobby/presentation/widgets/hotspot_guide_step.dart",
+      "lib/features/lobby/presentation/widgets/hotspot_illustration.dart",
+      "lib/features/lobby/presentation/widgets/ip_join_sheet.dart",
+      "lib/features/lobby/presentation/widgets/new_room_step.dart",
+      "lib/features/lobby/presentation/widgets/pin_join_sheet.dart",
+      "lib/features/lobby/presentation/widgets/room_note_label.dart",
+      "lib/features/lobby/presentation/widgets/scan_reticle.dart",
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings.i18n.json",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_en.i18n.json",
+      "lib/i18n/strings_es.g.dart",
+      "test/features/lobby/presentation/discovery_flow_test.dart",
+      "test/features/lobby/presentation/fifths_clock_test.dart",
+      "test/features/lobby/presentation/hotspot_guide_test.dart",
+      "test/features/lobby/presentation/join_sheets_test.dart",
+      "test/features/lobby/presentation/lobby_page_test.dart",
+      "test/features/lobby/presentation/new_room_test.dart",
+      "test/features/lobby/presentation/room_full_flow_test.dart",
+      "test/features/lobby/presentation/room_note_flow_test.dart",
+      "test/features/lobby/presentation/saved_name_test.dart",
+      "test/features/lobby/presentation/scan_qr_page_test.dart",
+      "test/features/room/presentation/room_flow_test.dart"
+    ],
+    "at": "2026-11-08T00:45:51.351Z",
+    "resolved": {
+      "commit": "74de078",
+      "at": "2026-11-08T00:46:41.296Z"
+    }
   }
 }

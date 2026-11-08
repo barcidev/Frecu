@@ -99,3 +99,36 @@ Referencia: `SH.pin`, `SH.ip` y `V.scan` de `screens.js`; `pinKey`, `renderPin`,
 - R1: C17 corre en paralelo y también toca `features/lobby` y los textos — mitigación: los textos van en `lobby.join`, los archivos nuevos no se cruzan con los suyos y, si chocan los generados, se regeneran con `dart run slang`.
 - R2: La hoja de código con el teclado mide unos 600 px y no cabe en pantallas bajas — mitigación: va dentro de un `SingleChildScrollView` que se encoge a su contenido.
 - R3: La retícula repinta a 60 fps sobre la cámara — mitigación: un solo `FrLoop` en un `RepaintBoundary`, que se quita al cerrarse sobre el código y con movimiento reducido.
+
+## Cierre
+
+### Resumen
+
+- `PinJoinSheet` (hoja de código): «nota · Hz · IP», el nombre de la frecu, `FrPinField` vacío, línea de estado, `FrKeypad` y «Entrarás como <nombre>»; se envía sola con el cuarto dígito, verifica sin aceptar teclas, con código incorrecto pasa a error y la siguiente tecla empieza otro, y con sala llena u otra falla muestra el aviso y vacía las celdas. Si el anfitrión acepta, se cierra y el inicio abre la frecu activa.
+- `IpJoinSheet` (conexión manual): IP con «Puerto 47800» y código de 4 dígitos; Conectar solo responde con los dos; sin respuesta marca la IP con «Sin respuesta en el puerto 47800» y el aviso, código incorrecto marca el código, y editar quita el error. La abren el inicio y el escáner.
+- `ScanQrPage` en tema oscuro con `ScanReticle` (velo, esquinas que respiran, haz, cierre con resorte `organic` y check), Atrás, linterna, la indicación o «Este QR no es una invitación de Frecu.», Conectar por IP, y la tarjeta «Frecu encontrada» con la nota y sus Hz, IP y puerto y Unirme; la frecu activa reemplaza al escáner. Con movimiento reducido la retícula no anima ni pide cuadros.
+- Textos nuevos en `lobby.join` (`es` y `en`); se quitan los dos `AlertDialog` con texto directo.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (480 pruebas; 23 nuevas en `join_sheets_test` y `scan_qr_page_test`). Con develop y C17 integrados (los `strings*.g.dart` regenerados) también sin avisos y 513 en verde.
+
+### Desviaciones
+
+- `ip_join_sheet.dart` entró en T1 (`scope add`) porque `join_sheets_test.dart`, la verificación de T1, también prueba la hoja de IP.
+- `room_full_flow_test` busca el mensaje de sala llena con `find.textContaining(…, findRichText: true)`: `FrBanner` pinta título y pista en un solo `Text.rich`.
+- Los campos de `IpJoinSheet` y el título de la barra y los datos de la tarjeta del escáner van en métodos aparte por el máximo de 50 líneas por función. `scan_qr_page.dart` queda en 361 líneas de código (aviso desde 300): página, barra, indicación y tarjeta.
+- Sin router (pruebas que montan el escáner en un `MaterialApp`) la unión no navega: se usa `StackRouterScope.of(context)` en lugar del `try/catch` de antes.
+
+### Decisiones
+
+- Textos en inglés: «Close», «Port $port», «Wrong code. Check it and try again.», «You can join when someone leaves.», «Make sure you're on the same Wi-Fi network.», «Enter the access code. Ask the host for it.», «Sent once all 4 digits are in», «Checking with the host…», «Code accepted · joining», «Delete», «You'll join as», «Manual connection», «Use it if the room isn't on the list.», «Host IP», «No answer on port $port», «Connect», «Scan invite», «Room QR», «Back», «Flashlight», «Point at the QR the host shows on their phone.», «This QR isn't a Frecu invite.», «Room found», «Room without a note» y «Join».
+- `lobby.join` va justo después de `lobby.title` para no chocar con los textos de C17.
+- El velo de la retícula es `scrim` al 62 % (el `rgba(2,3,4,.62)` del prototipo en tema oscuro); las hojas van en un `SingleChildScrollView` (R2).
+- El campo de IP usa el teclado `url`: el decimal de iOS en español escribe coma.
+- Al cerrar sobre un QR válido hay una vibración corta (`HapticFeedback.lightImpact`), como el `vibrate(18)` del prototipo.
+
+### Pendientes
+
+- `FrField` y `FrBanner` solo admiten `IconData`: cambiar `Icons.hub_outlined`, `Icons.lock_outline_rounded`, `Icons.group_outlined` e `Icons.error_outline_rounded` de las hojas de unión por `FrIcons.nodes`, `lock`, `users` y `alert` cuando `lib/core` lo permita.
+- Estado sin cámara del escáner (permiso negado o cámara ocupada): hoy sale el error por defecto de `mobile_scanner`.
+- Nombre de la frecu en el QR: la tarjeta del escáner muestra la nota y sus Hz porque la invitación no lo trae.
+- Transición de expansión de la hoja a la frecu activa (P53).
+- `dart format --set-exit-if-changed .` sigue fallando por 6 archivos ajenos a este cambio (`network_state.dart`, `permission_repository_impl.dart`, `fr_colors_order_test.dart`, `permission_datasource_test.dart`, `permission_repository_impl_test.dart` y `room_repository_test.dart`).
