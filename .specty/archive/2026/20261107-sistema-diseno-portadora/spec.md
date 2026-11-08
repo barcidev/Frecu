@@ -114,3 +114,49 @@ Referencia visual y de comportamiento: `docs/diseno/prototipo/index.html` (secci
 - R2: La épica "Segundo plano y resiliencia" ya cerró sus cambios sobre `RoomPage` y `room_provider` — mitigación: C4, C18 y C19 parten de develop actualizado y dibujan los estados `reconnecting` y `closed` que dejó en la isla de estado.
 - R3: Peso de las fuentes variables — mitigación: incluir solo los ejes y rangos usados y revisar el tamaño del APK en C5.
 - R4: Contraste del verde en tema claro — mitigación: `signalFg` en tinta de día y una prueba que verifique el contraste mínimo de los pares texto/fondo de ambos temas.
+
+## Cierre
+
+### Resumen
+
+La app entera quedó en el sistema de diseño Portadora, con los 19 cortes cerrados e incorporados a develop (`flutter analyze` sin avisos y 582 pruebas en verde al aceptar).
+- **Base:** tokens, tema claro y oscuro con el verde lima mate #C4E05C en ambos, fuentes Archivo, Martian Mono y Doto empaquetadas (sin red), movimiento orgánico con resortes y ruido, y respeto del movimiento reducido.
+- **Componentes:** botones, campos, PIN y teclado, segmentado, interruptor, píldoras, superficies, hojas, avisos, isla de estado e íconos propios `FrIcons`.
+- **Pantallas:** bienvenida, nombre y permisos; Ajustes; inicio con sintonizador; unión por código, IP y QR; nueva frecu con reloj de quintas y guía del punto de acceso; frecu activa con malla hexagonal, núcleo PTT, isla y hojas; pantalla de cierre.
+- **Canal:** la nota musical (`RoomNote`) se asigna por la hora en el círculo de quintas y viaja como `n` en mDNS y en el QR.
+
+### Desviaciones
+
+- La épica pasó de 4 a 19 cortes para respetar el límite de 2 módulos por cambio.
+- La pantalla de cierre es un estado de `RoomPage` y no una ruta propia, para no tocar el router en C19.
+- Las transiciones de `fr_transitions` no se conectaron al router (P53).
+- Escanear un QR ya no une sola la frecu: muestra la tarjeta «Frecu encontrada» y espera a «Unirme», como el prototipo.
+- Los nombres de las notas quedaron duplicados en `lobby.noteNames` y `room.noteNames` (P84/P87).
+- El arranque del prototipo (splash e intro de la portadora) no entró en ningún corte (P69/P71).
+
+### Decisiones
+
+- D1–D8 del prototipo aprobado:
+  - lima mate igual en ambos temas;
+  - malla hexagonal de 6 lugares;
+  - la nota como canal;
+  - el nombre se pide una sola vez;
+  - tema Auto, Claro u Oscuro;
+  - orden de construcción tokens → widgets → inicio y unión → frecu activa;
+  - de día el verde nunca es letra: `signalFg` es tinta, y el verde va como relleno, halo y marcatexto.
+- La isla de estado y el escáner van siempre oscuros.
+- Con modo delegado, el agente aprobó y aceptó los cortes tras verificar. Los desbloqueos de tests aprobados los decidió la persona: C4 S1 y S2, C6 S1, C7 S1, C10 S1 y S2, y C11.
+
+### Pendientes
+
+- Íconos de Material que siguen en `FrField`, `FrBanner`, el aviso de eco y Ajustes (P52, P55, P61, P96, P108).
+- Variante sólida de alerta en `FrButton` (P109) y ojos redondeados del QR (P110).
+- Grupo «General» de Ajustes (P62) y `FrToast` en varias líneas (P63).
+- Abrir los ajustes de Wi-Fi o de zona Wi-Fi desde el inicio y la guía; necesita un plugin (P83, P86, P93).
+- Nota en la unión por IP manual (P64), relojes distintos entre la nota mostrada y la asignada (P95) y nombre de la frecu en el QR (P98).
+- Estado sin cámara del escáner (P97) y nombre del dispositivo Bluetooth (P111).
+- Eventos pasajeros de la isla y cuenta atrás de reconexión (P101, P105).
+- PTT con el botón de volumen y nivel real de voz por WebRTC (P102, P106).
+- Borrar `PttButton` (P100, P104) y `PermissionsGuard` (P80); paso directo a permisos (P78).
+- Archivos grandes por partir (P76, P82, P94, P112) y `dart format` en archivos ajenos (P67, P72, P88, P99).
+- Perfilar animaciones en un Android de gama media (P33, P54) y añadir `verify.full` con `specty init`.

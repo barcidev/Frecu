@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261107-sistema-diseno-portadora",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/sistema-diseno-portadora",
   "baseCommit": "0d874f12af3da20b8b1f47cd4897f2faba5cad3c",
-  "revision": 2,
+  "revision": 3,
   "approved": {
     "revision": 2,
     "hash": "sha256:7f255441b7a2d3e4aff04cbab8c34f67a55636e2ec88ea75082dd79d636211e7",
@@ -61,5 +61,6 @@
     "AC": 8,
     "C": 19,
     "R": 4
-  }
+  },
+  "closingSubmittedAt": "2026-11-08T01:30:22.884Z"
 }
