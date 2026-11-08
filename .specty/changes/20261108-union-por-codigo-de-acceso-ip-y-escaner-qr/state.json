@@ -55,14 +55,23 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "lib/features/lobby/presentation/widgets/ip_join_sheet.dart"
-      ],
-      "attempts": 2,
       "baseCommit": "ed80446e619814a2361ce747025324aa8af69732",
+      "attempts": 2,
       "startedAt": "2026-11-08T00:39:15.301Z",
       "doneAt": "2026-11-08T00:41:18.305Z",
-      "summary": "Hoja de código de acceso (PinJoinSheet) con teclado propio y envío al cuarto dígito, y encabezado y aviso de error comunes; el inicio la abre al tocar una frecu; textos de lobby.join. IpJoinSheet entra ya porque join_sheets_test la importa"
+      "summary": "Hoja de código de acceso (PinJoinSheet) con teclado propio y envío al cuarto dígito, y encabezado y aviso de error comunes; el inicio la abre al tocar una frecu; textos de lobby.join. IpJoinSheet entra ya porque join_sheets_test la importa",
+      "scopeExtra": [
+        "lib/features/lobby/presentation/widgets/ip_join_sheet.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "5fad70fa60f11fbc9e93c6fb7fd07a5a5a913905",
+      "startedAt": "2026-11-08T00:41:18.983Z",
+      "doneAt": "2026-11-08T00:41:45.112Z",
+      "summary": "Conectar por IP del inicio abre IpJoinSheet (IP con puerto 47800, código de 4 dígitos, errores por campo y aviso) y se quitan los diálogos de Material"
     }
   },
   "pending": {
