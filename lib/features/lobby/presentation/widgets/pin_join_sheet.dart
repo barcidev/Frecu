@@ -293,9 +293,9 @@ class JoinFailureBanner extends StatelessWidget {
     final join = t.lobby.join;
     final full = failure == const Failure.roomFull();
     final unreachable = failure == const Failure.hostUnreachable();
-    return FrBanner(
+    return FrBanner.drawn(
       tone: full ? FrBannerTone.warn : FrBannerTone.alert,
-      icon: full ? Icons.group_outlined : Icons.error_outline_rounded,
+      icon: full ? FrIcons.users : FrIcons.alert,
       title: failure.toLocalizedMessage(),
       message: full
           ? join.roomFullHint

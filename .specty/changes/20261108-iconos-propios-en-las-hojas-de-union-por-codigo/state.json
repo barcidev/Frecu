@@ -6,6 +6,13 @@
   "branch": "feature/iconos-propios-en-las-hojas-de-union-por-codigo",
   "baseCommit": "f7322a7a419739e74589ce8c0753ed26c92da6e7",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:3c7c427d051e3148552e523be3a15084ba5bd669e2a16fc5d6b288d243f1604a",
+    "at": "2026-11-08T02:04:50.969Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 4,
@@ -28,7 +35,15 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "active",
+      "attempts": 0,
+      "scopeExtra": [],
+      "startedAt": "2026-11-08T02:04:51.966Z",
+      "baseCommit": "3cd396a83de83000b88789ba1edb9180dbb46920"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -38,12 +53,5 @@
     "AC": 3,
     "T": 1,
     "R": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:3c7c427d051e3148552e523be3a15084ba5bd669e2a16fc5d6b288d243f1604a",
-    "at": "2026-11-08T02:04:50.969Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
