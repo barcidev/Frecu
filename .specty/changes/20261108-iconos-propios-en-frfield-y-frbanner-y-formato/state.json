@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-iconos-propios-en-frfield-y-frbanner-y-formato",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/iconos-propios-en-frfield-y-frbanner-y-formato",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
   "revision": 1,
@@ -51,12 +51,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d426a29dceb07c75faca3992ff4f0b48e271a724",
+      "attempts": 1,
       "startedAt": "2026-11-08T01:56:35.151Z",
       "doneAt": "2026-11-08T01:58:34.820Z",
-      "summary": "FrBanner.drawn pinta el ícono de FrIcons a 18 px con el color del tono; dismissIcon pasa a FrIconData con FrIcons.close por defecto, pintado a 16 px en tx3 en los dos constructores. Prueba nueva fr_banner_drawn_test.dart."
+      "summary": "FrBanner.drawn pinta el ícono de FrIcons a 18 px con el color del tono; dismissIcon pasa a FrIconData con FrIcons.close por defecto, pintado a 16 px en tx3 en los dos constructores. Prueba nueva fr_banner_drawn_test.dart.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "300046d4d26ed708d8bc224c48d43da7dbdd01cb",
+      "startedAt": "2026-11-08T01:58:35.760Z",
+      "doneAt": "2026-11-08T01:59:01.864Z",
+      "summary": "dart format en fr_colors_order_test.dart (un token por línea, sin tocar aserciones); lib/core y test/core quedan con formato limpio."
     }
   },
   "pending": {
