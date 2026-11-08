@@ -6,6 +6,13 @@
   "branch": "feature/nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
   "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:58f2f4a6f733ef08ac542abe6e5335c184c81bf88fc857a824007e2f9f899e52",
+    "at": "2026-11-08T00:27:20.985Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 15,
@@ -52,12 +59,6 @@
     "T": 3,
     "R": 3
   },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:58f2f4a6f733ef08ac542abe6e5335c184c81bf88fc857a824007e2f9f899e52",
-    "at": "2026-11-08T00:27:20.985Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
-  },
-  "testCycle": "feature"
+  "testCycle": "feature",
+  "testsSubmittedAt": "2026-11-08T00:42:24.304Z"
 }

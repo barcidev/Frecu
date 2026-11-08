@@ -3,6 +3,7 @@
 // AC3: CUANDO el usuario cambia de modo de habla de micrófono abierto transmitiendo a PTT ENTONCES la transmisión continua se detiene de inmediato silenciando el micrófono.
 // AC2 (C4): CUANDO alguien habla ENTONCES su etiqueta en la malla dice «Hablando».
 // AC6 (C4): CUANDO el usuario está en la frecu activa ENTONCES el PTT, el micrófono abierto, el cambio de modo y el ciclo de ruta de audio funcionan como antes sobre la malla; con tema claro, el texto «Hablando» del micrófono abierto va en `signalFg`, nunca en verde sobre blanco.
+// AC1 y AC3 (C18): el núcleo PTT reemplaza al botón y a la tarjeta de Material: al aire dice «Al aire» y con micrófono abierto es un conmutador cuyas letras van en `signalInk` sobre el relleno de señal.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -147,7 +148,7 @@ void main() {
         // While pressed, simulated stream update to talking
         isTalkingController.add(true);
         await tester.pump();
-        expect(find.text(t.room.speaking), findsWidgets);
+        expect(find.text(t.room.talk.core.onAir.toUpperCase()), findsWidgets);
 
         // Pointer up -> stops talking
         await gesture.up();
@@ -255,8 +256,8 @@ void main() {
 
       expect(find.text('Bob'), findsOneWidget);
       expect(find.byIcon(Icons.volume_up), findsWidgets);
-      expect(find.text(t.room.openMic), findsWidgets);
-      expect(find.byIcon(Icons.mic), findsOneWidget);
+      expect(find.textContaining(t.room.openMic), findsWidgets);
+      expect(find.byKey(const Key('mic_toggle_button')), findsOneWidget);
     });
 
     testWidgets(
@@ -401,8 +402,8 @@ void main() {
 
     // AC6
     testWidgets(
-      'AC6: de día el «Hablando» del micrófono abierto va en signalFg y no en '
-      'verde',
+      'AC6: de día las letras del micrófono abierto van en signalInk sobre la '
+      'señal y no en verde',
       (tester) async {
         reduceMotion(tester);
         tester.platformDispatcher.platformBrightnessTestValue =
@@ -419,14 +420,15 @@ void main() {
         isTalkingController.add(true);
         await tester.pumpAndSettle();
 
-        final talking = find.descendant(
+        final label = find.descendant(
           of: find.byType(MicControlSection),
-          matching: find.text(t.room.speaking),
+          matching: find.byKey(const Key('ptt_core_label')),
         );
-        expect(talking, findsOneWidget);
-        final color = tester.widget<Text>(talking).style?.color;
-        expect(color, FrColors.light.signalFg);
-        expect(color, isNot(FrColors.light.signal));
+        expect(label, findsOneWidget);
+        final text = tester.widget<Text>(label);
+        expect(text.data, t.room.talk.core.open.toUpperCase());
+        expect(text.style?.color, FrColors.light.signalInk);
+        expect(text.style?.color, isNot(FrColors.light.signal));
       },
     );
   });
