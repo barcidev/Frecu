@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
+
+/// Niveles de voz leídos de las conexiones, de 0 a 1: el propio (`local`) y
+/// el recibido de cada par por su id (`peers`).
+typedef VoiceLevels = ({double local, Map<String, double> peers});
 
 /// Datasource responsable de gestionar la malla de conexiones WebRTC peer-to-peer.
 class PeerConnectionDataSource {
@@ -87,6 +92,52 @@ class PeerConnectionDataSource {
         SignalingMessage.talkState(peerId: _localPeerId, isSpeaking: enabled),
       );
     }
+  }
+
+  /// Lee a la vez el `getStats()` de cada conexión: el `audioLevel` del
+  /// informe `media-source` de audio es el nivel propio (el mayor de todas) y
+  /// el del `inbound-rtp` de audio, el del par. Una conexión que falla se
+  /// salta; sin conexiones el nivel propio es 0.
+  Future<VoiceLevels> readVoiceLevels() async {
+    final reads = await Future.wait([
+      for (final MapEntry(key: id, value: pc) in _peerConnections.entries)
+        _statsOf(id, pc),
+    ]);
+    var local = 0.0;
+    final peers = <String, double>{};
+    for (final (id, reports) in reads) {
+      for (final report in reports) {
+        final level = _audioLevel(report);
+        if (level == null) continue;
+        switch (report.type) {
+          case 'media-source':
+            local = math.max(local, level);
+          case 'inbound-rtp':
+            peers[id] = math.max(peers[id] ?? 0, level);
+        }
+      }
+    }
+    return (local: local, peers: peers);
+  }
+
+  Future<(String, List<StatsReport>)> _statsOf(
+    String peerId,
+    RTCPeerConnection pc,
+  ) async {
+    try {
+      return (peerId, await pc.getStats());
+    } on Object catch (e) {
+      AppLogger.d('getStats failed for $peerId: $e');
+      return (peerId, const <StatsReport>[]);
+    }
+  }
+
+  /// `audioLevel` de un informe de audio, entre 0 y 1, o nulo si no lo es.
+  static double? _audioLevel(StatsReport report) {
+    final values = report.values;
+    if ((values['kind'] ?? values['mediaType']) != 'audio') return null;
+    final level = values['audioLevel'];
+    return level is num ? level.toDouble().clamp(0, 1).toDouble() : null;
   }
 
   /// Inicia conexión hacia un par remoto generando una oferta SDP.

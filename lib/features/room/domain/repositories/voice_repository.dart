@@ -28,6 +28,14 @@ abstract interface class VoiceRepository {
   /// Stream reactivo del conjunto de IDs de participantes remotos que están hablando.
   Stream<Set<String>> watchSpeakingPeers();
 
+  /// Nivel de la voz propia, de 0 a 1, medido por WebRTC. Se lee solo
+  /// mientras alguien escucha este flujo o [watchPeerLevels].
+  Stream<double> watchLocalLevel();
+
+  /// Nivel de la voz recibida de cada participante remoto por su id, de 0 a
+  /// 1, medido por WebRTC. Se lee solo mientras alguien escucha.
+  Stream<Map<String, double>> watchPeerLevels();
+
   /// Stream reactivo del modo de habla actual.
   Stream<TalkMode> watchTalkMode();
 

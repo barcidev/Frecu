@@ -8,9 +8,6 @@ import 'package:frecu/core/design/tokens/fr_colors.dart';
 /// Marcas del bisel del núcleo.
 const int pttTickCount = 72;
 
-/// Nivel fijo de la voz con movimiento reducido.
-const double pttReducedLevel = 0.6;
-
 const double _tau = math.pi * 2;
 
 /// Marcas encendidas del bisel con el [level] propio al aire ([onAir]) o el
@@ -26,9 +23,10 @@ class PttLook {
   const PttLook({
     this.onAir = false,
     this.waiting = false,
+    this.level = 0,
     this.levelScale = 1,
     this.rxColor,
-    this.rxSeed = 0,
+    this.rxLevel = 0,
   });
 
   /// La persona propia transmite (PTT o micrófono abierto).
@@ -37,14 +35,17 @@ class PttLook {
   /// En espera: sin barrido y con marcas tenues.
   final bool waiting;
 
+  /// Nivel real de la voz propia, de 0 a 1.
+  final double level;
+
   /// Escala de la voz propia (0,7 con micrófono abierto).
   final double levelScale;
 
   /// Color de quien habla, si alguien habla.
   final Color? rxColor;
 
-  /// Semilla de la voz de quien habla.
-  final int rxSeed;
+  /// Nivel real de la voz de quien habla, de 0 a 1.
+  final double rxLevel;
 
   /// Transmite y no está en espera.
   bool get transmitting => onAir && !waiting;
@@ -57,12 +58,14 @@ class PttLook {
       other is PttLook &&
       other.onAir == onAir &&
       other.waiting == waiting &&
+      other.level == level &&
       other.levelScale == levelScale &&
       other.rxColor == rxColor &&
-      other.rxSeed == rxSeed;
+      other.rxLevel == rxLevel;
 
   @override
-  int get hashCode => Object.hash(onAir, waiting, levelScale, rxColor, rxSeed);
+  int get hashCode =>
+      Object.hash(onAir, waiting, level, levelScale, rxColor, rxLevel);
 }
 
 /// Onda que sale del núcleo en el segundo [start].
@@ -105,8 +108,9 @@ class PttMotion {
   /// Ondas en viaje.
   List<PttRipple> get ripples => List.unmodifiable(_ripples);
 
-  /// Avanza al segundo [t] con el aspecto [look]; [glow] es el color de las
-  /// ondas propias y [dayK] refuerza su opacidad de día.
+  /// Avanza al segundo [t] con el aspecto [look]: los niveles siguen los de
+  /// [look] con su resorte, o tal cual y sin ondas con [reduced]. [glow] es
+  /// el color de las ondas propias y [dayK] refuerza su opacidad de día.
   void advance(
     double t,
     PttLook look, {
@@ -115,17 +119,17 @@ class PttMotion {
     bool reduced = false,
   }) {
     final dt = _elapse(t);
+    final target = look.transmitting
+        ? math.max(0.12, look.level * look.levelScale)
+        : 0.0;
+    final rxTarget = look.receiving ? look.rxLevel : 0.0;
     if (reduced) {
-      _level = look.transmitting ? pttReducedLevel : 0;
-      _rxLevel = look.receiving ? pttReducedLevel : 0;
+      _level = target;
+      _rxLevel = rxTarget;
       _ripples.clear();
       return;
     }
-    final target = look.transmitting
-        ? math.max(0.12, frVoice(t, 1) * look.levelScale)
-        : 0.0;
     _level = _ease(_level, target, target > _level ? 0.35 : 0.12, dt);
-    final rxTarget = look.receiving ? frVoice(t, look.rxSeed) : 0.0;
     _rxLevel = _ease(_rxLevel, rxTarget, 0.25, dt);
     _ripples.removeWhere((r) => t - r.start >= PttRipple.lifetime);
     _emit(t, look, glow: glow, dayK: dayK);

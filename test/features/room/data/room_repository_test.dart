@@ -515,7 +515,9 @@ void main() {
       },
     );
 
-    test('AC3: client receives RoomNote from welcome message when joining room', () async {
+    test(
+      'AC3: client receives RoomNote from welcome message when joining room',
+      () async {
         const expectedNote = RoomNote(semitone: 16);
         final createResult = await hostRepository.createRoom(
           name: 'Sala con Nota',
@@ -538,7 +540,9 @@ void main() {
       },
     );
 
-    test('AC4: host passes RoomNote on createRoom and signaling server conveys it', () async {
+    test(
+      'AC4: host passes RoomNote on createRoom and signaling server conveys it',
+      () async {
         const hostNote = RoomNote(semitone: 21);
         final createResult = await hostRepository.createRoom(
           name: 'Sala Nota Host',
