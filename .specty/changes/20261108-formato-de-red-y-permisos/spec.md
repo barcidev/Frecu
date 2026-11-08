@@ -33,7 +33,7 @@ Pasar `dart format` a los cuatro archivos de red y permisos que quedan de P99, p
 
 ## Tareas
 
-- [ ] T1: Pasar `dart format` a los archivos de red y permisos
+- [x] T1: Pasar `dart format` a los archivos de red y permisos
   - files: lib/features/network/domain/entities/network_state.dart, lib/features/permissions/data/repositories/permission_repository_impl.dart, test/features/permissions/data/permission_datasource_test.dart, test/features/permissions/data/permission_repository_impl_test.dart
   - ac: AC1
   - verify: dart format --output=none --set-exit-if-changed lib/features/network/domain/entities/network_state.dart lib/features/permissions/data/repositories/permission_repository_impl.dart test/features/permissions/data/permission_datasource_test.dart test/features/permissions/data/permission_repository_impl_test.dart && flutter analyze && flutter test

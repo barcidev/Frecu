@@ -44,42 +44,51 @@ void main() {
       verify(() => mockDataSource.request(Permission.camera)).called(1);
     });
 
-    test('AC2: checkStatus returns Failure.unexpected when datasource throws', () async {
-      when(() => mockDataSource.getStatus(any()))
-          .thenThrow(Exception('platform error'));
+    test(
+      'AC2: checkStatus returns Failure.unexpected when datasource throws',
+      () async {
+        when(() => mockDataSource.getStatus(any()))
+            .thenThrow(Exception('platform error'));
 
-      final result = await repository.checkStatus(AppPermission.microphone);
+        final result = await repository.checkStatus(AppPermission.microphone);
 
-      expect(result.isFailure, isTrue);
-      expect(result.failureOrNull, isA<Failure>());
-    });
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<Failure>());
+      },
+    );
 
-    test('AC2: request returns Failure.unexpected when datasource throws', () async {
-      when(() => mockDataSource.request(any()))
-          .thenThrow(Exception('platform error'));
+    test(
+      'AC2: request returns Failure.unexpected when datasource throws',
+      () async {
+        when(() => mockDataSource.request(any()))
+            .thenThrow(Exception('platform error'));
 
-      final result = await repository.request(AppPermission.notification);
+        final result = await repository.request(AppPermission.notification);
 
-      expect(result.isFailure, isTrue);
-      expect(result.failureOrNull, isA<Failure>());
-    });
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<Failure>());
+      },
+    );
 
-    test('AC3: requestAll requests each permission and returns mapped status map', () async {
-      when(() => mockDataSource.request(Permission.microphone))
-          .thenAnswer((_) async => PermissionStatus.granted);
-      when(() => mockDataSource.request(Permission.bluetoothConnect))
-          .thenAnswer((_) async => PermissionStatus.denied);
+    test(
+      'AC3: requestAll requests each permission and returns mapped status map',
+      () async {
+        when(() => mockDataSource.request(Permission.microphone))
+            .thenAnswer((_) async => PermissionStatus.granted);
+        when(() => mockDataSource.request(Permission.bluetoothConnect))
+            .thenAnswer((_) async => PermissionStatus.denied);
 
-      final result = await repository.requestAll([
-        AppPermission.microphone,
-        AppPermission.bluetoothConnect,
-      ]);
+        final result = await repository.requestAll([
+          AppPermission.microphone,
+          AppPermission.bluetoothConnect,
+        ]);
 
-      expect(result.isSuccess, isTrue);
-      final map = result.dataOrNull!;
-      expect(map[AppPermission.microphone], AppPermissionStatus.granted);
-      expect(map[AppPermission.bluetoothConnect], AppPermissionStatus.denied);
-    });
+        expect(result.isSuccess, isTrue);
+        final map = result.dataOrNull!;
+        expect(map[AppPermission.microphone], AppPermissionStatus.granted);
+        expect(map[AppPermission.bluetoothConnect], AppPermissionStatus.denied);
+      },
+    );
 
     test('AC3: requestAll returns failure when an exception occurs', () async {
       when(() => mockDataSource.request(any()))
@@ -90,13 +99,16 @@ void main() {
       expect(result.isFailure, isTrue);
     });
 
-    test('AC4: openAppSettings delegates to datasource and returns bool result', () async {
-      when(() => mockDataSource.openSettings()).thenAnswer((_) async => true);
+    test(
+      'AC4: openAppSettings delegates to datasource and returns bool result',
+      () async {
+        when(() => mockDataSource.openSettings()).thenAnswer((_) async => true);
 
-      final result = await repository.openAppSettings();
+        final result = await repository.openAppSettings();
 
-      expect(result, isTrue);
-      verify(() => mockDataSource.openSettings()).called(1);
-    });
+        expect(result, isTrue);
+        verify(() => mockDataSource.openSettings()).called(1);
+      },
+    );
   });
 }

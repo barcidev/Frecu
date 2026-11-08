@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261108-formato-de-red-y-permisos",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/formato-de-red-y-permisos",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:68724b6cea09f97e5a9630c61223f975cd0349c4e7307652603d93e140e28b1b",
+    "at": "2026-11-08T01:53:30.918Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 6,
@@ -21,7 +28,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 2,
+      "baseCommit": "248093e94d3981996b3f906ed764448b156eb5fe",
+      "startedAt": "2026-11-08T01:53:31.977Z",
+      "doneAt": "2026-11-08T01:57:34.371Z",
+      "summary": "dart format en network_state.dart, permission_repository_impl.dart y las dos pruebas de permisos: solo saltos de línea y comas finales, sin tocar aserciones"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -30,12 +47,5 @@
     "A": 1,
     "AC": 1,
     "T": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:68724b6cea09f97e5a9630c61223f975cd0349c4e7307652603d93e140e28b1b",
-    "at": "2026-11-08T01:53:30.918Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
