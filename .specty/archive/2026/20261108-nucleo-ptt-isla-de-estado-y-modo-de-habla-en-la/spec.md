@@ -97,3 +97,39 @@ Referencia: `drawPtt` y `voice` de `engine.js`; `pttZone`, `PTT_COPY`, `pttState
 - R1: Un ticker más (el núcleo) junto a la malla y sus firmas en un Android de gama media (A1 de la épica) — mitigación: `RepaintBoundary` en el pintor, un solo `FrLoop` y el perfilado pendiente de P33.
 - R2: C19 rehace la cabecera y la fila de controles — mitigación: el núcleo, la isla y el aviso quedan en widgets separados y la fila deja el sitio de la pastilla de ruta.
 - R3: C16 y C17 tocan `lib/i18n` en paralelo — mitigación: las claves nuevas van dentro de `room.talk` y, si hay conflicto en los generados, se regeneran con `dart run slang`.
+
+## Cierre
+
+### Resumen
+
+- `room_talk.dart`: `RoomTalk.from` arma el estado de habla (enlace, modo, si transmite, quién habla, n y anfitrión solo) con los nodos de la malla; `pttPhase` e `islandPhase` dan las fases por prioridad y `formatOnAir` el «mm:ss». `RoomStatusIsland` pinta la `StatusIsland` de cada fase con n/6 y el color de quien habla en la paleta de noche (P75).
+- `ptt_core.dart` y `ptt_core_painter.dart`: `PttCore` (zona de 248 con botón de 156) con presión de varios dedos (`startTalking`/`stopTalking` una vez), conmutador con micrófono abierto, espera al 35 % que corta la transmisión si había un dedo, tiempo al aire, textos e íconos `FrIcons`, escala 0,94 con resorte `organic` y háptica; `PttCorePainter` y `PttMotion` dibujan ondas, bisel de 72 marcas como VU y anillo líquido como `drawPtt`, quietos con movimiento reducido.
+- `OnAirClock` (`voice_provider.dart`) cuenta los segundos al aire en PTT.
+- `MicControlSection`: `FrSegmented` PTT | Abierto (`FrIcons.walkie`/`openMic`, sin respuesta en espera) y el núcleo; `EchoNotice`: aviso ámbar de eco con micrófono abierto y altavoz, que se cierra y vuelve.
+- `RoomPage`: isla arriba, cabecera, malla con el aviso encima y controles abajo; al entrar aplica el modo por defecto de Ajustes si es distinto del actual, sin abrir el micrófono (P79).
+- Textos `room.talk.*` en es y en.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (505 pruebas).
+
+### Desviaciones
+
+- Para quedar en talla L, la isla vive en `room_talk.dart` junto al modelo (no en `room_status_island.dart`) y `PttButton` con su prueba no se borran: dejan de usarse y quedan como pendiente.
+- `invite_qr_dialog_test.dart` además comprueba que se ve el núcleo y que se aplicó el modo por defecto, para fallar sin el código en la fase de tests.
+- `RoomPage` aplica el modo por defecto dentro de un `try`: si falla, se registra y la frecu sigue (pruebas de `lobby` con dobles sin respuesta para `setTalkMode`).
+- `voice_provider.dart` importa `flutter_riverpod` para usar `select` en el reloj.
+
+### Decisiones
+
+- Elegir «Abierto» solo cambia el modo; el micrófono queda en «Silencio» hasta tocar el núcleo (A1).
+- El modo por defecto se compara con el modo de `VoiceState` y solo se aplica si es distinto (A2).
+- Mientras hay un dedo apoyado el núcleo se ve al aire aunque el repositorio aún no lo confirme; la isla espera a `isTalking`.
+- El `PttCore` conserva el botón con una `GlobalKey` al pasar de presión a conmutador o espera, así sus transiciones no se cortan.
+- Las claves `ptt_button`, `mic_toggle_button`, `mode_ptt` y `mode_open_mic` se mantienen para las pruebas de voz existentes.
+
+### Pendientes
+
+- Borrar `PttButton` (`ptt_button.dart`) y `test/features/room/presentation/widgets/ptt_button_test.dart`.
+- Eventos pasajeros de la isla (se unió, salió, audio por…, conexión recuperada) y cuenta atrás de la reconexión: `RoomStatus.reconnecting` no trae segundos.
+- Hablar con el botón de volumen y el nivel real de voz por estadísticas de WebRTC.
+- C19: la pastilla de ruta a la izquierda del selector en la fila de controles.
+- `FrBanner` solo acepta `IconData`: el aviso de eco usa `Icons.headphones_rounded` en lugar de `FrIcons.headset`.
+- Perfilar el núcleo junto a la malla en un Android de gama media (P33).

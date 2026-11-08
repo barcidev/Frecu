@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "id": "20261108-nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/nucleo-ptt-isla-de-estado-y-modo-de-habla-en-la",
+  "baseCommit": "4de99c3152ed65894e94ae113ffc8734a0bb65fe",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:58f2f4a6f733ef08ac542abe6e5335c184c81bf88fc857a824007e2f9f899e52",
+    "at": "2026-11-08T00:27:20.985Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 15,
+    "adjust": 0,
+    "reasons": [
+      "13 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:0cdd9403e702c11f89814d62afc24f0d3691dd50382026da4da797ac9ffb3b52",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:129aa9d21db509c91da78542c6fd007d49f86ed07a91097827d73b1cb1550dab",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:a5c58f66e92120a6d6efe112d3adbed191aec0b2275024c46704fe40b3a1dca5",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:43cba24a99ae203b7db6a5fd9a4bae91f50aa3a7a57aeb2c08c8bfbff068e542",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:6a970839d2a52b0068a9f36892b6e24671127c1d08ca9f090d0fa456d206b3dd",
+      "decision": "implicit"
+    },
+    "A6": {
+      "hash": "sha256:3e1fa696df0c5251e5000c5f80c775494e21247ebcbffc1b78dbf3785399afaa",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "7abe2f862bde6ec8849dcbc6df652c2d6f8846d7",
+      "attempts": 1,
+      "startedAt": "2026-11-08T00:42:32.808Z",
+      "doneAt": "2026-11-08T00:43:11.182Z",
+      "summary": "RoomTalk (fases del núcleo y de la isla, quién habla, n, anfitrión solo, formato del tiempo al aire) y RoomStatusIsland con StatusIsland y textos room.talk en es/en",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "7a3f96204a863cca3e1d5383c38e4ffeabc8a135",
+      "attempts": 1,
+      "startedAt": "2026-11-08T00:43:11.842Z",
+      "doneAt": "2026-11-08T00:44:43.788Z",
+      "summary": "PttCore (presión con varios dedos, conmutador de micrófono abierto, espera al 35 %, tiempo al aire, textos e íconos FrIcons, escala 0,94 con resorte y háptica) y PttCorePainter/PttMotion (ondas, bisel de 72 marcas como VU y anillo líquido, quieto con movimiento reducido)",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "788a5c757562388b5a1e3fd4d6d7cf12715bd98a",
+      "attempts": 1,
+      "startedAt": "2026-11-08T00:44:44.301Z",
+      "doneAt": "2026-11-08T00:45:54.443Z",
+      "summary": "RoomPage con la isla arriba (reloj OnAirClock al aire), los lugares de la malla para el color de quien habla, el aviso de eco sobre la malla y el modo de habla por defecto de Ajustes al entrar; MicControlSection con FrSegmented PTT | Abierto (FrIcons) y PttCore",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 6,
+    "AC": 8,
+    "T": 3,
+    "R": 3
+  },
+  "closingSubmittedAt": "2026-11-08T00:46:55.418Z",
+  "lockedTests": {
+    "test/features/room/presentation/invite_qr_dialog_test.dart": "sha256:9a613fc2dd186194ac73dacf2f5aa62b3236956f3137b6964659ff77d0c4e4c8",
+    "test/features/room/presentation/voice_flow_test.dart": "sha256:c13f003dbaf2432436cdcaba6ed227f2fadd37c0bcc6c316ce8a3f883b1a1e8d",
+    "test/features/room/presentation/ptt_core_test.dart": "sha256:704a8bbc88d28f018109764b3dc80981bed0f90b95a0f98db407643c63bb77f9",
+    "test/features/room/presentation/room_talk_test.dart": "sha256:20847143ad67df8d4f9ac7c884509fa71f1f0809eaa2c39c6faf5c8aa58f1598",
+    "test/features/room/presentation/talk_flow_test.dart": "sha256:0dad50723e4307603975e8c7ddcc4bd5fb81a1ecc285a51083e0611ac1e6817c"
+  },
+  "integration": {
+    "target": "develop",
+    "commit": "d29d860ee4147358c821d1a4dfe36630cc253bcc",
+    "reason": "conflicts",
+    "conflicts": [
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_es.g.dart"
+    ],
+    "paths": [
+      "lib/features/lobby/presentation/pages/create_room_page.dart",
+      "lib/features/lobby/presentation/pages/lobby_page.dart",
+      "lib/features/lobby/presentation/pages/scan_qr_page.dart",
+      "lib/features/lobby/presentation/providers/new_room_provider.dart",
+      "lib/features/lobby/presentation/providers/new_room_provider.g.dart",
+      "lib/features/lobby/presentation/widgets/create_room_layout.dart",
+      "lib/features/lobby/presentation/widgets/fifths_clock.dart",
+      "lib/features/lobby/presentation/widgets/hotspot_guide_step.dart",
+      "lib/features/lobby/presentation/widgets/hotspot_illustration.dart",
+      "lib/features/lobby/presentation/widgets/ip_join_sheet.dart",
+      "lib/features/lobby/presentation/widgets/new_room_step.dart",
+      "lib/features/lobby/presentation/widgets/pin_join_sheet.dart",
+      "lib/features/lobby/presentation/widgets/room_note_label.dart",
+      "lib/features/lobby/presentation/widgets/scan_reticle.dart",
+      "lib/features/room/presentation/pages/room_page.dart",
+      "lib/features/room/presentation/providers/voice_provider.dart",
+      "lib/features/room/presentation/providers/voice_provider.g.dart",
+      "lib/features/room/presentation/widgets/mic_control_section.dart",
+      "lib/features/room/presentation/widgets/ptt_core.dart",
+      "lib/features/room/presentation/widgets/ptt_core_painter.dart",
+      "lib/features/room/presentation/widgets/room_talk.dart",
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings.i18n.json",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_en.i18n.json",
+      "lib/i18n/strings_es.g.dart",
+      "test/features/lobby/presentation/discovery_flow_test.dart",
+      "test/features/lobby/presentation/fifths_clock_test.dart",
+      "test/features/lobby/presentation/hotspot_guide_test.dart",
+      "test/features/lobby/presentation/join_sheets_test.dart",
+      "test/features/lobby/presentation/lobby_page_test.dart",
+      "test/features/lobby/presentation/new_room_test.dart",
+      "test/features/lobby/presentation/room_full_flow_test.dart",
+      "test/features/lobby/presentation/room_note_flow_test.dart",
+      "test/features/lobby/presentation/saved_name_test.dart",
+      "test/features/lobby/presentation/scan_qr_page_test.dart",
+      "test/features/room/presentation/invite_qr_dialog_test.dart",
+      "test/features/room/presentation/ptt_core_test.dart",
+      "test/features/room/presentation/room_flow_test.dart",
+      "test/features/room/presentation/room_talk_test.dart",
+      "test/features/room/presentation/talk_flow_test.dart",
+      "test/features/room/presentation/voice_flow_test.dart"
+    ],
+    "at": "2026-11-08T00:47:19.884Z",
+    "resolved": {
+      "commit": "a1415d6",
+      "at": "2026-11-08T00:58:33.185Z"
+    }
+  }
+}
