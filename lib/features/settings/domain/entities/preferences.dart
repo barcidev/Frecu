@@ -1,4 +1,5 @@
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -17,6 +18,9 @@ sealed class Preferences with _$Preferences {
 
     /// Modo de habla con el que se entra a una frecu.
     @Default(TalkMode.pushToTalk) TalkMode defaultTalkMode,
+
+    /// Idioma de la app: Auto (sigue al teléfono), español o inglés.
+    @Default(LocalePreference.auto) LocalePreference localePreference,
   }) = _Preferences;
 
   /// Largo máximo del nombre visible, en caracteres.

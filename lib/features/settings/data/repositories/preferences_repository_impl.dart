@@ -2,6 +2,7 @@ import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 import 'package:frecu/features/settings/domain/repositories/preferences_repository.dart';
@@ -25,6 +26,9 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   /// Clave del modo de habla por defecto.
   static const defaultTalkModeKey = 'settings.defaultTalkMode';
 
+  /// Clave del idioma de la app.
+  static const localePreferenceKey = 'settings.localePreference';
+
   final SharedPreferencesAsync _storage;
 
   @override
@@ -33,6 +37,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
       final displayName = await _storage.getString(displayNameKey);
       final theme = await _storage.getString(themePreferenceKey);
       final talkMode = await _storage.getString(defaultTalkModeKey);
+      final locale = await _storage.getString(localePreferenceKey);
       const defaults = Preferences();
       return Result.success(
         Preferences(
@@ -44,6 +49,9 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
               defaults.themePreference,
           defaultTalkMode:
               TalkMode.values.asNameMap()[talkMode] ?? defaults.defaultTalkMode,
+          localePreference:
+              LocalePreference.values.asNameMap()[locale] ??
+              defaults.localePreference,
         ),
       );
     } on Object catch (e, st) {
@@ -76,6 +84,11 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   @override
   Future<Result<void>> saveDefaultTalkMode(TalkMode talkMode) =>
       _save(defaultTalkModeKey, talkMode.name);
+
+  @override
+  Future<Result<void>> saveLocalePreference(
+    LocalePreference localePreference,
+  ) => _save(localePreferenceKey, localePreference.name);
 
   Future<Result<void>> _save(String key, String value) async {
     try {

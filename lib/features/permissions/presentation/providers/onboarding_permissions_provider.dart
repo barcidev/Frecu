@@ -85,17 +85,24 @@ class OnboardingPermissions extends _$OnboardingPermissions {
 
   /// Pide uno por uno los permisos que faltan; cada fila cambia en cuanto
   /// llega su resultado.
-  Future<void> requestMissing() async {
+  ///
+  /// Devuelve si alguno quedó negado para siempre (`permanentlyDenied`), que
+  /// ya solo se concede desde los ajustes de la app.
+  Future<bool> requestMissing() async {
     final current = await future;
-    if (!ref.mounted || current.requesting) return;
+    if (!ref.mounted || current.requesting) return false;
     state = AsyncData(current.copyWith(requesting: true));
+    var permanentlyDenied = false;
     for (final permission in onboardingPermissions) {
       if (_current.stateOf(permission) == PermissionState.granted) continue;
       final result = await ref
           .read(permissionRepositoryProvider)
           .request(permission);
-      if (!ref.mounted) return;
+      if (!ref.mounted) return false;
       final status = result.dataOrNull;
+      if (status == AppPermissionStatus.permanentlyDenied) {
+        permanentlyDenied = true;
+      }
       _set(
         permission,
         status != null && _isGranted(status)
@@ -104,6 +111,17 @@ class OnboardingPermissions extends _$OnboardingPermissions {
       );
     }
     state = AsyncData(_current.copyWith(requesting: false, requested: true));
+    return permanentlyDenied;
+  }
+
+  /// Desde Ajustes: pide los que faltan y abre los ajustes de la app si
+  /// alguno quedó negado para siempre, o si ya estaban todos concedidos y no
+  /// queda nada que pedir.
+  Future<void> requestOrOpenSettings() async {
+    final current = await future;
+    if (!ref.mounted || current.requesting) return;
+    final open = current.allGranted || await requestMissing();
+    if (open && ref.mounted) await openSettings();
   }
 
   /// Vuelve a leer los estados, p. ej. al volver de los ajustes del teléfono;

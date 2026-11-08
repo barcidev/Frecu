@@ -17,7 +17,8 @@ mixin _$Preferences {
 /// Nombre visible en las frecus; nulo si aún no se pidió.
  String? get displayName;/// Tema de la app: Auto (sigue al sistema), Claro u Oscuro.
  ThemePreference get themePreference;/// Modo de habla con el que se entra a una frecu.
- TalkMode get defaultTalkMode;
+ TalkMode get defaultTalkMode;/// Idioma de la app: Auto (sigue al teléfono), español o inglés.
+ LocalePreference get localePreference;
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $PreferencesCopyWith<Preferences> get copyWith => _$PreferencesCopyWithImpl<Pref
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode)&&(identical(other.localePreference, localePreference) || other.localePreference == localePreference));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode);
+int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode,localePreference);
 
 @override
 String toString() {
-  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode)';
+  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode, localePreference: $localePreference)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $PreferencesCopyWith<$Res>  {
   factory $PreferencesCopyWith(Preferences value, $Res Function(Preferences) _then) = _$PreferencesCopyWithImpl;
 @useResult
 $Res call({
- String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode
+ String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode, LocalePreference localePreference
 });
 
 
@@ -65,12 +66,13 @@ class _$PreferencesCopyWithImpl<$Res>
 
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,Object? localePreference = null,}) {
   return _then(_self.copyWith(
 displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,themePreference: null == themePreference ? _self.themePreference : themePreference // ignore: cast_nullable_to_non_nullable
 as ThemePreference,defaultTalkMode: null == defaultTalkMode ? _self.defaultTalkMode : defaultTalkMode // ignore: cast_nullable_to_non_nullable
-as TalkMode,
+as TalkMode,localePreference: null == localePreference ? _self.localePreference : localePreference // ignore: cast_nullable_to_non_nullable
+as LocalePreference,
   ));
 }
 
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Preferences() when $default != null:
-return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode);case _:
+return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode);c
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference)  $default,) {final _that = this;
 switch (_that) {
 case _Preferences():
-return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode);}
+return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -190,10 +192,10 @@ return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference)?  $default,) {final _that = this;
 switch (_that) {
 case _Preferences() when $default != null:
-return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode);case _:
+return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference);case _:
   return null;
 
 }
@@ -205,7 +207,7 @@ return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode);c
 
 
 class _Preferences implements Preferences {
-  const _Preferences({this.displayName, this.themePreference = ThemePreference.auto, this.defaultTalkMode = TalkMode.pushToTalk});
+  const _Preferences({this.displayName, this.themePreference = ThemePreference.auto, this.defaultTalkMode = TalkMode.pushToTalk, this.localePreference = LocalePreference.auto});
   
 
 /// Nombre visible en las frecus; nulo si aún no se pidió.
@@ -214,6 +216,8 @@ class _Preferences implements Preferences {
 @override@JsonKey() final  ThemePreference themePreference;
 /// Modo de habla con el que se entra a una frecu.
 @override@JsonKey() final  TalkMode defaultTalkMode;
+/// Idioma de la app: Auto (sigue al teléfono), español o inglés.
+@override@JsonKey() final  LocalePreference localePreference;
 
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
@@ -225,16 +229,16 @@ _$PreferencesCopyWith<_Preferences> get copyWith => __$PreferencesCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode)&&(identical(other.localePreference, localePreference) || other.localePreference == localePreference));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode);
+int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode,localePreference);
 
 @override
 String toString() {
-  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode)';
+  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode, localePreference: $localePreference)';
 }
 
 
@@ -245,7 +249,7 @@ abstract mixin class _$PreferencesCopyWith<$Res> implements $PreferencesCopyWith
   factory _$PreferencesCopyWith(_Preferences value, $Res Function(_Preferences) _then) = __$PreferencesCopyWithImpl;
 @override @useResult
 $Res call({
- String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode
+ String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode, LocalePreference localePreference
 });
 
 
@@ -262,12 +266,13 @@ class __$PreferencesCopyWithImpl<$Res>
 
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,Object? localePreference = null,}) {
   return _then(_Preferences(
 displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,themePreference: null == themePreference ? _self.themePreference : themePreference // ignore: cast_nullable_to_non_nullable
 as ThemePreference,defaultTalkMode: null == defaultTalkMode ? _self.defaultTalkMode : defaultTalkMode // ignore: cast_nullable_to_non_nullable
-as TalkMode,
+as TalkMode,localePreference: null == localePreference ? _self.localePreference : localePreference // ignore: cast_nullable_to_non_nullable
+as LocalePreference,
   ));
 }
 

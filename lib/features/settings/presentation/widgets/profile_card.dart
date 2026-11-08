@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/motion/fr_noise.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/signal_signature.dart';
@@ -76,9 +77,9 @@ class ProfileCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        FrButton(
+        FrButton.drawn(
           label: t.settings.edit,
-          icon: Icons.edit_outlined,
+          icon: FrIcons.edit,
           variant: FrButtonVariant.secondary,
           size: FrButtonSize.small,
           onPressed: onEdit,

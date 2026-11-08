@@ -180,6 +180,10 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override String get defaultTalkMode => 'Default talk mode';
 	@override String get defaultTalkModeHelp => 'Applies every time you join a frecu.';
 	@override late final _Translations$settings$talkMode$en talkMode = _Translations$settings$talkMode$en._(_root);
+	@override String get general => 'General';
+	@override late final _Translations$settings$language$en language = _Translations$settings$language$en._(_root);
+	@override late final _Translations$settings$permissions$en permissions = _Translations$settings$permissions$en._(_root);
+	@override String get hotspotGuide => 'Hotspot guide';
 	@override String get appearance => 'Appearance';
 	@override String get theme => 'Theme';
 	@override String get themeHelp => 'Auto follows your phone';
@@ -440,6 +444,34 @@ class _Translations$settings$talkMode$en extends Translations$settings$talkMode$
 	// Translations
 	@override String get pushToTalk => 'PTT';
 	@override String get openMic => 'Open';
+}
+
+// Path: settings.language
+class _Translations$settings$language$en extends Translations$settings$language$es {
+	_Translations$settings$language$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Language';
+	@override String get message => 'Auto uses your phone\'s language.';
+	@override String get auto => 'Auto';
+	@override String get autoHelp => 'Follows your phone';
+	@override String autoValue({required Object language}) => 'Auto · ${language}';
+	@override String get es => 'Español';
+	@override String get en => 'English';
+}
+
+// Path: settings.permissions
+class _Translations$settings$permissions$en extends Translations$settings$permissions$es {
+	_Translations$settings$permissions$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Permissions';
+	@override String get subtitle => 'Microphone, local network, notifications';
+	@override String count({required Object granted, required Object total}) => '${granted}/${total}';
 }
 
 // Path: settings.themeMode
@@ -955,6 +987,18 @@ extension on TranslationsEn {
 			'settings.defaultTalkModeHelp' => 'Applies every time you join a frecu.',
 			'settings.talkMode.pushToTalk' => 'PTT',
 			'settings.talkMode.openMic' => 'Open',
+			'settings.general' => 'General',
+			'settings.language.title' => 'Language',
+			'settings.language.message' => 'Auto uses your phone\'s language.',
+			'settings.language.auto' => 'Auto',
+			'settings.language.autoHelp' => 'Follows your phone',
+			'settings.language.autoValue' => ({required Object language}) => 'Auto · ${language}',
+			'settings.language.es' => 'Español',
+			'settings.language.en' => 'English',
+			'settings.permissions.title' => 'Permissions',
+			'settings.permissions.subtitle' => 'Microphone, local network, notifications',
+			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
+			'settings.hotspotGuide' => 'Hotspot guide',
 			'settings.appearance' => 'Appearance',
 			'settings.theme' => 'Theme',
 			'settings.themeHelp' => 'Auto follows your phone',

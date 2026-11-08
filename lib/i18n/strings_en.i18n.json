@@ -281,6 +281,22 @@
       "pushToTalk": "PTT",
       "openMic": "Open"
     },
+    "general": "General",
+    "language": {
+      "title": "Language",
+      "message": "Auto uses your phone's language.",
+      "auto": "Auto",
+      "autoHelp": "Follows your phone",
+      "autoValue": "Auto · $language",
+      "es": "Español",
+      "en": "English"
+    },
+    "permissions": {
+      "title": "Permissions",
+      "subtitle": "Microphone, local network, notifications",
+      "count": "$granted/$total"
+    },
+    "hotspotGuide": "Hotspot guide",
     "appearance": "Appearance",
     "theme": "Theme",
     "themeHelp": "Auto follows your phone",

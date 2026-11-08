@@ -1,5 +1,6 @@
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
 
@@ -20,4 +21,7 @@ abstract interface class PreferencesRepository {
 
   /// Guarda el modo de habla por defecto.
   Future<Result<void>> saveDefaultTalkMode(TalkMode talkMode);
+
+  /// Guarda el idioma de la app.
+  Future<Result<void>> saveLocalePreference(LocalePreference localePreference);
 }
