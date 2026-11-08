@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-inicio-con-sintonizador-de-dos-octavas-y-lista",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/inicio-con-sintonizador-de-dos-octavas-y-lista",
   "baseCommit": "15711466d5b954b56999789a29a09f6bc3e0ae71",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:1b08baaf0f94a0480fd2396c9fb5241763a195022140a6dc04abe2caebdb8da3",
@@ -79,12 +79,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "ba932747c49563e12f00d517dad41d018f0476fe",
+      "attempts": 1,
       "startedAt": "2026-11-07T23:57:43.926Z",
       "doneAt": "2026-11-07T23:58:41.803Z",
-      "summary": "Quitados lobby.noRoomsNearby y lobby.yourName de es/en y regenerado slang; las pruebas existentes ya abren el inicio nuevo con movimiento reducido."
+      "summary": "Quitados lobby.noRoomsNearby y lobby.yourName de es/en y regenerado slang; las pruebas existentes ya abren el inicio nuevo con movimiento reducido.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -98,6 +98,7 @@
     "R": 3,
     "S": 3
   },
+  "closingSubmittedAt": "2026-11-07T23:59:21.710Z",
   "lockedTests": {
     "test/app/saved_theme_test.dart": "sha256:0acdc0d97581504236b6dba0ed44620b754df76104c1eceb043b8e47a6d02da9",
     "test/app/theme/app_theme_test.dart": "sha256:177890c6a7e3620de65bc640e8abe3a0185939a302b0b95e4ddfd4e8506cc08e",

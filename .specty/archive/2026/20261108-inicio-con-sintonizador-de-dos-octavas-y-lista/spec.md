@@ -101,3 +101,36 @@ Referencia: `V.lobby` de `screens.js`; `drawTuner`, `keyX`, `WHITE`, `drawSpark`
 - R1: El sintonizador repinta a 60 fps con ruido, picos y texto — mitigación: un solo `FrLoop` en un `RepaintBoundary`, los `TextPainter` de etiquetas fijas se preparan una vez por tamaño e idioma, y con movimiento reducido no pinta cuadros.
 - R2: C4 también cambia `room_flow_test`, `voice_flow_test` y los `.g.dart` de slang — mitigación: los cambios de estas pruebas van en líneas que C4 no toca (A7), los textos van dentro de `lobby` y, si al cerrar chocan los generados, se regeneran con `dart run slang`.
 - R3: En un teléfono de 360 px la píldora con una IP larga empuja la marca y Ajustes — mitigación: la píldora va en un `Flexible` con `FittedBox` que la encoge.
+
+## Cierre
+
+### Resumen
+
+- `LobbyPage` en Portadora (`FrScaffold`): cabecera con la marca («frecu» y su firma), la píldora de red (`Buscando red` ocupada, `Red · <IP>`, `Sin red local` en alerta) y Ajustes; «Frecus cercanas», «Elige tu frecu» y el número en dos cifras; el sintonizador; la lista de `NearbyRoomTile`, la búsqueda vacía con la onda o el aviso sin red; y el dock con Crear frecu, Escanear y Conectar por IP. Tocar una frecu la elige y abre el diálogo de código de hoy; la elección se olvida si la frecu sale de la lista.
+- `LobbyTuner`: teclado Do4–Si5, piso de ruido, un pico por nota que nace con el resorte del prototipo y la aguja con resorte (rigidez 90, amortiguación 16) hacia la elegida o en barrido, con la lectura de la nota más cercana; con movimiento reducido queda quieto y no pide cuadros. Funciones puras `tunerKeyX`, `tunerNearestSemitone`, `tunerSweep` y `TunerNeedle`.
+- `RoomNoteLabels` (`localizedName`, `label`, `hzText`) y `RoomNoteText` con el nombre, la alteración y la octava como textos separados.
+- Textos de `lobby` nuevos en `es` y `en` (nombres de las notas incluidos); `scanQr` pasa a «Escanear» y `joinRoom` a «Conectar por IP»; se quitan `noRoomsNearby` y `yourName`.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (415 pruebas), 21 de ellas en `lobby_page_test.dart`.
+
+### Desviaciones
+
+- S1, S2: el sintonizador se repartió en `lobby_tuner.dart` (widget), `lobby_tuner_painter.dart` (pintor y estado entre cuadros) y `tuner_keyboard.dart` (teclado y aguja, reexportado desde `lobby_tuner.dart`) por el límite de 500 líneas.
+- S3: la cabecera, el encabezado, la búsqueda vacía, el aviso sin red y el dock van en `widgets/lobby_sections.dart` por el mismo límite.
+- `nearby_room_tile.dart` entró en el alcance de T1 porque `lobby_page_test.dart`, que verifica T1, lo importa.
+- `lobby.noRoomsNearby` y `lobby.yourName` siguieron hasta T3 para que el inicio de antes compilara durante T1.
+- `room_full_flow_test` además toca la frecu llena por su `NearbyRoomTile` (no solo pasa a movimiento reducido): `specty propose` pide que cada prueba enviada falle sin el código. `discovery_flow_test` sustituye la red por un doble con Wi-Fi para no depender de las interfaces de la máquina.
+- Los botones del dock se encogen (`FittedBox`) si no caben, en lugar de desbordarse: con la fuente de pruebas a 390 px y en teléfonos de 360 px «Crear frecu» y «Escanear» no caben (amplía R3).
+
+### Decisiones
+
+- Textos en inglés: «Pick your room», «Checking network», «Network · $ip», «No local network», «Scanning · _frecu._tcp», «Search paused», «$n signal(s)», «No signals yet», «Join the host's Wi-Fi or ask them to show you their QR.», «Still searching», «You're not on any Wi-Fi network.», «Join the host's hotspot to find rooms.»; las notas en inglés son C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B, con las mismas alteraciones que `RoomNote`.
+- La línea y la punta de la aguja van en `signalFg` (trazo) y su brillo en `signal`; los lavados (pico, estela) multiplican su alfa por `washK` con tope 1.
+- Los picos de las notas que ya estaban al montar el sintonizador nacen crecidos; los que llegan después nacen con el resorte en el primer cuadro que los pinta.
+- Las pruebas buscan sin distinguir mayúsculas los textos que el estilo pone en mayúsculas (píldora, etiquetas, Hz).
+
+### Pendientes
+
+- Acción «Abrir ajustes de Wi-Fi» del aviso sin red (necesita un plugin).
+- Unificar `lobby.noteNames` con `room.noteNames` de C4 cuando llegue a develop.
+- Entrada escalonada de las tarjetas (`rise`) y transiciones del router (P53).
+- `dart format --set-exit-if-changed .` falla por 5 archivos ajenos a este cambio (`network_state.dart`, `permission_repository_impl.dart` y 3 pruebas de permisos y colores).
