@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261108-iconos-propios-en-frfield-y-frbanner-y-formato",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/iconos-propios-en-frfield-y-frbanner-y-formato",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:01e87c43bebd69c67ee17362bd1e2638eab0c9e84815b4613ffcbb23f950f71d",
@@ -60,12 +60,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "300046d4d26ed708d8bc224c48d43da7dbdd01cb",
+      "attempts": 1,
       "startedAt": "2026-11-08T01:58:35.760Z",
       "doneAt": "2026-11-08T01:59:01.864Z",
-      "summary": "dart format en fr_colors_order_test.dart (un token por línea, sin tocar aserciones); lib/core y test/core quedan con formato limpio."
+      "summary": "dart format en fr_colors_order_test.dart (un token por línea, sin tocar aserciones); lib/core y test/core quedan con formato limpio.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -77,5 +77,6 @@
     "AC": 4,
     "T": 3,
     "R": 1
-  }
+  },
+  "closingSubmittedAt": "2026-11-08T01:59:54.335Z"
 }

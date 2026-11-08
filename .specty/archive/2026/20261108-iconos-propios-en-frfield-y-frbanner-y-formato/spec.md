@@ -65,3 +65,26 @@ Los campos (`FrField`) y los avisos (`FrBanner`) pueden mostrar los íconos dibu
 ## Riesgos
 
 - R1: C2, C5 y C6 dependen de estos constructores y trabajan después en paralelo — mitigación: solo se suman constructores y el cierre cambia de ícono, sin cambiar medidas, colores ni la firma del constructor actual (salvo `dismissIcon`, que no tiene usos).
+
+## Cierre
+
+### Resumen
+
+- `FrField.drawn` recibe un ícono de `FrIcons` y lo pinta con `FrIcon` a 18 px en `tx3`, a 10 px antes del texto; el constructor con `IconData` no cambia.
+- `FrBanner.drawn` recibe un ícono de `FrIcons` y lo pinta con `FrIcon` a 18 px con el color de su tono; el constructor con `IconData` no cambia.
+- El cierre de `FrBanner` pinta `FrIcons.close` con `FrIcon` a 16 px en `tx3` con los dos constructores: `dismissIcon` pasa a `FrIconData` con `FrIcons.close` por defecto (P52 y P55).
+- `test/core/design/fr_colors_order_test.dart` queda con `dart format` (un token por línea), sin cambiar aserciones; `dart format --set-exit-if-changed lib/core test/core` pasa sin cambios.
+- Verificado: `flutter analyze` sin avisos y `flutter test` completo en verde (591 pruebas).
+
+### Desviaciones
+
+- En `FrBanner`, el ícono propio va dentro de un `Align` y el del cierre dentro de un `Center`, porque la columna de 22 px y el botón de 24 px le imponían su ancho a `FrIcon` y lo deformaban; `Icon` de Material centra su glifo por dentro y no lo necesitaba.
+
+### Decisiones
+
+- El ícono propio del aviso va al principio de su columna de 22 px, como el `svg` del prototipo en `.banner`; el de Material sigue centrado como antes.
+- `dismissIcon` cambia de tipo sin pasar por una variante con `IconData`, porque no tenía usos en `lib` ni en `test`.
+
+### Pendientes
+
+- El aviso sin red del inicio (`lib/features/lobby/presentation/widgets/lobby_sections.dart`) sigue con `Icons.wifi_off_rounded` y no lo cambia ningún corte de la épica (`FrIcons` no tiene un wifi tachado), así que el constructor de `FrBanner` con `IconData` seguirá teniendo un uso después de C2, C5 y C6.
