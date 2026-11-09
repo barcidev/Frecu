@@ -108,12 +108,18 @@ class FrToast extends StatelessWidget {
             height: 46,
             child: Padding(
               padding: EdgeInsets.fromLTRB(lead == null ? 16 : 8, 0, 16, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (lead != null) ...[lead, const SizedBox(width: 10)],
-                  _text(fr),
-                ],
+              // `showFrToast` lo pone en el `Overlay` raíz, fuera de todo
+              // `Material`: sin este estilo, su texto hereda el de error de
+              // `MaterialApp`, con subrayado doble amarillo.
+              child: DefaultTextStyle(
+                style: fr.type.body.copyWith(color: c.tx1),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (lead != null) ...[lead, const SizedBox(width: 10)],
+                    _text(fr),
+                  ],
+                ),
               ),
             ),
           ),
