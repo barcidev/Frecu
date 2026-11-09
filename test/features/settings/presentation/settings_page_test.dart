@@ -252,11 +252,19 @@ void main() {
       await _openSettings(tester);
       expect(_talkModeSelector(tester).value, TalkMode.pushToTalk);
 
+      await tester.ensureVisible(
+        find.text(t.settings.talkMode.openMic.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.talkMode.openMic.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_talkModeSelector(tester).value, TalkMode.openMic);
       expect((await _reopen())?.defaultTalkMode, TalkMode.openMic);
 
+      await tester.ensureVisible(
+        find.text(t.settings.talkMode.pushToTalk.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.talkMode.pushToTalk.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_talkModeSelector(tester).value, TalkMode.pushToTalk);
@@ -283,6 +291,10 @@ void main() {
       await _dismissToast(tester);
       expect(_toast(t.settings.saveError), findsNothing);
 
+      await tester.ensureVisible(
+        find.text(t.settings.talkMode.openMic.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.talkMode.openMic.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_toast(t.settings.saveError), findsOneWidget);

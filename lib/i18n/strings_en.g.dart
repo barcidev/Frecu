@@ -189,6 +189,7 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override late final _Translations$settings$language$en language = _Translations$settings$language$en._(_root);
 	@override late final _Translations$settings$permissions$en permissions = _Translations$settings$permissions$en._(_root);
 	@override String get hotspotGuide => 'Hotspot guide';
+	@override late final _Translations$settings$volumePtt$en volumePtt = _Translations$settings$volumePtt$en._(_root);
 	@override late final _Translations$settings$vibration$en vibration = _Translations$settings$vibration$en._(_root);
 	@override String get licenses => 'Licenses';
 	@override String get appearance => 'Appearance';
@@ -565,6 +566,17 @@ class _Translations$settings$permissions$en extends Translations$settings$permis
 	@override String get title => 'Permissions';
 	@override String get subtitle => 'Microphone, local network, notifications';
 	@override String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.volumePtt
+class _Translations$settings$volumePtt$en extends Translations$settings$volumePtt$es {
+	_Translations$settings$volumePtt$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Talk with the volume button';
+	@override String get subtitle => 'Hold to talk. With the screen off, press to start and again to stop.';
 }
 
 // Path: settings.vibration
@@ -1254,6 +1266,8 @@ extension on TranslationsEn {
 			'settings.permissions.subtitle' => 'Microphone, local network, notifications',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Hotspot guide',
+			'settings.volumePtt.title' => 'Talk with the volume button',
+			'settings.volumePtt.subtitle' => 'Hold to talk. With the screen off, press to start and again to stop.',
 			'settings.vibration.title' => 'Vibration',
 			'settings.vibration.subtitle' => 'When you transmit, when someone starts talking and if the connection drops.',
 			'settings.licenses' => 'Licenses',

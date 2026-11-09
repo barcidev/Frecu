@@ -25,6 +25,9 @@ sealed class Preferences with _$Preferences {
     /// Vibrar al transmitir, cuando alguien empieza a hablar y si se pierde
     /// la conexión.
     @Default(true) bool vibration,
+
+    /// Hablar con el botón de volumen (solo Android), apagado por defecto.
+    @Default(false) bool volumePtt,
   }) = _Preferences;
 
   /// Largo máximo del nombre visible, en caracteres.

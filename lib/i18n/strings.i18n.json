@@ -340,6 +340,10 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Guía del punto de acceso",
+    "volumePtt": {
+      "title": "Hablar con el botón de volumen",
+      "subtitle": "Mantén pulsado para hablar. Con la pantalla apagada, pulsa para empezar y otra vez para terminar."
+    },
     "vibration": {
       "title": "Vibración",
       "subtitle": "Al transmitir, cuando alguien empieza a hablar y si se pierde la conexión."

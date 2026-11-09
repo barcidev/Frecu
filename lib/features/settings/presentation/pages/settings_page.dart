@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
@@ -63,7 +64,7 @@ class SettingsPage extends ConsumerWidget {
                     ),
                   ),
                   SettingsSectionLabel(t.settings.voice),
-                  _TalkModeGroup(preferences.defaultTalkMode),
+                  _TalkModeGroup(preferences),
                   SettingsSectionLabel(t.settings.general),
                   _GeneralGroup(
                     preferences.localePreference,
@@ -142,12 +143,17 @@ class _SettingsAppBar extends StatelessWidget {
 
 /// Modo de habla por defecto: PTT o micrófono abierto.
 class _TalkModeGroup extends ConsumerWidget {
-  const _TalkModeGroup(this.value);
+  const _TalkModeGroup(this.preferences);
 
-  final TalkMode value;
+  final Preferences preferences;
+
+  TalkMode get value => preferences.defaultTalkMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(preferencesProvider.notifier);
+    // iOS no deja usar los botones de volumen para otra cosa.
+    final android = defaultTargetPlatform == TargetPlatform.android;
     return SettingsGroup(
       children: [
         SettingsRow(
@@ -175,6 +181,20 @@ class _TalkModeGroup extends ConsumerWidget {
             ],
           ),
         ),
+        if (android)
+          SettingsRow(
+            title: t.settings.volumePtt.title,
+            subtitle: t.settings.volumePtt.subtitle,
+            trailing: FrToggle(
+              key: const Key('volume_ptt_toggle'),
+              value: preferences.volumePtt,
+              semanticLabel: t.settings.volumePtt.title,
+              onChanged: (enabled) => _saveOrWarn(
+                context,
+                () => notifier.setVolumePtt(enabled: enabled),
+              ),
+            ),
+          ),
       ],
     );
   }

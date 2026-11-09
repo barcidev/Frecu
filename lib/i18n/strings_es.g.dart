@@ -298,6 +298,7 @@ class Translations$settings$es {
 	/// es: 'Guía del punto de acceso'
 	String get hotspotGuide => 'Guía del punto de acceso';
 
+	late final Translations$settings$volumePtt$es volumePtt = Translations$settings$volumePtt$es.internal(_root);
 	late final Translations$settings$vibration$es vibration = Translations$settings$vibration$es.internal(_root);
 
 	/// es: 'Licencias'
@@ -976,6 +977,21 @@ class Translations$settings$permissions$es {
 
 	/// es: '$granted/$total'
 	String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.volumePtt
+class Translations$settings$volumePtt$es {
+	Translations$settings$volumePtt$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Hablar con el botón de volumen'
+	String get title => 'Hablar con el botón de volumen';
+
+	/// es: 'Mantén pulsado para hablar. Con la pantalla apagada, pulsa para empezar y otra vez para terminar.'
+	String get subtitle => 'Mantén pulsado para hablar. Con la pantalla apagada, pulsa para empezar y otra vez para terminar.';
 }
 
 // Path: settings.vibration
@@ -1957,6 +1973,8 @@ extension on Translations {
 			'settings.permissions.subtitle' => 'Micrófono, red local, notificaciones',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Guía del punto de acceso',
+			'settings.volumePtt.title' => 'Hablar con el botón de volumen',
+			'settings.volumePtt.subtitle' => 'Mantén pulsado para hablar. Con la pantalla apagada, pulsa para empezar y otra vez para terminar.',
 			'settings.vibration.title' => 'Vibración',
 			'settings.vibration.subtitle' => 'Al transmitir, cuando alguien empieza a hablar y si se pierde la conexión.',
 			'settings.licenses' => 'Licencias',

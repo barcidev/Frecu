@@ -32,6 +32,9 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   /// Clave de la vibración (`true` o `false`).
   static const vibrationKey = 'settings.vibration';
 
+  /// Clave del botón de volumen para hablar (`true` o `false`).
+  static const volumePttKey = 'settings.volumePtt';
+
   final SharedPreferencesAsync _storage;
 
   @override
@@ -42,6 +45,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
       final talkMode = await _storage.getString(defaultTalkModeKey);
       final locale = await _storage.getString(localePreferenceKey);
       final vibration = await _storage.getString(vibrationKey);
+      final volumePtt = await _storage.getString(volumePttKey);
       const defaults = Preferences();
       return Result.success(
         Preferences(
@@ -57,6 +61,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
               LocalePreference.values.asNameMap()[locale] ??
               defaults.localePreference,
           vibration: _boolOf(vibration) ?? defaults.vibration,
+          volumePtt: _boolOf(volumePtt) ?? defaults.volumePtt,
         ),
       );
     } on Object catch (e, st) {
@@ -98,6 +103,10 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   @override
   Future<Result<void>> saveVibration({required bool enabled}) =>
       _save(vibrationKey, '$enabled');
+
+  @override
+  Future<Result<void>> saveVolumePtt({required bool enabled}) =>
+      _save(volumePttKey, '$enabled');
 
   /// `true` o `false` guardados como texto; nulo si es otra cosa.
   static bool? _boolOf(String? raw) => switch (raw) {

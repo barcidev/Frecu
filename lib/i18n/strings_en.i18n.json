@@ -340,6 +340,10 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Hotspot guide",
+    "volumePtt": {
+      "title": "Talk with the volume button",
+      "subtitle": "Hold to talk. With the screen off, press to start and again to stop."
+    },
     "vibration": {
       "title": "Vibration",
       "subtitle": "When you transmit, when someone starts talking and if the connection drops."
