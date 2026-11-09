@@ -12,6 +12,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         FrecuHaptics.install(this, flutterEngine.dartExecutor.binaryMessenger)
         VolumePtt.install(this, flutterEngine.dartExecutor.binaryMessenger)
+        FrecuProximity.install(this, flutterEngine.dartExecutor.binaryMessenger)
     }
 
     // El botón de volumen habla en la frecu si la persona lo activó.

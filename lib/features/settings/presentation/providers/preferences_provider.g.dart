@@ -105,7 +105,7 @@ final class PreferencesNotifierProvider
 }
 
 String _$preferencesNotifierHash() =>
-    r'19f246d9c095b85f7bc59814931a07b286039b16';
+    r'61b6b56adfe5d4f8249406f4e67f729c4afa8e19';
 
 /// Preferencias guardadas del usuario: nombre visible, tema, modo de habla
 /// por defecto e idioma.

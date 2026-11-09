@@ -181,6 +181,19 @@ class _TalkModeGroup extends ConsumerWidget {
             ],
           ),
         ),
+        SettingsRow(
+          title: t.settings.earpieceOnRaise.title,
+          subtitle: t.settings.earpieceOnRaise.subtitle,
+          trailing: FrToggle(
+            key: const Key('earpiece_on_raise_toggle'),
+            value: preferences.earpieceOnRaise,
+            semanticLabel: t.settings.earpieceOnRaise.title,
+            onChanged: (enabled) => _saveOrWarn(
+              context,
+              () => notifier.setEarpieceOnRaise(enabled: enabled),
+            ),
+          ),
+        ),
         if (android)
           SettingsRow(
             title: t.settings.volumePtt.title,

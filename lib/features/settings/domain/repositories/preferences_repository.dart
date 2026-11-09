@@ -30,4 +30,7 @@ abstract interface class PreferencesRepository {
 
   /// Guarda si el botón de volumen sirve para hablar (Android).
   Future<Result<void>> saveVolumePtt({required bool enabled});
+
+  /// Guarda si el audio pasa al auricular al acercar el teléfono a la oreja.
+  Future<Result<void>> saveEarpieceOnRaise({required bool enabled});
 }

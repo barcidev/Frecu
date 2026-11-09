@@ -17,6 +17,9 @@ import UIKit
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "FrecuHaptics") {
       FrecuHaptics.install(messenger: registrar.messenger())
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "FrecuProximity") {
+      FrecuProximity.install(messenger: registrar.messenger())
+    }
   }
 }
 
@@ -66,5 +69,62 @@ enum FrecuHaptics {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
       }
     }
+  }
+}
+
+/// Sensor de proximidad por `frecu/proximity` (activar) y
+/// `frecu/proximity/events` (`true` cerca, `false` lejos). Con el sensor
+/// activado iOS apaga la pantalla sola al acercar el teléfono a la oreja.
+final class FrecuProximity: NSObject, FlutterStreamHandler {
+  private static let shared = FrecuProximity()
+  private var sink: FlutterEventSink?
+
+  static func install(messenger: FlutterBinaryMessenger) {
+    FlutterMethodChannel(name: "frecu/proximity", binaryMessenger: messenger)
+      .setMethodCallHandler { call, result in
+        guard call.method == "setEnabled" else {
+          result(FlutterMethodNotImplemented)
+          return
+        }
+        result(shared.setEnabled(call.arguments as? Bool ?? false))
+      }
+    FlutterEventChannel(name: "frecu/proximity/events", binaryMessenger: messenger)
+      .setStreamHandler(shared)
+  }
+
+  /// Activa o desactiva el sensor; devuelve si el teléfono tiene uno.
+  private func setEnabled(_ on: Bool) -> Bool {
+    let device = UIDevice.current
+    let center = NotificationCenter.default
+    if on {
+      device.isProximityMonitoringEnabled = true
+      guard device.isProximityMonitoringEnabled else { return false }
+      center.addObserver(
+        self,
+        selector: #selector(changed),
+        name: UIDevice.proximityStateDidChangeNotification,
+        object: device
+      )
+    } else {
+      center.removeObserver(self, name: UIDevice.proximityStateDidChangeNotification, object: device)
+      device.isProximityMonitoringEnabled = false
+    }
+    return true
+  }
+
+  @objc private func changed() {
+    sink?(UIDevice.current.proximityState)
+  }
+
+  func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink)
+    -> FlutterError?
+  {
+    sink = events
+    return nil
+  }
+
+  func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    sink = nil
+    return nil
   }
 }
