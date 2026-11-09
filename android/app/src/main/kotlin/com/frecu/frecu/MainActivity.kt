@@ -9,6 +9,10 @@ class MainActivity : FlutterActivity() {
         // zona Wi-Fi de este teléfono.
         HotspotNetworkDetector.install()
         super.configureFlutterEngine(flutterEngine)
-        FrecuHaptics.install(this, flutterEngine.dartExecutor.binaryMessenger)
+        val messenger = flutterEngine.dartExecutor.binaryMessenger
+        FrecuHaptics.install(this, messenger)
+        // La red de la frecu: el anfitrión la crea y el invitado entra a ella.
+        LocalHotspot.install(this, messenger)
+        FrecuWifi.install(this, messenger)
     }
 }

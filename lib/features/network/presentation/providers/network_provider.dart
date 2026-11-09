@@ -1,10 +1,16 @@
+import 'package:frecu/features/network/data/datasources/local_hotspot_datasource.dart';
 import 'package:frecu/features/network/data/datasources/network_interface_datasource.dart';
 import 'package:frecu/features/network/data/datasources/system_settings_datasource.dart';
+import 'package:frecu/features/network/data/datasources/wifi_join_datasource.dart';
+import 'package:frecu/features/network/data/repositories/local_hotspot_repository_impl.dart';
 import 'package:frecu/features/network/data/repositories/network_repository_impl.dart';
 import 'package:frecu/features/network/data/repositories/system_settings_repository_impl.dart';
+import 'package:frecu/features/network/data/repositories/wifi_join_repository_impl.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
+import 'package:frecu/features/network/domain/repositories/local_hotspot_repository.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
 import 'package:frecu/features/network/domain/repositories/system_settings_repository.dart';
+import 'package:frecu/features/network/domain/repositories/wifi_join_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'network_provider.g.dart';
@@ -34,3 +40,13 @@ Raw<Stream<NetworkState>> networkStateStream(Ref ref) {
 @Riverpod(keepAlive: true)
 SystemSettingsRepository systemSettingsRepository(Ref ref) =>
     SystemSettingsRepositoryImpl(dataSource: SystemSettingsDataSource());
+
+/// La red de la frecu que crea el anfitrión Android (`LocalOnlyHotspot`).
+@Riverpod(keepAlive: true)
+LocalHotspotRepository localHotspotRepository(Ref ref) =>
+    LocalHotspotRepositoryImpl(dataSource: LocalHotspotDataSource());
+
+/// Cómo llega el invitado a la red del anfitrión.
+@Riverpod(keepAlive: true)
+WifiJoinRepository wifiJoinRepository(Ref ref) =>
+    WifiJoinRepositoryImpl(dataSource: WifiJoinDataSource());

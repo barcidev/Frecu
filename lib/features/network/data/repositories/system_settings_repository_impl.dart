@@ -27,6 +27,12 @@ class SystemSettingsRepositoryImpl implements SystemSettingsRepository {
   @override
   Future<Result<void>> openAppSettings() => _open(dataSource.openApp);
 
+  @override
+  Future<Result<void>> openLocationSettings() => _open(() async {
+    await dataSource.openLocation();
+    return true;
+  });
+
   /// Abre con [open], que dice si el sistema mostró los Ajustes.
   Future<Result<void>> _open(Future<bool> Function() open) async {
     try {

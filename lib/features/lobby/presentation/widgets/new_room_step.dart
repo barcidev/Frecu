@@ -21,6 +21,7 @@ import 'package:frecu/features/lobby/presentation/providers/new_room_provider.da
 import 'package:frecu/features/lobby/presentation/widgets/create_room_layout.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_hero.dart';
 import 'package:frecu/features/lobby/presentation/widgets/regenerated_code.dart';
+import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
@@ -99,6 +100,10 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     final name = widget.name.text.trim();
     if (name.isEmpty || _opening) return;
     setState(() => _opening = true);
+    // Con la red de Frecu al aire, la invitación la lleva.
+    final network = ref.exists(localHotspotProvider)
+        ? ref.read(localHotspotProvider)
+        : null;
     final result = await ref
         .read(roomNotifierProvider.notifier)
         .createRoom(
@@ -106,6 +111,10 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
           accessCode: _code,
           displayName: ref.savedDisplayName,
           note: note,
+          wifi: switch (network) {
+            LocalHotspotReady(:final hotspot) => hotspot.credentials,
+            _ => null,
+          },
         );
     if (!mounted) return;
     switch (result) {

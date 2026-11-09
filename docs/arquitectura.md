@@ -89,5 +89,5 @@ Datasources esperados en `features/room/data`:
 ## Manejo de errores
 
 - Los repositorios devuelven `Result<T>` (`success` | `failure`). Nunca lanzan excepciones hacia `domain` o `presentation`.
-- `Failure` es una unión sellada: `network`, `permissionDenied`, `roomFull`, `invalidAccessCode`, `hostUnreachable`, `audio`, `unexpected`.
+- `Failure` es una unión sellada: `network`, `permissionDenied`, `roomFull`, `invalidAccessCode`, `hostUnreachable`, `versionMismatch`, `audio`, `hotspot` (con `HotspotFailureReason`), `wifiJoin` (con `WifiJoinFailureReason`), `unexpected`.
 - Los datasources capturan excepciones y las traducen a `Failure` en el repositorio.

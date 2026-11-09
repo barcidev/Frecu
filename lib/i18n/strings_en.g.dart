@@ -118,6 +118,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override String get muted => 'Muted';
 	@override String get host => 'Host';
 	@override String get reconnecting => 'Reconnecting...';
+	@override late final _Translations$room$network$en network = _Translations$room$network$en._(_root);
 	@override List<String> get noteNames => [
 		'C',
 		'D♭',
@@ -212,6 +213,8 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get hostUnreachable => 'Host is unreachable';
 	@override String get versionMismatch => 'This frecu uses another version of Frecu';
 	@override String get audio => 'Audio subsystem error';
+	@override String get hotspot => 'The room\'s network couldn\'t be created';
+	@override String get wifiJoin => 'Couldn\'t connect to the room\'s network';
 	@override String get unexpected => 'Unexpected error';
 }
 
@@ -249,6 +252,7 @@ class _Translations$lobby$join$en extends Translations$lobby$join$es {
 	@override String get failedHint => 'Make sure you\'re on the same Wi-Fi network and try again.';
 	@override String get versionMismatch => 'This frecu uses another version of Frecu.';
 	@override String get versionMismatchHint => 'Update Frecu on both phones.';
+	@override late final _Translations$lobby$join$wifi$en wifi = _Translations$lobby$join$wifi$en._(_root);
 	@override late final _Translations$lobby$join$pin$en pin = _Translations$lobby$join$pin$en._(_root);
 	@override late final _Translations$lobby$join$ip$en ip = _Translations$lobby$join$ip$en._(_root);
 	@override late final _Translations$lobby$join$scan$en scan = _Translations$lobby$join$scan$en._(_root);
@@ -316,6 +320,7 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	@override String get back => 'Back';
 	@override String step({required Object current, required Object total}) => 'Step ${current} of ${total}';
 	@override late final _Translations$lobby$newRoom$guide$en guide = _Translations$lobby$newRoom$guide$en._(_root);
+	@override late final _Translations$lobby$newRoom$network$en network = _Translations$lobby$newRoom$network$en._(_root);
 	@override String get title => 'New room';
 	@override String get soundsIn => 'Your room sounds in';
 	@override String openedAt({required Object time}) => 'Opened at ${time}';
@@ -329,6 +334,21 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	@override String get codeHelp => 'Share it only with your group: it keeps strangers on the same network out.';
 	@override String get open => 'Open room';
 	@override String clockLabel({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}';
+}
+
+// Path: room.network
+class _Translations$room$network$en extends Translations$room$network$es {
+	_Translations$room$network$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lostTitle => 'The room\'s network turned off.';
+	@override String get lostMessage => 'Your group got disconnected. Create it again and show the QR again.';
+	@override String get recreate => 'Create the network again';
+	@override String get recreating => 'Creating the network…';
+	@override String get failedTitle => 'The network couldn\'t be created.';
+	@override String get failedMessage => 'Turn your hotspot off if it\'s on and try again.';
 }
 
 // Path: room.mesh
@@ -545,6 +565,37 @@ class _Translations$settings$themeMode$en extends Translations$settings$themeMod
 	@override String get dark => 'Dark';
 }
 
+// Path: lobby.join.wifi
+class _Translations$lobby$join$wifi$en extends Translations$lobby$join$wifi$es {
+	_Translations$lobby$join$wifi$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String network({required Object ssid}) => 'Network ${ssid}';
+	@override String get message => 'First we connect your phone to the room\'s network.';
+	@override String get needed => 'To join this room, your phone has to be on its network.';
+	@override String connecting({required Object ssid}) => 'Connecting to the Wi-Fi “${ssid}”…';
+	@override String get confirmHint => 'Your phone will ask you to confirm the network.';
+	@override String get declinedTitle => 'You didn\'t join the network.';
+	@override String get declinedMessage => 'The system prompt was canceled.';
+	@override String notFoundTitle({required Object ssid}) => 'We couldn\'t find the network “${ssid}”.';
+	@override String get notFoundMessage => 'Get closer to the host and check that the room is still open.';
+	@override String get failedTitle => 'We couldn\'t connect you to the network.';
+	@override String get failedMessage => 'Try again or connect by hand.';
+	@override String get manualMessage => 'Open Settings › Wi-Fi, pick this network and type the password. Then come back to Frecu.';
+	@override String get manualOld => 'This phone can\'t join the network on its own. Do it from Settings › Wi-Fi with these details and come back to Frecu.';
+	@override String get networkLabel => 'Network';
+	@override String get keyLabel => 'Password';
+	@override String get noKey => 'Open network, no password';
+	@override String get copy => 'Copy';
+	@override String get copied => 'Password copied';
+	@override String get retry => 'Try again';
+	@override String get manual => 'Connect by hand';
+	@override String get openWifi => 'Open Wi-Fi';
+	@override String get done => 'I\'m connected';
+}
+
 // Path: lobby.join.pin
 class _Translations$lobby$join$pin$en extends Translations$lobby$join$pin$es {
 	_Translations$lobby$join$pin$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -623,6 +674,50 @@ class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$gu
 	@override String get openSettingsIphone => 'Open Settings';
 }
 
+// Path: lobby.newRoom.network
+class _Translations$lobby$newRoom$network$en extends Translations$lobby$newRoom$network$es {
+	_Translations$lobby$newRoom$network$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get heading => 'Frecu creates the network';
+	@override String get message => 'Your phone will be the group\'s antenna. No internet, and none of your data.';
+	@override String get readyHeading => 'Your network is on air';
+	@override String get readyMessage => 'Now give your room a name and a code.';
+	@override List<HotspotStep> get steps => [
+		_Translations$lobby$newRoom$network$steps$0$en._(_root),
+		_Translations$lobby$newRoom$network$steps$1$en._(_root),
+		_Translations$lobby$newRoom$network$steps$2$en._(_root),
+	];
+	@override String get create => 'Create the network';
+	@override String get creating => 'Creating the network…';
+	@override String get creatingHint => 'It takes a few seconds.';
+	@override String get cancel => 'Cancel';
+	@override String get useHotspot => 'I\'d rather use my hotspot';
+	@override String get keepHotspot => 'Keep using my hotspot';
+	@override String get kContinue => 'Continue';
+	@override String get retry => 'Try again';
+	@override String get label => 'Room network';
+	@override String get keyInQr => 'The password travels in the QR';
+	@override String get onAir => 'On air';
+	@override String get hotspotOnTitle => 'Your hotspot is on.';
+	@override String get hotspotOnMessage => 'Android doesn\'t allow another network at the same time. Turn it off and try again, or keep it: your group joins your hotspot as usual.';
+	@override String get hotspotOnAction => 'Open hotspot settings';
+	@override String get nearbyDeniedTitle => 'The nearby devices permission is missing.';
+	@override String get nearbyDeniedMessage => 'Android requires it to create the network.';
+	@override String get locationDeniedTitle => 'The precise location permission is missing.';
+	@override String get locationDeniedMessage => 'On Android 12 or earlier, Android requires it to create the network.';
+	@override String get permissionAction => 'Open Frecu settings';
+	@override String get locationOffTitle => 'Location is off.';
+	@override String get locationOffMessage => 'On Android 12 or earlier, Android requires it to create the network.';
+	@override String get locationOffAction => 'Open location settings';
+	@override String get failedTitle => 'The network couldn\'t be created.';
+	@override String get failedMessage => 'Try again in a few seconds or use your hotspot.';
+	@override String get unsupportedTitle => 'This phone can\'t create the network.';
+	@override String get unsupportedMessage => 'It needs Android 8 or later. Use your hotspot.';
+}
+
 // Path: room.sheets.invite
 class _Translations$room$sheets$invite$en extends Translations$room$sheets$invite$es {
 	_Translations$room$sheets$invite$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -639,6 +734,10 @@ class _Translations$room$sheets$invite$en extends Translations$room$sheets$invit
 	@override String port({required Object port}) => 'Port ${port}';
 	@override String footer({required Object list}) => 'It also shows up in “${list}” for anyone on your network.';
 	@override String get qr => 'Invite QR code';
+	@override String get messageWifi => 'From Frecu › Scan. The QR already carries the network, its password and the code.';
+	@override String wifiKey({required Object key}) => 'Password ${key}';
+	@override String get wifiOpen => 'Open network, no password';
+	@override String get byHand => 'By hand';
 }
 
 // Path: room.sheets.route
@@ -837,6 +936,39 @@ class _Translations$lobby$newRoom$guide$iphoneSteps$2$en extends Translations$lo
 	@override String get rest => ' while they join. On iPhone we recommend that the host uses Android.';
 }
 
+// Path: lobby.newRoom.network.steps.0
+class _Translations$lobby$newRoom$network$steps$0$en extends Translations$lobby$newRoom$network$steps$0$es with HotspotStep {
+	_Translations$lobby$newRoom$network$steps$0$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Tap “Create the network”.';
+	@override String get rest => ' The first time, Android asks for the nearby devices permission.';
+}
+
+// Path: lobby.newRoom.network.steps.1
+class _Translations$lobby$newRoom$network$steps$1$en extends Translations$lobby$newRoom$network$steps$1$es with HotspotStep {
+	_Translations$lobby$newRoom$network$steps$1$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Open your room and show the QR.';
+	@override String get rest => ' It already carries the network and its password: your group joins with a single scan.';
+}
+
+// Path: lobby.newRoom.network.steps.2
+class _Translations$lobby$newRoom$network$steps$2$en extends Translations$lobby$newRoom$network$steps$2$es with HotspotStep {
+	_Translations$lobby$newRoom$network$steps$2$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lead => 'Closing the room turns the network off.';
+	@override String get rest => ' The next one gets a new name and a new password.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -859,6 +991,28 @@ extension on TranslationsEn {
 			'lobby.join.failedHint' => 'Make sure you\'re on the same Wi-Fi network and try again.',
 			'lobby.join.versionMismatch' => 'This frecu uses another version of Frecu.',
 			'lobby.join.versionMismatchHint' => 'Update Frecu on both phones.',
+			'lobby.join.wifi.network' => ({required Object ssid}) => 'Network ${ssid}',
+			'lobby.join.wifi.message' => 'First we connect your phone to the room\'s network.',
+			'lobby.join.wifi.needed' => 'To join this room, your phone has to be on its network.',
+			'lobby.join.wifi.connecting' => ({required Object ssid}) => 'Connecting to the Wi-Fi “${ssid}”…',
+			'lobby.join.wifi.confirmHint' => 'Your phone will ask you to confirm the network.',
+			'lobby.join.wifi.declinedTitle' => 'You didn\'t join the network.',
+			'lobby.join.wifi.declinedMessage' => 'The system prompt was canceled.',
+			'lobby.join.wifi.notFoundTitle' => ({required Object ssid}) => 'We couldn\'t find the network “${ssid}”.',
+			'lobby.join.wifi.notFoundMessage' => 'Get closer to the host and check that the room is still open.',
+			'lobby.join.wifi.failedTitle' => 'We couldn\'t connect you to the network.',
+			'lobby.join.wifi.failedMessage' => 'Try again or connect by hand.',
+			'lobby.join.wifi.manualMessage' => 'Open Settings › Wi-Fi, pick this network and type the password. Then come back to Frecu.',
+			'lobby.join.wifi.manualOld' => 'This phone can\'t join the network on its own. Do it from Settings › Wi-Fi with these details and come back to Frecu.',
+			'lobby.join.wifi.networkLabel' => 'Network',
+			'lobby.join.wifi.keyLabel' => 'Password',
+			'lobby.join.wifi.noKey' => 'Open network, no password',
+			'lobby.join.wifi.copy' => 'Copy',
+			'lobby.join.wifi.copied' => 'Password copied',
+			'lobby.join.wifi.retry' => 'Try again',
+			'lobby.join.wifi.manual' => 'Connect by hand',
+			'lobby.join.wifi.openWifi' => 'Open Wi-Fi',
+			'lobby.join.wifi.done' => 'I\'m connected',
 			'lobby.join.pin.message' => 'Enter the access code. Ask the host for it.',
 			'lobby.join.pin.autoSend' => 'Sent once all 4 digits are in',
 			'lobby.join.pin.checking' => 'Checking with the host…',
@@ -930,6 +1084,42 @@ extension on TranslationsEn {
 			'lobby.newRoom.guide.sameWifi' => 'We\'re already on the same Wi-Fi',
 			'lobby.newRoom.guide.openSettings' => 'Open hotspot settings',
 			'lobby.newRoom.guide.openSettingsIphone' => 'Open Settings',
+			'lobby.newRoom.network.heading' => 'Frecu creates the network',
+			'lobby.newRoom.network.message' => 'Your phone will be the group\'s antenna. No internet, and none of your data.',
+			'lobby.newRoom.network.readyHeading' => 'Your network is on air',
+			'lobby.newRoom.network.readyMessage' => 'Now give your room a name and a code.',
+			'lobby.newRoom.network.steps.0.lead' => 'Tap “Create the network”.',
+			'lobby.newRoom.network.steps.0.rest' => ' The first time, Android asks for the nearby devices permission.',
+			'lobby.newRoom.network.steps.1.lead' => 'Open your room and show the QR.',
+			'lobby.newRoom.network.steps.1.rest' => ' It already carries the network and its password: your group joins with a single scan.',
+			'lobby.newRoom.network.steps.2.lead' => 'Closing the room turns the network off.',
+			'lobby.newRoom.network.steps.2.rest' => ' The next one gets a new name and a new password.',
+			'lobby.newRoom.network.create' => 'Create the network',
+			'lobby.newRoom.network.creating' => 'Creating the network…',
+			'lobby.newRoom.network.creatingHint' => 'It takes a few seconds.',
+			'lobby.newRoom.network.cancel' => 'Cancel',
+			'lobby.newRoom.network.useHotspot' => 'I\'d rather use my hotspot',
+			'lobby.newRoom.network.keepHotspot' => 'Keep using my hotspot',
+			'lobby.newRoom.network.kContinue' => 'Continue',
+			'lobby.newRoom.network.retry' => 'Try again',
+			'lobby.newRoom.network.label' => 'Room network',
+			'lobby.newRoom.network.keyInQr' => 'The password travels in the QR',
+			'lobby.newRoom.network.onAir' => 'On air',
+			'lobby.newRoom.network.hotspotOnTitle' => 'Your hotspot is on.',
+			'lobby.newRoom.network.hotspotOnMessage' => 'Android doesn\'t allow another network at the same time. Turn it off and try again, or keep it: your group joins your hotspot as usual.',
+			'lobby.newRoom.network.hotspotOnAction' => 'Open hotspot settings',
+			'lobby.newRoom.network.nearbyDeniedTitle' => 'The nearby devices permission is missing.',
+			'lobby.newRoom.network.nearbyDeniedMessage' => 'Android requires it to create the network.',
+			'lobby.newRoom.network.locationDeniedTitle' => 'The precise location permission is missing.',
+			'lobby.newRoom.network.locationDeniedMessage' => 'On Android 12 or earlier, Android requires it to create the network.',
+			'lobby.newRoom.network.permissionAction' => 'Open Frecu settings',
+			'lobby.newRoom.network.locationOffTitle' => 'Location is off.',
+			'lobby.newRoom.network.locationOffMessage' => 'On Android 12 or earlier, Android requires it to create the network.',
+			'lobby.newRoom.network.locationOffAction' => 'Open location settings',
+			'lobby.newRoom.network.failedTitle' => 'The network couldn\'t be created.',
+			'lobby.newRoom.network.failedMessage' => 'Try again in a few seconds or use your hotspot.',
+			'lobby.newRoom.network.unsupportedTitle' => 'This phone can\'t create the network.',
+			'lobby.newRoom.network.unsupportedMessage' => 'It needs Android 8 or later. Use your hotspot.',
 			'lobby.newRoom.title' => 'New room',
 			'lobby.newRoom.soundsIn' => 'Your room sounds in',
 			'lobby.newRoom.openedAt' => ({required Object time}) => 'Opened at ${time}',
@@ -970,6 +1160,12 @@ extension on TranslationsEn {
 			'room.muted' => 'Muted',
 			'room.host' => 'Host',
 			'room.reconnecting' => 'Reconnecting...',
+			'room.network.lostTitle' => 'The room\'s network turned off.',
+			'room.network.lostMessage' => 'Your group got disconnected. Create it again and show the QR again.',
+			'room.network.recreate' => 'Create the network again',
+			'room.network.recreating' => 'Creating the network…',
+			'room.network.failedTitle' => 'The network couldn\'t be created.',
+			'room.network.failedMessage' => 'Turn your hotspot off if it\'s on and try again.',
 			'room.noteNames.0' => 'C',
 			'room.noteNames.1' => 'D♭',
 			'room.noteNames.2' => 'D',
@@ -1005,6 +1201,10 @@ extension on TranslationsEn {
 			'room.sheets.invite.port' => ({required Object port}) => 'Port ${port}',
 			'room.sheets.invite.footer' => ({required Object list}) => 'It also shows up in “${list}” for anyone on your network.',
 			'room.sheets.invite.qr' => 'Invite QR code',
+			'room.sheets.invite.messageWifi' => 'From Frecu › Scan. The QR already carries the network, its password and the code.',
+			'room.sheets.invite.wifiKey' => ({required Object key}) => 'Password ${key}',
+			'room.sheets.invite.wifiOpen' => 'Open network, no password',
+			'room.sheets.invite.byHand' => 'By hand',
 			'room.sheets.route.kicker' => 'Audio output',
 			'room.sheets.route.title' => 'Where do you listen?',
 			'room.sheets.route.message' => 'When you plug in headphones, the audio switches by itself.',
@@ -1153,6 +1353,8 @@ extension on TranslationsEn {
 			'errors.hostUnreachable' => 'Host is unreachable',
 			'errors.versionMismatch' => 'This frecu uses another version of Frecu',
 			'errors.audio' => 'Audio subsystem error',
+			'errors.hotspot' => 'The room\'s network couldn\'t be created',
+			'errors.wifiJoin' => 'Couldn\'t connect to the room\'s network',
 			'errors.unexpected' => 'Unexpected error',
 			'splash.title' => 'frecu',
 			'splash.tagline' => 'Group voice. No internet.',

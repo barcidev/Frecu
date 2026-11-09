@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
+import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
+import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
@@ -67,6 +70,10 @@ RoomRepository roomRepository(Ref ref) {
     serverDataSource: server,
     clientDataSource: client,
     foregroundServiceDataSource: foregroundService,
+    // Con la red de Frecu al aire, su IPv4 es la de la invitación.
+    preferredLanInterface: () => ref.exists(localHotspotProvider)
+        ? ref.read(localHotspotProvider.notifier).interfaceName
+        : null,
   );
   ref.onDispose(repository.dispose);
   return repository;
@@ -108,12 +115,16 @@ class RoomNotifier extends _$RoomNotifier {
   /// y el servidor la envía en `welcome` a quien se une. Sin [note], la
   /// calcula una sola vez con su hora de apertura y las [nearbyNotes] de las
   /// frecus cercanas.
+  ///
+  /// Con [wifi] (la red de la frecu que creó este teléfono), la invitación
+  /// la lleva.
   Future<Result<Room>> createRoom({
     required String name,
     required String accessCode,
     String? displayName,
     Iterable<RoomNote> nearbyNotes = const [],
     RoomNote? note,
+    WifiCredentials? wifi,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final voice = _voiceListening();
@@ -132,6 +143,7 @@ class RoomNotifier extends _$RoomNotifier {
                 createdAt: data.createdAt,
                 nearbyNotes: nearbyNotes,
               ),
+          wifi: wifi,
         );
         state = room;
         _joinVoice(repository, voice);
@@ -146,15 +158,22 @@ class RoomNotifier extends _$RoomNotifier {
   /// La frecu activa lleva la nota que el anfitrión envía en `welcome`, también
   /// al unirse por IP; si no la envía, la [note] que trajo la invitación (mDNS
   /// o QR), sin recalcularla, y sin ninguna de las dos queda sin nota.
+  ///
+  /// [wifi] es la red de la frecu que traía la invitación: quien está en la
+  /// frecu la comparte al invitar. Antes de conectar, en Android la app se
+  /// ata a la Wi-Fi en la que está el anfitrión: sin internet, no es la red
+  /// por defecto si hay datos móviles.
   Future<Result<Room>> joinRoom({
     required String hostAddress,
     required int port,
     required String accessCode,
     required String displayName,
     RoomNote? note,
+    WifiCredentials? wifi,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final voice = _voiceListening();
+    await ref.read(wifiJoinRepositoryProvider).route(hostAddress);
     final result = await repository.joinRoom(
       hostAddress: hostAddress,
       port: port,
@@ -163,7 +182,7 @@ class RoomNotifier extends _$RoomNotifier {
     );
     switch (result) {
       case Success(:final data):
-        final room = data.copyWith(note: data.note ?? note);
+        final room = data.copyWith(note: data.note ?? note, wifi: wifi);
         state = room;
         _joinVoice(repository, voice);
         return Result.success(room);
@@ -201,8 +220,35 @@ class RoomNotifier extends _$RoomNotifier {
       AppLogger.e('Error leaving room', error, stackTrace);
       result = Result.failure(Failure.unexpected(error: error));
     }
-    if (ref.mounted) state = null;
+    if (ref.mounted) {
+      state = null;
+      _releaseNetwork();
+    }
     return result;
+  }
+
+  /// La red de la frecu se volvió a crear: la invitación lleva la nueva red
+  /// y, si cambió, la nueva IPv4 del anfitrión.
+  void useNetwork(WifiCredentials wifi, {String? hostAddress}) {
+    final room = state;
+    if (room == null) return;
+    state = room.copyWith(
+      wifi: wifi,
+      hostAddress: hostAddress ?? room.hostAddress,
+    );
+  }
+
+  /// Sin frecu, el teléfono suelta la red de la frecu: el invitado vuelve a
+  /// su Wi-Fi y el anfitrión apaga la que creó.
+  void _releaseNetwork() {
+    try {
+      unawaited(ref.read(wifiJoinRepositoryProvider).release());
+      if (ref.exists(localHotspotProvider)) {
+        unawaited(ref.read(localHotspotProvider.notifier).stop());
+      }
+    } on Object catch (error, stackTrace) {
+      AppLogger.w('Could not release the room network', error, stackTrace);
+    }
   }
 
   /// Repositorio de voz, creado antes de crear o unirse para que escuche el

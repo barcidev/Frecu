@@ -1,6 +1,7 @@
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 
@@ -54,6 +55,17 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
     return trimmed.isEmpty ? null : trimmed;
   }
 
+  /// Lee la red de la frecu: `ws` con su nombre y `wk` con su clave. Sin
+  /// `ws` no hay red; sin `wk`, la red es abierta. El nombre y la clave van
+  /// tal cual: los espacios cuentan.
+  WifiCredentials? _parseWifi(String? ssid, String? key) {
+    if (ssid == null || ssid.isEmpty) return null;
+    return WifiCredentials(
+      ssid: ssid,
+      passphrase: key == null || key.isEmpty ? null : key,
+    );
+  }
+
   Result<RoomInvite> _extractInvite(Uri uri) {
     final host = uri.queryParameters['h']?.trim() ?? '';
     final port = _parsePort(uri.queryParameters['p']);
@@ -80,6 +92,7 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
         accessCode: accessCode,
         note: _parseNote(uri.queryParameters['n']),
         name: _parseName(uri.queryParameters['name']),
+        wifi: _parseWifi(uri.queryParameters['ws'], uri.queryParameters['wk']),
       ),
     );
   }

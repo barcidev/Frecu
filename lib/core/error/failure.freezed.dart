@@ -55,7 +55,7 @@ extension FailurePatterns on Failure {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _NetworkFailure value)?  network,TResult Function( _PermissionDeniedFailure value)?  permissionDenied,TResult Function( _RoomFullFailure value)?  roomFull,TResult Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult Function( _HostUnreachableFailure value)?  hostUnreachable,TResult Function( _VersionMismatchFailure value)?  versionMismatch,TResult Function( _AudioFailure value)?  audio,TResult Function( _UnexpectedFailure value)?  unexpected,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _NetworkFailure value)?  network,TResult Function( _PermissionDeniedFailure value)?  permissionDenied,TResult Function( _RoomFullFailure value)?  roomFull,TResult Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult Function( _HostUnreachableFailure value)?  hostUnreachable,TResult Function( _VersionMismatchFailure value)?  versionMismatch,TResult Function( _AudioFailure value)?  audio,TResult Function( _HotspotFailure value)?  hotspot,TResult Function( _WifiJoinFailure value)?  wifiJoin,TResult Function( _UnexpectedFailure value)?  unexpected,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
@@ -65,7 +65,9 @@ return roomFull(_that);case _InvalidAccessCodeFailure() when invalidAccessCode !
 return invalidAccessCode(_that);case _HostUnreachableFailure() when hostUnreachable != null:
 return hostUnreachable(_that);case _VersionMismatchFailure() when versionMismatch != null:
 return versionMismatch(_that);case _AudioFailure() when audio != null:
-return audio(_that);case _UnexpectedFailure() when unexpected != null:
+return audio(_that);case _HotspotFailure() when hotspot != null:
+return hotspot(_that);case _WifiJoinFailure() when wifiJoin != null:
+return wifiJoin(_that);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that);case _:
   return orElse();
 
@@ -84,7 +86,7 @@ return unexpected(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _NetworkFailure value)  network,required TResult Function( _PermissionDeniedFailure value)  permissionDenied,required TResult Function( _RoomFullFailure value)  roomFull,required TResult Function( _InvalidAccessCodeFailure value)  invalidAccessCode,required TResult Function( _HostUnreachableFailure value)  hostUnreachable,required TResult Function( _VersionMismatchFailure value)  versionMismatch,required TResult Function( _AudioFailure value)  audio,required TResult Function( _UnexpectedFailure value)  unexpected,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _NetworkFailure value)  network,required TResult Function( _PermissionDeniedFailure value)  permissionDenied,required TResult Function( _RoomFullFailure value)  roomFull,required TResult Function( _InvalidAccessCodeFailure value)  invalidAccessCode,required TResult Function( _HostUnreachableFailure value)  hostUnreachable,required TResult Function( _VersionMismatchFailure value)  versionMismatch,required TResult Function( _AudioFailure value)  audio,required TResult Function( _HotspotFailure value)  hotspot,required TResult Function( _WifiJoinFailure value)  wifiJoin,required TResult Function( _UnexpectedFailure value)  unexpected,}){
 final _that = this;
 switch (_that) {
 case _NetworkFailure():
@@ -94,7 +96,9 @@ return roomFull(_that);case _InvalidAccessCodeFailure():
 return invalidAccessCode(_that);case _HostUnreachableFailure():
 return hostUnreachable(_that);case _VersionMismatchFailure():
 return versionMismatch(_that);case _AudioFailure():
-return audio(_that);case _UnexpectedFailure():
+return audio(_that);case _HotspotFailure():
+return hotspot(_that);case _WifiJoinFailure():
+return wifiJoin(_that);case _UnexpectedFailure():
 return unexpected(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -109,7 +113,7 @@ return unexpected(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _NetworkFailure value)?  network,TResult? Function( _PermissionDeniedFailure value)?  permissionDenied,TResult? Function( _RoomFullFailure value)?  roomFull,TResult? Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult? Function( _HostUnreachableFailure value)?  hostUnreachable,TResult? Function( _VersionMismatchFailure value)?  versionMismatch,TResult? Function( _AudioFailure value)?  audio,TResult? Function( _UnexpectedFailure value)?  unexpected,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _NetworkFailure value)?  network,TResult? Function( _PermissionDeniedFailure value)?  permissionDenied,TResult? Function( _RoomFullFailure value)?  roomFull,TResult? Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult? Function( _HostUnreachableFailure value)?  hostUnreachable,TResult? Function( _VersionMismatchFailure value)?  versionMismatch,TResult? Function( _AudioFailure value)?  audio,TResult? Function( _HotspotFailure value)?  hotspot,TResult? Function( _WifiJoinFailure value)?  wifiJoin,TResult? Function( _UnexpectedFailure value)?  unexpected,}){
 final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
@@ -119,7 +123,9 @@ return roomFull(_that);case _InvalidAccessCodeFailure() when invalidAccessCode !
 return invalidAccessCode(_that);case _HostUnreachableFailure() when hostUnreachable != null:
 return hostUnreachable(_that);case _VersionMismatchFailure() when versionMismatch != null:
 return versionMismatch(_that);case _AudioFailure() when audio != null:
-return audio(_that);case _UnexpectedFailure() when unexpected != null:
+return audio(_that);case _HotspotFailure() when hotspot != null:
+return hotspot(_that);case _WifiJoinFailure() when wifiJoin != null:
+return wifiJoin(_that);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that);case _:
   return null;
 
@@ -137,7 +143,7 @@ return unexpected(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  network,TResult Function( String? permission)?  permissionDenied,TResult Function()?  roomFull,TResult Function()?  invalidAccessCode,TResult Function()?  hostUnreachable,TResult Function()?  versionMismatch,TResult Function( String? message)?  audio,TResult Function( String? message,  Object? error)?  unexpected,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  network,TResult Function( String? permission)?  permissionDenied,TResult Function()?  roomFull,TResult Function()?  invalidAccessCode,TResult Function()?  hostUnreachable,TResult Function()?  versionMismatch,TResult Function( String? message)?  audio,TResult Function( HotspotFailureReason reason)?  hotspot,TResult Function( WifiJoinFailureReason reason)?  wifiJoin,TResult Function( String? message,  Object? error)?  unexpected,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
 return network(_that.message);case _PermissionDeniedFailure() when permissionDenied != null:
@@ -146,7 +152,9 @@ return roomFull();case _InvalidAccessCodeFailure() when invalidAccessCode != nul
 return invalidAccessCode();case _HostUnreachableFailure() when hostUnreachable != null:
 return hostUnreachable();case _VersionMismatchFailure() when versionMismatch != null:
 return versionMismatch();case _AudioFailure() when audio != null:
-return audio(_that.message);case _UnexpectedFailure() when unexpected != null:
+return audio(_that.message);case _HotspotFailure() when hotspot != null:
+return hotspot(_that.reason);case _WifiJoinFailure() when wifiJoin != null:
+return wifiJoin(_that.reason);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that.message,_that.error);case _:
   return orElse();
 
@@ -165,7 +173,7 @@ return unexpected(_that.message,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  network,required TResult Function( String? permission)  permissionDenied,required TResult Function()  roomFull,required TResult Function()  invalidAccessCode,required TResult Function()  hostUnreachable,required TResult Function()  versionMismatch,required TResult Function( String? message)  audio,required TResult Function( String? message,  Object? error)  unexpected,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  network,required TResult Function( String? permission)  permissionDenied,required TResult Function()  roomFull,required TResult Function()  invalidAccessCode,required TResult Function()  hostUnreachable,required TResult Function()  versionMismatch,required TResult Function( String? message)  audio,required TResult Function( HotspotFailureReason reason)  hotspot,required TResult Function( WifiJoinFailureReason reason)  wifiJoin,required TResult Function( String? message,  Object? error)  unexpected,}) {final _that = this;
 switch (_that) {
 case _NetworkFailure():
 return network(_that.message);case _PermissionDeniedFailure():
@@ -174,7 +182,9 @@ return roomFull();case _InvalidAccessCodeFailure():
 return invalidAccessCode();case _HostUnreachableFailure():
 return hostUnreachable();case _VersionMismatchFailure():
 return versionMismatch();case _AudioFailure():
-return audio(_that.message);case _UnexpectedFailure():
+return audio(_that.message);case _HotspotFailure():
+return hotspot(_that.reason);case _WifiJoinFailure():
+return wifiJoin(_that.reason);case _UnexpectedFailure():
 return unexpected(_that.message,_that.error);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -189,7 +199,7 @@ return unexpected(_that.message,_that.error);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  network,TResult? Function( String? permission)?  permissionDenied,TResult? Function()?  roomFull,TResult? Function()?  invalidAccessCode,TResult? Function()?  hostUnreachable,TResult? Function()?  versionMismatch,TResult? Function( String? message)?  audio,TResult? Function( String? message,  Object? error)?  unexpected,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  network,TResult? Function( String? permission)?  permissionDenied,TResult? Function()?  roomFull,TResult? Function()?  invalidAccessCode,TResult? Function()?  hostUnreachable,TResult? Function()?  versionMismatch,TResult? Function( String? message)?  audio,TResult? Function( HotspotFailureReason reason)?  hotspot,TResult? Function( WifiJoinFailureReason reason)?  wifiJoin,TResult? Function( String? message,  Object? error)?  unexpected,}) {final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
 return network(_that.message);case _PermissionDeniedFailure() when permissionDenied != null:
@@ -198,7 +208,9 @@ return roomFull();case _InvalidAccessCodeFailure() when invalidAccessCode != nul
 return invalidAccessCode();case _HostUnreachableFailure() when hostUnreachable != null:
 return hostUnreachable();case _VersionMismatchFailure() when versionMismatch != null:
 return versionMismatch();case _AudioFailure() when audio != null:
-return audio(_that.message);case _UnexpectedFailure() when unexpected != null:
+return audio(_that.message);case _HotspotFailure() when hotspot != null:
+return hotspot(_that.reason);case _WifiJoinFailure() when wifiJoin != null:
+return wifiJoin(_that.reason);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that.message,_that.error);case _:
   return null;
 
@@ -527,6 +539,138 @@ class __$AudioFailureCopyWithImpl<$Res>
   return _then(_AudioFailure(
 message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _HotspotFailure implements Failure {
+  const _HotspotFailure(this.reason);
+  
+
+ final  HotspotFailureReason reason;
+
+/// Create a copy of Failure
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$HotspotFailureCopyWith<_HotspotFailure> get copyWith => __$HotspotFailureCopyWithImpl<_HotspotFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotspotFailure&&(identical(other.reason, reason) || other.reason == reason));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason);
+
+@override
+String toString() {
+  return 'Failure.hotspot(reason: $reason)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$HotspotFailureCopyWith<$Res> implements $FailureCopyWith<$Res> {
+  factory _$HotspotFailureCopyWith(_HotspotFailure value, $Res Function(_HotspotFailure) _then) = __$HotspotFailureCopyWithImpl;
+@useResult
+$Res call({
+ HotspotFailureReason reason
+});
+
+
+
+
+}
+/// @nodoc
+class __$HotspotFailureCopyWithImpl<$Res>
+    implements _$HotspotFailureCopyWith<$Res> {
+  __$HotspotFailureCopyWithImpl(this._self, this._then);
+
+  final _HotspotFailure _self;
+  final $Res Function(_HotspotFailure) _then;
+
+/// Create a copy of Failure
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+  return _then(_HotspotFailure(
+null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as HotspotFailureReason,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _WifiJoinFailure implements Failure {
+  const _WifiJoinFailure(this.reason);
+  
+
+ final  WifiJoinFailureReason reason;
+
+/// Create a copy of Failure
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$WifiJoinFailureCopyWith<_WifiJoinFailure> get copyWith => __$WifiJoinFailureCopyWithImpl<_WifiJoinFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WifiJoinFailure&&(identical(other.reason, reason) || other.reason == reason));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason);
+
+@override
+String toString() {
+  return 'Failure.wifiJoin(reason: $reason)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$WifiJoinFailureCopyWith<$Res> implements $FailureCopyWith<$Res> {
+  factory _$WifiJoinFailureCopyWith(_WifiJoinFailure value, $Res Function(_WifiJoinFailure) _then) = __$WifiJoinFailureCopyWithImpl;
+@useResult
+$Res call({
+ WifiJoinFailureReason reason
+});
+
+
+
+
+}
+/// @nodoc
+class __$WifiJoinFailureCopyWithImpl<$Res>
+    implements _$WifiJoinFailureCopyWith<$Res> {
+  __$WifiJoinFailureCopyWithImpl(this._self, this._then);
+
+  final _WifiJoinFailure _self;
+  final $Res Function(_WifiJoinFailure) _then;
+
+/// Create a copy of Failure
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,}) {
+  return _then(_WifiJoinFailure(
+null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as WifiJoinFailureReason,
   ));
 }
 

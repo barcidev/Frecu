@@ -37,6 +37,8 @@ void main() {
         Failure.hostUnreachable(),
         Failure.versionMismatch(),
         Failure.audio(message: 'audio error'),
+        Failure.hotspot(HotspotFailureReason.hotspotOn),
+        Failure.wifiJoin(WifiJoinFailureReason.declined),
         Failure.unexpected(message: 'crash'),
       ];
 
@@ -49,6 +51,8 @@ void main() {
           hostUnreachable: () => 'unreachable',
           versionMismatch: () => 'version',
           audio: (msg) => 'audio: $msg',
+          hotspot: (reason) => 'hotspot: ${reason.name}',
+          wifiJoin: (reason) => 'wifi: ${reason.name}',
           unexpected: (msg, err) => 'unexpected: $msg',
         );
         expect(description, isNotEmpty);

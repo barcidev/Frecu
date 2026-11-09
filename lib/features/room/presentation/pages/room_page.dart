@@ -29,6 +29,7 @@ import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
+import 'package:frecu/features/room/presentation/widgets/room_network_notice.dart';
 import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
@@ -540,6 +541,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
             mainAxisSize: MainAxisSize.min,
             spacing: 8,
             children: [
+              const RoomNetworkNotice(),
               if (_micUnavailable) _micNotice(),
               EchoNotice(
                 visible:

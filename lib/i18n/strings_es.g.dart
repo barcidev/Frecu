@@ -173,6 +173,7 @@ class Translations$room$es {
 	/// es: 'Reconectando...'
 	String get reconnecting => 'Reconectando...';
 
+	late final Translations$room$network$es network = Translations$room$network$es.internal(_root);
 	List<String> get noteNames => [
 		'Do',
 		'Re♭',
@@ -351,6 +352,12 @@ class Translations$errors$es {
 	/// es: 'Error en el subsistema de audio'
 	String get audio => 'Error en el subsistema de audio';
 
+	/// es: 'No se pudo crear la red de la frecu'
+	String get hotspot => 'No se pudo crear la red de la frecu';
+
+	/// es: 'No se pudo conectar a la red de la frecu'
+	String get wifiJoin => 'No se pudo conectar a la red de la frecu';
+
 	/// es: 'Error inesperado'
 	String get unexpected => 'Error inesperado';
 }
@@ -426,6 +433,7 @@ class Translations$lobby$join$es {
 	/// es: 'Actualiza Frecu en los dos teléfonos.'
 	String get versionMismatchHint => 'Actualiza Frecu en los dos teléfonos.';
 
+	late final Translations$lobby$join$wifi$es wifi = Translations$lobby$join$wifi$es.internal(_root);
 	late final Translations$lobby$join$pin$es pin = Translations$lobby$join$pin$es.internal(_root);
 	late final Translations$lobby$join$ip$es ip = Translations$lobby$join$ip$es.internal(_root);
 	late final Translations$lobby$join$scan$es scan = Translations$lobby$join$scan$es.internal(_root);
@@ -524,6 +532,7 @@ class Translations$lobby$newRoom$es {
 	String step({required Object current, required Object total}) => 'Paso ${current} de ${total}';
 
 	late final Translations$lobby$newRoom$guide$es guide = Translations$lobby$newRoom$guide$es.internal(_root);
+	late final Translations$lobby$newRoom$network$es network = Translations$lobby$newRoom$network$es.internal(_root);
 
 	/// es: 'Nueva frecu'
 	String get title => 'Nueva frecu';
@@ -563,6 +572,33 @@ class Translations$lobby$newRoom$es {
 
 	/// es: 'Reloj de quintas: $time, $note'
 	String clockLabel({required Object time, required Object note}) => 'Reloj de quintas: ${time}, ${note}';
+}
+
+// Path: room.network
+class Translations$room$network$es {
+	Translations$room$network$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'La red de la frecu se apagó.'
+	String get lostTitle => 'La red de la frecu se apagó.';
+
+	/// es: 'Tu grupo se desconectó. Créala de nuevo y vuelve a mostrar el QR.'
+	String get lostMessage => 'Tu grupo se desconectó. Créala de nuevo y vuelve a mostrar el QR.';
+
+	/// es: 'Crear la red de nuevo'
+	String get recreate => 'Crear la red de nuevo';
+
+	/// es: 'Creando la red…'
+	String get recreating => 'Creando la red…';
+
+	/// es: 'No se pudo crear la red.'
+	String get failedTitle => 'No se pudo crear la red.';
+
+	/// es: 'Apaga tu zona Wi-Fi si está encendida y vuelve a intentarlo.'
+	String get failedMessage => 'Apaga tu zona Wi-Fi si está encendida y vuelve a intentarlo.';
 }
 
 // Path: room.mesh
@@ -923,6 +959,81 @@ class Translations$settings$themeMode$es {
 	String get dark => 'Oscuro';
 }
 
+// Path: lobby.join.wifi
+class Translations$lobby$join$wifi$es {
+	Translations$lobby$join$wifi$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Red $ssid'
+	String network({required Object ssid}) => 'Red ${ssid}';
+
+	/// es: 'Primero conectamos tu teléfono a la red de la frecu.'
+	String get message => 'Primero conectamos tu teléfono a la red de la frecu.';
+
+	/// es: 'Para entrar a esta frecu, tu teléfono tiene que estar en su red.'
+	String get needed => 'Para entrar a esta frecu, tu teléfono tiene que estar en su red.';
+
+	/// es: 'Conectando a la Wi-Fi «$ssid»…'
+	String connecting({required Object ssid}) => 'Conectando a la Wi-Fi «${ssid}»…';
+
+	/// es: 'Tu teléfono te pedirá confirmar la red.'
+	String get confirmHint => 'Tu teléfono te pedirá confirmar la red.';
+
+	/// es: 'No te conectaste a la red.'
+	String get declinedTitle => 'No te conectaste a la red.';
+
+	/// es: 'Se canceló el aviso del sistema.'
+	String get declinedMessage => 'Se canceló el aviso del sistema.';
+
+	/// es: 'No encontramos la red «$ssid».'
+	String notFoundTitle({required Object ssid}) => 'No encontramos la red «${ssid}».';
+
+	/// es: 'Acércate al anfitrión y revisa que la frecu siga abierta.'
+	String get notFoundMessage => 'Acércate al anfitrión y revisa que la frecu siga abierta.';
+
+	/// es: 'No pudimos conectarte a la red.'
+	String get failedTitle => 'No pudimos conectarte a la red.';
+
+	/// es: 'Vuelve a intentarlo o conéctate a mano.'
+	String get failedMessage => 'Vuelve a intentarlo o conéctate a mano.';
+
+	/// es: 'Abre Ajustes › Wi-Fi, elige esta red y escribe la clave. Luego vuelve a Frecu.'
+	String get manualMessage => 'Abre Ajustes › Wi-Fi, elige esta red y escribe la clave. Luego vuelve a Frecu.';
+
+	/// es: 'Este teléfono no se conecta solo a la red. Hazlo desde Ajustes › Wi-Fi con estos datos y vuelve a Frecu.'
+	String get manualOld => 'Este teléfono no se conecta solo a la red. Hazlo desde Ajustes › Wi-Fi con estos datos y vuelve a Frecu.';
+
+	/// es: 'Red'
+	String get networkLabel => 'Red';
+
+	/// es: 'Clave'
+	String get keyLabel => 'Clave';
+
+	/// es: 'Red abierta, sin clave'
+	String get noKey => 'Red abierta, sin clave';
+
+	/// es: 'Copiar'
+	String get copy => 'Copiar';
+
+	/// es: 'Clave copiada'
+	String get copied => 'Clave copiada';
+
+	/// es: 'Reintentar'
+	String get retry => 'Reintentar';
+
+	/// es: 'Conectarme a mano'
+	String get manual => 'Conectarme a mano';
+
+	/// es: 'Abrir Wi-Fi'
+	String get openWifi => 'Abrir Wi-Fi';
+
+	/// es: 'Ya me conecté'
+	String get done => 'Ya me conecté';
+}
+
 // Path: lobby.join.pin
 class Translations$lobby$join$pin$es {
 	Translations$lobby$join$pin$es.internal(this._root);
@@ -1065,6 +1176,111 @@ class Translations$lobby$newRoom$guide$es {
 	String get openSettingsIphone => 'Abrir Ajustes';
 }
 
+// Path: lobby.newRoom.network
+class Translations$lobby$newRoom$network$es {
+	Translations$lobby$newRoom$network$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Frecu crea la red'
+	String get heading => 'Frecu crea la red';
+
+	/// es: 'Tu teléfono será la antena del grupo. Sin internet y sin gastar tus datos.'
+	String get message => 'Tu teléfono será la antena del grupo. Sin internet y sin gastar tus datos.';
+
+	/// es: 'Tu red está al aire'
+	String get readyHeading => 'Tu red está al aire';
+
+	/// es: 'Ahora ponle nombre y código a tu frecu.'
+	String get readyMessage => 'Ahora ponle nombre y código a tu frecu.';
+
+	List<HotspotStep> get steps => [
+		Translations$lobby$newRoom$network$steps$0$es.internal(_root),
+		Translations$lobby$newRoom$network$steps$1$es.internal(_root),
+		Translations$lobby$newRoom$network$steps$2$es.internal(_root),
+	];
+
+	/// es: 'Crear la red'
+	String get create => 'Crear la red';
+
+	/// es: 'Creando la red…'
+	String get creating => 'Creando la red…';
+
+	/// es: 'Tarda unos segundos.'
+	String get creatingHint => 'Tarda unos segundos.';
+
+	/// es: 'Cancelar'
+	String get cancel => 'Cancelar';
+
+	/// es: 'Prefiero mi zona Wi-Fi'
+	String get useHotspot => 'Prefiero mi zona Wi-Fi';
+
+	/// es: 'Seguir con mi zona Wi-Fi'
+	String get keepHotspot => 'Seguir con mi zona Wi-Fi';
+
+	/// es: 'Seguir'
+	String get kContinue => 'Seguir';
+
+	/// es: 'Reintentar'
+	String get retry => 'Reintentar';
+
+	/// es: 'Red de la frecu'
+	String get label => 'Red de la frecu';
+
+	/// es: 'La clave viaja en el QR'
+	String get keyInQr => 'La clave viaja en el QR';
+
+	/// es: 'Al aire'
+	String get onAir => 'Al aire';
+
+	/// es: 'Tu zona Wi-Fi está encendida.'
+	String get hotspotOnTitle => 'Tu zona Wi-Fi está encendida.';
+
+	/// es: 'Android no deja crear otra red a la vez. Apágala y reintenta, o sigue con ella: tu grupo se une a tu zona Wi-Fi como hoy.'
+	String get hotspotOnMessage => 'Android no deja crear otra red a la vez. Apágala y reintenta, o sigue con ella: tu grupo se une a tu zona Wi-Fi como hoy.';
+
+	/// es: 'Abrir ajustes de la zona Wi-Fi'
+	String get hotspotOnAction => 'Abrir ajustes de la zona Wi-Fi';
+
+	/// es: 'Falta el permiso de dispositivos cercanos.'
+	String get nearbyDeniedTitle => 'Falta el permiso de dispositivos cercanos.';
+
+	/// es: 'Android lo exige para crear la red.'
+	String get nearbyDeniedMessage => 'Android lo exige para crear la red.';
+
+	/// es: 'Falta el permiso de ubicación precisa.'
+	String get locationDeniedTitle => 'Falta el permiso de ubicación precisa.';
+
+	/// es: 'En Android 12 o anterior, Android lo exige para crear la red.'
+	String get locationDeniedMessage => 'En Android 12 o anterior, Android lo exige para crear la red.';
+
+	/// es: 'Abrir ajustes de Frecu'
+	String get permissionAction => 'Abrir ajustes de Frecu';
+
+	/// es: 'La ubicación está apagada.'
+	String get locationOffTitle => 'La ubicación está apagada.';
+
+	/// es: 'En Android 12 o anterior, Android la exige para crear la red.'
+	String get locationOffMessage => 'En Android 12 o anterior, Android la exige para crear la red.';
+
+	/// es: 'Abrir ajustes de ubicación'
+	String get locationOffAction => 'Abrir ajustes de ubicación';
+
+	/// es: 'No se pudo crear la red.'
+	String get failedTitle => 'No se pudo crear la red.';
+
+	/// es: 'Reintenta en unos segundos o usa tu zona Wi-Fi.'
+	String get failedMessage => 'Reintenta en unos segundos o usa tu zona Wi-Fi.';
+
+	/// es: 'Este teléfono no puede crear la red.'
+	String get unsupportedTitle => 'Este teléfono no puede crear la red.';
+
+	/// es: 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.'
+	String get unsupportedMessage => 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.';
+}
+
 // Path: room.sheets.invite
 class Translations$room$sheets$invite$es {
 	Translations$room$sheets$invite$es.internal(this._root);
@@ -1099,6 +1315,18 @@ class Translations$room$sheets$invite$es {
 
 	/// es: 'Código QR de invitación'
 	String get qr => 'Código QR de invitación';
+
+	/// es: 'Desde Frecu › Escanear. El QR ya lleva la red, su clave y el código.'
+	String get messageWifi => 'Desde Frecu › Escanear. El QR ya lleva la red, su clave y el código.';
+
+	/// es: 'Clave $key'
+	String wifiKey({required Object key}) => 'Clave ${key}';
+
+	/// es: 'Red abierta, sin clave'
+	String get wifiOpen => 'Red abierta, sin clave';
+
+	/// es: 'A mano'
+	String get byHand => 'A mano';
 }
 
 // Path: room.sheets.route
@@ -1437,6 +1665,51 @@ class Translations$lobby$newRoom$guide$iphoneSteps$2$es with HotspotStep {
 	@override String get rest => ' mientras se unen. En iPhone recomendamos que el anfitrión use Android.';
 }
 
+// Path: lobby.newRoom.network.steps.0
+class Translations$lobby$newRoom$network$steps$0$es with HotspotStep {
+	Translations$lobby$newRoom$network$steps$0$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Toca «Crear la red».'
+	@override String get lead => 'Toca «Crear la red».';
+
+	/// es: ' La primera vez, Android te pide el permiso de dispositivos cercanos.'
+	@override String get rest => ' La primera vez, Android te pide el permiso de dispositivos cercanos.';
+}
+
+// Path: lobby.newRoom.network.steps.1
+class Translations$lobby$newRoom$network$steps$1$es with HotspotStep {
+	Translations$lobby$newRoom$network$steps$1$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Abre tu frecu y muestra el QR.'
+	@override String get lead => 'Abre tu frecu y muestra el QR.';
+
+	/// es: ' Ya lleva la red y su clave: tu grupo entra con un solo escaneo.'
+	@override String get rest => ' Ya lleva la red y su clave: tu grupo entra con un solo escaneo.';
+}
+
+// Path: lobby.newRoom.network.steps.2
+class Translations$lobby$newRoom$network$steps$2$es with HotspotStep {
+	Translations$lobby$newRoom$network$steps$2$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Al cerrar la frecu, la red se apaga.'
+	@override String get lead => 'Al cerrar la frecu, la red se apaga.';
+
+	/// es: ' La próxima tendrá otro nombre y otra clave.'
+	@override String get rest => ' La próxima tendrá otro nombre y otra clave.';
+}
+
 /// The flat map containing all translations for locale <es>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -1459,6 +1732,28 @@ extension on Translations {
 			'lobby.join.failedHint' => 'Revisa que estés en su misma red Wi-Fi e intenta otra vez.',
 			'lobby.join.versionMismatch' => 'Esta frecu usa otra versión de Frecu.',
 			'lobby.join.versionMismatchHint' => 'Actualiza Frecu en los dos teléfonos.',
+			'lobby.join.wifi.network' => ({required Object ssid}) => 'Red ${ssid}',
+			'lobby.join.wifi.message' => 'Primero conectamos tu teléfono a la red de la frecu.',
+			'lobby.join.wifi.needed' => 'Para entrar a esta frecu, tu teléfono tiene que estar en su red.',
+			'lobby.join.wifi.connecting' => ({required Object ssid}) => 'Conectando a la Wi-Fi «${ssid}»…',
+			'lobby.join.wifi.confirmHint' => 'Tu teléfono te pedirá confirmar la red.',
+			'lobby.join.wifi.declinedTitle' => 'No te conectaste a la red.',
+			'lobby.join.wifi.declinedMessage' => 'Se canceló el aviso del sistema.',
+			'lobby.join.wifi.notFoundTitle' => ({required Object ssid}) => 'No encontramos la red «${ssid}».',
+			'lobby.join.wifi.notFoundMessage' => 'Acércate al anfitrión y revisa que la frecu siga abierta.',
+			'lobby.join.wifi.failedTitle' => 'No pudimos conectarte a la red.',
+			'lobby.join.wifi.failedMessage' => 'Vuelve a intentarlo o conéctate a mano.',
+			'lobby.join.wifi.manualMessage' => 'Abre Ajustes › Wi-Fi, elige esta red y escribe la clave. Luego vuelve a Frecu.',
+			'lobby.join.wifi.manualOld' => 'Este teléfono no se conecta solo a la red. Hazlo desde Ajustes › Wi-Fi con estos datos y vuelve a Frecu.',
+			'lobby.join.wifi.networkLabel' => 'Red',
+			'lobby.join.wifi.keyLabel' => 'Clave',
+			'lobby.join.wifi.noKey' => 'Red abierta, sin clave',
+			'lobby.join.wifi.copy' => 'Copiar',
+			'lobby.join.wifi.copied' => 'Clave copiada',
+			'lobby.join.wifi.retry' => 'Reintentar',
+			'lobby.join.wifi.manual' => 'Conectarme a mano',
+			'lobby.join.wifi.openWifi' => 'Abrir Wi-Fi',
+			'lobby.join.wifi.done' => 'Ya me conecté',
 			'lobby.join.pin.message' => 'Ingresa el código de acceso. Pídeselo al anfitrión.',
 			'lobby.join.pin.autoSend' => 'Se envía al completar los 4 dígitos',
 			'lobby.join.pin.checking' => 'Verificando con el anfitrión…',
@@ -1530,6 +1825,42 @@ extension on Translations {
 			'lobby.newRoom.guide.sameWifi' => 'Ya estamos en la misma Wi-Fi',
 			'lobby.newRoom.guide.openSettings' => 'Abrir ajustes de zona Wi-Fi',
 			'lobby.newRoom.guide.openSettingsIphone' => 'Abrir Ajustes',
+			'lobby.newRoom.network.heading' => 'Frecu crea la red',
+			'lobby.newRoom.network.message' => 'Tu teléfono será la antena del grupo. Sin internet y sin gastar tus datos.',
+			'lobby.newRoom.network.readyHeading' => 'Tu red está al aire',
+			'lobby.newRoom.network.readyMessage' => 'Ahora ponle nombre y código a tu frecu.',
+			'lobby.newRoom.network.steps.0.lead' => 'Toca «Crear la red».',
+			'lobby.newRoom.network.steps.0.rest' => ' La primera vez, Android te pide el permiso de dispositivos cercanos.',
+			'lobby.newRoom.network.steps.1.lead' => 'Abre tu frecu y muestra el QR.',
+			'lobby.newRoom.network.steps.1.rest' => ' Ya lleva la red y su clave: tu grupo entra con un solo escaneo.',
+			'lobby.newRoom.network.steps.2.lead' => 'Al cerrar la frecu, la red se apaga.',
+			'lobby.newRoom.network.steps.2.rest' => ' La próxima tendrá otro nombre y otra clave.',
+			'lobby.newRoom.network.create' => 'Crear la red',
+			'lobby.newRoom.network.creating' => 'Creando la red…',
+			'lobby.newRoom.network.creatingHint' => 'Tarda unos segundos.',
+			'lobby.newRoom.network.cancel' => 'Cancelar',
+			'lobby.newRoom.network.useHotspot' => 'Prefiero mi zona Wi-Fi',
+			'lobby.newRoom.network.keepHotspot' => 'Seguir con mi zona Wi-Fi',
+			'lobby.newRoom.network.kContinue' => 'Seguir',
+			'lobby.newRoom.network.retry' => 'Reintentar',
+			'lobby.newRoom.network.label' => 'Red de la frecu',
+			'lobby.newRoom.network.keyInQr' => 'La clave viaja en el QR',
+			'lobby.newRoom.network.onAir' => 'Al aire',
+			'lobby.newRoom.network.hotspotOnTitle' => 'Tu zona Wi-Fi está encendida.',
+			'lobby.newRoom.network.hotspotOnMessage' => 'Android no deja crear otra red a la vez. Apágala y reintenta, o sigue con ella: tu grupo se une a tu zona Wi-Fi como hoy.',
+			'lobby.newRoom.network.hotspotOnAction' => 'Abrir ajustes de la zona Wi-Fi',
+			'lobby.newRoom.network.nearbyDeniedTitle' => 'Falta el permiso de dispositivos cercanos.',
+			'lobby.newRoom.network.nearbyDeniedMessage' => 'Android lo exige para crear la red.',
+			'lobby.newRoom.network.locationDeniedTitle' => 'Falta el permiso de ubicación precisa.',
+			'lobby.newRoom.network.locationDeniedMessage' => 'En Android 12 o anterior, Android lo exige para crear la red.',
+			'lobby.newRoom.network.permissionAction' => 'Abrir ajustes de Frecu',
+			'lobby.newRoom.network.locationOffTitle' => 'La ubicación está apagada.',
+			'lobby.newRoom.network.locationOffMessage' => 'En Android 12 o anterior, Android la exige para crear la red.',
+			'lobby.newRoom.network.locationOffAction' => 'Abrir ajustes de ubicación',
+			'lobby.newRoom.network.failedTitle' => 'No se pudo crear la red.',
+			'lobby.newRoom.network.failedMessage' => 'Reintenta en unos segundos o usa tu zona Wi-Fi.',
+			'lobby.newRoom.network.unsupportedTitle' => 'Este teléfono no puede crear la red.',
+			'lobby.newRoom.network.unsupportedMessage' => 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.',
 			'lobby.newRoom.title' => 'Nueva frecu',
 			'lobby.newRoom.soundsIn' => 'Tu frecu suena en',
 			'lobby.newRoom.openedAt' => ({required Object time}) => 'Abierta a las ${time}',
@@ -1570,6 +1901,12 @@ extension on Translations {
 			'room.muted' => 'Silenciado',
 			'room.host' => 'Anfitrión',
 			'room.reconnecting' => 'Reconectando...',
+			'room.network.lostTitle' => 'La red de la frecu se apagó.',
+			'room.network.lostMessage' => 'Tu grupo se desconectó. Créala de nuevo y vuelve a mostrar el QR.',
+			'room.network.recreate' => 'Crear la red de nuevo',
+			'room.network.recreating' => 'Creando la red…',
+			'room.network.failedTitle' => 'No se pudo crear la red.',
+			'room.network.failedMessage' => 'Apaga tu zona Wi-Fi si está encendida y vuelve a intentarlo.',
 			'room.noteNames.0' => 'Do',
 			'room.noteNames.1' => 'Re♭',
 			'room.noteNames.2' => 'Re',
@@ -1605,6 +1942,10 @@ extension on Translations {
 			'room.sheets.invite.port' => ({required Object port}) => 'Puerto ${port}',
 			'room.sheets.invite.footer' => ({required Object list}) => 'También aparece en “${list}” para quien esté en tu red.',
 			'room.sheets.invite.qr' => 'Código QR de invitación',
+			'room.sheets.invite.messageWifi' => 'Desde Frecu › Escanear. El QR ya lleva la red, su clave y el código.',
+			'room.sheets.invite.wifiKey' => ({required Object key}) => 'Clave ${key}',
+			'room.sheets.invite.wifiOpen' => 'Red abierta, sin clave',
+			'room.sheets.invite.byHand' => 'A mano',
 			'room.sheets.route.kicker' => 'Salida de audio',
 			'room.sheets.route.title' => '¿Dónde escuchas?',
 			'room.sheets.route.message' => 'Al conectar audífonos, el audio cambia solo.',
@@ -1753,6 +2094,8 @@ extension on Translations {
 			'errors.hostUnreachable' => 'El anfitrión no responde',
 			'errors.versionMismatch' => 'Esta frecu usa otra versión de Frecu',
 			'errors.audio' => 'Error en el subsistema de audio',
+			'errors.hotspot' => 'No se pudo crear la red de la frecu',
+			'errors.wifiJoin' => 'No se pudo conectar a la red de la frecu',
 			'errors.unexpected' => 'Error inesperado',
 			'splash.title' => 'frecu',
 			'splash.tagline' => 'Voz de grupo. Sin internet.',

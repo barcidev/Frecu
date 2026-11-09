@@ -16,7 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$Room {
 
  String get id; String get name; String get hostAddress; int get port; String get accessCode; DateTime get createdAt; int get maxParticipants;/// Nota musical de la frecu, calculada con su hora de apertura.
-@RoomNoteConverter() RoomNote? get note;
+@RoomNoteConverter() RoomNote? get note;/// Red de la frecu, si el anfitrión la creó con Frecu: la que creó este
+/// teléfono o la que traía la invitación. Va en el QR para invitar.
+ WifiCredentials? get wifi;
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +31,16 @@ $RoomCopyWith<Room> get copyWith => _$RoomCopyWithImpl<Room>(this as Room, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note)&&(identical(other.wifi, wifi) || other.wifi == wifi));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note);
+int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note,wifi);
 
 @override
 String toString() {
-  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note)';
+  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note, wifi: $wifi)';
 }
 
 
@@ -49,11 +51,11 @@ abstract mixin class $RoomCopyWith<$Res>  {
   factory $RoomCopyWith(Room value, $Res Function(Room) _then) = _$RoomCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note
+ String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note, WifiCredentials? wifi
 });
 
 
-$RoomNoteCopyWith<$Res>? get note;
+$RoomNoteCopyWith<$Res>? get note;$WifiCredentialsCopyWith<$Res>? get wifi;
 
 }
 /// @nodoc
@@ -66,7 +68,7 @@ class _$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,Object? wifi = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -76,7 +78,8 @@ as int,accessCode: null == accessCode ? _self.accessCode : accessCode // ignore:
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,maxParticipants: null == maxParticipants ? _self.maxParticipants : maxParticipants // ignore: cast_nullable_to_non_nullable
 as int,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
-as RoomNote?,
+as RoomNote?,wifi: freezed == wifi ? _self.wifi : wifi // ignore: cast_nullable_to_non_nullable
+as WifiCredentials?,
   ));
 }
 /// Create a copy of Room
@@ -90,6 +93,18 @@ $RoomNoteCopyWith<$Res>? get note {
 
   return $RoomNoteCopyWith<$Res>(_self.note!, (value) {
     return _then(_self.copyWith(note: value));
+  });
+}/// Create a copy of Room
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$WifiCredentialsCopyWith<$Res>? get wifi {
+    if (_self.wifi == null) {
+    return null;
+  }
+
+  return $WifiCredentialsCopyWith<$Res>(_self.wifi!, (value) {
+    return _then(_self.copyWith(wifi: value));
   });
 }
 }
@@ -170,10 +185,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note);case _:
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi);case _:
   return orElse();
 
 }
@@ -191,10 +206,10 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi)  $default,) {final _that = this;
 switch (_that) {
 case _Room():
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note);}
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -208,10 +223,10 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi)?  $default,) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note);case _:
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi);case _:
   return null;
 
 }
@@ -223,7 +238,7 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 @JsonSerializable()
 
 class _Room implements Room {
-  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note});
+  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note, this.wifi});
   factory _Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
 @override final  String id;
@@ -235,6 +250,9 @@ class _Room implements Room {
 @override@JsonKey() final  int maxParticipants;
 /// Nota musical de la frecu, calculada con su hora de apertura.
 @override@RoomNoteConverter() final  RoomNote? note;
+/// Red de la frecu, si el anfitrión la creó con Frecu: la que creó este
+/// teléfono o la que traía la invitación. Va en el QR para invitar.
+@override final  WifiCredentials? wifi;
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note)&&(identical(other.wifi, wifi) || other.wifi == wifi));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note);
+int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note,wifi);
 
 @override
 String toString() {
-  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note)';
+  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note, wifi: $wifi)';
 }
 
 
@@ -269,11 +287,11 @@ abstract mixin class _$RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
   factory _$RoomCopyWith(_Room value, $Res Function(_Room) _then) = __$RoomCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note
+ String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note, WifiCredentials? wifi
 });
 
 
-@override $RoomNoteCopyWith<$Res>? get note;
+@override $RoomNoteCopyWith<$Res>? get note;@override $WifiCredentialsCopyWith<$Res>? get wifi;
 
 }
 /// @nodoc
@@ -286,7 +304,7 @@ class __$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,Object? wifi = freezed,}) {
   return _then(_Room(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -296,7 +314,8 @@ as int,accessCode: null == accessCode ? _self.accessCode : accessCode // ignore:
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,maxParticipants: null == maxParticipants ? _self.maxParticipants : maxParticipants // ignore: cast_nullable_to_non_nullable
 as int,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
-as RoomNote?,
+as RoomNote?,wifi: freezed == wifi ? _self.wifi : wifi // ignore: cast_nullable_to_non_nullable
+as WifiCredentials?,
   ));
 }
 
@@ -311,6 +330,18 @@ $RoomNoteCopyWith<$Res>? get note {
 
   return $RoomNoteCopyWith<$Res>(_self.note!, (value) {
     return _then(_self.copyWith(note: value));
+  });
+}/// Create a copy of Room
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$WifiCredentialsCopyWith<$Res>? get wifi {
+    if (_self.wifi == null) {
+    return null;
+  }
+
+  return $WifiCredentialsCopyWith<$Res>(_self.wifi!, (value) {
+    return _then(_self.copyWith(wifi: value));
   });
 }
 }

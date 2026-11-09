@@ -1,3 +1,4 @@
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,6 +20,10 @@ sealed class RoomInvite with _$RoomInvite {
 
     /// Nombre de la frecu; nulo si la invitación no lo trae (QR anteriores).
     String? name,
+
+    /// Red de la frecu que creó el anfitrión; nula si la invitación no la
+    /// trae (la red es la de siempre).
+    WifiCredentials? wifi,
   }) = _RoomInvite;
 
   /// Deserializa desde JSON.

@@ -3,9 +3,12 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/core/design/widgets/signal_signature.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/usecases/build_invite_qr.dart';
@@ -31,6 +34,7 @@ class InviteSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final fr = context.fr;
     final copy = t.room.sheets.invite;
+    final wifi = room.wifi;
     final uri = const BuildInviteQr().buildUri(
       RoomInvite(
         host: room.hostAddress,
@@ -39,6 +43,7 @@ class InviteSheet extends StatelessWidget {
         accessCode: room.accessCode,
         note: room.note,
         name: room.name,
+        wifi: wifi,
       ),
     );
     return SingleChildScrollView(
@@ -47,10 +52,11 @@ class InviteSheet extends StatelessWidget {
           RoomSheetHeader(
             kicker: copy.kicker,
             title: copy.title,
-            message: copy.message,
+            message: wifi == null ? copy.message : copy.messageWifi,
           ),
           Center(child: InviteQr(data: uri)),
           _InviteFacts(room: room),
+          if (wifi != null) InviteNetwork(wifi: wifi),
           Text(
             copy.footer(list: t.lobby.nearbyRooms),
             textAlign: TextAlign.center,
@@ -371,6 +377,92 @@ class _InviteFacts extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// La red de la frecu bajo la ficha (`.nfc-box` del prototipo de la red de
+/// Frecu): su nombre y su clave, por si alguien se une a mano.
+class InviteNetwork extends StatelessWidget {
+  /// Crea la fila de la red [wifi].
+  const InviteNetwork({required this.wifi, super.key});
+
+  /// Red de la frecu.
+  final WifiCredentials wifi;
+
+  @override
+  Widget build(BuildContext context) {
+    final fr = context.fr;
+    final c = fr.colors;
+    final copy = t.room.sheets.invite;
+    final key = wifi.passphrase;
+    final data = fr.type.data;
+    return DecoratedBox(
+      key: const Key('invite_network'),
+      decoration: ShapeDecoration(
+        color: c.bg1,
+        shape: RoundedSuperellipseBorder(
+          borderRadius: BorderRadius.circular(18),
+          side: BorderSide(color: c.line1),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: ShapeDecoration(
+                color: c.bg2,
+                shape: RoundedSuperellipseBorder(
+                  borderRadius: BorderRadius.circular(13),
+                  side: BorderSide(color: c.line1),
+                ),
+              ),
+              child: Center(child: FrIcon(FrIcons.hotspot, color: c.signalFg)),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 3,
+                children: [
+                  Text(
+                    wifi.ssid,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: data.copyWith(color: c.tx1),
+                  ),
+                  if (key == null)
+                    Text(
+                      copy.wifiOpen,
+                      style: fr.type.bodyS.copyWith(color: c.tx3),
+                    )
+                  else
+                    Text.rich(
+                      TextSpan(
+                        text: copy.wifiKey(key: ''),
+                        children: [
+                          TextSpan(
+                            text: key,
+                            style: data.copyWith(color: c.tx2, fontSize: 12.5),
+                          ),
+                        ],
+                      ),
+                      style: fr.type.bodyS.copyWith(color: c.tx3),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              copy.byHand.toUpperCase(),
+              style: fr.type.labelS.copyWith(color: c.tx3),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
