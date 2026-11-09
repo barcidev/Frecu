@@ -1,5 +1,6 @@
 package com.frecu.frecu
 
+import android.view.KeyEvent
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
@@ -10,5 +11,10 @@ class MainActivity : FlutterActivity() {
         HotspotNetworkDetector.install()
         super.configureFlutterEngine(flutterEngine)
         FrecuHaptics.install(this, flutterEngine.dartExecutor.binaryMessenger)
+        VolumePtt.install(this, flutterEngine.dartExecutor.binaryMessenger)
     }
+
+    // El botón de volumen habla en la frecu si la persona lo activó.
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+        VolumePtt.onKey(event) || super.dispatchKeyEvent(event)
 }

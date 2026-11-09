@@ -6,7 +6,7 @@
 // P101/P105, F11, F13 (malla y ruta): la isla avisa quién entra y sale, la ruta nueva (con el nombre del Bluetooth) y la conexión recuperada, y cuenta los segundos al reconectar; la malla dice «Silenciado» y «Conectando» según la voz.
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -23,6 +23,7 @@ import 'package:frecu/features/room/data/datasources/audio_session_datasource.da
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
+import 'package:frecu/features/room/data/datasources/volume_buttons_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
@@ -33,15 +34,18 @@ import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
+import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
+import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/features/settings/presentation/providers/vibration_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Señalización de mentira: contesta el `join` con un `welcome` (con los
 /// que ya estaban y un id nuevo cada vez) y deja inyectar mensajes.
@@ -374,6 +378,8 @@ void main() {
     late StreamController<String?> bluetooth;
     late StreamController<int> notificationLeaves;
     late List<String> vibrated;
+    late StreamController<Object?> volumeKeys;
+    late List<bool> volumeEnabled;
 
     setUp(() {
       // La malla, el núcleo y el inicio animan sin fin: con movimiento
@@ -396,6 +402,8 @@ void main() {
       bluetooth = StreamController<String?>.broadcast();
       notificationLeaves = StreamController<int>.broadcast();
       vibrated = [];
+      volumeKeys = StreamController<Object?>.broadcast();
+      volumeEnabled = [];
       when(() => voice.initializeAudio()).thenAnswer((_) async => _ok);
       when(
         () => voice.joinMesh(
@@ -461,6 +469,13 @@ void main() {
               signalingClientProvider.overrideWithValue(signaling),
               roomRepositoryProvider.overrideWithValue(rooms),
               voiceRepositoryProvider.overrideWithValue(voice),
+              volumeButtonsProvider.overrideWithValue(
+                VolumeButtonsDataSource(
+                  invoke: (_, enabled) async =>
+                      volumeEnabled.add(enabled! as bool),
+                  events: volumeKeys.stream,
+                ),
+              ),
               hapticsProvider.overrideWithValue(
                 Haptics(invoke: (_, pattern) async => vibrated.add('$pattern')),
               ),
@@ -871,6 +886,45 @@ void main() {
         signaling.sent.whereType<SignalingQuickMessage>().single.kind,
         'onMyWay',
       );
+    });
+
+    testWidgets('Botón de volumen (Android): con la opción activada, pulsar '
+        'habla, soltar calla y con la pantalla apagada cada pulsación '
+        'alterna; al salir deja el volumen como estaba', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      await tester.runAsync(
+        () => SharedPreferencesAsync().setString(
+          PreferencesRepositoryImpl.volumePttKey,
+          'true',
+        ),
+      );
+      addTearDown(
+        () => tester.runAsync(
+          () => SharedPreferencesAsync().setString(
+            PreferencesRepositoryImpl.volumePttKey,
+            'false',
+          ),
+        ),
+      );
+      final router = await enter(tester);
+      expect(volumeEnabled, [true]);
+
+      volumeKeys.add('down');
+      await tester.pumpAndSettle();
+      verify(() => voice.startTalking()).called(1);
+      volumeKeys.add('up');
+      await tester.pumpAndSettle();
+      verify(() => voice.stopTalking()).called(1);
+      volumeKeys.add('toggle');
+      await tester.pumpAndSettle();
+      verify(() => voice.startTalking()).called(1);
+
+      // Salir de la pantalla devuelve el botón al volumen.
+      router.popUntilRoot();
+      await tester.pumpAndSettle();
+      expect(volumeEnabled.last, isFalse);
+      await volumeKeys.close();
+      debugDefaultTargetPlatformOverride = null;
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (

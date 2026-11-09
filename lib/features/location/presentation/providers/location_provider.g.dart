@@ -62,17 +62,20 @@ String _$locationRepositoryHash() =>
     r'0e1e6c1543bc8c01480c2c89b04622bce8bd7bbc';
 
 /// Comparte la ubicación propia (si se activa), recibe la de los demás y
-/// decide quién se quedó atrás. Al terminar la frecu deja de compartir.
+/// decide quién se quedó atrás. La pantalla de la frecu deja de compartir
+/// al terminar o al salir.
 
 @ProviderFor(LocationSharing)
 final locationSharingProvider = LocationSharingProvider._();
 
 /// Comparte la ubicación propia (si se activa), recibe la de los demás y
-/// decide quién se quedó atrás. Al terminar la frecu deja de compartir.
+/// decide quién se quedó atrás. La pantalla de la frecu deja de compartir
+/// al terminar o al salir.
 final class LocationSharingProvider
     extends $NotifierProvider<LocationSharing, LocationState> {
   /// Comparte la ubicación propia (si se activa), recibe la de los demás y
-  /// decide quién se quedó atrás. Al terminar la frecu deja de compartir.
+  /// decide quién se quedó atrás. La pantalla de la frecu deja de compartir
+  /// al terminar o al salir.
   LocationSharingProvider._()
     : super(
         from: null,
@@ -100,10 +103,11 @@ final class LocationSharingProvider
   }
 }
 
-String _$locationSharingHash() => r'1702cb88ce01f7b52d4736ac69403dfe7599e9f7';
+String _$locationSharingHash() => r'35d8db46907d7c3f4399adfb447ad8ee253ebb66';
 
 /// Comparte la ubicación propia (si se activa), recibe la de los demás y
-/// decide quién se quedó atrás. Al terminar la frecu deja de compartir.
+/// decide quién se quedó atrás. La pantalla de la frecu deja de compartir
+/// al terminar o al salir.
 
 abstract class _$LocationSharing extends $Notifier<LocationState> {
   LocationState build();

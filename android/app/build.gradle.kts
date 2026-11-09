@@ -78,4 +78,6 @@ dependencies {
     // trae flutter_webrtc (no se empaqueta otra copia). Debe ser la misma
     // versión que declara flutter_webrtc en su android/build.gradle.
     compileOnly("io.github.webrtc-sdk:android:150.7871.04")
+    // Sesión de medios para el botón de volumen con la pantalla apagada.
+    implementation("androidx.media:media:1.7.0")
 }

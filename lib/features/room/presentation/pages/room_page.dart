@@ -25,6 +25,7 @@ import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/pages/room_haptics.dart';
 import 'package:frecu/features/room/presentation/pages/room_messages.dart';
+import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
@@ -65,6 +66,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
 
   /// Vibración con los cambios de la frecu.
   final RoomHaptics _haptics = RoomHaptics();
+
+  /// Botón de volumen para hablar (Android).
+  final RoomVolumePtt _volume = RoomVolumePtt();
 
   /// Mensajes rápidos: enviar y avisar de los que llegan.
   late final RoomMessages _messages = RoomMessages(
@@ -113,6 +117,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     super.initState();
     _rooms = ref.read(roomNotifierProvider.notifier);
     _location = ref.read(locationSharingProvider.notifier);
+    _volume.start(ref);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => unawaited(_startVoice()),
     );
@@ -121,6 +126,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   @override
   void dispose() {
     _eventTimer?.cancel();
+    _volume.stop();
     // Si la pantalla se va sin salir de la frecu, sale: nunca deja servidor,
     // anuncio, servicio ni micrófono vivos.
     if (_inRoom && !_leaving && _closure == null) {

@@ -206,6 +206,8 @@ void main() {
       );
       await _openSettings(tester, permissions);
 
+      await tester.ensureVisible(_permissionsRow);
+      await tester.pumpAndSettle();
       await tester.tap(_permissionsRow);
       await tester.pumpAndSettle();
 
@@ -223,6 +225,8 @@ void main() {
       await _openSettings(tester, permissions);
       expect(_tag(tester).label, '0/3');
 
+      await tester.ensureVisible(_permissionsRow);
+      await tester.pumpAndSettle();
       await tester.tap(_permissionsRow);
       await tester.pumpAndSettle();
 
@@ -246,6 +250,8 @@ void main() {
       );
       await _openSettings(tester, permissions);
 
+      await tester.ensureVisible(_permissionsRow);
+      await tester.pumpAndSettle();
       await tester.tap(_permissionsRow);
       await tester.pumpAndSettle();
 
@@ -258,6 +264,8 @@ void main() {
       final permissions = _FakePermissions(current: _allGranted);
       await _openSettings(tester, permissions);
 
+      await tester.ensureVisible(_permissionsRow);
+      await tester.pumpAndSettle();
       await tester.tap(_permissionsRow);
       await tester.pumpAndSettle();
 
@@ -291,6 +299,8 @@ void main() {
       );
       expect(_chevronIn(_guideRow), findsOneWidget);
 
+      await tester.ensureVisible(_guideRow);
+      await tester.pumpAndSettle();
       await tester.tap(_guideRow);
       await tester.pumpAndSettle();
 
@@ -319,6 +329,8 @@ void main() {
     for (final label in ['Ya está activo', 'Ya estamos en la misma Wi-Fi']) {
       testWidgets('«$label» también vuelve a Ajustes', (tester) async {
         await _openSettings(tester, _FakePermissions(current: _allGranted));
+        await tester.ensureVisible(_guideRow);
+        await tester.pumpAndSettle();
         await tester.tap(_guideRow);
         await tester.pumpAndSettle();
 
@@ -415,6 +427,8 @@ void main() {
       findsOneWidget,
     );
 
+    await tester.ensureVisible(_guideRow);
+    await tester.pumpAndSettle();
     await tester.tap(_guideRow);
     await tester.pumpAndSettle();
     expect(find.text('Turn on your hotspot'), findsOneWidget);

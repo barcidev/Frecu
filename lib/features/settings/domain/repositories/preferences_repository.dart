@@ -27,4 +27,7 @@ abstract interface class PreferencesRepository {
 
   /// Guarda si el teléfono vibra con los avisos de la frecu.
   Future<Result<void>> saveVibration({required bool enabled});
+
+  /// Guarda si el botón de volumen sirve para hablar (Android).
+  Future<Result<void>> saveVolumePtt({required bool enabled});
 }
