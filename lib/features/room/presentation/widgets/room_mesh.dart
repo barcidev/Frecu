@@ -42,7 +42,8 @@ class RoomMesh extends StatefulWidget {
   /// Ids de quienes hablan.
   final Set<String> speakingPeers;
 
-  /// La persona propia está transmitiendo.
+  /// La persona propia habla: en PTT, transmite; en micrófono abierto, se
+  /// oye su voz.
   final bool localTalking;
 
   /// Nivel real de la voz de cada persona por id, la propia incluida, de 0

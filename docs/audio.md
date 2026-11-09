@@ -10,4 +10,4 @@
 - Elegir «Abierto» en el selector abre el micrófono al instante. El modo por defecto de Ajustes se aplica al entrar sin abrirlo: Abierto empieza en silencio. Silenciarse en Abierto envía `talk_state` con `muted: true` y los demás ven «Silenciado».
 - Mientras la frecu reconecta no se transmite, ni en PTT ni en Abierto; al volver, el micrófono abierto se retoma solo y PTT espera a que se vuelva a presionar.
 - En modo micrófono abierto con altavoz, muestra un aviso sugiriendo audífonos para evitar eco.
-- El indicador de "hablando" se basa en `talk_state` en PTT. En micrófono abierto, usa el nivel de audio de las estadísticas de WebRTC.
+- El indicador de "hablando" se basa en `talk_state`. En PTT, se anuncia al presionar y al soltar. En micrófono abierto, cada teléfono mide su propia voz con el `audioLevel` del `media-source` de WebRTC (`VoiceActivityDetector`): anuncia `isSpeaking: true` cuando el nivel supera el umbral (`openMicVoiceThresholdDb`, −36 dBFS) y `false` tras 400 ms sin superarlo (`openMicVoiceHold`). La persona propia se ve «hablando» con la misma regla. El umbral falta ajustarlo en teléfonos reales.

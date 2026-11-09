@@ -13,7 +13,6 @@ import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
-import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSignalingClientDataSource extends Mock
@@ -236,13 +235,12 @@ void main() {
 
     // AC2
     test(
-      'AC2: startTalking enables audio track and sends talk_state true',
+      'AC2: startTalking (PTT) enables audio track and sends talk_state true',
       () async {
         final pcDataSource = createPeerConnectionDataSource();
         final repository = createRepository(pcDataSource);
 
         await repository.joinMesh(localPeerId: 'my_peer_id', peerIds: const []);
-        await repository.setTalkMode(TalkMode.openMic);
 
         final startResult = await repository.startTalking();
         expect(startResult.isSuccess, isTrue);

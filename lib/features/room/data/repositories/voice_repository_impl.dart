@@ -10,6 +10,7 @@ import 'package:frecu/features/room/data/datasources/peer_connection_datasource.
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/current_then.dart';
+import 'package:frecu/features/room/data/repositories/voice_activity_detector.dart';
 import 'package:frecu/features/room/data/repositories/voice_level_sampler.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
@@ -74,6 +75,12 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _peerConnection.readVoiceLevels,
   );
 
+  /// Voz propia en micrófono abierto, por el nivel local.
+  late final VoiceActivityDetector _voice = VoiceActivityDetector(
+    onChanged: _handleVoiceActivity,
+  );
+  StreamSubscription<double>? _localLevelSubscription;
+
   StreamSubscription<SignalingMessage>? _signalingSubscription;
   StreamSubscription<bool>? _connectionSubscription;
   StreamSubscription<Set<AudioDevice>>? _devicesSubscription;
@@ -81,6 +88,8 @@ class VoiceRepositoryImpl implements VoiceRepository {
   Timer? _reapplyRoute;
 
   final StreamController<bool> _isTalkingController =
+      StreamController<bool>.broadcast();
+  final StreamController<bool> _voiceDetectedController =
       StreamController<bool>.broadcast();
   final StreamController<Set<String>> _speakingPeersController =
       StreamController<Set<String>>.broadcast();
@@ -105,6 +114,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
   };
   String? _bluetoothName;
   bool _isTalking = false;
+
+  /// Último valor emitido por [watchVoiceDetected].
+  bool _voiceDetected = false;
 
   /// Id con el que la voz está en la malla; nulo fuera de una frecu.
   String? _meshPeerId;
@@ -208,6 +220,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
       _isTalking = false;
       _emit(_isTalkingController, false);
     }
+    _syncVoiceActivity();
     _setSpeakingPeers(const {});
     _setMutedPeers(const {});
     await _peerConnection.reset();
@@ -217,20 +230,64 @@ class VoiceRepositoryImpl implements VoiceRepository {
     }
   }
 
+  /// Habla propia que ve la frecu: en PTT mientras se transmite; en
+  /// micrófono abierto, mientras se oye la voz.
+  bool get _speaking =>
+      _isTalking && (_talkMode == TalkMode.pushToTalk || _voice.isActive);
+
   /// Avisa a la frecu del estado propio (al entrar alguien, o al volver).
   void _announce() {
     _peerConnection.announceTalkState(
-      speaking: _isTalking,
+      speaking: _speaking,
       muted: _talkMode == TalkMode.openMic && !_isTalking,
     );
+  }
+
+  /// Escucha el nivel propio solo en micrófono abierto con el micrófono
+  /// abierto; si no, la voz vuelve al silencio.
+  void _syncVoiceActivity() {
+    if (_isTalking && _talkMode == TalkMode.openMic) {
+      _localLevelSubscription ??= _levels.watchLocal().listen(
+        _voice.add,
+        onError: _logStreamError,
+      );
+    } else {
+      unawaited(_localLevelSubscription?.cancel());
+      _localLevelSubscription = null;
+      _voice.reset();
+    }
+    _emitVoiceDetected();
+  }
+
+  void _emitVoiceDetected() {
+    final detected =
+        _isTalking && _talkMode == TalkMode.openMic && _voice.isActive;
+    if (detected == _voiceDetected) return;
+    _voiceDetected = detected;
+    _emit(_voiceDetectedController, detected);
+  }
+
+  /// En micrófono abierto, la voz que empieza o termina se anuncia.
+  void _handleVoiceActivity(bool active) {
+    _emitVoiceDetected();
+    if (_meshPeerId != null && _isTalking && _talkMode == TalkMode.openMic) {
+      _peerConnection.announceTalkState(speaking: active);
+    }
   }
 
   @override
   Future<Result<void>> startTalking() async {
     try {
       _isTalking = true;
-      _peerConnection.setMicrophoneEnabled(enabled: true);
+      if (_talkMode == TalkMode.openMic) {
+        // Abierto no es hablar: se anuncia la voz cuando se oiga.
+        _peerConnection.setMicrophoneEnabled(enabled: true, announce: false);
+        _announce();
+      } else {
+        _peerConnection.setMicrophoneEnabled(enabled: true);
+      }
       _emit(_isTalkingController, true);
+      _syncVoiceActivity();
       return const Result.success(null);
     } on Object catch (e, st) {
       AppLogger.e('Error starting voice transmission', e, st);
@@ -247,6 +304,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
         muted: _talkMode == TalkMode.openMic,
       );
       _emit(_isTalkingController, false);
+      _syncVoiceActivity();
       return const Result.success(null);
     } on Object catch (e, st) {
       AppLogger.e('Error stopping voice transmission', e, st);
@@ -269,8 +327,10 @@ class VoiceRepositoryImpl implements VoiceRepository {
             _announce();
           }
         case TalkMode.openMic:
-          // Abierto empieza en silencio hasta que se abre el micrófono.
-          if (!_isTalking) _announce();
+          // Abierto empieza en silencio hasta que se abre el micrófono, y
+          // abierto, sin hablar hasta que se oye la voz.
+          _syncVoiceActivity();
+          _announce();
       }
       return const Result.success(null);
     } on Object catch (e, st) {
@@ -316,6 +376,10 @@ class VoiceRepositoryImpl implements VoiceRepository {
   @override
   Stream<bool> watchIsTalking() =>
       currentThen(() => _isTalking, _isTalkingController.stream);
+
+  @override
+  Stream<bool> watchVoiceDetected() =>
+      currentThen(() => _voiceDetected, _voiceDetectedController.stream);
 
   @override
   Stream<Set<String>> watchSpeakingPeers() =>
@@ -441,6 +505,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
       _peerConnection.setMicrophoneEnabled(enabled: false, announce: false);
       _emit(_isTalkingController, false);
     }
+    _syncVoiceActivity();
     _setSpeakingPeers(const {});
   }
 
@@ -546,10 +611,14 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _reapplyRoute?.cancel();
     await _webRtcDevicesSubscription?.cancel();
     _webRtcDevicesSubscription = null;
+    _voice.reset();
+    unawaited(_localLevelSubscription?.cancel());
+    _localLevelSubscription = null;
     await _levels.dispose();
     await _peerConnection.dispose();
     await _audioSession.deactivate();
     await _isTalkingController.close();
+    await _voiceDetectedController.close();
     await _speakingPeersController.close();
     await _mutedPeersController.close();
     await _talkModeController.close();
