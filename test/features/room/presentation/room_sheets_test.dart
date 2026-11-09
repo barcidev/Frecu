@@ -1,5 +1,5 @@
 // AC1: CUANDO el usuario toca Invitar en la cabecera o un lugar libre de la malla ENTONCES se abre la hoja de invitación con el QR, la nota, el código, la IP y el puerto; CUANDO toca Cerrar ENTONCES se cierra y sigue en la frecu.
-// AC2: CUANDO está en la frecu activa ENTONCES la cabecera lleva solo Invitar y Salir con íconos propios y la pastilla de ruta va a la izquierda del selector y muestra la ruta activa.
+// AC2: CUANDO está en la frecu activa ENTONCES la cabecera lleva Mensajes, Invitar y Salir con íconos propios y la pastilla de ruta va a la izquierda del selector y muestra la ruta activa.
 // AC3: CUANDO toca la pastilla ENTONCES se abre la hoja de salidas con la ruta activa marcada y las no disponibles deshabilitadas; elegir una disponible llama `setAudioRoute` y cierra la hoja.
 // AC4: CUANDO quien no es anfitrión toca Salir ENTONCES la hoja pide confirmar; cancelar lo deja en la frecu y confirmar llama `leaveRoom` y vuelve al inicio.
 // AC5: CUANDO el anfitrión toca Salir ENTONCES la hoja dice que la frecu se cierra para las otras personas, para la otra persona o, si está solo, que se cierra.
@@ -251,7 +251,7 @@ void main() {
       );
     });
 
-    testWidgets('AC2: la cabecera lleva solo Invitar y Salir con íconos '
+    testWidgets('AC2: la cabecera lleva Mensajes, Invitar y Salir con íconos '
         'propios, sin íconos de Material ni ruta', (tester) async {
       await enterRoom(tester);
 
@@ -266,7 +266,7 @@ void main() {
           )
           .map((button) => button.drawnIcon)
           .toList();
-      expect(buttons, [FrIcons.qr, FrIcons.exit]);
+      expect(buttons, [FrIcons.msg, FrIcons.qr, FrIcons.exit]);
       expect(find.descendant(of: header, matching: pill()), findsNothing);
     });
 

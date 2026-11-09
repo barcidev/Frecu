@@ -87,6 +87,18 @@ sealed class SignalingMessage with _$SignalingMessage {
     @Default('talk_state') String type,
   }) = SignalingTalkStateMessage;
 
+  /// Mensaje rápido para toda la frecu: [kind] es el nombre de uno de los
+  /// mensajes predefinidos (`behind`, `stop`, `fuel`, `ok`, `onMyWay`) o
+  /// `sos`. El anfitrión lo reenvía a todos menos a quien lo envía, con
+  /// [peerId] forzado al remitente. Un tipo desconocido se ignora al
+  /// recibirlo, así que se pueden sumar tipos sin cambiar la versión.
+  @FreezedUnionValue('quick_message')
+  const factory SignalingMessage.quickMessage({
+    required String peerId,
+    required String kind,
+    @Default('quick_message') String type,
+  }) = SignalingQuickMessage;
+
   /// Latido enviado para comprobar liveness.
   const factory SignalingMessage.ping({
     required int timestamp,

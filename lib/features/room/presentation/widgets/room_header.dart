@@ -18,6 +18,7 @@ class RoomHeader extends StatelessWidget {
     required this.localParticipantId,
     required this.onInvite,
     required this.onLeave,
+    this.onMessages,
     super.key,
   });
 
@@ -35,6 +36,9 @@ class RoomHeader extends StatelessWidget {
 
   /// Sale de la frecu.
   final VoidCallback onLeave;
+
+  /// Abre los mensajes rápidos; nulo sin frecu.
+  final VoidCallback? onMessages;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +80,14 @@ class RoomHeader extends StatelessWidget {
   Widget _buttons() {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      spacing: 8,
+      spacing: 6,
       children: [
+        FrIconButton.drawn(
+          key: const Key('messages_button'),
+          icon: FrIcons.msg,
+          semanticLabel: t.messages.button,
+          onPressed: onMessages,
+        ),
         FrIconButton.drawn(
           key: const Key('invite_button'),
           icon: FrIcons.qr,

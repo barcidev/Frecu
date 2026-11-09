@@ -132,6 +132,38 @@ void main() {
     expect(leo.of<SignalingTalkStateMessage>(), isEmpty);
   });
 
+  test('Mensajes rápidos: quick_message llega a todos menos a quien lo '
+      'envía, con su id como remitente', () async {
+    await start();
+    final ana = await join('Ana');
+    final leo = await join('Leo');
+    final sofi = await join('Sofi');
+
+    leo.client.send(
+      SignalingMessage.quickMessage(peerId: sofi.id!, kind: 'sos'),
+    );
+
+    final toAna = await next<SignalingQuickMessage>(ana);
+    expect(toAna.peerId, leo.id);
+    expect(toAna.kind, 'sos');
+    expect((await next<SignalingQuickMessage>(sofi)).peerId, leo.id);
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    expect(leo.of<SignalingQuickMessage>(), isEmpty);
+  });
+
+  test('Mensajes rápidos: antes del join no se enruta', () async {
+    await start();
+    final ana = await join('Ana');
+    final stranger = await connect();
+
+    stranger.client.send(
+      const SignalingMessage.quickMessage(peerId: 'x', kind: 'sos'),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+
+    expect(ana.of<SignalingQuickMessage>(), isEmpty);
+  });
+
   test('F12: talk_state lleva el silencio del micrófono abierto', () async {
     await start();
     final ana = await join('Ana');

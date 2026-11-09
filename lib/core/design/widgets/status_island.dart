@@ -17,6 +17,9 @@ enum StatusIslandTone {
 
   /// Aviso: borde y halo ámbar.
   warn,
+
+  /// Alarma (SOS): relleno rojo con texto claro.
+  alert,
 }
 
 enum _IslandKind {
@@ -183,6 +186,7 @@ class StatusIsland extends StatelessWidget {
         StatusIslandTone.neutral => _c.tx1,
         StatusIslandTone.onAir => _c.signalInk,
         StatusIslandTone.warn => _c.warn,
+        StatusIslandTone.alert => const Color(0xFFFFFFFF),
       };
 
   BoxDecoration _decoration() => switch (tone) {
@@ -223,6 +227,18 @@ class StatusIsland extends StatelessWidget {
         ),
       ],
     ),
+    StatusIslandTone.alert => BoxDecoration(
+      color: _c.alert,
+      borderRadius: BorderRadius.circular(18),
+      border: Border.all(color: _c.alert),
+      boxShadow: [
+        BoxShadow(
+          color: _c.alert.withValues(alpha: 0.85),
+          blurRadius: 30,
+          spreadRadius: -6,
+        ),
+      ],
+    ),
   };
 
   Widget? _leading() => switch (_kind) {
@@ -244,9 +260,14 @@ class StatusIsland extends StatelessWidget {
     _IslandKind.event => leading,
     _IslandKind.custom =>
       leading ??
-          _IslandDot(
-            color: tone == StatusIslandTone.onAir ? _c.signalInk : _c.signalFg,
-          ),
+          switch (tone) {
+            StatusIslandTone.onAir => _IslandDot(color: _c.signalInk),
+            StatusIslandTone.alert => const _IslandDot(
+              color: Color(0xFFFFFFFF),
+              period: 0.6,
+            ),
+            _ => _IslandDot(color: _c.signalFg),
+          },
   };
 }
 

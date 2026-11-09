@@ -17,6 +17,8 @@ import 'package:frecu/core/design/widgets/status_island.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/haptics/haptics.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/messages/presentation/widgets/sos_alert_layer.dart';
+import 'package:frecu/features/messages/presentation/widgets/sos_alert_view.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
@@ -813,6 +815,62 @@ void main() {
       talking.add(true);
       await tester.pumpAndSettle();
       expect(vibrated, isEmpty);
+
+      // Lo guardado sigue para las pruebas siguientes: se vuelve a encender.
+      await tester.runAsync(
+        () => container
+            .read(preferencesProvider.notifier)
+            .setVibration(enabled: true),
+      );
+    });
+
+    testWidgets('Mensajes rápidos: el que llega sale en la isla con quien lo '
+        'manda y vibra; uno elegido en la hoja se envía', (tester) async {
+      await enter(tester);
+
+      signaling.emit(
+        const SignalingMessage.quickMessage(peerId: 'peer_1', kind: 'stop'),
+      );
+      await tester.pumpAndSettle();
+      expect(islandLabel(tester), 'Andrés · Parada en la próxima');
+      expect(vibrated, contains('talk'));
+      await tester.pump(RoomIslandEvent.duration);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('messages_button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('quick_message_fuel')));
+      await tester.pumpAndSettle();
+      final sent = signaling.sent.whereType<SignalingQuickMessage>();
+      expect(sent.single.kind, 'fuel');
+      expect(islandLabel(tester), 'Enviado · Necesito combustible');
+      await tester.pump(RoomIslandEvent.duration);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('SOS: tapa la frecu con quien lo pide hasta que se atiende; '
+        '«Voy en camino» responde a todos', (tester) async {
+      await enter(tester);
+
+      signaling.emit(
+        const SignalingMessage.quickMessage(peerId: 'peer_1', kind: 'sos'),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(SosAlertView), findsOneWidget);
+      expect(find.text('Andrés necesita ayuda'), findsOneWidget);
+      expect(vibrated, ['sos']);
+
+      // Sin atender vuelve a vibrar.
+      await tester.pump(SosAlertLayer.remindEvery);
+      expect(vibrated, ['sos', 'sos']);
+
+      await tester.tap(find.byKey(const Key('sos_on_my_way')));
+      await tester.pumpAndSettle();
+      expect(find.byType(SosAlertView), findsNothing);
+      expect(
+        signaling.sent.whereType<SignalingQuickMessage>().single.kind,
+        'onMyWay',
+      );
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (

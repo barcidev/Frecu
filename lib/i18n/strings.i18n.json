@@ -374,5 +374,32 @@
     "localNetwork": "Red local",
     "mesh": "Malla P2P",
     "skip": "Toca para entrar"
+  },
+  "messages": {
+    "button": "Mensajes",
+    "kicker": "Para toda la frecu",
+    "title": "Mensajes rápidos",
+    "message": "Llegan al instante y vibran, aunque tengan la pantalla apagada.",
+    "kinds": {
+      "behind": "Me quedé atrás",
+      "stop": "Parada en la próxima",
+      "fuel": "Necesito combustible",
+      "ok": "Todo bien",
+      "onMyWay": "Voy en camino",
+      "sos": "SOS"
+    },
+    "sosHold": "Mantén para enviar SOS",
+    "sosHoldHelp": "Alarma para todos hasta que alguien la atienda",
+    "sent": "Enviado · $text",
+    "sosSent": "SOS enviado a tu grupo",
+    "received": "$name · $text",
+    "sendError": "No se pudo enviar: sin conexión con el anfitrión",
+    "sos": {
+      "kicker": "SOS",
+      "title": "$name necesita ayuda",
+      "body": "Avisa al grupo si vas hacia allá. La alarma sigue hasta que la atiendas.",
+      "onMyWay": "Voy en camino",
+      "dismiss": "Entendido"
+    }
   }
 }

@@ -46,6 +46,7 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$settings$en settings = _Translations$settings$en._(_root);
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 	@override late final _Translations$splash$en splash = _Translations$splash$en._(_root);
+	@override late final _Translations$messages$en messages = _Translations$messages$en._(_root);
 }
 
 // Path: app
@@ -228,6 +229,27 @@ class _Translations$splash$en extends Translations$splash$es {
 	@override String get localNetwork => 'Local network';
 	@override String get mesh => 'P2P mesh';
 	@override String get skip => 'Tap to enter';
+}
+
+// Path: messages
+class _Translations$messages$en extends Translations$messages$es {
+	_Translations$messages$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get button => 'Messages';
+	@override String get kicker => 'For the whole frecu';
+	@override String get title => 'Quick messages';
+	@override String get message => 'They arrive instantly and vibrate, even with the screen off.';
+	@override late final _Translations$messages$kinds$en kinds = _Translations$messages$kinds$en._(_root);
+	@override String get sosHold => 'Hold to send SOS';
+	@override String get sosHoldHelp => 'Alarm for everyone until someone answers';
+	@override String sent({required Object text}) => 'Sent · ${text}';
+	@override String get sosSent => 'SOS sent to your group';
+	@override String received({required Object name, required Object text}) => '${name} · ${text}';
+	@override String get sendError => 'Couldn\'t send: no connection to the host';
+	@override late final _Translations$messages$sos$en sos = _Translations$messages$sos$en._(_root);
 }
 
 // Path: lobby.join
@@ -543,6 +565,35 @@ class _Translations$settings$themeMode$en extends Translations$settings$themeMod
 	@override String get auto => 'Auto';
 	@override String get light => 'Light';
 	@override String get dark => 'Dark';
+}
+
+// Path: messages.kinds
+class _Translations$messages$kinds$en extends Translations$messages$kinds$es {
+	_Translations$messages$kinds$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get behind => 'I fell behind';
+	@override String get stop => 'Stop at the next one';
+	@override String get fuel => 'I need fuel';
+	@override String get ok => 'All good';
+	@override String get onMyWay => 'On my way';
+	@override String get sos => 'SOS';
+}
+
+// Path: messages.sos
+class _Translations$messages$sos$en extends Translations$messages$sos$es {
+	_Translations$messages$sos$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'SOS';
+	@override String title({required Object name}) => '${name} needs help';
+	@override String get body => 'Tell the group if you\'re heading there. The alarm continues until you answer.';
+	@override String get onMyWay => 'On my way';
+	@override String get dismiss => 'Got it';
 }
 
 // Path: lobby.join.pin
@@ -1160,6 +1211,27 @@ extension on TranslationsEn {
 			'splash.localNetwork' => 'Local network',
 			'splash.mesh' => 'P2P mesh',
 			'splash.skip' => 'Tap to enter',
+			'messages.button' => 'Messages',
+			'messages.kicker' => 'For the whole frecu',
+			'messages.title' => 'Quick messages',
+			'messages.message' => 'They arrive instantly and vibrate, even with the screen off.',
+			'messages.kinds.behind' => 'I fell behind',
+			'messages.kinds.stop' => 'Stop at the next one',
+			'messages.kinds.fuel' => 'I need fuel',
+			'messages.kinds.ok' => 'All good',
+			'messages.kinds.onMyWay' => 'On my way',
+			'messages.kinds.sos' => 'SOS',
+			'messages.sosHold' => 'Hold to send SOS',
+			'messages.sosHoldHelp' => 'Alarm for everyone until someone answers',
+			'messages.sent' => ({required Object text}) => 'Sent · ${text}',
+			'messages.sosSent' => 'SOS sent to your group',
+			'messages.received' => ({required Object name, required Object text}) => '${name} · ${text}',
+			'messages.sendError' => 'Couldn\'t send: no connection to the host',
+			'messages.sos.kicker' => 'SOS',
+			'messages.sos.title' => ({required Object name}) => '${name} needs help',
+			'messages.sos.body' => 'Tell the group if you\'re heading there. The alarm continues until you answer.',
+			'messages.sos.onMyWay' => 'On my way',
+			'messages.sos.dismiss' => 'Got it',
 			_ => null,
 		};
 	}

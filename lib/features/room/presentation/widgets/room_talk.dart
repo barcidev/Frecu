@@ -185,33 +185,61 @@ class RoomIslandEvent {
   /// [name] se unió; su firma va en [color], el de su lugar.
   const RoomIslandEvent.joined({required this.name, required Color this.color})
     : kind = RoomIslandEventKind.joined,
-      icon = null;
+      icon = null,
+      text = null;
 
   /// [name] salió.
   const RoomIslandEvent.left({required this.name})
     : kind = RoomIslandEventKind.left,
       color = null,
-      icon = null;
+      icon = null,
+      text = null;
 
   /// El audio sale ahora por [name], con el ícono de su ruta.
   const RoomIslandEvent.route({
     required this.name,
     required FrIconData this.icon,
   }) : kind = RoomIslandEventKind.route,
-       color = null;
+       color = null,
+       text = null;
 
   /// El enlace de voz con [name] llega débil.
   const RoomIslandEvent.weak({required this.name})
     : kind = RoomIslandEventKind.weak,
       color = null,
+      icon = null,
+      text = null;
+
+  /// [name] mandó el mensaje rápido [text]; su firma va en [color].
+  const RoomIslandEvent.message({
+    required this.name,
+    required Color this.color,
+    required String this.text,
+  }) : kind = RoomIslandEventKind.message,
+       icon = null;
+
+  /// Se envió el mensaje rápido [text].
+  const RoomIslandEvent.sent({required String this.text})
+    : kind = RoomIslandEventKind.sent,
+      name = '',
+      color = null,
       icon = null;
+
+  /// Se envió un SOS al grupo.
+  const RoomIslandEvent.sosSent()
+    : kind = RoomIslandEventKind.sosSent,
+      name = '',
+      color = null,
+      icon = null,
+      text = null;
 
   /// Volvió la conexión con el anfitrión.
   const RoomIslandEvent.recovered()
     : kind = RoomIslandEventKind.recovered,
       name = '',
       color = null,
-      icon = null;
+      icon = null,
+      text = null;
 
   /// Lo que dura el evento en la isla (2,6 s, como el prototipo).
   static const Duration duration = Duration(milliseconds: 2600);
@@ -228,6 +256,9 @@ class RoomIslandEvent {
   /// Ícono de la ruta de audio.
   final FrIconData? icon;
 
+  /// Texto del mensaje rápido.
+  final String? text;
+
   /// Texto de la isla.
   String get label {
     final texts = t.room.talk.island;
@@ -237,6 +268,12 @@ class RoomIslandEvent {
       RoomIslandEventKind.route => texts.route(route: name),
       RoomIslandEventKind.recovered => texts.recovered,
       RoomIslandEventKind.weak => texts.weak(name: name),
+      RoomIslandEventKind.message => t.messages.received(
+        name: name,
+        text: text ?? '',
+      ),
+      RoomIslandEventKind.sent => t.messages.sent(text: text ?? ''),
+      RoomIslandEventKind.sosSent => t.messages.sosSent,
     };
   }
 
@@ -246,10 +283,11 @@ class RoomIslandEvent {
       other.kind == kind &&
       other.name == name &&
       other.color == color &&
-      other.icon == icon;
+      other.icon == icon &&
+      other.text == text;
 
   @override
-  int get hashCode => Object.hash(kind, name, color, icon);
+  int get hashCode => Object.hash(kind, name, color, icon, text);
 }
 
 /// Tipo de [RoomIslandEvent].
@@ -268,6 +306,15 @@ enum RoomIslandEventKind {
 
   /// El enlace con alguien llega débil.
   weak,
+
+  /// Llegó un mensaje rápido.
+  message,
+
+  /// Se envió un mensaje rápido.
+  sent,
+
+  /// Se envió un SOS.
+  sosSent,
 }
 
 /// Isla de estado de la frecu activa (`isleFor` del prototipo): una
@@ -332,6 +379,10 @@ class RoomStatusIsland extends StatelessWidget {
           leading: _eventLead(event),
         );
       }
+      // El SOS enviado va en rojo, con el punto que parpadea.
+      if (event.kind == RoomIslandEventKind.sosSent) {
+        return StatusIsland(label: event.label, tone: StatusIslandTone.alert);
+      }
       return StatusIsland.event(label: event.label, leading: _eventLead(event));
     }
     return switch (phase) {
@@ -360,14 +411,11 @@ class RoomStatusIsland extends StatelessWidget {
   }
 
   /// Lo que va antes del texto del evento; la isla es siempre de noche.
-  static Widget _eventLead(RoomIslandEvent event) {
+  static Widget? _eventLead(RoomIslandEvent event) {
     const c = FrColors.dark;
     return switch (event.kind) {
-      RoomIslandEventKind.joined => SignalSignature(
-        name: event.name,
-        size: 24,
-        color: event.color,
-      ),
+      RoomIslandEventKind.joined || RoomIslandEventKind.message =>
+        SignalSignature(name: event.name, size: 24, color: event.color),
       RoomIslandEventKind.left => Padding(
         padding: const EdgeInsets.only(left: 4),
         child: FrIcon(FrIcons.exit, size: 16, color: c.tx3),
@@ -384,6 +432,11 @@ class RoomStatusIsland extends StatelessWidget {
         padding: const EdgeInsets.only(left: 4),
         child: FrIcon(FrIcons.signal, size: 16, color: c.warn),
       ),
+      RoomIslandEventKind.sent => Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: FrIcon(FrIcons.check, size: 16, color: c.signal),
+      ),
+      RoomIslandEventKind.sosSent => null,
     };
   }
 }

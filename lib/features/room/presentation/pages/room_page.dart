@@ -12,12 +12,15 @@ import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/widgets/fr_banner.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/logging/app_logger.dart';
+import 'package:frecu/features/messages/presentation/widgets/sos_alert_layer.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/pages/room_haptics.dart';
+import 'package:frecu/features/room/presentation/pages/room_messages.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
@@ -57,6 +60,19 @@ class _RoomPageState extends ConsumerState<RoomPage> {
 
   /// Vibración con los cambios de la frecu.
   final RoomHaptics _haptics = RoomHaptics();
+
+  /// Mensajes rápidos: enviar y avisar de los que llegan.
+  late final RoomMessages _messages = RoomMessages(
+    showEvent: _showEvent,
+    colorOf: (person) => meshNodeColor(
+      FrColors.dark,
+      MeshNode(
+        id: person.id,
+        name: person.displayName,
+        slot: _slots[person.id] ?? 0,
+      ),
+    ),
+  );
 
   /// Resumen del cierre; mientras no es nulo se ve la pantalla de cierre.
   RoomClosure? _closure;
@@ -401,6 +417,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _listenForNotificationLeave();
     _listenForEvents();
     _haptics.listen(ref);
+    _messages.listen(ref);
     final fr = context.fr;
     final closure = _closure;
     return PopScope<Object?>(
@@ -450,30 +467,58 @@ class _RoomPageState extends ConsumerState<RoomPage> {
         : () => unawaited(InviteSheet.show(context, room));
 
     return FrScaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Stack(
         children: [
-          _island(talk),
-          RoomHeader(
-            room: room,
-            participants: participants,
-            localParticipantId: localId,
-            onInvite: onInvite,
-            onLeave: () =>
-                unawaited(_confirmLeave(host: host, others: talk.count - 1)),
-          ),
-          Expanded(
-            child: _meshArea(
-              participants,
-              localId,
-              status,
-              voiceState,
-              onInvite,
+          Positioned.fill(
+            child: _roomColumn(
+              room: room,
+              participants: participants,
+              localId: localId,
+              status: status,
+              voiceState: voiceState,
+              talk: talk,
+              host: host,
+              onInvite: onInvite,
             ),
           ),
-          _controls(voiceState, talk),
+          // El SOS que llega tapa la frecu hasta que se atiende.
+          const SosAlertLayer(),
         ],
       ),
+    );
+  }
+
+  /// Isla, cabecera, malla y controles.
+  Widget _roomColumn({
+    required Room? room,
+    required List<Participant> participants,
+    required String? localId,
+    required RoomStatus? status,
+    required VoiceState voiceState,
+    required RoomTalk talk,
+    required bool host,
+    required VoidCallback? onInvite,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _island(talk),
+        RoomHeader(
+          room: room,
+          participants: participants,
+          localParticipantId: localId,
+          onInvite: onInvite,
+          onMessages: room == null
+              ? null
+              : () => unawaited(_messages.open(context, ref)),
+          onLeave: () =>
+              unawaited(_confirmLeave(host: host, others: talk.count - 1)),
+        ),
+        Expanded(
+          child: _meshArea(participants, localId, status, voiceState, onInvite),
+        ),
+        _controls(voiceState, talk),
+      ],
     );
   }
 
