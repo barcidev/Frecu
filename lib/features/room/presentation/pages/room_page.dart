@@ -11,7 +11,11 @@ import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/widgets/fr_banner.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
+import 'package:frecu/core/haptics/haptics.dart';
 import 'package:frecu/core/logging/app_logger.dart';
+import 'package:frecu/features/location/presentation/location_labels.dart';
+import 'package:frecu/features/location/presentation/providers/location_provider.dart';
+import 'package:frecu/features/location/presentation/widgets/sharing_location_tag.dart';
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_layer.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
@@ -35,6 +39,7 @@ import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
 import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:frecu/features/settings/presentation/providers/vibration_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Pantalla de la frecu activa (comunicador de voz).
@@ -80,6 +85,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   /// Gestor de la frecu, guardado para poder salir al desmontar la pantalla.
   late final RoomNotifier _rooms;
 
+  /// Ubicación compartida, guardada para dejar de compartir al desmontar.
+  late final LocationSharing _location;
+
   /// Hay frecu activa (según el último build).
   bool _inRoom = false;
 
@@ -104,6 +112,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   void initState() {
     super.initState();
     _rooms = ref.read(roomNotifierProvider.notifier);
+    _location = ref.read(locationSharingProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => unawaited(_startVoice()),
     );
@@ -121,6 +130,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       final rooms = _rooms;
       scheduleMicrotask(() => unawaited(rooms.leaveRoom()));
     }
+    // Fuera de la frecu nadie comparte su ubicación.
+    final location = _location;
+    scheduleMicrotask(() => unawaited(location.stop()));
     super.dispose();
   }
 
@@ -214,6 +226,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     ref.listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
       next.value?.maybeWhen(
         closed: (reason) {
+          unawaited(_location.stop());
           if (reason == 'user_left') return;
           unawaited(
             _close(
@@ -258,6 +271,10 @@ class _RoomPageState extends ConsumerState<RoomPage> {
         voiceNotifierProvider.select((voice) => voice.peerQuality),
         (previous, next) => _onQualityChanged(previous ?? const {}, next),
       )
+      ..listen<Set<String>>(
+        locationSharingProvider.select((location) => location.behind),
+        (previous, next) => _onBehindChanged(previous ?? const {}, next),
+      )
       ..listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
         final wasReconnecting =
             previous?.value?.maybeWhen(
@@ -288,6 +305,20 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       final person = people.where((p) => p.id == id).firstOrNull;
       if (person == null) continue;
       _showEvent(RoomIslandEvent.weak(name: person.displayName));
+      return;
+    }
+  }
+
+  /// «X se quedó atrás» (y vibra) cuando alguien más pasa a estar atrás.
+  void _onBehindChanged(Set<String> before, Set<String> after) {
+    final people = ref.read(roomParticipantsProvider).value ?? const [];
+    final localId = ref.read(roomRepositoryProvider).localParticipantId;
+    for (final id in after.difference(before)) {
+      if (id == localId) continue;
+      final person = people.where((p) => p.id == id).firstOrNull;
+      if (person == null) continue;
+      _showEvent(RoomIslandEvent.behind(name: person.displayName));
+      unawaited(ref.read(vibrationProvider)(HapticPattern.alert));
       return;
     }
   }
@@ -565,15 +596,24 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           child: Center(
             // Solo la malla se reconstruye con los niveles de voz.
             child: Consumer(
-              builder: (context, ref, _) => RoomMesh(
-                participants: participants,
-                localParticipantId: localId,
-                speakingPeers: voice.speakingPeers,
-                localTalking: voice.selfSpeaking,
-                levels: _voiceLevels(ref, localId),
-                status: status,
-                onInvite: onInvite,
-              ),
+              builder: (context, ref, _) {
+                final location = ref.watch(locationSharingProvider);
+                return RoomMesh(
+                  participants: participants,
+                  localParticipantId: localId,
+                  speakingPeers: voice.speakingPeers,
+                  localTalking: voice.selfSpeaking,
+                  levels: _voiceLevels(ref, localId),
+                  status: status,
+                  onInvite: onInvite,
+                  distances: {
+                    for (final id in location.peers.keys)
+                      if (location.towards(id) case final towards?)
+                        id: towardsLabel(towards),
+                  },
+                  behind: location.behind,
+                );
+              },
             ),
           ),
         ),
@@ -585,6 +625,11 @@ class _RoomPageState extends ConsumerState<RoomPage> {
             mainAxisSize: MainAxisSize.min,
             spacing: 8,
             children: [
+              // Recuerda que se comparte la ubicación, sin tapar la malla.
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: SharingLocationTag(),
+              ),
               if (_micUnavailable) _micNotice(),
               EchoNotice(
                 visible:

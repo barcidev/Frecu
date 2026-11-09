@@ -557,7 +557,8 @@ class VoiceRepositoryImpl implements VoiceRepository {
           SignalingIceMessage() ||
           SignalingPingMessage() ||
           SignalingPongMessage() ||
-          SignalingQuickMessage():
+          SignalingQuickMessage() ||
+          SignalingPositionMessage():
         break;
     }
   }

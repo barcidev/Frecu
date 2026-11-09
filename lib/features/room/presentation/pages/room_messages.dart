@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/design/widgets/fr_toast.dart';
 import 'package:frecu/core/haptics/haptics.dart';
+import 'package:frecu/features/location/presentation/widgets/share_location_row.dart';
 import 'package:frecu/features/messages/domain/entities/quick_message.dart';
 import 'package:frecu/features/messages/presentation/providers/messages_provider.dart';
 import 'package:frecu/features/messages/presentation/widgets/quick_message_sheet.dart';
@@ -51,7 +52,10 @@ class RoomMessages {
 
   /// Abre la hoja de mensajes y envía el que se elija.
   Future<void> open(BuildContext context, WidgetRef ref) async {
-    final kind = await QuickMessageSheet.show(context);
+    final kind = await QuickMessageSheet.show(
+      context,
+      footer: const ShareLocationRow(),
+    );
     if (kind == null) return;
     final result = await ref.read(messagesRepositoryProvider).send(kind);
     if (!context.mounted) return;

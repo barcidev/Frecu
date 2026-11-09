@@ -29,6 +29,8 @@ void main() {
         'android.permission.CAMERA',
         'android.permission.FOREGROUND_SERVICE',
         'android.permission.FOREGROUND_SERVICE_MICROPHONE',
+        'android.permission.FOREGROUND_SERVICE_LOCATION',
+        'android.permission.ACCESS_FINE_LOCATION',
         'android.permission.POST_NOTIFICATIONS',
         'android.permission.WAKE_LOCK',
       ];
@@ -48,7 +50,9 @@ void main() {
         isTrue,
       );
       expect(
-        content.contains('android:foregroundServiceType="microphone"'),
+        // Micrófono siempre; ubicación solo mientras se comparte (la app
+        // elige los tipos al arrancar el servicio).
+        content.contains('android:foregroundServiceType="microphone|location"'),
         isTrue,
       );
     });
@@ -84,11 +88,18 @@ void main() {
 
       expect(podfile, contains('post_install do |installer|'));
       expect(podfile, contains("'GCC_PREPROCESSOR_DEFINITIONS'"));
-      expect(podfile, contains("target.name == 'permission_handler_apple'"));
+      expect(
+        podfile,
+        contains("'permission_handler_apple' => PERMISSION_HANDLER_MACROS"),
+      );
+      // geolocator sin el permiso «siempre», que App Store pide justificar.
+      expect(podfile, contains("'geolocator_apple' => GEOLOCATOR_MACROS"));
+      expect(podfile, contains("'BYPASS_PERMISSION_LOCATION_ALWAYS=1'"));
       const required = {
         'PERMISSION_MICROPHONE': 'NSMicrophoneUsageDescription',
         'PERMISSION_NOTIFICATIONS': null,
         'PERMISSION_CAMERA': 'NSCameraUsageDescription',
+        'PERMISSION_LOCATION_WHENINUSE': 'NSLocationWhenInUseUsageDescription',
       };
       for (final MapEntry(key: macro, value: usage) in required.entries) {
         expect(

@@ -53,6 +53,7 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 | `ice` | peer → peer (vía host) | from, to, candidate, sdpMid, sdpMLineIndex |
 | `talk_state` | peer → todos (vía host) | peerId, isSpeaking, `muted` opcional |
 | `quick_message` | peer → todos menos quien lo envía (vía host) | peerId, kind |
+| `position` | peer → todos menos quien lo envía (vía host) | peerId, lat y lon opcionales, accuracy opcional |
 | `ping` / `pong` | ambos | timestamp |
 | `room_closed` | host → todos | reason |
 
@@ -75,6 +76,15 @@ Mensajes predefinidos para toda la frecu: `kind` es `behind` («Me quedé atrás
 - El anfitrión lo reenvía a todos menos a quien lo envía, con `peerId` forzado al id de su socket, igual que `talk_state`.
 - Quien lo recibe ignora un `kind` que no conoce, así que sumar tipos no cambia la versión (`v=1`). Una app anterior descarta el mensaje entero.
 - Un SOS tapa la frecu con una alarma hasta que se atiende y vuelve a vibrar cada 5 s. «Voy en camino» lo atiende y envía `onMyWay` a todos.
+
+### Ubicación compartida (`position`)
+
+Solo la envía quien activó «Compartir mi ubicación» (apagado por defecto): `lat` y `lon` en grados, como mucho cada 5 s salvo que se haya movido 20 m. Sin `lat` ni `lon` avisa que dejó de compartirla.
+
+- El anfitrión la reenvía como `quick_message`: a todos menos a quien la envía y con `peerId` forzado.
+- Quien la recibe muestra la distancia y el rumbo (N, NE…) bajo el nombre, si también comparte la suya. Al salir alguien (`peer_left`) o al cambiar de frecu se olvidan sus posiciones.
+- «Se quedó atrás»: con 3 o más personas compartiendo, quien tiene a la más cercana a más de 200 m durante 20 s. Es un primer umbral, que se ajustará en ruta.
+- Es aditivo (`v=1`).
 
 ### Control de acceso del anfitrión
 

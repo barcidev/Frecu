@@ -49,6 +49,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$errors$es errors = Translations$errors$es.internal(_root);
 	late final Translations$splash$es splash = Translations$splash$es.internal(_root);
 	late final Translations$messages$es messages = Translations$messages$es.internal(_root);
+	late final Translations$location$es location = Translations$location$es.internal(_root);
 }
 
 // Path: app
@@ -424,6 +425,49 @@ class Translations$messages$es {
 	String get sendError => 'No se pudo enviar: sin conexión con el anfitrión';
 
 	late final Translations$messages$sos$es sos = Translations$messages$sos$es.internal(_root);
+}
+
+// Path: location
+class Translations$location$es {
+	Translations$location$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final Translations$location$share$es share = Translations$location$share$es.internal(_root);
+
+	/// es: 'Compartes tu ubicación'
+	String get sharingTag => 'Compartes tu ubicación';
+
+	/// es: 'Sin permiso de ubicación'
+	String get denied => 'Sin permiso de ubicación';
+
+	/// es: 'Sin permiso de ubicación: actívalo en los ajustes del teléfono'
+	String get deniedForever => 'Sin permiso de ubicación: actívalo en los ajustes del teléfono';
+
+	/// es: 'No se pudo usar la ubicación'
+	String get failed => 'No se pudo usar la ubicación';
+
+	/// es: '$name se quedó atrás'
+	String behind({required Object name}) => '${name} se quedó atrás';
+
+	/// es: 'Atrás · $distance'
+	String behindCaption({required Object distance}) => 'Atrás · ${distance}';
+
+	/// es: '$distance $direction'
+	String towards({required Object distance, required Object direction}) => '${distance} ${direction}';
+
+	/// es: 'Está a $distance hacia el $direction. Avisa al grupo si vas hacia allá.'
+	String sosDetail({required Object distance, required Object direction}) => 'Está a ${distance} hacia el ${direction}. Avisa al grupo si vas hacia allá.';
+
+	/// es: '$value m'
+	String meters({required Object value}) => '${value} m';
+
+	/// es: '$value km'
+	String kilometers({required Object value}) => '${value} km';
+
+	late final Translations$location$compass$es compass = Translations$location$compass$es.internal(_root);
+	late final Translations$location$compassLong$es compassLong = Translations$location$compassLong$es.internal(_root);
 }
 
 // Path: lobby.join
@@ -1016,6 +1060,90 @@ class Translations$messages$sos$es {
 
 	/// es: 'Entendido'
 	String get dismiss => 'Entendido';
+}
+
+// Path: location.share
+class Translations$location$share$es {
+	Translations$location$share$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Compartir mi ubicación'
+	String get title => 'Compartir mi ubicación';
+
+	/// es: 'Tu grupo ve a qué distancia y hacia dónde estás.'
+	String get on => 'Tu grupo ve a qué distancia y hacia dónde estás.';
+
+	/// es: 'Apagado. Tu grupo no ve dónde estás.'
+	String get off => 'Apagado. Tu grupo no ve dónde estás.';
+}
+
+// Path: location.compass
+class Translations$location$compass$es {
+	Translations$location$compass$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'N'
+	String get n => 'N';
+
+	/// es: 'NE'
+	String get ne => 'NE';
+
+	/// es: 'E'
+	String get e => 'E';
+
+	/// es: 'SE'
+	String get se => 'SE';
+
+	/// es: 'S'
+	String get s => 'S';
+
+	/// es: 'SO'
+	String get sw => 'SO';
+
+	/// es: 'O'
+	String get w => 'O';
+
+	/// es: 'NO'
+	String get nw => 'NO';
+}
+
+// Path: location.compassLong
+class Translations$location$compassLong$es {
+	Translations$location$compassLong$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'norte'
+	String get n => 'norte';
+
+	/// es: 'noreste'
+	String get ne => 'noreste';
+
+	/// es: 'este'
+	String get e => 'este';
+
+	/// es: 'sureste'
+	String get se => 'sureste';
+
+	/// es: 'sur'
+	String get s => 'sur';
+
+	/// es: 'suroeste'
+	String get sw => 'suroeste';
+
+	/// es: 'oeste'
+	String get w => 'oeste';
+
+	/// es: 'noroeste'
+	String get nw => 'noroeste';
 }
 
 // Path: lobby.join.pin
@@ -1876,6 +2004,35 @@ extension on Translations {
 			'messages.sos.body' => 'Avisa al grupo si vas hacia allá. La alarma sigue hasta que la atiendas.',
 			'messages.sos.onMyWay' => 'Voy en camino',
 			'messages.sos.dismiss' => 'Entendido',
+			'location.share.title' => 'Compartir mi ubicación',
+			'location.share.on' => 'Tu grupo ve a qué distancia y hacia dónde estás.',
+			'location.share.off' => 'Apagado. Tu grupo no ve dónde estás.',
+			'location.sharingTag' => 'Compartes tu ubicación',
+			'location.denied' => 'Sin permiso de ubicación',
+			'location.deniedForever' => 'Sin permiso de ubicación: actívalo en los ajustes del teléfono',
+			'location.failed' => 'No se pudo usar la ubicación',
+			'location.behind' => ({required Object name}) => '${name} se quedó atrás',
+			'location.behindCaption' => ({required Object distance}) => 'Atrás · ${distance}',
+			'location.towards' => ({required Object distance, required Object direction}) => '${distance} ${direction}',
+			'location.sosDetail' => ({required Object distance, required Object direction}) => 'Está a ${distance} hacia el ${direction}. Avisa al grupo si vas hacia allá.',
+			'location.meters' => ({required Object value}) => '${value} m',
+			'location.kilometers' => ({required Object value}) => '${value} km',
+			'location.compass.n' => 'N',
+			'location.compass.ne' => 'NE',
+			'location.compass.e' => 'E',
+			'location.compass.se' => 'SE',
+			'location.compass.s' => 'S',
+			'location.compass.sw' => 'SO',
+			'location.compass.w' => 'O',
+			'location.compass.nw' => 'NO',
+			'location.compassLong.n' => 'norte',
+			'location.compassLong.ne' => 'noreste',
+			'location.compassLong.e' => 'este',
+			'location.compassLong.se' => 'sureste',
+			'location.compassLong.s' => 'sur',
+			'location.compassLong.sw' => 'suroeste',
+			'location.compassLong.w' => 'oeste',
+			'location.compassLong.nw' => 'noroeste',
 			_ => null,
 		};
 	}

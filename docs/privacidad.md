@@ -20,6 +20,7 @@ Frecu funciona sin internet y sin cuentas. No recogemos, guardamos ni vendemos d
 | Cámara | Escanear el código QR de invitación a una frecu. | No. Las imágenes no se guardan ni se envían. |
 | Notificaciones | Mostrar que la frecu sigue activa con la pantalla apagada y permitir salir de ella. | No. |
 | Bluetooth (Android) | Usar audífonos o intercomunicadores Bluetooth. | No. |
+| Ubicación (solo si activas «Compartir mi ubicación») | Que tu grupo vea a qué distancia y hacia dónde estás, y avisar si alguien se queda atrás. | Solo a los teléfonos de tu frecu, por la red local, mientras la compartes. No se guarda. |
 
 ## Datos que se guardan en tu teléfono
 
@@ -69,6 +70,7 @@ Frecu works without internet and without accounts. We do not collect, store or s
 | Camera | To scan a frecu's invitation QR code. | No. Images are neither stored nor sent. |
 | Notifications | To show that the frecu is still active with the screen off and to let you leave it. | No. |
 | Bluetooth (Android) | To use Bluetooth headphones or intercoms. | No. |
+| Location (only if you turn on “Share my location”) | So your group sees how far away you are and in which direction, and to warn if someone falls behind. | Only to the phones in your frecu, over the local network, while you share it. Not stored. |
 
 ## Data stored on your phone
 

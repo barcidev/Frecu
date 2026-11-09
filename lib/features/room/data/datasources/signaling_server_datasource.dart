@@ -274,6 +274,17 @@ class SignalingServerDataSource {
           SignalingMessage.quickMessage(peerId: from, kind: kind),
           excludePeerId: from,
         );
+      case SignalingPositionMessage(:final lat, :final lon, :final accuracy):
+        _messagesController.add(message);
+        _broadcast(
+          SignalingMessage.position(
+            peerId: from,
+            lat: lat,
+            lon: lon,
+            accuracy: accuracy,
+          ),
+          excludePeerId: from,
+        );
       case SignalingPingMessage(:final timestamp):
         _sendToPeer(from, SignalingMessage.pong(timestamp: timestamp));
       case SignalingJoinMessage() ||

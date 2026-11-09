@@ -401,5 +401,42 @@
       "onMyWay": "Voy en camino",
       "dismiss": "Entendido"
     }
+  },
+  "location": {
+    "share": {
+      "title": "Compartir mi ubicación",
+      "on": "Tu grupo ve a qué distancia y hacia dónde estás.",
+      "off": "Apagado. Tu grupo no ve dónde estás."
+    },
+    "sharingTag": "Compartes tu ubicación",
+    "denied": "Sin permiso de ubicación",
+    "deniedForever": "Sin permiso de ubicación: actívalo en los ajustes del teléfono",
+    "failed": "No se pudo usar la ubicación",
+    "behind": "$name se quedó atrás",
+    "behindCaption": "Atrás · $distance",
+    "towards": "$distance $direction",
+    "sosDetail": "Está a $distance hacia el $direction. Avisa al grupo si vas hacia allá.",
+    "meters": "$value m",
+    "kilometers": "$value km",
+    "compass": {
+      "n": "N",
+      "ne": "NE",
+      "e": "E",
+      "se": "SE",
+      "s": "S",
+      "sw": "SO",
+      "w": "O",
+      "nw": "NO"
+    },
+    "compassLong": {
+      "n": "norte",
+      "ne": "noreste",
+      "e": "este",
+      "se": "sureste",
+      "s": "sur",
+      "sw": "suroeste",
+      "w": "oeste",
+      "nw": "noroeste"
+    }
   }
 }

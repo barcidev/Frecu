@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/features/location/presentation/location_labels.dart';
+import 'package:frecu/features/location/presentation/providers/location_provider.dart';
 import 'package:frecu/features/messages/presentation/providers/messages_provider.dart';
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_view.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:frecu/i18n/strings.g.dart';
 
 /// Capa de la frecu que muestra la alarma del SOS más antiguo sin atender y
 /// vuelve a vibrar cada [remindEvery] mientras quede alguno. Sin SOS no
@@ -63,10 +66,18 @@ class _SosAlertLayerState extends ConsumerState<SosAlertLayer> {
         .map((p) => p.displayName)
         .firstOrNull;
     final notifier = ref.read(sosAlertsProvider.notifier);
+    final towards = ref.watch(locationSharingProvider).towards(sos.senderId);
     return Positioned.fill(
       child: SosAlertView(
         key: ValueKey('sos_${sos.senderId}'),
         name: name ?? '',
+        // Con las dos ubicaciones compartidas, a qué distancia y hacia dónde.
+        detail: towards == null
+            ? null
+            : t.location.sosDetail(
+                distance: distanceLabel(towards.meters),
+                direction: compassLongLabel(towards.bearing),
+              ),
         onMyWay: () => unawaited(notifier.dismiss(sos.senderId, onMyWay: true)),
         onDismiss: () => unawaited(notifier.dismiss(sos.senderId)),
       ),

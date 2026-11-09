@@ -401,5 +401,42 @@
       "onMyWay": "On my way",
       "dismiss": "Got it"
     }
+  },
+  "location": {
+    "share": {
+      "title": "Share my location",
+      "on": "Your group sees how far away you are and in which direction.",
+      "off": "Off. Your group can't see where you are."
+    },
+    "sharingTag": "Sharing your location",
+    "denied": "No location permission",
+    "deniedForever": "No location permission: turn it on in your phone's settings",
+    "failed": "Couldn't use your location",
+    "behind": "$name fell behind",
+    "behindCaption": "Behind · $distance",
+    "towards": "$distance $direction",
+    "sosDetail": "They're $distance to the $direction. Tell the group if you're heading there.",
+    "meters": "$value m",
+    "kilometers": "$value km",
+    "compass": {
+      "n": "N",
+      "ne": "NE",
+      "e": "E",
+      "se": "SE",
+      "s": "S",
+      "sw": "SW",
+      "w": "W",
+      "nw": "NW"
+    },
+    "compassLong": {
+      "n": "north",
+      "ne": "northeast",
+      "e": "east",
+      "se": "southeast",
+      "s": "south",
+      "sw": "southwest",
+      "w": "west",
+      "nw": "northwest"
+    }
   }
 }

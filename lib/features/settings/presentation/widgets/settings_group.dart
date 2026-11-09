@@ -29,10 +29,17 @@ class SettingsSectionLabel extends StatelessWidget {
 /// especular arriba y una línea entre filas.
 class SettingsGroup extends StatelessWidget {
   /// Crea un grupo con [children].
-  const SettingsGroup({required this.children, super.key});
+  const SettingsGroup({
+    required this.children,
+    this.margin = const EdgeInsets.symmetric(horizontal: 20),
+    super.key,
+  });
 
   /// Filas del grupo.
   final List<Widget> children;
+
+  /// Margen alrededor: el de la pantalla de Ajustes; nada dentro de una hoja.
+  final EdgeInsetsGeometry margin;
 
   static const double _radius = 22;
 
@@ -43,7 +50,7 @@ class SettingsGroup extends StatelessWidget {
       borderRadius: BorderRadius.circular(_radius),
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: margin,
       child: DecoratedBox(
         decoration: ShapeDecoration(
           color: c.bg1,

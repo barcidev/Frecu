@@ -22,6 +22,7 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - Aviso de señal débil por persona (pérdidas o retraso del enlace de voz).
 - Vibración con los avisos de la frecu (transmitir, alguien habla, conexión perdida), que se apaga en Ajustes.
 - Mensajes rápidos predefinidos para toda la frecu y SOS con alarma.
+- Ubicación compartida voluntaria: distancia y rumbo a cada persona y aviso de quién se quedó atrás.
 
 ## Fuera de alcance del MVP
 

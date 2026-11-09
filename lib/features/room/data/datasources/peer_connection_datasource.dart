@@ -429,6 +429,7 @@ class PeerConnectionDataSource {
           SignalingPingMessage() ||
           SignalingPongMessage() ||
           SignalingQuickMessage() ||
+          SignalingPositionMessage() ||
           SignalingRoomClosedMessage():
         break;
     }
