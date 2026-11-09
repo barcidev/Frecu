@@ -298,6 +298,7 @@ class Translations$settings$es {
 	/// es: 'Guía del punto de acceso'
 	String get hotspotGuide => 'Guía del punto de acceso';
 
+	late final Translations$settings$windFilter$es windFilter = Translations$settings$windFilter$es.internal(_root);
 	late final Translations$settings$earpieceOnRaise$es earpieceOnRaise = Translations$settings$earpieceOnRaise$es.internal(_root);
 	late final Translations$settings$volumePtt$es volumePtt = Translations$settings$volumePtt$es.internal(_root);
 	late final Translations$settings$vibration$es vibration = Translations$settings$vibration$es.internal(_root);
@@ -978,6 +979,21 @@ class Translations$settings$permissions$es {
 
 	/// es: '$granted/$total'
 	String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.windFilter
+class Translations$settings$windFilter$es {
+	Translations$settings$windFilter$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Filtro de viento'
+	String get title => 'Filtro de viento';
+
+	/// es: 'Quita el retumbo del viento y del motor en moto o bici.'
+	String get subtitle => 'Quita el retumbo del viento y del motor en moto o bici.';
 }
 
 // Path: settings.earpieceOnRaise
@@ -1989,6 +2005,8 @@ extension on Translations {
 			'settings.permissions.subtitle' => 'Micrófono, red local, notificaciones',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Guía del punto de acceso',
+			'settings.windFilter.title' => 'Filtro de viento',
+			'settings.windFilter.subtitle' => 'Quita el retumbo del viento y del motor en moto o bici.',
 			'settings.earpieceOnRaise.title' => 'Auricular al acercar',
 			'settings.earpieceOnRaise.subtitle' => 'Si te llevas el teléfono a la oreja, el audio pasa al auricular.',
 			'settings.volumePtt.title' => 'Hablar con el botón de volumen',

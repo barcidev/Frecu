@@ -2,6 +2,8 @@ import AVFoundation
 import AudioToolbox
 import Flutter
 import UIKit
+import WebRTC
+import flutter_webrtc
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -19,6 +21,9 @@ import UIKit
     }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "FrecuProximity") {
       FrecuProximity.install(messenger: registrar.messenger())
+    }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "FrecuWindFilter") {
+      WindFilter.install(messenger: registrar.messenger())
     }
   }
 }
@@ -126,5 +131,101 @@ final class FrecuProximity: NSObject, FlutterStreamHandler {
   func onCancel(withArguments arguments: Any?) -> FlutterError? {
     sink = nil
     return nil
+  }
+}
+
+/// Filtro de viento por `frecu/wind_filter`: paso alto Butterworth de 4.º
+/// orden a 150 Hz sobre el micrófono, después del procesado de WebRTC. Quita
+/// el retumbo grave del viento y del motor sin tocar la voz.
+final class WindFilter: NSObject, ExternalAudioProcessingDelegate {
+  private static let shared = WindFilter()
+  private static let cutoff = 150.0
+  /// Q de las dos secciones de un Butterworth de 4.º orden.
+  private static let qs = [0.5411961, 1.3065630]
+
+  private let lock = NSLock()
+  private var sections: [Biquad] = []
+  private var sampleRate = 0.0
+  private var enabled = false
+
+  static func install(messenger: FlutterBinaryMessenger) {
+    FlutterMethodChannel(name: "frecu/wind_filter", binaryMessenger: messenger)
+      .setMethodCallHandler { call, result in
+        guard call.method == "setEnabled" else {
+          result(FlutterMethodNotImplemented)
+          return
+        }
+        result(shared.setEnabled(call.arguments as? Bool ?? false))
+      }
+  }
+
+  private func setEnabled(_ on: Bool) -> Bool {
+    guard on != enabled else { return true }
+    enabled = on
+    let adapter = AudioManager.sharedInstance().capturePostProcessingAdapter
+    if on {
+      adapter.addProcessing(self)
+    } else {
+      adapter.removeProcessing(self)
+    }
+    return true
+  }
+
+  func audioProcessingInitialize(withSampleRate sampleRateHz: Int, channels: Int) {
+    configure(Double(sampleRateHz))
+  }
+
+  func audioProcessingProcess(_ audioBuffer: RTCAudioBuffer) {
+    lock.lock()
+    defer { lock.unlock() }
+    // Cada tramo son 10 ms: la frecuencia sale de su largo.
+    let rate = Double(audioBuffer.frames) * 100
+    if rate != sampleRate { configureLocked(rate) }
+    guard !sections.isEmpty, audioBuffer.channels > 0 else { return }
+    let samples = audioBuffer.rawBuffer(forChannel: 0)
+    for i in 0..<audioBuffer.frames {
+      var x = Double(samples[i])
+      for s in 0..<sections.count { x = sections[s].next(x) }
+      samples[i] = Float(x)
+    }
+  }
+
+  func audioProcessingRelease() {}
+
+  private func configure(_ rate: Double) {
+    lock.lock()
+    defer { lock.unlock() }
+    configureLocked(rate)
+  }
+
+  private func configureLocked(_ rate: Double) {
+    guard rate > 0 else { return }
+    sampleRate = rate
+    sections = Self.qs.map { Biquad.highPass(cutoff: Self.cutoff, sampleRate: rate, q: $0) }
+  }
+
+  /// Sección de segundo orden (forma directa I) del recetario de RBJ.
+  private struct Biquad {
+    let b0, b1, b2, a1, a2: Double
+    var x1 = 0.0, x2 = 0.0, y1 = 0.0, y2 = 0.0
+
+    mutating func next(_ x: Double) -> Double {
+      let y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2
+      x2 = x1
+      x1 = x
+      y2 = y1
+      y1 = y
+      return y
+    }
+
+    static func highPass(cutoff: Double, sampleRate: Double, q: Double) -> Biquad {
+      let w0 = 2 * Double.pi * cutoff / sampleRate
+      let alpha = sin(w0) / (2 * q)
+      let c = cos(w0)
+      let a0 = 1 + alpha
+      return Biquad(
+        b0: (1 + c) / 2 / a0, b1: -(1 + c) / a0, b2: (1 + c) / 2 / a0,
+        a1: -2 * c / a0, a2: (1 - alpha) / a0)
+    }
   }
 }

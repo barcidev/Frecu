@@ -125,6 +125,24 @@ void main() {
       expect((await openRepository().load()).dataOrNull?.vibration, isTrue);
     });
 
+    test('Filtro de viento: encendido por defecto, se guarda y se lee al '
+        'reabrir; un valor desconocido vuelve a encendido', () async {
+      expect((await openRepository().load()).dataOrNull?.windFilter, isTrue);
+
+      final repository = openRepository();
+      expect(
+        (await repository.saveWindFilter(enabled: false)).isSuccess,
+        isTrue,
+      );
+      expect((await openRepository().load()).dataOrNull?.windFilter, isFalse);
+
+      await SharedPreferencesAsync().setString(
+        PreferencesRepositoryImpl.windFilterKey,
+        'quizás',
+      );
+      expect((await openRepository().load()).dataOrNull?.windFilter, isTrue);
+    });
+
     test(
       'AC4: si el almacenamiento falla devuelve Result.failure sin lanzar',
       () async {

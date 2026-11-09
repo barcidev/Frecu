@@ -189,6 +189,7 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override late final _Translations$settings$language$en language = _Translations$settings$language$en._(_root);
 	@override late final _Translations$settings$permissions$en permissions = _Translations$settings$permissions$en._(_root);
 	@override String get hotspotGuide => 'Hotspot guide';
+	@override late final _Translations$settings$windFilter$en windFilter = _Translations$settings$windFilter$en._(_root);
 	@override late final _Translations$settings$earpieceOnRaise$en earpieceOnRaise = _Translations$settings$earpieceOnRaise$en._(_root);
 	@override late final _Translations$settings$volumePtt$en volumePtt = _Translations$settings$volumePtt$en._(_root);
 	@override late final _Translations$settings$vibration$en vibration = _Translations$settings$vibration$en._(_root);
@@ -567,6 +568,17 @@ class _Translations$settings$permissions$en extends Translations$settings$permis
 	@override String get title => 'Permissions';
 	@override String get subtitle => 'Microphone, local network, notifications';
 	@override String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.windFilter
+class _Translations$settings$windFilter$en extends Translations$settings$windFilter$es {
+	_Translations$settings$windFilter$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wind filter';
+	@override String get subtitle => 'Removes the rumble of wind and engine on a motorcycle or bike.';
 }
 
 // Path: settings.earpieceOnRaise
@@ -1278,6 +1290,8 @@ extension on TranslationsEn {
 			'settings.permissions.subtitle' => 'Microphone, local network, notifications',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Hotspot guide',
+			'settings.windFilter.title' => 'Wind filter',
+			'settings.windFilter.subtitle' => 'Removes the rumble of wind and engine on a motorcycle or bike.',
 			'settings.earpieceOnRaise.title' => 'Earpiece when raised',
 			'settings.earpieceOnRaise.subtitle' => 'Hold the phone to your ear and the audio moves to the earpiece.',
 			'settings.volumePtt.title' => 'Talk with the volume button',

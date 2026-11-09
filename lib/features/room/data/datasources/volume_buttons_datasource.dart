@@ -28,6 +28,7 @@ class VolumeButtonsDataSource {
   );
 
   final Future<void> Function(String method, Object? arguments) _invoke;
+
   /// Pulsaciones en crudo; en pruebas reemplazan al canal.
   final Stream<Object?>? events;
 

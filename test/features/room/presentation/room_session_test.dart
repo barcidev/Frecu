@@ -26,6 +26,7 @@ import 'package:frecu/features/room/data/datasources/proximity_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/datasources/volume_buttons_datasource.dart';
+import 'package:frecu/features/room/data/datasources/wind_filter_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
@@ -38,6 +39,7 @@ import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/pages/room_proximity.dart';
 import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
+import 'package:frecu/features/room/presentation/pages/room_wind_filter.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
@@ -385,6 +387,8 @@ void main() {
     late StreamController<Object?> proximity;
     late List<bool> proximityEnabled;
     late List<bool> volumeEnabled;
+    late List<bool> windFilter;
+    late bool windFilterReady;
 
     setUp(() {
       // La malla, el núcleo y el inicio animan sin fin: con movimiento
@@ -411,6 +415,8 @@ void main() {
       volumeEnabled = [];
       proximity = StreamController<Object?>.broadcast();
       proximityEnabled = [];
+      windFilter = [];
+      windFilterReady = true;
       when(() => voice.initializeAudio()).thenAnswer((_) async => _ok);
       when(
         () => voice.joinMesh(
@@ -490,6 +496,15 @@ void main() {
                     return true;
                   },
                   events: proximity.stream,
+                ),
+              ),
+              windFilterProvider.overrideWithValue(
+                WindFilterDataSource(
+                  invoke: (_, enabled) async {
+                    if (!windFilterReady) return false;
+                    windFilter.add(enabled! as bool);
+                    return true;
+                  },
                 ),
               ),
               hapticsProvider.overrideWithValue(
@@ -985,6 +1000,50 @@ void main() {
       await tester.pumpAndSettle();
       expect(proximityEnabled.last, isTrue);
       await proximity.close();
+    });
+
+    testWidgets('Filtro de viento: se engancha con la voz, sigue a Ajustes '
+        'y se quita al salir', (tester) async {
+      final router = await enter(tester);
+      expect(windFilter, [true]);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(FrecuApp)),
+      );
+      await tester.runAsync(
+        () => container
+            .read(preferencesProvider.notifier)
+            .setWindFilter(enabled: false),
+      );
+      await tester.pumpAndSettle();
+      expect(windFilter, [true, false]);
+
+      await tester.runAsync(
+        () => container
+            .read(preferencesProvider.notifier)
+            .setWindFilter(enabled: true),
+      );
+      await tester.pumpAndSettle();
+      expect(windFilter, [true, false, true]);
+
+      router.popUntilRoot();
+      await tester.pumpAndSettle();
+      expect(windFilter.last, isFalse);
+    });
+
+    testWidgets('Filtro de viento: si WebRTC aún no arrancó, reintenta '
+        'hasta engancharse', (tester) async {
+      windFilterReady = false;
+      final router = await enter(tester);
+      expect(windFilter, isEmpty);
+
+      windFilterReady = true;
+      await tester.pump(RoomWindFilter.retryEvery);
+      await tester.pumpAndSettle();
+      expect(windFilter, [true]);
+
+      router.popUntilRoot();
+      await tester.pumpAndSettle();
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (

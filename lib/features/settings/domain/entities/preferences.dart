@@ -31,6 +31,9 @@ sealed class Preferences with _$Preferences {
 
     /// Pasar al auricular al llevarse el teléfono a la oreja.
     @Default(true) bool earpieceOnRaise,
+
+    /// Quitar el retumbo grave del viento y del motor del micrófono.
+    @Default(true) bool windFilter,
   }) = _Preferences;
 
   /// Largo máximo del nombre visible, en caracteres.

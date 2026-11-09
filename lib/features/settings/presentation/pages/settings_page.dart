@@ -182,6 +182,19 @@ class _TalkModeGroup extends ConsumerWidget {
           ),
         ),
         SettingsRow(
+          title: t.settings.windFilter.title,
+          subtitle: t.settings.windFilter.subtitle,
+          trailing: FrToggle(
+            key: const Key('wind_filter_toggle'),
+            value: preferences.windFilter,
+            semanticLabel: t.settings.windFilter.title,
+            onChanged: (enabled) => _saveOrWarn(
+              context,
+              () => notifier.setWindFilter(enabled: enabled),
+            ),
+          ),
+        ),
+        SettingsRow(
           title: t.settings.earpieceOnRaise.title,
           subtitle: t.settings.earpieceOnRaise.subtitle,
           trailing: FrToggle(

@@ -340,6 +340,10 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Guía del punto de acceso",
+    "windFilter": {
+      "title": "Filtro de viento",
+      "subtitle": "Quita el retumbo del viento y del motor en moto o bici."
+    },
     "earpieceOnRaise": {
       "title": "Auricular al acercar",
       "subtitle": "Si te llevas el teléfono a la oreja, el audio pasa al auricular."

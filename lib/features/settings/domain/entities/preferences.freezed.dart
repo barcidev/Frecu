@@ -22,7 +22,8 @@ mixin _$Preferences {
 /// la conexión.
  bool get vibration;/// Hablar con el botón de volumen (solo Android), apagado por defecto.
  bool get volumePtt;/// Pasar al auricular al llevarse el teléfono a la oreja.
- bool get earpieceOnRaise;
+ bool get earpieceOnRaise;/// Quitar el retumbo grave del viento y del motor del micrófono.
+ bool get windFilter;
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -33,16 +34,16 @@ $PreferencesCopyWith<Preferences> get copyWith => _$PreferencesCopyWithImpl<Pref
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode)&&(identical(other.localePreference, localePreference) || other.localePreference == localePreference)&&(identical(other.vibration, vibration) || other.vibration == vibration)&&(identical(other.volumePtt, volumePtt) || other.volumePtt == volumePtt)&&(identical(other.earpieceOnRaise, earpieceOnRaise) || other.earpieceOnRaise == earpieceOnRaise));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode)&&(identical(other.localePreference, localePreference) || other.localePreference == localePreference)&&(identical(other.vibration, vibration) || other.vibration == vibration)&&(identical(other.volumePtt, volumePtt) || other.volumePtt == volumePtt)&&(identical(other.earpieceOnRaise, earpieceOnRaise) || other.earpieceOnRaise == earpieceOnRaise)&&(identical(other.windFilter, windFilter) || other.windFilter == windFilter));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode,localePreference,vibration,volumePtt,earpieceOnRaise);
+int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode,localePreference,vibration,volumePtt,earpieceOnRaise,windFilter);
 
 @override
 String toString() {
-  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode, localePreference: $localePreference, vibration: $vibration, volumePtt: $volumePtt, earpieceOnRaise: $earpieceOnRaise)';
+  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode, localePreference: $localePreference, vibration: $vibration, volumePtt: $volumePtt, earpieceOnRaise: $earpieceOnRaise, windFilter: $windFilter)';
 }
 
 
@@ -53,7 +54,7 @@ abstract mixin class $PreferencesCopyWith<$Res>  {
   factory $PreferencesCopyWith(Preferences value, $Res Function(Preferences) _then) = _$PreferencesCopyWithImpl;
 @useResult
 $Res call({
- String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode, LocalePreference localePreference, bool vibration, bool volumePtt, bool earpieceOnRaise
+ String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode, LocalePreference localePreference, bool vibration, bool volumePtt, bool earpieceOnRaise, bool windFilter
 });
 
 
@@ -70,7 +71,7 @@ class _$PreferencesCopyWithImpl<$Res>
 
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,Object? localePreference = null,Object? vibration = null,Object? volumePtt = null,Object? earpieceOnRaise = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,Object? localePreference = null,Object? vibration = null,Object? volumePtt = null,Object? earpieceOnRaise = null,Object? windFilter = null,}) {
   return _then(_self.copyWith(
 displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,themePreference: null == themePreference ? _self.themePreference : themePreference // ignore: cast_nullable_to_non_nullable
@@ -79,6 +80,7 @@ as TalkMode,localePreference: null == localePreference ? _self.localePreference 
 as LocalePreference,vibration: null == vibration ? _self.vibration : vibration // ignore: cast_nullable_to_non_nullable
 as bool,volumePtt: null == volumePtt ? _self.volumePtt : volumePtt // ignore: cast_nullable_to_non_nullable
 as bool,earpieceOnRaise: null == earpieceOnRaise ? _self.earpieceOnRaise : earpieceOnRaise // ignore: cast_nullable_to_non_nullable
+as bool,windFilter: null == windFilter ? _self.windFilter : windFilter // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -161,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference,  bool vibration,  bool volumePtt,  bool earpieceOnRaise)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference,  bool vibration,  bool volumePtt,  bool earpieceOnRaise,  bool windFilter)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Preferences() when $default != null:
-return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference,_that.vibration,_that.volumePtt,_that.earpieceOnRaise);case _:
+return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference,_that.vibration,_that.volumePtt,_that.earpieceOnRaise,_that.windFilter);case _:
   return orElse();
 
 }
@@ -182,10 +184,10 @@ return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference,  bool vibration,  bool volumePtt,  bool earpieceOnRaise)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference,  bool vibration,  bool volumePtt,  bool earpieceOnRaise,  bool windFilter)  $default,) {final _that = this;
 switch (_that) {
 case _Preferences():
-return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference,_that.vibration,_that.volumePtt,_that.earpieceOnRaise);}
+return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference,_that.vibration,_that.volumePtt,_that.earpieceOnRaise,_that.windFilter);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -199,10 +201,10 @@ return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference,  bool vibration,  bool volumePtt,  bool earpieceOnRaise)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? displayName,  ThemePreference themePreference,  TalkMode defaultTalkMode,  LocalePreference localePreference,  bool vibration,  bool volumePtt,  bool earpieceOnRaise,  bool windFilter)?  $default,) {final _that = this;
 switch (_that) {
 case _Preferences() when $default != null:
-return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference,_that.vibration,_that.volumePtt,_that.earpieceOnRaise);case _:
+return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_that.localePreference,_that.vibration,_that.volumePtt,_that.earpieceOnRaise,_that.windFilter);case _:
   return null;
 
 }
@@ -214,7 +216,7 @@ return $default(_that.displayName,_that.themePreference,_that.defaultTalkMode,_t
 
 
 class _Preferences implements Preferences {
-  const _Preferences({this.displayName, this.themePreference = ThemePreference.auto, this.defaultTalkMode = TalkMode.pushToTalk, this.localePreference = LocalePreference.auto, this.vibration = true, this.volumePtt = false, this.earpieceOnRaise = true});
+  const _Preferences({this.displayName, this.themePreference = ThemePreference.auto, this.defaultTalkMode = TalkMode.pushToTalk, this.localePreference = LocalePreference.auto, this.vibration = true, this.volumePtt = false, this.earpieceOnRaise = true, this.windFilter = true});
   
 
 /// Nombre visible en las frecus; nulo si aún no se pidió.
@@ -232,6 +234,8 @@ class _Preferences implements Preferences {
 @override@JsonKey() final  bool volumePtt;
 /// Pasar al auricular al llevarse el teléfono a la oreja.
 @override@JsonKey() final  bool earpieceOnRaise;
+/// Quitar el retumbo grave del viento y del motor del micrófono.
+@override@JsonKey() final  bool windFilter;
 
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +247,16 @@ _$PreferencesCopyWith<_Preferences> get copyWith => __$PreferencesCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode)&&(identical(other.localePreference, localePreference) || other.localePreference == localePreference)&&(identical(other.vibration, vibration) || other.vibration == vibration)&&(identical(other.volumePtt, volumePtt) || other.volumePtt == volumePtt)&&(identical(other.earpieceOnRaise, earpieceOnRaise) || other.earpieceOnRaise == earpieceOnRaise));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Preferences&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.themePreference, themePreference) || other.themePreference == themePreference)&&(identical(other.defaultTalkMode, defaultTalkMode) || other.defaultTalkMode == defaultTalkMode)&&(identical(other.localePreference, localePreference) || other.localePreference == localePreference)&&(identical(other.vibration, vibration) || other.vibration == vibration)&&(identical(other.volumePtt, volumePtt) || other.volumePtt == volumePtt)&&(identical(other.earpieceOnRaise, earpieceOnRaise) || other.earpieceOnRaise == earpieceOnRaise)&&(identical(other.windFilter, windFilter) || other.windFilter == windFilter));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode,localePreference,vibration,volumePtt,earpieceOnRaise);
+int get hashCode => Object.hash(runtimeType,displayName,themePreference,defaultTalkMode,localePreference,vibration,volumePtt,earpieceOnRaise,windFilter);
 
 @override
 String toString() {
-  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode, localePreference: $localePreference, vibration: $vibration, volumePtt: $volumePtt, earpieceOnRaise: $earpieceOnRaise)';
+  return 'Preferences(displayName: $displayName, themePreference: $themePreference, defaultTalkMode: $defaultTalkMode, localePreference: $localePreference, vibration: $vibration, volumePtt: $volumePtt, earpieceOnRaise: $earpieceOnRaise, windFilter: $windFilter)';
 }
 
 
@@ -263,7 +267,7 @@ abstract mixin class _$PreferencesCopyWith<$Res> implements $PreferencesCopyWith
   factory _$PreferencesCopyWith(_Preferences value, $Res Function(_Preferences) _then) = __$PreferencesCopyWithImpl;
 @override @useResult
 $Res call({
- String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode, LocalePreference localePreference, bool vibration, bool volumePtt, bool earpieceOnRaise
+ String? displayName, ThemePreference themePreference, TalkMode defaultTalkMode, LocalePreference localePreference, bool vibration, bool volumePtt, bool earpieceOnRaise, bool windFilter
 });
 
 
@@ -280,7 +284,7 @@ class __$PreferencesCopyWithImpl<$Res>
 
 /// Create a copy of Preferences
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,Object? localePreference = null,Object? vibration = null,Object? volumePtt = null,Object? earpieceOnRaise = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? displayName = freezed,Object? themePreference = null,Object? defaultTalkMode = null,Object? localePreference = null,Object? vibration = null,Object? volumePtt = null,Object? earpieceOnRaise = null,Object? windFilter = null,}) {
   return _then(_Preferences(
 displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,themePreference: null == themePreference ? _self.themePreference : themePreference // ignore: cast_nullable_to_non_nullable
@@ -289,6 +293,7 @@ as TalkMode,localePreference: null == localePreference ? _self.localePreference 
 as LocalePreference,vibration: null == vibration ? _self.vibration : vibration // ignore: cast_nullable_to_non_nullable
 as bool,volumePtt: null == volumePtt ? _self.volumePtt : volumePtt // ignore: cast_nullable_to_non_nullable
 as bool,earpieceOnRaise: null == earpieceOnRaise ? _self.earpieceOnRaise : earpieceOnRaise // ignore: cast_nullable_to_non_nullable
+as bool,windFilter: null == windFilter ? _self.windFilter : windFilter // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

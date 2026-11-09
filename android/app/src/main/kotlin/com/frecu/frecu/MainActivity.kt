@@ -1,6 +1,7 @@
 package com.frecu.frecu
 
 import android.view.KeyEvent
+import com.cloudwebrtc.webrtc.FlutterWebRTCPlugin
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
@@ -13,6 +14,10 @@ class MainActivity : FlutterActivity() {
         FrecuHaptics.install(this, flutterEngine.dartExecutor.binaryMessenger)
         VolumePtt.install(this, flutterEngine.dartExecutor.binaryMessenger)
         FrecuProximity.install(this, flutterEngine.dartExecutor.binaryMessenger)
+        WindFilter.install(
+            flutterEngine.dartExecutor.binaryMessenger,
+            flutterEngine.plugins.get(FlutterWebRTCPlugin::class.java) as? FlutterWebRTCPlugin,
+        )
     }
 
     // El botón de volumen habla en la frecu si la persona lo activó.

@@ -38,6 +38,9 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   /// Clave del auricular al acercar (`true` o `false`).
   static const earpieceOnRaiseKey = 'settings.earpieceOnRaise';
 
+  /// Clave del filtro de viento (`true` o `false`).
+  static const windFilterKey = 'settings.windFilter';
+
   final SharedPreferencesAsync _storage;
 
   @override
@@ -50,6 +53,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
       final vibration = await _storage.getString(vibrationKey);
       final volumePtt = await _storage.getString(volumePttKey);
       final earpiece = await _storage.getString(earpieceOnRaiseKey);
+      final wind = await _storage.getString(windFilterKey);
       const defaults = Preferences();
       return Result.success(
         Preferences(
@@ -67,6 +71,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
           vibration: _boolOf(vibration) ?? defaults.vibration,
           volumePtt: _boolOf(volumePtt) ?? defaults.volumePtt,
           earpieceOnRaise: _boolOf(earpiece) ?? defaults.earpieceOnRaise,
+          windFilter: _boolOf(wind) ?? defaults.windFilter,
         ),
       );
     } on Object catch (e, st) {
@@ -116,6 +121,10 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   @override
   Future<Result<void>> saveEarpieceOnRaise({required bool enabled}) =>
       _save(earpieceOnRaiseKey, '$enabled');
+
+  @override
+  Future<Result<void>> saveWindFilter({required bool enabled}) =>
+      _save(windFilterKey, '$enabled');
 
   /// `true` o `false` guardados como texto; nulo si es otra cosa.
   static bool? _boolOf(String? raw) => switch (raw) {

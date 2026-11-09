@@ -377,6 +377,34 @@ void main() {
     });
   });
 
+  group('Fila Filtro de viento', () {
+    testWidgets('encendida por defecto; al tocarla se apaga y se guarda', (
+      tester,
+    ) async {
+      await _openSettings(tester, _FakePermissions(current: _allGranted));
+      final row = find.byWidgetPredicate(
+        (widget) =>
+            widget is SettingsRow &&
+            widget.title == t.settings.windFilter.title,
+      );
+      expect(row, findsOneWidget);
+      final toggle = find.descendant(of: row, matching: find.byType(FrToggle));
+      expect(tester.widget<FrToggle>(toggle).value, isTrue);
+
+      await tester.ensureVisible(toggle);
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<FrToggle>(toggle).value, isFalse);
+      final saved = await tester.runAsync(
+        () =>
+            PreferencesRepositoryImpl(preferences: SharedPreferencesAsync())
+                .load(),
+      );
+      expect(saved?.dataOrNull?.windFilter, isFalse);
+    });
+  });
+
   group('Fila Licencias', () {
     testWidgets('va después de la guía y abre la pantalla de licencias', (
       tester,
