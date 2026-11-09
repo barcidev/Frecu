@@ -389,6 +389,32 @@ void main() {
       },
     );
 
+    testWidgets('AC4: el texto del toast no lleva subrayado', (tester) async {
+      await pumpHost(tester, const SizedBox());
+
+      // El toast va en el `Overlay` raíz, fuera de todo `Material`: su texto
+      // no hereda el estilo de error de `MaterialApp` (subrayado doble
+      // amarillo).
+      showFrToast(hostContext, const FrToast(title: 'Ana', message: 'se unió'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+
+      for (final text in ['Ana', 'se unió']) {
+        final style = styleOf(tester, text);
+        expect(style, isNotNull, reason: '«$text» está en el toast');
+        expect(
+          style!.decoration,
+          anyOf(isNull, TextDecoration.none),
+          reason: '«$text» no lleva subrayado',
+        );
+      }
+
+      await tester.pump(const Duration(milliseconds: 2600));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump();
+      expect(find.byType(FrToast), findsNothing);
+    });
+
     testWidgets(
       'AC6: con movimiento reducido el toast entra fundido sin subir',
       (tester) async {
