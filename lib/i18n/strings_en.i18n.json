@@ -340,6 +340,10 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Hotspot guide",
+    "earpieceOnRaise": {
+      "title": "Earpiece when raised",
+      "subtitle": "Hold the phone to your ear and the audio moves to the earpiece."
+    },
     "volumePtt": {
       "title": "Talk with the volume button",
       "subtitle": "Hold to talk. With the screen off, press to start and again to stop."

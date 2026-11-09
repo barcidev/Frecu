@@ -28,6 +28,9 @@ sealed class Preferences with _$Preferences {
 
     /// Hablar con el botón de volumen (solo Android), apagado por defecto.
     @Default(false) bool volumePtt,
+
+    /// Pasar al auricular al llevarse el teléfono a la oreja.
+    @Default(true) bool earpieceOnRaise,
   }) = _Preferences;
 
   /// Largo máximo del nombre visible, en caracteres.

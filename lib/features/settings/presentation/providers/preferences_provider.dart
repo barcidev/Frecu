@@ -106,6 +106,16 @@ class PreferencesNotifier extends _$PreferencesNotifier {
     return result;
   }
 
+  /// Guarda si el audio pasa al auricular al acercar el teléfono a la oreja.
+  Future<Result<void>> setEarpieceOnRaise({required bool enabled}) async {
+    await future;
+    final result = await _repository.saveEarpieceOnRaise(enabled: enabled);
+    if (result.isSuccess) {
+      _update((preferences) => preferences.copyWith(earpieceOnRaise: enabled));
+    }
+    return result;
+  }
+
   /// Guarda el idioma de la app y, solo si se guardó, lo aplica al instante.
   Future<Result<void>> setLocalePreference(
     LocalePreference localePreference,

@@ -298,6 +298,7 @@ class Translations$settings$es {
 	/// es: 'Guía del punto de acceso'
 	String get hotspotGuide => 'Guía del punto de acceso';
 
+	late final Translations$settings$earpieceOnRaise$es earpieceOnRaise = Translations$settings$earpieceOnRaise$es.internal(_root);
 	late final Translations$settings$volumePtt$es volumePtt = Translations$settings$volumePtt$es.internal(_root);
 	late final Translations$settings$vibration$es vibration = Translations$settings$vibration$es.internal(_root);
 
@@ -977,6 +978,21 @@ class Translations$settings$permissions$es {
 
 	/// es: '$granted/$total'
 	String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.earpieceOnRaise
+class Translations$settings$earpieceOnRaise$es {
+	Translations$settings$earpieceOnRaise$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Auricular al acercar'
+	String get title => 'Auricular al acercar';
+
+	/// es: 'Si te llevas el teléfono a la oreja, el audio pasa al auricular.'
+	String get subtitle => 'Si te llevas el teléfono a la oreja, el audio pasa al auricular.';
 }
 
 // Path: settings.volumePtt
@@ -1973,6 +1989,8 @@ extension on Translations {
 			'settings.permissions.subtitle' => 'Micrófono, red local, notificaciones',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Guía del punto de acceso',
+			'settings.earpieceOnRaise.title' => 'Auricular al acercar',
+			'settings.earpieceOnRaise.subtitle' => 'Si te llevas el teléfono a la oreja, el audio pasa al auricular.',
 			'settings.volumePtt.title' => 'Hablar con el botón de volumen',
 			'settings.volumePtt.subtitle' => 'Mantén pulsado para hablar. Con la pantalla apagada, pulsa para empezar y otra vez para terminar.',
 			'settings.vibration.title' => 'Vibración',

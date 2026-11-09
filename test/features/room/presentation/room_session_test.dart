@@ -7,6 +7,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -21,6 +22,7 @@ import 'package:frecu/features/messages/presentation/widgets/sos_alert_layer.dar
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_view.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
+import 'package:frecu/features/room/data/datasources/proximity_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/datasources/volume_buttons_datasource.dart';
@@ -34,6 +36,7 @@ import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
+import 'package:frecu/features/room/presentation/pages/room_proximity.dart';
 import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
@@ -379,6 +382,8 @@ void main() {
     late StreamController<int> notificationLeaves;
     late List<String> vibrated;
     late StreamController<Object?> volumeKeys;
+    late StreamController<Object?> proximity;
+    late List<bool> proximityEnabled;
     late List<bool> volumeEnabled;
 
     setUp(() {
@@ -404,6 +409,8 @@ void main() {
       vibrated = [];
       volumeKeys = StreamController<Object?>.broadcast();
       volumeEnabled = [];
+      proximity = StreamController<Object?>.broadcast();
+      proximityEnabled = [];
       when(() => voice.initializeAudio()).thenAnswer((_) async => _ok);
       when(
         () => voice.joinMesh(
@@ -474,6 +481,15 @@ void main() {
                   invoke: (_, enabled) async =>
                       volumeEnabled.add(enabled! as bool),
                   events: volumeKeys.stream,
+                ),
+              ),
+              proximityProvider.overrideWithValue(
+                ProximityDataSource(
+                  invoke: (_, enabled) async {
+                    proximityEnabled.add(enabled! as bool);
+                    return true;
+                  },
+                  events: proximity.stream,
                 ),
               ),
               hapticsProvider.overrideWithValue(
@@ -925,6 +941,50 @@ void main() {
       expect(volumeEnabled.last, isFalse);
       await volumeKeys.close();
       debugDefaultTargetPlatformOverride = null;
+    });
+
+    testWidgets('Auricular al acercar: con el altavoz, acercar pasa al '
+        'auricular y alejar vuelve; con Bluetooth o la app al fondo el '
+        'sensor se apaga', (tester) async {
+      await enter(tester);
+      route.add(AudioRoute.speaker);
+      await tester.pumpAndSettle();
+      expect(proximityEnabled.last, isTrue);
+
+      proximity.add(true);
+      await tester.pumpAndSettle();
+      verify(() => voice.setAudioRoute(AudioRoute.earpiece)).called(1);
+      route.add(AudioRoute.earpiece);
+      await tester.pumpAndSettle();
+      // Sigue activo para saber cuándo se aleja.
+      expect(proximityEnabled.last, isTrue);
+
+      proximity.add(false);
+      await tester.pumpAndSettle();
+      verify(() => voice.setAudioRoute(AudioRoute.speaker)).called(1);
+      route.add(AudioRoute.speaker);
+      await tester.pumpAndSettle();
+
+      // Con Bluetooth no sirve: se apaga.
+      route.add(AudioRoute.bluetooth);
+      await tester.pumpAndSettle();
+      expect(proximityEnabled.last, isFalse);
+
+      // Con la app al fondo (bolsillo) tampoco.
+      route.add(AudioRoute.speaker);
+      await tester.pumpAndSettle();
+      expect(proximityEnabled.last, isTrue);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pumpAndSettle();
+      expect(proximityEnabled.last, isFalse);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+      expect(proximityEnabled.last, isTrue);
+      await proximity.close();
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (
