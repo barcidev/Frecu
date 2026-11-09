@@ -48,6 +48,7 @@ Matriz de pruebas manuales:
 - Pantalla apagada y app en segundo plano durante 10 minutos.
 - Conexión y desconexión de audífonos Bluetooth.
 - Participante que sale del rango y vuelve.
+- Red de la frecu (Android anfitrión): crearla, invitar con un solo QR a un Android y a un iPhone (aviso del sistema y unión), con el invitado con datos móviles encendidos; salir de la frecu (el invitado vuelve a su Wi-Fi y la red se apaga); encender la zona Wi-Fi con la frecu abierta (aviso y crear la red de nuevo); Android 12 o anterior (permiso de ubicación).
 
 ---
 

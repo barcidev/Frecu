@@ -2,7 +2,7 @@
 
 ## Qué es
 
-Frecu convierte varios teléfonos en un intercomunicador de voz grupal que funciona sin internet. Un teléfono actúa como anfitrión: comparte su red WiFi (hotspot) y crea una frecu (sala). Los demás teléfonos se conectan a esa red, se unen a la frecu y hablan entre todos en tiempo real.
+Frecu convierte varios teléfonos en un intercomunicador de voz grupal que funciona sin internet. Un teléfono actúa como anfitrión: crea la red Wi-Fi del grupo (en Android, Frecu la crea; si no, comparte su punto de acceso) y crea una frecu (sala). Los demás teléfonos se conectan a esa red, se unen a la frecu y hablan entre todos en tiempo real.
 
 ## Para quién
 
@@ -11,6 +11,7 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 ## Alcance del MVP
 
 - Crear una frecu como anfitrión y unirse como participante.
+- Red de la frecu creada desde la app en Android (`LocalOnlyHotspot`): el QR lleva la red y su clave, y el invitado entra con un escaneo. En iPhone, o si el anfitrión lo prefiere, se usa el punto de acceso manual con la guía.
 - Descubrimiento automático en la red local (mDNS) y unión por código QR como respaldo.
 - Voz grupal de hasta 6 participantes en topología mesh.
 - Modos de habla: PTT (push-to-talk, por defecto) y micrófono abierto.
@@ -26,7 +27,6 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 
 ## Fuera de alcance del MVP
 
-- Crear el hotspot desde la app (`LocalOnlyHotspot`). En el MVP el usuario lo activa manualmente y la app lo guía.
 - Migración de anfitrión: si el anfitrión sale, la frecu se cierra.
 - Topología SFU o mezcla en el anfitrión.
 - Video, chat de texto libre (solo hay mensajes predefinidos), grabación, cuentas de usuario, backend en la nube.

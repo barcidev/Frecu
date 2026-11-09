@@ -2,11 +2,11 @@
 
 ## Flujo general
 
-1. El anfitrión activa su hotspot (manualmente en el MVP) y crea la frecu.
+1. El anfitrión prepara la red y crea la frecu. En Android, Frecu crea la red (ver «Red de la frecu»); si no, o en iPhone, el anfitrión activa su punto de acceso a mano y la app lo guía.
 2. La app del anfitrión levanta un servidor WebSocket en `0.0.0.0:47800` (constante en `core/constants`).
 3. Publica el servicio mDNS `_frecu._tcp` con atributos TXT: `roomId`, `name`, `v` (versión de protocolo) y, si la frecu tiene nota, `n`. Retira el anuncio cuando la frecu termina (ver «Anuncio y búsqueda mDNS»).
-4. Muestra un QR con la invitación: `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>&n=<semitono>&name=<nombre>` (`n` solo si la frecu tiene nota; `name`, el nombre de la frecu, es opcional).
-5. Cada participante descubre la frecu por mDNS o escanea el QR, se conecta al WebSocket y envía `join` con el código de acceso.
+4. Muestra un QR con la invitación: `frecu://join?h=<ip>&p=<puerto>&r=<roomId>&c=<codigo>&n=<semitono>&name=<nombre>&ws=<red>&wk=<clave>` (`n` solo si la frecu tiene nota; `name`, el nombre de la frecu, es opcional; `ws` y `wk`, solo con la red de Frecu).
+5. Cada participante descubre la frecu por mDNS o escanea el QR (si el QR trae la red y el anfitrión no responde, la app conecta antes el teléfono a esa red), se conecta al WebSocket y envía `join` con el código de acceso.
 6. La señalización WebRTC (offer, answer, ice) viaja por el WebSocket; el audio viaja directo entre teléfonos.
 
 La IP del anfitrión no es fija (en Android suele ser `192.168.43.1`, pero varía por fabricante y versión). Obtenla siempre de las interfaces de red, nunca la escribas a mano. Solo cuentan las interfaces Wi-Fi o de punto de acceso (`wlan0`, `en0`, `ap0`, `swlan0`, `softap0`, `bridge100`…), nunca las de datos móviles, VPN o túneles (`pdp_ip*`, `rmnet*`, `ccmni*`, `utun*`, `ipsec*`, `tun*`, `ppp*`, `awdl*`, `llw*`); entre varias, se prefiere un rango privado. La regla vive en `selectLanAddress` (`lib/core/network/lan_address.dart`): sin ninguna interfaz así, el teléfono no está en ninguna red local.
@@ -36,6 +36,17 @@ La invitación puede llevar el nombre de la frecu como dato aditivo `name`, tras
 - `name` es opcional: si falta o está vacío (o solo tiene espacios), la invitación se lee sin nombre y la tarjeta muestra la nota y sus Hz, como antes.
 - Es aditivo, así que la versión del protocolo no cambia (`v=1`): una app anterior ignora `name` y una app nueva lee las invitaciones sin `name`.
 - Lo construye `BuildInviteQr` desde `RoomInvite.name` y lo lee `ParseInviteFromQr`; el orden de los parámetros no importa al leer.
+
+## Red de la frecu (`ws` y `wk`)
+
+En Android (8 o posterior), el anfitrión no activa la zona Wi-Fi a mano: Frecu crea una red local sin internet con `LocalOnlyHotspot` (canal `frecu/hotspot`). Android le pone un nombre y una clave nuevos cada vez y Frecu los suma a la invitación como datos aditivos, tras `name`: `ws` con el nombre de la red y `wk` con su clave, tal cual y codificados en la URI.
+
+- La red se crea al tocar «Crear la red» y se apaga al cerrar la frecu o al salir de la creación sin abrirla. Si Android la apaga por su cuenta (se encendió la zona Wi-Fi, modo avión), el anfitrión ve un aviso y, al crearla de nuevo, la invitación lleva la red nueva y, si cambió, la IPv4 nueva.
+- La IPv4 de la invitación es la de la interfaz de esa red, aunque el teléfono siga en otra Wi-Fi (`selectLanAddress(prefer:)`).
+- `ws` es opcional: sin él no hay red y el QR se lee como antes. Sin `wk` (o vacío), la red es abierta. `wk` sin `ws` no cuenta. Es aditivo, así que la versión del protocolo no cambia (`v=1`).
+- Lo construye `BuildInviteQr` desde `RoomInvite.wifi` y lo lee `ParseInviteFromQr`. La frecu activa guarda la red en `Room.wifi`, también la de quien se unió con ese QR, para invitar a otros.
+- Al tocar Unirme con un QR que trae la red, si el anfitrión no responde, la app conecta el teléfono a esa red (canal `frecu/wifi`): en Android con `WifiNetworkSpecifier` (Android 10 o posterior) y en iOS con `NEHotspotConfiguration` (`joinOnce` falso, para seguir en la red con la pantalla apagada). El sistema pide confirmar. Si se cancela, la red no aparece o el teléfono no se conecta solo (Android 7 a 9), la hoja muestra la red y la clave para conectarse a mano. Al salir de la frecu, el teléfono olvida la red que conectó la app.
+- En Android, una Wi-Fi sin internet no es la red por defecto si hay datos móviles: antes de unirse (por cualquier vía), la app se ata a la Wi-Fi en la que está el anfitrión (`bindProcessToNetwork`) y se desata al salir.
 
 ## Mensajes de señalización
 

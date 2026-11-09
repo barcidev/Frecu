@@ -13,6 +13,9 @@ _RoomInvite _$RoomInviteFromJson(Map<String, dynamic> json) => _RoomInvite(
   accessCode: json['accessCode'] as String,
   note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
   name: json['name'] as String?,
+  wifi: json['wifi'] == null
+      ? null
+      : WifiCredentials.fromJson(json['wifi'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$RoomInviteToJson(_RoomInvite instance) =>
@@ -23,4 +26,5 @@ Map<String, dynamic> _$RoomInviteToJson(_RoomInvite instance) =>
       'accessCode': instance.accessCode,
       'note': const RoomNoteConverter().toJson(instance.note),
       'name': instance.name,
+      'wifi': instance.wifi,
     };

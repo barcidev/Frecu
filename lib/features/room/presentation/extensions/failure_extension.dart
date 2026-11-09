@@ -15,6 +15,8 @@ extension FailureLocalization on Failure {
       hostUnreachable: () => t.errors.hostUnreachable,
       versionMismatch: () => t.errors.versionMismatch,
       audio: (msg) => msg ?? t.errors.audio,
+      hotspot: (_) => t.errors.hotspot,
+      wifiJoin: (_) => t.errors.wifiJoin,
       unexpected: (msg, _) => msg ?? t.errors.unexpected,
     );
   }

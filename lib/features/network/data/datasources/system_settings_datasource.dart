@@ -25,4 +25,7 @@ class SystemSettingsDataSource {
 
   /// Ajustes de la app; falso si el sistema no los abrió.
   Future<bool> openApp() => _openAppSettings();
+
+  /// Ajustes de ubicación; en iOS, los de la app.
+  Future<void> openLocation() => _openSettings(AppSettingsType.location);
 }

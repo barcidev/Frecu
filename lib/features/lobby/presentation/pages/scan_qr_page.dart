@@ -24,6 +24,8 @@ import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/lobby/presentation/widgets/scan_reticle.dart';
+import 'package:frecu/features/lobby/presentation/widgets/wifi_join_sheet.dart';
+import 'package:frecu/features/network/domain/repositories/wifi_join_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
@@ -95,10 +97,21 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
   bool _torch = false;
   Failure? _failure;
 
+  /// Cómo llega el teléfono a la red de la frecu.
+  late final WifiJoinRepository _network;
+
+  /// La app pudo conectar el teléfono a la red de la frecu: si no se entra,
+  /// al salir del escáner la suelta.
+  bool _networkTouched = false;
+
+  /// Se entró a la frecu: la red sigue con ella.
+  bool _entered = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _network = ref.read(wifiJoinRepositoryProvider);
     if (widget.scannerBuilder == null) {
       _camera = MobileScannerController()..addListener(_onCameraState);
     }
@@ -107,6 +120,7 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    if (_networkTouched && !_entered) unawaited(_network.release());
     final camera = _camera;
     if (camera != null) {
       camera.removeListener(_onCameraState);
@@ -195,6 +209,11 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
       _joining = true;
       _failure = null;
     });
+    if (invite.wifi != null && !await _onRoomNetwork(invite)) {
+      if (mounted) setState(() => _joining = false);
+      return;
+    }
+    if (!mounted) return;
     final result = await ref
         .read(roomNotifierProvider.notifier)
         .joinRoom(
@@ -203,6 +222,7 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
           accessCode: invite.accessCode,
           displayName: ref.joinDisplayName,
           note: invite.note,
+          wifi: invite.wifi,
         );
     if (!mounted) return;
     switch (result) {
@@ -215,6 +235,15 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
           _failure = failure;
         });
     }
+  }
+
+  /// Verdadero si el teléfono está en la red de la frecu que trae [invite]:
+  /// ya lo estaba (el anfitrión responde) o entró con la [WifiJoinSheet].
+  Future<bool> _onRoomNetwork(RoomInvite invite) async {
+    _networkTouched = true;
+    if (await _network.reaches(invite.host, invite.port)) return true;
+    if (!mounted) return false;
+    return WifiJoinSheet.show(context, invite);
   }
 
   Future<void> _joinByIp() async {
@@ -231,6 +260,7 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
 
   /// La frecu activa reemplaza al escáner; sin router (pruebas) no navega.
   void _openRoom(Room room) {
+    _entered = true;
     final router = StackRouterScope.of(context)?.controller;
     if (router != null) unawaited(router.replace(RoomRoute(roomId: room.id)));
   }
@@ -732,6 +762,24 @@ class ScanFoundCard extends StatelessWidget {
           subtitle.toUpperCase(),
           style: fr.type.labelS.copyWith(color: c.tx3),
         ),
+        if (invite.wifi case final wifi?) ...[
+          const SizedBox(height: 6),
+          Row(
+            key: const Key('scan_found_network'),
+            children: [
+              FrIcon(FrIcons.hotspot, size: 16, color: c.tx3),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  t.lobby.join.wifi.network(ssid: wifi.ssid),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: fr.type.bodyS.copyWith(color: c.tx3),
+                ),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }

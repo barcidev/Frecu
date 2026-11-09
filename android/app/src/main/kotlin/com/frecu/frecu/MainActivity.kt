@@ -11,13 +11,17 @@ class MainActivity : FlutterActivity() {
         // zona Wi-Fi de este teléfono.
         HotspotNetworkDetector.install()
         super.configureFlutterEngine(flutterEngine)
-        FrecuHaptics.install(this, flutterEngine.dartExecutor.binaryMessenger)
-        VolumePtt.install(this, flutterEngine.dartExecutor.binaryMessenger)
-        FrecuProximity.install(this, flutterEngine.dartExecutor.binaryMessenger)
+        val messenger = flutterEngine.dartExecutor.binaryMessenger
+        FrecuHaptics.install(this, messenger)
+        VolumePtt.install(this, messenger)
+        FrecuProximity.install(this, messenger)
         WindFilter.install(
-            flutterEngine.dartExecutor.binaryMessenger,
+            messenger,
             flutterEngine.plugins.get(FlutterWebRTCPlugin::class.java) as? FlutterWebRTCPlugin,
         )
+        // La red de la frecu: el anfitrión la crea y el invitado entra a ella.
+        LocalHotspot.install(this, messenger)
+        FrecuWifi.install(this, messenger)
     }
 
     // El botón de volumen habla en la frecu si la persona lo activó.

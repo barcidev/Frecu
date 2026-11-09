@@ -13,4 +13,8 @@ abstract interface class SystemSettingsRepository {
 
   /// Abre los ajustes de la app, donde están sus permisos (cámara…).
   Future<Result<void>> openAppSettings();
+
+  /// Abre los ajustes de ubicación (Android 12 o anterior la exige para
+  /// crear la red de la frecu).
+  Future<Result<void>> openLocationSettings();
 }

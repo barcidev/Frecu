@@ -33,6 +33,7 @@ class RoomRepositoryImpl implements RoomRepository {
     required SignalingClientDataSource clientDataSource,
     ForegroundServiceDataSource? foregroundServiceDataSource,
     Future<List<NetworkInterface>> Function()? networkInterfacesProvider,
+    String? Function()? preferredLanInterface,
     Duration? reconnectBaseDelay,
     this.maxReconnectAttempts = 5,
     this.welcomeTimeout = const Duration(seconds: 5),
@@ -43,6 +44,7 @@ class RoomRepositoryImpl implements RoomRepository {
            foregroundServiceDataSource ?? ForegroundServiceDataSource(),
        _networkInterfacesProvider =
            networkInterfacesProvider ?? NetworkInterface.list,
+       _lanInterfaceHint = preferredLanInterface,
        _reconnectBaseDelay =
            reconnectBaseDelay ??
            (_isTest
@@ -57,6 +59,10 @@ class RoomRepositoryImpl implements RoomRepository {
   final SignalingClientDataSource _client;
   final ForegroundServiceDataSource _foregroundService;
   final Future<List<NetworkInterface>> Function() _networkInterfacesProvider;
+
+  /// Interfaz de la red de la frecu que creó este teléfono, si la hay: su
+  /// IPv4 es la que va en la invitación.
+  final String? Function()? _lanInterfaceHint;
   final Duration _reconnectBaseDelay;
 
   /// Intentos de reconexión antes de dar la frecu por perdida.
@@ -117,9 +123,13 @@ class RoomRepositoryImpl implements RoomRepository {
   @override
   Future<String?> getLocalIpAddress() async {
     try {
-      // Solo Wi-Fi o punto de acceso: nunca datos móviles ni VPN.
+      // Solo Wi-Fi o punto de acceso: nunca datos móviles ni VPN. Con la
+      // red de Frecu al aire, la suya.
       final interfaces = await _networkInterfacesProvider();
-      return selectLanAddress(interfaces.map(LanInterface.fromIo))?.address ??
+      return selectLanAddress(
+            interfaces.map(LanInterface.fromIo),
+            prefer: _lanInterfaceHint?.call(),
+          )?.address ??
           '192.168.43.1';
     } on Object catch (e) {
       AppLogger.w('Failed to get local IP: $e');

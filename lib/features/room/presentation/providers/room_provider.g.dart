@@ -197,7 +197,7 @@ final class RoomRepositoryProvider
   }
 }
 
-String _$roomRepositoryHash() => r'd84ca6682c7660e5e196898c8a5ace7665a5f07d';
+String _$roomRepositoryHash() => r'e0973550a61a20db3289d0dbcfaf14da72fc70de';
 
 /// Stream de los participantes de la sala activa.
 
@@ -362,7 +362,7 @@ final class RoomNotifierProvider
   }
 }
 
-String _$roomNotifierHash() => r'893f07f213af33348c485e13f8290def6d467912';
+String _$roomNotifierHash() => r'd3cd3a3d3cb6da660f12091356c1bd407a7b49db';
 
 /// Gestor del ciclo de vida y estado de la sala activa.
 

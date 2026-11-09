@@ -15,6 +15,9 @@ _Room _$RoomFromJson(Map<String, dynamic> json) => _Room(
   createdAt: DateTime.parse(json['createdAt'] as String),
   maxParticipants: (json['maxParticipants'] as num?)?.toInt() ?? 6,
   note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
+  wifi: json['wifi'] == null
+      ? null
+      : WifiCredentials.fromJson(json['wifi'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$RoomToJson(_Room instance) => <String, dynamic>{
@@ -26,4 +29,5 @@ Map<String, dynamic> _$RoomToJson(_Room instance) => <String, dynamic>{
   'createdAt': instance.createdAt.toIso8601String(),
   'maxParticipants': instance.maxParticipants,
   'note': const RoomNoteConverter().toJson(instance.note),
+  'wifi': instance.wifi,
 };

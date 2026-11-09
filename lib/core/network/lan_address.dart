@@ -83,9 +83,10 @@ final RegExp _excluded = RegExp(
   caseSensitive: false,
 );
 
-/// Punto de acceso de este teléfono.
+/// Punto de acceso de este teléfono, también el de doble banda que Android
+/// arma como puente (`ap_br_wlan2`).
 final RegExp _hotspot = RegExp(
-  r'^(ap|softap|swlan|bridge)\d+$',
+  r'^((ap|softap|swlan|bridge)\d+|ap_br_(wlan|softap|swlan)\d+)$',
   caseSensitive: false,
 );
 
@@ -111,7 +112,28 @@ LanKind? lanKindOf(String name) {
 /// demás y deja las autoasignadas (169.254/16) para el final; a igual rango,
 /// el punto de acceso (es la red a la que se unen los demás) y luego el
 /// orden del sistema.
-LanAddress? selectLanAddress(Iterable<LanInterface> interfaces) {
+///
+/// Con [prefer] (la interfaz de la red de la frecu que creó este teléfono),
+/// esa interfaz gana si tiene una IPv4 válida: con la red de Frecu al aire
+/// el teléfono puede seguir en otra Wi-Fi, que no es la del grupo.
+LanAddress? selectLanAddress(
+  Iterable<LanInterface> interfaces, {
+  String? prefer,
+}) {
+  if (prefer != null && !_excluded.hasMatch(prefer)) {
+    for (final interface in interfaces) {
+      if (interface.name != prefer) continue;
+      for (final text in interface.addresses) {
+        final octets = _unicastOctets(text);
+        if (octets == null) continue;
+        return LanAddress(
+          address: octets.join('.'),
+          interfaceName: interface.name,
+          kind: lanKindOf(interface.name) ?? LanKind.hotspot,
+        );
+      }
+    }
+  }
   LanAddress? best;
   var bestScore = -1;
   for (final interface in interfaces) {

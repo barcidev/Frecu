@@ -103,6 +103,12 @@ class _FakeSettings implements SystemSettingsRepository {
     opened.add('app');
     return const Result.success(null);
   }
+
+  @override
+  Future<Result<void>> openLocationSettings() async {
+    opened.add('location');
+    return const Result.success(null);
+  }
 }
 
 /// Mi4: 329,6 Hz.

@@ -222,3 +222,109 @@ final class SystemSettingsRepositoryProvider
 
 String _$systemSettingsRepositoryHash() =>
     r'46be98e6f825445e1ee3a7c48a5ec79ebd7e10e3';
+
+/// La red de la frecu que crea el anfitrión Android (`LocalOnlyHotspot`).
+
+@ProviderFor(localHotspotRepository)
+final localHotspotRepositoryProvider = LocalHotspotRepositoryProvider._();
+
+/// La red de la frecu que crea el anfitrión Android (`LocalOnlyHotspot`).
+
+final class LocalHotspotRepositoryProvider
+    extends
+        $FunctionalProvider<
+          LocalHotspotRepository,
+          LocalHotspotRepository,
+          LocalHotspotRepository
+        >
+    with $Provider<LocalHotspotRepository> {
+  /// La red de la frecu que crea el anfitrión Android (`LocalOnlyHotspot`).
+  LocalHotspotRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localHotspotRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$localHotspotRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<LocalHotspotRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  LocalHotspotRepository create(Ref ref) {
+    return localHotspotRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LocalHotspotRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LocalHotspotRepository>(value),
+    );
+  }
+}
+
+String _$localHotspotRepositoryHash() =>
+    r'893f358e91e2a8cc8d0ae57a3bba0d941e3bcf83';
+
+/// Cómo llega el invitado a la red del anfitrión.
+
+@ProviderFor(wifiJoinRepository)
+final wifiJoinRepositoryProvider = WifiJoinRepositoryProvider._();
+
+/// Cómo llega el invitado a la red del anfitrión.
+
+final class WifiJoinRepositoryProvider
+    extends
+        $FunctionalProvider<
+          WifiJoinRepository,
+          WifiJoinRepository,
+          WifiJoinRepository
+        >
+    with $Provider<WifiJoinRepository> {
+  /// Cómo llega el invitado a la red del anfitrión.
+  WifiJoinRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'wifiJoinRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$wifiJoinRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<WifiJoinRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  WifiJoinRepository create(Ref ref) {
+    return wifiJoinRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(WifiJoinRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<WifiJoinRepository>(value),
+    );
+  }
+}
+
+String _$wifiJoinRepositoryHash() =>
+    r'93488f6834c120b77c3ffc2b88d8d89b2080e8fe';

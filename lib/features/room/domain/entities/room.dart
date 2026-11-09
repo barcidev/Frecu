@@ -1,3 +1,4 @@
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,6 +20,10 @@ sealed class Room with _$Room {
 
     /// Nota musical de la frecu, calculada con su hora de apertura.
     @RoomNoteConverter() RoomNote? note,
+
+    /// Red de la frecu, si el anfitrión la creó con Frecu: la que creó este
+    /// teléfono o la que traía la invitación. Va en el QR para invitar.
+    WifiCredentials? wifi,
   }) = _Room;
 
   /// Deserializa desde JSON.

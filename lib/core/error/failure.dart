@@ -1,4 +1,7 @@
+import 'package:frecu/core/error/network_failure_reasons.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+export 'package:frecu/core/error/network_failure_reasons.dart';
 
 part 'failure.freezed.dart';
 
@@ -26,6 +29,13 @@ sealed class Failure with _$Failure {
 
   /// Error en la captura, reproducción o sesión de audio.
   const factory Failure.audio({String? message}) = _AudioFailure;
+
+  /// No se pudo crear la red de la frecu en este teléfono.
+  const factory Failure.hotspot(HotspotFailureReason reason) = _HotspotFailure;
+
+  /// El teléfono no entró a la red de la frecu.
+  const factory Failure.wifiJoin(WifiJoinFailureReason reason) =
+      _WifiJoinFailure;
 
   /// Error inesperado no categorizado.
   const factory Failure.unexpected({String? message, Object? error}) =
