@@ -75,6 +75,7 @@ class PermissionRepositoryImpl implements PermissionRepository {
       AppPermission.camera => Permission.camera,
       AppPermission.notification => Permission.notification,
       AppPermission.bluetoothConnect => Permission.bluetoothConnect,
+      AppPermission.location => Permission.locationWhenInUse,
     };
   }
 

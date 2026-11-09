@@ -31,6 +31,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Frecu usa tu ubicación solo si activas «Compartir mi ubicación» en una frecu, para que tu grupo vea a qué distancia estás. No sale de tu grupo.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Frecu necesita acceso al micrófono para la comunicación de voz grupal en la red local.</string>
 	<key>NSLocalNetworkUsageDescription</key>
@@ -44,6 +46,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>location</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

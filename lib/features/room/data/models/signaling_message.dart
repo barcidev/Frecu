@@ -99,6 +99,19 @@ sealed class SignalingMessage with _$SignalingMessage {
     @Default('quick_message') String type,
   }) = SignalingQuickMessage;
 
+  /// Posición de quien comparte su ubicación: [lat] y [lon] en grados y
+  /// [accuracy] en metros. Sin [lat] ni [lon] avisa que dejó de compartirla.
+  /// El anfitrión la reenvía a todos menos a quien la envía, con [peerId]
+  /// forzado al remitente.
+  @FreezedUnionValue('position')
+  const factory SignalingMessage.position({
+    required String peerId,
+    @JsonKey(includeIfNull: false) double? lat,
+    @JsonKey(includeIfNull: false) double? lon,
+    @JsonKey(includeIfNull: false) double? accuracy,
+    @Default('position') String type,
+  }) = SignalingPositionMessage;
+
   /// Latido enviado para comprobar liveness.
   const factory SignalingMessage.ping({
     required int timestamp,

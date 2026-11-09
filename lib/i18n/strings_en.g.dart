@@ -47,6 +47,7 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 	@override late final _Translations$splash$en splash = _Translations$splash$en._(_root);
 	@override late final _Translations$messages$en messages = _Translations$messages$en._(_root);
+	@override late final _Translations$location$en location = _Translations$location$en._(_root);
 }
 
 // Path: app
@@ -250,6 +251,28 @@ class _Translations$messages$en extends Translations$messages$es {
 	@override String received({required Object name, required Object text}) => '${name} · ${text}';
 	@override String get sendError => 'Couldn\'t send: no connection to the host';
 	@override late final _Translations$messages$sos$en sos = _Translations$messages$sos$en._(_root);
+}
+
+// Path: location
+class _Translations$location$en extends Translations$location$es {
+	_Translations$location$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override late final _Translations$location$share$en share = _Translations$location$share$en._(_root);
+	@override String get sharingTag => 'Sharing your location';
+	@override String get denied => 'No location permission';
+	@override String get deniedForever => 'No location permission: turn it on in your phone\'s settings';
+	@override String get failed => 'Couldn\'t use your location';
+	@override String behind({required Object name}) => '${name} fell behind';
+	@override String behindCaption({required Object distance}) => 'Behind · ${distance}';
+	@override String towards({required Object distance, required Object direction}) => '${distance} ${direction}';
+	@override String sosDetail({required Object distance, required Object direction}) => 'They\'re ${distance} to the ${direction}. Tell the group if you\'re heading there.';
+	@override String meters({required Object value}) => '${value} m';
+	@override String kilometers({required Object value}) => '${value} km';
+	@override late final _Translations$location$compass$en compass = _Translations$location$compass$en._(_root);
+	@override late final _Translations$location$compassLong$en compassLong = _Translations$location$compassLong$en._(_root);
 }
 
 // Path: lobby.join
@@ -594,6 +617,52 @@ class _Translations$messages$sos$en extends Translations$messages$sos$es {
 	@override String get body => 'Tell the group if you\'re heading there. The alarm continues until you answer.';
 	@override String get onMyWay => 'On my way';
 	@override String get dismiss => 'Got it';
+}
+
+// Path: location.share
+class _Translations$location$share$en extends Translations$location$share$es {
+	_Translations$location$share$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Share my location';
+	@override String get on => 'Your group sees how far away you are and in which direction.';
+	@override String get off => 'Off. Your group can\'t see where you are.';
+}
+
+// Path: location.compass
+class _Translations$location$compass$en extends Translations$location$compass$es {
+	_Translations$location$compass$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get n => 'N';
+	@override String get ne => 'NE';
+	@override String get e => 'E';
+	@override String get se => 'SE';
+	@override String get s => 'S';
+	@override String get sw => 'SW';
+	@override String get w => 'W';
+	@override String get nw => 'NW';
+}
+
+// Path: location.compassLong
+class _Translations$location$compassLong$en extends Translations$location$compassLong$es {
+	_Translations$location$compassLong$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get n => 'north';
+	@override String get ne => 'northeast';
+	@override String get e => 'east';
+	@override String get se => 'southeast';
+	@override String get s => 'south';
+	@override String get sw => 'southwest';
+	@override String get w => 'west';
+	@override String get nw => 'northwest';
 }
 
 // Path: lobby.join.pin
@@ -1232,6 +1301,35 @@ extension on TranslationsEn {
 			'messages.sos.body' => 'Tell the group if you\'re heading there. The alarm continues until you answer.',
 			'messages.sos.onMyWay' => 'On my way',
 			'messages.sos.dismiss' => 'Got it',
+			'location.share.title' => 'Share my location',
+			'location.share.on' => 'Your group sees how far away you are and in which direction.',
+			'location.share.off' => 'Off. Your group can\'t see where you are.',
+			'location.sharingTag' => 'Sharing your location',
+			'location.denied' => 'No location permission',
+			'location.deniedForever' => 'No location permission: turn it on in your phone\'s settings',
+			'location.failed' => 'Couldn\'t use your location',
+			'location.behind' => ({required Object name}) => '${name} fell behind',
+			'location.behindCaption' => ({required Object distance}) => 'Behind · ${distance}',
+			'location.towards' => ({required Object distance, required Object direction}) => '${distance} ${direction}',
+			'location.sosDetail' => ({required Object distance, required Object direction}) => 'They\'re ${distance} to the ${direction}. Tell the group if you\'re heading there.',
+			'location.meters' => ({required Object value}) => '${value} m',
+			'location.kilometers' => ({required Object value}) => '${value} km',
+			'location.compass.n' => 'N',
+			'location.compass.ne' => 'NE',
+			'location.compass.e' => 'E',
+			'location.compass.se' => 'SE',
+			'location.compass.s' => 'S',
+			'location.compass.sw' => 'SW',
+			'location.compass.w' => 'W',
+			'location.compass.nw' => 'NW',
+			'location.compassLong.n' => 'north',
+			'location.compassLong.ne' => 'northeast',
+			'location.compassLong.e' => 'east',
+			'location.compassLong.se' => 'southeast',
+			'location.compassLong.s' => 'south',
+			'location.compassLong.sw' => 'southwest',
+			'location.compassLong.w' => 'west',
+			'location.compassLong.nw' => 'northwest',
 			_ => null,
 		};
 	}

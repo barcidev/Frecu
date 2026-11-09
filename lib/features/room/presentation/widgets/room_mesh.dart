@@ -30,6 +30,8 @@ class RoomMesh extends StatefulWidget {
     this.levels = const {},
     this.status,
     this.onInvite,
+    this.distances = const {},
+    this.behind = const {},
     super.key,
   });
 
@@ -55,6 +57,12 @@ class RoomMesh extends StatefulWidget {
 
   /// Al tocar un lugar libre.
   final VoidCallback? onInvite;
+
+  /// Distancia y rumbo hasta cada persona por id («120 m NE»).
+  final Map<String, String> distances;
+
+  /// Quiénes se quedaron atrás.
+  final Set<String> behind;
 
   @override
   State<RoomMesh> createState() => _RoomMeshState();
@@ -96,6 +104,8 @@ class _RoomMeshState extends State<RoomMesh> {
       localTalking: widget.localTalking,
       levels: widget.levels,
       status: widget.status,
+      distances: widget.distances,
+      behind: widget.behind,
     );
     _bornAt.removeWhere((id, _) => !_slots.containsKey(id));
     // Sin nodos, el bucle se desmonta y su tiempo vuelve a empezar.
@@ -225,9 +235,11 @@ class _RoomMeshState extends State<RoomMesh> {
           name: node.name,
           nameColor: onAir ? color : colors.tx1,
           nameWeight: FontWeight.w600,
-          caption: _captionText(caption).toUpperCase(),
+          caption: _captionText(caption, node).toUpperCase(),
           captionColor:
-              caption == MeshCaption.reconnecting || caption == MeshCaption.weak
+              caption == MeshCaption.reconnecting ||
+                  caption == MeshCaption.weak ||
+                  caption == MeshCaption.behind
               ? colors.warn
               : onAir
               ? color
@@ -280,7 +292,7 @@ class _RoomMeshState extends State<RoomMesh> {
     child: IgnorePointer(child: child),
   );
 
-  String _captionText(MeshCaption caption) => switch (caption) {
+  String _captionText(MeshCaption caption, MeshNode node) => switch (caption) {
     MeshCaption.none => '',
     MeshCaption.you => t.room.mesh.you,
     MeshCaption.youHost => t.room.mesh.youHost,
@@ -291,5 +303,10 @@ class _RoomMeshState extends State<RoomMesh> {
     MeshCaption.connecting => t.room.mesh.connecting,
     MeshCaption.reconnecting => t.room.mesh.reconnecting,
     MeshCaption.weak => t.room.mesh.weak,
+    MeshCaption.distance => node.distance ?? '',
+    MeshCaption.hostDistance => '${t.room.host} · ${node.distance ?? ''}',
+    MeshCaption.behind => t.location.behindCaption(
+      distance: node.distance ?? '',
+    ),
   };
 }

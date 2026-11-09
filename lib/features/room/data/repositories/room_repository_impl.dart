@@ -428,7 +428,8 @@ class RoomRepositoryImpl implements RoomRepository {
               SignalingTalkStateMessage() ||
               SignalingPingMessage() ||
               SignalingPongMessage() ||
-              SignalingQuickMessage():
+              SignalingQuickMessage() ||
+              SignalingPositionMessage():
             break;
         }
       },

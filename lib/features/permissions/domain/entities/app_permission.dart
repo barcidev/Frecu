@@ -11,6 +11,10 @@ enum AppPermission {
 
   /// Permiso para conexión con periféricos Bluetooth cercanos.
   bluetoothConnect,
+
+  /// Ubicación mientras se usa la app, para compartirla con la frecu. Se
+  /// pide solo al activar «Compartir mi ubicación».
+  location,
 }
 
 /// Estado de resolución de un permiso de sistema.

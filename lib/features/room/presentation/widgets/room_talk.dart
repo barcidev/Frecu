@@ -225,6 +225,13 @@ class RoomIslandEvent {
       color = null,
       icon = null;
 
+  /// [name] se quedó atrás del grupo.
+  const RoomIslandEvent.behind({required this.name})
+    : kind = RoomIslandEventKind.behind,
+      color = null,
+      icon = null,
+      text = null;
+
   /// Se envió un SOS al grupo.
   const RoomIslandEvent.sosSent()
     : kind = RoomIslandEventKind.sosSent,
@@ -274,6 +281,7 @@ class RoomIslandEvent {
       ),
       RoomIslandEventKind.sent => t.messages.sent(text: text ?? ''),
       RoomIslandEventKind.sosSent => t.messages.sosSent,
+      RoomIslandEventKind.behind => t.location.behind(name: name),
     };
   }
 
@@ -315,6 +323,9 @@ enum RoomIslandEventKind {
 
   /// Se envió un SOS.
   sosSent,
+
+  /// Alguien se quedó atrás.
+  behind,
 }
 
 /// Isla de estado de la frecu activa (`isleFor` del prototipo): una
@@ -372,7 +383,8 @@ class RoomStatusIsland extends StatelessWidget {
     final event = this.event;
     if (event != null) {
       // La señal débil es un aviso: va en ámbar, como reconectando.
-      if (event.kind == RoomIslandEventKind.weak) {
+      if (event.kind == RoomIslandEventKind.weak ||
+          event.kind == RoomIslandEventKind.behind) {
         return StatusIsland(
           label: event.label,
           tone: StatusIslandTone.warn,
@@ -437,6 +449,10 @@ class RoomStatusIsland extends StatelessWidget {
         child: FrIcon(FrIcons.check, size: 16, color: c.signal),
       ),
       RoomIslandEventKind.sosSent => null,
+      RoomIslandEventKind.behind => Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: FrIcon(FrIcons.pin, size: 16, color: c.warn),
+      ),
     };
   }
 }

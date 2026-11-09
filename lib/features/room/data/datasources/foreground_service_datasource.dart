@@ -105,6 +105,12 @@ class ForegroundServiceDataSource {
 
   bool _isRunning = false;
 
+  /// Con la ubicación compartida el servicio también es de tipo `location`:
+  /// sin ese tipo Android no da la ubicación con la pantalla apagada.
+  bool _locationActive = false;
+  String _roomName = '';
+  ForegroundStatus _status = ForegroundStatus.connected;
+
   final StreamController<int> _leaveRequests =
       StreamController<int>.broadcast();
   int _leaveCount = 0;
@@ -170,6 +176,8 @@ class ForegroundServiceDataSource {
     required ForegroundStatus status,
   }) async {
     _isRunning = true;
+    _roomName = roomName;
+    _status = status;
     if (_isTest) return;
 
     try {
@@ -181,6 +189,12 @@ class ForegroundServiceDataSource {
       final texts = _texts();
       await FlutterForegroundTask.startService(
         serviceId: 4780,
+        // Solo los tipos que se usan: declarar `location` sin permiso de
+        // ubicación hace fallar el arranque en Android 14+.
+        serviceTypes: [
+          ForegroundServiceTypes.microphone,
+          if (_locationActive) ForegroundServiceTypes.location,
+        ],
         notificationTitle: texts.title,
         notificationText: texts.line(roomName, status),
         notificationButtons: _buttons(texts),
@@ -197,6 +211,8 @@ class ForegroundServiceDataSource {
     required ForegroundStatus status,
   }) async {
     if (!_isRunning) return;
+    _roomName = roomName;
+    _status = status;
     if (_isTest) return;
 
     try {
@@ -211,9 +227,31 @@ class ForegroundServiceDataSource {
     }
   }
 
+  /// Suma o quita el tipo `location` al servicio. Android solo fija los
+  /// tipos al arrancar, así que con el servicio en marcha lo reinicia; se
+  /// llama desde la app al frente (al tocar «Compartir mi ubicación»), donde
+  /// Android deja arrancarlo.
+  Future<void> setLocationActive({required bool active}) async {
+    if (_locationActive == active) return;
+    _locationActive = active;
+    if (!_isRunning || _isTest || !Platform.isAndroid) return;
+    try {
+      if (await FlutterForegroundTask.isRunningService) {
+        await FlutterForegroundTask.stopService();
+      }
+      await startService(roomName: _roomName, status: _status);
+    } on Object catch (e, st) {
+      AppLogger.w('Failed to restart foreground service', e, st);
+    }
+  }
+
+  /// Si el servicio lleva el tipo `location`.
+  bool get locationActive => _locationActive;
+
   /// Stops the foreground service.
   Future<void> stopService() async {
     _isRunning = false;
+    _locationActive = false;
     if (_isTest) return;
 
     try {

@@ -145,7 +145,7 @@ final class SosAlertsProvider
   }
 }
 
-String _$sosAlertsHash() => r'df6d92f9b32b242e8cd0be620150e00171a7ea5f';
+String _$sosAlertsHash() => r'c408d2d8ea19fb8142f47b8e1fe16c129e6701da';
 
 /// SOS que llegaron y aún no se atendieron, el más antiguo primero; uno por
 /// persona.

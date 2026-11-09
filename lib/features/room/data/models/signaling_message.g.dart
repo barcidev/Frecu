@@ -176,6 +176,26 @@ Map<String, dynamic> _$SignalingQuickMessageToJson(
   'type': instance.type,
 };
 
+SignalingPositionMessage _$SignalingPositionMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingPositionMessage(
+  peerId: json['peerId'] as String,
+  lat: (json['lat'] as num?)?.toDouble(),
+  lon: (json['lon'] as num?)?.toDouble(),
+  accuracy: (json['accuracy'] as num?)?.toDouble(),
+  type: json['type'] as String? ?? 'position',
+);
+
+Map<String, dynamic> _$SignalingPositionMessageToJson(
+  SignalingPositionMessage instance,
+) => <String, dynamic>{
+  'peerId': instance.peerId,
+  'lat': ?instance.lat,
+  'lon': ?instance.lon,
+  'accuracy': ?instance.accuracy,
+  'type': instance.type,
+};
+
 SignalingPingMessage _$SignalingPingMessageFromJson(
   Map<String, dynamic> json,
 ) => SignalingPingMessage(

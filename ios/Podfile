@@ -45,17 +45,26 @@ PERMISSION_HANDLER_MACROS = [
   'PERMISSION_MICROPHONE=1',
   'PERMISSION_NOTIFICATIONS=1',
   'PERMISSION_CAMERA=1',
+  'PERMISSION_LOCATION_WHENINUSE=1',
 ].freeze
+
+# geolocator solo pide «mientras se usa»: sin el permiso «siempre», que App
+# Store exige justificar.
+GEOLOCATOR_MACROS = ['BYPASS_PERMISSION_LOCATION_ALWAYS=1'].freeze
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-    next unless target.name == 'permission_handler_apple'
+    macros = {
+      'permission_handler_apple' => PERMISSION_HANDLER_MACROS,
+      'geolocator_apple' => GEOLOCATOR_MACROS,
+    }[target.name]
+    next unless macros
 
     target.build_configurations.each do |config|
       definitions = Array(config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || '$(inherited)')
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] =
-        (definitions + PERMISSION_HANDLER_MACROS).uniq
+        (definitions + macros).uniq
     end
   end
 end

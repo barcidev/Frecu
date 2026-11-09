@@ -89,6 +89,8 @@ class MeshNode {
     this.muted = false,
     this.link = MeshLink.ok,
     this.weak = false,
+    this.distance,
+    this.behind = false,
     this.level = 0,
   });
 
@@ -119,6 +121,13 @@ class MeshNode {
   /// Su enlace conectado llega débil: pérdidas o mucho retraso.
   final bool weak;
 
+  /// Distancia y rumbo hasta esa persona («120 m NE»), si las dos
+  /// comparten su ubicación.
+  final String? distance;
+
+  /// Se quedó atrás del grupo.
+  final bool behind;
+
   /// Nivel real de su voz, de 0 a 1.
   final double level;
 
@@ -137,6 +146,8 @@ class MeshNode {
       other.muted == muted &&
       other.link == link &&
       other.weak == weak &&
+      other.distance == distance &&
+      other.behind == behind &&
       other.level == level;
 
   @override
@@ -150,6 +161,8 @@ class MeshNode {
     muted,
     link,
     weak,
+    distance,
+    behind,
     level,
   );
 }
@@ -161,7 +174,8 @@ class MeshNode {
 /// [MeshLink.link]; si no, cada uno sigue su `connectionState`. La persona
 /// propia habla con [localTalking] y las demás con `isSpeaking` o
 /// [speakingPeers]. El nivel de voz de cada uno sale de [levels] por id y
-/// su enlace débil, de su `linkQuality`.
+/// su enlace débil, de su `linkQuality`; la distancia a cada uno, de
+/// [distances], y quién se quedó atrás, de [behind].
 List<MeshNode?> buildMeshNodes({
   required List<Participant> participants,
   required Map<String, int> slots,
@@ -170,6 +184,8 @@ List<MeshNode?> buildMeshNodes({
   Map<String, double> levels = const {},
   bool localTalking = false,
   RoomStatus? status,
+  Map<String, String> distances = const {},
+  Set<String> behind = const {},
 }) {
   final nodes = List<MeshNode?>.filled(meshSlotCount, null);
   final roomLink = status?.maybeWhen(
@@ -193,6 +209,8 @@ List<MeshNode?> buildMeshNodes({
       muted: participant.isMuted,
       link: roomLink ?? _peerLink(participant.connectionState),
       weak: !isMe && participant.linkQuality == LinkQuality.weak,
+      distance: isMe ? null : distances[participant.id],
+      behind: behind.contains(participant.id),
       level: levels[participant.id] ?? 0,
     );
   }
@@ -237,6 +255,15 @@ enum MeshCaption {
 
   /// «Señal débil».
   weak,
+
+  /// Distancia y rumbo («120 m NE»).
+  distance,
+
+  /// «Anfitrión · 45 m NE».
+  hostDistance,
+
+  /// «Atrás · 850 m»: se quedó atrás del grupo.
+  behind,
 }
 
 /// Leyenda de [node]: el enlace manda sobre el silencio, el silencio sobre
@@ -245,9 +272,13 @@ MeshCaption meshCaption(MeshNode node) {
   if (node.link == MeshLink.link) return MeshCaption.connecting;
   if (node.link == MeshLink.rec) return MeshCaption.reconnecting;
   if (node.muted) return MeshCaption.muted;
+  if (node.behind && node.link == MeshLink.ok) return MeshCaption.behind;
   if (node.weak && node.link == MeshLink.ok) return MeshCaption.weak;
   if (node.onAir) return node.isMe ? MeshCaption.onAir : MeshCaption.speaking;
   if (node.isMe) return node.isHost ? MeshCaption.youHost : MeshCaption.you;
+  if (node.distance != null) {
+    return node.isHost ? MeshCaption.hostDistance : MeshCaption.distance;
+  }
   return node.isHost ? MeshCaption.host : MeshCaption.none;
 }
 
@@ -310,7 +341,9 @@ List<MeshEdge> meshEdges(List<MeshNode?> nodes) => [
                 a.link != MeshLink.ok ||
                 b.link != MeshLink.ok ||
                 a.weak ||
-                b.weak,
+                b.weak ||
+                a.behind ||
+                b.behind,
           ),
 ];
 
