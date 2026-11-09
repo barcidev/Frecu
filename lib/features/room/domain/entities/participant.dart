@@ -1,3 +1,4 @@
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'participant.freezed.dart';
@@ -29,6 +30,12 @@ sealed class Participant with _$Participant {
     @Default(false) bool isSpeaking,
     @Default(false) bool isMuted,
     @Default(PeerConnectionState.connected) PeerConnectionState connectionState,
+
+    /// Calidad del enlace de voz que mide este teléfono; es local, así que
+    /// no viaja en la señalización.
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(LinkQuality.good)
+    LinkQuality linkQuality,
   }) = _Participant;
 
   /// Deserializa desde JSON.

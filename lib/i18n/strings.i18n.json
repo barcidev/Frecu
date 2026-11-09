@@ -148,6 +148,7 @@
       "onAir": "Al aire",
       "connecting": "Conectando",
       "reconnecting": "Reconectando",
+      "weak": "Señal débil",
       "free": "Libre",
       "invite": "Invitar"
     },
@@ -240,7 +241,8 @@
         "joined": "$name se unió",
         "left": "$name salió",
         "route": "Audio por $route",
-        "recovered": "Conexión recuperada"
+        "recovered": "Conexión recuperada",
+        "weak": "$name · señal débil"
       },
       "echo": {
         "title": "Micrófono abierto con altavoz.",

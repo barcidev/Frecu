@@ -24,6 +24,7 @@ import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
@@ -361,6 +362,7 @@ void main() {
     late StreamController<Set<String>> speaking;
     late StreamController<Set<String>> muted;
     late StreamController<Map<String, PeerConnectionState>> links;
+    late StreamController<Map<String, LinkQuality>> quality;
     late StreamController<TalkMode> mode;
     late StreamController<AudioRoute> route;
     late StreamController<Set<AudioRoute>> available;
@@ -381,6 +383,7 @@ void main() {
       speaking = StreamController<Set<String>>.broadcast();
       muted = StreamController<Set<String>>.broadcast();
       links = StreamController<Map<String, PeerConnectionState>>.broadcast();
+      quality = StreamController<Map<String, LinkQuality>>.broadcast();
       mode = StreamController<TalkMode>.broadcast();
       route = StreamController<AudioRoute>.broadcast();
       available = StreamController<Set<AudioRoute>>.broadcast();
@@ -398,6 +401,7 @@ void main() {
       when(() => voice.watchSpeakingPeers()).thenAnswer((_) => speaking.stream);
       when(() => voice.watchMutedPeers()).thenAnswer((_) => muted.stream);
       when(() => voice.watchPeerLinks()).thenAnswer((_) => links.stream);
+      when(() => voice.watchPeerQuality()).thenAnswer((_) => quality.stream);
       when(() => voice.watchTalkMode()).thenAnswer((_) => mode.stream);
       when(() => voice.watchAudioRoute()).thenAnswer((_) => route.stream);
       when(() => voice.watchAvailableAudioRoutes())
@@ -418,6 +422,7 @@ void main() {
         speaking,
         muted,
         links,
+        quality,
         mode,
         route,
         available,
@@ -726,6 +731,32 @@ void main() {
       await tester.pumpAndSettle();
       expect(islandLabel(tester), 'En línea · 2/6');
       expect(find.text('CONECTANDO'), findsNothing);
+    });
+
+    testWidgets('Señal débil: la malla y la isla avisan una vez y se va al '
+        'mejorar', (tester) async {
+      await enter(tester);
+
+      quality.add({'peer_1': LinkQuality.weak});
+      await tester.pumpAndSettle();
+      expect(find.text('SEÑAL DÉBIL'), findsOneWidget);
+      expect(islandLabel(tester), 'Andrés · señal débil');
+      expect(
+        tester.widget<StatusIsland>(find.byType(StatusIsland)).tone,
+        StatusIslandTone.warn,
+      );
+
+      // Sigue débil: la leyenda queda, el aviso no se repite.
+      await tester.pump(RoomIslandEvent.duration);
+      await tester.pumpAndSettle();
+      quality.add({'peer_1': LinkQuality.weak});
+      await tester.pumpAndSettle();
+      expect(islandLabel(tester), 'En línea · 2/6');
+      expect(find.text('SEÑAL DÉBIL'), findsOneWidget);
+
+      quality.add({'peer_1': LinkQuality.good});
+      await tester.pumpAndSettle();
+      expect(find.text('SEÑAL DÉBIL'), findsNothing);
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (

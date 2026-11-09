@@ -7,6 +7,7 @@ import 'package:frecu/features/room/data/datasources/audio_session_datasource.da
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
@@ -28,6 +29,7 @@ class VoiceState {
     this.isInitialized = false,
     this.mutedPeers = const {},
     this.peerLinks = const {},
+    this.peerQuality = const {},
     this.bluetoothName,
   });
 
@@ -67,6 +69,10 @@ class VoiceState {
   /// Estado del enlace de voz con cada participante remoto, por id.
   final Map<String, PeerConnectionState> peerLinks;
 
+  /// Calidad del enlace de voz con cada participante remoto, por id; quien no
+  /// aparece cuenta como bueno.
+  final Map<String, LinkQuality> peerQuality;
+
   /// Nombre del dispositivo Bluetooth conectado, si hay uno.
   final String? bluetoothName;
 
@@ -82,6 +88,7 @@ class VoiceState {
     bool? isInitialized,
     Set<String>? mutedPeers,
     Map<String, PeerConnectionState>? peerLinks,
+    Map<String, LinkQuality>? peerQuality,
     String? bluetoothName,
     bool clearBluetoothName = false,
   }) {
@@ -95,6 +102,7 @@ class VoiceState {
       isInitialized: isInitialized ?? this.isInitialized,
       mutedPeers: mutedPeers ?? this.mutedPeers,
       peerLinks: peerLinks ?? this.peerLinks,
+      peerQuality: peerQuality ?? this.peerQuality,
       bluetoothName: clearBluetoothName
           ? bluetoothName
           : bluetoothName ?? this.bluetoothName,
@@ -222,6 +230,9 @@ class VoiceNotifier extends _$VoiceNotifier {
     final linksSub = _follow(repository.watchPeerLinks, (links) {
       state = state.copyWith(peerLinks: links);
     });
+    final qualitySub = _follow(repository.watchPeerQuality, (quality) {
+      state = state.copyWith(peerQuality: quality);
+    });
     final bluetoothSub = _follow(repository.watchBluetoothName, (name) {
       state = state.copyWith(bluetoothName: name, clearBluetoothName: true);
     });
@@ -237,6 +248,7 @@ class VoiceNotifier extends _$VoiceNotifier {
       availSub?.cancel();
       mutedSub?.cancel();
       linksSub?.cancel();
+      qualitySub?.cancel();
       bluetoothSub?.cancel();
       voiceSub?.cancel();
     });

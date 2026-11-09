@@ -586,6 +586,9 @@ class Translations$room$mesh$es {
 	/// es: 'Reconectando'
 	String get reconnecting => 'Reconectando';
 
+	/// es: 'Señal débil'
+	String get weak => 'Señal débil';
+
 	/// es: 'Libre'
 	String get free => 'Libre';
 
@@ -1259,6 +1262,9 @@ class Translations$room$talk$island$es {
 
 	/// es: 'Conexión recuperada'
 	String get recovered => 'Conexión recuperada';
+
+	/// es: '$name · señal débil'
+	String weak({required Object name}) => '${name} · señal débil';
 }
 
 // Path: room.talk.echo
@@ -1564,6 +1570,7 @@ extension on Translations {
 			'room.mesh.onAir' => 'Al aire',
 			'room.mesh.connecting' => 'Conectando',
 			'room.mesh.reconnecting' => 'Reconectando',
+			'room.mesh.weak' => 'Señal débil',
 			'room.mesh.free' => 'Libre',
 			'room.mesh.invite' => 'Invitar',
 			'room.header.youAreHost' => 'Eres el anfitrión',
@@ -1638,6 +1645,7 @@ extension on Translations {
 			'room.talk.island.left' => ({required Object name}) => '${name} salió',
 			'room.talk.island.route' => ({required Object route}) => 'Audio por ${route}',
 			'room.talk.island.recovered' => 'Conexión recuperada',
+			'room.talk.island.weak' => ({required Object name}) => '${name} · señal débil',
 			'room.talk.echo.title' => 'Micrófono abierto con altavoz.',
 			'room.talk.echo.message' => 'Usa audífonos para evitar eco.',
 			'room.talk.echo.dismiss' => 'Cerrar aviso',

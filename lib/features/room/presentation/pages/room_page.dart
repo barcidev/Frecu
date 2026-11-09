@@ -13,6 +13,7 @@ import 'package:frecu/core/design/widgets/fr_banner.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -233,6 +234,10 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           );
         },
       )
+      ..listen<Map<String, LinkQuality>>(
+        voiceNotifierProvider.select((voice) => voice.peerQuality),
+        (previous, next) => _onQualityChanged(previous ?? const {}, next),
+      )
       ..listen<AsyncValue<RoomStatus>>(roomStatusProvider, (previous, next) {
         final wasReconnecting =
             previous?.value?.maybeWhen(
@@ -247,6 +252,24 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           _showEvent(const RoomIslandEvent.recovered());
         }
       });
+  }
+
+  /// «X · señal débil» cuando el enlace con alguien pasa a débil; avisa una
+  /// vez por cada caída, y nada mientras sigue débil.
+  void _onQualityChanged(
+    Map<String, LinkQuality> before,
+    Map<String, LinkQuality> after,
+  ) {
+    final people = ref.read(roomParticipantsProvider).value ?? const [];
+    for (final MapEntry(key: id, value: quality) in after.entries) {
+      if (quality != LinkQuality.weak || before[id] == LinkQuality.weak) {
+        continue;
+      }
+      final person = people.where((p) => p.id == id).firstOrNull;
+      if (person == null) continue;
+      _showEvent(RoomIslandEvent.weak(name: person.displayName));
+      return;
+    }
   }
 
   /// «X se unió» o «X salió»; los ids propios (que cambian al reconectar) no
@@ -315,6 +338,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                 voice.mutedPeers.contains(participant.id),
             connectionState:
                 voice.peerLinks[participant.id] ?? participant.connectionState,
+            linkQuality: voice.peerQuality[participant.id] ?? LinkQuality.good,
           ),
     ];
   }

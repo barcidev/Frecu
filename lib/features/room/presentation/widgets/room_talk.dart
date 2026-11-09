@@ -200,6 +200,12 @@ class RoomIslandEvent {
   }) : kind = RoomIslandEventKind.route,
        color = null;
 
+  /// El enlace de voz con [name] llega débil.
+  const RoomIslandEvent.weak({required this.name})
+    : kind = RoomIslandEventKind.weak,
+      color = null,
+      icon = null;
+
   /// Volvió la conexión con el anfitrión.
   const RoomIslandEvent.recovered()
     : kind = RoomIslandEventKind.recovered,
@@ -230,6 +236,7 @@ class RoomIslandEvent {
       RoomIslandEventKind.left => texts.left(name: name),
       RoomIslandEventKind.route => texts.route(route: name),
       RoomIslandEventKind.recovered => texts.recovered,
+      RoomIslandEventKind.weak => texts.weak(name: name),
     };
   }
 
@@ -258,6 +265,9 @@ enum RoomIslandEventKind {
 
   /// Volvió la conexión.
   recovered,
+
+  /// El enlace con alguien llega débil.
+  weak,
 }
 
 /// Isla de estado de la frecu activa (`isleFor` del prototipo): una
@@ -314,6 +324,14 @@ class RoomStatusIsland extends StatelessWidget {
     }
     final event = this.event;
     if (event != null) {
+      // La señal débil es un aviso: va en ámbar, como reconectando.
+      if (event.kind == RoomIslandEventKind.weak) {
+        return StatusIsland(
+          label: event.label,
+          tone: StatusIslandTone.warn,
+          leading: _eventLead(event),
+        );
+      }
       return StatusIsland.event(label: event.label, leading: _eventLead(event));
     }
     return switch (phase) {
@@ -361,6 +379,10 @@ class RoomStatusIsland extends StatelessWidget {
       RoomIslandEventKind.recovered => Padding(
         padding: const EdgeInsets.only(left: 4),
         child: FrIcon(FrIcons.check, size: 16, color: c.signal),
+      ),
+      RoomIslandEventKind.weak => Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: FrIcon(FrIcons.signal, size: 16, color: c.warn),
       ),
     };
   }

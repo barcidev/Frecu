@@ -226,7 +226,8 @@ class _RoomMeshState extends State<RoomMesh> {
           nameColor: onAir ? color : colors.tx1,
           nameWeight: FontWeight.w600,
           caption: _captionText(caption).toUpperCase(),
-          captionColor: caption == MeshCaption.reconnecting
+          captionColor:
+              caption == MeshCaption.reconnecting || caption == MeshCaption.weak
               ? colors.warn
               : onAir
               ? color
@@ -289,5 +290,6 @@ class _RoomMeshState extends State<RoomMesh> {
     MeshCaption.muted => t.room.muted,
     MeshCaption.connecting => t.room.mesh.connecting,
     MeshCaption.reconnecting => t.room.mesh.reconnecting,
+    MeshCaption.weak => t.room.mesh.weak,
   };
 }

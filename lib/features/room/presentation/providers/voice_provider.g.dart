@@ -390,7 +390,7 @@ final class VoiceNotifierProvider
   }
 }
 
-String _$voiceNotifierHash() => r'c77358b68748cc52ca538145c6028e413121d026';
+String _$voiceNotifierHash() => r'48bc2b37a8f649b8d73d6f80baf1db34fd4e74c9';
 
 /// Gestor de estado del micrófono y transmisión de voz.
 
