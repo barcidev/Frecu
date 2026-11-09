@@ -8,6 +8,7 @@ Permisos:
 - `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`
 - `POST_NOTIFICATIONS` (Android 13+)
 - `BLUETOOTH_CONNECT` (Android 12+)
+- Invitar por Bluetooth: `BLUETOOTH_SCAN` con `neverForLocation` y `BLUETOOTH_ADVERTISE` (Android 12+), y `BLUETOOTH` y `BLUETOOTH_ADMIN` con `maxSdkVersion="30"`. `android.hardware.bluetooth_le` no es obligatorio. No hace falta el tipo de servicio `connectedDevice`: anunciar por BLE no lo exige.
 - `WAKE_LOCK`
 - `VIBRATE` (avisos de la frecu con la pantalla apagada)
 - `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION` y `FOREGROUND_SERVICE_LOCATION` (ubicación compartida, solo si se activa). Sin `maxSdkVersion`: en Android 12 o anterior, crear la red de la frecu también exige la ubicación precisa (y la ubicación encendida).
@@ -25,6 +26,7 @@ Canales nativos de la red (en `MainActivity`): `frecu/hotspot` (`LocalHotspot.kt
 - `NSLocalNetworkUsageDescription`
 - `NSBonjourServices`: `_frecu._tcp`
 - `NSCameraUsageDescription` (escáner QR)
+- `NSBluetoothAlwaysUsageDescription` (invitar por Bluetooth: buscar frecus cercanas). CoreBluetooth lo pide la primera vez que se busca; `permission_handler` no pide Bluetooth en iOS (sin `PERMISSION_BLUETOOTH`).
 - `UIBackgroundModes`: `audio` y `location`
 - `NSLocationWhenInUseUsageDescription` (solo «mientras se usa»; geolocator con `BYPASS_PERMISSION_LOCATION_ALWAYS=1` en el Podfile)
 

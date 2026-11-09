@@ -225,11 +225,17 @@ class _RoomInfo extends StatelessWidget {
         const SizedBox(height: 6),
         Row(
           children: [
-            FrIcon(FrIcons.lock, size: 16, color: c.tx3),
+            FrIcon(
+              room.viaBluetooth ? FrIcons.bluetooth : FrIcons.lock,
+              size: 16,
+              color: c.tx3,
+            ),
             const SizedBox(width: 6),
             Flexible(
               child: Text(
-                room.hostAddress,
+                room.viaBluetooth
+                    ? t.lobby.join.bluetooth.via
+                    : room.hostAddress,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: address,

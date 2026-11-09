@@ -1,5 +1,6 @@
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
 import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
@@ -122,6 +123,17 @@ class PreferencesNotifier extends _$PreferencesNotifier {
     final result = await _repository.saveWindFilter(enabled: enabled);
     if (result.isSuccess) {
       _update((preferences) => preferences.copyWith(windFilter: enabled));
+    }
+    return result;
+  }
+
+  /// Guarda la zona Wi-Fi de este teléfono para invitar por Bluetooth, o la
+  /// borra con `null`.
+  Future<Result<void>> setHotspot(WifiCredentials? hotspot) async {
+    await future;
+    final result = await _repository.saveHotspot(hotspot);
+    if (result.isSuccess) {
+      _update((preferences) => preferences.copyWith(hotspot: hotspot));
     }
     return result;
   }

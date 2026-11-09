@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
@@ -41,6 +44,9 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   /// Clave del filtro de viento (`true` o `false`).
   static const windFilterKey = 'settings.windFilter';
 
+  /// Clave de la zona Wi-Fi guardada para invitar por Bluetooth (JSON).
+  static const hotspotKey = 'settings.hotspot';
+
   final SharedPreferencesAsync _storage;
 
   @override
@@ -54,6 +60,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
       final volumePtt = await _storage.getString(volumePttKey);
       final earpiece = await _storage.getString(earpieceOnRaiseKey);
       final wind = await _storage.getString(windFilterKey);
+      final hotspot = await _storage.getString(hotspotKey);
       const defaults = Preferences();
       return Result.success(
         Preferences(
@@ -72,6 +79,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
           volumePtt: _boolOf(volumePtt) ?? defaults.volumePtt,
           earpieceOnRaise: _boolOf(earpiece) ?? defaults.earpieceOnRaise,
           windFilter: _boolOf(wind) ?? defaults.windFilter,
+          hotspot: _hotspotOf(hotspot),
         ),
       );
     } on Object catch (e, st) {
@@ -125,6 +133,35 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   @override
   Future<Result<void>> saveWindFilter({required bool enabled}) =>
       _save(windFilterKey, '$enabled');
+
+  @override
+  Future<Result<void>> saveHotspot(WifiCredentials? hotspot) async {
+    if (hotspot == null) {
+      try {
+        await _storage.remove(hotspotKey);
+        return const Result.success(null);
+      } on Object catch (e, st) {
+        AppLogger.e('Error removing preference $hotspotKey', e, st);
+        return Result.failure(
+          Failure.unexpected(message: e.toString(), error: e),
+        );
+      }
+    }
+    return _save(hotspotKey, jsonEncode(hotspot.toJson()));
+  }
+
+  /// La zona Wi-Fi guardada; nula si falta o no se entiende.
+  static WifiCredentials? _hotspotOf(String? raw) {
+    if (raw == null) return null;
+    try {
+      final json = jsonDecode(raw);
+      if (json is! Map<String, dynamic>) return null;
+      final hotspot = WifiCredentials.fromJson(json);
+      return hotspot.ssid.isEmpty ? null : hotspot;
+    } on Object {
+      return null;
+    }
+  }
 
   /// `true` o `false` guardados como texto; nulo si es otra cosa.
   static bool? _boolOf(String? raw) => switch (raw) {

@@ -10,6 +10,7 @@ dependencies:
   app_settings: ^7.0.0
   audio_session: ^0.2.4
   auto_route: ^11.2.0
+  bluetooth_low_energy: ^6.2.1
   flutter:
     sdk: flutter
   flutter_foreground_task: ^11.0.3

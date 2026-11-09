@@ -487,6 +487,7 @@ class Translations$lobby$join$es {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+	late final Translations$lobby$join$bluetooth$es bluetooth = Translations$lobby$join$bluetooth$es.internal(_root);
 
 	/// es: 'Cerrar'
 	String get close => 'Cerrar';
@@ -1230,6 +1231,27 @@ class Translations$location$compassLong$es {
 	String get nw => 'noroeste';
 }
 
+// Path: lobby.join.bluetooth
+class Translations$lobby$join$bluetooth$es {
+	Translations$lobby$join$bluetooth$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Por Bluetooth'
+	String get via => 'Por Bluetooth';
+
+	/// es: 'Aún no estás en su Wi-Fi: al poner el código te conectamos.'
+	String get hint => 'Aún no estás en su Wi-Fi: al poner el código te conectamos.';
+
+	/// es: 'El anfitrión no responde por Bluetooth.'
+	String get unreachable => 'El anfitrión no responde por Bluetooth.';
+
+	/// es: 'Acércate a su teléfono e intenta otra vez.'
+	String get unreachableHint => 'Acércate a su teléfono e intenta otra vez.';
+}
+
 // Path: lobby.join.wifi
 class Translations$lobby$join$wifi$es {
 	Translations$lobby$join$wifi$es.internal(this._root);
@@ -1407,6 +1429,14 @@ class Translations$lobby$newRoom$guide$es {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// es: 'Guardarla para invitar por Bluetooth'
+	String get saveForBluetooth => 'Guardarla para invitar por Bluetooth';
+
+	/// es: 'Zona Wi-Fi guardada · editar'
+	String get savedForBluetooth => 'Zona Wi-Fi guardada · editar';
+
+	late final Translations$lobby$newRoom$guide$hotspotSheet$es hotspotSheet = Translations$lobby$newRoom$guide$hotspotSheet$es.internal(_root);
 
 	/// es: 'Prepara la red'
 	String get title => 'Prepara la red';
@@ -1846,6 +1876,42 @@ class Translations$lobby$join$scan$camera$es {
 	String get openSettings => 'Abrir ajustes';
 }
 
+// Path: lobby.newRoom.guide.hotspotSheet
+class Translations$lobby$newRoom$guide$hotspotSheet$es {
+	Translations$lobby$newRoom$guide$hotspotSheet$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Invitar por Bluetooth · opcional'
+	String get kicker => 'Invitar por Bluetooth · opcional';
+
+	/// es: 'Tu zona Wi-Fi'
+	String get title => 'Tu zona Wi-Fi';
+
+	/// es: 'Quien esté cerca y tenga el código de la frecu se conecta a tu red sin buscarla. Se guarda solo en tu teléfono.'
+	String get message => 'Quien esté cerca y tenga el código de la frecu se conecta a tu red sin buscarla. Se guarda solo en tu teléfono.';
+
+	/// es: 'Nombre de la zona Wi-Fi'
+	String get ssid => 'Nombre de la zona Wi-Fi';
+
+	/// es: 'Tal como aparece en Ajustes'
+	String get ssidHint => 'Tal como aparece en Ajustes';
+
+	/// es: 'Contraseña'
+	String get key => 'Contraseña';
+
+	/// es: 'Android no deja que las apps la lean: escríbela tal como está en Ajustes › Zona Wi-Fi.'
+	String get keyHelp => 'Android no deja que las apps la lean: escríbela tal como está en Ajustes › Zona Wi-Fi.';
+
+	/// es: 'Guardar'
+	String get save => 'Guardar';
+
+	/// es: 'Olvidarla'
+	String get forget => 'Olvidarla';
+}
+
 // Path: lobby.newRoom.guide.androidSteps.0
 class Translations$lobby$newRoom$guide$androidSteps$0$es with HotspotStep {
 	Translations$lobby$newRoom$guide$androidSteps$0$es.internal(this._root);
@@ -1991,6 +2057,10 @@ extension on Translations {
 		return switch (path) {
 			'app.title' => 'Frecu',
 			'lobby.title' => 'frecu',
+			'lobby.join.bluetooth.via' => 'Por Bluetooth',
+			'lobby.join.bluetooth.hint' => 'Aún no estás en su Wi-Fi: al poner el código te conectamos.',
+			'lobby.join.bluetooth.unreachable' => 'El anfitrión no responde por Bluetooth.',
+			'lobby.join.bluetooth.unreachableHint' => 'Acércate a su teléfono e intenta otra vez.',
 			'lobby.join.close' => 'Cerrar',
 			'lobby.join.port' => ({required Object port}) => 'Puerto ${port}',
 			'lobby.join.wrongCode' => 'Código incorrecto. Revisa e intenta otra vez.',
@@ -2075,6 +2145,17 @@ extension on Translations {
 			'lobby.offline.openSettings' => 'Abrir ajustes de Wi-Fi',
 			'lobby.newRoom.back' => 'Atrás',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Paso ${current} de ${total}',
+			'lobby.newRoom.guide.saveForBluetooth' => 'Guardarla para invitar por Bluetooth',
+			'lobby.newRoom.guide.savedForBluetooth' => 'Zona Wi-Fi guardada · editar',
+			'lobby.newRoom.guide.hotspotSheet.kicker' => 'Invitar por Bluetooth · opcional',
+			'lobby.newRoom.guide.hotspotSheet.title' => 'Tu zona Wi-Fi',
+			'lobby.newRoom.guide.hotspotSheet.message' => 'Quien esté cerca y tenga el código de la frecu se conecta a tu red sin buscarla. Se guarda solo en tu teléfono.',
+			'lobby.newRoom.guide.hotspotSheet.ssid' => 'Nombre de la zona Wi-Fi',
+			'lobby.newRoom.guide.hotspotSheet.ssidHint' => 'Tal como aparece en Ajustes',
+			'lobby.newRoom.guide.hotspotSheet.key' => 'Contraseña',
+			'lobby.newRoom.guide.hotspotSheet.keyHelp' => 'Android no deja que las apps la lean: escríbela tal como está en Ajustes › Zona Wi-Fi.',
+			'lobby.newRoom.guide.hotspotSheet.save' => 'Guardar',
+			'lobby.newRoom.guide.hotspotSheet.forget' => 'Olvidarla',
 			'lobby.newRoom.guide.title' => 'Prepara la red',
 			'lobby.newRoom.guide.heading' => 'Activa tu punto de acceso',
 			'lobby.newRoom.guide.message' => 'Tu teléfono será la antena del grupo.',

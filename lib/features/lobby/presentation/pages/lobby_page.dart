@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/usecase/usecase.dart';
+import 'package:frecu/features/bluetooth_invite/presentation/providers/bluetooth_invite_provider.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
+import 'package:frecu/features/lobby/domain/usecases/merge_nearby_rooms.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_sections.dart';
@@ -76,6 +78,10 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
         nearbyRoomsProvider,
         _onRooms,
         fireImmediately: true,
+      )
+      ..listenManual<AsyncValue<List<NearbyRoom>>>(
+        bluetoothNearbyRoomsProvider,
+        (_, _) => _dropMissingSelection(),
       );
   }
 
@@ -139,18 +145,30 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
     AsyncValue<List<NearbyRoom>>? previous,
     AsyncValue<List<NearbyRoom>> next,
   ) {
-    final rooms = _roomsOf(next);
-    if (_selectedRoomId != null &&
-        !rooms.any((room) => room.roomId == _selectedRoomId)) {
-      _deselect();
-    }
+    _dropMissingSelection(local: next);
     if (next.hasError && !next.isLoading) _scheduleRetry();
+  }
+
+  /// Suelta la frecu elegida si ya no está en la red ni por Bluetooth.
+  void _dropMissingSelection({AsyncValue<List<NearbyRoom>>? local}) {
+    final selected = _selectedRoomId;
+    if (selected == null) return;
+    final rooms = _merged(local ?? ref.read(nearbyRoomsProvider));
+    if (!rooms.any((room) => room.roomId == selected)) _deselect();
   }
 
   /// Frecus de la búsqueda; si no pudo empezar, ninguna: sin búsqueda en
   /// marcha la lista anterior ya no es fiable.
   static List<NearbyRoom> _roomsOf(AsyncValue<List<NearbyRoom>> search) =>
       search.hasError ? const [] : search.value ?? const [];
+
+  /// Las de la red [local] y, de las que no están en ella, las encontradas
+  /// por Bluetooth.
+  List<NearbyRoom> _merged(AsyncValue<List<NearbyRoom>> local) =>
+      mergeNearbyRooms(
+        _roomsOf(local),
+        ref.read(bluetoothNearbyRoomsProvider).value ?? const [],
+      );
 
   void _scheduleRetry() {
     _retry?.cancel();
@@ -163,7 +181,10 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
   @override
   Widget build(BuildContext context) {
     final search = ref.watch(nearbyRoomsProvider);
-    final rooms = _roomsOf(search);
+    final rooms = mergeNearbyRooms(
+      _roomsOf(search),
+      ref.watch(bluetoothNearbyRoomsProvider).value ?? const [],
+    );
     final failed = search.hasError;
     final selected = rooms
         .where((room) => room.roomId == _selectedRoomId)
@@ -204,13 +225,16 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
   /// encendida.
   Widget _roomList(List<NearbyRoom> rooms) => ListView.separated(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 200),
-    itemCount: rooms.length,
+    // Con alguna encontrada solo por Bluetooth, al final la pista de que el
+    // código también conecta a su Wi-Fi.
+    itemCount: rooms.length + (rooms.any((r) => r.viaBluetooth) ? 1 : 0),
     separatorBuilder: (_, _) => const SizedBox(height: 10),
     findItemIndexCallback: (key) {
       final index = rooms.indexWhere((room) => ValueKey(room.roomId) == key);
       return index < 0 ? null : index;
     },
     itemBuilder: (context, index) {
+      if (index == rooms.length) return const LobbyBluetoothHint();
       final room = rooms[index];
       return RiseIn(
         key: ValueKey(room.roomId),

@@ -288,6 +288,7 @@ class _Translations$lobby$join$en extends Translations$lobby$join$es {
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	@override late final _Translations$lobby$join$bluetooth$en bluetooth = _Translations$lobby$join$bluetooth$en._(_root);
 	@override String get close => 'Close';
 	@override String port({required Object port}) => 'Port ${port}';
 	@override String get wrongCode => 'Wrong code. Check it and try again.';
@@ -721,6 +722,19 @@ class _Translations$location$compassLong$en extends Translations$location$compas
 	@override String get nw => 'northwest';
 }
 
+// Path: lobby.join.bluetooth
+class _Translations$lobby$join$bluetooth$en extends Translations$lobby$join$bluetooth$es {
+	_Translations$lobby$join$bluetooth$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get via => 'Via Bluetooth';
+	@override String get hint => 'You\'re not on their Wi-Fi yet: enter the code and we\'ll connect you.';
+	@override String get unreachable => 'The host isn\'t answering over Bluetooth.';
+	@override String get unreachableHint => 'Move closer to their phone and try again.';
+}
+
 // Path: lobby.join.wifi
 class _Translations$lobby$join$wifi$en extends Translations$lobby$join$wifi$es {
 	_Translations$lobby$join$wifi$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -809,6 +823,9 @@ class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$gu
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	@override String get saveForBluetooth => 'Save it to invite via Bluetooth';
+	@override String get savedForBluetooth => 'Hotspot saved · edit';
+	@override late final _Translations$lobby$newRoom$guide$hotspotSheet$en hotspotSheet = _Translations$lobby$newRoom$guide$hotspotSheet$en._(_root);
 	@override String get title => 'Set up the network';
 	@override String get heading => 'Turn on your hotspot';
 	@override String get message => 'Your phone will be the group\'s antenna.';
@@ -1026,6 +1043,24 @@ class _Translations$lobby$join$scan$camera$en extends Translations$lobby$join$sc
 	@override String get openSettings => 'Open settings';
 }
 
+// Path: lobby.newRoom.guide.hotspotSheet
+class _Translations$lobby$newRoom$guide$hotspotSheet$en extends Translations$lobby$newRoom$guide$hotspotSheet$es {
+	_Translations$lobby$newRoom$guide$hotspotSheet$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Invite via Bluetooth · optional';
+	@override String get title => 'Your hotspot';
+	@override String get message => 'Anyone nearby with the frecu\'s code joins your network without looking for it. It\'s stored only on your phone.';
+	@override String get ssid => 'Hotspot name';
+	@override String get ssidHint => 'As it appears in Settings';
+	@override String get key => 'Password';
+	@override String get keyHelp => 'Android doesn\'t let apps read it: type it exactly as it is in Settings › Hotspot.';
+	@override String get save => 'Save';
+	@override String get forget => 'Forget it';
+}
+
 // Path: lobby.newRoom.guide.androidSteps.0
 class _Translations$lobby$newRoom$guide$androidSteps$0$en extends Translations$lobby$newRoom$guide$androidSteps$0$es with HotspotStep {
 	_Translations$lobby$newRoom$guide$androidSteps$0$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -1135,6 +1170,10 @@ extension on TranslationsEn {
 		return switch (path) {
 			'app.title' => 'Frecu',
 			'lobby.title' => 'frecu',
+			'lobby.join.bluetooth.via' => 'Via Bluetooth',
+			'lobby.join.bluetooth.hint' => 'You\'re not on their Wi-Fi yet: enter the code and we\'ll connect you.',
+			'lobby.join.bluetooth.unreachable' => 'The host isn\'t answering over Bluetooth.',
+			'lobby.join.bluetooth.unreachableHint' => 'Move closer to their phone and try again.',
 			'lobby.join.close' => 'Close',
 			'lobby.join.port' => ({required Object port}) => 'Port ${port}',
 			'lobby.join.wrongCode' => 'Wrong code. Check it and try again.',
@@ -1219,6 +1258,17 @@ extension on TranslationsEn {
 			'lobby.offline.openSettings' => 'Open Wi-Fi settings',
 			'lobby.newRoom.back' => 'Back',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Step ${current} of ${total}',
+			'lobby.newRoom.guide.saveForBluetooth' => 'Save it to invite via Bluetooth',
+			'lobby.newRoom.guide.savedForBluetooth' => 'Hotspot saved · edit',
+			'lobby.newRoom.guide.hotspotSheet.kicker' => 'Invite via Bluetooth · optional',
+			'lobby.newRoom.guide.hotspotSheet.title' => 'Your hotspot',
+			'lobby.newRoom.guide.hotspotSheet.message' => 'Anyone nearby with the frecu\'s code joins your network without looking for it. It\'s stored only on your phone.',
+			'lobby.newRoom.guide.hotspotSheet.ssid' => 'Hotspot name',
+			'lobby.newRoom.guide.hotspotSheet.ssidHint' => 'As it appears in Settings',
+			'lobby.newRoom.guide.hotspotSheet.key' => 'Password',
+			'lobby.newRoom.guide.hotspotSheet.keyHelp' => 'Android doesn\'t let apps read it: type it exactly as it is in Settings › Hotspot.',
+			'lobby.newRoom.guide.hotspotSheet.save' => 'Save',
+			'lobby.newRoom.guide.hotspotSheet.forget' => 'Forget it',
 			'lobby.newRoom.guide.title' => 'Set up the network',
 			'lobby.newRoom.guide.heading' => 'Turn on your hotspot',
 			'lobby.newRoom.guide.message' => 'Your phone will be the group\'s antenna.',

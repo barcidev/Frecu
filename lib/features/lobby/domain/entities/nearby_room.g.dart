@@ -13,6 +13,7 @@ _NearbyRoom _$NearbyRoomFromJson(Map<String, dynamic> json) => _NearbyRoom(
   port: (json['port'] as num).toInt(),
   protocolVersion: (json['protocolVersion'] as num?)?.toInt() ?? 1,
   note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
+  bluetoothId: json['bluetoothId'] as String?,
 );
 
 Map<String, dynamic> _$NearbyRoomToJson(_NearbyRoom instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$NearbyRoomToJson(_NearbyRoom instance) =>
       'port': instance.port,
       'protocolVersion': instance.protocolVersion,
       'note': const RoomNoteConverter().toJson(instance.note),
+      'bluetoothId': instance.bluetoothId,
     };

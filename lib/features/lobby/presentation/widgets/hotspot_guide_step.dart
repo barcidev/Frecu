@@ -32,6 +32,8 @@ class HotspotGuideStep extends StatefulWidget {
     required this.onBack,
     required this.onContinue,
     this.onOpenHotspotSettings,
+    this.onSaveHotspot,
+    this.hotspotSaved = false,
     this.showStep = true,
     super.key,
   });
@@ -45,6 +47,13 @@ class HotspotGuideStep extends StatefulWidget {
   /// Abre los ajustes del punto de acceso de este teléfono; sin él no hay
   /// botón.
   final VoidCallback? onOpenHotspotSettings;
+
+  /// Abre la hoja para guardar la zona Wi-Fi e invitar por Bluetooth (solo
+  /// en Android); sin él no hay botón.
+  final VoidCallback? onSaveHotspot;
+
+  /// Si ya hay una zona Wi-Fi guardada.
+  final bool hotspotSaved;
 
   /// Si muestra «Paso 1 de 2»; falso cuando se abre sola desde Ajustes.
   final bool showStep;
@@ -150,6 +159,7 @@ class _HotspotGuideStepState extends State<HotspotGuideStep> {
     final iphone = _platform == HotspotPlatform.iphone;
     final steps = iphone ? guide.iphoneSteps : guide.androidSteps;
     final openSettings = widget.onOpenHotspotSettings;
+    final saveHotspot = widget.onSaveHotspot;
     return TweenAnimationBuilder<double>(
       key: ValueKey(_switches),
       tween: Tween<double>(begin: _switches == 0 ? 1 : 0, end: 1),
@@ -181,6 +191,25 @@ class _HotspotGuideStepState extends State<HotspotGuideStep> {
                   variant: FrButtonVariant.secondary,
                   size: FrButtonSize.small,
                   onPressed: openSettings,
+                ),
+              ),
+            ],
+            if (saveHotspot != null &&
+                !iphone &&
+                _device == HotspotPlatform.android) ...[
+              const SizedBox(height: 10),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: FrButton.drawn(
+                  key: const Key('guide_save_hotspot'),
+                  label: widget.hotspotSaved
+                      ? guide.savedForBluetooth
+                      : guide.saveForBluetooth,
+                  icon: FrIcons.bluetooth,
+                  variant: FrButtonVariant.ghost,
+                  size: FrButtonSize.small,
+                  onPressed: saveHotspot,
                 ),
               ),
             ],

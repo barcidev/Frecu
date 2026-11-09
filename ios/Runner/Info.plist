@@ -37,6 +37,8 @@
 	<string>Frecu necesita acceso al micrófono para la comunicación de voz grupal en la red local.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Frecu necesita acceso a la red local para descubrir y conectar participantes sin internet.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Frecu usa Bluetooth para encontrar frecus cercanas aunque aún no estés en su Wi-Fi, y para invitar a quien esté cerca.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Frecu necesita acceso a la cámara para escanear códigos QR de invitación a una frecu.</string>
 	<key>NSBonjourServices</key>

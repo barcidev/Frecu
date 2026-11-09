@@ -1,4 +1,5 @@
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
@@ -36,4 +37,8 @@ abstract interface class PreferencesRepository {
 
   /// Guarda si el filtro de viento está encendido.
   Future<Result<void>> saveWindFilter({required bool enabled});
+
+  /// Guarda la zona Wi-Fi de este teléfono para invitar por Bluetooth, o la
+  /// borra con `null`.
+  Future<Result<void>> saveHotspot(WifiCredentials? hotspot);
 }

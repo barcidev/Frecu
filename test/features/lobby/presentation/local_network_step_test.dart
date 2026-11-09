@@ -33,8 +33,12 @@ import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
+import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 class _MockDiscoveryRepository extends Mock implements DiscoveryRepository {}
 
@@ -470,6 +474,92 @@ void main() {
 
     expect(find.byType(LocalNetworkStep), findsOneWidget);
     expect(find.text('Frecu crea la red'), findsOneWidget);
+  });
+
+  testWidgets('en la guía, la zona Wi-Fi se guarda para invitar por '
+      'Bluetooth y la frecu abierta con ella encendida la lleva', (
+    tester,
+  ) async {
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
+    when(() => network.getNetworkState()).thenAnswer(
+      (_) async => const Result.success(
+        NetworkState.connected(
+          ipAddress: '192.168.62.1',
+          interfaceName: 'swlan0',
+          isHotspot: true,
+        ),
+      ),
+    );
+    final container = await pumpCreate(tester);
+    await tap(tester, _button('Prefiero mi zona Wi-Fi'));
+
+    final save = _button('Guardarla para invitar por Bluetooth');
+    await tester.ensureVisible(save);
+    await tap(tester, save);
+    expect(find.text('Tu zona Wi-Fi'), findsOneWidget);
+    await tester.enterText(
+      find.descendant(
+        of: find.byKey(const Key('hotspot_ssid')),
+        matching: find.byType(EditableText),
+      ),
+      ' Moto de Andrés ',
+    );
+    await tester.enterText(
+      find.descendant(
+        of: find.byKey(const Key('hotspot_key')),
+        matching: find.byType(EditableText),
+      ),
+      'clave-1234',
+    );
+    await tester.pump();
+    await tap(tester, find.byKey(const Key('hotspot_save')));
+
+    const saved = WifiCredentials(
+      ssid: 'Moto de Andrés',
+      passphrase: 'clave-1234',
+    );
+    expect(container.read(preferencesProvider).value?.hotspot, saved);
+    expect(_button('Zona Wi-Fi guardada · editar'), findsOneWidget);
+
+    await tap(tester, _button('Ya está activo'));
+    await tap(tester, _button('Abrir frecu'));
+
+    expect(container.read(roomNotifierProvider)?.wifi, saved);
+  });
+
+  testWidgets('sin la zona Wi-Fi encendida, la clave guardada no viaja', (
+    tester,
+  ) async {
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.withData({
+          PreferencesRepositoryImpl.hotspotKey:
+              '{"ssid":"Moto de Andrés","passphrase":"clave-1234"}',
+        });
+    when(() => network.getNetworkState()).thenAnswer(
+      (_) async => const Result.success(
+        NetworkState.connected(
+          ipAddress: '192.168.1.20',
+          interfaceName: 'wlan0',
+          isHotspot: false,
+        ),
+      ),
+    );
+    final container = await pumpCreate(tester);
+    await container.read(preferencesProvider.future);
+    await tap(tester, _button('Prefiero mi zona Wi-Fi'));
+    await tap(tester, _button('Ya está activo'));
+    await tap(tester, _button('Abrir frecu'));
+
+    expect(container.read(roomNotifierProvider)?.wifi, isNull);
+  });
+
+  testWidgets('en iPhone la guía no ofrece guardar la zona Wi-Fi', (
+    tester,
+  ) async {
+    await pumpCreate(tester, android: false);
+
+    expect(_button('Guardarla para invitar por Bluetooth'), findsNothing);
   });
 
   testWidgets('en iPhone el primer paso sigue siendo la guía', (tester) async {

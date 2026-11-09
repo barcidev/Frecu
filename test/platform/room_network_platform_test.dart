@@ -45,7 +45,11 @@ void main() {
           contains('android:name="android.permission.$location" />'),
           reason: location,
         );
-        expect(manifest, isNot(contains('maxSdkVersion')), reason: location);
+        expect(
+          manifest,
+          isNot(matches(RegExp('$location"\\s+android:maxSdkVersion'))),
+          reason: location,
+        );
       }
     });
 

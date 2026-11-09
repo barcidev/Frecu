@@ -21,11 +21,14 @@ import 'package:frecu/features/lobby/presentation/providers/new_room_provider.da
 import 'package:frecu/features/lobby/presentation/widgets/create_room_layout.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_hero.dart';
 import 'package:frecu/features/lobby/presentation/widgets/regenerated_code.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
+import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Nueva frecu (pantalla `create` del prototipo), paso 2 de 2 de la
@@ -95,6 +98,16 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     widget.onCodeChanged(code);
   }
 
+  /// Sin la red de Frecu, la zona Wi-Fi guardada para invitar por
+  /// Bluetooth, solo si este teléfono la tiene encendida ahora (si no, la
+  /// frecu va por otra red y esa clave no sirve).
+  Future<WifiCredentials?> _savedHotspot() async {
+    final saved = ref.read(preferencesProvider).value?.hotspot;
+    if (saved == null) return null;
+    final state = await ref.read(networkRepositoryProvider).getNetworkState();
+    return state.dataOrNull?.isHotspot ?? false ? saved : null;
+  }
+
   /// Abre la frecu con la [note] que muestra la pantalla.
   Future<void> _open(RoomNote note) async {
     final name = widget.name.text.trim();
@@ -104,6 +117,11 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     final network = ref.exists(localHotspotProvider)
         ? ref.read(localHotspotProvider)
         : null;
+    final wifi = switch (network) {
+      LocalHotspotReady(:final hotspot) => hotspot.credentials,
+      _ => await _savedHotspot(),
+    };
+    if (!mounted) return;
     final result = await ref
         .read(roomNotifierProvider.notifier)
         .createRoom(
@@ -111,10 +129,7 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
           accessCode: _code,
           displayName: ref.savedDisplayName,
           note: note,
-          wifi: switch (network) {
-            LocalHotspotReady(:final hotspot) => hotspot.credentials,
-            _ => null,
-          },
+          wifi: wifi,
         );
     if (!mounted) return;
     switch (result) {

@@ -5,6 +5,12 @@
   "lobby": {
     "title": "frecu",
     "join": {
+      "bluetooth": {
+        "via": "Via Bluetooth",
+        "hint": "You're not on their Wi-Fi yet: enter the code and we'll connect you.",
+        "unreachable": "The host isn't answering over Bluetooth.",
+        "unreachableHint": "Move closer to their phone and try again."
+      },
       "close": "Close",
       "port": "Port $port",
       "wrongCode": "Wrong code. Check it and try again.",
@@ -113,6 +119,19 @@
       "back": "Back",
       "step": "Step $current of $total",
       "guide": {
+        "saveForBluetooth": "Save it to invite via Bluetooth",
+        "savedForBluetooth": "Hotspot saved · edit",
+        "hotspotSheet": {
+          "kicker": "Invite via Bluetooth · optional",
+          "title": "Your hotspot",
+          "message": "Anyone nearby with the frecu's code joins your network without looking for it. It's stored only on your phone.",
+          "ssid": "Hotspot name",
+          "ssidHint": "As it appears in Settings",
+          "key": "Password",
+          "keyHelp": "Android doesn't let apps read it: type it exactly as it is in Settings › Hotspot.",
+          "save": "Save",
+          "forget": "Forget it"
+        },
         "title": "Set up the network",
         "heading": "Turn on your hotspot",
         "message": "Your phone will be the group's antenna.",
