@@ -342,6 +342,7 @@ class _Translations$room$mesh$en extends Translations$room$mesh$es {
 	@override String get onAir => 'On air';
 	@override String get connecting => 'Connecting';
 	@override String get reconnecting => 'Reconnecting';
+	@override String get weak => 'Weak signal';
 	@override String get free => 'Free';
 	@override String get invite => 'Invite';
 }
@@ -716,6 +717,7 @@ class _Translations$room$talk$island$en extends Translations$room$talk$island$es
 	@override String left({required Object name}) => '${name} left';
 	@override String route({required Object route}) => 'Audio via ${route}';
 	@override String get recovered => 'Connection restored';
+	@override String weak({required Object name}) => '${name} · weak signal';
 }
 
 // Path: room.talk.echo
@@ -973,6 +975,7 @@ extension on TranslationsEn {
 			'room.mesh.onAir' => 'On air',
 			'room.mesh.connecting' => 'Connecting',
 			'room.mesh.reconnecting' => 'Reconnecting',
+			'room.mesh.weak' => 'Weak signal',
 			'room.mesh.free' => 'Free',
 			'room.mesh.invite' => 'Invite',
 			'room.header.youAreHost' => 'You\'re the host',
@@ -1047,6 +1050,7 @@ extension on TranslationsEn {
 			'room.talk.island.left' => ({required Object name}) => '${name} left',
 			'room.talk.island.route' => ({required Object route}) => 'Audio via ${route}',
 			'room.talk.island.recovered' => 'Connection restored',
+			'room.talk.island.weak' => ({required Object name}) => '${name} · weak signal',
 			'room.talk.echo.title' => 'Open mic on speaker.',
 			'room.talk.echo.message' => 'Use headphones to avoid echo.',
 			'room.talk.echo.dismiss' => 'Dismiss notice',

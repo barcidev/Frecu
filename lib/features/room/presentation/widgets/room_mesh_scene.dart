@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:frecu/core/design/tokens/fr_colors.dart';
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 
@@ -87,6 +88,7 @@ class MeshNode {
     this.speaking = false,
     this.muted = false,
     this.link = MeshLink.ok,
+    this.weak = false,
     this.level = 0,
   });
 
@@ -114,6 +116,9 @@ class MeshNode {
   /// Estado de su enlace.
   final MeshLink link;
 
+  /// Su enlace conectado llega débil: pérdidas o mucho retraso.
+  final bool weak;
+
   /// Nivel real de su voz, de 0 a 1.
   final double level;
 
@@ -131,11 +136,22 @@ class MeshNode {
       other.speaking == speaking &&
       other.muted == muted &&
       other.link == link &&
+      other.weak == weak &&
       other.level == level;
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, slot, isMe, isHost, speaking, muted, link, level);
+  int get hashCode => Object.hash(
+    id,
+    name,
+    slot,
+    isMe,
+    isHost,
+    speaking,
+    muted,
+    link,
+    weak,
+    level,
+  );
 }
 
 /// Los 6 lugares de la malla (nulos los libres) con quién es quién, quién
@@ -144,7 +160,8 @@ class MeshNode {
 /// Con la frecu reconectando todos quedan en [MeshLink.rec] y conectando en
 /// [MeshLink.link]; si no, cada uno sigue su `connectionState`. La persona
 /// propia habla con [localTalking] y las demás con `isSpeaking` o
-/// [speakingPeers]. El nivel de voz de cada uno sale de [levels] por id.
+/// [speakingPeers]. El nivel de voz de cada uno sale de [levels] por id y
+/// su enlace débil, de su `linkQuality`.
 List<MeshNode?> buildMeshNodes({
   required List<Participant> participants,
   required Map<String, int> slots,
@@ -175,6 +192,7 @@ List<MeshNode?> buildMeshNodes({
           : participant.isSpeaking || speakingPeers.contains(participant.id),
       muted: participant.isMuted,
       link: roomLink ?? _peerLink(participant.connectionState),
+      weak: !isMe && participant.linkQuality == LinkQuality.weak,
       level: levels[participant.id] ?? 0,
     );
   }
@@ -216,14 +234,18 @@ enum MeshCaption {
 
   /// «Reconectando».
   reconnecting,
+
+  /// «Señal débil».
+  weak,
 }
 
 /// Leyenda de [node]: el enlace manda sobre el silencio, el silencio sobre
-/// el habla y el habla sobre el papel.
+/// la señal débil, la señal débil sobre el habla y el habla sobre el papel.
 MeshCaption meshCaption(MeshNode node) {
   if (node.link == MeshLink.link) return MeshCaption.connecting;
   if (node.link == MeshLink.rec) return MeshCaption.reconnecting;
   if (node.muted) return MeshCaption.muted;
+  if (node.weak && node.link == MeshLink.ok) return MeshCaption.weak;
   if (node.onAir) return node.isMe ? MeshCaption.onAir : MeshCaption.speaking;
   if (node.isMe) return node.isHost ? MeshCaption.youHost : MeshCaption.you;
   return node.isHost ? MeshCaption.host : MeshCaption.none;
@@ -281,7 +303,15 @@ List<MeshEdge> meshEdges(List<MeshNode?> nodes) => [
     for (var j = i + 1; j < nodes.length; j++)
       if (nodes[i] case final a?)
         if (nodes[j] case final b?)
-          MeshEdge(i, j, weak: a.link != MeshLink.ok || b.link != MeshLink.ok),
+          MeshEdge(
+            i,
+            j,
+            weak:
+                a.link != MeshLink.ok ||
+                b.link != MeshLink.ok ||
+                a.weak ||
+                b.weak,
+          ),
 ];
 
 /// Paquete de voz que viaja de [from] a [to].

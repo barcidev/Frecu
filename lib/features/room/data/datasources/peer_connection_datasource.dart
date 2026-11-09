@@ -11,6 +11,12 @@ import 'package:frecu/features/room/domain/entities/participant.dart';
 /// el recibido de cada par por su id (`peers`).
 typedef VoiceLevels = ({double local, Map<String, double> peers});
 
+/// Lo que dice el `getStats()` de un enlace sobre su calidad: el tiempo de ida
+/// y vuelta del par de candidatos elegido, en milisegundos, y los contadores
+/// acumulados de paquetes de audio recibidos y perdidos. Cada dato es nulo si
+/// el informe no lo trae.
+typedef LinkSample = ({double? rttMs, int? packetsReceived, int? packetsLost});
+
 /// Datasource responsable de gestionar la malla de conexiones WebRTC
 /// peer-to-peer de la frecu activa.
 ///
@@ -217,6 +223,44 @@ class PeerConnectionDataSource {
       }
     }
     return (local: local, peers: peers);
+  }
+
+  /// Lee a la vez el `getStats()` de cada conexión y devuelve, por par, su
+  /// [LinkSample]: el `currentRoundTripTime` del `candidate-pair` elegido
+  /// (`succeeded` y nominado) y los `packetsReceived`/`packetsLost` de su
+  /// `inbound-rtp` de audio. Una conexión que falla se salta.
+  Future<Map<String, LinkSample>> readLinkStats() async {
+    final reads = await Future.wait([
+      for (final MapEntry(key: id, value: pc) in _peerConnections.entries)
+        _statsOf(id, pc),
+    ]);
+    return {
+      for (final (id, reports) in reads)
+        if (reports.isNotEmpty) id: linkSampleOf(reports),
+    };
+  }
+
+  /// [LinkSample] de los informes de un enlace.
+  static LinkSample linkSampleOf(List<StatsReport> reports) {
+    double? rttMs;
+    int? received;
+    int? lost;
+    for (final report in reports) {
+      final values = report.values;
+      switch (report.type) {
+        case 'candidate-pair'
+            when values['state'] == 'succeeded' && values['nominated'] != false:
+          final rtt = values['currentRoundTripTime'];
+          if (rtt is num) rttMs = math.max(rttMs ?? 0, rtt * 1000);
+        case 'inbound-rtp'
+            when (values['kind'] ?? values['mediaType']) == 'audio':
+          final r = values['packetsReceived'];
+          final l = values['packetsLost'];
+          if (r is num) received = (received ?? 0) + r.toInt();
+          if (l is num) lost = (lost ?? 0) + l.toInt();
+      }
+    }
+    return (rttMs: rttMs, packetsReceived: received, packetsLost: lost);
   }
 
   Future<(String, List<StatsReport>)> _statsOf(

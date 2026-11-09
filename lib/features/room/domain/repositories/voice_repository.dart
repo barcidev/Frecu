@@ -1,5 +1,6 @@
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 
@@ -61,6 +62,10 @@ abstract interface class VoiceRepository {
   /// Estado del enlace de voz con cada participante remoto, por id; empieza
   /// con el valor actual. Quien no aparece aún no tiene enlace.
   Stream<Map<String, PeerConnectionState>> watchPeerLinks();
+
+  /// Calidad del enlace de voz con cada participante remoto, por id; empieza
+  /// con el valor actual. Se mide solo mientras alguien escucha este flujo.
+  Stream<Map<String, LinkQuality>> watchPeerQuality();
 
   /// Nivel de la voz propia, de 0 a 1, medido por WebRTC. Se lee solo
   /// mientras alguien escucha este flujo o [watchPeerLevels].

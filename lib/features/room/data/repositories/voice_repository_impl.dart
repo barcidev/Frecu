@@ -10,9 +10,11 @@ import 'package:frecu/features/room/data/datasources/peer_connection_datasource.
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/current_then.dart';
+import 'package:frecu/features/room/data/repositories/link_quality_monitor.dart';
 import 'package:frecu/features/room/data/repositories/voice_activity_detector.dart';
 import 'package:frecu/features/room/data/repositories/voice_level_sampler.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
@@ -73,6 +75,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
   final bool _isAndroid;
   late final VoiceLevelSampler _levels = VoiceLevelSampler(
     _peerConnection.readVoiceLevels,
+  );
+  late final LinkQualityMonitor _linkQuality = LinkQualityMonitor(
+    _peerConnection.readLinkStats,
   );
 
   /// Voz propia en micrófono abierto, por el nivel local.
@@ -400,6 +405,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
       currentThen(() => _peerConnection.links, _peerConnection.linkChanges);
 
   @override
+  Stream<Map<String, LinkQuality>> watchPeerQuality() => _linkQuality.watch();
+
+  @override
   Stream<TalkMode> watchTalkMode() =>
       currentThen(() => _talkMode, _talkModeController.stream);
 
@@ -615,6 +623,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
     unawaited(_localLevelSubscription?.cancel());
     _localLevelSubscription = null;
     await _levels.dispose();
+    await _linkQuality.dispose();
     await _peerConnection.dispose();
     await _audioSession.deactivate();
     await _isTalkingController.close();

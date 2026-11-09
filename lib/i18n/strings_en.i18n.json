@@ -148,6 +148,7 @@
       "onAir": "On air",
       "connecting": "Connecting",
       "reconnecting": "Reconnecting",
+      "weak": "Weak signal",
       "free": "Free",
       "invite": "Invite"
     },
@@ -240,7 +241,8 @@
         "joined": "$name joined",
         "left": "$name left",
         "route": "Audio via $route",
-        "recovered": "Connection restored"
+        "recovered": "Connection restored",
+        "weak": "$name · weak signal"
       },
       "echo": {
         "title": "Open mic on speaker.",
