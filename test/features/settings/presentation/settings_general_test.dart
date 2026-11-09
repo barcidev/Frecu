@@ -332,6 +332,29 @@ void main() {
     }
   });
 
+  group('Fila Licencias', () {
+    testWidgets('va después de la guía y abre la pantalla de licencias', (
+      tester,
+    ) async {
+      await _openSettings(tester, _FakePermissions(current: _allGranted));
+      final licensesRow = find.byWidgetPredicate(
+        (widget) => widget is SettingsRow && widget.title == 'Licencias',
+      );
+      expect(licensesRow, findsOneWidget);
+      expect(_chevronIn(licensesRow), findsOneWidget);
+      expect(
+        tester.getTopLeft(licensesRow).dy,
+        greaterThan(tester.getTopLeft(_guideRow).dy),
+      );
+
+      await tester.ensureVisible(licensesRow);
+      await tester.tap(licensesRow);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(LicensePage), findsOneWidget);
+    });
+  });
+
   testWidgets('en inglés las dos filas salen de la traducción en', (
     tester,
   ) async {

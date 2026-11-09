@@ -338,6 +338,7 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Hotspot guide",
+    "licenses": "Licenses",
     "appearance": "Appearance",
     "theme": "Theme",
     "themeHelp": "Auto follows your phone",

@@ -296,6 +296,9 @@ class Translations$settings$es {
 	/// es: 'Guía del punto de acceso'
 	String get hotspotGuide => 'Guía del punto de acceso';
 
+	/// es: 'Licencias'
+	String get licenses => 'Licencias';
+
 	/// es: 'Apariencia'
 	String get appearance => 'Apariencia';
 
@@ -1706,6 +1709,7 @@ extension on Translations {
 			'settings.permissions.subtitle' => 'Micrófono, red local, notificaciones',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Guía del punto de acceso',
+			'settings.licenses' => 'Licencias',
 			'settings.appearance' => 'Apariencia',
 			'settings.theme' => 'Tema',
 			'settings.themeHelp' => 'Auto sigue al teléfono',

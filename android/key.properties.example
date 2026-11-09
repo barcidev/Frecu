@@ -1,0 +1,12 @@
+# Copia este archivo como android/key.properties (ya está en .gitignore) y
+# rellénalo con los datos de tu clave de subida a Google Play.
+#
+# Crear la clave (una sola vez; guarda el .jks y las contraseñas fuera del repo):
+#   keytool -genkey -v -keystore ~/claves/frecu-upload.jks -keyalg RSA \
+#     -keysize 2048 -validity 10000 -alias upload
+#
+# storeFile es relativo a android/app o una ruta absoluta.
+storePassword=
+keyPassword=
+keyAlias=upload
+storeFile=/Users/TU_USUARIO/claves/frecu-upload.jks

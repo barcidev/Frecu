@@ -187,6 +187,7 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override late final _Translations$settings$language$en language = _Translations$settings$language$en._(_root);
 	@override late final _Translations$settings$permissions$en permissions = _Translations$settings$permissions$en._(_root);
 	@override String get hotspotGuide => 'Hotspot guide';
+	@override String get licenses => 'Licenses';
 	@override String get appearance => 'Appearance';
 	@override String get theme => 'Theme';
 	@override String get themeHelp => 'Auto follows your phone';
@@ -1117,6 +1118,7 @@ extension on TranslationsEn {
 			'settings.permissions.subtitle' => 'Microphone, local network, notifications',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Hotspot guide',
+			'settings.licenses' => 'Licenses',
 			'settings.appearance' => 'Appearance',
 			'settings.theme' => 'Theme',
 			'settings.themeHelp' => 'Auto follows your phone',

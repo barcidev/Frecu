@@ -338,6 +338,7 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Guía del punto de acceso",
+    "licenses": "Licencias",
     "appearance": "Apariencia",
     "theme": "Tema",
     "themeHelp": "Auto sigue al teléfono",

@@ -16,6 +16,7 @@ import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
+import 'package:frecu/features/settings/presentation/providers/app_version_provider.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/features/settings/presentation/widgets/edit_name_sheet.dart';
 import 'package:frecu/features/settings/presentation/widgets/language_sheet.dart';
@@ -199,6 +200,14 @@ class _GeneralGroup extends ConsumerWidget {
           title: t.settings.hotspotGuide,
           onPressed: () =>
               unawaited(context.router.push<void>(const HotspotGuideRoute())),
+        ),
+        SettingsRow(
+          title: t.settings.licenses,
+          onPressed: () => showLicensePage(
+            context: context,
+            applicationName: t.app.title,
+            applicationVersion: ref.read(appVersionProvider).value,
+          ),
         ),
       ],
     );
