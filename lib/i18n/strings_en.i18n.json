@@ -340,6 +340,10 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Hotspot guide",
+    "windFilter": {
+      "title": "Wind filter",
+      "subtitle": "Removes the rumble of wind and engine on a motorcycle or bike."
+    },
     "earpieceOnRaise": {
       "title": "Earpiece when raised",
       "subtitle": "Hold the phone to your ear and the audio moves to the earpiece."

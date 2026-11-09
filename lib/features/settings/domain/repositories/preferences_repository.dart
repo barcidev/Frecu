@@ -33,4 +33,7 @@ abstract interface class PreferencesRepository {
 
   /// Guarda si el audio pasa al auricular al acercar el teléfono a la oreja.
   Future<Result<void>> saveEarpieceOnRaise({required bool enabled});
+
+  /// Guarda si el filtro de viento está encendido.
+  Future<Result<void>> saveWindFilter({required bool enabled});
 }

@@ -99,6 +99,8 @@ Finder _inRow(String text) =>
 
 /// Abre la hoja desde la fila «Idioma».
 Future<void> _openSheet(WidgetTester tester) async {
+  await tester.ensureVisible(_row);
+  await tester.pumpAndSettle();
   await tester.tap(_row);
   await tester.pumpAndSettle();
 }
