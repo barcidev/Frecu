@@ -48,6 +48,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$settings$es settings = Translations$settings$es.internal(_root);
 	late final Translations$errors$es errors = Translations$errors$es.internal(_root);
 	late final Translations$splash$es splash = Translations$splash$es.internal(_root);
+	late final Translations$messages$es messages = Translations$messages$es.internal(_root);
 }
 
 // Path: app
@@ -380,6 +381,49 @@ class Translations$splash$es {
 
 	/// es: 'Toca para entrar'
 	String get skip => 'Toca para entrar';
+}
+
+// Path: messages
+class Translations$messages$es {
+	Translations$messages$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Mensajes'
+	String get button => 'Mensajes';
+
+	/// es: 'Para toda la frecu'
+	String get kicker => 'Para toda la frecu';
+
+	/// es: 'Mensajes rápidos'
+	String get title => 'Mensajes rápidos';
+
+	/// es: 'Llegan al instante y vibran, aunque tengan la pantalla apagada.'
+	String get message => 'Llegan al instante y vibran, aunque tengan la pantalla apagada.';
+
+	late final Translations$messages$kinds$es kinds = Translations$messages$kinds$es.internal(_root);
+
+	/// es: 'Mantén para enviar SOS'
+	String get sosHold => 'Mantén para enviar SOS';
+
+	/// es: 'Alarma para todos hasta que alguien la atienda'
+	String get sosHoldHelp => 'Alarma para todos hasta que alguien la atienda';
+
+	/// es: 'Enviado · $text'
+	String sent({required Object text}) => 'Enviado · ${text}';
+
+	/// es: 'SOS enviado a tu grupo'
+	String get sosSent => 'SOS enviado a tu grupo';
+
+	/// es: '$name · $text'
+	String received({required Object name, required Object text}) => '${name} · ${text}';
+
+	/// es: 'No se pudo enviar: sin conexión con el anfitrión'
+	String get sendError => 'No se pudo enviar: sin conexión con el anfitrión';
+
+	late final Translations$messages$sos$es sos = Translations$messages$sos$es.internal(_root);
 }
 
 // Path: lobby.join
@@ -921,6 +965,57 @@ class Translations$settings$themeMode$es {
 
 	/// es: 'Oscuro'
 	String get dark => 'Oscuro';
+}
+
+// Path: messages.kinds
+class Translations$messages$kinds$es {
+	Translations$messages$kinds$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Me quedé atrás'
+	String get behind => 'Me quedé atrás';
+
+	/// es: 'Parada en la próxima'
+	String get stop => 'Parada en la próxima';
+
+	/// es: 'Necesito combustible'
+	String get fuel => 'Necesito combustible';
+
+	/// es: 'Todo bien'
+	String get ok => 'Todo bien';
+
+	/// es: 'Voy en camino'
+	String get onMyWay => 'Voy en camino';
+
+	/// es: 'SOS'
+	String get sos => 'SOS';
+}
+
+// Path: messages.sos
+class Translations$messages$sos$es {
+	Translations$messages$sos$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'SOS'
+	String get kicker => 'SOS';
+
+	/// es: '$name necesita ayuda'
+	String title({required Object name}) => '${name} necesita ayuda';
+
+	/// es: 'Avisa al grupo si vas hacia allá. La alarma sigue hasta que la atiendas.'
+	String get body => 'Avisa al grupo si vas hacia allá. La alarma sigue hasta que la atiendas.';
+
+	/// es: 'Voy en camino'
+	String get onMyWay => 'Voy en camino';
+
+	/// es: 'Entendido'
+	String get dismiss => 'Entendido';
 }
 
 // Path: lobby.join.pin
@@ -1760,6 +1855,27 @@ extension on Translations {
 			'splash.localNetwork' => 'Red local',
 			'splash.mesh' => 'Malla P2P',
 			'splash.skip' => 'Toca para entrar',
+			'messages.button' => 'Mensajes',
+			'messages.kicker' => 'Para toda la frecu',
+			'messages.title' => 'Mensajes rápidos',
+			'messages.message' => 'Llegan al instante y vibran, aunque tengan la pantalla apagada.',
+			'messages.kinds.behind' => 'Me quedé atrás',
+			'messages.kinds.stop' => 'Parada en la próxima',
+			'messages.kinds.fuel' => 'Necesito combustible',
+			'messages.kinds.ok' => 'Todo bien',
+			'messages.kinds.onMyWay' => 'Voy en camino',
+			'messages.kinds.sos' => 'SOS',
+			'messages.sosHold' => 'Mantén para enviar SOS',
+			'messages.sosHoldHelp' => 'Alarma para todos hasta que alguien la atienda',
+			'messages.sent' => ({required Object text}) => 'Enviado · ${text}',
+			'messages.sosSent' => 'SOS enviado a tu grupo',
+			'messages.received' => ({required Object name, required Object text}) => '${name} · ${text}',
+			'messages.sendError' => 'No se pudo enviar: sin conexión con el anfitrión',
+			'messages.sos.kicker' => 'SOS',
+			'messages.sos.title' => ({required Object name}) => '${name} necesita ayuda',
+			'messages.sos.body' => 'Avisa al grupo si vas hacia allá. La alarma sigue hasta que la atiendas.',
+			'messages.sos.onMyWay' => 'Voy en camino',
+			'messages.sos.dismiss' => 'Entendido',
 			_ => null,
 		};
 	}

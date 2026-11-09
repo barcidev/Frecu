@@ -14,6 +14,17 @@ void main() {
       return SignalingMessage.fromJson(map) as T;
     }
 
+    test('quick_message: ida y vuelta por JSON con su tipo', () {
+      const message = SignalingMessage.quickMessage(
+        peerId: 'peer_2',
+        kind: 'fuel',
+      );
+      final json = message.toJson();
+
+      expect(json['type'], 'quick_message');
+      expect(SignalingMessage.fromJson(json), message);
+    });
+
     test('AC1: serializes and deserializes all message variants', () {
       const join = SignalingMessage.join(
         displayName: 'Bob',

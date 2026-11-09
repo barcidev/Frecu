@@ -19,13 +19,16 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - Soporte de audífonos Bluetooth y altavoz.
 - Reconexión automática cuando un participante sale y vuelve al rango.
 - Interfaz en español (idioma base) e inglés.
+- Aviso de señal débil por persona (pérdidas o retraso del enlace de voz).
+- Vibración con los avisos de la frecu (transmitir, alguien habla, conexión perdida), que se apaga en Ajustes.
+- Mensajes rápidos predefinidos para toda la frecu y SOS con alarma.
 
 ## Fuera de alcance del MVP
 
 - Crear el hotspot desde la app (`LocalOnlyHotspot`). En el MVP el usuario lo activa manualmente y la app lo guía.
 - Migración de anfitrión: si el anfitrión sale, la frecu se cierra.
 - Topología SFU o mezcla en el anfitrión.
-- Video, chat de texto, grabación, cuentas de usuario, backend en la nube.
+- Video, chat de texto libre (solo hay mensajes predefinidos), grabación, cuentas de usuario, backend en la nube.
 - Activación por voz (VOX).
 
 ## Stack

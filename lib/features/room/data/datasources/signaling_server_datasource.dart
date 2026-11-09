@@ -268,6 +268,12 @@ class SignalingServerDataSource {
           ),
           excludePeerId: from,
         );
+      case SignalingQuickMessage(:final kind):
+        _messagesController.add(message);
+        _broadcast(
+          SignalingMessage.quickMessage(peerId: from, kind: kind),
+          excludePeerId: from,
+        );
       case SignalingPingMessage(:final timestamp):
         _sendToPeer(from, SignalingMessage.pong(timestamp: timestamp));
       case SignalingJoinMessage() ||

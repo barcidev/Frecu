@@ -160,6 +160,22 @@ Map<String, dynamic> _$SignalingTalkStateMessageToJson(
   'type': instance.type,
 };
 
+SignalingQuickMessage _$SignalingQuickMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingQuickMessage(
+  peerId: json['peerId'] as String,
+  kind: json['kind'] as String,
+  type: json['type'] as String? ?? 'quick_message',
+);
+
+Map<String, dynamic> _$SignalingQuickMessageToJson(
+  SignalingQuickMessage instance,
+) => <String, dynamic>{
+  'peerId': instance.peerId,
+  'kind': instance.kind,
+  'type': instance.type,
+};
+
 SignalingPingMessage _$SignalingPingMessageFromJson(
   Map<String, dynamic> json,
 ) => SignalingPingMessage(

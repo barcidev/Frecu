@@ -374,5 +374,32 @@
     "localNetwork": "Local network",
     "mesh": "P2P mesh",
     "skip": "Tap to enter"
+  },
+  "messages": {
+    "button": "Messages",
+    "kicker": "For the whole frecu",
+    "title": "Quick messages",
+    "message": "They arrive instantly and vibrate, even with the screen off.",
+    "kinds": {
+      "behind": "I fell behind",
+      "stop": "Stop at the next one",
+      "fuel": "I need fuel",
+      "ok": "All good",
+      "onMyWay": "On my way",
+      "sos": "SOS"
+    },
+    "sosHold": "Hold to send SOS",
+    "sosHoldHelp": "Alarm for everyone until someone answers",
+    "sent": "Sent · $text",
+    "sosSent": "SOS sent to your group",
+    "received": "$name · $text",
+    "sendError": "Couldn't send: no connection to the host",
+    "sos": {
+      "kicker": "SOS",
+      "title": "$name needs help",
+      "body": "Tell the group if you're heading there. The alarm continues until you answer.",
+      "onMyWay": "On my way",
+      "dismiss": "Got it"
+    }
   }
 }

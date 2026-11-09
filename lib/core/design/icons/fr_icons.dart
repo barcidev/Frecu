@@ -237,6 +237,68 @@ abstract final class FrIcons {
   /// Punto relleno.
   static const dot = FrIconData('dot', [FrIconCircle(12, 12, 3, filled: true)]);
 
+  /// Ubicación: alfiler de mapa.
+  static const pin = FrIconData('pin', [
+    FrIconPath(
+      'M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z',
+    ),
+    FrIconCircle(12, 9.8, 2.4),
+  ]);
+
+  /// Mensaje rápido: globo de texto.
+  static const msg = FrIconData('msg', [
+    FrIconPath(
+      'M5 4.5h14a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-7l-4.5 3.5V17H5a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2z',
+    ),
+    FrIconPath('M8 9h8M8 12.5h5'),
+  ]);
+
+  /// SOS: baliza de alarma.
+  static const sos = FrIconData('sos', [
+    FrIconPath('M6.5 18.5V13a5.5 5.5 0 0 1 11 0v5.5'),
+    FrIconPath('M4.5 21h15M12 2.5V5M4.2 6.2l1.8 1.8M19.8 6.2L18 8M12 11v4'),
+  ]);
+
+  /// NFC: ondas cortas desde un punto.
+  static const nfc = FrIconData('nfc', [
+    FrIconPath(
+      'M9 8.5a5 5 0 0 1 0 7M12.2 6a8.6 8.6 0 0 1 0 12M15.4 3.5a12.2 12.2 0 0 1 0 17',
+    ),
+    FrIconCircle(5.5, 12, 1.4),
+  ]);
+
+  /// Viento.
+  static const wind = FrIconData('wind', [
+    FrIconPath('M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6'),
+  ]);
+
+  /// Vibración: teléfono con marcas a los lados.
+  static const vibrate = FrIconData('vibrate', [
+    FrIconRect(8, 4, 8, 16, rx: 2.5),
+    FrIconPath('M4.8 9v6M19.2 9v6M2 10.5v3M22 10.5v3'),
+  ]);
+
+  /// Oreja: auricular al acercar.
+  static const ear = FrIconData('ear', [
+    FrIconPath(
+      'M7 9.5a5.5 5.5 0 0 1 11 0c0 3-2.5 4-3 6.5-.4 2.2-1.9 4-4.2 4A3.8 3.8 0 0 1 7 16.2',
+    ),
+    FrIconPath('M10 10a2.5 2.5 0 0 1 5 0c0 1.5-1.5 2-1.5 3.5'),
+  ]);
+
+  /// Combustible: surtidor.
+  static const fuel = FrIconData('fuel', [
+    FrIconRect(4, 4, 10, 16.5, rx: 2),
+    FrIconPath(
+      'M4 10.5h10M14 8.5l3.2 2.3a2 2 0 0 1 .8 1.6V17a1.5 1.5 0 0 0 3 0V9l-2.5-3',
+    ),
+  ]);
+
+  /// Bandera: parada.
+  static const flag = FrIconData('flag', [
+    FrIconPath('M5.5 21V3.5M5.5 4.5h11l-2.2 4 2.2 4h-11'),
+  ]);
+
   /// Todos los íconos, en el orden del prototipo.
   static const values = [
     mic,
@@ -276,5 +338,14 @@ abstract final class FrIcons {
     nodes,
     volume,
     dot,
+    pin,
+    msg,
+    sos,
+    nfc,
+    wind,
+    vibrate,
+    ear,
+    fuel,
+    flag,
   ];
 }
