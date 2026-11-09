@@ -630,9 +630,11 @@ void main() {
 
       expect(await voice.watchIsTalking().first, isTrue);
       expect(track.enabled, isTrue);
+      // Abierto y sin silenciar, pero sin hablar hasta que se oiga la voz.
       final talk = rig.sentOf<SignalingTalkStateMessage>().last;
       expect(talk.peerId, 'peer_5');
-      expect(talk.isSpeaking, isTrue);
+      expect(talk.isSpeaking, isFalse);
+      expect(talk.muted, isNull);
       await voice.dispose();
     });
 

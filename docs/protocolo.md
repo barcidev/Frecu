@@ -65,6 +65,8 @@ El `welcome` lleva el nombre de la frecu en `roomName`, para que quien se une (t
 
 Quien está en micrófono abierto y se silencia envía `talk_state` con `isSpeaking: false` y `muted: true`; al abrir el micrófono o pasar a PTT lo envía sin `muted`. Quien recibe marca a esa persona como «Silenciado» mientras el último `talk_state` traiga `muted: true`. Es aditivo (`v=1`): sin `muted` se lee como no silenciado. Cada uno reenvía su estado cuando entra alguien (`peer_joined`), para que quien llega lo sepa.
 
+En micrófono abierto, `isSpeaking` no es tener el micrófono abierto, sino que se oiga la voz: se envía `true` cuando el nivel propio supera el umbral y `false` cuando pasa la retención sin superarlo (ver `docs/audio.md`). Abrir el micrófono envía `isSpeaking: false` sin `muted`.
+
 ### Control de acceso del anfitrión
 
 - Mientras un socket no hizo un `join` aceptado, el servidor ignora todo lo demás que mande; un segundo `join` del mismo socket también se ignora.

@@ -20,6 +20,7 @@ class VoiceState {
   /// Constructor con valores por defecto.
   const VoiceState({
     this.isTalking = false,
+    this.voiceDetected = false,
     this.talkMode = TalkMode.pushToTalk,
     this.audioRoute = AudioRoute.speaker,
     this.availableAudioRoutes = const {AudioRoute.speaker, AudioRoute.earpiece},
@@ -32,6 +33,18 @@ class VoiceState {
 
   /// Indica si el micrófono local está transmitiendo audio.
   final bool isTalking;
+
+  /// En micrófono abierto con el micrófono abierto, si se oye la voz propia
+  /// (su nivel supera el umbral).
+  final bool voiceDetected;
+
+  /// La persona propia sale «hablando» en la malla: en PTT mientras
+  /// transmite y en micrófono abierto solo mientras se oye su voz, igual que
+  /// la ven los demás.
+  bool get selfSpeaking => switch (talkMode) {
+    TalkMode.pushToTalk => isTalking,
+    TalkMode.openMic => isTalking && voiceDetected,
+  };
 
   /// Modo de habla activo (PTT o micrófono abierto).
   final TalkMode talkMode;
@@ -61,6 +74,7 @@ class VoiceState {
   /// se reemplaza siempre que se pase [clearBluetoothName] o un nombre.
   VoiceState copyWith({
     bool? isTalking,
+    bool? voiceDetected,
     TalkMode? talkMode,
     AudioRoute? audioRoute,
     Set<AudioRoute>? availableAudioRoutes,
@@ -73,6 +87,7 @@ class VoiceState {
   }) {
     return VoiceState(
       isTalking: isTalking ?? this.isTalking,
+      voiceDetected: voiceDetected ?? this.voiceDetected,
       talkMode: talkMode ?? this.talkMode,
       audioRoute: audioRoute ?? this.audioRoute,
       availableAudioRoutes: availableAudioRoutes ?? this.availableAudioRoutes,
@@ -210,6 +225,9 @@ class VoiceNotifier extends _$VoiceNotifier {
     final bluetoothSub = _follow(repository.watchBluetoothName, (name) {
       state = state.copyWith(bluetoothName: name, clearBluetoothName: true);
     });
+    final voiceSub = _follow(repository.watchVoiceDetected, (detected) {
+      state = state.copyWith(voiceDetected: detected);
+    });
 
     ref.onDispose(() {
       talkingSub.cancel();
@@ -220,6 +238,7 @@ class VoiceNotifier extends _$VoiceNotifier {
       mutedSub?.cancel();
       linksSub?.cancel();
       bluetoothSub?.cancel();
+      voiceSub?.cancel();
     });
 
     return const VoiceState();

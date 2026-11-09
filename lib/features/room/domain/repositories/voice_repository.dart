@@ -43,7 +43,15 @@ abstract interface class VoiceRepository {
   /// Stream reactivo que emite si el usuario local está hablando/transmitiendo.
   Stream<bool> watchIsTalking();
 
-  /// Stream reactivo del conjunto de IDs de participantes remotos que están hablando.
+  /// En micrófono abierto con el micrófono abierto, si se oye la voz propia
+  /// (su nivel supera el umbral, con retención); falso en PTT o con el
+  /// micrófono cerrado. Empieza con el valor actual. Es lo que se anuncia
+  /// a la frecu como `talk_state` en micrófono abierto.
+  Stream<bool> watchVoiceDetected();
+
+  /// Stream reactivo del conjunto de IDs de participantes remotos que están
+  /// hablando: en PTT mientras transmiten y en micrófono abierto mientras su
+  /// teléfono detecta su voz.
   Stream<Set<String>> watchSpeakingPeers();
 
   /// Ids de los participantes remotos que se silenciaron en micrófono

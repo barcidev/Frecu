@@ -359,7 +359,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
         slots: _slots,
         localId: localId,
         speakingPeers: voice.speakingPeers,
-        localTalking: voice.isTalking,
+        localTalking: voice.selfSpeaking,
         status: status,
       ),
     );
@@ -495,7 +495,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                 participants: participants,
                 localParticipantId: localId,
                 speakingPeers: voice.speakingPeers,
-                localTalking: voice.isTalking,
+                localTalking: voice.selfSpeaking,
                 levels: _voiceLevels(ref, localId),
                 status: status,
                 onInvite: onInvite,
