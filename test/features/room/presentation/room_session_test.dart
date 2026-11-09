@@ -18,8 +18,12 @@ import 'package:frecu/core/design/widgets/status_island.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/haptics/haptics.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/bluetooth_invite/domain/repositories/bluetooth_invite_repository.dart';
+import 'package:frecu/features/bluetooth_invite/presentation/providers/bluetooth_invite_provider.dart';
+import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_layer.dart';
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_view.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/datasources/proximity_datasource.dart';
@@ -33,6 +37,7 @@ import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -149,6 +154,27 @@ class _FakeServer extends SignalingServerDataSource {
 }
 
 class _MockVoice extends Mock implements VoiceRepository {}
+
+/// Bluetooth del anfitrión: anota qué anuncia y cuándo deja de hacerlo.
+class _FakeBluetooth implements BluetoothInviteRepository {
+  final List<String> calls = [];
+
+  @override
+  Future<Result<void>> advertise(RoomInvite invite) async {
+    calls.add('advertise ${invite.wifi?.ssid}');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<void> stopAdvertising() async => calls.add('stop');
+
+  @override
+  Stream<List<NearbyRoom>> watchNearbyRooms() => const Stream.empty();
+
+  @override
+  Future<Result<RoomInvite>> requestInvite(NearbyRoom room, String code) =>
+      throw UnimplementedError();
+}
 
 class _MockAudioSession extends Mock implements AudioSessionDataSource {}
 
@@ -388,6 +414,7 @@ void main() {
     late List<bool> proximityEnabled;
     late List<bool> volumeEnabled;
     late List<bool> windFilter;
+    late _FakeBluetooth bleInvite;
     late bool windFilterReady;
 
     setUp(() {
@@ -416,6 +443,7 @@ void main() {
       proximity = StreamController<Object?>.broadcast();
       proximityEnabled = [];
       windFilter = [];
+      bleInvite = _FakeBluetooth();
       windFilterReady = true;
       when(() => voice.initializeAudio()).thenAnswer((_) async => _ok);
       when(
@@ -498,6 +526,7 @@ void main() {
                   events: proximity.stream,
                 ),
               ),
+              bluetoothInviteRepositoryProvider.overrideWithValue(bleInvite),
               windFilterProvider.overrideWithValue(
                 WindFilterDataSource(
                   invoke: (_, enabled) async {
@@ -1044,6 +1073,44 @@ void main() {
 
       router.popUntilRoot();
       await tester.pumpAndSettle();
+    });
+
+    testWidgets('Invitar por Bluetooth: el anfitrión anuncia cuando conoce '
+        'la red de la frecu, con la nueva si cambia, y deja de anunciar al '
+        'salir', (tester) async {
+      final router = await enter(tester, host: true);
+      // Sin red que entregar no se anuncia.
+      expect(bleInvite.calls, isEmpty);
+
+      final notifier =
+          ProviderScope.containerOf(tester.element(find.byType(FrecuApp)))
+              .read(roomNotifierProvider.notifier)
+            ..useNetwork(
+              const WifiCredentials(ssid: 'DIRECT-a', passphrase: 'k'),
+            );
+      await tester.pumpAndSettle();
+      expect(bleInvite.calls, ['advertise DIRECT-a']);
+
+      notifier.useNetwork(
+        const WifiCredentials(ssid: 'DIRECT-b', passphrase: 'k'),
+      );
+      await tester.pumpAndSettle();
+      expect(bleInvite.calls.last, 'advertise DIRECT-b');
+
+      router.popUntilRoot();
+      await tester.pumpAndSettle();
+      expect(bleInvite.calls.last, 'stop');
+    });
+
+    testWidgets('Invitar por Bluetooth: quien se unió no anuncia, aunque '
+        'conozca la red', (tester) async {
+      await enter(tester);
+      ProviderScope.containerOf(tester.element(find.byType(FrecuApp)))
+          .read(roomNotifierProvider.notifier)
+          .useNetwork(const WifiCredentials(ssid: 'DIRECT-a'));
+      await tester.pumpAndSettle();
+
+      expect(bleInvite.calls, isEmpty);
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (

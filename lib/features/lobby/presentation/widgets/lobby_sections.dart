@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/tokens/fr_type.dart';
 import 'package:frecu/core/design/widgets/fr_banner.dart';
@@ -230,6 +231,36 @@ class LobbyOfflineNotice extends StatelessWidget {
           onAction: onOpenSettings,
         ),
       ],
+    );
+  }
+}
+
+/// Pista bajo las frecus encontradas solo por Bluetooth: aún no se está en
+/// su Wi-Fi, y el código también conecta a ella.
+class LobbyBluetoothHint extends StatelessWidget {
+  /// Crea la pista.
+  const LobbyBluetoothHint({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final fr = context.fr;
+    final c = fr.colors;
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FrIcon(FrIcons.info, size: 16, color: c.tx3),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              t.lobby.join.bluetooth.hint,
+              key: const Key('lobby_bluetooth_hint'),
+              style: fr.type.bodyS.copyWith(color: c.tx3),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

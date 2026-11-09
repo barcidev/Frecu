@@ -3,6 +3,7 @@
 // AC3: CUANDO se guarda un nombre con espacios alrededor ENTONCES se guarda recortado; CUANDO el nombre queda vacío o pasa de 20 caracteres ENTONCES se devuelve un fallo y el nombre guardado no cambia.
 // AC4: CUANDO el almacenamiento falla al leer o escribir, o guarda un valor desconocido ENTONCES el repositorio devuelve `Result.failure` sin lanzar excepciones o usa el valor por defecto, y el provider conserva su estado anterior (o los valores por defecto si falla la lectura).
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
 import 'package:frecu/features/settings/domain/entities/preferences.dart';
@@ -141,6 +142,24 @@ void main() {
         'quizás',
       );
       expect((await openRepository().load()).dataOrNull?.windFilter, isTrue);
+    });
+
+    test('Zona Wi-Fi para Bluetooth: sin guardar no hay; se guarda, se lee '
+        'al reabrir y se borra; un valor roto cuenta como ninguna', () async {
+      expect((await openRepository().load()).dataOrNull?.hotspot, isNull);
+
+      const hotspot = WifiCredentials(ssid: 'Moto', passphrase: 'clave-1234');
+      expect((await openRepository().saveHotspot(hotspot)).isSuccess, isTrue);
+      expect((await openRepository().load()).dataOrNull?.hotspot, hotspot);
+
+      expect((await openRepository().saveHotspot(null)).isSuccess, isTrue);
+      expect((await openRepository().load()).dataOrNull?.hotspot, isNull);
+
+      await SharedPreferencesAsync().setString(
+        PreferencesRepositoryImpl.hotspotKey,
+        '{roto',
+      );
+      expect((await openRepository().load()).dataOrNull?.hotspot, isNull);
     });
 
     test(

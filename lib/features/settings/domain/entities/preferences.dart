@@ -1,3 +1,4 @@
+import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
 import 'package:frecu/features/settings/domain/entities/theme_preference.dart';
@@ -34,6 +35,11 @@ sealed class Preferences with _$Preferences {
 
     /// Quitar el retumbo grave del viento y del motor del micrófono.
     @Default(true) bool windFilter,
+
+    /// La zona Wi-Fi de este teléfono (nombre y clave) que escribió el
+    /// anfitrión para invitar por Bluetooth; nula si no la guardó. Solo
+    /// queda en este teléfono.
+    WifiCredentials? hotspot,
   }) = _Preferences;
 
   /// Largo máximo del nombre visible, en caracteres.

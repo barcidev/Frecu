@@ -16,12 +16,17 @@ import 'package:frecu/core/design/widgets/fr_pin_field.dart';
 import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/bluetooth_invite/presentation/providers/bluetooth_invite_provider.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/extensions/nearby_room_extension.dart';
 import 'package:frecu/features/lobby/presentation/widgets/join_cancel.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
+import 'package:frecu/features/lobby/presentation/widgets/wifi_join_sheet.dart';
+import 'package:frecu/features/network/domain/repositories/wifi_join_repository.dart';
+import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -71,11 +76,26 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet>
   /// Falla que se muestra en un aviso (sala llena, sin respuesta…).
   Failure? _failure;
 
+  /// Por Bluetooth: se conectó el teléfono a la red de la frecu, y si al
+  /// final entró (si no, al cerrar la hoja la suelta).
+  bool _networkTouched = false;
+  bool _entered = false;
+  WifiJoinRepository? _network;
+
   bool get _locked => _state == FrPinState.busy || _state == FrPinState.ok;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.room.viaBluetooth) {
+      _network = ref.read(wifiJoinRepositoryProvider);
+    }
+  }
 
   @override
   void dispose() {
     _enter.dispose();
+    if (_networkTouched && !_entered) unawaited(_network?.release());
     super.dispose();
   }
 
@@ -112,14 +132,41 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet>
     setState(() => _state = FrPinState.busy);
     final room = widget.room;
     final container = ProviderScope.containerOf(context, listen: false);
+    var invite = RoomInvite(
+      host: room.hostAddress,
+      port: room.port,
+      roomId: room.roomId,
+      accessCode: _digits,
+      note: room.note,
+    );
+    if (room.viaBluetooth) {
+      // Fuera de su red: el anfitrión entrega la invitación (con su red)
+      // solo con el código correcto, y el teléfono entra a la red.
+      final asked = await ref
+          .read(bluetoothInviteRepositoryProvider)
+          .requestInvite(room, _digits);
+      if (!mounted) return;
+      switch (asked) {
+        case FailureResult(:final failure):
+          return _fail(failure);
+        case Success(:final data):
+          invite = data.copyWith(note: data.note ?? room.note);
+      }
+      if (!await _onRoomNetwork(invite)) {
+        if (mounted) setState(_clear);
+        return;
+      }
+      if (!mounted) return;
+    }
     final result = await ref
         .read(roomNotifierProvider.notifier)
         .joinRoom(
-          hostAddress: room.hostAddress,
-          port: room.port,
+          hostAddress: invite.host,
+          port: invite.port,
           accessCode: _digits,
           displayName: ref.joinDisplayName,
-          note: room.note,
+          note: invite.note,
+          wifi: invite.wifi,
         );
     if (!mounted) return leaveCancelledJoin(container, result);
     switch (result) {
@@ -140,8 +187,21 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet>
       return leaveCancelledJoin(container, Result.success(room));
     }
     if (!mounted) return leaveCancelledJoin(container, Result.success(room));
+    _entered = true;
     FrExpandOrigin.recordFrom(context);
     Navigator.of(context).pop(room);
+  }
+
+  /// Verdadero si el teléfono está en la red de [invite]: ya lo estaba (el
+  /// anfitrión responde) o entró con la [WifiJoinSheet]. Sin red en la
+  /// invitación, se intenta tal cual.
+  Future<bool> _onRoomNetwork(RoomInvite invite) async {
+    final network = _network;
+    if (invite.wifi == null || network == null) return true;
+    _networkTouched = true;
+    if (await network.reaches(invite.host, invite.port)) return true;
+    if (!mounted) return false;
+    return WifiJoinSheet.show(context, invite);
   }
 
   void _fail(Failure failure) {
@@ -173,7 +233,10 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet>
             JoinSheetHeader(
               kicker: [
                 if (note != null) ...[note.label, note.hzText],
-                room.hostAddress,
+                if (room.viaBluetooth)
+                  t.lobby.join.bluetooth.via
+                else
+                  room.hostAddress,
               ].join(' · '),
               title: room.title,
               message: t.lobby.join.pin.message,
@@ -203,7 +266,12 @@ class _PinJoinSheetState extends ConsumerState<PinJoinSheet>
   /// Línea de estado bajo las celdas (`.pin-msg`), o el aviso de la falla.
   Widget _status(BuildContext context) {
     final failure = _failure;
-    if (failure != null) return JoinFailureBanner(failure: failure);
+    if (failure != null) {
+      return JoinFailureBanner(
+        failure: failure,
+        viaBluetooth: widget.room.viaBluetooth,
+      );
+    }
     final fr = context.fr;
     final c = fr.colors;
     final pin = t.lobby.join.pin;
@@ -324,11 +392,18 @@ class JoinSheetHeader extends StatelessWidget {
 /// anfitrión que no responde y cualquier otro fallo, en alerta y sin el
 /// mensaje técnico.
 class JoinFailureBanner extends StatelessWidget {
-  /// Crea el aviso de [failure].
-  const JoinFailureBanner({required this.failure, super.key});
+  /// Crea el aviso de [failure]; [viaBluetooth] si se pidió por Bluetooth.
+  const JoinFailureBanner({
+    required this.failure,
+    this.viaBluetooth = false,
+    super.key,
+  });
 
   /// Falla de la unión.
   final Failure failure;
+
+  /// Si se habló con el anfitrión por Bluetooth (otra pista si no responde).
+  final bool viaBluetooth;
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +412,9 @@ class JoinFailureBanner extends StatelessWidget {
     final (title, message) = failure.maybeWhen<(String, String?)>(
       roomFull: () =>
           (join.full(max: NetworkConstants.maxParticipants), join.roomFullHint),
-      hostUnreachable: () => (join.unreachable, join.unreachableHint),
+      hostUnreachable: () => viaBluetooth
+          ? (join.bluetooth.unreachable, join.bluetooth.unreachableHint)
+          : (join.unreachable, join.unreachableHint),
       invalidAccessCode: () => (join.wrongCode, null),
       versionMismatch: () => (join.versionMismatch, join.versionMismatchHint),
       orElse: () => (join.failed, join.failedHint),

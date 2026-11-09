@@ -5,6 +5,12 @@
   "lobby": {
     "title": "frecu",
     "join": {
+      "bluetooth": {
+        "via": "Por Bluetooth",
+        "hint": "Aún no estás en su Wi-Fi: al poner el código te conectamos.",
+        "unreachable": "El anfitrión no responde por Bluetooth.",
+        "unreachableHint": "Acércate a su teléfono e intenta otra vez."
+      },
       "close": "Cerrar",
       "port": "Puerto $port",
       "wrongCode": "Código incorrecto. Revisa e intenta otra vez.",
@@ -113,6 +119,19 @@
       "back": "Atrás",
       "step": "Paso $current de $total",
       "guide": {
+        "saveForBluetooth": "Guardarla para invitar por Bluetooth",
+        "savedForBluetooth": "Zona Wi-Fi guardada · editar",
+        "hotspotSheet": {
+          "kicker": "Invitar por Bluetooth · opcional",
+          "title": "Tu zona Wi-Fi",
+          "message": "Quien esté cerca y tenga el código de la frecu se conecta a tu red sin buscarla. Se guarda solo en tu teléfono.",
+          "ssid": "Nombre de la zona Wi-Fi",
+          "ssidHint": "Tal como aparece en Ajustes",
+          "key": "Contraseña",
+          "keyHelp": "Android no deja que las apps la lean: escríbela tal como está en Ajustes › Zona Wi-Fi.",
+          "save": "Guardar",
+          "forget": "Olvidarla"
+        },
         "title": "Prepara la red",
         "heading": "Activa tu punto de acceso",
         "message": "Tu teléfono será la antena del grupo.",

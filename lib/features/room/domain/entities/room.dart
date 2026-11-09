@@ -24,6 +24,12 @@ sealed class Room with _$Room {
     /// Red de la frecu, si el anfitrión la creó con Frecu: la que creó este
     /// teléfono o la que traía la invitación. Va en el QR para invitar.
     WifiCredentials? wifi,
+
+    /// Si este teléfono la creó (es el anfitrión). Solo vale en este
+    /// teléfono: no viaja en JSON.
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool hosting,
   }) = _Room;
 
   /// Deserializa desde JSON.

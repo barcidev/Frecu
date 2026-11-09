@@ -26,6 +26,7 @@ void main() {
         'android.permission.ACCESS_WIFI_STATE',
         'android.permission.CHANGE_WIFI_MULTICAST_STATE',
         'android.permission.BLUETOOTH_CONNECT',
+        'android.permission.BLUETOOTH_ADVERTISE',
         'android.permission.CAMERA',
         'android.permission.FOREGROUND_SERVICE',
         'android.permission.FOREGROUND_SERVICE_MICROPHONE',
@@ -42,6 +43,16 @@ void main() {
           reason: 'Missing permission: $permission',
         );
       }
+      // Buscar frecus por Bluetooth no usa la ubicación.
+      expect(
+        content,
+        matches(
+          RegExp(
+            r'android\.permission\.BLUETOOTH_SCAN"\s+'
+            'android:usesPermissionFlags="neverForLocation"',
+          ),
+        ),
+      );
 
       expect(
         content.contains(
@@ -115,8 +126,10 @@ void main() {
           );
         }
       }
-      // Bluetooth no se pide en iOS: activarlo exigiría su texto de uso.
+      // permission_handler no pide Bluetooth en iOS: lo pide CoreBluetooth
+      // al buscar o anunciar frecus (invitar por Bluetooth), con su texto.
       expect(podfile, isNot(contains('PERMISSION_BLUETOOTH=1')));
+      expect(plist, contains('<key>NSBluetoothAlwaysUsageDescription</key>'));
     });
 
     // P69: el splash nativo va en la noche de Portadora, sin destello blanco.
@@ -206,6 +219,7 @@ void main() {
         'NSMicrophoneUsageDescription',
         'NSLocalNetworkUsageDescription',
         'NSCameraUsageDescription',
+        'NSBluetoothAlwaysUsageDescription',
       ];
       for (final locale in ['es', 'en']) {
         final strings = _findFile('ios/Runner/$locale.lproj/InfoPlist.strings')

@@ -144,6 +144,7 @@ class RoomNotifier extends _$RoomNotifier {
                 nearbyNotes: nearbyNotes,
               ),
           wifi: wifi,
+          hosting: true,
         );
         state = room;
         _joinVoice(repository, voice);

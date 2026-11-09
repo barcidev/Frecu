@@ -8,12 +8,14 @@ import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/lobby/presentation/providers/new_room_provider.dart';
+import 'package:frecu/features/lobby/presentation/widgets/hotspot_credentials_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/local_network_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Crear una frecu como anfitrión, en dos pasos: la red y la nueva frecu con
@@ -109,11 +111,21 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
 
   /// La guía del punto de acceso: el primer paso en iPhone; en Android,
   /// detrás de «Prefiero mi zona Wi-Fi».
-  Widget _guide(BuildContext _) => HotspotGuideStep(
-    onBack: _createsNetwork ? _back : _exit,
-    onContinue: _toNewRoom,
-    onOpenHotspotSettings: () => unawaited(
-      ref.read(systemSettingsRepositoryProvider).openHotspotSettings(),
+  Widget _guide(BuildContext _) => Consumer(
+    builder: (context, ref, _) => HotspotGuideStep(
+      onBack: _createsNetwork ? _back : _exit,
+      onContinue: _toNewRoom,
+      onOpenHotspotSettings: () => unawaited(
+        ref.read(systemSettingsRepositoryProvider).openHotspotSettings(),
+      ),
+      // Solo donde Frecu crea la red (Android): la zona Wi-Fi propia se
+      // guarda para entregarla por Bluetooth.
+      onSaveHotspot: _createsNetwork
+          ? () => unawaited(HotspotCredentialsSheet.show(context))
+          : null,
+      hotspotSaved: ref.watch(
+        preferencesProvider.select((p) => p.value?.hotspot != null),
+      ),
     ),
   );
 

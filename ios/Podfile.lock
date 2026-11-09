@@ -3,6 +3,9 @@ PODS:
     - Flutter
   - audio_session (0.0.1):
     - Flutter
+  - bluetooth_low_energy_darwin (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - Flutter (1.0.0)
   - flutter_foreground_task (0.0.1):
     - Flutter
@@ -29,6 +32,7 @@ PODS:
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
+  - bluetooth_low_energy_darwin (from `.symlinks/plugins/bluetooth_low_energy_darwin/darwin`)
   - Flutter (from `Flutter`)
   - flutter_foreground_task (from `.symlinks/plugins/flutter_foreground_task/ios`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
@@ -48,6 +52,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_settings/ios"
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
+  bluetooth_low_energy_darwin:
+    :path: ".symlinks/plugins/bluetooth_low_energy_darwin/darwin"
   Flutter:
     :path: Flutter
   flutter_foreground_task:
@@ -70,6 +76,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_settings: 0341ec6daa4f0c50f5a421bf0ad7c36084db6e90
   audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
+  bluetooth_low_energy_darwin: 8027d98a11f64f880e4c738157dfe5ca88d28dbc
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_foreground_task: ff24d2fb1aefdcde8ed192e8b0574348aab3a30e
   flutter_webrtc: 7948417965923736a584f9a1c5eeccaccf3372cf

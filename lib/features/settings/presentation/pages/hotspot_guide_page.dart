@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frecu/features/lobby/presentation/widgets/hotspot_credentials_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dart';
+import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 
 /// Guía del punto de acceso abierta desde Ajustes: la misma de crear una
 /// frecu ([HotspotGuideStep]), sola. Atrás y sus dos botones vuelven a
@@ -24,6 +27,12 @@ class HotspotGuidePage extends ConsumerWidget {
       showStep: false,
       onOpenHotspotSettings: () => unawaited(
         ref.read(systemSettingsRepositoryProvider).openHotspotSettings(),
+      ),
+      onSaveHotspot: ref.watch(localHotspotAvailableProvider)
+          ? () => unawaited(HotspotCredentialsSheet.show(context))
+          : null,
+      hotspotSaved: ref.watch(
+        preferencesProvider.select((p) => p.value?.hotspot != null),
       ),
     );
   }
