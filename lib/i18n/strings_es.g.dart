@@ -296,6 +296,8 @@ class Translations$settings$es {
 	/// es: 'Guía del punto de acceso'
 	String get hotspotGuide => 'Guía del punto de acceso';
 
+	late final Translations$settings$vibration$es vibration = Translations$settings$vibration$es.internal(_root);
+
 	/// es: 'Licencias'
 	String get licenses => 'Licencias';
 
@@ -886,6 +888,21 @@ class Translations$settings$permissions$es {
 
 	/// es: '$granted/$total'
 	String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.vibration
+class Translations$settings$vibration$es {
+	Translations$settings$vibration$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Vibración'
+	String get title => 'Vibración';
+
+	/// es: 'Al transmitir, cuando alguien empieza a hablar y si se pierde la conexión.'
+	String get subtitle => 'Al transmitir, cuando alguien empieza a hablar y si se pierde la conexión.';
 }
 
 // Path: settings.themeMode
@@ -1717,6 +1734,8 @@ extension on Translations {
 			'settings.permissions.subtitle' => 'Micrófono, red local, notificaciones',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Guía del punto de acceso',
+			'settings.vibration.title' => 'Vibración',
+			'settings.vibration.subtitle' => 'Al transmitir, cuando alguien empieza a hablar y si se pierde la conexión.',
 			'settings.licenses' => 'Licencias',
 			'settings.appearance' => 'Apariencia',
 			'settings.theme' => 'Tema',

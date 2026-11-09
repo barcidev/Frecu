@@ -15,6 +15,7 @@ import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/widgets/status_island.dart';
 import 'package:frecu/core/error/failure.dart';
+import 'package:frecu/core/haptics/haptics.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
@@ -35,6 +36,8 @@ import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
+import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:frecu/features/settings/presentation/providers/vibration_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -368,6 +371,7 @@ void main() {
     late StreamController<Set<AudioRoute>> available;
     late StreamController<String?> bluetooth;
     late StreamController<int> notificationLeaves;
+    late List<String> vibrated;
 
     setUp(() {
       // La malla, el núcleo y el inicio animan sin fin: con movimiento
@@ -389,6 +393,7 @@ void main() {
       available = StreamController<Set<AudioRoute>>.broadcast();
       bluetooth = StreamController<String?>.broadcast();
       notificationLeaves = StreamController<int>.broadcast();
+      vibrated = [];
       when(() => voice.initializeAudio()).thenAnswer((_) async => _ok);
       when(
         () => voice.joinMesh(
@@ -454,6 +459,9 @@ void main() {
               signalingClientProvider.overrideWithValue(signaling),
               roomRepositoryProvider.overrideWithValue(rooms),
               voiceRepositoryProvider.overrideWithValue(voice),
+              hapticsProvider.overrideWithValue(
+                Haptics(invoke: (_, pattern) async => vibrated.add('$pattern')),
+              ),
               notificationLeaveRequestsProvider.overrideWith(
                 (ref) => notificationLeaves.stream,
               ),
@@ -757,6 +765,54 @@ void main() {
       quality.add({'peer_1': LinkQuality.good});
       await tester.pumpAndSettle();
       expect(find.text('SEÑAL DÉBIL'), findsNothing);
+    });
+
+    testWidgets('Vibración: al transmitir, cuando alguien empieza a hablar '
+        '(sin repetir), con la señal débil y al volver la conexión', (
+      tester,
+    ) async {
+      await enter(tester);
+
+      talking.add(true);
+      await tester.pumpAndSettle();
+      talking.add(false);
+      await tester.pumpAndSettle();
+      expect(vibrated, ['tick', 'tick']);
+
+      vibrated.clear();
+      speaking.add({'peer_1'});
+      await tester.pumpAndSettle();
+      speaking.add(const {});
+      await tester.pumpAndSettle();
+      // Otra vez enseguida: no vibra de nuevo.
+      speaking.add({'peer_1'});
+      await tester.pumpAndSettle();
+      expect(vibrated, ['talk']);
+
+      vibrated.clear();
+      quality.add({'peer_1': LinkQuality.weak});
+      await tester.pumpAndSettle();
+      quality.add({'peer_1': LinkQuality.weak});
+      await tester.pumpAndSettle();
+      expect(vibrated, ['alert']);
+      await tester.pump(RoomIslandEvent.duration);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Vibración: apagada en Ajustes, no vibra', (tester) async {
+      await enter(tester);
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(FrecuApp)),
+      );
+      await tester.runAsync(
+        () => container
+            .read(preferencesProvider.notifier)
+            .setVibration(enabled: false),
+      );
+
+      talking.add(true);
+      await tester.pumpAndSettle();
+      expect(vibrated, isEmpty);
     });
 
     testWidgets('F15: elegir «Abierto» abre el micrófono al instante', (

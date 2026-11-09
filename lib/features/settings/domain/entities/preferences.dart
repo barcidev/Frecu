@@ -21,6 +21,10 @@ sealed class Preferences with _$Preferences {
 
     /// Idioma de la app: Auto (sigue al teléfono), español o inglés.
     @Default(LocalePreference.auto) LocalePreference localePreference,
+
+    /// Vibrar al transmitir, cuando alguien empieza a hablar y si se pierde
+    /// la conexión.
+    @Default(true) bool vibration,
   }) = _Preferences;
 
   /// Largo máximo del nombre visible, en caracteres.

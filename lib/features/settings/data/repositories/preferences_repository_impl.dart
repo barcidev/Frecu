@@ -29,6 +29,9 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   /// Clave del idioma de la app.
   static const localePreferenceKey = 'settings.localePreference';
 
+  /// Clave de la vibración (`true` o `false`).
+  static const vibrationKey = 'settings.vibration';
+
   final SharedPreferencesAsync _storage;
 
   @override
@@ -38,6 +41,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
       final theme = await _storage.getString(themePreferenceKey);
       final talkMode = await _storage.getString(defaultTalkModeKey);
       final locale = await _storage.getString(localePreferenceKey);
+      final vibration = await _storage.getString(vibrationKey);
       const defaults = Preferences();
       return Result.success(
         Preferences(
@@ -52,6 +56,7 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
           localePreference:
               LocalePreference.values.asNameMap()[locale] ??
               defaults.localePreference,
+          vibration: _boolOf(vibration) ?? defaults.vibration,
         ),
       );
     } on Object catch (e, st) {
@@ -89,6 +94,17 @@ class PreferencesRepositoryImpl implements PreferencesRepository {
   Future<Result<void>> saveLocalePreference(
     LocalePreference localePreference,
   ) => _save(localePreferenceKey, localePreference.name);
+
+  @override
+  Future<Result<void>> saveVibration({required bool enabled}) =>
+      _save(vibrationKey, '$enabled');
+
+  /// `true` o `false` guardados como texto; nulo si es otra cosa.
+  static bool? _boolOf(String? raw) => switch (raw) {
+    'true' => true,
+    'false' => false,
+    _ => null,
+  };
 
   Future<Result<void>> _save(String key, String value) async {
     try {

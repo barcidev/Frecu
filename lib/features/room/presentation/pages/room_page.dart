@@ -17,6 +17,7 @@ import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/room/presentation/pages/room_haptics.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
@@ -53,6 +54,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
 
   /// Mayor número de personas que hubo a la vez en la malla.
   int _peak = 0;
+
+  /// Vibración con los cambios de la frecu.
+  final RoomHaptics _haptics = RoomHaptics();
 
   /// Resumen del cierre; mientras no es nulo se ve la pantalla de cierre.
   RoomClosure? _closure;
@@ -396,6 +400,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _listenForClose();
     _listenForNotificationLeave();
     _listenForEvents();
+    _haptics.listen(ref);
     final fr = context.fr;
     final closure = _closure;
     return PopScope<Object?>(

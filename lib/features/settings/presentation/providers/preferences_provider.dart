@@ -86,6 +86,16 @@ class PreferencesNotifier extends _$PreferencesNotifier {
     return result;
   }
 
+  /// Guarda si el teléfono vibra con los avisos de la frecu.
+  Future<Result<void>> setVibration({required bool enabled}) async {
+    await future;
+    final result = await _repository.saveVibration(enabled: enabled);
+    if (result.isSuccess) {
+      _update((preferences) => preferences.copyWith(vibration: enabled));
+    }
+    return result;
+  }
+
   /// Guarda el idioma de la app y, solo si se guardó, lo aplica al instante.
   Future<Result<void>> setLocalePreference(
     LocalePreference localePreference,

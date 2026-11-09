@@ -187,6 +187,7 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override late final _Translations$settings$language$en language = _Translations$settings$language$en._(_root);
 	@override late final _Translations$settings$permissions$en permissions = _Translations$settings$permissions$en._(_root);
 	@override String get hotspotGuide => 'Hotspot guide';
+	@override late final _Translations$settings$vibration$en vibration = _Translations$settings$vibration$en._(_root);
 	@override String get licenses => 'Licenses';
 	@override String get appearance => 'Appearance';
 	@override String get theme => 'Theme';
@@ -519,6 +520,17 @@ class _Translations$settings$permissions$en extends Translations$settings$permis
 	@override String get title => 'Permissions';
 	@override String get subtitle => 'Microphone, local network, notifications';
 	@override String count({required Object granted, required Object total}) => '${granted}/${total}';
+}
+
+// Path: settings.vibration
+class _Translations$settings$vibration$en extends Translations$settings$vibration$es {
+	_Translations$settings$vibration$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Vibration';
+	@override String get subtitle => 'When you transmit, when someone starts talking and if the connection drops.';
 }
 
 // Path: settings.themeMode
@@ -1122,6 +1134,8 @@ extension on TranslationsEn {
 			'settings.permissions.subtitle' => 'Microphone, local network, notifications',
 			'settings.permissions.count' => ({required Object granted, required Object total}) => '${granted}/${total}',
 			'settings.hotspotGuide' => 'Hotspot guide',
+			'settings.vibration.title' => 'Vibration',
+			'settings.vibration.subtitle' => 'When you transmit, when someone starts talking and if the connection drops.',
 			'settings.licenses' => 'Licenses',
 			'settings.appearance' => 'Appearance',
 			'settings.theme' => 'Theme',

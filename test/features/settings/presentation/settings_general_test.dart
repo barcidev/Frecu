@@ -13,17 +13,20 @@ import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_tag.dart';
+import 'package:frecu/core/design/widgets/fr_toggle.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dart';
 import 'package:frecu/features/permissions/domain/entities/app_permission.dart';
 import 'package:frecu/features/permissions/domain/repositories/permission_repository.dart';
 import 'package:frecu/features/permissions/presentation/providers/permission_provider.dart';
+import 'package:frecu/features/settings/data/repositories/preferences_repository_impl.dart';
 import 'package:frecu/features/settings/presentation/pages/settings_page.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/features/settings/presentation/widgets/language_sheet.dart';
 import 'package:frecu/features/settings/presentation/widgets/permissions_row.dart';
 import 'package:frecu/features/settings/presentation/widgets/settings_group.dart';
 import 'package:frecu/i18n/strings.g.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
@@ -330,6 +333,36 @@ void main() {
         expect(find.byType(SettingsPage), findsOneWidget);
       });
     }
+  });
+
+  group('Fila Vibración', () {
+    testWidgets('va entre Idioma y Permisos, encendida por defecto, y al '
+        'tocarla se apaga y se guarda', (tester) async {
+      await _openSettings(tester, _FakePermissions(current: _allGranted));
+      final row = find.byWidgetPredicate(
+        (widget) =>
+            widget is SettingsRow && widget.title == t.settings.vibration.title,
+      );
+      expect(row, findsOneWidget);
+      expect(
+        tester.getTopLeft(row).dy,
+        lessThan(tester.getTopLeft(_permissionsRow).dy),
+      );
+      final toggle = find.descendant(of: row, matching: find.byType(FrToggle));
+      expect(tester.widget<FrToggle>(toggle).value, isTrue);
+
+      await tester.ensureVisible(toggle);
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<FrToggle>(toggle).value, isFalse);
+      final saved = await tester.runAsync(
+        () =>
+            PreferencesRepositoryImpl(preferences: SharedPreferencesAsync())
+                .load(),
+      );
+      expect(saved?.dataOrNull?.vibration, isFalse);
+    });
   });
 
   group('Fila Licencias', () {

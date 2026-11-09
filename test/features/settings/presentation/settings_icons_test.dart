@@ -114,6 +114,11 @@ void main() {
       SharedPreferencesAsyncPlatform.instance = _FailingWrites();
       await _openSettings(tester);
 
+      // El tema queda bajo el borde: se lleva a la vista antes de tocarlo.
+      await tester.ensureVisible(
+        find.text(t.settings.themeMode.light.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.themeMode.light.toUpperCase()));
       await tester.pumpAndSettle();
 

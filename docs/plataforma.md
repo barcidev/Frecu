@@ -9,6 +9,7 @@ Permisos:
 - `POST_NOTIFICATIONS` (Android 13+)
 - `BLUETOOTH_CONNECT` (Android 12+)
 - `WAKE_LOCK`
+- `VIBRATE` (avisos de la frecu con la pantalla apagada)
 
 Mientras la frecu esté activa, corre un servicio en primer plano de tipo `microphone` con una notificación persistente que permita salir de la frecu.
 

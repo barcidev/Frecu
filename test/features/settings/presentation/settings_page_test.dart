@@ -207,12 +207,22 @@ void main() {
       expect(_themeSelector(tester).value, ThemePreference.auto);
       expect(_colorsOf(tester), AppTheme.dark.colorScheme);
 
+      // El tema queda bajo el borde: se lleva a la vista antes de tocarlo.
+      await tester.ensureVisible(
+        find.text(t.settings.themeMode.light.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.themeMode.light.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_themeSelector(tester).value, ThemePreference.light);
       expect(_colorsOf(tester), AppTheme.light.colorScheme);
       expect((await _reopen())?.themePreference, ThemePreference.light);
 
+      // El tema queda bajo el borde: se lleva a la vista antes de tocarlo.
+      await tester.ensureVisible(
+        find.text(t.settings.themeMode.dark.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.themeMode.dark.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_themeSelector(tester).value, ThemePreference.dark);
@@ -224,6 +234,11 @@ void main() {
       await tester.pumpAndSettle();
       expect(_colorsOf(tester), AppTheme.dark.colorScheme);
 
+      // El tema queda bajo el borde: se lleva a la vista antes de tocarlo.
+      await tester.ensureVisible(
+        find.text(t.settings.themeMode.auto.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.themeMode.auto.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_themeSelector(tester).value, ThemePreference.auto);
@@ -255,6 +270,11 @@ void main() {
       await _openSettings(tester);
       expect(_toast(t.settings.saveError), findsNothing);
 
+      // El tema queda bajo el borde: se lleva a la vista antes de tocarlo.
+      await tester.ensureVisible(
+        find.text(t.settings.themeMode.light.toUpperCase()),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.settings.themeMode.light.toUpperCase()));
       await tester.pumpAndSettle();
       expect(_toast(t.settings.saveError), findsOneWidget);
