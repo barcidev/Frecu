@@ -20,6 +20,9 @@ typedef VoiceLevels = ({double local, Map<String, double> peers});
 /// ICE que llegan antes de la descripción remota se aplican después de ella.
 /// Las offers y answers esperan a que se decida el micrófono
 /// ([prepareMedia]) para llevar la pista local.
+///
+/// Un enlace que no conecta en [linkWaitLimit] (sin ruta de voz, p. ej.)
+/// queda como caído en lugar de seguir «conectando» para siempre.
 class PeerConnectionDataSource {
   /// Constructor con inyección de cliente de señalización y fábricas
   /// opcionales.
@@ -28,6 +31,7 @@ class PeerConnectionDataSource {
     this.peerConnectionFactory,
     this.userMediaFactory,
     this.mediaWaitLimit = const Duration(seconds: 20),
+    this.linkWaitLimit = const Duration(seconds: 15),
   }) {
     _signalingSub = signalingClient.messages.listen(
       _handleSignalingMessage,
@@ -48,6 +52,10 @@ class PeerConnectionDataSource {
 
   /// Espera máxima a que se decida el micrófono antes de negociar sin él.
   final Duration mediaWaitLimit;
+
+  /// Espera máxima a que un enlace conecte; después queda como caído (si
+  /// conecta más tarde, vuelve a contar como conectado).
+  final Duration linkWaitLimit;
 
   static const Map<String, dynamic> _config = {
     'iceServers': <Map<String, dynamic>>[],
@@ -73,6 +81,7 @@ class PeerConnectionDataSource {
   final Map<String, int> _peerEpochs = {};
   final List<SignalingMessage> _early = [];
   final Map<String, PeerConnectionState> _links = {};
+  final Map<String, Timer> _linkTimers = {};
   final StreamController<Map<String, PeerConnectionState>> _linksController =
       StreamController<Map<String, PeerConnectionState>>.broadcast();
 
@@ -444,6 +453,7 @@ class PeerConnectionDataSource {
 
   void _closePeer(String peerId) {
     _peerEpochs[peerId] = (_peerEpochs[peerId] ?? 0) + 1;
+    _linkTimers.remove(peerId)?.cancel();
     _queues.remove(peerId);
     _pendingIceCandidates.remove(peerId);
     _hasRemoteDescription.remove(peerId);
@@ -455,6 +465,10 @@ class PeerConnectionDataSource {
   /// Cierra todos los enlaces; lo que estaba en curso se descarta.
   List<Future<void>> _closeAllPeers() {
     _generation++;
+    for (final timer in _linkTimers.values) {
+      timer.cancel();
+    }
+    _linkTimers.clear();
     final closing = [
       for (final pc in _peerConnections.values) _closeQuietly(pc),
     ];
@@ -493,9 +507,26 @@ class PeerConnectionDataSource {
     }
   }
 
+  /// Mientras el enlace con [peerId] está conectando corre su espera
+  /// ([linkWaitLimit]); cualquier otro estado la cancela.
   void _setLink(String peerId, PeerConnectionState state) {
+    if (state == PeerConnectionState.connecting) {
+      _linkTimers[peerId] ??= Timer(linkWaitLimit, () => _linkTimedOut(peerId));
+    } else {
+      _linkTimers.remove(peerId)?.cancel();
+    }
     if (_links[peerId] == state) return;
     _links[peerId] = state;
+    _emitLinks();
+  }
+
+  /// El enlace con [peerId] no conectó a tiempo: sin ruta de voz (p. ej. ICE
+  /// sin pares) se quedaría «conectando» para siempre y bloquearía la frecu.
+  void _linkTimedOut(String peerId) {
+    _linkTimers.remove(peerId);
+    if (_links[peerId] != PeerConnectionState.connecting) return;
+    AppLogger.w('Voice link with $peerId did not connect in $linkWaitLimit');
+    _links[peerId] = PeerConnectionState.disconnected;
     _emitLinks();
   }
 

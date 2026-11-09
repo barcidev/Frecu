@@ -47,3 +47,10 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Solo para compilar HotspotNetworkDetector contra la API de WebRTC que ya
+    // trae flutter_webrtc (no se empaqueta otra copia). Debe ser la misma
+    // versión que declara flutter_webrtc en su android/build.gradle.
+    compileOnly("io.github.webrtc-sdk:android:150.7871.04")
+}
