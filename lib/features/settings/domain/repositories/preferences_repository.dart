@@ -24,4 +24,7 @@ abstract interface class PreferencesRepository {
 
   /// Guarda el idioma de la app.
   Future<Result<void>> saveLocalePreference(LocalePreference localePreference);
+
+  /// Guarda si el teléfono vibra con los avisos de la frecu.
+  Future<Result<void>> saveVibration({required bool enabled});
 }

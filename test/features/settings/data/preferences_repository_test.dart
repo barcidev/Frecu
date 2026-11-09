@@ -107,6 +107,24 @@ void main() {
       },
     );
 
+    test('Vibración: encendida por defecto, se guarda y se lee al reabrir; '
+        'un valor desconocido vuelve a encendida', () async {
+      expect((await openRepository().load()).dataOrNull?.vibration, isTrue);
+
+      final repository = openRepository();
+      expect(
+        (await repository.saveVibration(enabled: false)).isSuccess,
+        isTrue,
+      );
+      expect((await openRepository().load()).dataOrNull?.vibration, isFalse);
+
+      await SharedPreferencesAsync().setString(
+        PreferencesRepositoryImpl.vibrationKey,
+        'quizás',
+      );
+      expect((await openRepository().load()).dataOrNull?.vibration, isTrue);
+    });
+
     test(
       'AC4: si el almacenamiento falla devuelve Result.failure sin lanzar',
       () async {

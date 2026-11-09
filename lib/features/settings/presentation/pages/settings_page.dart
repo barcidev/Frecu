@@ -11,6 +11,7 @@ import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_segmented.dart';
 import 'package:frecu/core/design/widgets/fr_toast.dart';
+import 'package:frecu/core/design/widgets/fr_toggle.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/settings/domain/entities/locale_preference.dart';
@@ -64,7 +65,10 @@ class SettingsPage extends ConsumerWidget {
                   SettingsSectionLabel(t.settings.voice),
                   _TalkModeGroup(preferences.defaultTalkMode),
                   SettingsSectionLabel(t.settings.general),
-                  _GeneralGroup(preferences.localePreference),
+                  _GeneralGroup(
+                    preferences.localePreference,
+                    vibration: preferences.vibration,
+                  ),
                   SettingsSectionLabel(t.settings.appearance),
                   _ThemeGroup(preferences.themePreference),
                   const SizedBox(height: 24),
@@ -176,11 +180,15 @@ class _TalkModeGroup extends ConsumerWidget {
   }
 }
 
-/// General: el idioma de la app, los permisos y la guía del punto de acceso.
+/// General: el idioma de la app, la vibración, los permisos, la guía del
+/// punto de acceso y las licencias.
 class _GeneralGroup extends ConsumerWidget {
-  const _GeneralGroup(this.locale);
+  const _GeneralGroup(this.locale, {required this.vibration});
 
   final LocalePreference locale;
+
+  /// Si el teléfono vibra con los avisos de la frecu.
+  final bool vibration;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -193,6 +201,20 @@ class _GeneralGroup extends ConsumerWidget {
             () => ref
                 .read(preferencesProvider.notifier)
                 .setLocalePreference(choice),
+          ),
+        ),
+        SettingsRow(
+          title: t.settings.vibration.title,
+          subtitle: t.settings.vibration.subtitle,
+          trailing: FrToggle(
+            value: vibration,
+            semanticLabel: t.settings.vibration.title,
+            onChanged: (enabled) => _saveOrWarn(
+              context,
+              () => ref
+                  .read(preferencesProvider.notifier)
+                  .setVibration(enabled: enabled),
+            ),
           ),
         ),
         const PermissionsRow(),

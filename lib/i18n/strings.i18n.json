@@ -340,6 +340,10 @@
       "count": "$granted/$total"
     },
     "hotspotGuide": "Guía del punto de acceso",
+    "vibration": {
+      "title": "Vibración",
+      "subtitle": "Al transmitir, cuando alguien empieza a hablar y si se pierde la conexión."
+    },
     "licenses": "Licencias",
     "appearance": "Apariencia",
     "theme": "Tema",

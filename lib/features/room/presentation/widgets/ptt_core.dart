@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/features/room/presentation/widgets/ptt_core_face.dart';
@@ -106,7 +103,7 @@ class _PttCoreState extends State<PttCore> {
     final first = _pointers.isEmpty;
     setState(() => _pointers.add(event.pointer));
     if (!first) return;
-    unawaited(HapticFeedback.lightImpact());
+    // La vibración la da la pantalla de la frecu al empezar a transmitir.
     widget.onStart();
   }
 
@@ -114,7 +111,6 @@ class _PttCoreState extends State<PttCore> {
     if (!_pointers.contains(event.pointer)) return;
     setState(() => _pointers.remove(event.pointer));
     if (_pressed) return;
-    unawaited(HapticFeedback.lightImpact());
     widget.onStop();
   }
 

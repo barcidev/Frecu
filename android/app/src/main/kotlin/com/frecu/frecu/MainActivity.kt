@@ -9,5 +9,6 @@ class MainActivity : FlutterActivity() {
         // zona Wi-Fi de este teléfono.
         HotspotNetworkDetector.install()
         super.configureFlutterEngine(flutterEngine)
+        FrecuHaptics.install(this, flutterEngine.dartExecutor.binaryMessenger)
     }
 }
