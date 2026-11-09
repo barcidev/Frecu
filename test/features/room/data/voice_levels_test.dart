@@ -51,6 +51,8 @@ void main() {
   setUp(() {
     signaling = _MockSignaling();
     when(() => signaling.messages).thenAnswer((_) => const Stream.empty());
+    when(() => signaling.connectionState)
+        .thenAnswer((_) => const Stream.empty());
     when(() => signaling.send(any())).thenAnswer((_) {});
   });
 
@@ -81,7 +83,7 @@ void main() {
         peerConnectionFactory: (_) async => (order..moveNext()).current,
         userMediaFactory: (_) async => stream,
       );
-      await dataSource.initialize(localPeerId: 'me');
+      await (dataSource..attach('me')).prepareMedia(capture: true);
     });
 
     test('AC1: sin conexiones el nivel propio es 0 y no hay niveles de '

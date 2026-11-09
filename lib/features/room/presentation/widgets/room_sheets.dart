@@ -3,6 +3,7 @@ import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
+import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -13,12 +14,14 @@ FrIconData audioRouteIcon(AudioRoute route) => switch (route) {
   AudioRoute.bluetooth => FrIcons.headset,
 };
 
-/// Nombre de cada ruta de audio.
-String audioRouteName(AudioRoute route) => switch (route) {
-  AudioRoute.speaker => t.room.speaker,
-  AudioRoute.earpiece => t.room.earpiece,
-  AudioRoute.bluetooth => t.room.bluetooth,
-};
+/// Nombre de cada ruta de audio; la de Bluetooth lleva el nombre del
+/// dispositivo ([deviceName], p. ej. «Sena 50S») si se conoce.
+String audioRouteName(AudioRoute route, {String? deviceName}) =>
+    switch (route) {
+      AudioRoute.speaker => t.room.speaker,
+      AudioRoute.earpiece => t.room.earpiece,
+      AudioRoute.bluetooth => deviceName ?? t.room.bluetooth,
+    };
 
 /// Encabezado de las hojas de la frecu (`.sh-h`): la línea superior, el
 /// título, el mensaje y Cerrar.
@@ -56,14 +59,7 @@ class RoomSheetHeader extends StatelessWidget {
                 style: fr.type.labelS.copyWith(color: c.tx3),
               ),
               const SizedBox(height: 8),
-              Text(
-                title,
-                style: fr.type.titleL.copyWith(
-                  fontSize: 22,
-                  height: 1.15,
-                  color: c.tx1,
-                ),
-              ),
+              Text(title, style: FrSheet.titleStyle(fr)),
               const SizedBox(height: 6),
               Text(
                 message,

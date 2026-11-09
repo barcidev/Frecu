@@ -75,6 +75,86 @@ void main() {
       expect(connected.isHotspot, isTrue);
     });
 
+    test(
+      'F10: con solo datos móviles (pdp_ip0, rmnet) no hay red local',
+      () async {
+        when(() => mockAddress.address).thenReturn('10.45.12.8');
+        when(() => mockAddress.type).thenReturn(InternetAddressType.IPv4);
+        when(() => mockInterface.name).thenReturn('pdp_ip0');
+        when(() => mockInterface.addresses).thenReturn([mockAddress]);
+        final cellular = MockNetworkInterface();
+        final cellularAddress = MockInterfaceAddress();
+        when(() => cellularAddress.address).thenReturn('100.80.2.1');
+        when(() => cellularAddress.type).thenReturn(InternetAddressType.IPv4);
+        when(() => cellular.name).thenReturn('rmnet_data0');
+        when(() => cellular.addresses).thenReturn([cellularAddress]);
+        when(() => mockDataSource.getInterfaces())
+            .thenAnswer((_) async => [mockInterface, cellular]);
+
+        final result = await repository.getNetworkState();
+
+        expect(result.dataOrNull, const NetworkState.disconnected());
+      },
+    );
+
+    test(
+      'F10: con datos móviles, VPN y Wi-Fi toma la IP de la Wi-Fi',
+      () async {
+        MockNetworkInterface interface(String name, String ip) {
+          final address = MockInterfaceAddress();
+          when(() => address.address).thenReturn(ip);
+          when(() => address.type).thenReturn(InternetAddressType.IPv4);
+          final mock = MockNetworkInterface();
+          when(() => mock.name).thenReturn(name);
+          when(() => mock.addresses).thenReturn([address]);
+          return mock;
+        }
+
+        final interfaces = [
+          interface('pdp_ip0', '10.45.12.8'),
+          interface('utun2', '10.8.0.2'),
+          interface('en0', '192.168.1.34'),
+        ];
+        when(() => mockDataSource.getInterfaces())
+            .thenAnswer((_) async => interfaces);
+
+        final result = await repository.getNetworkState();
+
+        expect(
+          result.dataOrNull,
+          const NetworkState.connected(
+            ipAddress: '192.168.1.34',
+            interfaceName: 'en0',
+            isHotspot: false,
+          ),
+        );
+      },
+    );
+
+    test(
+      'F10: el punto de acceso del iPhone (bridge100) cuenta como red y como '
+      'punto de acceso',
+      () async {
+        when(() => mockAddress.address).thenReturn('172.20.10.1');
+        when(() => mockAddress.type).thenReturn(InternetAddressType.IPv4);
+        when(() => mockInterface.name).thenReturn('bridge100');
+        when(() => mockInterface.addresses).thenReturn([mockAddress]);
+        when(() => mockDataSource.getInterfaces())
+            .thenAnswer((_) async => [mockInterface]);
+
+        final result = await repository.getNetworkState();
+
+        expect(
+          result.dataOrNull,
+          const NetworkState.connected(
+            ipAddress: '172.20.10.1',
+            interfaceName: 'bridge100',
+            isHotspot: true,
+          ),
+        );
+      },
+    );
+
     test('AC4: getNetworkState captures exception and returns Result.failure with Failure.network', () async {
       when(() => mockDataSource.getInterfaces()).thenThrow(
         const SocketException('Platform error querying network interfaces'),

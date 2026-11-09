@@ -11,6 +11,7 @@ class MeshLabel extends StatelessWidget {
     required this.name,
     required this.nameColor,
     required this.nameWeight,
+    this.nameSpacing,
     this.caption,
     this.captionColor,
     super.key,
@@ -24,6 +25,9 @@ class MeshLabel extends StatelessWidget {
 
   /// Peso del nombre.
   final FontWeight nameWeight;
+
+  /// Espaciado entre letras del nombre; «LIBRE» lleva el de etiqueta.
+  final double? nameSpacing;
 
   /// Leyenda bajo el nombre, ya en mayúsculas.
   final String? caption;
@@ -51,6 +55,7 @@ class MeshLabel extends StatelessWidget {
               FontVariation.weight(nameWeight.value.toDouble()),
               const FontVariation.width(104),
             ],
+            letterSpacing: nameSpacing,
             color: nameColor,
           ),
         ),

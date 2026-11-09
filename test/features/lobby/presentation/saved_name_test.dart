@@ -221,6 +221,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verifyJoinedAs('Ana');
+        await _unmountRoomPage(tester);
       },
     );
 
@@ -232,6 +233,7 @@ void main() {
       await joinByIp(tester);
 
       verifyJoinedAs('Ana');
+      await _unmountRoomPage(tester);
     });
 
     testWidgets('AC5: unirse escaneando un QR usa el nombre guardado', (
@@ -242,7 +244,7 @@ void main() {
         tester,
         MaterialApp(
           home: ScanQrPage(
-            scannerBuilder: (context, onScan) {
+            scannerBuilder: (context, onScan, _) {
               triggerScan = onScan;
               return const SizedBox(key: Key('scanner_stub'));
             },
@@ -275,6 +277,7 @@ void main() {
       await joinByIp(tester);
 
       verifyJoinedAs('Bea');
+      await _unmountRoomPage(tester);
     });
 
     testWidgets(
@@ -302,7 +305,16 @@ void main() {
             note: any(named: 'note'),
           ),
         ).called(1);
+        await _unmountRoomPage(tester);
       },
     );
   });
+}
+
+/// La prueba termina dentro de la frecu: al desmontarse, `RoomPage` sale de
+/// ella y Riverpod refresca a quien la mira. Se vacía antes de acabar para no
+/// dejar temporizadores pendientes.
+Future<void> _unmountRoomPage(WidgetTester tester) async {
+  await tester.pumpWidget(const SizedBox());
+  await tester.pump(const Duration(milliseconds: 50));
 }

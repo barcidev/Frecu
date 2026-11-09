@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frecu/core/design/motion/fr_transitions.dart';
 import 'package:frecu/core/design/tokens/fr_colors.dart';
 import 'package:frecu/core/design/tokens/fr_motion.dart';
 import 'package:frecu/core/design/tokens/fr_radii.dart';
@@ -29,6 +30,8 @@ abstract final class AppTheme {
       fontFamily: FrFonts.ui,
       textTheme: _textTheme(c, type),
       splashColor: c.touch,
+      // Sin la tinta de Material al tocar: cada control lleva su propia luz.
+      splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
       iconTheme: IconThemeData(color: c.tx1),
       textSelectionTheme: TextSelectionThemeData(
@@ -37,6 +40,13 @@ abstract final class AppTheme {
         selectionHandleColor: c.signalFg,
       ),
       extensions: [c, type, FrSpace.standard, radii, FrMotion.standard],
+      // Las rutas que no son `FrPageRoute` también entran como Portadora.
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FrPageTransitionsBuilder(),
+          TargetPlatform.iOS: FrPageTransitionsBuilder(),
+        },
+      ),
       appBarTheme: _appBar(c, type),
       filledButtonTheme: _Buttons.filled(c, type, radii),
       elevatedButtonTheme: _Buttons.elevated(c, type, radii),
@@ -152,7 +162,7 @@ abstract final class AppTheme {
       floatingLabelStyle: type.body.copyWith(color: c.tx2),
       hintStyle: type.body.copyWith(color: c.tx4),
       helperStyle: type.bodyS.copyWith(color: c.tx3),
-      errorStyle: type.bodyS.copyWith(color: c.alert),
+      errorStyle: type.bodyS.copyWith(color: c.alertFg),
       prefixIconColor: c.tx3,
       suffixIconColor: c.tx3,
       border: border(c.line1),

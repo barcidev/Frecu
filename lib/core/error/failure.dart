@@ -21,6 +21,9 @@ sealed class Failure with _$Failure {
   /// No se puede contactar al anfitrión de la frecu.
   const factory Failure.hostUnreachable() = _HostUnreachableFailure;
 
+  /// El anfitrión usa una versión del protocolo que esta app no entiende.
+  const factory Failure.versionMismatch() = _VersionMismatchFailure;
+
   /// Error en la captura, reproducción o sesión de audio.
   const factory Failure.audio({String? message}) = _AudioFailure;
 

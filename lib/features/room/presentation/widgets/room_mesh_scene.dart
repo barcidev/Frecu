@@ -17,9 +17,11 @@ const int meshSlotCount = 6;
 
 const List<double> _slotDegrees = [90, 150, 210, 270, 330, 30];
 
-/// Orden en que se ocupan los lugares libres: el 0 queda para la persona
-/// propia y solo se usa si no se sabe quién es.
-const List<int> _freeOrder = [1, 2, 3, 4, 5, 0];
+/// Orden en que se ocupan los lugares libres (`addPeer` del prototipo): el
+/// primero en llegar va arriba, frente a la persona propia, y los demás se
+/// reparten alrededor. El 0 queda para la persona propia y solo se usa si no
+/// se sabe quién es.
+const List<int> _freeOrder = [3, 1, 5, 2, 4, 0];
 
 /// Centros de los 6 lugares en un lienzo de [size], como `meshSlots` del
 /// prototipo: el 0 abajo, cerca del pulgar, y los demás cada 60°.
@@ -154,7 +156,7 @@ List<MeshNode?> buildMeshNodes({
 }) {
   final nodes = List<MeshNode?>.filled(meshSlotCount, null);
   final roomLink = status?.maybeWhen(
-    reconnecting: () => MeshLink.rec,
+    reconnecting: (_, _) => MeshLink.rec,
     connecting: () => MeshLink.link,
     orElse: () => null,
   );
@@ -239,15 +241,16 @@ double meshAppearScale(double age) {
 double meshEdgeAlpha(double age) => (age * 1.4).clamp(0, 1).toDouble();
 
 /// Color de un nodo: la señal (como trazo, `signalFg`) para la persona
-/// propia y `p1`…`p5` según el lugar para las demás.
+/// propia y `p1`…`p5` para las demás en el orden en que se ocupan los
+/// lugares (el primero en llegar, arriba, es `p1`), como el prototipo.
 Color meshNodeColor(FrColors colors, MeshNode node) {
   if (node.isMe) return colors.signalFg;
   return switch (node.slot) {
-    1 => colors.p1,
-    2 => colors.p2,
-    3 => colors.p3,
-    4 => colors.p4,
-    5 => colors.p5,
+    3 => colors.p1,
+    1 => colors.p2,
+    5 => colors.p3,
+    2 => colors.p4,
+    4 => colors.p5,
     _ => colors.tx2,
   };
 }

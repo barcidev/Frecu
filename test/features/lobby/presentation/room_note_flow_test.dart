@@ -153,7 +153,7 @@ void main() {
         withProviders(
           MaterialApp(
             home: ScanQrPage(
-              scannerBuilder: (context, onScan) {
+              scannerBuilder: (context, onScan, _) {
                 triggerScan = onScan;
                 return const SizedBox(key: Key('scanner_stub'));
               },
@@ -185,53 +185,47 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets(
-      'AC4: al crear la frecu calcula su nota con las frecus cercanas y la '
-      'publica en el TXT de mDNS y en el QR',
-      (tester) async {
-        await pumpApp(tester);
+    testWidgets('AC4: al crear la frecu calcula su nota con las frecus cercanas y la '
+        'publica en el TXT de mDNS y en el QR', (tester) async {
+      await pumpApp(tester);
 
-        // Una frecu cercana ya usa Mi4, la nota de las 04:30: le toca Si4.
-        nearbyRoomsController.add([
-          const NearbyRoom(
-            roomId: 'room-vecina',
-            name: 'Frecu vecina',
-            hostAddress: '192.168.43.20',
-            port: 47800,
-            note: RoomNote(semitone: 4),
-          ),
-        ]);
-        await tester.pumpAndSettle();
+      // Una frecu cercana ya usa Mi4, la nota de las 04:30: le toca Si4.
+      nearbyRoomsController.add([
+        const NearbyRoom(
+          roomId: 'room-vecina',
+          name: 'Frecu vecina',
+          hostAddress: '192.168.43.20',
+          port: 47800,
+          note: RoomNote(semitone: 4),
+        ),
+      ]);
+      await tester.pumpAndSettle();
 
-        await tester.tap(find.text(t.lobby.createRoom));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(t.lobby.newRoom.guide.ready));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(t.lobby.newRoom.open));
-        await tester.pumpAndSettle();
+      await tester.tap(find.text(t.lobby.createRoom));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(t.lobby.newRoom.open));
+      await tester.pumpAndSettle();
 
-        expect(
-          activeRoom(tester, FrecuApp)?.note,
-          const RoomNote(semitone: 11),
-        );
-        verify(
-          () => discoveryRepository.publishRoom(
-            roomId: 'room-123',
-            name: 'Frecu',
-            port: 47800,
-            note: const RoomNote(semitone: 11),
-          ),
-        ).called(1);
+      expect(activeRoom(tester, FrecuApp)?.note, const RoomNote(semitone: 11));
+      verify(
+        () => discoveryRepository.publishRoom(
+          roomId: 'room-123',
+          name: 'Frecu',
+          port: 47800,
+          note: const RoomNote(semitone: 11),
+        ),
+      ).called(1);
 
-        await tester.tap(find.byKey(const Key('invite_button')));
-        await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('invite_button')));
+      await tester.pumpAndSettle();
 
-        expect(
-          tester.widget<InviteQr>(find.byType(InviteQr)).data,
-          'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=1234&n=11',
-        );
-      },
-    );
+      expect(
+        tester.widget<InviteQr>(find.byType(InviteQr)).data,
+        'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=1234&n=11&name=Frecu',
+      );
+    });
 
     testWidgets(
       'AC5: al unirse a una frecu descubierta por mDNS la frecu activa lleva '

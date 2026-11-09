@@ -47,7 +47,8 @@ void main() {
     });
 
     test(
-      'AC1: la persona propia va al lugar 0 y los demás al primer lugar libre',
+      'AC1: la persona propia va al lugar 0 y los demás al primer lugar libre '
+      'en el orden del prototipo: arriba (3), abajo a la izquierda (1)…',
       () {
         final slots = assignMeshSlots(
           previous: const {},
@@ -55,7 +56,7 @@ void main() {
           localId: 'p-1',
         );
 
-        expect(slots, {'p-1': 0, 'p-2': 1, 'p-3': 2});
+        expect(slots, {'p-1': 0, 'p-2': 3, 'p-3': 1});
       },
     );
 
@@ -64,17 +65,17 @@ void main() {
       'lugar libre',
       () {
         final slots = assignMeshSlots(
-          previous: const {'p-1': 0, 'p-2': 1, 'p-3': 2},
+          previous: const {'p-1': 0, 'p-2': 3, 'p-3': 1},
           participants: const [jorge, leo, sofi],
           localId: 'p-1',
         );
 
-        expect(slots, {'p-1': 0, 'p-3': 2, 'p-4': 1});
+        expect(slots, {'p-1': 0, 'p-3': 1, 'p-4': 3});
       },
     );
 
-    test('AC1: sin id propio los nodos llenan los lugares 1 a 5 y luego el 0, '
-        'hasta 6', () {
+    test('AC1: sin id propio los nodos llenan los lugares 3, 1, 5, 2 y 4 y '
+        'luego el 0, hasta 6', () {
       final many = List.generate(
         7,
         (i) => Participant(id: 'x$i', displayName: 'X$i'),
@@ -86,7 +87,7 @@ void main() {
         localId: null,
       );
 
-      expect(slots, {'x0': 1, 'x1': 2, 'x2': 3, 'x3': 4, 'x4': 5, 'x5': 0});
+      expect(slots, {'x0': 3, 'x1': 1, 'x2': 5, 'x3': 2, 'x4': 4, 'x5': 0});
     });
 
     test(
@@ -99,7 +100,7 @@ void main() {
           localId: 'p-1',
         );
 
-        expect(slots, {'p-1': 0, 'p-2': 1});
+        expect(slots, {'p-1': 0, 'p-2': 3});
       },
     );
 

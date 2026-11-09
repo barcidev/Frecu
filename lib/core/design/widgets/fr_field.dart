@@ -4,14 +4,18 @@ import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
+import 'package:frecu/core/design/tokens/fr_colors.dart';
+import 'package:frecu/core/design/tokens/fr_type.dart';
+import 'package:frecu/core/design/widgets/fr_specular.dart';
 
-/// Campo de texto de Portadora: etiqueta en mayúsculas, contador, foco con la
-/// señal y error con temblor.
+/// Campo de texto de Portadora: etiqueta en mayúsculas, contador dentro de
+/// la caja, foco con la señal y error con temblor.
 ///
-/// Con foco enciende el borde de señal (de día, el anillo `ledRing`) y abre
-/// una línea desde el centro. Con [error] pinta el borde y la ayuda en
-/// alerta y tiembla una vez; con movimiento reducido no tiembla y la línea
-/// aparece con un fundido.
+/// Dibuja su propia caja (`.field-box`): el `inputDecorationTheme` del tema
+/// no se cuela en el texto. Con foco enciende el borde de señal (de día, el
+/// anillo `ledRing`) y abre una línea desde el centro. Con [error] pinta el
+/// borde en alerta y la ayuda en `alertFg`, y tiembla una vez; con movimiento
+/// reducido no tiembla y la línea aparece con un fundido.
 class FrField extends StatefulWidget {
   /// Crea un campo con [label].
   const FrField({
@@ -70,10 +74,11 @@ class FrField extends StatefulWidget {
   /// Error bajo el campo; reemplaza a [help].
   final String? error;
 
-  /// Máximo de caracteres; muestra el contador `n/máx`.
+  /// Máximo de caracteres; muestra el contador `n/máx` a la derecha, dentro
+  /// de la caja.
   final int? maxLength;
 
-  /// Texto en Martian Mono (códigos e IP).
+  /// Texto en Martian Mono de 16 px (códigos e IP).
   final bool mono;
 
   /// Ícono de Material antes del texto; nulo si el campo se creó con
@@ -161,7 +166,10 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _header(fr),
+        Text(
+          widget.label.toUpperCase(),
+          style: fr.type.label.copyWith(color: fr.colors.tx3),
+        ),
         const SizedBox(height: _gap),
         AnimatedBuilder(
           animation: _shake,
@@ -176,33 +184,10 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
           Text(
             message,
             style: fr.type.bodyS.copyWith(
-              color: widget.error != null ? fr.colors.alert : fr.colors.tx3,
+              color: widget.error != null ? fr.colors.alertFg : fr.colors.tx3,
             ),
           ),
         ],
-      ],
-    );
-  }
-
-  Widget _header(FrTheme fr) {
-    final max = widget.maxLength;
-    final muted = fr.colors.tx3;
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            widget.label.toUpperCase(),
-            style: fr.type.label.copyWith(color: muted),
-          ),
-        ),
-        if (max != null)
-          ValueListenableBuilder<TextEditingValue>(
-            valueListenable: _controller,
-            builder: (context, value, _) => Text(
-              '${value.text.characters.length}/$max',
-              style: fr.type.labelS.copyWith(color: muted),
-            ),
-          ),
       ],
     );
   }
@@ -221,32 +206,41 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
     final glow = hasError
         ? c.alert.withValues(alpha: 0.08)
         : c.signal.withValues(alpha: _focused ? 0.07 : 0);
-    return AnimatedContainer(
-      key: const ValueKey('fr-field-box'),
-      duration: fr.motion.smooth,
-      curve: fr.motion.easeOut,
-      height: _boxHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: ShapeDecoration(
-        color: c.bg2,
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(fr.radii.m),
-          side: side,
-        ),
-        shadows: [BoxShadow(color: glow, spreadRadius: 4)],
+    final shape = RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.circular(fr.radii.m),
+      side: side,
+    );
+    // Filo especular arriba, salvo con error (`.field.error`). Va delante:
+    // el contenido, centrado, no llega al canto.
+    return CustomPaint(
+      foregroundPainter: FrSpecularPainter(
+        shape: shape,
+        color: hasError ? c.spec.withValues(alpha: 0) : c.spec,
       ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned.fill(child: _input(fr)),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: -1,
-            height: 2,
-            child: _line(fr),
-          ),
-        ],
+      child: AnimatedContainer(
+        key: const ValueKey('fr-field-box'),
+        duration: fr.motion.smooth,
+        curve: fr.motion.easeOut,
+        height: _boxHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: ShapeDecoration(
+          color: c.bg2,
+          shape: shape,
+          shadows: [BoxShadow(color: glow, spreadRadius: 4)],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned.fill(child: _input(fr)),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: -1,
+              height: 2,
+              child: _line(fr),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -255,9 +249,7 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
     final c = fr.colors;
     final max = widget.maxLength;
     final glyph = _glyph(c.tx3);
-    final style = (widget.mono ? fr.type.data : fr.type.bodyL).copyWith(
-      color: c.tx1,
-    );
+    final style = widget.mono ? _monoStyle(fr) : _textStyle(fr);
     return Row(
       children: [
         if (glyph != null) ...[glyph, const SizedBox(width: 10)],
@@ -275,15 +267,27 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
             ],
             style: style,
             cursorColor: c.signalFg,
-            decoration: InputDecoration.collapsed(
-              hintText: widget.hint,
+            decoration: _bareDecoration(
+              hint: widget.hint,
               hintStyle: style.copyWith(color: c.tx4),
             ),
           ),
         ),
+        if (max != null) ...[const SizedBox(width: 10), _counter(fr, max)],
       ],
     );
   }
+
+  /// Contador `n/máx` dentro de la caja, a la derecha (`.field-count`).
+  Widget _counter(FrTheme fr, int max) =>
+      ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _controller,
+        builder: (context, value, _) => Text(
+          '${value.text.characters.length}/$max',
+          key: const ValueKey('fr-field-count'),
+          style: _counterStyle(fr.type, fr.colors),
+        ),
+      );
 
   /// Ícono propio o de Material, a 18 px con [color].
   Widget? _glyph(Color color) {
@@ -329,6 +333,54 @@ class _FrFieldState extends State<FrField> with SingleTickerProviderStateMixin {
       ),
     );
   }
+
+  /// Texto normal del campo: Archivo de 17 px con peso 500 (`.field-box
+  /// input`).
+  static TextStyle _textStyle(FrTheme fr) => fr.type.bodyL.copyWith(
+    color: fr.colors.tx1,
+    fontWeight: FontWeight.w500,
+    fontVariations: const [FontVariation.weight(500), FontVariation.width(100)],
+  );
+
+  /// Texto mono del campo: Martian Mono de 16 px (`.field-box input.mono`).
+  static TextStyle _monoStyle(FrTheme fr) => fr.type.data.copyWith(
+    color: fr.colors.tx1,
+    fontSize: 16,
+    letterSpacing: 0.32,
+  );
+
+  /// Contador: Martian Mono de 11 px en `tx3` (`.field-count`).
+  static TextStyle _counterStyle(FrType type, FrColors colors) =>
+      type.data.copyWith(
+        color: colors.tx3,
+        fontSize: 11,
+        height: 1,
+        fontVariations: const [
+          FontVariation.weight(400),
+          FontVariation.width(100),
+        ],
+      );
+
+  /// Decoración sin caja propia: el campo pinta la suya, así que todos los
+  /// bordes y el relleno del `inputDecorationTheme` quedan apagados (con
+  /// `InputDecoration.collapsed`, los bordes del tema se colaban y pintaban
+  /// una segunda caja dentro).
+  static InputDecoration _bareDecoration({
+    String? hint,
+    TextStyle? hintStyle,
+  }) => InputDecoration(
+    hintText: hint,
+    hintStyle: hintStyle,
+    isCollapsed: true,
+    contentPadding: EdgeInsets.zero,
+    filled: false,
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
+    focusedBorder: InputBorder.none,
+    disabledBorder: InputBorder.none,
+    errorBorder: InputBorder.none,
+    focusedErrorBorder: InputBorder.none,
+  );
 
   /// Temblor de error (`@keyframes shake` del prototipo), en px.
   static Animatable<double> _shakeTween(Curve curve) => TweenSequence<double>([

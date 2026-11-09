@@ -45,6 +45,7 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$permissions$en permissions = _Translations$permissions$en._(_root);
 	@override late final _Translations$settings$en settings = _Translations$settings$en._(_root);
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
+	@override late final _Translations$splash$en splash = _Translations$splash$en._(_root);
 }
 
 // Path: app
@@ -73,6 +74,7 @@ class _Translations$lobby$en extends Translations$lobby$es {
 	@override String get joinRoom => 'Connect by IP';
 	@override String get nearbyRooms => 'Nearby rooms';
 	@override String get accessCode => 'Access code';
+	@override String get unnamedRoom => 'Unnamed room';
 	@override late final _Translations$lobby$network$en network = _Translations$lobby$network$en._(_root);
 	@override late final _Translations$lobby$tuner$en tuner = _Translations$lobby$tuner$en._(_root);
 	@override late final _Translations$lobby$empty$en empty = _Translations$lobby$empty$en._(_root);
@@ -135,6 +137,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override late final _Translations$room$sheets$en sheets = _Translations$room$sheets$en._(_root);
 	@override late final _Translations$room$closure$en closure = _Translations$room$closure$en._(_root);
 	@override late final _Translations$room$talk$en talk = _Translations$room$talk$en._(_root);
+	@override late final _Translations$room$notification$en notification = _Translations$room$notification$en._(_root);
 }
 
 // Path: permissions
@@ -189,7 +192,8 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override String get themeHelp => 'Auto follows your phone';
 	@override late final _Translations$settings$themeMode$en themeMode = _Translations$settings$themeMode$en._(_root);
 	@override String get saveError => 'Couldn\'t save';
-	@override String get footer => '100% local · no internet';
+	@override String footer({required Object app}) => '${app} · 100% local · no internet';
+	@override String appVersion({required Object version}) => 'Frecu ${version}';
 }
 
 // Path: errors
@@ -204,8 +208,24 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get roomFull => 'Room is full (max 6 participants)';
 	@override String get invalidAccessCode => 'Invalid access code';
 	@override String get hostUnreachable => 'Host is unreachable';
+	@override String get versionMismatch => 'This frecu uses another version of Frecu';
 	@override String get audio => 'Audio subsystem error';
 	@override String get unexpected => 'Unexpected error';
+}
+
+// Path: splash
+class _Translations$splash$en extends Translations$splash$es {
+	_Translations$splash$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'frecu';
+	@override String get tagline => 'Group voice. No internet.';
+	@override String version({required Object version}) => 'v${version}';
+	@override String get localNetwork => 'Local network';
+	@override String get mesh => 'P2P mesh';
+	@override String get skip => 'Tap to enter';
 }
 
 // Path: lobby.join
@@ -220,6 +240,13 @@ class _Translations$lobby$join$en extends Translations$lobby$join$es {
 	@override String get wrongCode => 'Wrong code. Check it and try again.';
 	@override String get roomFullHint => 'You can join when someone leaves.';
 	@override String get unreachableHint => 'Make sure you\'re on the same Wi-Fi network.';
+	@override String get defaultName => 'Participant';
+	@override String full({required Object max}) => 'This room is full (${max}/${max}).';
+	@override String get unreachable => 'The host isn\'t responding.';
+	@override String get failed => 'Couldn\'t join the room.';
+	@override String get failedHint => 'Make sure you\'re on the same Wi-Fi network and try again.';
+	@override String get versionMismatch => 'This frecu uses another version of Frecu.';
+	@override String get versionMismatchHint => 'Update Frecu on both phones.';
 	@override late final _Translations$lobby$join$pin$en pin = _Translations$lobby$join$pin$en._(_root);
 	@override late final _Translations$lobby$join$ip$en ip = _Translations$lobby$join$ip$en._(_root);
 	@override late final _Translations$lobby$join$scan$en scan = _Translations$lobby$join$scan$en._(_root);
@@ -262,6 +289,7 @@ class _Translations$lobby$empty$en extends Translations$lobby$empty$es {
 	@override String get title => 'No signals yet';
 	@override String get message => 'Join the host\'s Wi-Fi or ask them to show you their QR.';
 	@override String get searching => 'Still searching';
+	@override String get failed => 'Search failed · retrying';
 }
 
 // Path: lobby.offline
@@ -273,6 +301,7 @@ class _Translations$lobby$offline$en extends Translations$lobby$offline$es {
 	// Translations
 	@override String get title => 'You\'re not on any Wi-Fi network.';
 	@override String get message => 'Join the host\'s hotspot to find rooms.';
+	@override String get openSettings => 'Open Wi-Fi settings';
 }
 
 // Path: lobby.newRoom
@@ -375,6 +404,22 @@ class _Translations$room$talk$en extends Translations$room$talk$es {
 	@override late final _Translations$room$talk$hint$en hint = _Translations$room$talk$hint$en._(_root);
 	@override late final _Translations$room$talk$island$en island = _Translations$room$talk$island$en._(_root);
 	@override late final _Translations$room$talk$echo$en echo = _Translations$room$talk$echo$en._(_root);
+	@override late final _Translations$room$talk$mic$en mic = _Translations$room$talk$mic$en._(_root);
+}
+
+// Path: room.notification
+class _Translations$room$notification$en extends Translations$room$notification$es {
+	_Translations$room$notification$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get channelName => 'Frecu in the background';
+	@override String get channelDescription => 'Keeps the Frecu connection alive with the screen off.';
+	@override String get title => 'Frecu active';
+	@override String connected({required Object room}) => '${room} · Connected';
+	@override String reconnecting({required Object room}) => '${room} · Reconnecting…';
+	@override String get leave => 'Leave the room';
 }
 
 // Path: permissions.welcome
@@ -512,6 +557,7 @@ class _Translations$lobby$join$ip$en extends Translations$lobby$join$ip$es {
 	@override String get message => 'Use it if the room isn\'t on the list.';
 	@override String get host => 'Host IP';
 	@override String noAnswer({required Object port}) => 'No answer on port ${port}';
+	@override String invalid({required Object ip}) => 'Enter an IP like ${ip}.';
 	@override String get connect => 'Connect';
 }
 
@@ -531,6 +577,8 @@ class _Translations$lobby$join$scan$en extends Translations$lobby$join$scan$es {
 	@override String get found => 'Room found';
 	@override String get noNote => 'Room without a note';
 	@override String get join => 'Join';
+	@override String get another => 'Scan another QR';
+	@override late final _Translations$lobby$join$scan$camera$en camera = _Translations$lobby$join$scan$camera$en._(_root);
 }
 
 // Path: lobby.newRoom.guide
@@ -557,6 +605,8 @@ class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$gu
 	];
 	@override String get ready => 'It\'s on';
 	@override String get sameWifi => 'We\'re already on the same Wi-Fi';
+	@override String get openSettings => 'Open hotspot settings';
+	@override String get openSettingsIphone => 'Open Settings';
 }
 
 // Path: room.sheets.invite
@@ -591,6 +641,7 @@ class _Translations$room$sheets$route$en extends Translations$room$sheets$route$
 	@override String get earpieceSub => 'Phone to your ear';
 	@override String get bluetoothOn => 'Connected';
 	@override String get bluetoothOff => 'No device';
+	@override String get bluetoothDevice => 'Bluetooth · connected';
 	@override String label({required Object route}) => 'Audio output: ${route}';
 }
 
@@ -659,6 +710,11 @@ class _Translations$room$talk$island$en extends Translations$room$talk$island$es
 	@override String get waiting => 'On air · waiting for your group';
 	@override String get connecting => 'Connecting…';
 	@override String get reconnecting => 'Reconnecting…';
+	@override String reconnectingIn({required Object seconds}) => 'Reconnecting · ${seconds} s';
+	@override String joined({required Object name}) => '${name} joined';
+	@override String left({required Object name}) => '${name} left';
+	@override String route({required Object route}) => 'Audio via ${route}';
+	@override String get recovered => 'Connection restored';
 }
 
 // Path: room.talk.echo
@@ -671,6 +727,33 @@ class _Translations$room$talk$echo$en extends Translations$room$talk$echo$es {
 	@override String get title => 'Open mic on speaker.';
 	@override String get message => 'Use headphones to avoid echo.';
 	@override String get dismiss => 'Dismiss notice';
+}
+
+// Path: room.talk.mic
+class _Translations$room$talk$mic$en extends Translations$room$talk$mic$es {
+	_Translations$room$talk$mic$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Your microphone isn\'t available.';
+	@override String get message => 'You can hear your group, but nobody can hear you. Check the permission in Settings.';
+	@override String get settings => 'Open settings';
+	@override String get dismiss => 'Dismiss notice';
+}
+
+// Path: lobby.join.scan.camera
+class _Translations$lobby$join$scan$camera$en extends Translations$lobby$join$scan$camera$es {
+	_Translations$lobby$join$scan$camera$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get deniedTitle => 'Frecu can\'t use the camera.';
+	@override String get deniedMessage => 'Allow it in Settings to scan the invite, or connect by IP.';
+	@override String get unavailableTitle => 'The camera isn\'t available.';
+	@override String get unavailableMessage => 'You can join with the host\'s IP.';
+	@override String get openSettings => 'Open settings';
 }
 
 // Path: lobby.newRoom.guide.androidSteps.0
@@ -754,6 +837,13 @@ extension on TranslationsEn {
 			'lobby.join.wrongCode' => 'Wrong code. Check it and try again.',
 			'lobby.join.roomFullHint' => 'You can join when someone leaves.',
 			'lobby.join.unreachableHint' => 'Make sure you\'re on the same Wi-Fi network.',
+			'lobby.join.defaultName' => 'Participant',
+			'lobby.join.full' => ({required Object max}) => 'This room is full (${max}/${max}).',
+			'lobby.join.unreachable' => 'The host isn\'t responding.',
+			'lobby.join.failed' => 'Couldn\'t join the room.',
+			'lobby.join.failedHint' => 'Make sure you\'re on the same Wi-Fi network and try again.',
+			'lobby.join.versionMismatch' => 'This frecu uses another version of Frecu.',
+			'lobby.join.versionMismatchHint' => 'Update Frecu on both phones.',
 			'lobby.join.pin.message' => 'Enter the access code. Ask the host for it.',
 			'lobby.join.pin.autoSend' => 'Sent once all 4 digits are in',
 			'lobby.join.pin.checking' => 'Checking with the host…',
@@ -764,6 +854,7 @@ extension on TranslationsEn {
 			'lobby.join.ip.message' => 'Use it if the room isn\'t on the list.',
 			'lobby.join.ip.host' => 'Host IP',
 			'lobby.join.ip.noAnswer' => ({required Object port}) => 'No answer on port ${port}',
+			'lobby.join.ip.invalid' => ({required Object ip}) => 'Enter an IP like ${ip}.',
 			'lobby.join.ip.connect' => 'Connect',
 			'lobby.join.scan.title' => 'Scan invite',
 			'lobby.join.scan.subtitle' => 'Room QR',
@@ -774,6 +865,12 @@ extension on TranslationsEn {
 			'lobby.join.scan.found' => 'Room found',
 			'lobby.join.scan.noNote' => 'Room without a note',
 			'lobby.join.scan.join' => 'Join',
+			'lobby.join.scan.another' => 'Scan another QR',
+			'lobby.join.scan.camera.deniedTitle' => 'Frecu can\'t use the camera.',
+			'lobby.join.scan.camera.deniedMessage' => 'Allow it in Settings to scan the invite, or connect by IP.',
+			'lobby.join.scan.camera.unavailableTitle' => 'The camera isn\'t available.',
+			'lobby.join.scan.camera.unavailableMessage' => 'You can join with the host\'s IP.',
+			'lobby.join.scan.camera.openSettings' => 'Open settings',
 			'lobby.settings' => 'Settings',
 			'lobby.heading' => 'Pick your room',
 			'lobby.createRoom' => 'Create room',
@@ -781,6 +878,7 @@ extension on TranslationsEn {
 			'lobby.joinRoom' => 'Connect by IP',
 			'lobby.nearbyRooms' => 'Nearby rooms',
 			'lobby.accessCode' => 'Access code',
+			'lobby.unnamedRoom' => 'Unnamed room',
 			'lobby.network.checking' => 'Checking network',
 			'lobby.network.connected' => ({required Object ip}) => 'Network · ${ip}',
 			'lobby.network.offline' => 'No local network',
@@ -790,8 +888,10 @@ extension on TranslationsEn {
 			'lobby.empty.title' => 'No signals yet',
 			'lobby.empty.message' => 'Join the host\'s Wi-Fi or ask them to show you their QR.',
 			'lobby.empty.searching' => 'Still searching',
+			'lobby.empty.failed' => 'Search failed · retrying',
 			'lobby.offline.title' => 'You\'re not on any Wi-Fi network.',
 			'lobby.offline.message' => 'Join the host\'s hotspot to find rooms.',
+			'lobby.offline.openSettings' => 'Open Wi-Fi settings',
 			'lobby.newRoom.back' => 'Back',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Step ${current} of ${total}',
 			'lobby.newRoom.guide.title' => 'Set up the network',
@@ -813,6 +913,8 @@ extension on TranslationsEn {
 			'lobby.newRoom.guide.iphoneSteps.2.rest' => ' while they join. On iPhone we recommend that the host uses Android.',
 			'lobby.newRoom.guide.ready' => 'It\'s on',
 			'lobby.newRoom.guide.sameWifi' => 'We\'re already on the same Wi-Fi',
+			'lobby.newRoom.guide.openSettings' => 'Open hotspot settings',
+			'lobby.newRoom.guide.openSettingsIphone' => 'Open Settings',
 			'lobby.newRoom.title' => 'New room',
 			'lobby.newRoom.soundsIn' => 'Your room sounds in',
 			'lobby.newRoom.openedAt' => ({required Object time}) => 'Opened at ${time}',
@@ -894,6 +996,7 @@ extension on TranslationsEn {
 			'room.sheets.route.earpieceSub' => 'Phone to your ear',
 			'room.sheets.route.bluetoothOn' => 'Connected',
 			'room.sheets.route.bluetoothOff' => 'No device',
+			'room.sheets.route.bluetoothDevice' => 'Bluetooth · connected',
 			'room.sheets.route.label' => ({required Object route}) => 'Audio output: ${route}',
 			'room.sheets.leave.peerTitle' => 'Leave the frecu?',
 			'room.sheets.leave.peerMessage' => 'You can join again with the access code.',
@@ -938,9 +1041,24 @@ extension on TranslationsEn {
 			'room.talk.island.waiting' => 'On air · waiting for your group',
 			'room.talk.island.connecting' => 'Connecting…',
 			'room.talk.island.reconnecting' => 'Reconnecting…',
+			'room.talk.island.reconnectingIn' => ({required Object seconds}) => 'Reconnecting · ${seconds} s',
+			'room.talk.island.joined' => ({required Object name}) => '${name} joined',
+			'room.talk.island.left' => ({required Object name}) => '${name} left',
+			'room.talk.island.route' => ({required Object route}) => 'Audio via ${route}',
+			'room.talk.island.recovered' => 'Connection restored',
 			'room.talk.echo.title' => 'Open mic on speaker.',
 			'room.talk.echo.message' => 'Use headphones to avoid echo.',
 			'room.talk.echo.dismiss' => 'Dismiss notice',
+			'room.talk.mic.title' => 'Your microphone isn\'t available.',
+			'room.talk.mic.message' => 'You can hear your group, but nobody can hear you. Check the permission in Settings.',
+			'room.talk.mic.settings' => 'Open settings',
+			'room.talk.mic.dismiss' => 'Dismiss notice',
+			'room.notification.channelName' => 'Frecu in the background',
+			'room.notification.channelDescription' => 'Keeps the Frecu connection alive with the screen off.',
+			'room.notification.title' => 'Frecu active',
+			'room.notification.connected' => ({required Object room}) => '${room} · Connected',
+			'room.notification.reconnecting' => ({required Object room}) => '${room} · Reconnecting…',
+			'room.notification.leave' => 'Leave the room',
 			'permissions.back' => 'Back',
 			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
 			'permissions.welcome.kicker' => 'No internet · no coverage',
@@ -1006,14 +1124,22 @@ extension on TranslationsEn {
 			'settings.themeMode.light' => 'Light',
 			'settings.themeMode.dark' => 'Dark',
 			'settings.saveError' => 'Couldn\'t save',
-			'settings.footer' => '100% local · no internet',
+			'settings.footer' => ({required Object app}) => '${app} · 100% local · no internet',
+			'settings.appVersion' => ({required Object version}) => 'Frecu ${version}',
 			'errors.network' => 'Local network error',
 			'errors.permissionDenied' => 'Required permission denied',
 			'errors.roomFull' => 'Room is full (max 6 participants)',
 			'errors.invalidAccessCode' => 'Invalid access code',
 			'errors.hostUnreachable' => 'Host is unreachable',
+			'errors.versionMismatch' => 'This frecu uses another version of Frecu',
 			'errors.audio' => 'Audio subsystem error',
 			'errors.unexpected' => 'Unexpected error',
+			'splash.title' => 'frecu',
+			'splash.tagline' => 'Group voice. No internet.',
+			'splash.version' => ({required Object version}) => 'v${version}',
+			'splash.localNetwork' => 'Local network',
+			'splash.mesh' => 'P2P mesh',
+			'splash.skip' => 'Tap to enter',
 			_ => null,
 		};
 	}

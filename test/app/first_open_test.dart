@@ -1,7 +1,7 @@
 // AC1: CUANDO la app se abre sin nombre guardado ENTONCES muestra la bienvenida del recorrido de la primera vez en lugar del inicio.
-// AC2: CUANDO la app se abre con el nombre guardado y algún permiso del recorrido por pedir ENTONCES muestra la bienvenida del recorrido, y su paso del nombre trae el nombre guardado ya escrito.
-// AC3: CUANDO la app se abre con el nombre guardado y los permisos del recorrido concedidos o negados para siempre ENTONCES va directo al inicio, sin la bienvenida.
-// AC4: CUANDO el recorrido termina, aunque se haya negado algún permiso ENTONCES el inicio queda como única pantalla y el recorrido no se vuelve a abrir mientras la app siga abierta, tampoco al volver al inicio.
+// AC2: CUANDO la app se abre con el nombre guardado pero sin haber completado el recorrido (sin pulsar Continuar en los permisos) ENTONCES muestra la bienvenida del recorrido, y su paso del nombre trae el nombre guardado ya escrito.
+// AC3: CUANDO la app se abre con el nombre guardado y el recorrido completado ENTONCES va directo al inicio, sin la bienvenida, aunque algún permiso siga negado o por pedir (Android responde `denied` al consultar un permiso negado, nunca `permanentlyDenied`).
+// AC4: CUANDO el recorrido termina con Continuar, aunque se haya negado algún permiso ENTONCES se guarda que se completó, el inicio queda como única pantalla y el recorrido no se vuelve a abrir mientras la app siga abierta, tampoco al volver al inicio ni al volver a abrir la app.
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
@@ -16,6 +16,7 @@ import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/pages/lobby_page.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/permissions/data/repositories/onboarding_repository_impl.dart';
 import 'package:frecu/features/permissions/domain/entities/app_permission.dart';
 import 'package:frecu/features/permissions/domain/repositories/permission_repository.dart';
 import 'package:frecu/features/permissions/presentation/providers/permission_provider.dart';
@@ -40,9 +41,10 @@ const _allGranted = {
   _notification: AppPermissionStatus.granted,
 };
 
-/// Permisos del teléfono en memoria: [current] es lo que lee `checkStatus`
-/// (`denied`, por pedir, si falta) y [answers] lo que responde la persona al
-/// pedirlos (concedido si falta).
+/// Permisos de un Android en memoria: [current] es lo que lee `checkStatus`
+/// (`denied`, por pedir, si falta: Android nunca informa `permanentlyDenied`
+/// al consultar) y [answers] lo que responde la persona al pedirlos
+/// (concedido si falta).
 class _FakePermissions implements PermissionRepository {
   _FakePermissions({
     Map<AppPermission, AppPermissionStatus>? current,
@@ -56,7 +58,15 @@ class _FakePermissions implements PermissionRepository {
   @override
   Future<Result<AppPermissionStatus>> checkStatus(
     AppPermission permission,
-  ) async => Result.success(current[permission] ?? AppPermissionStatus.denied);
+  ) async {
+    final status = current[permission] ?? AppPermissionStatus.denied;
+    // Como en Android: lo negado para siempre se lee como `denied`.
+    return Result.success(
+      status == AppPermissionStatus.permanentlyDenied
+          ? AppPermissionStatus.denied
+          : status,
+    );
+  }
 
   @override
   Future<Result<AppPermissionStatus>> request(AppPermission permission) async {
@@ -79,13 +89,22 @@ class _FakePermissions implements PermissionRepository {
 
 class _MockDiscoveryRepository extends Mock implements DiscoveryRepository {}
 
-/// Abre la app como al arrancar (preferencias ya leídas y sin router
-/// inyectado) en un teléfono de 390 × 844 con movimiento reducido, con [name]
-/// guardado y los [permissions] del teléfono.
+/// Guarda en el almacenamiento en memoria el [name] y, si [completed], que el
+/// recorrido ya se completó.
+void _useStorage({String? name, bool completed = false}) {
+  SharedPreferencesAsyncPlatform.instance =
+      InMemorySharedPreferencesAsync.withData({
+        if (name != null) PreferencesRepositoryImpl.displayNameKey: name,
+        if (completed) OnboardingRepositoryImpl.completedKey: true,
+      });
+}
+
+/// Abre la app como al arrancar (preferencias ya leídas, sin router inyectado
+/// y sin la intro) en un teléfono de 390 × 844 con movimiento reducido, con
+/// lo guardado en el almacenamiento y los [permissions] del teléfono.
 Future<void> _openApp(
   WidgetTester tester, {
   required _FakePermissions permissions,
-  String? name,
 }) async {
   tester.view
     ..physicalSize = const Size(1170, 2532)
@@ -96,10 +115,6 @@ Future<void> _openApp(
   tester.platformDispatcher.accessibilityFeaturesTestValue =
       const FakeAccessibilityFeatures(disableAnimations: true);
   addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
-  SharedPreferencesAsyncPlatform.instance =
-      InMemorySharedPreferencesAsync.withData({
-        if (name != null) PreferencesRepositoryImpl.displayNameKey: name,
-      });
 
   final discovery = _MockDiscoveryRepository();
   when(discovery.watchNearbyRooms)
@@ -119,7 +134,7 @@ Future<void> _openApp(
     TranslationProvider(
       child: UncontrolledProviderScope(
         container: container,
-        child: const FrecuApp(),
+        child: const FrecuApp(showIntro: false),
       ),
     ),
   );
@@ -153,6 +168,7 @@ void main() {
     testWidgets('AC1: sin nombre guardado abre la bienvenida y no el inicio', (
       tester,
     ) async {
+      _useStorage();
       await _openApp(
         tester,
         permissions: _FakePermissions(current: _allGranted),
@@ -164,19 +180,13 @@ void main() {
     });
 
     testWidgets(
-      'AC2: con nombre y un permiso por pedir abre la bienvenida y el paso '
-      'del nombre trae el guardado',
+      'AC2: con nombre y el recorrido sin completar abre la bienvenida y el '
+      'paso del nombre trae el guardado',
       (tester) async {
+        _useStorage(name: 'Ana');
         await _openApp(
           tester,
-          name: 'Ana',
-          permissions: _FakePermissions(
-            current: {
-              _microphone: AppPermissionStatus.granted,
-              _nearby: AppPermissionStatus.granted,
-              _notification: AppPermissionStatus.denied,
-            },
-          ),
+          permissions: _FakePermissions(current: _allGranted),
         );
 
         expect(find.byType(WelcomeStep), findsOneWidget);
@@ -192,11 +202,11 @@ void main() {
     );
 
     testWidgets(
-      'AC3: con nombre y los permisos concedidos va directo al inicio',
+      'AC3: con nombre y el recorrido completado va directo al inicio',
       (tester) async {
+        _useStorage(name: 'Ana', completed: true);
         await _openApp(
           tester,
-          name: 'Ana',
           permissions: _FakePermissions(current: _allGranted),
         );
 
@@ -207,16 +217,17 @@ void main() {
     );
 
     testWidgets(
-      'AC3: con nombre y un permiso negado para siempre va directo al inicio',
+      'AC3: con el recorrido completado y permisos que Android lee como por '
+      'pedir va directo al inicio',
       (tester) async {
+        _useStorage(name: 'Ana', completed: true);
         await _openApp(
           tester,
-          name: 'Ana',
           permissions: _FakePermissions(
             current: {
-              _microphone: AppPermissionStatus.granted,
+              _microphone: AppPermissionStatus.permanentlyDenied,
               _nearby: AppPermissionStatus.granted,
-              _notification: AppPermissionStatus.permanentlyDenied,
+              _notification: AppPermissionStatus.denied,
             },
           ),
         );
@@ -228,14 +239,13 @@ void main() {
 
     testWidgets(
       'AC4: al terminar el recorrido con un permiso negado queda el inicio y '
-      'no vuelve a abrirse',
+      'no vuelve a abrirse, tampoco al volver a abrir la app',
       (tester) async {
-        await _openApp(
-          tester,
-          permissions: _FakePermissions(
-            answers: {_notification: AppPermissionStatus.denied},
-          ),
+        _useStorage();
+        final permissions = _FakePermissions(
+          answers: {_notification: AppPermissionStatus.denied},
         );
+        await _openApp(tester, permissions: permissions);
 
         await _tapAndSettle(
           tester,
@@ -265,6 +275,14 @@ void main() {
         expect(find.byType(LobbyPage), findsOneWidget);
         expect(find.byType(WelcomeStep), findsNothing);
         expect(_routerOf(tester).stack, hasLength(1));
+
+        // Al volver a abrir la app (mismo almacenamiento, notificaciones aún
+        // por pedir según Android) va directo al inicio.
+        await tester.pumpWidget(const SizedBox());
+        await _openApp(tester, permissions: permissions);
+
+        expect(find.byType(LobbyPage), findsOneWidget);
+        expect(find.byType(WelcomeStep), findsNothing);
       },
     );
   });

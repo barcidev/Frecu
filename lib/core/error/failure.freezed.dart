@@ -55,7 +55,7 @@ extension FailurePatterns on Failure {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _NetworkFailure value)?  network,TResult Function( _PermissionDeniedFailure value)?  permissionDenied,TResult Function( _RoomFullFailure value)?  roomFull,TResult Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult Function( _HostUnreachableFailure value)?  hostUnreachable,TResult Function( _AudioFailure value)?  audio,TResult Function( _UnexpectedFailure value)?  unexpected,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _NetworkFailure value)?  network,TResult Function( _PermissionDeniedFailure value)?  permissionDenied,TResult Function( _RoomFullFailure value)?  roomFull,TResult Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult Function( _HostUnreachableFailure value)?  hostUnreachable,TResult Function( _VersionMismatchFailure value)?  versionMismatch,TResult Function( _AudioFailure value)?  audio,TResult Function( _UnexpectedFailure value)?  unexpected,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
@@ -63,7 +63,8 @@ return network(_that);case _PermissionDeniedFailure() when permissionDenied != n
 return permissionDenied(_that);case _RoomFullFailure() when roomFull != null:
 return roomFull(_that);case _InvalidAccessCodeFailure() when invalidAccessCode != null:
 return invalidAccessCode(_that);case _HostUnreachableFailure() when hostUnreachable != null:
-return hostUnreachable(_that);case _AudioFailure() when audio != null:
+return hostUnreachable(_that);case _VersionMismatchFailure() when versionMismatch != null:
+return versionMismatch(_that);case _AudioFailure() when audio != null:
 return audio(_that);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that);case _:
   return orElse();
@@ -83,7 +84,7 @@ return unexpected(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _NetworkFailure value)  network,required TResult Function( _PermissionDeniedFailure value)  permissionDenied,required TResult Function( _RoomFullFailure value)  roomFull,required TResult Function( _InvalidAccessCodeFailure value)  invalidAccessCode,required TResult Function( _HostUnreachableFailure value)  hostUnreachable,required TResult Function( _AudioFailure value)  audio,required TResult Function( _UnexpectedFailure value)  unexpected,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _NetworkFailure value)  network,required TResult Function( _PermissionDeniedFailure value)  permissionDenied,required TResult Function( _RoomFullFailure value)  roomFull,required TResult Function( _InvalidAccessCodeFailure value)  invalidAccessCode,required TResult Function( _HostUnreachableFailure value)  hostUnreachable,required TResult Function( _VersionMismatchFailure value)  versionMismatch,required TResult Function( _AudioFailure value)  audio,required TResult Function( _UnexpectedFailure value)  unexpected,}){
 final _that = this;
 switch (_that) {
 case _NetworkFailure():
@@ -91,7 +92,8 @@ return network(_that);case _PermissionDeniedFailure():
 return permissionDenied(_that);case _RoomFullFailure():
 return roomFull(_that);case _InvalidAccessCodeFailure():
 return invalidAccessCode(_that);case _HostUnreachableFailure():
-return hostUnreachable(_that);case _AudioFailure():
+return hostUnreachable(_that);case _VersionMismatchFailure():
+return versionMismatch(_that);case _AudioFailure():
 return audio(_that);case _UnexpectedFailure():
 return unexpected(_that);}
 }
@@ -107,7 +109,7 @@ return unexpected(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _NetworkFailure value)?  network,TResult? Function( _PermissionDeniedFailure value)?  permissionDenied,TResult? Function( _RoomFullFailure value)?  roomFull,TResult? Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult? Function( _HostUnreachableFailure value)?  hostUnreachable,TResult? Function( _AudioFailure value)?  audio,TResult? Function( _UnexpectedFailure value)?  unexpected,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _NetworkFailure value)?  network,TResult? Function( _PermissionDeniedFailure value)?  permissionDenied,TResult? Function( _RoomFullFailure value)?  roomFull,TResult? Function( _InvalidAccessCodeFailure value)?  invalidAccessCode,TResult? Function( _HostUnreachableFailure value)?  hostUnreachable,TResult? Function( _VersionMismatchFailure value)?  versionMismatch,TResult? Function( _AudioFailure value)?  audio,TResult? Function( _UnexpectedFailure value)?  unexpected,}){
 final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
@@ -115,7 +117,8 @@ return network(_that);case _PermissionDeniedFailure() when permissionDenied != n
 return permissionDenied(_that);case _RoomFullFailure() when roomFull != null:
 return roomFull(_that);case _InvalidAccessCodeFailure() when invalidAccessCode != null:
 return invalidAccessCode(_that);case _HostUnreachableFailure() when hostUnreachable != null:
-return hostUnreachable(_that);case _AudioFailure() when audio != null:
+return hostUnreachable(_that);case _VersionMismatchFailure() when versionMismatch != null:
+return versionMismatch(_that);case _AudioFailure() when audio != null:
 return audio(_that);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that);case _:
   return null;
@@ -134,14 +137,15 @@ return unexpected(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  network,TResult Function( String? permission)?  permissionDenied,TResult Function()?  roomFull,TResult Function()?  invalidAccessCode,TResult Function()?  hostUnreachable,TResult Function( String? message)?  audio,TResult Function( String? message,  Object? error)?  unexpected,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  network,TResult Function( String? permission)?  permissionDenied,TResult Function()?  roomFull,TResult Function()?  invalidAccessCode,TResult Function()?  hostUnreachable,TResult Function()?  versionMismatch,TResult Function( String? message)?  audio,TResult Function( String? message,  Object? error)?  unexpected,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
 return network(_that.message);case _PermissionDeniedFailure() when permissionDenied != null:
 return permissionDenied(_that.permission);case _RoomFullFailure() when roomFull != null:
 return roomFull();case _InvalidAccessCodeFailure() when invalidAccessCode != null:
 return invalidAccessCode();case _HostUnreachableFailure() when hostUnreachable != null:
-return hostUnreachable();case _AudioFailure() when audio != null:
+return hostUnreachable();case _VersionMismatchFailure() when versionMismatch != null:
+return versionMismatch();case _AudioFailure() when audio != null:
 return audio(_that.message);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that.message,_that.error);case _:
   return orElse();
@@ -161,14 +165,15 @@ return unexpected(_that.message,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  network,required TResult Function( String? permission)  permissionDenied,required TResult Function()  roomFull,required TResult Function()  invalidAccessCode,required TResult Function()  hostUnreachable,required TResult Function( String? message)  audio,required TResult Function( String? message,  Object? error)  unexpected,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  network,required TResult Function( String? permission)  permissionDenied,required TResult Function()  roomFull,required TResult Function()  invalidAccessCode,required TResult Function()  hostUnreachable,required TResult Function()  versionMismatch,required TResult Function( String? message)  audio,required TResult Function( String? message,  Object? error)  unexpected,}) {final _that = this;
 switch (_that) {
 case _NetworkFailure():
 return network(_that.message);case _PermissionDeniedFailure():
 return permissionDenied(_that.permission);case _RoomFullFailure():
 return roomFull();case _InvalidAccessCodeFailure():
 return invalidAccessCode();case _HostUnreachableFailure():
-return hostUnreachable();case _AudioFailure():
+return hostUnreachable();case _VersionMismatchFailure():
+return versionMismatch();case _AudioFailure():
 return audio(_that.message);case _UnexpectedFailure():
 return unexpected(_that.message,_that.error);}
 }
@@ -184,14 +189,15 @@ return unexpected(_that.message,_that.error);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  network,TResult? Function( String? permission)?  permissionDenied,TResult? Function()?  roomFull,TResult? Function()?  invalidAccessCode,TResult? Function()?  hostUnreachable,TResult? Function( String? message)?  audio,TResult? Function( String? message,  Object? error)?  unexpected,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  network,TResult? Function( String? permission)?  permissionDenied,TResult? Function()?  roomFull,TResult? Function()?  invalidAccessCode,TResult? Function()?  hostUnreachable,TResult? Function()?  versionMismatch,TResult? Function( String? message)?  audio,TResult? Function( String? message,  Object? error)?  unexpected,}) {final _that = this;
 switch (_that) {
 case _NetworkFailure() when network != null:
 return network(_that.message);case _PermissionDeniedFailure() when permissionDenied != null:
 return permissionDenied(_that.permission);case _RoomFullFailure() when roomFull != null:
 return roomFull();case _InvalidAccessCodeFailure() when invalidAccessCode != null:
 return invalidAccessCode();case _HostUnreachableFailure() when hostUnreachable != null:
-return hostUnreachable();case _AudioFailure() when audio != null:
+return hostUnreachable();case _VersionMismatchFailure() when versionMismatch != null:
+return versionMismatch();case _AudioFailure() when audio != null:
 return audio(_that.message);case _UnexpectedFailure() when unexpected != null:
 return unexpected(_that.message,_that.error);case _:
   return null;
@@ -421,6 +427,38 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'Failure.hostUnreachable()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _VersionMismatchFailure implements Failure {
+  const _VersionMismatchFailure();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VersionMismatchFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'Failure.versionMismatch()';
 }
 
 

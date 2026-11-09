@@ -240,10 +240,12 @@ class _RoomMeshState extends State<RoomMesh> {
       key: ValueKey('mesh_free_label_$slot'),
       center: center,
       top: 30,
+      // «LIBRE» en mayúsculas y espaciado de etiqueta (`.nl.free b`).
       child: MeshLabel(
-        name: t.room.mesh.free,
+        name: t.room.mesh.free.toUpperCase(),
         nameColor: colors.tx4,
         nameWeight: FontWeight.w500,
+        nameSpacing: 1.25,
       ),
     ),
     Positioned(

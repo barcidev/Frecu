@@ -16,6 +16,9 @@ sealed class RoomInvite with _$RoomInvite {
 
     /// Nota musical de la frecu; nula si la invitación no la trae.
     @RoomNoteConverter() RoomNote? note,
+
+    /// Nombre de la frecu; nulo si la invitación no lo trae (QR anteriores).
+    String? name,
   }) = _RoomInvite;
 
   /// Deserializa desde JSON.

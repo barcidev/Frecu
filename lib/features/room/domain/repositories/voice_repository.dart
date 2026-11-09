@@ -1,11 +1,28 @@
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 
 /// Contrato del repositorio para la captura, transmisión y gestión de voz.
 abstract interface class VoiceRepository {
-  /// Inicializa la sesión de audio y solicita permisos de micrófono.
+  /// Pide el permiso del micrófono, activa la sesión de audio y captura el
+  /// micrófono, una sola vez por frecu: llamarlo de nuevo devuelve el mismo
+  /// resultado.
   Future<Result<void>> initializeAudio();
+
+  /// Une la voz de este teléfono a la malla de la frecu activa como
+  /// [localPeerId] y ofrece enlace a [peerIds], los que ya estaban.
+  ///
+  /// Es idempotente por frecu: con el mismo id no hace nada; con otro (al
+  /// reconectar) rehace los enlaces con el id nuevo.
+  Future<void> joinMesh({
+    required String localPeerId,
+    required List<String> peerIds,
+  });
+
+  /// Sale de la malla: cierra los enlaces, suelta el micrófono y la sesión
+  /// de audio, deja de transmitir y olvida quién habla.
+  Future<void> leaveMesh();
 
   /// Inicia la transmisión de voz en el canal WebRTC.
   Future<Result<void>> startTalking();
@@ -13,7 +30,8 @@ abstract interface class VoiceRepository {
   /// Detiene la transmisión de voz (silencia el micrófono).
   Future<Result<void>> stopTalking();
 
-  /// Cambia el modo de habla (PTT o micrófono abierto).
+  /// Cambia el modo de habla (PTT o micrófono abierto) sin abrir el
+  /// micrófono: el micrófono abierto empieza en silencio.
   Future<Result<void>> setTalkMode(TalkMode mode);
 
   /// Conmuta la salida de audio a la ruta seleccionada.
@@ -27,6 +45,14 @@ abstract interface class VoiceRepository {
 
   /// Stream reactivo del conjunto de IDs de participantes remotos que están hablando.
   Stream<Set<String>> watchSpeakingPeers();
+
+  /// Ids de los participantes remotos que se silenciaron en micrófono
+  /// abierto; empieza con el valor actual.
+  Stream<Set<String>> watchMutedPeers();
+
+  /// Estado del enlace de voz con cada participante remoto, por id; empieza
+  /// con el valor actual. Quien no aparece aún no tiene enlace.
+  Stream<Map<String, PeerConnectionState>> watchPeerLinks();
 
   /// Nivel de la voz propia, de 0 a 1, medido por WebRTC. Se lee solo
   /// mientras alguien escucha este flujo o [watchPeerLevels].
@@ -44,6 +70,13 @@ abstract interface class VoiceRepository {
 
   /// Stream reactivo del conjunto de rutas de audio disponibles en el dispositivo.
   Stream<Set<AudioRoute>> watchAvailableAudioRoutes();
+
+  /// Nombre del dispositivo Bluetooth conectado (p. ej. «Sena 50S»), o nulo
+  /// si no hay; empieza con el valor actual.
+  Stream<String?> watchBluetoothName();
+
+  /// Abre los ajustes de la app en el sistema, para conceder el micrófono.
+  Future<bool> openMicrophoneSettings();
 
   /// Libera recursos y cierra pistas de audio y conexiones de voz.
   Future<void> dispose();

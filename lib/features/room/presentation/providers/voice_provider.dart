@@ -7,6 +7,7 @@ import 'package:frecu/features/room/data/datasources/audio_session_datasource.da
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/repositories/voice_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -24,6 +25,9 @@ class VoiceState {
     this.availableAudioRoutes = const {AudioRoute.speaker, AudioRoute.earpiece},
     this.speakingPeers = const {},
     this.isInitialized = false,
+    this.mutedPeers = const {},
+    this.peerLinks = const {},
+    this.bluetoothName,
   });
 
   /// Indica si el micrófono local está transmitiendo audio.
@@ -44,7 +48,17 @@ class VoiceState {
   /// Indica si la sesión de audio ya fue inicializada.
   final bool isInitialized;
 
-  /// Crea una copia del estado con los campos proporcionados.
+  /// Participantes remotos silenciados en micrófono abierto.
+  final Set<String> mutedPeers;
+
+  /// Estado del enlace de voz con cada participante remoto, por id.
+  final Map<String, PeerConnectionState> peerLinks;
+
+  /// Nombre del dispositivo Bluetooth conectado, si hay uno.
+  final String? bluetoothName;
+
+  /// Crea una copia del estado con los campos proporcionados; [bluetoothName]
+  /// se reemplaza siempre que se pase [clearBluetoothName] o un nombre.
   VoiceState copyWith({
     bool? isTalking,
     TalkMode? talkMode,
@@ -52,6 +66,10 @@ class VoiceState {
     Set<AudioRoute>? availableAudioRoutes,
     Set<String>? speakingPeers,
     bool? isInitialized,
+    Set<String>? mutedPeers,
+    Map<String, PeerConnectionState>? peerLinks,
+    String? bluetoothName,
+    bool clearBluetoothName = false,
   }) {
     return VoiceState(
       isTalking: isTalking ?? this.isTalking,
@@ -60,6 +78,11 @@ class VoiceState {
       availableAudioRoutes: availableAudioRoutes ?? this.availableAudioRoutes,
       speakingPeers: speakingPeers ?? this.speakingPeers,
       isInitialized: isInitialized ?? this.isInitialized,
+      mutedPeers: mutedPeers ?? this.mutedPeers,
+      peerLinks: peerLinks ?? this.peerLinks,
+      bluetoothName: clearBluetoothName
+          ? bluetoothName
+          : bluetoothName ?? this.bluetoothName,
     );
   }
 }
@@ -177,15 +200,40 @@ class VoiceNotifier extends _$VoiceNotifier {
       });
     } on Object catch (_) {}
 
+    // Un stream que falte (p. ej. un doble de pruebas) nunca rompe la frecu.
+    final mutedSub = _follow(repository.watchMutedPeers, (peers) {
+      state = state.copyWith(mutedPeers: peers);
+    });
+    final linksSub = _follow(repository.watchPeerLinks, (links) {
+      state = state.copyWith(peerLinks: links);
+    });
+    final bluetoothSub = _follow(repository.watchBluetoothName, (name) {
+      state = state.copyWith(bluetoothName: name, clearBluetoothName: true);
+    });
+
     ref.onDispose(() {
       talkingSub.cancel();
       speakingSub.cancel();
       modeSub.cancel();
       routeSub?.cancel();
       availSub?.cancel();
+      mutedSub?.cancel();
+      linksSub?.cancel();
+      bluetoothSub?.cancel();
     });
 
     return const VoiceState();
+  }
+
+  static StreamSubscription<T>? _follow<T>(
+    Stream<T> Function() watch,
+    void Function(T value) onData,
+  ) {
+    try {
+      return watch().listen(onData, onError: (Object _) {});
+    } on Object catch (_) {
+      return null;
+    }
   }
 
   /// Inicializa la captura y sesión de audio con permisos.
@@ -219,10 +267,19 @@ class VoiceNotifier extends _$VoiceNotifier {
     }
   }
 
-  /// Cambia el modo de habla (PTT o micrófono abierto).
+  /// Cambia el modo de habla (PTT o micrófono abierto) sin abrir el
+  /// micrófono, como al aplicar el modo por defecto al entrar.
   Future<Result<void>> setTalkMode(TalkMode mode) async {
     final repository = ref.read(voiceRepositoryProvider);
     return repository.setTalkMode(mode);
+  }
+
+  /// Elige el modo en el selector: «Abierto» abre el micrófono al instante
+  /// y «PTT» lo cierra.
+  Future<Result<void>> chooseTalkMode(TalkMode mode) async {
+    final result = await setTalkMode(mode);
+    if (result.isFailure || mode != TalkMode.openMic) return result;
+    return startTalking();
   }
 
   /// Conmuta la salida a la ruta de audio especificada.
@@ -236,6 +293,10 @@ class VoiceNotifier extends _$VoiceNotifier {
     final repository = ref.read(voiceRepositoryProvider);
     return repository.setSpeakerOn(enabled);
   }
+
+  /// Abre los ajustes del sistema para conceder el micrófono.
+  Future<bool> openMicrophoneSettings() =>
+      ref.read(voiceRepositoryProvider).openMicrophoneSettings();
 
   /// Conmuta/cicla entre las rutas de audio disponibles en el dispositivo.
   Future<Result<void>> cycleAudioRoute() async {

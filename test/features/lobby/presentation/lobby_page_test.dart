@@ -1,10 +1,10 @@
-// AC1: CUANDO se abre el inicio ENTONCES se ve en Portadora (`FrScaffold`) con la marca «frecu», la píldora de red, el botón Ajustes, «Frecus cercanas», «Elige tu frecu» con el número de frecus cercanas en dos cifras («00»), el sintonizador y abajo Crear frecu, Escanear y Conectar por IP, con todos los textos de slang en español y en inglés; Ajustes abre Ajustes, Crear frecu abre la pantalla de nueva frecu de hoy, Escanear abre el escáner de hoy y Conectar por IP abre el diálogo de unión por IP de hoy.
+// AC1: CUANDO se abre el inicio ENTONCES se ve en Portadora (`FrScaffold`) con la marca «frecu», la píldora de red, el botón Ajustes, «FRECUS CERCANAS» en mayúsculas como etiqueta, «Elige tu frecu» con el número de frecus cercanas en dos cifras («00»), el sintonizador y abajo Crear frecu, Escanear y Conectar por IP, con todos los textos de slang en español y en inglés; Ajustes abre Ajustes, Crear frecu abre la pantalla de nueva frecu de hoy, Escanear abre el escáner de hoy y Conectar por IP abre el diálogo de unión por IP de hoy.
 // AC2: CUANDO llega el estado de la red local ENTONCES la píldora dice «Red · <IP local>» si hay red o «Sin red local» en alerta si no la hay; mientras no llega dice «Buscando red».
-// AC3: CUANDO hay frecus cercanas ENTONCES la lista muestra una tarjeta por frecu con su nota (nombre en el idioma de la app, alteración y octava), sus Hz con un decimal («329,6 Hz» en español, «329.6 Hz» en inglés), su nombre y su IP; el número las cuenta, y el sintonizador recibe la nota de cada una para dibujar su pico sobre su tecla y dice «N señales»; una frecu sin nota sale con «—», sin Hz y sin pico.
-// AC4: CUANDO el usuario toca una frecu cercana ENTONCES queda elegida (su tarjeta encendida y la aguja del sintonizador va a su nota) y se abre el diálogo de código de hoy, que se une a esa frecu con su IP y su puerto.
-// AC5: CUANDO no hay frecus cercanas y la red está conectada o aún no se sabe ENTONCES se ve la búsqueda vacía: la onda, «Sin señales por ahora», «Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.» y «La búsqueda sigue activa»; el sintonizador dice «Escaneando · _frecu._tcp» y «0 señales».
-// AC6: CUANDO no hay frecus cercanas y no hay red local ENTONCES en lugar de la búsqueda vacía se ve un aviso de alerta «No estás en ninguna red Wi-Fi.» con «Únete al punto de acceso del anfitrión para encontrar frecus.» y el sintonizador queda atenuado con «Búsqueda en pausa»; CUANDO vuelve la red ENTONCES vuelve la búsqueda vacía; CUANDO hay frecus sin red ENTONCES se ve la lista.
-// AC7: CUANDO se dibuja el sintonizador ENTONCES sus 14 teclas blancas y 10 negras van de Do4 a Si5 y cada nota cae en el centro de su tecla (`keyX` del prototipo), la lectura nombra la nota más cercana a la aguja, la aguja sigue un resorte (rigidez 90, amortiguación 16) hacia la nota elegida o barre las dos octavas sin salirse; sin movimiento reducido anima en cada cuadro y con movimiento reducido queda quieto y no pide cuadros.
+// AC3: CUANDO hay frecus cercanas ENTONCES la lista muestra una tarjeta por frecu, que entra con `rise` escalonado (0, 80 y 160 ms), con su nota (nombre en el idioma de la app, alteración y octava), sus Hz con un decimal («329,6 Hz» en español, «329.6 Hz» en inglés), su nombre y su IP; el número las cuenta, y el sintonizador recibe la nota de cada una para dibujar su pico sobre su tecla y dice «N señales»; una frecu sin nota sale con «—», sin Hz y sin pico, y una sin nombre, como «Frecu sin nombre».
+// AC4: CUANDO el usuario toca una frecu cercana ENTONCES queda elegida (su tarjeta encendida y la aguja del sintonizador va a su nota) y, 380 ms después, se abre el diálogo de código de hoy, que se une a esa frecu con su IP y su puerto; CUANDO cierra la hoja sin unirse o vuelve de la frecu ENTONCES la frecu deja de estar elegida. Mientras hay una frecu activa la búsqueda queda en pausa; CUANDO termina ENTONCES se retira su anuncio mDNS y se vuelve a buscar (F7).
+// AC5: CUANDO no hay frecus cercanas y la red está conectada o aún no se sabe ENTONCES se ve la búsqueda vacía: la onda, «Sin señales por ahora», «Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.» y «La búsqueda sigue activa»; el sintonizador dice «Escaneando · _frecu._tcp» y «0 señales». CUANDO la búsqueda no puede empezar ENTONCES dice «La búsqueda falló · reintentando», el sintonizador queda en pausa y se reintenta cada 5 s hasta que arranca.
+// AC6: CUANDO no hay frecus cercanas y no hay red local ENTONCES en lugar de la búsqueda vacía se ve un aviso de alerta «No estás en ninguna red Wi-Fi.» con «Únete al punto de acceso del anfitrión para encontrar frecus.» y la acción «Abrir ajustes de Wi-Fi», que abre los ajustes de Wi-Fi, y el sintonizador queda atenuado con «Búsqueda en pausa»; CUANDO vuelve la red ENTONCES vuelve la búsqueda vacía; CUANDO hay frecus sin red ENTONCES se ve la lista.
+// AC7: CUANDO se dibuja el sintonizador ENTONCES sus 14 teclas blancas y 10 negras van de Do4 a Si5 y cada nota cae en el centro de su tecla (`keyX` del prototipo), la lectura nombra la nota más cercana a la aguja, la aguja sigue un resorte (rigidez 90, amortiguación 16) hacia la nota elegida o barre las dos octavas sin salirse; sin movimiento reducido anima en cada cuadro y con movimiento reducido queda quieto y no pide cuadros; sus textos maquetados se reutilizan entre cuadros y se liberan al quitarlo.
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -30,11 +30,15 @@ import 'package:frecu/features/lobby/presentation/pages/lobby_page.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner.dart';
+import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner_painter.dart';
 import 'package:frecu/features/lobby/presentation/widgets/nearby_room_tile.dart';
 import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
+import 'package:frecu/features/lobby/presentation/widgets/rise_in.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
+import 'package:frecu/features/network/domain/repositories/system_settings_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -49,8 +53,10 @@ class _MockNetworkRepository extends Mock implements NetworkRepository {}
 class _MockRoomRepository extends Mock implements RoomRepository {}
 
 const _scannerStub = Key('scanner_stub');
+const _roomStub = Key('room_stub');
 
-/// Router de la app con el escáner sustituido: en las pruebas no hay cámara.
+/// Router de la app con el escáner y la frecu activa sustituidos: en las
+/// pruebas no hay cámara, y se mira a qué frecu se entra, no su pantalla.
 class _AppRouterWithoutCamera extends AppRouter {
   @override
   List<AutoRoute> get routes => [
@@ -63,9 +69,40 @@ class _AppRouterWithoutCamera extends AppRouter {
           ),
           path: '/scan-qr',
         )
+      else if (route.name == RoomRoute.name)
+        AutoRoute(
+          page: PageInfo(
+            RoomRoute.name,
+            builder: (_) => const SizedBox(key: _roomStub),
+          ),
+          path: '/room/:roomId',
+        )
       else
         route,
   ];
+}
+
+/// Ajustes del sistema que anota cuáles se abren.
+class _FakeSettings implements SystemSettingsRepository {
+  final List<String> opened = [];
+
+  @override
+  Future<Result<void>> openWifiSettings() async {
+    opened.add('wifi');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<void>> openHotspotSettings() async {
+    opened.add('hotspot');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<void>> openAppSettings() async {
+    opened.add('app');
+    return const Result.success(null);
+  }
 }
 
 /// Mi4: 329,6 Hz.
@@ -92,6 +129,15 @@ const _vieja = NearbyRoom(
   name: 'Frecu vieja',
   hostAddress: '192.168.43.9',
   port: 47800,
+);
+
+Room _joined(String id) => Room(
+  id: id,
+  name: 'Ruta del domingo',
+  hostAddress: '192.168.43.1',
+  port: 47812,
+  accessCode: '4827',
+  createdAt: DateTime(2026, 11, 8, 16, 24),
 );
 
 const _wifi = NetworkState.connected(
@@ -146,6 +192,7 @@ void main() {
   late _MockRoomRepository rooms;
   late StreamController<List<NearbyRoom>> nearby;
   late StreamController<NetworkState> networkStates;
+  late _FakeSettings settings;
 
   setUp(() {
     LocaleSettings.setLocaleSync(AppLocale.es);
@@ -154,9 +201,14 @@ void main() {
     rooms = _MockRoomRepository();
     nearby = StreamController<List<NearbyRoom>>.broadcast();
     networkStates = StreamController<NetworkState>.broadcast();
+    settings = _FakeSettings();
 
     when(() => discovery.watchNearbyRooms()).thenAnswer((_) => nearby.stream);
     when(() => discovery.dispose()).thenAnswer((_) async {});
+    when(() => discovery.stopPublishing())
+        .thenAnswer((_) async => const Result<void>.success(null));
+    when(() => rooms.leaveRoom())
+        .thenAnswer((_) async => const Result<void>.success(null));
     when(() => network.watchNetworkState())
         .thenAnswer((_) => networkStates.stream);
     when(() => rooms.getLocalIpAddress())
@@ -178,14 +230,16 @@ void main() {
     await networkStates.close();
   });
 
-  /// Abre la app en el inicio, en un teléfono de 390 × 844 y con movimiento
-  /// reducido (el sintonizador, la píldora y la onda no paran solos).
-  Future<void> pumpLobby(WidgetTester tester) async {
+  /// Abre la app en el inicio, en un teléfono de 390 × 844 y, con [reduce]
+  /// (por defecto), con movimiento reducido (el sintonizador, la píldora y
+  /// la onda no paran solos).
+  Future<AppRouter> pumpLobby(WidgetTester tester, {bool reduce = true}) async {
     tester.view
       ..physicalSize = const Size(1170, 2532)
       ..devicePixelRatio = 3;
     addTearDown(tester.view.reset);
-    _reduceMotion(tester);
+    if (reduce) _reduceMotion(tester);
+    final router = _AppRouterWithoutCamera();
     await tester.pumpWidget(
       TranslationProvider(
         child: ProviderScope(
@@ -193,12 +247,18 @@ void main() {
             discoveryRepositoryProvider.overrideWithValue(discovery),
             networkRepositoryProvider.overrideWithValue(network),
             roomRepositoryProvider.overrideWithValue(rooms),
+            systemSettingsRepositoryProvider.overrideWithValue(settings),
           ],
-          child: FrecuApp(appRouter: _AppRouterWithoutCamera()),
+          child: FrecuApp(appRouter: router),
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    if (reduce) {
+      await tester.pumpAndSettle();
+    } else {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    return router;
   }
 
   Future<void> showRooms(WidgetTester tester, List<NearbyRoom> list) async {
@@ -228,7 +288,7 @@ void main() {
         expect(find.text('frecu'), findsOneWidget);
         expect(find.byType(FrPill), findsOneWidget);
         expect(_iconButton('Ajustes'), findsOneWidget);
-        expect(find.text('Frecus cercanas'), findsOneWidget);
+        expect(find.text('FRECUS CERCANAS'), findsOneWidget);
         expect(find.text('Elige tu frecu'), findsOneWidget);
         expect(find.text('00'), findsOneWidget);
         expect(find.byType(LobbyTuner), findsOneWidget);
@@ -245,7 +305,7 @@ void main() {
 
       expect(find.text('frecu'), findsOneWidget);
       expect(_iconButton('Settings'), findsOneWidget);
-      expect(find.text('Nearby rooms'), findsOneWidget);
+      expect(find.text('NEARBY ROOMS'), findsOneWidget);
       expect(find.text('Pick your room'), findsOneWidget);
       expect(find.text('00'), findsOneWidget);
       expect(_label('Checking network'), findsOneWidget);
@@ -503,6 +563,189 @@ void main() {
       expect(find.byType(FrBanner), findsNothing);
       expect(_tuner(tester).paused, isFalse);
     });
+
+    testWidgets('AC3: las tarjetas entran con rise escalonado', (tester) async {
+      await pumpLobby(tester);
+      await showNetwork(tester, _wifi);
+      await showRooms(tester, [_ruta, _brigada, _vieja]);
+
+      final rises = tester.widgetList<RiseIn>(find.byType(RiseIn));
+      expect(rises.map((rise) => rise.delay), const [
+        Duration.zero,
+        Duration(milliseconds: 80),
+        Duration(milliseconds: 160),
+      ]);
+      expect(
+        find.descendant(
+          of: find.byType(RiseIn),
+          matching: find.byType(NearbyRoomTile),
+        ),
+        findsNWidgets(3),
+      );
+    });
+
+    testWidgets('AC3: una frecu sin nombre sale como «Frecu sin nombre»', (
+      tester,
+    ) async {
+      await pumpLobby(tester);
+      await showRooms(tester, [_vieja.copyWith(name: '')]);
+
+      expect(_inTile('Frecu sin nombre', find.text('—')), findsOneWidget);
+    });
+
+    testWidgets(
+      'AC4: la hoja de código se abre 380 ms después de elegir la frecu, '
+      'cuando la aguja llega a su nota',
+      (tester) async {
+        await pumpLobby(tester, reduce: false);
+        nearby.add([_ruta]);
+        await tester.pump(const Duration(seconds: 1));
+
+        await tester.tap(find.text(_ruta.name));
+        await tester.pump();
+        expect(_tile(tester, _ruta.name).selected, isTrue);
+
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.byType(PinJoinSheet), findsNothing);
+
+        await tester.pump(const Duration(milliseconds: 100));
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(find.byType(PinJoinSheet), findsOneWidget);
+      },
+    );
+
+    testWidgets('AC4: al cerrar la hoja sin unirse la frecu deja de estar '
+        'elegida', (tester) async {
+      await pumpLobby(tester);
+      await showRooms(tester, [_ruta, _brigada]);
+
+      await tester.tap(find.text(_ruta.name));
+      await tester.pumpAndSettle();
+      expect(find.byType(PinJoinSheet), findsOneWidget);
+      expect(_tile(tester, _ruta.name).selected, isTrue);
+
+      await tester.tap(_iconButton(t.lobby.join.close));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PinJoinSheet), findsNothing);
+      expect(_tile(tester, _ruta.name).selected, isFalse);
+      expect(_tuner(tester).selected, isNull);
+    });
+
+    testWidgets(
+      'AC4: con una frecu activa la búsqueda queda en pausa; al terminar se '
+      'retira su anuncio, se suelta la elección y se vuelve a buscar',
+      (tester) async {
+        when(
+          () => rooms.joinRoom(
+            hostAddress: any(named: 'hostAddress'),
+            port: any(named: 'port'),
+            accessCode: any(named: 'accessCode'),
+            displayName: any(named: 'displayName'),
+          ),
+        ).thenAnswer((_) async => Result.success(_joined('room-ruta')));
+        final router = await pumpLobby(tester);
+        await showNetwork(tester, _wifi);
+        await showRooms(tester, [_ruta, _brigada]);
+        expect(nearby.hasListener, isTrue);
+
+        await tester.tap(find.text(_ruta.name));
+        await tester.pumpAndSettle();
+        for (final digit in '4827'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
+        await tester.pumpAndSettle();
+
+        expect(router.currentPath, '/room/room-ruta');
+        expect(nearby.hasListener, isFalse);
+        verifyNever(() => discovery.stopPublishing());
+
+        final container = ProviderScope.containerOf(
+          tester.element(find.byKey(_roomStub)),
+        );
+        await container.read(roomNotifierProvider.notifier).leaveRoom();
+        await tester.pumpAndSettle();
+
+        verify(() => discovery.stopPublishing()).called(1);
+        expect(nearby.hasListener, isTrue);
+        verify(() => discovery.watchNearbyRooms()).called(2);
+
+        await router.maybePop();
+        await tester.pumpAndSettle();
+        await showRooms(tester, [_ruta, _brigada]);
+
+        expect(router.currentPath, '/');
+        expect(_tile(tester, _ruta.name).selected, isFalse);
+        expect(_tuner(tester).selected, isNull);
+      },
+    );
+
+    testWidgets(
+      'AC5: si la búsqueda no puede empezar lo dice, el sintonizador queda '
+      'en pausa y se reintenta cada 5 s hasta que arranca',
+      (tester) async {
+        await pumpLobby(tester);
+        await showNetwork(tester, _wifi);
+        await showRooms(tester, [_ruta]);
+        nearby.addError(const Failure.network(message: 'MissingPlugin'));
+        await tester.pumpAndSettle();
+
+        // Sin búsqueda en marcha la lista anterior ya no es fiable.
+        expect(find.byType(NearbyRoomTile), findsNothing);
+        expect(_label('La búsqueda falló · reintentando'), findsOneWidget);
+        expect(_label('La búsqueda sigue activa'), findsNothing);
+        expect(find.text('Sin señales por ahora'), findsOneWidget);
+        expect(_tuner(tester).paused, isTrue);
+        verify(() => discovery.watchNearbyRooms()).called(1);
+
+        await tester.pump(const Duration(seconds: 4));
+        verifyNever(() => discovery.watchNearbyRooms());
+
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
+        verify(() => discovery.watchNearbyRooms()).called(1);
+        expect(_label('La búsqueda falló · reintentando'), findsOneWidget);
+
+        await showRooms(tester, []);
+
+        expect(_label('La búsqueda sigue activa'), findsOneWidget);
+        expect(_label('La búsqueda falló · reintentando'), findsNothing);
+        expect(_tuner(tester).paused, isFalse);
+        await tester.pump(const Duration(seconds: 6));
+        verifyNever(() => discovery.watchNearbyRooms());
+      },
+    );
+
+    testWidgets('AC6: «Abrir ajustes de Wi-Fi» abre los ajustes de Wi-Fi', (
+      tester,
+    ) async {
+      await pumpLobby(tester);
+      await showRooms(tester, []);
+      await showNetwork(tester, const NetworkState.disconnected());
+
+      final banner = tester.widget<FrBanner>(find.byType(FrBanner));
+      expect(banner.actionLabel, 'Abrir ajustes de Wi-Fi');
+
+      await tester.tap(find.text('Abrir ajustes de Wi-Fi'));
+      await tester.pumpAndSettle();
+
+      expect(settings.opened, ['wifi']);
+    });
+
+    testWidgets('AC6: en inglés la acción dice «Open Wi-Fi settings»', (
+      tester,
+    ) async {
+      await _useEnglish(tester);
+      await pumpLobby(tester);
+      await showRooms(tester, []);
+      await showNetwork(tester, const NetworkState.disconnected());
+
+      expect(
+        tester.widget<FrBanner>(find.byType(FrBanner)).actionLabel,
+        'Open Wi-Fi settings',
+      );
+    });
   });
 
   group('Sintonizador', () {
@@ -609,6 +852,32 @@ void main() {
       expect(tester.binding.hasScheduledFrame, isTrue);
 
       await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('AC7: los textos maquetados se reutilizan y se liberan al '
+        'quitar el sintonizador', (tester) async {
+      _reduceMotion(tester);
+      await pumpTuner(tester);
+      await tester.pump();
+
+      final painter = tester
+          .widgetList<CustomPaint>(
+            find.descendant(
+              of: find.byType(LobbyTuner),
+              matching: find.byType(CustomPaint),
+            ),
+          )
+          .map((paint) => paint.painter)
+          .whereType<LobbyTunerPainter>()
+          .single;
+      final motion = painter.motion;
+      final texts = motion.texts.values.toList();
+      expect(texts, isNotEmpty);
+
+      await tester.pumpWidget(const SizedBox());
+
+      expect(motion.texts, isEmpty);
+      expect(texts.every((text) => text.debugDisposed), isTrue);
     });
 
     testWidgets('AC7: con movimiento reducido el sintonizador queda quieto y '

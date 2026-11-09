@@ -104,6 +104,8 @@ void main() {
           expectLater(
             stream,
             emitsInOrder([
+              // Al empezar la búsqueda, las frecus que ya conoce: ninguna.
+              isEmpty,
               predicate<List<NearbyRoom>>((list) {
                 if (list.length != 1) return false;
                 final room = list.first;

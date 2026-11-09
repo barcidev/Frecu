@@ -3,6 +3,7 @@ import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/widgets/fr_pressable.dart';
+import 'package:frecu/core/design/widgets/fr_specular.dart';
 import 'package:frecu/core/design/widgets/wave_loader.dart';
 
 /// Estilo de un [FrButton].
@@ -18,6 +19,10 @@ enum FrButtonVariant {
 
   /// Lavado de alerta: acciones destructivas.
   danger,
+
+  /// Relleno de alerta (`.btn-danger-solid`): la confirmación de una acción
+  /// destructiva, como cerrar o salir de la frecu.
+  dangerSolid,
 }
 
 /// Tamaño de un [FrButton].
@@ -25,7 +30,7 @@ enum FrButtonSize {
   /// 58 px de alto (48 en `ghost`).
   regular,
 
-  /// 44 px de alto.
+  /// 44 px de alto y radio 14.
   small,
 }
 
@@ -117,6 +122,15 @@ class FrButton extends StatelessWidget {
   }
 }
 
+/// Tinta sobre el relleno de alerta (`.btn-danger-solid` del prototipo).
+const Color _alertInk = Color(0xFF1A0503);
+
+/// Blanco de los brillos interiores de los rellenos.
+const Color _white = Color(0xFFFFFFFF);
+
+/// Negro del canto inferior del botón principal.
+const Color _black = Color(0xFF000000);
+
 @immutable
 class _ButtonStyle {
   const _ButtonStyle({
@@ -126,6 +140,8 @@ class _ButtonStyle {
     required this.loader,
     this.side = BorderSide.none,
     this.shadows = const [],
+    this.topEdge,
+    this.bottomEdge,
   });
 
   factory _ButtonStyle.of(FrButtonVariant variant, FrTheme fr) {
@@ -144,19 +160,22 @@ class _ButtonStyle {
             spreadRadius: -12,
           ),
         ],
+        topEdge: _white.withValues(alpha: 0.6),
+        bottomEdge: _black.withValues(alpha: 0.14),
       ),
       FrButtonVariant.secondary => _ButtonStyle(
         background: c.bg2,
         foreground: c.tx1,
         light: c.touch,
-        loader: c.signal,
+        loader: c.signalFg,
         side: BorderSide(color: c.line2),
+        topEdge: c.spec,
       ),
       FrButtonVariant.ghost => _ButtonStyle(
         background: c.bg2.withValues(alpha: 0),
         foreground: c.tx2,
         light: c.touch,
-        loader: c.signal,
+        loader: c.signalFg,
       ),
       FrButtonVariant.danger => _ButtonStyle(
         background: c.alert.withValues(alpha: 0.12),
@@ -164,6 +183,21 @@ class _ButtonStyle {
         light: c.touch,
         loader: c.alert,
         side: BorderSide(color: c.alert.withValues(alpha: 0.38)),
+      ),
+      FrButtonVariant.dangerSolid => _ButtonStyle(
+        background: c.alert,
+        foreground: _alertInk,
+        light: _white.withValues(alpha: 0.35),
+        loader: _alertInk,
+        shadows: [
+          BoxShadow(
+            color: c.alert.withValues(alpha: 0.7),
+            offset: const Offset(0, 10),
+            blurRadius: 30,
+            spreadRadius: -12,
+          ),
+        ],
+        topEdge: _white.withValues(alpha: 0.4),
       ),
     };
   }
@@ -174,6 +208,12 @@ class _ButtonStyle {
   final Color loader;
   final BorderSide side;
   final List<BoxShadow> shadows;
+
+  /// Brillo de 1 px en el canto superior (filo especular).
+  final Color? topEdge;
+
+  /// Sombra de 2 px en el canto inferior.
+  final Color? bottomEdge;
 }
 
 class _ButtonBody extends StatelessWidget {
@@ -207,9 +247,11 @@ class _ButtonBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final fr = context.fr;
     final shape = RoundedSuperellipseBorder(
-      borderRadius: BorderRadius.circular(_small ? fr.radii.m : fr.radii.btn),
+      borderRadius: BorderRadius.circular(_small ? _smallRadius : fr.radii.btn),
       side: style.side,
     );
+    final top = style.topEdge;
+    final bottom = style.bottomEdge;
     return DecoratedBox(
       decoration: ShapeDecoration(
         color: style.background,
@@ -234,11 +276,30 @@ class _ButtonBody extends StatelessWidget {
                 ),
               ),
             ),
+            if (top != null)
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: FrSpecularPainter(shape: shape, color: top),
+                ),
+              ),
+            if (bottom != null)
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: FrSpecularPainter(
+                    shape: shape,
+                    color: bottom,
+                    depth: -2,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
+
+  /// Radio del botón pequeño (`.btn-s`).
+  static const double _smallRadius = 14;
 
   /// Luz que nace en el dedo: entra en 60 ms y sale en 420 ms.
   Widget _light(FrTheme fr) => IgnorePointer(

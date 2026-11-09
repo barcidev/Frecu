@@ -6,19 +6,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
+import 'package:frecu/core/design/motion/fr_spring_curve.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_field.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
-import 'package:frecu/core/design/widgets/fr_pin_field.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_toast.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/lobby/presentation/providers/new_room_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/create_room_layout.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_hero.dart';
+import 'package:frecu/features/lobby/presentation/widgets/regenerated_code.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
@@ -120,6 +122,8 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
         );
         unawaited(context.router.replace(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
+        // Sin frecu abierta no queda ningún anuncio en la red.
+        unawaited(ref.read(stopPublishingRoomProvider)(const NoParams()));
         setState(() => _opening = false);
         showFrToast(
           context,
@@ -256,7 +260,11 @@ class _AccessCode extends StatelessWidget {
     );
   }
 
-  /// Las celdas del código y «Generar otro», que gira una vuelta.
+  /// Vuelta de «Generar otro».
+  static const Duration _regenSpin = Duration(milliseconds: 700);
+
+  /// Las celdas del código, que aparecen escalonadas, y «Generar otro», que
+  /// gira una vuelta con el resorte `organic`.
   Widget _pinRow(BuildContext context) {
     final newRoom = t.lobby.newRoom;
     return Row(
@@ -266,21 +274,15 @@ class _AccessCode extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: FrPinField(
-                value: code,
-                readOnly: true,
-                semanticLabel: newRoom.code,
-              ),
+              child: RegeneratedCode(code: code, semanticLabel: newRoom.code),
             ),
           ),
         ),
         const SizedBox(width: 12),
         AnimatedRotation(
           turns: turns,
-          duration: context.reduceMotion
-              ? Duration.zero
-              : const Duration(milliseconds: 700),
-          curve: context.fr.motion.easeOut,
+          duration: context.reduceMotion ? Duration.zero : _regenSpin,
+          curve: FrSpringCurve(context.fr.motion.springOrganic, _regenSpin),
           child: FrIconButton.drawn(
             icon: FrIcons.regen,
             semanticLabel: newRoom.regenerate,

@@ -1,10 +1,13 @@
 // AC2: CUANDO otra persona habla y el usuario está en PTT sin transmitir ENTONCES el núcleo muestra a quien habla; CUANDO el anfitrión está solo ENTONCES la pista invita a mostrar el QR.
 // AC6: CUANDO el usuario está en la frecu activa ENTONCES la isla dice, por prioridad, reconectando, conectando, al aire con su tiempo, quién habla, micrófono abierto o silenciado con n/6, esperando a tu grupo o en línea con n/6.
 // AC7: CUANDO la frecu está conectando o reconectando ENTONCES el núcleo queda en espera y no se puede hablar ni cambiar de modo.
+// P101/P105: CUANDO alguien se une o sale, cambia la salida de audio o vuelve la conexión ENTONCES la isla lo dice un momento, por encima de todo menos la reconexión, que cuenta los segundos al próximo intento.
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/theme/app_theme.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/tokens/fr_colors.dart';
+import 'package:frecu/core/design/widgets/signal_signature.dart';
 import 'package:frecu/core/design/widgets/status_island.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -47,10 +50,12 @@ RoomTalk _talk({
   );
 }
 
+/// Como el prototipo: el anfitrión llegó primero (arriba, lugar 3) y Ana
+/// después (lugar 1).
 final List<MeshNode> _group = [
   _node('Jorge', 0, me: true),
-  _node('Andrés', 1, host: true),
-  _node('Ana', 2),
+  _node('Andrés', 3, host: true),
+  _node('Ana', 1),
 ];
 
 void main() {
@@ -61,7 +66,7 @@ void main() {
       final talk = _talk(
         nodes: [
           _node('Jorge', 0, me: true),
-          _node('Ana', 2, speaking: true),
+          _node('Ana', 1, speaking: true),
           _node('Leo', 5),
         ],
       );
@@ -74,7 +79,7 @@ void main() {
     test('AC6: la persona propia al aire no cuenta como quien habla', () {
       final talk = _talk(
         talking: true,
-        nodes: [_node('Jorge', 0, me: true, speaking: true), _node('Ana', 2)],
+        nodes: [_node('Jorge', 0, me: true, speaking: true), _node('Ana', 1)],
       );
 
       expect(talk.speaker, isNull);
@@ -85,7 +90,7 @@ void main() {
         status: const RoomStatus.reconnecting(),
         nodes: [
           _node('Jorge', 0, me: true),
-          _node('Ana', 2, speaking: true, link: MeshLink.rec),
+          _node('Ana', 1, speaking: true, link: MeshLink.rec),
         ],
       );
 
@@ -98,9 +103,9 @@ void main() {
         isTrue,
       );
       expect(_talk(nodes: [_node('Jorge', 0, me: true)]).alone, isFalse);
-      expect(_talk(nodes: [_node('Andrés', 1, host: true)]).alone, isFalse);
+      expect(_talk(nodes: [_node('Andrés', 3, host: true)]).alone, isFalse);
       expect(
-        _talk(nodes: [_node('Jorge', 0, me: true, host: true), _node('Ana', 2)])
+        _talk(nodes: [_node('Jorge', 0, me: true, host: true), _node('Ana', 1)])
             .alone,
         isFalse,
       );
@@ -125,7 +130,7 @@ void main() {
     });
 
     test('AC2: fases del núcleo en PTT', () {
-      final speaking = [..._group.take(2), _node('Ana', 2, speaking: true)];
+      final speaking = [..._group.take(2), _node('Ana', 1, speaking: true)];
 
       expect(_talk(nodes: _group).pttPhase(), PttPhase.idle);
       expect(_talk(nodes: _group).pttPhase(pressed: true), PttPhase.onAir);
@@ -161,7 +166,7 @@ void main() {
     });
 
     test('AC6: prioridad de la isla', () {
-      final speaking = [..._group.take(2), _node('Ana', 2, speaking: true)];
+      final speaking = [..._group.take(2), _node('Ana', 1, speaking: true)];
       final cases = <RoomTalk, IslandPhase>{
         _talk(status: const RoomStatus.reconnecting(), talking: true):
             IslandPhase.reconnecting,
@@ -194,6 +199,8 @@ void main() {
       WidgetTester tester,
       RoomTalk talk, {
       Duration? onAirFor,
+      RoomIslandEvent? event,
+      int? retryIn,
     }) async {
       tester.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
@@ -204,7 +211,12 @@ void main() {
         MaterialApp(
           theme: AppTheme.light,
           home: Scaffold(
-            body: RoomStatusIsland(talk: talk, onAirFor: onAirFor),
+            body: RoomStatusIsland(
+              talk: talk,
+              onAirFor: onAirFor,
+              event: event,
+              retryIn: retryIn,
+            ),
           ),
         ),
       );
@@ -239,7 +251,7 @@ void main() {
       (tester) async {
         final island = await pumpIsland(
           tester,
-          _talk(nodes: [..._group.take(2), _node('Ana', 2, speaking: true)]),
+          _talk(nodes: [..._group.take(2), _node('Ana', 1, speaking: true)]),
         );
 
         expect(island.label, 'Ana · hablando');
@@ -289,6 +301,76 @@ void main() {
         _talk(status: const RoomStatus.connecting(), nodes: _group),
       );
       expect(island.label, 'Conectando…');
+    });
+
+    testWidgets('P105: reconectando cuenta los segundos al próximo intento', (
+      tester,
+    ) async {
+      final reconnecting = _talk(
+        status: const RoomStatus.reconnecting(),
+        nodes: _group,
+      );
+
+      var island = await pumpIsland(tester, reconnecting, retryIn: 4);
+      expect(island.label, 'Reconectando · 4 s');
+      expect(island.tone, StatusIslandTone.warn);
+
+      island = await pumpIsland(tester, reconnecting, retryIn: 0);
+      expect(island.label, 'Reconectando…');
+    });
+
+    testWidgets('P101: los eventos pasajeros mandan sobre al aire y quien '
+        'habla, pero no sobre la reconexión', (tester) async {
+      const joined = RoomIslandEvent.joined(
+        name: 'Leo',
+        color: Color(0xFF00FF00),
+      );
+
+      var island = await pumpIsland(
+        tester,
+        _talk(talking: true, nodes: _group),
+        event: joined,
+      );
+      expect(island.label, 'Leo se unió');
+      expect(
+        find.descendant(
+          of: find.byType(StatusIsland),
+          matching: find.byType(SignalSignature),
+        ),
+        findsOneWidget,
+      );
+
+      island = await pumpIsland(
+        tester,
+        _talk(nodes: _group),
+        event: const RoomIslandEvent.left(name: 'Bob'),
+      );
+      expect(island.label, 'Bob salió');
+
+      island = await pumpIsland(
+        tester,
+        _talk(nodes: _group),
+        event: const RoomIslandEvent.route(
+          name: 'Sena 50S',
+          icon: FrIcons.headset,
+        ),
+      );
+      expect(island.label, 'Audio por Sena 50S');
+
+      island = await pumpIsland(
+        tester,
+        _talk(nodes: _group),
+        event: const RoomIslandEvent.recovered(),
+      );
+      expect(island.label, 'Conexión recuperada');
+
+      island = await pumpIsland(
+        tester,
+        _talk(status: const RoomStatus.reconnecting(), nodes: _group),
+        event: joined,
+        retryIn: 2,
+      );
+      expect(island.label, 'Reconectando · 2 s');
     });
   });
 }

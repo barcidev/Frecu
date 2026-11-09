@@ -9,31 +9,34 @@ part of 'needs_onboarding_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Si al abrir la app hace falta el recorrido de la primera vez (bienvenida,
-/// nombre y permisos): no hay nombre guardado, o algún permiso del recorrido
-/// sigue por pedir.
+/// nombre y permisos): no hay nombre guardado, o el recorrido no se completó
+/// (no se pulsó Continuar en los permisos).
 ///
-/// Un permiso negado para siempre no cuenta como por pedir: solo se concede
-/// desde los ajustes del teléfono. Los permisos solo se leen si hay nombre.
+/// No depende del estado de los permisos: Android nunca informa «negado para
+/// siempre» al consultar, así que un permiso negado parecería siempre por
+/// pedir. Lo que falte se vuelve a pedir en contexto.
 
 @ProviderFor(needsOnboarding)
 final needsOnboardingProvider = NeedsOnboardingProvider._();
 
 /// Si al abrir la app hace falta el recorrido de la primera vez (bienvenida,
-/// nombre y permisos): no hay nombre guardado, o algún permiso del recorrido
-/// sigue por pedir.
+/// nombre y permisos): no hay nombre guardado, o el recorrido no se completó
+/// (no se pulsó Continuar en los permisos).
 ///
-/// Un permiso negado para siempre no cuenta como por pedir: solo se concede
-/// desde los ajustes del teléfono. Los permisos solo se leen si hay nombre.
+/// No depende del estado de los permisos: Android nunca informa «negado para
+/// siempre» al consultar, así que un permiso negado parecería siempre por
+/// pedir. Lo que falte se vuelve a pedir en contexto.
 
 final class NeedsOnboardingProvider
     extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
     with $FutureModifier<bool>, $FutureProvider<bool> {
   /// Si al abrir la app hace falta el recorrido de la primera vez (bienvenida,
-  /// nombre y permisos): no hay nombre guardado, o algún permiso del recorrido
-  /// sigue por pedir.
+  /// nombre y permisos): no hay nombre guardado, o el recorrido no se completó
+  /// (no se pulsó Continuar en los permisos).
   ///
-  /// Un permiso negado para siempre no cuenta como por pedir: solo se concede
-  /// desde los ajustes del teléfono. Los permisos solo se leen si hay nombre.
+  /// No depende del estado de los permisos: Android nunca informa «negado para
+  /// siempre» al consultar, así que un permiso negado parecería siempre por
+  /// pedir. Lo que falte se vuelve a pedir en contexto.
   NeedsOnboardingProvider._()
     : super(
         from: null,
@@ -59,4 +62,4 @@ final class NeedsOnboardingProvider
   }
 }
 
-String _$needsOnboardingHash() => r'ecb2fa773e021f0e29325ff2f80daea357705870';
+String _$needsOnboardingHash() => r'cc2fb1349930be1c1a0c0eea38e9cbe3b0c77347';

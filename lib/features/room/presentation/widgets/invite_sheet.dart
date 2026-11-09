@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
 import 'package:frecu/core/design/widgets/fr_sheet.dart';
+import 'package:frecu/core/design/widgets/signal_signature.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/usecases/build_invite_qr.dart';
@@ -37,6 +38,7 @@ class InviteSheet extends StatelessWidget {
         roomId: room.id,
         accessCode: room.accessCode,
         note: room.note,
+        name: room.name,
       ),
     );
     return SingleChildScrollView(
@@ -60,9 +62,10 @@ class InviteSheet extends StatelessWidget {
   }
 }
 
-/// QR de la invitación (`.qr-frame` y `drawQR`): módulos redondos en tinta
-/// sobre un marco claro en los dos temas, la firma de Frecu al centro y un
-/// haz que lo recorre (quieto con movimiento reducido).
+/// QR de la invitación (`.qr-frame` y `drawQR`): módulos redondos y ojos de
+/// esquina suave en tinta sobre un marco claro en los dos temas, con
+/// corrección H y la marca de Frecu al centro, y un haz que lo recorre
+/// (quieto con movimiento reducido).
 class InviteQr extends StatelessWidget {
   /// Crea el QR de [data].
   const InviteQr({required this.data, super.key});
@@ -73,8 +76,11 @@ class InviteQr extends StatelessWidget {
   /// Lado del marco.
   static const double size = 236;
 
-  /// Lado del código dentro del marco.
+  /// Lado del código dentro del marco (18 px de margen silencioso).
   static const double _code = 200;
+
+  /// Lado de la marca del centro: 7,2 celdas del QR de 29 del prototipo.
+  static const double _mark = _code * 7.2 / 29;
 
   /// Fondo claro del marco, igual en los dos temas para poder escanearlo.
   static const Color paper = Color(0xFFF4F6F1);
@@ -103,19 +109,20 @@ class InviteQr extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          QrImageView(
-            data: data,
-            size: _code,
-            padding: EdgeInsets.zero,
-            errorCorrectionLevel: QrErrorCorrectLevel.H,
-            semanticsLabel: t.room.sheets.invite.qr,
-            eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: ink),
-            dataModuleStyle: const QrDataModuleStyle(
-              dataModuleShape: QrDataModuleShape.circle,
-              color: ink,
+          Semantics(
+            image: true,
+            label: t.room.sheets.invite.qr,
+            child: CustomPaint(
+              key: const Key('invite_qr_code'),
+              size: const Size.square(_code),
+              painter: InviteQrPainter(
+                image: InviteQrPainter.encode(data),
+                ink: ink,
+                hole: _mark,
+              ),
             ),
           ),
-          const _FrecuMark(cell: _code / 29),
+          const _FrecuMark(side: _mark),
           if (!context.reduceMotion)
             Positioned.fill(
               child: FrLoop(
@@ -130,25 +137,104 @@ class InviteQr extends StatelessWidget {
   }
 }
 
-/// Cuadro de tinta del centro del QR con la firma de Frecu.
-class _FrecuMark extends StatelessWidget {
-  const _FrecuMark({required this.cell});
+/// Pintor del QR de la invitación (`drawQR` del prototipo) sobre el `QrCode`
+/// del paquete `qr`: cada módulo oscuro es un punto de 0,8 celdas, los tres
+/// ojos son un aro de una celda con radio 2 y un centro de 3 × 3 con radio
+/// 1,1, y el cuadro central de lado [hole] queda libre para la marca.
+class InviteQrPainter extends CustomPainter {
+  /// Pinta [image] en [ink], dejando libre un cuadro central de [hole] px.
+  const InviteQrPainter({
+    required this.image,
+    required this.ink,
+    this.hole = 0,
+  });
 
-  final double cell;
+  /// Codifica [data] con corrección de errores H (la marca tapa el centro).
+  static QrImage encode(String data) => QrImage(
+    QrCode.fromData(data: data, errorCorrectLevel: QrErrorCorrectLevel.H),
+  );
+
+  /// Módulos del código.
+  final QrImage image;
+
+  /// Color de los módulos.
+  final Color ink;
+
+  /// Lado del cuadro central sin módulos, en px.
+  final double hole;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final n = image.moduleCount;
+    final cell = math.min(size.width, size.height) / n;
+    final center = Offset(n * cell / 2, n * cell / 2);
+    final free = Rect.fromCenter(center: center, width: hole, height: hole);
+    final fill = Paint()..color = ink;
+    for (var y = 0; y < n; y++) {
+      for (var x = 0; x < n; x++) {
+        if (_inEye(x, y, n) || !image.isDark(y, x)) continue;
+        final dot = Offset((x + 0.5) * cell, (y + 0.5) * cell);
+        if (hole > 0 && free.inflate(cell * 0.5).contains(dot)) continue;
+        canvas.drawCircle(dot, cell * 0.4, fill);
+      }
+    }
+    final ring = Paint()
+      ..color = ink
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = cell;
+    for (final (ex, ey) in [(0, 0), (n - 7, 0), (0, n - 7)]) {
+      canvas
+        ..drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(
+              (ex + 0.5) * cell,
+              (ey + 0.5) * cell,
+              6 * cell,
+              6 * cell,
+            ),
+            Radius.circular(2 * cell),
+          ),
+          ring,
+        )
+        ..drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH((ex + 2) * cell, (ey + 2) * cell, 3 * cell, 3 * cell),
+            Radius.circular(1.1 * cell),
+          ),
+          fill,
+        );
+    }
+  }
+
+  /// Si el módulo ([x], [y]) es parte de un ojo o de su separador.
+  static bool _inEye(int x, int y, int n) =>
+      (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
+
+  @override
+  bool shouldRepaint(InviteQrPainter oldDelegate) =>
+      oldDelegate.image != image ||
+      oldDelegate.ink != ink ||
+      oldDelegate.hole != hole;
+}
+
+/// Cuadro de tinta del centro del QR con la marca de Frecu.
+class _FrecuMark extends StatelessWidget {
+  const _FrecuMark({required this.side});
+
+  final double side;
 
   @override
   Widget build(BuildContext context) {
-    final side = cell * 7.2;
     return Container(
       width: side,
       height: side,
       decoration: BoxDecoration(
         color: InviteQr.ink,
-        borderRadius: BorderRadius.circular(cell * 2),
+        borderRadius: BorderRadius.circular(side * 2 / 7.2),
       ),
       child: CustomPaint(
         painter: _FrecuSignaturePainter(
-          radius: cell * 2.4,
+          radius: side / 3,
           color: context.fr.colors.signal,
         ),
       ),
@@ -156,7 +242,8 @@ class _FrecuMark extends StatelessWidget {
   }
 }
 
-/// Firma de Frecu: Lissajous 2:3 con fase 0,6.
+/// Marca de Frecu: Lissajous 2:3 con fase 0,6 ([SignatureParams.brand]),
+/// quieta y en el verde, que sobre la tinta se ve en los dos temas.
 class _FrecuSignaturePainter extends CustomPainter {
   const _FrecuSignaturePainter({required this.radius, required this.color});
 
@@ -165,13 +252,16 @@ class _FrecuSignaturePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    const brand = SignatureParams.brand;
     final center = size.center(Offset.zero);
     final path = Path();
     const steps = 160;
     for (var i = 0; i <= steps; i++) {
       final u = i / steps * math.pi * 2;
       final point =
-          center + Offset(math.sin(2 * u + 0.6), math.sin(3 * u)) * radius;
+          center +
+          Offset(math.sin(brand.a * u + brand.phase), math.sin(brand.b * u)) *
+              radius;
       i == 0
           ? path.moveTo(point.dx, point.dy)
           : path.lineTo(point.dx, point.dy);

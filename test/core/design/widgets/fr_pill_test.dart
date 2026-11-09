@@ -1,4 +1,4 @@
-// AC6: CUANDO se muestra una `FrPill` o una `FrTag` ENTONCES la píldora de 28 px lleva el texto en mayúsculas y un punto del color de su tono (`ok`, `warn`, `alert`, `off`) con un halo que late cada 2,4 s (1,1 s en `warn`, sin halo en `off`) o, si está ocupada, un arco que gira; la etiqueta de 20 px va en mayúsculas en neutro (`bg3` y `tx2`), señal (relleno `signal` al 12 % × `washK` y texto `signalFg`) o aviso; en el tema claro ningún texto ni trazo de estos widgets usa `signal`.
+// AC6: CUANDO se muestra una `FrPill` o una `FrTag` ENTONCES la píldora de 28 px lleva el texto en mayúsculas y un punto del color de su tono (`ok`, `warn`, `alert`, `off`) con un halo que late cada 2,4 s (1,1 s en `warn`, sin halo en `off`) o, si está ocupada, un arco que gira; la etiqueta de 20 px va en mayúsculas en neutro (`bg3` y `tx2`), señal (relleno `signal` al 12 % × `washK` y texto `signalFg`) o aviso; en el tema claro ningún texto ni trazo de estos widgets usa `signal`, salvo el halo del punto conectado, que es un brillo y va en verde (D8); ocupada, el anillo y el arco van en ámbar de 1,5 px (`.pill.busy`).
 // AC7: CUANDO el sistema pide reducir el movimiento ENTONCES el cursor del PIN queda fijo y visible, el dígito no salta, la fila no tiembla, la ola de `ok` no se mueve y `busy` queda quieto con su borde de señal; las teclas no se hunden, el pulgar y la perilla cambian de lugar sin resorte ni estiramiento, el halo de la píldora se apaga y su arco se detiene, sin ocultar ningún estado (cursor, ocupado, correcto, error, selección y encendido).
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -176,7 +176,8 @@ void main() {
   });
 
   testWidgets(
-    'AC6: en el tema claro ningún texto ni trazo de la píldora o la etiqueta usa signal',
+    'AC6: en el tema claro ningún texto ni trazo de la píldora o la etiqueta '
+    'usa signal, salvo el halo verde del punto conectado',
     (tester) async {
       const day = FrColors.light;
       const column = ValueKey('day');
@@ -218,6 +219,7 @@ void main() {
         ),
       );
       for (final box in boxes) {
+        if (box.key == const ValueKey('fr-pill-halo')) continue;
         final side = sideOf(box.decoration);
         if (side.style != BorderStyle.none) {
           expect(side.color, isNot(day.signal));
@@ -226,7 +228,19 @@ void main() {
       final firstHalo = find
           .descendant(of: find.byType(FrPill).first, matching: halo)
           .first;
-      expect(sideOf(decorationOf(tester, firstHalo)).color, day.signalFg);
+      expect(sideOf(decorationOf(tester, firstHalo)).color, day.signal);
+      final busyRing = find.descendant(
+        of: find.byType(FrPill).at(1),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is DecoratedBox && sideOf(widget.decoration).width == 1.5,
+        ),
+      );
+      expect(busyRing, findsOneWidget);
+      expect(
+        sideOf(tester.widget<DecoratedBox>(busyRing).decoration).color,
+        day.warn,
+      );
     },
   );
 

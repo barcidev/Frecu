@@ -66,7 +66,8 @@ class WelcomeMesh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.fr.colors;
-    final colors = [c.signal, c.p1, c.p2, c.p3, c.p4, c.p5];
+    // La señal va como trazo (`signalFg`: de día, tinta) y brilla en verde.
+    final colors = [c.signalFg, c.p1, c.p2, c.p3, c.p4, c.p5];
     return RepaintBoundary(
       child: FrLoop(
         builder: (context, seconds) => Stack(
@@ -76,6 +77,7 @@ class WelcomeMesh extends StatelessWidget {
               painter: _MeshPainter(
                 seconds: seconds,
                 colors: colors,
+                glows: [for (final color in colors) c.glowOf(color)],
                 ink: c.ink,
                 disc: c.bg0,
               ),
@@ -136,12 +138,16 @@ class _MeshPainter extends CustomPainter {
   _MeshPainter({
     required this.seconds,
     required this.colors,
+    required this.glows,
     required this.ink,
     required this.disc,
   }) : super(repaint: seconds);
 
   final ValueListenable<double> seconds;
   final List<Color> colors;
+
+  /// Brillo de cada lugar: el de la señal, verde también de día.
+  final List<Color> glows;
   final Color ink;
   final Color disc;
 
@@ -204,6 +210,7 @@ class _MeshPainter extends CustomPainter {
     double t,
   ) {
     final voice = colors[speaker];
+    final halo = glows[speaker];
     final glow = Paint()
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
     final dot = Paint();
@@ -212,7 +219,7 @@ class _MeshPainter extends CustomPainter {
       final progress = (t * 1.3 + j * 0.21) % 1;
       final at = Offset.lerp(centers[speaker], centers[j], progress)!;
       final alpha = math.sin(math.pi * progress);
-      glow.color = voice.withValues(alpha: alpha * 0.6);
+      glow.color = halo.withValues(alpha: alpha * 0.6);
       dot.color = voice.withValues(alpha: alpha);
       canvas
         ..drawCircle(at, 4, glow)
@@ -224,6 +231,7 @@ class _MeshPainter extends CustomPainter {
   bool shouldRepaint(_MeshPainter oldDelegate) =>
       oldDelegate.seconds != seconds ||
       !listEquals(oldDelegate.colors, colors) ||
+      !listEquals(oldDelegate.glows, glows) ||
       oldDelegate.ink != ink ||
       oldDelegate.disc != disc;
 }

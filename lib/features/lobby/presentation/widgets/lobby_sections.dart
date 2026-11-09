@@ -76,7 +76,7 @@ class _Wordmark extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SignalSignature(name: title, size: 26),
+        const SignalSignature.brand(size: 26),
         const SizedBox(width: 8),
         Text(
           title,
@@ -146,8 +146,13 @@ class LobbyHeading extends StatelessWidget {
 
 /// Búsqueda vacía: la onda y qué hacer mientras no aparecen frecus.
 class LobbyEmptySearch extends StatelessWidget {
-  /// Crea la búsqueda vacía.
-  const LobbyEmptySearch({super.key});
+  /// Crea la búsqueda vacía; con [failed], la búsqueda no pudo empezar y se
+  /// reintenta.
+  const LobbyEmptySearch({this.failed = false, super.key});
+
+  /// La búsqueda falló: en lugar de «La búsqueda sigue activa» dice que
+  /// falló y que se reintenta.
+  final bool failed;
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +195,9 @@ class LobbyEmptySearch extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              empty.searching.toUpperCase(),
+              (failed ? empty.failed : empty.searching).toUpperCase(),
               textAlign: TextAlign.center,
-              style: fr.type.labelS.copyWith(color: c.tx3),
+              style: fr.type.labelS.copyWith(color: failed ? c.alert : c.tx3),
             ),
           ],
         ),
@@ -201,10 +206,14 @@ class LobbyEmptySearch extends StatelessWidget {
   }
 }
 
-/// Aviso sin red local: en lugar de la búsqueda vacía.
+/// Aviso sin red local: en lugar de la búsqueda vacía, con «Abrir ajustes
+/// de Wi-Fi».
 class LobbyOfflineNotice extends StatelessWidget {
-  /// Crea el aviso.
-  const LobbyOfflineNotice({super.key});
+  /// Crea el aviso; la acción llama a [onOpenSettings].
+  const LobbyOfflineNotice({required this.onOpenSettings, super.key});
+
+  /// Abre los ajustes de Wi-Fi del sistema.
+  final VoidCallback onOpenSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -217,6 +226,8 @@ class LobbyOfflineNotice extends StatelessWidget {
           icon: FrIcons.wifi,
           title: offline.title,
           message: offline.message,
+          actionLabel: offline.openSettings,
+          onAction: onOpenSettings,
         ),
       ],
     );
@@ -301,7 +312,8 @@ class _FitWidth extends StatelessWidget {
   );
 }
 
-/// «Frecus cercanas» tras la línea de señal (`.kicker`).
+/// «Frecus cercanas» tras la línea de señal, en mayúsculas como etiqueta
+/// (`.kicker`).
 class _Kicker extends StatelessWidget {
   const _Kicker();
 
@@ -315,7 +327,7 @@ class _Kicker extends StatelessWidget {
         const SizedBox(width: 8),
         Flexible(
           child: Text(
-            t.lobby.nearbyRooms,
+            t.lobby.nearbyRooms.toUpperCase(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: fr.type.label.copyWith(color: c.tx3),

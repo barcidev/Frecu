@@ -1,9 +1,13 @@
 // AC1: CUANDO el anfitrión crea una frecu ENTONCES la sala se inicializa en el estado conectado, el servidor de señalización se activa y se muestra la IP local del anfitrión.
 // AC2: CUANDO un participante ingresa la IP del anfitrión y el código de acceso ENTONCES se une a la sala mediante WebSocket y ambos teléfonos ven la lista actualizada de participantes.
 // AC3: CUANDO un participante o el anfitrión abandona la sala ENTONCES la conexión se cierra limpiamente y se actualiza el estado de la sala en los participantes restantes.
+// F2: CUANDO la pantalla de la frecu se abre después del `welcome` ENTONCES recibe al instante los participantes y el estado actuales.
+// F4: CUANDO se abre una frecu sin haber cerrado la anterior ENTONCES la anterior se cierra y la nueva usa su propio código.
+// F9: CUANDO alguien se une ENTONCES la frecu lleva el nombre real.
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
@@ -17,6 +21,8 @@ class MockForegroundServiceDataSource extends Mock
     implements ForegroundServiceDataSource {}
 
 void main() {
+  setUpAll(() => registerFallbackValue(ForegroundStatus.connected));
+
   group('RoomRepository integration', () {
     late SignalingServerDataSource hostServer;
     late SignalingClientDataSource hostClient;
@@ -189,7 +195,7 @@ void main() {
         final reconnectingCompleter = Completer<void>();
         final sub = peerRepository.watchStatus().listen((status) {
           status.maybeWhen(
-            reconnecting: () {
+            reconnecting: (_, _) {
               if (!reconnectingCompleter.isCompleted) {
                 reconnectingCompleter.complete();
               }
@@ -235,7 +241,10 @@ void main() {
         status.maybeWhen(
           connected: () {
             if (statusEvents.any(
-              (s) => s.maybeWhen(reconnecting: () => true, orElse: () => false),
+              (s) => s.maybeWhen(
+                reconnecting: (_, _) => true,
+                orElse: () => false,
+              ),
             )) {
               if (!reconnectedCompleter.isCompleted) {
                 reconnectedCompleter.complete();
@@ -323,7 +332,7 @@ void main() {
         verify(
           () => mockForeground.startService(
             roomName: 'Frecu Foreground',
-            status: 'Conectado',
+            status: ForegroundStatus.connected,
           ),
         ).called(1);
 
@@ -435,7 +444,7 @@ void main() {
         final reconnectedCompleter = Completer<void>();
         final sub = peerRepository.watchStatus().listen((status) {
           status.maybeWhen(
-            reconnecting: () => sawReconnecting = true,
+            reconnecting: (_, _) => sawReconnecting = true,
             connected: () {
               if (sawReconnecting && !reconnectedCompleter.isCompleted) {
                 reconnectedCompleter.complete();
@@ -555,5 +564,102 @@ void main() {
         expect(room.note, hostNote);
       },
     );
+
+    // F2
+    test('F2: quien mira después del welcome recibe al instante los '
+        'participantes y el estado actuales', () async {
+      final created = await hostRepository.createRoom(
+        name: 'Moto Rutas',
+        accessCode: '1234',
+        displayName: 'HostAlice',
+      );
+      final room = created.dataOrNull!;
+
+      // La pantalla se abre después: antes, estos streams no repetían nada.
+      final hostPeople = await hostRepository.watchParticipants().first.timeout(
+        const Duration(seconds: 1),
+      );
+      expect(hostPeople.single.displayName, 'HostAlice');
+      expect(hostPeople.single.id, hostRepository.localParticipantId);
+      expect(hostPeople.single.isHost, isTrue);
+      expect(
+        await hostRepository.watchStatus().first.timeout(
+          const Duration(seconds: 1),
+        ),
+        const RoomStatus.connected(),
+      );
+
+      await peerRepository.joinRoom(
+        hostAddress: '127.0.0.1',
+        port: room.port,
+        accessCode: '1234',
+        displayName: 'PeerBob',
+      );
+      final peerPeople = await peerRepository.watchParticipants().first.timeout(
+        const Duration(seconds: 1),
+      );
+      expect(peerPeople.map((p) => p.displayName), ['HostAlice', 'PeerBob']);
+      expect(
+        await peerRepository.watchStatus().first.timeout(
+          const Duration(seconds: 1),
+        ),
+        const RoomStatus.connected(),
+      );
+    });
+
+    // F9
+    test('F9: quien se une ve el nombre real de la frecu', () async {
+      final created = await hostRepository.createRoom(
+        name: 'Moto Rutas',
+        accessCode: '1234',
+        displayName: 'HostAlice',
+      );
+
+      final joined = await peerRepository.joinRoom(
+        hostAddress: '127.0.0.1',
+        port: created.dataOrNull!.port,
+        accessCode: '1234',
+        displayName: 'PeerBob',
+      );
+
+      expect(joined.dataOrNull?.name, 'Moto Rutas');
+    });
+
+    // F4
+    test('F4: abrir otra frecu sin cerrar la anterior la cierra y la nueva '
+        'usa su propio código', () async {
+      final first = await hostRepository.createRoom(
+        name: 'Vieja',
+        accessCode: '1111',
+        displayName: 'HostAlice',
+      );
+      expect(first.isSuccess, isTrue);
+
+      final second = await hostRepository.createRoom(
+        name: 'Nueva',
+        accessCode: '2222',
+        displayName: 'HostAlice',
+      );
+      expect(second.isSuccess, isTrue);
+      final port = second.dataOrNull!.port;
+
+      final stale = await peerRepository.joinRoom(
+        hostAddress: '127.0.0.1',
+        port: port,
+        accessCode: '1111',
+        displayName: 'PeerBob',
+      );
+      expect(stale.failureOrNull, const Failure.invalidAccessCode());
+
+      final fresh = await peerRepository.joinRoom(
+        hostAddress: '127.0.0.1',
+        port: port,
+        accessCode: '2222',
+        displayName: 'PeerBob',
+      );
+      expect(fresh.dataOrNull?.name, 'Nueva');
+      final people = await peerRepository.watchParticipants().first;
+      expect(people.map((p) => p.displayName), ['HostAlice', 'PeerBob']);
+    });
   });
 }

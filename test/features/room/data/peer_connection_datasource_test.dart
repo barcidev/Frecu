@@ -105,8 +105,8 @@ void main() {
     }
 
     test('AC1: manages up to 5 concurrent peer connections, sends offers and tracks, and handles answers and ice candidates', () async {
-      final ds = createDataSource();
-      await ds.initialize(localPeerId: 'peer_local');
+      final ds = createDataSource()..attach('peer_local');
+      await ds.prepareMedia(capture: true);
 
       // Conectar a 5 participantes remotos (malla de 6 participantes en total)
       for (var i = 1; i <= 5; i++) {

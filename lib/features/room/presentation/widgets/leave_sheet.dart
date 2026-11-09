@@ -60,7 +60,7 @@ class LeaveSheet extends StatelessWidget {
                 key: const Key('leave_confirm'),
                 label: host ? copy.hostConfirm : copy.peerConfirm,
                 icon: FrIcons.exit,
-                variant: FrButtonVariant.danger,
+                variant: FrButtonVariant.dangerSolid,
                 expand: true,
                 onPressed: () => navigator.pop(true),
               ),

@@ -1,13 +1,14 @@
 // AC1: CUANDO el usuario toca una frecu cercana ENTONCES se abre la hoja de código (`FrSheet`) con «<nota> · <Hz> · <IP>» (solo la IP si la frecu no tiene nota), el nombre de la frecu, «Ingresa el código de acceso. Pídeselo al anfitrión.», el botón Cerrar, el código de 4 celdas vacío, «Se envía al completar los 4 dígitos», el teclado propio y «Entrarás como <nombre guardado>»; cada tecla escribe su dígito en la celda siguiente y Borrar quita el último.
-// AC2: CUANDO se escribe el cuarto dígito ENTONCES el código se envía solo a la IP y el puerto de la frecu con el nombre guardado y la nota de la frecu, las celdas pasan a verificando con «Verificando con el anfitrión…» y el teclado no responde; CUANDO el anfitrión lo acepta ENTONCES la hoja se cierra y se abre la frecu activa.
-// AC3: CUANDO el anfitrión rechaza el código ENTONCES las celdas pasan a error con «Código incorrecto. Revisa e intenta otra vez.» y la siguiente tecla empieza un código nuevo; CUANDO la frecu está llena ENTONCES se ve un aviso ámbar «La frecu está llena (máximo 6 participantes)» con «Podrás entrar cuando alguien salga.»; CUANDO falla por otro motivo ENTONCES un aviso de alerta con su mensaje; en esos dos casos las celdas quedan vacías para reintentar.
-// AC4: CUANDO el usuario toca Conectar por IP ENTONCES se abre la hoja «Conexión manual», «Conectar por IP», «Úsalo si la frecu no aparece en la lista.» con los campos «IP del anfitrión» (con «Puerto 47800» debajo) y «Código de acceso» (4 dígitos), y Conectar solo responde con una IP y 4 dígitos; al tocarlo se une a esa IP en el puerto 47800 con ese código y el nombre guardado, sin nota; CUANDO el anfitrión acepta ENTONCES la hoja se cierra y se abre la frecu activa.
-// AC5: CUANDO el anfitrión no responde a la conexión por IP ENTONCES el campo de IP pasa a error con «Sin respuesta en el puerto 47800» y se ve un aviso de alerta «El anfitrión no responde» con «Revisa que estés en su misma red Wi-Fi.»; CUANDO el código es incorrecto ENTONCES el campo del código pasa a error con «Código incorrecto. Revisa e intenta otra vez.»; CUANDO la frecu está llena ENTONCES el aviso ámbar de AC3; CUANDO el usuario edita un campo ENTONCES el error se quita.
+// AC2: CUANDO se escribe el cuarto dígito ENTONCES el código se envía solo a la IP y el puerto de la frecu con el nombre guardado y la nota de la frecu, las celdas pasan a verificando con «Verificando con el anfitrión…» y el teclado no responde; CUANDO el anfitrión lo acepta ENTONCES las celdas se rellenan con la ola de acierto y «Código correcto · entrando» un momento (700 ms, menos con movimiento reducido) y luego la hoja se cierra y se abre la frecu activa; CUANDO se cierra la hoja mientras verifica ENTONCES se cancela: si el anfitrión acepta igual, sale de esa frecu.
+// AC3: CUANDO el anfitrión rechaza el código ENTONCES el teléfono vibra, las celdas pasan a error con «Código incorrecto. Revisa e intenta otra vez.» y la siguiente tecla empieza un código nuevo; CUANDO la frecu está llena ENTONCES se ve el aviso ámbar del prototipo «Esta frecu está llena (6/6).» con «Podrás entrar cuando alguien salga.» y los dígitos siguen escritos; CUANDO el anfitrión no responde ENTONCES el aviso de alerta «El anfitrión no responde.» con «Revisa que estés en su misma red Wi-Fi.»; CUANDO falla por otro motivo ENTONCES un aviso de alerta amable, sin «Error inesperado» ni el mensaje técnico; en esos casos las celdas quedan vacías para reintentar.
+// AC4: CUANDO el usuario toca Conectar por IP ENTONCES se abre la hoja «Conexión manual», «Conectar por IP», «Úsalo si la frecu no aparece en la lista.» con los campos «IP del anfitrión» (con «Puerto 47800» a la derecha de su etiqueta) y «Código de acceso» (4 dígitos), y Conectar solo responde con una IP y 4 dígitos; al tocarlo, si la IP no es una IPv4 su campo pasa a error y no se conecta; si lo es, se une a esa IP (en su forma corriente) en el puerto 47800 con ese código y el nombre guardado, sin nota; CUANDO el anfitrión acepta ENTONCES la hoja se cierra y se abre la frecu activa.
+// AC5: CUANDO el anfitrión no responde a la conexión por IP ENTONCES el campo de IP pasa a error con «Sin respuesta en el puerto 47800» y se ve el aviso de alerta del prototipo «El anfitrión no responde.» con «Revisa que estés en su misma red Wi-Fi.»; CUANDO el código es incorrecto ENTONCES el teléfono vibra y el campo del código pasa a error con «Código incorrecto. Revisa e intenta otra vez.»; CUANDO la frecu está llena ENTONCES el aviso ámbar de AC3; CUANDO falla por otro motivo ENTONCES el aviso amable de AC3; CUANDO el usuario edita un campo ENTONCES el error se quita; CUANDO cierra la hoja mientras conecta ENTONCES se cancela: si el anfitrión acepta igual, sale de esa frecu.
 // AC8: CUANDO la app está en inglés ENTONCES las hojas y el escáner muestran sus textos de la traducción `en`; CUANDO el sistema pide reducir el movimiento ENTONCES la retícula no respira, el haz queda quieto y el escáner no pide cuadros, sin ocultar el cierre sobre el código.
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
@@ -26,6 +27,7 @@ import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
+import 'package:frecu/features/lobby/presentation/widgets/join_cancel.dart';
 import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
@@ -131,6 +133,43 @@ FrPinField _pin(WidgetTester tester) =>
 FrBanner _banner(WidgetTester tester) =>
     tester.widget<FrBanner>(find.byType(FrBanner));
 
+/// [port] va a la derecha de la etiqueta del campo [label], en su línea.
+void expectPortBesideLabel(WidgetTester tester, String port, String label) {
+  final aside = _inSheet(_label(port));
+  expect(aside, findsOneWidget);
+  final field = _field(label);
+  final fieldLabel = find.descendant(of: field, matching: _label(label));
+  expect(
+    tester.getTopRight(aside).dx,
+    closeTo(tester.getTopRight(field).dx, 0.5),
+  );
+  expect(
+    tester.getCenter(aside).dy,
+    closeTo(tester.getCenter(fieldLabel).dy, 2),
+  );
+}
+
+/// Anota las vibraciones que pide la app.
+List<String> _recordHaptics(WidgetTester tester) {
+  final haptics = <String>[];
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (call) async {
+      if (call.method == 'HapticFeedback.vibrate') {
+        haptics.add('${call.arguments}');
+      }
+      return null;
+    },
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      null,
+    ),
+  );
+  return haptics;
+}
+
 /// Escribe [digits] con el teclado propio de la hoja.
 Future<void> _type(WidgetTester tester, String digits) async {
   for (final digit in digits.split('')) {
@@ -182,6 +221,10 @@ void main() {
     when(() => rooms.getLocalIpAddress())
         .thenAnswer((_) async => '192.168.43.27');
     answerJoin(() async => const Result.failure(Failure.invalidAccessCode()));
+    when(() => rooms.leaveRoom())
+        .thenAnswer((_) async => const Result<void>.success(null));
+    when(() => discovery.stopPublishing())
+        .thenAnswer((_) async => const Result<void>.success(null));
   });
 
   tearDown(() async {
@@ -371,8 +414,8 @@ void main() {
     );
 
     testWidgets(
-      'AC3: con la frecu llena se ve el aviso ámbar y las celdas quedan '
-      'vacías para reintentar',
+      'AC3: con la frecu llena se ve el aviso ámbar del prototipo y los '
+      'dígitos siguen escritos; la siguiente tecla empieza otro código',
       (tester) async {
         answerJoin(() async => const Result.failure(Failure.roomFull()));
         await pumpLobby(tester);
@@ -381,12 +424,9 @@ void main() {
         await _type(tester, '4827');
 
         expect(_banner(tester).tone, FrBannerTone.warn);
-        expect(
-          _banner(tester).title,
-          'La frecu está llena (máximo 6 participantes)',
-        );
+        expect(_banner(tester).title, 'Esta frecu está llena (6/6).');
         expect(_banner(tester).message, 'Podrás entrar cuando alguien salga.');
-        expect(_pin(tester).value, isEmpty);
+        expect(_pin(tester).value, '4827');
         expect(_pin(tester).state, FrPinState.idle);
 
         await _type(tester, '4');
@@ -407,7 +447,11 @@ void main() {
         await _type(tester, '4827');
 
         expect(_banner(tester).tone, FrBannerTone.alert);
-        expect(_banner(tester).title, 'El anfitrión no responde');
+        expect(_banner(tester).title, 'El anfitrión no responde.');
+        expect(
+          _banner(tester).message,
+          'Revisa que estés en su misma red Wi-Fi.',
+        );
         expect(_pin(tester).value, isEmpty);
         expect(find.byType(PinJoinSheet), findsOneWidget);
       },
@@ -444,6 +488,105 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets(
+      'AC2: con el código aceptado se ven la ola de acierto y «Código '
+      'correcto · entrando» antes de cerrar la hoja y entrar',
+      (tester) async {
+        answerJoin(() async => Result.success(_joined('room-ruta')));
+        final (router, _) = await pumpLobby(tester);
+        await openPin(tester, _ruta);
+
+        for (final digit in '4827'.split('')) {
+          await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+          await tester.pump();
+        }
+        await tester.pump();
+
+        expect(_pin(tester).state, FrPinState.ok);
+        expect(
+          _inSheet(find.text('Código correcto · entrando')),
+          findsOneWidget,
+        );
+        expect(find.byType(PinJoinSheet), findsOneWidget);
+        expect(router.currentPath, '/');
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(PinJoinSheet), findsNothing);
+        expect(router.currentPath, '/room/room-ruta');
+      },
+    );
+
+    testWidgets(
+      'AC2: cerrar la hoja mientras verifica cancela; si el anfitrión acepta '
+      'igual, sale de esa frecu y sigue en el inicio',
+      (tester) async {
+        final answer = Completer<Result<Room>>();
+        answerJoin(() => answer.future);
+        final (router, container) = await pumpLobby(tester);
+        await openPin(tester, _ruta);
+
+        await _type(tester, '4827');
+        expect(_pin(tester).state, FrPinState.busy);
+
+        await tester.tap(_iconButton('Cerrar'));
+        await tester.pumpAndSettle();
+        expect(find.byType(PinJoinSheet), findsNothing);
+
+        answer.complete(Result.success(_joined('room-ruta')));
+        await tester.pumpAndSettle();
+
+        verify(() => rooms.leaveRoom()).called(1);
+        expect(container.read(roomNotifierProvider), isNull);
+        expect(router.currentPath, '/');
+      },
+    );
+
+    testWidgets('AC3: con el código rechazado el teléfono vibra', (
+      tester,
+    ) async {
+      final haptics = _recordHaptics(tester);
+      await pumpLobby(tester);
+      await openPin(tester, _ruta);
+
+      await _type(tester, '1111');
+
+      expect(_pin(tester).state, FrPinState.error);
+      expect(haptics, contains('HapticFeedbackType.heavyImpact'));
+    });
+
+    testWidgets(
+      'AC3: un fallo inesperado se ve como un aviso amable, sin «Error '
+      'inesperado» ni el mensaje técnico',
+      (tester) async {
+        answerJoin(
+          () async => const Result.failure(
+            Failure.unexpected(message: 'TimeoutException after 0:00:05'),
+          ),
+        );
+        await pumpLobby(tester);
+        await openPin(tester, _ruta);
+
+        await _type(tester, '4827');
+
+        expect(_banner(tester).tone, FrBannerTone.alert);
+        expect(_banner(tester).title, 'No se pudo entrar a la frecu.');
+        expect(
+          _banner(tester).message,
+          'Revisa que estés en su misma red Wi-Fi e intenta otra vez.',
+        );
+        expect(
+          find.textContaining('Error inesperado', findRichText: true),
+          findsNothing,
+        );
+        expect(
+          find.textContaining('Timeout', findRichText: true),
+          findsNothing,
+        );
+        expect(_pin(tester).value, isEmpty);
+      },
+    );
   });
 
   group('IpJoinSheet', () {
@@ -493,7 +636,8 @@ void main() {
         );
         expect(_inSheet(_field('IP del anfitrión')), findsOneWidget);
         expect(_inSheet(_field('Código de acceso')), findsOneWidget);
-        expect(field(tester, 'IP del anfitrión').help, 'Puerto 47800');
+        expect(field(tester, 'IP del anfitrión').help, isNull);
+        expectPortBesideLabel(tester, 'Puerto 47800', 'IP del anfitrión');
         expect(field(tester, 'Código de acceso').maxLength, 4);
         expect(_inSheet(_button('Conectar')), findsOneWidget);
         expect(_inSheet(_iconButton('Cerrar')), findsOneWidget);
@@ -553,7 +697,7 @@ void main() {
           'Sin respuesta en el puerto 47800',
         );
         expect(_banner(tester).tone, FrBannerTone.alert);
-        expect(_banner(tester).title, 'El anfitrión no responde');
+        expect(_banner(tester).title, 'El anfitrión no responde.');
         expect(
           _banner(tester).message,
           'Revisa que estés en su misma red Wi-Fi.',
@@ -592,10 +736,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(_banner(tester).tone, FrBannerTone.warn);
-        expect(
-          _banner(tester).title,
-          'La frecu está llena (máximo 6 participantes)',
-        );
+        expect(_banner(tester).title, 'Esta frecu está llena (6/6).');
         expect(_banner(tester).message, 'Podrás entrar cuando alguien salga.');
       },
     );
@@ -615,8 +756,142 @@ void main() {
       );
       expect(_inSheet(_field('Host IP')), findsOneWidget);
       expect(_inSheet(_field('Access code')), findsOneWidget);
-      expect(field(tester, 'Host IP').help, 'Port 47800');
+      expectPortBesideLabel(tester, 'Port 47800', 'Host IP');
       expect(_inSheet(_button('Connect')), findsOneWidget);
     });
+
+    testWidgets(
+      'AC4: una IP que no es IPv4 marca su campo y no conecta; la IP válida '
+      'se une en su forma corriente',
+      (tester) async {
+        answerJoin(() async => Result.success(_joined('room-ip')));
+        await pumpLobby(tester);
+        await openIp(tester);
+        await fill(tester, ip: '192.168.43', code: '4827');
+
+        await tester.tap(_button('Conectar'));
+        await tester.pumpAndSettle();
+
+        expect(
+          field(tester, 'IP del anfitrión').error,
+          'Escribe una IP como 192.168.43.1.',
+        );
+        expect(find.byType(FrBanner), findsNothing);
+        verifyNever(
+          () => rooms.joinRoom(
+            hostAddress: any(named: 'hostAddress'),
+            port: any(named: 'port'),
+            accessCode: any(named: 'accessCode'),
+            displayName: any(named: 'displayName'),
+          ),
+        );
+
+        await fill(tester, ip: ' 192.168.043.050 ');
+        expect(field(tester, 'IP del anfitrión').error, isNull);
+
+        await tester.tap(_button('Conectar'));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => rooms.joinRoom(
+            hostAddress: '192.168.43.50',
+            port: 47800,
+            accessCode: '4827',
+            displayName: 'Ana',
+          ),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'AC5: un fallo inesperado se ve como un aviso amable y no marca la IP',
+      (tester) async {
+        answerJoin(
+          () async => const Result.failure(
+            Failure.unexpected(message: 'SocketException: Connection refused'),
+          ),
+        );
+        await pumpLobby(tester);
+        await openIp(tester);
+        await fill(tester, ip: '192.168.43.50', code: '4827');
+
+        await tester.tap(_button('Conectar'));
+        await tester.pumpAndSettle();
+
+        expect(_banner(tester).title, 'No se pudo entrar a la frecu.');
+        expect(
+          find.textContaining('SocketException', findRichText: true),
+          findsNothing,
+        );
+        expect(field(tester, 'IP del anfitrión').error, isNull);
+      },
+    );
+
+    testWidgets('AC5: con el código incorrecto el teléfono vibra', (
+      tester,
+    ) async {
+      final haptics = _recordHaptics(tester);
+      await pumpLobby(tester);
+      await openIp(tester);
+      await fill(tester, ip: '192.168.43.50', code: '1111');
+
+      await tester.tap(_button('Conectar'));
+      await tester.pumpAndSettle();
+
+      expect(field(tester, 'Código de acceso').error, isNotNull);
+      expect(haptics, contains('HapticFeedbackType.heavyImpact'));
+    });
+
+    testWidgets(
+      'AC5: cerrar la hoja mientras conecta cancela; si el anfitrión acepta '
+      'igual, sale de esa frecu',
+      (tester) async {
+        final answer = Completer<Result<Room>>();
+        answerJoin(() => answer.future);
+        final (router, container) = await pumpLobby(tester);
+        await openIp(tester);
+        await fill(tester, ip: '192.168.43.50', code: '4827');
+
+        await tester.tap(_button('Conectar'));
+        await tester.pumpAndSettle();
+        expect(tester.widget<FrButton>(_button('Conectar')).loading, isTrue);
+
+        await tester.tap(_iconButton('Cerrar'));
+        await tester.pumpAndSettle();
+        expect(find.byType(IpJoinSheet), findsNothing);
+
+        answer.complete(Result.success(_joined('room-ip')));
+        await tester.pumpAndSettle();
+
+        verify(() => rooms.leaveRoom()).called(1);
+        expect(container.read(roomNotifierProvider), isNull);
+        expect(router.currentPath, '/');
+      },
+    );
+
+    testWidgets(
+      'AC5: si al cancelar la unión ya se entró a otra frecu, no sale de ella',
+      (tester) async {
+        final container = ProviderContainer(
+          overrides: [roomRepositoryProvider.overrideWithValue(rooms)],
+        );
+        addTearDown(container.dispose);
+        answerJoin(() async => Result.success(_joined('room-otra')));
+        await container
+            .read(roomNotifierProvider.notifier)
+            .joinRoom(
+              hostAddress: '192.168.43.9',
+              port: 47800,
+              accessCode: '1111',
+              displayName: 'Ana',
+            );
+
+        leaveCancelledJoin(container, Result.success(_joined('room-ip')));
+        await tester.pump();
+
+        verifyNever(() => rooms.leaveRoom());
+        expect(container.read(roomNotifierProvider)?.id, 'room-otra');
+      },
+    );
   });
 }

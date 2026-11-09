@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:frecu/core/error/failure.dart';
+import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
@@ -10,7 +12,10 @@ import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
+import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
+import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/i18n/strings.g.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'room_provider.g.dart';
@@ -26,9 +31,30 @@ SignalingClientDataSource signalingClient(Ref ref) {
 /// Datasource del servicio en primer plano para persistencia.
 @Riverpod(keepAlive: true)
 ForegroundServiceDataSource foregroundServiceDataSource(Ref ref) {
-  final dataSource = ForegroundServiceDataSource();
+  final dataSource = ForegroundServiceDataSource(texts: roomNotificationTexts);
   unawaited(dataSource.init());
+  ref.onDispose(dataSource.dispose);
   return dataSource;
+}
+
+/// Toques en «Salir» de la notificación de la frecu (Android).
+@riverpod
+Stream<int> notificationLeaveRequests(Ref ref) =>
+    ref.watch(foregroundServiceDataSourceProvider).leaveRequests;
+
+/// Textos de la notificación de la frecu activa en el idioma actual; sin
+/// nombre (anfitrión de una versión anterior) usa el título genérico.
+ForegroundNotificationTexts roomNotificationTexts() {
+  final copy = t.room.notification;
+  String named(String roomName) => roomName.isEmpty ? t.room.title : roomName;
+  return ForegroundNotificationTexts(
+    channelName: copy.channelName,
+    channelDescription: copy.channelDescription,
+    title: copy.title,
+    connected: (roomName) => copy.connected(room: named(roomName)),
+    reconnecting: (roomName) => copy.reconnecting(room: named(roomName)),
+    leave: copy.leave,
+  );
 }
 
 /// Proveedor global singleton del repositorio de sala.
@@ -90,10 +116,11 @@ class RoomNotifier extends _$RoomNotifier {
     RoomNote? note,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
+    final voice = _voiceListening();
     final result = await repository.createRoom(
       name: name,
       accessCode: accessCode,
-      displayName: displayName,
+      displayName: displayName ?? t.room.host,
       note: note,
     );
     switch (result) {
@@ -107,6 +134,7 @@ class RoomNotifier extends _$RoomNotifier {
               ),
         );
         state = room;
+        _joinVoice(repository, voice);
         return Result.success(room);
       case FailureResult():
         return result;
@@ -126,6 +154,7 @@ class RoomNotifier extends _$RoomNotifier {
     RoomNote? note,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
+    final voice = _voiceListening();
     final result = await repository.joinRoom(
       hostAddress: hostAddress,
       port: port,
@@ -136,17 +165,80 @@ class RoomNotifier extends _$RoomNotifier {
       case Success(:final data):
         final room = data.copyWith(note: data.note ?? note);
         state = room;
+        _joinVoice(repository, voice);
         return Result.success(room);
       case FailureResult():
         return result;
     }
   }
 
-  /// Abandona la frecu activa.
+  /// Abandona la frecu activa: primero suelta la voz (enlaces, micrófono y
+  /// sesión de audio) y después la señalización.
   Future<Result<void>> leaveRoom() async {
-    final repository = ref.read(roomRepositoryProvider);
-    final result = await repository.leaveRoom();
-    state = null;
+    // Con la app cerrándose, los repositorios ya se sueltan solos.
+    if (!ref.mounted) return const Result<void>.success(null);
+    Result<void> result;
+    try {
+      final repository = ref.read(roomRepositoryProvider);
+      final voice = ref.exists(voiceRepositoryProvider)
+          ? ref.read(voiceRepositoryProvider)
+          : null;
+      if (voice != null) {
+        try {
+          // Dejar de transmitir y cerrar los enlaces pasa ya; soltar el
+          // micrófono y la sesión de audio termina por su cuenta.
+          unawaited(
+            voice.leaveMesh().catchError((Object error, StackTrace stack) {
+              AppLogger.w('Could not leave the voice mesh', error, stack);
+            }),
+          );
+        } on Object catch (error, stackTrace) {
+          AppLogger.w('Could not leave the voice mesh', error, stackTrace);
+        }
+      }
+      result = await repository.leaveRoom();
+    } on Object catch (error, stackTrace) {
+      AppLogger.e('Error leaving room', error, stackTrace);
+      result = Result.failure(Failure.unexpected(error: error));
+    }
+    if (ref.mounted) state = null;
     return result;
+  }
+
+  /// Repositorio de voz, creado antes de crear o unirse para que escuche el
+  /// `welcome` y las offers desde el principio.
+  VoiceRepository? _voiceListening() {
+    try {
+      return ref.read(voiceRepositoryProvider);
+    } on Object catch (error, stackTrace) {
+      AppLogger.w('Voice is not available', error, stackTrace);
+      return null;
+    }
+  }
+
+  /// Une la voz a la malla con el id local y quienes ya estaban, aunque el
+  /// `welcome` se haya consumido antes de que la voz existiera. Es
+  /// idempotente: si la voz ya entró con ese id, no hace nada.
+  void _joinVoice(RoomRepository rooms, VoiceRepository? voice) {
+    final localId = rooms.localParticipantId;
+    if (voice == null || localId == null) return;
+    unawaited(_joinMesh(rooms, voice, localId));
+  }
+
+  Future<void> _joinMesh(
+    RoomRepository rooms,
+    VoiceRepository voice,
+    String localId,
+  ) async {
+    try {
+      final present = await rooms.watchParticipants().first;
+      // Quien llega ofrece a los que ya estaban, que van antes en la lista.
+      final earlier = [for (final participant in present) participant.id]
+          .takeWhile((id) => id != localId)
+          .toList();
+      await voice.joinMesh(localPeerId: localId, peerIds: earlier);
+    } on Object catch (error, stackTrace) {
+      AppLogger.w('Could not join the voice mesh', error, stackTrace);
+    }
   }
 }

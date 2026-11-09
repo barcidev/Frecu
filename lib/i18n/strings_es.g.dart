@@ -47,6 +47,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$permissions$es permissions = Translations$permissions$es.internal(_root);
 	late final Translations$settings$es settings = Translations$settings$es.internal(_root);
 	late final Translations$errors$es errors = Translations$errors$es.internal(_root);
+	late final Translations$splash$es splash = Translations$splash$es.internal(_root);
 }
 
 // Path: app
@@ -94,6 +95,9 @@ class Translations$lobby$es {
 
 	/// es: 'Código de acceso'
 	String get accessCode => 'Código de acceso';
+
+	/// es: 'Frecu sin nombre'
+	String get unnamedRoom => 'Frecu sin nombre';
 
 	late final Translations$lobby$network$es network = Translations$lobby$network$es.internal(_root);
 	late final Translations$lobby$tuner$es tuner = Translations$lobby$tuner$es.internal(_root);
@@ -188,6 +192,7 @@ class Translations$room$es {
 	late final Translations$room$sheets$es sheets = Translations$room$sheets$es.internal(_root);
 	late final Translations$room$closure$es closure = Translations$room$closure$es.internal(_root);
 	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
+	late final Translations$room$notification$es notification = Translations$room$notification$es.internal(_root);
 }
 
 // Path: permissions
@@ -305,8 +310,11 @@ class Translations$settings$es {
 	/// es: 'No se pudo guardar'
 	String get saveError => 'No se pudo guardar';
 
-	/// es: '100 % local · sin internet'
-	String get footer => '100 % local · sin internet';
+	/// es: '$app · 100% local · sin internet'
+	String footer({required Object app}) => '${app} · 100% local · sin internet';
+
+	/// es: 'Frecu $version'
+	String appVersion({required Object version}) => 'Frecu ${version}';
 }
 
 // Path: errors
@@ -332,11 +340,41 @@ class Translations$errors$es {
 	/// es: 'El anfitrión no responde'
 	String get hostUnreachable => 'El anfitrión no responde';
 
+	/// es: 'Esta frecu usa otra versión de Frecu'
+	String get versionMismatch => 'Esta frecu usa otra versión de Frecu';
+
 	/// es: 'Error en el subsistema de audio'
 	String get audio => 'Error en el subsistema de audio';
 
 	/// es: 'Error inesperado'
 	String get unexpected => 'Error inesperado';
+}
+
+// Path: splash
+class Translations$splash$es {
+	Translations$splash$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'frecu'
+	String get title => 'frecu';
+
+	/// es: 'Voz de grupo. Sin internet.'
+	String get tagline => 'Voz de grupo. Sin internet.';
+
+	/// es: 'v$version'
+	String version({required Object version}) => 'v${version}';
+
+	/// es: 'Red local'
+	String get localNetwork => 'Red local';
+
+	/// es: 'Malla P2P'
+	String get mesh => 'Malla P2P';
+
+	/// es: 'Toca para entrar'
+	String get skip => 'Toca para entrar';
 }
 
 // Path: lobby.join
@@ -361,6 +399,27 @@ class Translations$lobby$join$es {
 
 	/// es: 'Revisa que estés en su misma red Wi-Fi.'
 	String get unreachableHint => 'Revisa que estés en su misma red Wi-Fi.';
+
+	/// es: 'Participante'
+	String get defaultName => 'Participante';
+
+	/// es: 'Esta frecu está llena ($max/$max).'
+	String full({required Object max}) => 'Esta frecu está llena (${max}/${max}).';
+
+	/// es: 'El anfitrión no responde.'
+	String get unreachable => 'El anfitrión no responde.';
+
+	/// es: 'No se pudo entrar a la frecu.'
+	String get failed => 'No se pudo entrar a la frecu.';
+
+	/// es: 'Revisa que estés en su misma red Wi-Fi e intenta otra vez.'
+	String get failedHint => 'Revisa que estés en su misma red Wi-Fi e intenta otra vez.';
+
+	/// es: 'Esta frecu usa otra versión de Frecu.'
+	String get versionMismatch => 'Esta frecu usa otra versión de Frecu.';
+
+	/// es: 'Actualiza Frecu en los dos teléfonos.'
+	String get versionMismatchHint => 'Actualiza Frecu en los dos teléfonos.';
 
 	late final Translations$lobby$join$pin$es pin = Translations$lobby$join$pin$es.internal(_root);
 	late final Translations$lobby$join$ip$es ip = Translations$lobby$join$ip$es.internal(_root);
@@ -422,6 +481,9 @@ class Translations$lobby$empty$es {
 
 	/// es: 'La búsqueda sigue activa'
 	String get searching => 'La búsqueda sigue activa';
+
+	/// es: 'La búsqueda falló · reintentando'
+	String get failed => 'La búsqueda falló · reintentando';
 }
 
 // Path: lobby.offline
@@ -437,6 +499,9 @@ class Translations$lobby$offline$es {
 
 	/// es: 'Únete al punto de acceso del anfitrión para encontrar frecus.'
 	String get message => 'Únete al punto de acceso del anfitrión para encontrar frecus.';
+
+	/// es: 'Abrir ajustes de Wi-Fi'
+	String get openSettings => 'Abrir ajustes de Wi-Fi';
 }
 
 // Path: lobby.newRoom
@@ -622,6 +687,34 @@ class Translations$room$talk$es {
 	late final Translations$room$talk$hint$es hint = Translations$room$talk$hint$es.internal(_root);
 	late final Translations$room$talk$island$es island = Translations$room$talk$island$es.internal(_root);
 	late final Translations$room$talk$echo$es echo = Translations$room$talk$echo$es.internal(_root);
+	late final Translations$room$talk$mic$es mic = Translations$room$talk$mic$es.internal(_root);
+}
+
+// Path: room.notification
+class Translations$room$notification$es {
+	Translations$room$notification$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Frecu en segundo plano'
+	String get channelName => 'Frecu en segundo plano';
+
+	/// es: 'Mantiene activa la conexión de Frecu con la pantalla apagada.'
+	String get channelDescription => 'Mantiene activa la conexión de Frecu con la pantalla apagada.';
+
+	/// es: 'Frecu activa'
+	String get title => 'Frecu activa';
+
+	/// es: '$room · Conectado'
+	String connected({required Object room}) => '${room} · Conectado';
+
+	/// es: '$room · Reconectando…'
+	String reconnecting({required Object room}) => '${room} · Reconectando…';
+
+	/// es: 'Salir de la frecu'
+	String get leave => 'Salir de la frecu';
 }
 
 // Path: permissions.welcome
@@ -854,6 +947,9 @@ class Translations$lobby$join$ip$es {
 	/// es: 'Sin respuesta en el puerto $port'
 	String noAnswer({required Object port}) => 'Sin respuesta en el puerto ${port}';
 
+	/// es: 'Escribe una IP como $ip.'
+	String invalid({required Object ip}) => 'Escribe una IP como ${ip}.';
+
 	/// es: 'Conectar'
 	String get connect => 'Conectar';
 }
@@ -892,6 +988,11 @@ class Translations$lobby$join$scan$es {
 
 	/// es: 'Unirme'
 	String get join => 'Unirme';
+
+	/// es: 'Escanear otro QR'
+	String get another => 'Escanear otro QR';
+
+	late final Translations$lobby$join$scan$camera$es camera = Translations$lobby$join$scan$camera$es.internal(_root);
 }
 
 // Path: lobby.newRoom.guide
@@ -933,6 +1034,12 @@ class Translations$lobby$newRoom$guide$es {
 
 	/// es: 'Ya estamos en la misma Wi-Fi'
 	String get sameWifi => 'Ya estamos en la misma Wi-Fi';
+
+	/// es: 'Abrir ajustes de zona Wi-Fi'
+	String get openSettings => 'Abrir ajustes de zona Wi-Fi';
+
+	/// es: 'Abrir Ajustes'
+	String get openSettingsIphone => 'Abrir Ajustes';
 }
 
 // Path: room.sheets.invite
@@ -999,6 +1106,9 @@ class Translations$room$sheets$route$es {
 
 	/// es: 'Sin dispositivo'
 	String get bluetoothOff => 'Sin dispositivo';
+
+	/// es: 'Bluetooth · conectado'
+	String get bluetoothDevice => 'Bluetooth · conectado';
 
 	/// es: 'Salida de audio: $route'
 	String label({required Object route}) => 'Salida de audio: ${route}';
@@ -1131,6 +1241,21 @@ class Translations$room$talk$island$es {
 
 	/// es: 'Reconectando…'
 	String get reconnecting => 'Reconectando…';
+
+	/// es: 'Reconectando · $seconds s'
+	String reconnectingIn({required Object seconds}) => 'Reconectando · ${seconds} s';
+
+	/// es: '$name se unió'
+	String joined({required Object name}) => '${name} se unió';
+
+	/// es: '$name salió'
+	String left({required Object name}) => '${name} salió';
+
+	/// es: 'Audio por $route'
+	String route({required Object route}) => 'Audio por ${route}';
+
+	/// es: 'Conexión recuperada'
+	String get recovered => 'Conexión recuperada';
 }
 
 // Path: room.talk.echo
@@ -1149,6 +1274,51 @@ class Translations$room$talk$echo$es {
 
 	/// es: 'Cerrar aviso'
 	String get dismiss => 'Cerrar aviso';
+}
+
+// Path: room.talk.mic
+class Translations$room$talk$mic$es {
+	Translations$room$talk$mic$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Tu micrófono no está disponible.'
+	String get title => 'Tu micrófono no está disponible.';
+
+	/// es: 'Escuchas a tu grupo, pero nadie te oye. Revisa el permiso en Ajustes.'
+	String get message => 'Escuchas a tu grupo, pero nadie te oye. Revisa el permiso en Ajustes.';
+
+	/// es: 'Abrir ajustes'
+	String get settings => 'Abrir ajustes';
+
+	/// es: 'Cerrar aviso'
+	String get dismiss => 'Cerrar aviso';
+}
+
+// Path: lobby.join.scan.camera
+class Translations$lobby$join$scan$camera$es {
+	Translations$lobby$join$scan$camera$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Frecu no tiene acceso a la cámara.'
+	String get deniedTitle => 'Frecu no tiene acceso a la cámara.';
+
+	/// es: 'Permítela en Ajustes para escanear la invitación, o conéctate por IP.'
+	String get deniedMessage => 'Permítela en Ajustes para escanear la invitación, o conéctate por IP.';
+
+	/// es: 'La cámara no está disponible.'
+	String get unavailableTitle => 'La cámara no está disponible.';
+
+	/// es: 'Puedes unirte con la IP del anfitrión.'
+	String get unavailableMessage => 'Puedes unirte con la IP del anfitrión.';
+
+	/// es: 'Abrir ajustes'
+	String get openSettings => 'Abrir ajustes';
 }
 
 // Path: lobby.newRoom.guide.androidSteps.0
@@ -1256,6 +1426,13 @@ extension on Translations {
 			'lobby.join.wrongCode' => 'Código incorrecto. Revisa e intenta otra vez.',
 			'lobby.join.roomFullHint' => 'Podrás entrar cuando alguien salga.',
 			'lobby.join.unreachableHint' => 'Revisa que estés en su misma red Wi-Fi.',
+			'lobby.join.defaultName' => 'Participante',
+			'lobby.join.full' => ({required Object max}) => 'Esta frecu está llena (${max}/${max}).',
+			'lobby.join.unreachable' => 'El anfitrión no responde.',
+			'lobby.join.failed' => 'No se pudo entrar a la frecu.',
+			'lobby.join.failedHint' => 'Revisa que estés en su misma red Wi-Fi e intenta otra vez.',
+			'lobby.join.versionMismatch' => 'Esta frecu usa otra versión de Frecu.',
+			'lobby.join.versionMismatchHint' => 'Actualiza Frecu en los dos teléfonos.',
 			'lobby.join.pin.message' => 'Ingresa el código de acceso. Pídeselo al anfitrión.',
 			'lobby.join.pin.autoSend' => 'Se envía al completar los 4 dígitos',
 			'lobby.join.pin.checking' => 'Verificando con el anfitrión…',
@@ -1266,6 +1443,7 @@ extension on Translations {
 			'lobby.join.ip.message' => 'Úsalo si la frecu no aparece en la lista.',
 			'lobby.join.ip.host' => 'IP del anfitrión',
 			'lobby.join.ip.noAnswer' => ({required Object port}) => 'Sin respuesta en el puerto ${port}',
+			'lobby.join.ip.invalid' => ({required Object ip}) => 'Escribe una IP como ${ip}.',
 			'lobby.join.ip.connect' => 'Conectar',
 			'lobby.join.scan.title' => 'Escanear invitación',
 			'lobby.join.scan.subtitle' => 'QR de la frecu',
@@ -1276,6 +1454,12 @@ extension on Translations {
 			'lobby.join.scan.found' => 'Frecu encontrada',
 			'lobby.join.scan.noNote' => 'Frecu sin nota',
 			'lobby.join.scan.join' => 'Unirme',
+			'lobby.join.scan.another' => 'Escanear otro QR',
+			'lobby.join.scan.camera.deniedTitle' => 'Frecu no tiene acceso a la cámara.',
+			'lobby.join.scan.camera.deniedMessage' => 'Permítela en Ajustes para escanear la invitación, o conéctate por IP.',
+			'lobby.join.scan.camera.unavailableTitle' => 'La cámara no está disponible.',
+			'lobby.join.scan.camera.unavailableMessage' => 'Puedes unirte con la IP del anfitrión.',
+			'lobby.join.scan.camera.openSettings' => 'Abrir ajustes',
 			'lobby.settings' => 'Ajustes',
 			'lobby.heading' => 'Elige tu frecu',
 			'lobby.createRoom' => 'Crear frecu',
@@ -1283,6 +1467,7 @@ extension on Translations {
 			'lobby.joinRoom' => 'Conectar por IP',
 			'lobby.nearbyRooms' => 'Frecus cercanas',
 			'lobby.accessCode' => 'Código de acceso',
+			'lobby.unnamedRoom' => 'Frecu sin nombre',
 			'lobby.network.checking' => 'Buscando red',
 			'lobby.network.connected' => ({required Object ip}) => 'Red · ${ip}',
 			'lobby.network.offline' => 'Sin red local',
@@ -1292,8 +1477,10 @@ extension on Translations {
 			'lobby.empty.title' => 'Sin señales por ahora',
 			'lobby.empty.message' => 'Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.',
 			'lobby.empty.searching' => 'La búsqueda sigue activa',
+			'lobby.empty.failed' => 'La búsqueda falló · reintentando',
 			'lobby.offline.title' => 'No estás en ninguna red Wi-Fi.',
 			'lobby.offline.message' => 'Únete al punto de acceso del anfitrión para encontrar frecus.',
+			'lobby.offline.openSettings' => 'Abrir ajustes de Wi-Fi',
 			'lobby.newRoom.back' => 'Atrás',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Paso ${current} de ${total}',
 			'lobby.newRoom.guide.title' => 'Prepara la red',
@@ -1315,6 +1502,8 @@ extension on Translations {
 			'lobby.newRoom.guide.iphoneSteps.2.rest' => ' mientras se unen. En iPhone recomendamos que el anfitrión use Android.',
 			'lobby.newRoom.guide.ready' => 'Ya está activo',
 			'lobby.newRoom.guide.sameWifi' => 'Ya estamos en la misma Wi-Fi',
+			'lobby.newRoom.guide.openSettings' => 'Abrir ajustes de zona Wi-Fi',
+			'lobby.newRoom.guide.openSettingsIphone' => 'Abrir Ajustes',
 			'lobby.newRoom.title' => 'Nueva frecu',
 			'lobby.newRoom.soundsIn' => 'Tu frecu suena en',
 			'lobby.newRoom.openedAt' => ({required Object time}) => 'Abierta a las ${time}',
@@ -1396,6 +1585,7 @@ extension on Translations {
 			'room.sheets.route.earpieceSub' => 'Teléfono en la oreja',
 			'room.sheets.route.bluetoothOn' => 'Conectado',
 			'room.sheets.route.bluetoothOff' => 'Sin dispositivo',
+			'room.sheets.route.bluetoothDevice' => 'Bluetooth · conectado',
 			'room.sheets.route.label' => ({required Object route}) => 'Salida de audio: ${route}',
 			'room.sheets.leave.peerTitle' => '¿Salir de la frecu?',
 			'room.sheets.leave.peerMessage' => 'Podrás volver a unirte con el código de acceso.',
@@ -1440,9 +1630,24 @@ extension on Translations {
 			'room.talk.island.waiting' => 'Al aire · esperando a tu grupo',
 			'room.talk.island.connecting' => 'Conectando…',
 			'room.talk.island.reconnecting' => 'Reconectando…',
+			'room.talk.island.reconnectingIn' => ({required Object seconds}) => 'Reconectando · ${seconds} s',
+			'room.talk.island.joined' => ({required Object name}) => '${name} se unió',
+			'room.talk.island.left' => ({required Object name}) => '${name} salió',
+			'room.talk.island.route' => ({required Object route}) => 'Audio por ${route}',
+			'room.talk.island.recovered' => 'Conexión recuperada',
 			'room.talk.echo.title' => 'Micrófono abierto con altavoz.',
 			'room.talk.echo.message' => 'Usa audífonos para evitar eco.',
 			'room.talk.echo.dismiss' => 'Cerrar aviso',
+			'room.talk.mic.title' => 'Tu micrófono no está disponible.',
+			'room.talk.mic.message' => 'Escuchas a tu grupo, pero nadie te oye. Revisa el permiso en Ajustes.',
+			'room.talk.mic.settings' => 'Abrir ajustes',
+			'room.talk.mic.dismiss' => 'Cerrar aviso',
+			'room.notification.channelName' => 'Frecu en segundo plano',
+			'room.notification.channelDescription' => 'Mantiene activa la conexión de Frecu con la pantalla apagada.',
+			'room.notification.title' => 'Frecu activa',
+			'room.notification.connected' => ({required Object room}) => '${room} · Conectado',
+			'room.notification.reconnecting' => ({required Object room}) => '${room} · Reconectando…',
+			'room.notification.leave' => 'Salir de la frecu',
 			'permissions.back' => 'Atrás',
 			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
 			'permissions.welcome.kicker' => 'Sin internet · sin cobertura',
@@ -1508,14 +1713,22 @@ extension on Translations {
 			'settings.themeMode.light' => 'Claro',
 			'settings.themeMode.dark' => 'Oscuro',
 			'settings.saveError' => 'No se pudo guardar',
-			'settings.footer' => '100 % local · sin internet',
+			'settings.footer' => ({required Object app}) => '${app} · 100% local · sin internet',
+			'settings.appVersion' => ({required Object version}) => 'Frecu ${version}',
 			'errors.network' => 'Error de red local',
 			'errors.permissionDenied' => 'Permiso denegado',
 			'errors.roomFull' => 'La frecu está llena (máximo 6 participantes)',
 			'errors.invalidAccessCode' => 'Código de acceso inválido',
 			'errors.hostUnreachable' => 'El anfitrión no responde',
+			'errors.versionMismatch' => 'Esta frecu usa otra versión de Frecu',
 			'errors.audio' => 'Error en el subsistema de audio',
 			'errors.unexpected' => 'Error inesperado',
+			'splash.title' => 'frecu',
+			'splash.tagline' => 'Voz de grupo. Sin internet.',
+			'splash.version' => ({required Object version}) => 'v${version}',
+			'splash.localNetwork' => 'Red local',
+			'splash.mesh' => 'Malla P2P',
+			'splash.skip' => 'Toca para entrar',
 			_ => null,
 		};
 	}

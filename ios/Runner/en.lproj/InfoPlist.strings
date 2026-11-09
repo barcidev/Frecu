@@ -1,0 +1,4 @@
+/* System permission dialog texts, in English. */
+"NSMicrophoneUsageDescription" = "Frecu needs microphone access for group voice communication on the local network.";
+"NSLocalNetworkUsageDescription" = "Frecu needs local network access to find and connect participants without internet.";
+"NSCameraUsageDescription" = "Frecu needs camera access to scan a frecu's invitation QR codes.";

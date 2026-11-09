@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' show lerpDouble;
+import 'dart:ui' show ImageFilter, lerpDouble;
 
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/gestures.dart' show HorizontalDragGestureRecognizer;
 import 'package:flutter/widgets.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/motion/fr_spring_curve.dart';
@@ -11,7 +15,8 @@ import 'package:frecu/core/design/tokens/fr_motion.dart';
 /// Transiciones de pantalla de Portadora.
 enum FrTransition {
   /// Entrar a un modo (crear, escanear, unirse): la pantalla nueva se revela
-  /// en un círculo desde el dedo con un frente de onda luminoso.
+  /// en un círculo desde el dedo con un frente de onda luminoso, bajando de
+  /// un brillo de 1,5 a 1.
   wave,
 
   /// Jerarquía (ajustes, guía): entra de lado con paralaje y la anterior se
@@ -22,7 +27,8 @@ enum FrTransition {
   /// y se convierte en la pantalla nueva.
   expand,
 
-  /// Cambio sin dirección: la pantalla nueva se funde sobre la anterior.
+  /// Cambio sin dirección: la pantalla nueva se funde sobre la anterior,
+  /// desde un desenfoque de 6 px y una escala de 1,03.
   fade,
 }
 
@@ -44,13 +50,51 @@ abstract final class FrTouchOrigin {
   static void clear() => _last = null;
 }
 
+/// Hoja desde la que crece la próxima pantalla (`FrTransition.expand`).
+///
+/// Con el código correcto la hoja de unión se convierte en la frecu: antes de
+/// cerrarse anota su rectángulo y la ruta que entra a continuación con la
+/// onda crece desde ahí. Caduca en [ttl] para no colarse en otra entrada.
+abstract final class FrExpandOrigin {
+  static Rect? _rect;
+  static DateTime? _at;
+
+  /// Cuánto vale un rectángulo anotado.
+  static const Duration ttl = Duration(seconds: 2);
+
+  /// Anota [rect] (global) como origen de la próxima expansión.
+  static void record(Rect rect) {
+    if (!rect.isFinite || rect.isEmpty) return;
+    _rect = rect;
+    _at = DateTime.now();
+  }
+
+  /// Devuelve el origen anotado si sigue vigente y lo olvida.
+  static Rect? take() {
+    final rect = _rect;
+    final at = _at;
+    _rect = null;
+    _at = null;
+    if (rect == null || at == null) return null;
+    return DateTime.now().difference(at) <= ttl ? rect : null;
+  }
+
+  /// Anota el rectángulo global de la caja de [context], si ya tiene tamaño.
+  static void recordFrom(BuildContext context) {
+    final box = context.findRenderObject();
+    if (box is! RenderBox || !box.hasSize) return;
+    record(box.localToGlobal(Offset.zero) & box.size);
+  }
+}
+
 /// Constructores de las transiciones de Portadora.
 ///
 /// Cada uno es un `RouteTransitionsBuilder`: sirve en `PageRouteBuilder` o en
 /// `CustomRoute(transitionsBuilder: …)` de auto_route, con la duración de
 /// [durationOf] y [backDuration] al volver. También aplica su efecto de salida
-/// a la pantalla que queda abajo. Con movimiento reducido todas son un
-/// fundido sin desplazamiento.
+/// a la pantalla que queda abajo; al volver, esa pantalla regresa siempre
+/// desde el −28 % con el brillo al 0,45 (`back` del prototipo). Con
+/// movimiento reducido todas son un fundido sin desplazamiento.
 abstract final class FrTransitions {
   /// Onda: 760 ms.
   static const Duration waveDuration = Duration(milliseconds: 760);
@@ -72,6 +116,13 @@ abstract final class FrTransitions {
 
   /// Clave de la superficie que crece en la expansión.
   static const Key expandSurfaceKey = ValueKey<String>('frExpandSurface');
+
+  /// Desenfoque inicial del fundido, en px (desviación típica, como
+  /// `blur()` de CSS).
+  static const double fadeBlur = 6;
+
+  /// Brillo inicial de la pantalla que entra con la onda.
+  static const double waveBrightness = 1.5;
 
   /// Duración de [transition] al entrar.
   static Duration durationOf(FrTransition transition) => switch (transition) {
@@ -256,12 +307,198 @@ class FrPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
+  ) {
+    final view = _FrTransitionView(
+      transition: transition,
+      animation: animation,
+      secondaryAnimation: secondaryAnimation,
+      origin: origin,
+      from: from,
+      child: child,
+    );
+    // En iOS se vuelve deslizando desde el borde, como en las páginas de
+    // Cupertino; donde no se puede salir (PopScope) el gesto no empieza.
+    final platform = defaultTargetPlatform;
+    if (platform != TargetPlatform.iOS && platform != TargetPlatform.macOS) {
+      return view;
+    }
+    return _FrBackSwipe(route: this, child: view);
+  }
+
+  /// El dedo lleva la ruta hacia atrás una [fraction] del ancho.
+  void _swipeBy(double fraction) {
+    final c = controller;
+    if (c == null) return;
+    c.value -= fraction;
+  }
+
+  /// Suelta el gesto con [velocity] (anchos de pantalla por segundo): vuelve
+  /// si se lanzó hacia atrás o pasó la mitad; si no, la pantalla se queda.
+  void _swipeEnd(double velocity) {
+    final c = controller;
+    final nav = navigator;
+    if (c == null || nav == null) return;
+    const curve = Curves.fastEaseInToSlowEaseOut;
+    final bool stay;
+    if (!isCurrent) {
+      stay = isActive;
+    } else if (velocity.abs() >= _kBackSwipeFling) {
+      stay = velocity <= 0;
+    } else {
+      stay = c.value > 0.5;
+    }
+    if (stay) {
+      unawaited(c.animateTo(1, duration: _kBackSwipeSettle, curve: curve));
+    } else {
+      if (isCurrent) nav.pop();
+      if (c.isAnimating) {
+        unawaited(c.animateBack(0, duration: _kBackSwipeSettle, curve: curve));
+      }
+    }
+    if (c.isAnimating) {
+      late AnimationStatusListener done;
+      done = (_) {
+        nav.didStopUserGesture();
+        c.removeStatusListener(done);
+      };
+      c.addStatusListener(done);
+    } else {
+      nav.didStopUserGesture();
+    }
+  }
+}
+
+/// Ancho del borde desde el que empieza el gesto de volver.
+const double _kBackSwipeEdge = 20;
+
+/// Velocidad (anchos de pantalla por segundo) que cuenta como lanzamiento.
+const double _kBackSwipeFling = 1;
+
+/// Lo que tarda la pantalla en asentarse al soltar el gesto.
+const Duration _kBackSwipeSettle = Duration(milliseconds: 350);
+
+/// Gesto de volver desde el borde izquierdo para [FrPageRoute] en iOS.
+class _FrBackSwipe extends StatefulWidget {
+  const _FrBackSwipe({required this.route, required this.child});
+
+  final FrPageRoute<dynamic> route;
+  final Widget child;
+
+  @override
+  State<_FrBackSwipe> createState() => _FrBackSwipeState();
+}
+
+class _FrBackSwipeState extends State<_FrBackSwipe> {
+  late final HorizontalDragGestureRecognizer _drag =
+      HorizontalDragGestureRecognizer(debugOwner: this)
+        ..onStart = _start
+        ..onUpdate = _update
+        ..onEnd = _end
+        ..onCancel = _cancel;
+
+  bool _dragging = false;
+
+  double get _width => context.size?.width ?? 1;
+
+  double get _direction =>
+      Directionality.of(context) == TextDirection.rtl ? -1 : 1;
+
+  @override
+  void dispose() {
+    _drag.dispose();
+    if (_dragging) {
+      // La pantalla se fue a mitad del gesto: el navegador deja de esperarlo.
+      _dragging = false;
+      widget.route.navigator?.didStopUserGesture();
+    }
+    super.dispose();
+  }
+
+  void _pointerDown(PointerDownEvent event) {
+    if (widget.route.popGestureEnabled) _drag.addPointer(event);
+  }
+
+  void _start(DragStartDetails details) {
+    _dragging = true;
+    widget.route.navigator?.didStartUserGesture();
+  }
+
+  void _update(DragUpdateDetails details) {
+    if (!_dragging) return;
+    widget.route._swipeBy(_direction * details.primaryDelta! / _width);
+  }
+
+  void _end(DragEndDetails details) {
+    if (!_dragging) return;
+    _dragging = false;
+    widget.route._swipeEnd(
+      _direction * details.velocity.pixelsPerSecond.dx / _width,
+    );
+  }
+
+  void _cancel() {
+    if (!_dragging) return;
+    _dragging = false;
+    widget.route._swipeEnd(0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = MediaQuery.paddingOf(context);
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+    final edge = math.max(rtl ? padding.right : padding.left, _kBackSwipeEdge);
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        widget.child,
+        PositionedDirectional(
+          start: 0,
+          top: 0,
+          bottom: 0,
+          width: edge,
+          child: Listener(
+            onPointerDown: _pointerDown,
+            behavior: HitTestBehavior.translucent,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Transición de Portadora para las rutas de página que no son
+/// [FrPageRoute] (`PageTransitionsTheme` del tema): por defecto, el
+/// deslizamiento de la jerarquía, con su efecto sobre la pantalla de abajo.
+/// Así ninguna ruta de Material o Cupertino entra con una transición
+/// genérica.
+class FrPageTransitionsBuilder extends PageTransitionsBuilder {
+  /// Crea el constructor de [transition].
+  const FrPageTransitionsBuilder([this.transition = FrTransition.slide]);
+
+  /// Transición de entrada.
+  final FrTransition transition;
+
+  @override
+  DelegatedTransitionBuilder? get delegatedTransition =>
+      FrTransitions._delegateOf(transition);
+
+  @override
+  Duration get transitionDuration => FrTransitions.durationOf(transition);
+
+  @override
+  Duration get reverseTransitionDuration => FrTransitions.backDuration;
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
   ) => _FrTransitionView(
     transition: transition,
     animation: animation,
     secondaryAnimation: secondaryAnimation,
-    origin: origin,
-    from: from,
     child: child,
   );
 }
@@ -326,15 +563,18 @@ class _UnderView extends StatelessWidget {
     final motion = fr.motion;
     final v = animation.value;
     final reversing = animation.status == AnimationStatus.reverse;
+    // Al volver, la pantalla de abajo regresa desde el −28 % con el brillo al
+    // 0,45, venga de la transición que venga (`back` del prototipo).
+    if (reversing && kind != _Under.recede) {
+      final t = _progress(animation, _backCurve(motion));
+      return _Effect(dx: -0.28 * t, veil: 0.55 * t);
+    }
     switch (kind) {
       case _Under.wave:
-        final t = reversing
-            ? _progress(animation, _backCurve(motion))
-            : motion.easeOut.transform(v);
+        final t = motion.easeOut.transform(v);
         return _Effect(scale: 1 - 0.1 * t, veil: 0.65 * t);
       case _Under.slide:
-        final curve = reversing ? _backCurve(motion) : _slideCurve(motion);
-        final t = _progress(animation, curve);
+        final t = _progress(animation, _slideCurve(motion));
         return _Effect(dx: -0.28 * t, veil: 0.55 * t);
       case _Under.fade:
         final out = Interval(0, 420 / 620, curve: motion.easeOut).transform(v);
@@ -452,6 +692,9 @@ class _FrTransitionViewState extends State<_FrTransitionView> {
         ? 1.0
         : context.fr.motion.easeOut.transform(widget.animation.value);
     final scale = 1.08 - 0.08 * t;
+    // Entra con brillo 1,5 que baja a 1 (`filter: brightness(1.5)`).
+    final brightness =
+        FrTransitions.waveBrightness - (FrTransitions.waveBrightness - 1) * t;
     return CustomPaint(
       foregroundPainter: _RingPainter(
         origin: _origin,
@@ -461,10 +704,13 @@ class _FrTransitionViewState extends State<_FrTransitionView> {
       child: ClipPath(
         clipper: _CircleClipper(_origin, t),
         clipBehavior: t < 1 ? Clip.antiAlias : Clip.none,
-        child: Transform.scale(
-          scale: scale,
-          alignment: _viewOrigin,
-          child: child,
+        child: CustomPaint(
+          foregroundPainter: _BrightnessPainter(brightness),
+          child: Transform.scale(
+            scale: scale,
+            alignment: _viewOrigin,
+            child: child,
+          ),
         ),
       ),
     );
@@ -514,9 +760,17 @@ class _FrTransitionViewState extends State<_FrTransitionView> {
     final t = back
         ? 1.0
         : context.fr.motion.easeOut.transform(widget.animation.value);
+    // Entra desde un desenfoque de 6 px (`filter: blur(6px)`).
+    final blur = FrTransitions.fadeBlur * (1 - t);
+    final scaled = Transform.scale(scale: 1.03 - 0.03 * t, child: child);
     return Opacity(
       opacity: t,
-      child: Transform.scale(scale: 1.03 - 0.03 * t, child: child),
+      child: blur > 0
+          ? ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+              child: scaled,
+            )
+          : scaled,
     );
   }
 }
@@ -596,6 +850,31 @@ class _RingPainter extends CustomPainter {
       oldDelegate.origin != origin ||
       oldDelegate.progress != progress ||
       oldDelegate.color != color;
+}
+
+/// Brillo de CSS (`filter: brightness()`) sobre el contenido opaco que ya
+/// está pintado debajo: un gris en `colorDodge` divide cada canal por
+/// `1 − gris`, es decir, lo multiplica por [factor]. Sin capas extra.
+class _BrightnessPainter extends CustomPainter {
+  _BrightnessPainter(this.factor);
+
+  final double factor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (factor <= 1) return;
+    final dodge = 1 - 1 / factor;
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()
+        ..color = Color.from(alpha: 1, red: dodge, green: dodge, blue: dodge)
+        ..blendMode = BlendMode.colorDodge,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_BrightnessPainter oldDelegate) =>
+      oldDelegate.factor != factor;
 }
 
 /// Velo negro de opacidad [alpha] sobre el contenido.

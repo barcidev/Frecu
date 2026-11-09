@@ -48,6 +48,12 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
     return RoomNote.tryFromSemitone(int.tryParse(noteStr?.trim() ?? ''));
   }
 
+  /// Lee el nombre `name`; ausente o vacío es sin nombre.
+  String? _parseName(String? name) {
+    final trimmed = name?.trim() ?? '';
+    return trimmed.isEmpty ? null : trimmed;
+  }
+
   Result<RoomInvite> _extractInvite(Uri uri) {
     final host = uri.queryParameters['h']?.trim() ?? '';
     final port = _parsePort(uri.queryParameters['p']);
@@ -73,6 +79,7 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
         roomId: roomId,
         accessCode: accessCode,
         note: _parseNote(uri.queryParameters['n']),
+        name: _parseName(uri.queryParameters['name']),
       ),
     );
   }

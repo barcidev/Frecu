@@ -11,7 +11,8 @@ SignalingJoinMessage _$SignalingJoinMessageFromJson(
 ) => SignalingJoinMessage(
   displayName: json['displayName'] as String,
   accessCode: json['accessCode'] as String,
-  protocolVersion: (json['protocolVersion'] as num?)?.toInt() ?? 1,
+  protocolVersion:
+      (json['protocolVersion'] as num?)?.toInt() ?? signalingProtocolVersion,
   type: json['type'] as String? ?? 'join',
 );
 
@@ -32,6 +33,7 @@ SignalingWelcomeMessage _$SignalingWelcomeMessageFromJson(
       .map((e) => Participant.fromJson(e as Map<String, dynamic>))
       .toList(),
   note: const RoomNoteConverter().fromJson((json['note'] as num?)?.toInt()),
+  roomName: json['roomName'] as String?,
   type: json['type'] as String? ?? 'welcome',
 );
 
@@ -41,6 +43,7 @@ Map<String, dynamic> _$SignalingWelcomeMessageToJson(
   'peerId': instance.peerId,
   'participants': instance.participants,
   'note': const RoomNoteConverter().toJson(instance.note),
+  'roomName': ?instance.roomName,
   'type': instance.type,
 };
 
@@ -144,6 +147,7 @@ SignalingTalkStateMessage _$SignalingTalkStateMessageFromJson(
 ) => SignalingTalkStateMessage(
   peerId: json['peerId'] as String,
   isSpeaking: json['isSpeaking'] as bool,
+  muted: json['muted'] as bool?,
   type: json['type'] as String? ?? 'talk_state',
 );
 
@@ -152,6 +156,7 @@ Map<String, dynamic> _$SignalingTalkStateMessageToJson(
 ) => <String, dynamic>{
   'peerId': instance.peerId,
   'isSpeaking': instance.isSpeaking,
+  'muted': ?instance.muted,
   'type': instance.type,
 };
 

@@ -1,4 +1,4 @@
-// AC1: CUANDO el usuario toca Crear frecu en el inicio ENTONCES se abre la guía en Portadora (`FrScaffold`) con Atrás, «Paso 1 de 2» y «Prepara la red», la ilustración del teléfono emisor, «Activa tu punto de acceso», «Tu teléfono será la antena del grupo.», el selector Android | iPhone y los tres pasos de la plataforma elegida numerados 01 a 03 con su inicio en negrita, y abajo «Ya está activo» y «Ya estamos en la misma Wi-Fi»; el selector empieza en iPhone en iOS y en Android en lo demás, y elegir la otra plataforma cambia los pasos; todos los textos salen de slang en español y en inglés.
+// AC1: CUANDO el usuario toca Crear frecu en el inicio ENTONCES se abre la guía en Portadora (`FrScaffold`) con Atrás, «Paso 1 de 2» y «Prepara la red», la ilustración del teléfono emisor, «Activa tu punto de acceso», «Tu teléfono será la antena del grupo.», el selector Android | iPhone y los tres pasos de la plataforma elegida numerados 01 a 03 con su inicio en negrita, y abajo «Ya está activo» y «Ya estamos en la misma Wi-Fi»; el selector empieza en Android en todos los teléfonos (se prioriza como anfitrión), elegir la otra plataforma cambia los pasos y los nuevos entran con un fundido; bajo los pasos de la plataforma del teléfono, «Abrir ajustes de zona Wi-Fi» (en iPhone, «Abrir Ajustes») abre los ajustes de su punto de acceso; todos los textos salen de slang en español y en inglés.
 // AC2: CUANDO el usuario toca «Ya está activo» o «Ya estamos en la misma Wi-Fi» ENTONCES pasa a la nueva frecu con «Paso 2 de 2» y «Nueva frecu»; Atrás en la nueva frecu vuelve a la guía y, al volver a entrar, conserva el nombre y el código; Atrás en la guía vuelve al inicio.
 // AC6: CUANDO el sistema pide reducir el movimiento ENTONCES la ilustración del punto de acceso queda quieta y no pide cuadros; sin movimiento reducido sus anillos se mueven en cada cuadro.
 import 'dart:async';
@@ -8,10 +8,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
+import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_pin_field.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_segmented.dart';
+import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/repositories/discovery_repository.dart';
 import 'package:frecu/features/lobby/presentation/pages/create_room_page.dart';
@@ -23,6 +25,7 @@ import 'package:frecu/features/lobby/presentation/widgets/hotspot_illustration.d
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
+import 'package:frecu/features/network/domain/repositories/system_settings_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -87,6 +90,45 @@ List<String> _steps(WidgetTester tester) => [
     '${row.step.lead}${row.step.rest}',
 ];
 
+/// Ajustes del sistema que anota cuáles se abren.
+class _FakeSettings implements SystemSettingsRepository {
+  final List<String> opened = [];
+
+  @override
+  Future<Result<void>> openWifiSettings() async {
+    opened.add('wifi');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<void>> openHotspotSettings() async {
+    opened.add('hotspot');
+    return const Result.success(null);
+  }
+
+  @override
+  Future<Result<void>> openAppSettings() async {
+    opened.add('app');
+    return const Result.success(null);
+  }
+}
+
+Finder _button(String label) => find.byWidgetPredicate(
+  (widget) => widget is FrButton && widget.label == label,
+);
+
+/// Opacidad de los pasos (el fundido al cambiar de pestaña).
+double _stepsOpacity(WidgetTester tester) => tester
+    .widget<Opacity>(
+      find
+          .ancestor(
+            of: find.byType(HotspotGuideStepRow).first,
+            matching: find.byType(Opacity),
+          )
+          .first,
+    )
+    .opacity;
+
 HotspotPlatform _platform(WidgetTester tester) => tester
     .widget<FrSegmented<HotspotPlatform>>(
       find.byType(FrSegmented<HotspotPlatform>),
@@ -113,6 +155,7 @@ void main() {
   late StreamController<List<NearbyRoom>> nearby;
   late StreamController<NetworkState> networkStates;
   late List<String> codes;
+  late _FakeSettings settings;
 
   setUp(() {
     LocaleSettings.setLocaleSync(AppLocale.es);
@@ -122,6 +165,7 @@ void main() {
     nearby = StreamController<List<NearbyRoom>>.broadcast();
     networkStates = StreamController<NetworkState>.broadcast();
     codes = ['4827', '1593', '7302'];
+    settings = _FakeSettings();
 
     when(() => discovery.watchNearbyRooms()).thenAnswer((_) => nearby.stream);
     when(() => discovery.dispose()).thenAnswer((_) async {});
@@ -151,6 +195,7 @@ void main() {
             discoveryRepositoryProvider.overrideWithValue(discovery),
             networkRepositoryProvider.overrideWithValue(network),
             roomRepositoryProvider.overrideWithValue(rooms),
+            systemSettingsRepositoryProvider.overrideWithValue(settings),
             newRoomClockProvider.overrideWithValue(
               () => DateTime(2026, 11, 8, 16, 24),
             ),
@@ -245,11 +290,64 @@ void main() {
       );
     });
 
-    testWidgets('AC1: en iOS la guía empieza en iPhone', (tester) async {
+    testWidgets('AC1: en iOS la guía también empieza en Android, que se '
+        'prioriza como anfitrión', (tester) async {
       await pumpGuide(tester);
 
-      expect(_platform(tester), HotspotPlatform.iphone);
+      expect(_platform(tester), HotspotPlatform.android);
+      expect(
+        _steps(tester).first,
+        'Abre Ajustes › Zona Wi-Fi (el nombre cambia según la marca).',
+      );
+    }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
+    testWidgets('AC1: al cambiar de pestaña los pasos nuevos entran con un '
+        'fundido', (tester) async {
+      await pumpGuide(tester);
+      expect(_stepsOpacity(tester), 1);
+
+      await tester.tap(_label('iPhone'));
+      await tester.pump();
+
       expect(_steps(tester).first, _iphoneOpen);
+      expect(_stepsOpacity(tester), lessThan(1));
+
+      await tester.pumpAndSettle();
+      expect(_stepsOpacity(tester), 1);
+    });
+
+    testWidgets('P92: en Android, bajo sus pasos, «Abrir ajustes de zona '
+        'Wi-Fi» abre los ajustes del punto de acceso', (tester) async {
+      await pumpGuide(tester);
+
+      final open = _button('Abrir ajustes de zona Wi-Fi');
+      expect(open, findsOneWidget);
+      await tester.ensureVisible(open);
+      await tester.tap(open);
+      await tester.pumpAndSettle();
+      expect(settings.opened, ['hotspot']);
+
+      // Los pasos del iPhone son para otro teléfono: sin botón.
+      await tester.tap(_label('iPhone'));
+      await tester.pumpAndSettle();
+      expect(open, findsNothing);
+      expect(_button('Abrir Ajustes'), findsNothing);
+    }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+    testWidgets('P93: en iPhone el botón sale bajo sus pasos y dice «Abrir '
+        'Ajustes»', (tester) async {
+      await pumpGuide(tester);
+      expect(_button('Abrir ajustes de zona Wi-Fi'), findsNothing);
+
+      await tester.tap(_label('iPhone'));
+      await tester.pumpAndSettle();
+
+      final open = _button('Abrir Ajustes');
+      expect(open, findsOneWidget);
+      await tester.ensureVisible(open);
+      await tester.tap(open);
+      await tester.pumpAndSettle();
+      expect(settings.opened, ['hotspot']);
     }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
     testWidgets('AC1: en inglés los textos de la guía salen de la '

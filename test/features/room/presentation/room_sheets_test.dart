@@ -196,7 +196,7 @@ void main() {
       );
       expect(
         tester.widget<InviteQr>(find.byType(InviteQr)).data,
-        'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=4821&n=4',
+        'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=4821&n=4&name=Ruta+40',
       );
       expect(
         find.descendant(
@@ -243,7 +243,7 @@ void main() {
 
       expect(
         tester.widget<InviteQr>(find.byType(InviteQr)).data,
-        'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=4821',
+        'frecu://join?h=192.168.43.1&p=47800&r=room-123&c=4821&name=Ruta+40',
       );
       expect(
         find.descendant(of: find.byType(InviteSheet), matching: find.text('—')),

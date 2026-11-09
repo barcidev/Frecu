@@ -34,6 +34,22 @@ class FrSheet extends StatelessWidget {
   /// Contenido, separado por 18 px.
   final List<Widget> children;
 
+  /// Título de una hoja (`.sheet .sh-h h3`): Archivo de 22 px con peso 680,
+  /// ancho 118 e interlineado 1,15, en `tx1`.
+  static TextStyle titleStyle(FrTheme fr) => fr.type.titleL.copyWith(
+    color: fr.colors.tx1,
+    fontSize: 22,
+    height: 1.15,
+    letterSpacing: -0.22,
+    fontWeight: const FontWeight(680),
+    fontVariations: const [FontVariation.weight(680), FontVariation.width(118)],
+  );
+
+  /// Mensaje bajo el título (`.sheet .sh-h p`): Archivo de 14 px con
+  /// interlineado 1,45, en `tx2`.
+  static TextStyle messageStyle(FrTheme fr) =>
+      fr.type.body.copyWith(color: fr.colors.tx2, fontSize: 14, height: 1.45);
+
   @override
   Widget build(BuildContext context) {
     final fr = context.fr;
@@ -147,17 +163,10 @@ class _SheetHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (title != null)
-                Text(
-                  title,
-                  style: fr.type.titleL.copyWith(color: fr.colors.tx1),
-                ),
+              if (title != null) Text(title, style: FrSheet.titleStyle(fr)),
               if (title != null && message != null) const SizedBox(height: 6),
               if (message != null)
-                Text(
-                  message,
-                  style: fr.type.body.copyWith(color: fr.colors.tx2),
-                ),
+                Text(message, style: FrSheet.messageStyle(fr)),
             ],
           ),
         ),

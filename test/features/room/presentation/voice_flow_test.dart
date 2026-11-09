@@ -199,27 +199,30 @@ void main() {
         await tester.tap(openMicSegment);
         await tester.pumpAndSettle();
         verify(() => voiceRepository.setTalkMode(TalkMode.openMic)).called(1);
+        // Elegir «Abierto» abre el micrófono al instante (app.js:382-389).
+        verify(() => voiceRepository.startTalking()).called(1);
 
-        // Mode changes to openMic
+        // Mode changes to openMic, transmitting
         talkModeController.add(TalkMode.openMic);
+        isTalkingController.add(true);
         await tester.pumpAndSettle();
 
         final micButton = find.byKey(const Key('mic_toggle_button'));
         expect(micButton, findsOneWidget);
 
-        // Tap to start talking continuously
-        await tester.tap(micButton);
-        await tester.pumpAndSettle();
-        verify(() => voiceRepository.startTalking()).called(1);
-
-        // State updates to talking
-        isTalkingController.add(true);
-        await tester.pumpAndSettle();
-
-        // Tap again to mute
+        // Tap to mute
         await tester.tap(micButton);
         await tester.pumpAndSettle();
         verify(() => voiceRepository.stopTalking()).called(1);
+
+        // State updates to muted
+        isTalkingController.add(false);
+        await tester.pumpAndSettle();
+
+        // Tap again to open the mic
+        await tester.tap(micButton);
+        await tester.pumpAndSettle();
+        verify(() => voiceRepository.startTalking()).called(1);
       },
     );
 

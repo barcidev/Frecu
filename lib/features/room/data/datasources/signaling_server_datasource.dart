@@ -7,22 +7,54 @@ import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+/// Motivos de rechazo del `join` (`rejected.reason` del protocolo).
+abstract final class RejectReason {
+  /// La frecu ya tiene 6 personas.
+  static const String roomFull = 'roomFull';
+
+  /// Código de acceso incorrecto (o demasiados intentos fallidos).
+  static const String invalidAccessCode = 'invalidAccessCode';
+
+  /// El `join` habla otra versión del protocolo.
+  static const String versionMismatch = 'versionMismatch';
+}
+
 /// Servidor WebSocket de señalización para el anfitrión de la sala.
+///
+/// Solo enruta mensajes de sockets que hicieron `join` con el código
+/// correcto; antes del `join` todo lo demás se ignora. El remitente de
+/// `offer`, `answer`, `ice` y `talk_state` es siempre el id que el servidor
+/// asignó al socket, nunca el que dice el mensaje. Tras [maxCodeAttempts]
+/// códigos incorrectos desde la misma dirección, esa dirección queda
+/// bloqueada durante [codeLockout].
 class SignalingServerDataSource {
-  /// Constructor con umbral de timeout y comprobación de watchdog configurables.
-  SignalingServerDataSource({Duration? peerTimeout, Duration? watchdogInterval})
-    : _configuredPeerTimeout = peerTimeout,
-      _configuredWatchdogInterval = watchdogInterval;
+  /// Constructor con umbral de timeout, comprobación de watchdog y límite de
+  /// intentos del código configurables.
+  SignalingServerDataSource({
+    Duration? peerTimeout,
+    Duration? watchdogInterval,
+    this.maxCodeAttempts = 5,
+    this.codeLockout = const Duration(minutes: 1),
+  }) : _configuredPeerTimeout = peerTimeout,
+       _configuredWatchdogInterval = watchdogInterval;
 
   final Duration? _configuredPeerTimeout;
   final Duration? _configuredWatchdogInterval;
 
+  /// Códigos incorrectos que se toleran desde una misma dirección.
+  final int maxCodeAttempts;
+
+  /// Tiempo que una dirección queda bloqueada tras agotar los intentos.
+  final Duration codeLockout;
+
   HttpServer? _server;
   String _accessCode = '';
+  String? _roomName;
   int _peerCounter = 0;
   Timer? _watchdogTimer;
   RoomNote? _note;
@@ -30,6 +62,7 @@ class SignalingServerDataSource {
   final Map<String, WebSocketChannel> _clientChannels = {};
   final Map<String, Participant> _participants = {};
   final Map<String, DateTime> _peerLastSeen = {};
+  final Map<String, List<DateTime>> _failedCodes = {};
   final StreamController<SignalingMessage> _messagesController =
       StreamController<SignalingMessage>.broadcast();
 
@@ -53,7 +86,8 @@ class SignalingServerDataSource {
   /// Puerto en el que está escuchando el servidor.
   int get port => _server?.port ?? 0;
 
-  /// Stream de todos los mensajes de señalización procesados por el servidor.
+  /// Stream de los mensajes de señalización que el servidor procesa: los
+  /// `join` y los mensajes de quienes ya se unieron, y los rechazos.
   Stream<SignalingMessage> get messages => _messagesController.stream;
 
   /// Lista de participantes actualmente registrados en el servidor.
@@ -62,28 +96,45 @@ class SignalingServerDataSource {
   /// Nota musical de la sala si está configurada.
   RoomNote? get note => _note;
 
-  /// Inicia el servidor de señalización.
+  /// Nombre de la frecu que viaja en el `welcome`.
+  String? get roomName => _roomName;
+
+  /// Inicia el servidor de señalización de una frecu nueva.
+  ///
+  /// Si ya había uno en marcha (una frecu anterior que no se cerró), lo
+  /// detiene antes: la frecu nueva nunca hereda el código ni los
+  /// participantes de la vieja. Si no puede escuchar, lanza el error.
   Future<void> start({
     required String accessCode,
+    String? roomName,
     String host = '0.0.0.0',
     int port = NetworkConstants.signalingPort,
     RoomNote? note,
   }) async {
-    if (isRunning) return;
+    if (isRunning) {
+      AppLogger.w('Signaling server was still running: restarting it');
+      await stop();
+    }
 
     _accessCode = accessCode;
+    _roomName = roomName;
     _note = note;
     _participants.clear();
     _clientChannels.clear();
     _peerLastSeen.clear();
+    _failedCodes.clear();
     _peerCounter = 0;
 
-    final handler = webSocketHandler((
-      WebSocketChannel channel,
-      String? subprotocol,
-    ) {
-      _handleConnection(channel);
-    });
+    FutureOr<Response> handler(Request request) {
+      final info = request.context['shelf.io.connection_info'];
+      final address = info is HttpConnectionInfo
+          ? info.remoteAddress.address
+          : null;
+      return webSocketHandler(
+        (WebSocketChannel channel, String? subprotocol) =>
+            _handleConnection(channel, address),
+      )(request);
+    }
 
     try {
       _server = await shelf_io.serve(handler, host, port);
@@ -128,95 +179,133 @@ class SignalingServerDataSource {
     }
   }
 
-  void _handleConnection(WebSocketChannel channel) {
+  void _handleConnection(WebSocketChannel channel, String? address) {
     String? assignedPeerId;
 
     channel.stream.listen(
       (data) {
-        final newId = _onClientData(channel, data as String, assignedPeerId);
-        if (newId != null) {
-          assignedPeerId = newId;
+        final message = _decode(data);
+        if (message == null) return;
+        final peerId = assignedPeerId;
+        if (peerId == null) {
+          // Antes del `join` no se enruta nada.
+          if (message is SignalingJoinMessage) {
+            _messagesController.add(message);
+            assignedPeerId = _processJoin(channel, message, address);
+          }
+          return;
         }
+        if (!identical(_clientChannels[peerId], channel)) return;
+        _peerLastSeen[peerId] = DateTime.now();
+        _routeFrom(peerId, message);
       },
       onDone: () {
-        if (assignedPeerId != null) _handlePeerLeft(assignedPeerId!);
+        final peerId = assignedPeerId;
+        if (peerId != null) _handlePeerLeft(peerId, channel: channel);
       },
       onError: (Object error) {
         AppLogger.w('Client socket error: $error');
-        if (assignedPeerId != null) _handlePeerLeft(assignedPeerId!);
+        final peerId = assignedPeerId;
+        if (peerId != null) _handlePeerLeft(peerId, channel: channel);
       },
     );
   }
 
-  String? _onClientData(
-    WebSocketChannel channel,
-    String rawData,
-    String? assignedPeerId,
-  ) {
+  SignalingMessage? _decode(Object? data) {
+    if (data is! String) return null;
     try {
-      final jsonMap = jsonDecode(rawData) as Map<String, dynamic>;
-      final message = SignalingMessage.fromJson(jsonMap);
-      _messagesController.add(message);
-
-      if (assignedPeerId != null) {
-        _peerLastSeen[assignedPeerId] = DateTime.now();
-      }
-
-      return message.when(
-        join: (displayName, code, version, type) =>
-            _processJoin(channel, displayName, code),
-        welcome: (_, __, ___, ____) => null,
-        rejected: (_, __) => null,
-        peerJoined: (_, __) => null,
-        peerLeft: (_, __) => null,
-        offer: (_, to, __, ___) => _routeAndReturn(to, message),
-        answer: (_, to, __, ___) => _routeAndReturn(to, message),
-        ice: (_, to, __, ___, ____, _____) => _routeAndReturn(to, message),
-        talkState: (peerId, _, __) {
-          _broadcast(message, excludePeerId: peerId);
-          return null;
-        },
-        ping: (timestamp, _) {
-          if (assignedPeerId != null) {
-            _sendToPeer(
-              assignedPeerId,
-              SignalingMessage.pong(timestamp: timestamp),
-            );
-          }
-          return null;
-        },
-        pong: (_, __) => null,
-        roomClosed: (_, __) => null,
-      );
-    } on Object catch (e, stackTrace) {
-      AppLogger.e('Error handling signaling message', e, stackTrace);
+      final jsonMap = jsonDecode(data) as Map<String, dynamic>;
+      return SignalingMessage.fromJson(jsonMap);
+    } on Object catch (e) {
+      AppLogger.w('Ignoring malformed signaling message: $e');
       return null;
     }
   }
 
-  String? _routeAndReturn(String to, SignalingMessage message) {
-    _routeToPeer(to, message);
-    return null;
+  /// Enruta un mensaje de [from], que ya se unió, forzando su id como
+  /// remitente.
+  void _routeFrom(String from, SignalingMessage message) {
+    switch (message) {
+      case SignalingOfferMessage(:final to, :final sdp):
+        _messagesController.add(message);
+        _routeToPeer(
+          from,
+          to,
+          SignalingMessage.offer(from: from, to: to, sdp: sdp),
+        );
+      case SignalingAnswerMessage(:final to, :final sdp):
+        _messagesController.add(message);
+        _routeToPeer(
+          from,
+          to,
+          SignalingMessage.answer(from: from, to: to, sdp: sdp),
+        );
+      case SignalingIceMessage(
+        :final to,
+        :final candidate,
+        :final sdpMid,
+        :final sdpMLineIndex,
+      ):
+        _messagesController.add(message);
+        _routeToPeer(
+          from,
+          to,
+          SignalingMessage.ice(
+            from: from,
+            to: to,
+            candidate: candidate,
+            sdpMid: sdpMid,
+            sdpMLineIndex: sdpMLineIndex,
+          ),
+        );
+      case SignalingTalkStateMessage(:final isSpeaking, :final muted):
+        _messagesController.add(message);
+        _broadcast(
+          SignalingMessage.talkState(
+            peerId: from,
+            isSpeaking: isSpeaking,
+            muted: muted,
+          ),
+          excludePeerId: from,
+        );
+      case SignalingPingMessage(:final timestamp):
+        _sendToPeer(from, SignalingMessage.pong(timestamp: timestamp));
+      case SignalingJoinMessage() ||
+          SignalingWelcomeMessage() ||
+          SignalingRejectedMessage() ||
+          SignalingPeerJoinedMessage() ||
+          SignalingPeerLeftMessage() ||
+          SignalingPongMessage() ||
+          SignalingRoomClosedMessage():
+        // Solo el anfitrión los emite; uno de un participante se ignora.
+        break;
+    }
   }
 
   String? _processJoin(
     WebSocketChannel channel,
-    String displayName,
-    String code,
+    SignalingJoinMessage join,
+    String? address,
   ) {
-    if (code != _accessCode) {
-      const rejected = SignalingMessage.rejected(reason: 'invalidAccessCode');
-      _messagesController.add(rejected);
-      _sendToChannel(channel, rejected);
-      unawaited(channel.sink.close());
+    if (join.protocolVersion != signalingProtocolVersion) {
+      _reject(channel, RejectReason.versionMismatch);
+      return null;
+    }
+
+    if (_isLockedOut(address)) {
+      AppLogger.w('Too many wrong access codes from $address');
+      _reject(channel, RejectReason.invalidAccessCode);
+      return null;
+    }
+
+    if (join.accessCode != _accessCode) {
+      _recordWrongCode(address);
+      _reject(channel, RejectReason.invalidAccessCode);
       return null;
     }
 
     if (_participants.length >= NetworkConstants.maxParticipants) {
-      const rejected = SignalingMessage.rejected(reason: 'roomFull');
-      _messagesController.add(rejected);
-      _sendToChannel(channel, rejected);
-      unawaited(channel.sink.close());
+      _reject(channel, RejectReason.roomFull);
       return null;
     }
 
@@ -226,7 +315,7 @@ class SignalingServerDataSource {
 
     final participant = Participant(
       id: peerId,
-      displayName: displayName,
+      displayName: join.displayName,
       isHost: isFirstPeer,
     );
 
@@ -240,6 +329,7 @@ class SignalingServerDataSource {
         peerId: peerId,
         participants: _participants.values.toList(),
         note: _note,
+        roomName: _roomName,
       ),
     );
 
@@ -251,7 +341,32 @@ class SignalingServerDataSource {
     return peerId;
   }
 
-  void _handlePeerLeft(String peerId) {
+  void _reject(WebSocketChannel channel, String reason) {
+    final rejected = SignalingMessage.rejected(reason: reason);
+    _messagesController.add(rejected);
+    _sendToChannel(channel, rejected);
+    unawaited(channel.sink.close());
+  }
+
+  bool _isLockedOut(String? address) {
+    if (address == null) return false;
+    final attempts = _failedCodes[address];
+    if (attempts == null) return false;
+    final since = DateTime.now().subtract(codeLockout);
+    attempts.removeWhere((at) => at.isBefore(since));
+    return attempts.length >= maxCodeAttempts;
+  }
+
+  void _recordWrongCode(String? address) {
+    if (address == null) return;
+    (_failedCodes[address] ??= []).add(DateTime.now());
+  }
+
+  /// Saca a [peerId]; con [channel], solo si ese sigue siendo su socket.
+  void _handlePeerLeft(String peerId, {WebSocketChannel? channel}) {
+    if (channel != null && !identical(_clientChannels[peerId], channel)) {
+      return;
+    }
     _clientChannels.remove(peerId);
     _peerLastSeen.remove(peerId);
     final removed = _participants.remove(peerId);
@@ -261,7 +376,8 @@ class SignalingServerDataSource {
     }
   }
 
-  void _routeToPeer(String to, SignalingMessage message) {
+  void _routeToPeer(String from, String to, SignalingMessage message) {
+    if (to == from) return;
     final targetChannel = _clientChannels[to];
     if (targetChannel != null) {
       _sendToChannel(targetChannel, message);
@@ -278,8 +394,11 @@ class SignalingServerDataSource {
   }
 
   void _sendToChannel(WebSocketChannel channel, SignalingMessage message) {
-    final payload = jsonEncode(message.toJson());
-    channel.sink.add(payload);
+    try {
+      channel.sink.add(jsonEncode(message.toJson()));
+    } on Object catch (e) {
+      AppLogger.w('Could not send signaling message: $e');
+    }
   }
 
   void _broadcast(SignalingMessage message, {String? excludePeerId}) {
@@ -287,7 +406,11 @@ class SignalingServerDataSource {
     final snapshot = Map<String, WebSocketChannel>.from(_clientChannels);
     for (final entry in snapshot.entries) {
       if (entry.key != excludePeerId) {
-        entry.value.sink.add(payload);
+        try {
+          entry.value.sink.add(payload);
+        } on Object catch (e) {
+          AppLogger.w('Could not broadcast to ${entry.key}: $e');
+        }
       }
     }
   }
@@ -300,15 +423,20 @@ class SignalingServerDataSource {
     _watchdogTimer = null;
     _peerLastSeen.clear();
     _note = null;
+    _roomName = null;
 
     _broadcast(SignalingMessage.roomClosed(reason: reason));
 
     final channels = List<WebSocketChannel>.from(_clientChannels.values);
-    for (final channel in channels) {
-      await channel.sink.close();
-    }
     _clientChannels.clear();
     _participants.clear();
+    for (final channel in channels) {
+      try {
+        await channel.sink.close().timeout(const Duration(seconds: 1));
+      } on Object catch (e) {
+        AppLogger.w('Could not close client socket: $e');
+      }
+    }
 
     await _server?.close(force: true);
     _server = null;

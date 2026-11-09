@@ -47,10 +47,10 @@ class FrSpace extends ThemeExtension<FrSpace> {
   /// 16 pt.
   final double s4;
 
-  /// 20 pt.
+  /// 20 pt: margen de pantalla (`.pad` y el dock del prototipo).
   final double s5;
 
-  /// 24 pt: margen de pantalla.
+  /// 24 pt.
   final double s6;
 
   /// 32 pt.
@@ -59,10 +59,10 @@ class FrSpace extends ThemeExtension<FrSpace> {
   /// 40 pt.
   final double s10;
 
-  /// 56 pt.
+  /// 56 pt: objetivo táctil mínimo (con guantes, «56 dp o más»).
   final double s14;
 
-  /// 72 pt: objetivo táctil mínimo de los controles grandes.
+  /// 72 pt.
   final double s18;
 
   List<double> get _values => [s1, s2, s3, s4, s5, s6, s8, s10, s14, s18];

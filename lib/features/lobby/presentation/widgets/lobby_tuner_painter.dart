@@ -13,7 +13,9 @@ import 'package:frecu/features/lobby/presentation/widgets/tuner_keyboard.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 
 /// Lo que el sintonizador recuerda entre cuadros: la aguja, cuándo apareció
-/// cada nota y el último instante pintado.
+/// cada nota, el último instante pintado y los textos ya maquetados.
+///
+/// Vive en el estado del sintonizador, que llama a [dispose] al quitarlo.
 class TunerMotion {
   /// Aguja con resorte.
   final TunerNeedle needle = TunerNeedle();
@@ -24,6 +26,18 @@ class TunerMotion {
 
   /// Último instante pintado; nulo antes del primer cuadro.
   double? lastSeconds;
+
+  /// Textos maquetados (etiquetas y lectura), por texto, color, tamaño y
+  /// peso: se reutilizan en cada cuadro y en cada pintor nuevo.
+  final Map<String, TextPainter> texts = {};
+
+  /// Libera los textos maquetados.
+  void dispose() {
+    for (final painter in texts.values) {
+      painter.dispose();
+    }
+    texts.clear();
+  }
 
   /// Sigue a las [notes] de ahora: olvida las que se fueron y anota las
   /// nuevas, ya crecidas si [grown] o por nacer en el próximo cuadro.
@@ -82,8 +96,6 @@ class LobbyTunerPainter extends CustomPainter {
 
   /// Movimiento reducido: aguja en su destino y picos crecidos.
   final bool reduceMotion;
-
-  final Map<String, TextPainter> _texts = {};
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -373,7 +385,7 @@ class LobbyTunerPainter extends CustomPainter {
     double baseline, {
     TextAlign align = TextAlign.left,
   }) {
-    final painter = _texts.putIfAbsent(
+    final painter = motion.texts.putIfAbsent(
       '$text|${color.toARGB32()}|$size|${weight.value}',
       () => TextPainter(
         text: TextSpan(

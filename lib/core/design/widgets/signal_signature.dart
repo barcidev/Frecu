@@ -62,6 +62,16 @@ class SignatureParams {
     );
   }
 
+  /// Marca de Frecu (`DRAW.brand` del prototipo): Lissajous 2:3 con fase
+  /// 0,6, sin giro y deriva 0,12.
+  static const SignatureParams brand = SignatureParams(
+    a: 2,
+    b: 3,
+    phase: 0.6,
+    rot: 0,
+    drift: 0.12,
+  );
+
   /// Frecuencia horizontal.
   final int a;
 
@@ -92,29 +102,59 @@ class SignatureParams {
 
 /// Firma de señal: la figura de Lissajous animada de una persona.
 ///
-/// Respira en reposo y ondula y brilla con el nivel de voz. Con movimiento
-/// reducido queda en un cuadro fijo.
+/// Respira en reposo y ondula y brilla con el nivel de voz. Sin [color] es la
+/// firma propia, en la señal: de noche, lima; de día, trazo en tinta
+/// (`signalFg`) con el brillo verde (D8). Con movimiento reducido queda en un
+/// cuadro fijo.
 class SignalSignature extends StatelessWidget {
   /// Firma de [name] en un cuadrado de [size] px.
   const SignalSignature({
     required this.name,
     this.size = 64,
     this.color,
+    this.glow,
     this.mode = SignatureMode.idle,
     this.level = 0,
     this.levelOf,
     this.radius = 0.42,
     super.key,
-  });
+  }) : params = null,
+       points = 220;
+
+  /// Marca de Frecu (`DRAW.brand` del prototipo): la Lissajous 2:3 de
+  /// [SignatureParams.brand] trazada con 180 puntos, en la señal salvo que
+  /// reciba [color].
+  const SignalSignature.brand({
+    this.size = 64,
+    this.color,
+    this.glow,
+    this.mode = SignatureMode.idle,
+    this.level = 0,
+    this.levelOf,
+    this.radius = 0.42,
+    super.key,
+  }) : name = 'frecu',
+       params = SignatureParams.brand,
+       points = 180;
 
   /// Nombre del que sale la figura.
   final String name;
 
+  /// Parámetros fijos de la figura; si son nulos, salen de [name].
+  final SignatureParams? params;
+
+  /// Puntos con los que se traza la curva.
+  final int points;
+
   /// Lado del cuadrado en px.
   final double size;
 
-  /// Color del trazo; por defecto `signal`.
+  /// Color del trazo; por defecto `signalFg` (la señal como trazo).
   final Color? color;
+
+  /// Color del brillo al hablar; por defecto el de [color] según
+  /// `FrColors.glowOf`: verde si el trazo es la señal, aunque sea tinta.
+  final Color? glow;
 
   /// Estado de la firma.
   final SignatureMode mode;
@@ -131,8 +171,9 @@ class SignalSignature extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final params = SignatureParams.fromName(name);
-    final ink = color ?? context.fr.colors.signal;
+    final colors = context.fr.colors;
+    final params = this.params ?? SignatureParams.fromName(name);
+    final ink = color ?? colors.signalFg;
     return SizedBox.square(
       dimension: size,
       child: RepaintBoundary(
@@ -142,6 +183,8 @@ class SignalSignature extends StatelessWidget {
               params: params,
               seconds: seconds,
               color: ink,
+              glow: glow ?? colors.glowOf(ink),
+              pointCount: points,
               mode: mode,
               level: level,
               levelOf: levelOf,
@@ -159,18 +202,21 @@ class _SignaturePainter extends CustomPainter {
     required this.params,
     required this.seconds,
     required this.color,
+    required this.glow,
+    required this.pointCount,
     required this.mode,
     required this.level,
     required this.levelOf,
     required this.radius,
   }) : super(repaint: seconds);
 
-  static const int _points = 220;
   static const int _cometSegments = 30;
 
   final SignatureParams params;
   final ValueListenable<double> seconds;
   final Color color;
+  final Color glow;
+  final int pointCount;
   final SignatureMode mode;
   final double level;
   final double Function(double seconds)? levelOf;
@@ -204,8 +250,8 @@ class _SignaturePainter extends CustomPainter {
     };
     final amp = r * (0.74 + 0.2 * lvl);
     final d = params.phase + t * (params.drift + lvl * 1.4);
-    return List<Offset>.generate(_points + 1, (i) {
-      final u = i / _points * _tau;
+    return List<Offset>.generate(pointCount + 1, (i) {
+      final u = i / pointCount * _tau;
       final wob = lvl == 0
           ? 1.0
           : 1 +
@@ -243,7 +289,7 @@ class _SignaturePainter extends CustomPainter {
       final sigma = (4 + 16 * lvl) / 2;
       canvas.drawPath(
         path,
-        _stroke(width, color)
+        _stroke(width, glow)
           ..maskFilter = MaskFilter.blur(BlurStyle.normal, sigma),
       );
     }
@@ -267,7 +313,7 @@ class _SignaturePainter extends CustomPainter {
     final paint = _stroke(math.max(1.2, r * 0.05) * (1 + lvl * 0.6), color);
     for (var k = 0; k < _cometSegments; k++) {
       final f = ((head - length * k / _cometSegments) % 1 + 1) % 1;
-      final i = (f * _points).floor();
+      final i = (f * pointCount).floor();
       paint.color = color.withValues(
         alpha: (1 - k / _cometSegments) * peak * color.a,
       );
@@ -297,6 +343,8 @@ class _SignaturePainter extends CustomPainter {
       oldDelegate.params != params ||
       oldDelegate.seconds != seconds ||
       oldDelegate.color != color ||
+      oldDelegate.glow != glow ||
+      oldDelegate.pointCount != pointCount ||
       oldDelegate.mode != mode ||
       oldDelegate.level != level ||
       oldDelegate.levelOf != levelOf ||

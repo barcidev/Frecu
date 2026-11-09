@@ -10,6 +10,13 @@
       "wrongCode": "Wrong code. Check it and try again.",
       "roomFullHint": "You can join when someone leaves.",
       "unreachableHint": "Make sure you're on the same Wi-Fi network.",
+      "defaultName": "Participant",
+      "full": "This room is full ($max/$max).",
+      "unreachable": "The host isn't responding.",
+      "failed": "Couldn't join the room.",
+      "failedHint": "Make sure you're on the same Wi-Fi network and try again.",
+      "versionMismatch": "This frecu uses another version of Frecu.",
+      "versionMismatchHint": "Update Frecu on both phones.",
       "pin": {
         "message": "Enter the access code. Ask the host for it.",
         "autoSend": "Sent once all 4 digits are in",
@@ -23,6 +30,7 @@
         "message": "Use it if the room isn't on the list.",
         "host": "Host IP",
         "noAnswer": "No answer on port $port",
+        "invalid": "Enter an IP like $ip.",
         "connect": "Connect"
       },
       "scan": {
@@ -34,7 +42,15 @@
         "invalid": "This QR isn't a Frecu invite.",
         "found": "Room found",
         "noNote": "Room without a note",
-        "join": "Join"
+        "join": "Join",
+        "another": "Scan another QR",
+        "camera": {
+          "deniedTitle": "Frecu can't use the camera.",
+          "deniedMessage": "Allow it in Settings to scan the invite, or connect by IP.",
+          "unavailableTitle": "The camera isn't available.",
+          "unavailableMessage": "You can join with the host's IP.",
+          "openSettings": "Open settings"
+        }
       }
     },
     "settings": "Settings",
@@ -44,6 +60,7 @@
     "joinRoom": "Connect by IP",
     "nearbyRooms": "Nearby rooms",
     "accessCode": "Access code",
+    "unnamedRoom": "Unnamed room",
     "network": {
       "checking": "Checking network",
       "connected": "Network · $ip",
@@ -60,11 +77,13 @@
     "empty": {
       "title": "No signals yet",
       "message": "Join the host's Wi-Fi or ask them to show you their QR.",
-      "searching": "Still searching"
+      "searching": "Still searching",
+      "failed": "Search failed · retrying"
     },
     "offline": {
       "title": "You're not on any Wi-Fi network.",
-      "message": "Join the host's hotspot to find rooms."
+      "message": "Join the host's hotspot to find rooms.",
+      "openSettings": "Open Wi-Fi settings"
     },
     "newRoom": {
       "back": "Back",
@@ -86,7 +105,9 @@
           { "lead": "Keep Frecu open", "rest": " while they join. On iPhone we recommend that the host uses Android." }
         ],
         "ready": "It's on",
-        "sameWifi": "We're already on the same Wi-Fi"
+        "sameWifi": "We're already on the same Wi-Fi",
+        "openSettings": "Open hotspot settings",
+        "openSettingsIphone": "Open Settings"
       },
       "title": "New room",
       "soundsIn": "Your room sounds in",
@@ -158,6 +179,7 @@
         "earpieceSub": "Phone to your ear",
         "bluetoothOn": "Connected",
         "bluetoothOff": "No device",
+        "bluetoothDevice": "Bluetooth · connected",
         "label": "Audio output: $route"
       },
       "leave": {
@@ -213,13 +235,32 @@
         "receiving": "$name · talking",
         "waiting": "On air · waiting for your group",
         "connecting": "Connecting…",
-        "reconnecting": "Reconnecting…"
+        "reconnecting": "Reconnecting…",
+        "reconnectingIn": "Reconnecting · $seconds s",
+        "joined": "$name joined",
+        "left": "$name left",
+        "route": "Audio via $route",
+        "recovered": "Connection restored"
       },
       "echo": {
         "title": "Open mic on speaker.",
         "message": "Use headphones to avoid echo.",
         "dismiss": "Dismiss notice"
+      },
+      "mic": {
+        "title": "Your microphone isn't available.",
+        "message": "You can hear your group, but nobody can hear you. Check the permission in Settings.",
+        "settings": "Open settings",
+        "dismiss": "Dismiss notice"
       }
+    },
+    "notification": {
+      "channelName": "Frecu in the background",
+      "channelDescription": "Keeps the Frecu connection alive with the screen off.",
+      "title": "Frecu active",
+      "connected": "$room · Connected",
+      "reconnecting": "$room · Reconnecting…",
+      "leave": "Leave the room"
     }
   },
   "permissions": {
@@ -306,7 +347,8 @@
       "dark": "Dark"
     },
     "saveError": "Couldn't save",
-    "footer": "100% local · no internet"
+    "footer": "$app · 100% local · no internet",
+    "appVersion": "Frecu $version"
   },
   "errors": {
     "network": "Local network error",
@@ -314,7 +356,16 @@
     "roomFull": "Room is full (max 6 participants)",
     "invalidAccessCode": "Invalid access code",
     "hostUnreachable": "Host is unreachable",
+    "versionMismatch": "This frecu uses another version of Frecu",
     "audio": "Audio subsystem error",
     "unexpected": "Unexpected error"
+  },
+  "splash": {
+    "title": "frecu",
+    "tagline": "Group voice. No internet.",
+    "version": "v$version",
+    "localNetwork": "Local network",
+    "mesh": "P2P mesh",
+    "skip": "Tap to enter"
   }
 }
