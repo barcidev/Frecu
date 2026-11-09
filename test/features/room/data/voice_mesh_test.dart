@@ -2,8 +2,11 @@
 // F1: CUANDO alguien ofrece enlace al anfitrión ENTONCES el anfitrión ya escucha la señalización y responde, aunque la offer llegue antes de que sepa su id.
 // F5: CUANDO se sale, se cierra o se pierde la frecu ENTONCES se cierran todos los enlaces, se para y suelta el micrófono y se olvida quién habla; la siguiente frecu captura el micrófono de nuevo y nunca reutiliza un enlace de la anterior.
 // F13 y P111: CUANDO se conectan audífonos ENTONCES la salida cambia a ellos y muestra el nombre del Bluetooth; CUANDO se desconectan ENTONCES vuelve al altavoz.
+// Reloj: CUANDO en Android hay un Bluetooth solo de llamadas (sin A2DP ni LE Audio, como un reloj) ENTONCES la salida no va sola a él (la voz se oiría en la muñeca): queda para elegirlo a mano; unos audífonos o unos de cable sí se llevan la salida.
+// Reloj: CUANDO en Android el gestor de audio de WebRTC cambia de salida por su cuenta ENTONCES vuelve la ruta elegida.
 // F15: CUANDO se pierde al anfitrión con el micrófono abierto ENTONCES deja de transmitir y al reconectar lo retoma.
 // F16: CUANDO un candidato ICE llega antes que la descripción remota ENTONCES se aplica después de ella; un error de negociación no escapa.
+// Enlace: CUANDO un enlace de voz no conecta a tiempo (sin ruta, p. ej. ICE sin pares) ENTONCES queda caído en lugar de dejar la frecu «conectando» para siempre; si conecta después, vuelve a conectado.
 import 'dart:async';
 
 import 'package:audio_session/audio_session.dart';
@@ -133,6 +136,8 @@ class _Rig {
     when(audio.activate).thenAnswer((_) async {});
     when(audio.deactivate).thenAnswer((_) async {});
     when(() => audio.devicesStream).thenAnswer((_) => devices.stream);
+    when(() => audio.webRtcDeviceChanges)
+        .thenAnswer((_) => webRtcDevices.stream);
     when(() => audio.setSpeakerphoneOn(any())).thenAnswer((_) async {});
     when(audio.setSpeakerphoneOnButPreferBluetooth).thenAnswer((_) async {});
   }
@@ -142,6 +147,7 @@ class _Rig {
   final messages = StreamController<SignalingMessage>.broadcast();
   final connection = StreamController<bool>.broadcast();
   final devices = StreamController<Set<AudioDevice>>.broadcast();
+  final webRtcDevices = StreamController<void>.broadcast();
   final sent = <SignalingMessage>[];
   final pcs = <_FakePc>[];
   final streams = <_FakeStream>[];
@@ -151,8 +157,11 @@ class _Rig {
   bool micAvailable = true;
   int settingsOpened = 0;
 
-  PeerConnectionDataSource peerConnections() => PeerConnectionDataSource(
+  PeerConnectionDataSource peerConnections({
+    Duration linkWaitLimit = const Duration(seconds: 15),
+  }) => PeerConnectionDataSource(
     signalingClient: signaling,
+    linkWaitLimit: linkWaitLimit,
     peerConnectionFactory: (config) async {
       expect(config['iceServers'], isEmpty);
       final pc = _FakePc();
@@ -167,17 +176,20 @@ class _Rig {
     },
   );
 
-  VoiceRepositoryImpl voice([PeerConnectionDataSource? peers]) =>
-      VoiceRepositoryImpl(
-        audioSessionDataSource: audio,
-        peerConnectionDataSource: peers ?? peerConnections(),
-        signalingClientDataSource: signaling,
-        permissionRequester: () async => micGranted,
-        settingsOpener: () async {
-          settingsOpened++;
-          return true;
-        },
-      );
+  VoiceRepositoryImpl voice([
+    PeerConnectionDataSource? peers,
+    bool? isAndroid,
+  ]) => VoiceRepositoryImpl(
+    audioSessionDataSource: audio,
+    peerConnectionDataSource: peers ?? peerConnections(),
+    signalingClientDataSource: signaling,
+    isAndroid: isAndroid,
+    permissionRequester: () async => micGranted,
+    settingsOpener: () async {
+      settingsOpened++;
+      return true;
+    },
+  );
 
   Iterable<T> sentOf<T extends SignalingMessage>() => sent.whereType<T>();
 
@@ -185,6 +197,7 @@ class _Rig {
     await messages.close();
     await connection.close();
     await devices.close();
+    await webRtcDevices.close();
   }
 }
 
@@ -471,6 +484,58 @@ void main() {
       },
     );
 
+    test('Enlace: si no conecta a tiempo queda caído y la frecu deja de '
+        'estar conectando; si conecta después, vuelve a conectado', () async {
+      final voice = rig.voice(
+        rig.peerConnections(linkWaitLimit: const Duration(milliseconds: 40)),
+      );
+      final links = <Map<String, PeerConnectionState>>[];
+      final sub = voice.watchPeerLinks().listen(links.add);
+      await voice.joinMesh(localPeerId: 'peer_2', peerIds: ['peer_1']);
+      await pumpEventQueue();
+      expect(links.last, {'peer_1': PeerConnectionState.connecting});
+
+      // ICE sin pares: nunca llega a conectar ni a fallar.
+      rig.pcs.single.onIceConnectionState!(
+        RTCIceConnectionState.RTCIceConnectionStateChecking,
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 80));
+      expect(links.last, {'peer_1': PeerConnectionState.disconnected});
+
+      rig.pcs.single.onIceConnectionState!(
+        RTCIceConnectionState.RTCIceConnectionStateConnected,
+      );
+      await pumpEventQueue();
+      expect(links.last, {'peer_1': PeerConnectionState.connected});
+
+      await sub.cancel();
+      await voice.dispose();
+    });
+
+    test('Enlace: un enlace que conecta a tiempo no se da por caído y la '
+        'espera no revive a quien salió', () async {
+      final voice = rig.voice(
+        rig.peerConnections(linkWaitLimit: const Duration(milliseconds: 40)),
+      );
+      final links = <Map<String, PeerConnectionState>>[];
+      final sub = voice.watchPeerLinks().listen(links.add);
+      await voice.joinMesh(
+        localPeerId: 'peer_3',
+        peerIds: ['peer_1', 'peer_2'],
+      );
+      await pumpEventQueue();
+
+      rig.pcs.first.onIceConnectionState!(
+        RTCIceConnectionState.RTCIceConnectionStateConnected,
+      );
+      rig.messages.add(const SignalingMessage.peerLeft(peerId: 'peer_2'));
+      await Future<void>.delayed(const Duration(milliseconds: 80));
+
+      expect(links.last, {'peer_1': PeerConnectionState.connected});
+      await sub.cancel();
+      await voice.dispose();
+    });
+
     test('F16: sin permiso de micrófono falla con permissionDenied y la malla '
         'igual escucha (solo recibe)', () async {
       rig
@@ -641,6 +706,97 @@ void main() {
       await pumpEventQueue();
       expect(await voice.watchAudioRoute().first, AudioRoute.speaker);
       await voice.dispose();
+    });
+
+    test('Reloj: en Android un Bluetooth solo de llamadas no se lleva la '
+        'salida al entrar ni al conectarse, pero se puede elegir', () async {
+      final voice = rig.voice(null, true);
+      rig.devices.add({
+        _device('Altavoz', AudioDeviceType.builtInSpeaker),
+        _device('HUAWEI WATCH GT 2 Pro', AudioDeviceType.bluetoothSco),
+      });
+      await pumpEventQueue();
+
+      expect(await voice.watchAudioRoute().first, AudioRoute.speaker);
+      expect(
+        await voice.watchAvailableAudioRoutes().first,
+        contains(AudioRoute.bluetooth),
+      );
+      expect(await voice.watchBluetoothName().first, 'HUAWEI WATCH GT 2 Pro');
+      verifyNever(rig.audio.setSpeakerphoneOnButPreferBluetooth);
+
+      // Elegido a mano, sí va a él.
+      await voice.setAudioRoute(AudioRoute.bluetooth);
+      expect(await voice.watchAudioRoute().first, AudioRoute.bluetooth);
+      await voice.dispose();
+    });
+
+    test('Reloj: en Android unos audífonos con A2DP sí se llevan la salida '
+        'aunque haya un reloj, y unos de cable también', () async {
+      final voice = rig.voice(null, true);
+      rig.devices.add({
+        _device('Altavoz', AudioDeviceType.builtInSpeaker),
+        _device('HUAWEI WATCH GT 2 Pro', AudioDeviceType.bluetoothSco),
+      });
+      await pumpEventQueue();
+
+      rig.devices.add({
+        _device('Altavoz', AudioDeviceType.builtInSpeaker),
+        _device('HUAWEI WATCH GT 2 Pro', AudioDeviceType.bluetoothSco),
+        _device('Audífonos', AudioDeviceType.wiredHeadphones),
+      });
+      await pumpEventQueue();
+      expect(await voice.watchAudioRoute().first, AudioRoute.earpiece);
+
+      rig.devices.add({
+        _device('Altavoz', AudioDeviceType.builtInSpeaker),
+        _device('HUAWEI WATCH GT 2 Pro', AudioDeviceType.bluetoothSco),
+        AudioDevice(
+          id: 'Buds-sco',
+          name: 'Galaxy Buds',
+          type: AudioDeviceType.bluetoothSco,
+          isInput: true,
+          isOutput: true,
+        ),
+        AudioDevice(
+          id: 'Buds-a2dp',
+          name: 'Galaxy Buds',
+          type: AudioDeviceType.bluetoothA2dp,
+          isInput: false,
+          isOutput: true,
+        ),
+      });
+      await pumpEventQueue();
+      expect(await voice.watchAudioRoute().first, AudioRoute.bluetooth);
+      expect(await voice.watchBluetoothName().first, 'Galaxy Buds');
+      await voice.dispose();
+    });
+
+    test('Reloj: en Android, si el gestor de audio de WebRTC cambia de '
+        'salida por su cuenta, vuelve la ruta elegida', () async {
+      final voice = rig.voice(null, true);
+      rig.devices.add({
+        _device('Altavoz', AudioDeviceType.builtInSpeaker),
+        _device('HUAWEI WATCH GT 2 Pro', AudioDeviceType.bluetoothSco),
+      });
+      await pumpEventQueue();
+      clearInteractions(rig.audio);
+
+      // audioswitch eligió el reloj sin que nadie lo pidiera.
+      rig.webRtcDevices
+        ..add(null)
+        ..add(null);
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+
+      verify(() => rig.audio.setSpeakerphoneOn(true)).called(1);
+      expect(await voice.watchAudioRoute().first, AudioRoute.speaker);
+      await voice.dispose();
+    });
+
+    test('Reloj: fuera de Android no escucha al gestor de audio de WebRTC', () {
+      final voice = rig.voice(null, false);
+      verifyNever(() => rig.audio.webRtcDeviceChanges);
+      return voice.dispose();
     });
 
     test(

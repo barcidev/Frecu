@@ -1,22 +1,65 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 
 /// Datasource para la configuración y control de la sesión de audio nativa.
 class AudioSessionDataSource {
-  /// Constructor con inyección opcional de sesión y setters de speaker.
+  /// Constructor con inyección opcional de sesión, setters de speaker y
+  /// cambios del gestor de audio de WebRTC.
   AudioSessionDataSource([
     this._session,
     Future<void> Function(bool enabled)? speakerphoneSetter,
     Future<void> Function()? speakerphoneWithBluetoothSetter,
-  ]) : _speakerphoneSetter = speakerphoneSetter ?? Helper.setSpeakerphoneOn,
+    Stream<void>? webRtcDeviceChanges,
+  ]) : _speakerphoneSetter = speakerphoneSetter ?? _setSpeakerphone,
        _speakerphoneWithBluetoothSetter =
            speakerphoneWithBluetoothSetter ??
-           Helper.setSpeakerphoneOnButPreferBluetooth;
+           Helper.setSpeakerphoneOnButPreferBluetooth,
+       _webRtcDeviceChanges = webRtcDeviceChanges;
 
   AudioSession? _session;
   final Future<void> Function(bool enabled) _speakerphoneSetter;
   final Future<void> Function() _speakerphoneWithBluetoothSetter;
+  final Stream<void>? _webRtcDeviceChanges;
+
+  static StreamController<void>? _deviceChanges;
+
+  /// Cada vez que el gestor de audio de WebRTC ve otros dispositivos o elige
+  /// otra salida (en Android, audioswitch, que puede elegir por su cuenta
+  /// cualquier Bluetooth).
+  Stream<void> get webRtcDeviceChanges =>
+      _webRtcDeviceChanges ?? _nativeDeviceChanges();
+
+  static Stream<void> _nativeDeviceChanges() {
+    final changes = _deviceChanges ??= StreamController<void>.broadcast(
+      onListen: () =>
+          navigator.mediaDevices.ondevicechange = (_) =>
+              _deviceChanges?.add(null),
+      onCancel: () => navigator.mediaDevices.ondevicechange = null,
+    );
+    return changes.stream;
+  }
+
+  /// Altavoz o, sin él, auricular (o audífonos de cable). En Android elige el
+  /// dispositivo exacto: «sin altavoz» de flutter_webrtc prefiere cualquier
+  /// Bluetooth, y un reloj se llevaría la voz.
+  static Future<void> _setSpeakerphone(bool enabled) async {
+    if (!Platform.isAndroid) return Helper.setSpeakerphoneOn(enabled);
+    if (enabled) return Helper.selectAudioOutput(_speaker);
+    final devices = await navigator.mediaDevices.enumerateDevices();
+    final wired = devices.any(
+      (device) => device.kind == 'audiooutput' && device.deviceId == _wired,
+    );
+    return Helper.selectAudioOutput(wired ? _wired : _earpiece);
+  }
+
+  /// Salidas de audioswitch (`AudioDeviceKind` de flutter_webrtc).
+  static const String _speaker = 'speaker';
+  static const String _earpiece = 'earpiece';
+  static const String _wired = 'wired-headset';
 
   /// Stream reactivo del conjunto de dispositivos de audio detectados.
   Stream<Set<AudioDevice>> get devicesStream async* {

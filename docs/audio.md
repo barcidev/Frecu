@@ -2,6 +2,8 @@
 
 - Configura `audio_session` en categoría `playAndRecord`, modo `voiceChat`, con Bluetooth permitido y salida por altavoz por defecto. Al activar la sesión de cada frecu se vuelve a aplicar la ruta elegida.
 - Al conectar audífonos Bluetooth o cableados, la salida cambia a ellos automáticamente, también si ya estaban conectados al entrar (Bluetooth antes que cable). Al desconectar los que se usaban, vuelve al altavoz. La isla avisa «Audio por …».
+- En Android solo se lleva la salida un Bluetooth que reproduce medios (A2DP o LE Audio): audífonos, intercomunicadores, el carro. Uno solo de llamadas, como un reloj, aparece en la hoja de salida pero no se elige solo. En iOS los audífonos se ven como HFP, así que cuenta cualquiera.
+- En Android la ruta se aplica con el dispositivo exacto de audioswitch (`speaker`, `earpiece` o `wired-headset`), porque «sin altavoz» de flutter_webrtc prefiere cualquier Bluetooth. Además, cada vez que audioswitch cambia de salida por su cuenta (prefiere un Bluetooth al altavoz y descarta lo que se pide antes de ver los dispositivos), se vuelve a aplicar la ruta elegida.
 - La hoja de salida y la pastilla muestran el nombre del dispositivo Bluetooth (el `name` del dispositivo de `audio_session`, p. ej. «Sena 50S · Bluetooth · conectado»).
 - Un solo `getUserMedia` por frecu. Salir, cerrar o perder la frecu para la pista, suelta la sesión de audio y deja de transmitir.
 - Sin permiso de micrófono se escucha igual y la frecu lo avisa con un acceso a los ajustes del sistema.

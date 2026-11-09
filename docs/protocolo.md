@@ -84,6 +84,8 @@ Quien está en micrófono abierto y se silencia envía `talk_state` con `isSpeak
 - Un solo `getUserMedia` por frecu. Sin micrófono (permiso negado) la malla se arma igual para escuchar, con un transceptor de solo recepción.
 - Salir, cerrar o perder la frecu cierra todos los enlaces y para el micrófono; nunca se reutiliza un enlace de otra frecu.
 - El estado ICE de cada enlace (`onIceConnectionState`) llega a la malla como el estado del participante: conectando, conectado, reconectando o desconectado.
+- Un enlace que no conecta en 15 s (sin ruta de voz, p. ej. ICE sin pares) queda como desconectado: la frecu no se queda «Conectando» con el PTT bloqueado. Si conecta después, vuelve a conectado.
+- **Punto de acceso en Android:** WebRTC solo junta candidatos en las redes que conoce ConnectivityManager con internet, y la interfaz de la zona Wi-Fi propia (`swlan0`, `ap0`, `wlan1`…) no lo es. `HotspotNetworkDetector` (Kotlin, instalado en `MainActivity` antes de la primera conexión) suma esa interfaz al detector de WebRTC con el identificador de su red de Android, o con 0 si no tiene (WebRTC no ata sus sockets). Sin él, el teléfono que comparte su zona Wi-Fi no tiene ruta de voz con nadie, aunque la señalización (y «hablando») sí llegue. Se compila contra la misma versión de WebRTC que trae flutter_webrtc (`compileOnly`). En iOS, con el iPhone como punto de acceso (`bridge100`), falta verificarlo.
 - PTT se implementa activando y desactivando `track.enabled` del track local de audio. **No** renegocies la conexión para silenciar.
 - Límite de 6 participantes. El anfitrión rechaza el séptimo con `rejected(roomFull)`.
 

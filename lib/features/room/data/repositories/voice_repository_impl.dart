@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:frecu/core/error/failure.dart';
@@ -24,19 +25,22 @@ import 'package:permission_handler/permission_handler.dart';
 /// (señalización caída) deja de transmitir y, al volver, retoma el
 /// micrófono abierto si estaba abierto.
 class VoiceRepositoryImpl implements VoiceRepository {
-  /// Constructor con inyección de datasources y requester de permisos.
+  /// Constructor con inyección de datasources y requester de permisos;
+  /// [isAndroid] se inyecta en pruebas.
   VoiceRepositoryImpl({
     required AudioSessionDataSource audioSessionDataSource,
     required PeerConnectionDataSource peerConnectionDataSource,
     required SignalingClientDataSource signalingClientDataSource,
     Future<bool> Function()? permissionRequester,
     Future<bool> Function()? settingsOpener,
+    bool? isAndroid,
   }) : _audioSession = audioSessionDataSource,
        _peerConnection = peerConnectionDataSource,
        _signalingClient = signalingClientDataSource,
        _permissionRequester =
            permissionRequester ?? _defaultPermissionRequester,
-       _settingsOpener = settingsOpener ?? openAppSettings {
+       _settingsOpener = settingsOpener ?? openAppSettings,
+       _isAndroid = isAndroid ?? Platform.isAndroid {
     _signalingSubscription = _signalingClient.messages.listen(
       _handleSignalingMessage,
       onError: _logStreamError,
@@ -49,6 +53,15 @@ class VoiceRepositoryImpl implements VoiceRepository {
       _handleAudioDevicesChanged,
       onError: _logStreamError,
     );
+    // En Android, audioswitch elige salida por su cuenta (un Bluetooth antes
+    // que el altavoz) y descarta la que se pide antes de ver los
+    // dispositivos: cada vez que cambia, vuelve la ruta elegida.
+    if (_isAndroid) {
+      _webRtcDevicesSubscription = _audioSession.webRtcDeviceChanges.listen(
+        (_) => _reapplyRouteSoon(),
+        onError: _logStreamError,
+      );
+    }
   }
 
   final AudioSessionDataSource _audioSession;
@@ -56,6 +69,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
   final SignalingClientDataSource _signalingClient;
   final Future<bool> Function() _permissionRequester;
   final Future<bool> Function() _settingsOpener;
+  final bool _isAndroid;
   late final VoiceLevelSampler _levels = VoiceLevelSampler(
     _peerConnection.readVoiceLevels,
   );
@@ -63,6 +77,8 @@ class VoiceRepositoryImpl implements VoiceRepository {
   StreamSubscription<SignalingMessage>? _signalingSubscription;
   StreamSubscription<bool>? _connectionSubscription;
   StreamSubscription<Set<AudioDevice>>? _devicesSubscription;
+  StreamSubscription<void>? _webRtcDevicesSubscription;
+  Timer? _reapplyRoute;
 
   final StreamController<bool> _isTalkingController =
       StreamController<bool>.broadcast();
@@ -283,6 +299,15 @@ class VoiceRepositoryImpl implements VoiceRepository {
     }
   }
 
+  /// Vuelve a aplicar la ruta elegida cuando audioswitch se calma; elegir la
+  /// misma salida no genera otro cambio, así que no se repite.
+  void _reapplyRouteSoon() {
+    _reapplyRoute?.cancel();
+    _reapplyRoute = Timer(const Duration(milliseconds: 250), () {
+      unawaited(setAudioRoute(_activeAudioRoute));
+    });
+  }
+
   @override
   Future<Result<void>> setSpeakerOn(bool enabled) {
     return setAudioRoute(enabled ? AudioRoute.speaker : AudioRoute.earpiece);
@@ -333,20 +358,40 @@ class VoiceRepositoryImpl implements VoiceRepository {
       type == AudioDeviceType.bluetoothA2dp ||
       type == AudioDeviceType.bluetoothLe;
 
+  /// Bluetooth que reproduce medios (A2DP o LE Audio): audífonos,
+  /// intercomunicadores, el carro.
+  static bool _playsMedia(AudioDeviceType type) =>
+      type == AudioDeviceType.bluetoothA2dp ||
+      type == AudioDeviceType.bluetoothLe;
+
+  /// Bluetooth al que la salida puede ir sola. En Android, un dispositivo
+  /// solo de llamadas (sin A2DP ni LE Audio, como un reloj) se puede elegir
+  /// pero no se lleva la voz; en iOS los audífonos se ven como HFP, así que
+  /// cuenta cualquiera.
+  bool _takesOutput(AudioDevice device, Iterable<AudioDevice> bluetooth) =>
+      !_isAndroid ||
+      bluetooth.any((d) => d.name == device.name && _playsMedia(d.type));
+
   static bool _isWired(AudioDeviceType type) =>
       type == AudioDeviceType.wiredHeadset ||
       type == AudioDeviceType.wiredHeadphones ||
       type == AudioDeviceType.usbAudio;
 
   /// Al conectar audífonos (Bluetooth o de cable) la salida cambia a ellos;
-  /// al desconectar los que se usaban, vuelve al altavoz.
+  /// al desconectar los que se usaban, vuelve al altavoz. Un Bluetooth solo
+  /// de llamadas en Android (un reloj) queda para elegirlo a mano.
   void _handleAudioDevicesChanged(Set<AudioDevice> devices) {
     final bluetooth = devices.where((d) => _isBluetooth(d.type)).toList()
       ..sort((a, b) => (b.isOutput ? 1 : 0) - (a.isOutput ? 1 : 0));
+    final listening = bluetooth
+        .where((d) => _takesOutput(d, bluetooth))
+        .toList();
     final hasBluetooth = bluetooth.isNotEmpty;
+    final takesOutput = listening.isNotEmpty;
     final hasWired = devices.any((d) => _isWired(d.type));
 
-    final name = hasBluetooth ? bluetooth.first.name.trim() : '';
+    final named = takesOutput ? listening : bluetooth;
+    final name = hasBluetooth ? named.first.name.trim() : '';
     final bluetoothName = name.isEmpty ? null : name;
     if (bluetoothName != _bluetoothName) {
       _bluetoothName = bluetoothName;
@@ -361,17 +406,17 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _emit(_availableRoutesController, _availableAudioRoutes);
 
     final first = !_devicesKnown;
-    final bluetoothArrived = hasBluetooth && (first || !_hadBluetooth);
+    final bluetoothArrived = takesOutput && (first || !_hadBluetooth);
     final wiredArrived = hasWired && (first || !_hadWired);
     final wiredLeft = !hasWired && _hadWired;
     _devicesKnown = true;
-    _hadBluetooth = hasBluetooth;
+    _hadBluetooth = takesOutput;
     _hadWired = hasWired;
 
     final AudioRoute? next;
     if (bluetoothArrived) {
       next = AudioRoute.bluetooth;
-    } else if (wiredArrived && !hasBluetooth) {
+    } else if (wiredArrived && !takesOutput) {
       next = AudioRoute.earpiece;
     } else if (!hasBluetooth && _activeAudioRoute == AudioRoute.bluetooth) {
       // Se fue el Bluetooth (o ya no estaba): nunca queda una ruta muda.
@@ -498,6 +543,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _connectionSubscription = null;
     await _devicesSubscription?.cancel();
     _devicesSubscription = null;
+    _reapplyRoute?.cancel();
+    await _webRtcDevicesSubscription?.cancel();
+    _webRtcDevicesSubscription = null;
     await _levels.dispose();
     await _peerConnection.dispose();
     await _audioSession.deactivate();
