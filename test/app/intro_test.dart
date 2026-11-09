@@ -110,6 +110,41 @@ void main() {
       expect(find.byType(LobbyPage), findsOneWidget);
     });
 
+    testWidgets('P69: los textos de la intro no llevan subrayado', (
+      tester,
+    ) async {
+      await _launch(tester, reduceMotion: true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // La intro va encima del navegador, fuera de todo `Material`: sus
+      // textos no heredan el estilo de error de `MaterialApp` (subrayado
+      // doble amarillo).
+      final texts = tester
+          .widgetList<RichText>(
+            find.descendant(of: _intro, matching: find.byType(RichText)),
+          )
+          .map((text) => text.text)
+          .toList();
+      expect(
+        texts.map((text) => text.toPlainText()),
+        containsAll(<String>[
+          'frecu',
+          'Voz de grupo. Sin internet.',
+          'V0.1.0',
+          'RED LOCAL',
+          'MALLA P2P',
+        ]),
+      );
+      for (final text in texts) {
+        expect(
+          text.style?.decoration,
+          anyOf(isNull, TextDecoration.none),
+          reason: '«${text.toPlainText()}» no lleva subrayado',
+        );
+      }
+    });
+
     testWidgets('P69: sin tocar, se funde a los 3,9 s', (tester) async {
       await _launch(tester);
       await tester.pump();

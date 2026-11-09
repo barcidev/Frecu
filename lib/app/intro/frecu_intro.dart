@@ -206,15 +206,21 @@ class FrecuIntro extends ConsumerWidget {
             final fr = context.fr;
             return ColoredBox(
               color: fr.colors.bg0,
-              child: AnimatedBuilder(
-                animation: seconds,
-                builder: (context, _) {
-                  final t = still ? stillAt : seconds.value;
-                  return LayoutBuilder(
-                    builder: (context, constraints) =>
-                        _frame(fr, constraints.biggest, t, version),
-                  );
-                },
+              // La intro va encima del navegador, fuera de todo `Material`:
+              // sin este estilo, sus textos heredan el de error de
+              // `MaterialApp`, con subrayado doble amarillo.
+              child: DefaultTextStyle(
+                style: fr.type.body.copyWith(color: fr.colors.tx1),
+                child: AnimatedBuilder(
+                  animation: seconds,
+                  builder: (context, _) {
+                    final t = still ? stillAt : seconds.value;
+                    return LayoutBuilder(
+                      builder: (context, constraints) =>
+                          _frame(fr, constraints.biggest, t, version),
+                    );
+                  },
+                ),
               ),
             );
           },
