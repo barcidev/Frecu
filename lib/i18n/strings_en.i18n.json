@@ -379,9 +379,19 @@
       "channelName": "Frecu in the background",
       "channelDescription": "Keeps the Frecu connection alive with the screen off.",
       "title": "Frecu active",
-      "connected": "$room · Connected",
-      "reconnecting": "$room · Reconnecting…",
-      "leave": "Leave the room"
+      "connected": "Connected",
+      "reconnecting": "Reconnecting…",
+      "leave": "Leave the room",
+      "close": "Close the room",
+      "talk": "Talk",
+      "cut": "Stop talking",
+      "mute": "Mute me",
+      "unmute": "Unmute",
+      "route": "Audio output: $route",
+      "sos": "SOS · $where",
+      "towards": "$distance to the $direction",
+      "sosGo": "On my way",
+      "sosAck": "Got it"
     }
   },
   "permissions": {

@@ -379,9 +379,19 @@
       "channelName": "Frecu en segundo plano",
       "channelDescription": "Mantiene activa la conexión de Frecu con la pantalla apagada.",
       "title": "Frecu activa",
-      "connected": "$room · Conectado",
-      "reconnecting": "$room · Reconectando…",
-      "leave": "Salir de la frecu"
+      "connected": "Conectado",
+      "reconnecting": "Reconectando…",
+      "leave": "Salir de la frecu",
+      "close": "Cerrar la frecu",
+      "talk": "Hablar",
+      "cut": "Cortar",
+      "mute": "Silenciarme",
+      "unmute": "Activar micrófono",
+      "route": "Salida de audio: $route",
+      "sos": "SOS · $where",
+      "towards": "$distance hacia el $direction",
+      "sosGo": "Voy en camino",
+      "sosAck": "Entendido"
     }
   },
   "permissions": {

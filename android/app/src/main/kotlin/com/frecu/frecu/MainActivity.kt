@@ -1,5 +1,6 @@
 package com.frecu.frecu
 
+import android.content.Intent
 import android.view.KeyEvent
 import com.cloudwebrtc.webrtc.FlutterWebRTCPlugin
 import io.flutter.embedding.android.FlutterActivity
@@ -24,6 +25,21 @@ class MainActivity : FlutterActivity() {
         FrecuWifi.install(this, messenger)
         // Invitar por NFC: el teléfono como etiqueta con la invitación.
         FrecuNfcHostService.install(this, messenger)
+        // La frecu activa: servicio en primer plano y tarjeta de reproductor.
+        FrecuRoomService.install(this, messenger)
+    }
+
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        // Sin motor no hay frecu: el servicio y su tarjeta se van con él.
+        FrecuRoomService.uninstall(this)
+        super.cleanUpFlutterEngine(flutterEngine)
+    }
+
+    // Tocar la tarjeta de la frecu la trae al frente; con el anfitrión solo,
+    // con el QR para invitar.
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        FrecuRoomService.opened(intent.getStringExtra(FrecuRoomService.EXTRA_OPEN))
     }
 
     // El botón de volumen habla en la frecu si la persona lo activó.

@@ -54,12 +54,9 @@ void main() {
         ),
       );
 
-      expect(
-        content.contains(
-          'com.pravera.flutter_foreground_task.service.ForegroundService',
-        ),
-        isTrue,
-      );
+      // Servicio propio de la frecu: voz con la pantalla apagada y tarjeta
+      // de reproductor.
+      expect(content.contains('android:name=".FrecuRoomService"'), isTrue);
       expect(
         // Micrófono siempre; ubicación solo mientras se comparte (la app
         // elige los tipos al arrancar el servicio).

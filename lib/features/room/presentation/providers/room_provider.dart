@@ -40,22 +40,21 @@ ForegroundServiceDataSource foregroundServiceDataSource(Ref ref) {
   return dataSource;
 }
 
-/// Toques en «Salir» de la notificación de la frecu (Android).
+/// Toques en «Salir» de la tarjeta de la frecu (Android).
 @riverpod
 Stream<int> notificationLeaveRequests(Ref ref) =>
     ref.watch(foregroundServiceDataSourceProvider).leaveRequests;
 
-/// Textos de la notificación de la frecu activa en el idioma actual; sin
-/// nombre (anfitrión de una versión anterior) usa el título genérico.
+/// Textos de arranque de la tarjeta de la frecu en el idioma actual, hasta
+/// que la pantalla de la frecu manda el contenido completo.
 ForegroundNotificationTexts roomNotificationTexts() {
   final copy = t.room.notification;
-  String named(String roomName) => roomName.isEmpty ? t.room.title : roomName;
   return ForegroundNotificationTexts(
     channelName: copy.channelName,
     channelDescription: copy.channelDescription,
     title: copy.title,
-    connected: (roomName) => copy.connected(room: named(roomName)),
-    reconnecting: (roomName) => copy.reconnecting(room: named(roomName)),
+    connected: copy.connected,
+    reconnecting: copy.reconnecting,
     leave: copy.leave,
   );
 }

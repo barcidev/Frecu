@@ -27,6 +27,7 @@ import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/nfc_invite/domain/repositories/nfc_invite_repository.dart';
 import 'package:frecu/features/nfc_invite/presentation/providers/nfc_invite_provider.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
+import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/datasources/proximity_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
@@ -44,6 +45,7 @@ import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
+import 'package:frecu/features/room/presentation/pages/room_notification.dart';
 import 'package:frecu/features/room/presentation/pages/room_proximity.dart';
 import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/pages/room_wind_filter.dart';
@@ -520,11 +522,16 @@ void main() {
 
     /// Abre la app, crea (o se une a) la frecu como lo hace el inicio y
     /// después abre la pantalla, como en la app.
-    Future<AppRouter> enter(WidgetTester tester, {bool host = false}) async {
+    Future<AppRouter> enter(
+      WidgetTester tester, {
+      bool host = false,
+      ForegroundServiceDataSource? service,
+    }) async {
       // Dentro de la prueba, para que sus suscripciones vivan en su reloj.
       rooms = RoomRepositoryImpl(
         serverDataSource: _FakeServer(),
         clientDataSource: signaling,
+        foregroundServiceDataSource: service,
         networkInterfacesProvider: () async => [],
         reconnectBaseDelay: const Duration(seconds: 4),
         maxReconnectAttempts: 1,
@@ -570,6 +577,12 @@ void main() {
               notificationLeaveRequestsProvider.overrideWith(
                 (ref) => notificationLeaves.stream,
               ),
+              if (service != null) ...[
+                foregroundServiceDataSourceProvider.overrideWithValue(service),
+                roomArtPainterProvider.overrideWithValue(
+                  (_) async => Uint8List.fromList([1, 2, 3]),
+                ),
+              ],
             ],
             child: FrecuApp(appRouter: router),
           ),
@@ -976,6 +989,68 @@ void main() {
       );
     });
 
+    testWidgets('Tarjeta de reproductor (Android): dice lo que la isla, con '
+        'su carátula, y sus botones hablan, cambian la salida y atienden el '
+        'SOS', (tester) async {
+      final calls = <(String, Object?)>[];
+      final service = ForegroundServiceDataSource(
+        texts: roomNotificationTexts,
+        invoke: (method, args) async {
+          calls.add((method, args));
+          return null;
+        },
+      );
+      Map<String, Object?> card() =>
+          calls.lastWhere((call) => call.$1 == 'update').$2!
+              as Map<String, Object?>;
+      List<Object?> buttons() => [
+        for (final button in card()['buttons']! as List<Object?>)
+          (button! as Map<String, Object?>)['id'],
+      ];
+
+      await enter(tester, service: service);
+      await tester.pump();
+      expect(calls.first.$1, 'start');
+      expect(card()['subtitle'], 'En línea · 2/6');
+      expect(card()['art'], [1, 2, 3]);
+      expect(buttons(), ['mic', 'route', 'leave']);
+
+      // Hablar desde la tarjeta (o desde los audífonos).
+      service.handleAction('mic');
+      await tester.pump();
+      verify(() => voice.startTalking()).called(1);
+      talking.add(true);
+      await tester.pump(const Duration(seconds: 1));
+      expect(card()['subtitle'], 'Al aire · 00:00');
+      expect((card()['buttons']! as List<Object?>).first, {
+        'id': 'mic',
+        'icon': 'stop',
+        'label': 'Cortar',
+      });
+
+      // Cambiar la salida de audio.
+      service.handleAction('route');
+      await tester.pump();
+      verify(() => voice.setAudioRoute(any())).called(1);
+
+      // Un SOS manda sobre todo y se atiende sin abrir la app.
+      talking.add(false);
+      signaling.emit(
+        const SignalingMessage.quickMessage(peerId: 'peer_1', kind: 'sos'),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(card()['title'], 'Andrés necesita ayuda');
+      expect(buttons(), ['sosGo', 'sosAck', 'leave']);
+      service.handleAction('sosGo');
+      await tester.pumpAndSettle();
+      expect(
+        signaling.sent.whereType<SignalingQuickMessage>().single.kind,
+        'onMyWay',
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(buttons(), ['mic', 'route', 'leave']);
+    });
+
     testWidgets('Botón de volumen (Android): con la opción activada, pulsar '
         'habla, soltar calla y con la pantalla apagada cada pulsación '
         'alterna; al salir deja el volumen como estaba', (tester) async {
@@ -1175,18 +1250,21 @@ void main() {
     });
   });
 
-  test('F16: la notificación usa textos traducidos y el nombre genérico si '
-      'falta', () async {
-    LocaleSettings.setLocaleSync(AppLocale.es);
-    var texts = roomNotificationTexts();
-    expect(texts.title, 'Frecu activa');
-    expect(texts.connected('Ruta 40'), 'Ruta 40 · Conectado');
-    expect(texts.reconnecting(''), 'Frecu activa · Reconectando…');
+  test(
+    'F16: la notificación usa textos traducidos y el título genérico',
+    () async {
+      LocaleSettings.setLocaleSync(AppLocale.es);
+      var texts = roomNotificationTexts();
+      expect(texts.title, 'Frecu activa');
+      expect(texts.connected, 'Conectado');
+      expect(texts.reconnecting, 'Reconectando…');
+      expect(texts.leave, 'Salir de la frecu');
 
-    await LocaleSettings.setLocale(AppLocale.en);
-    addTearDown(() => LocaleSettings.setLocaleSync(AppLocale.es));
-    texts = roomNotificationTexts();
-    expect(texts.connected('Ruta 40'), 'Ruta 40 · Connected');
-    expect(texts.channelName, 'Frecu in the background');
-  });
+      await LocaleSettings.setLocale(AppLocale.en);
+      addTearDown(() => LocaleSettings.setLocaleSync(AppLocale.es));
+      texts = roomNotificationTexts();
+      expect(texts.connected, 'Connected');
+      expect(texts.channelName, 'Frecu in the background');
+    },
+  );
 }

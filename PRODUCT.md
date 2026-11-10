@@ -55,7 +55,7 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - **NFC**: `nfc_manager`, `nfc_manager_ndef`
 - **Enlaces**: `app_links`
 - **Ubicación**: `geolocator`
-- **Foreground Service (Android)**: `flutter_foreground_task`
+- **Foreground Service (Android)**: servicio propio en Kotlin (`FrecuRoomService`) con notificación de medios (`androidx.media`)
 - **IP local**: `network_info_plus`
 - **Identificadores**: `uuid`
 - **Logs**: `logger`
