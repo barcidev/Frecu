@@ -3,5 +3,4 @@
     <!-- Portadora · noche: vacío (bg0) y señal, de lib/core/design/tokens/fr_colors.dart. -->
     <color name="portadora_night">#FF060708</color>
     <color name="portadora_signal">#FFC4E05C</color>
-    <color name="ic_launcher_background">#FF060708</color>
 </resources>

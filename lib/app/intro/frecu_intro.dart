@@ -372,6 +372,11 @@ abstract final class IntroCurve {
   /// Puntos de la curva.
   static const int points = 260;
 
+  /// Segundo en que la curva se asienta en la marca. Su fase avanza como en
+  /// el prototipo (`t × 0,25`), pero desfasada para aterrizar aquí justo en
+  /// la de la marca (0,6): la intro termina en el logo y se queda en él.
+  static const double landAt = 3;
+
   /// Centro de la curva en una pantalla de [size]: al 40 % del alto.
   static Offset centerOf(Size size) =>
       Offset(size.width / 2, size.height * 0.4);
@@ -393,7 +398,11 @@ abstract final class IntroCurve {
       center.dy + math.sin(turn * 3 - t * 3.2) * amp * math.sin(math.pi * u),
     );
     final sign = Offset(
-      center.dx + math.sin(brand.a * turn + brand.phase + t * 0.25) * radius,
+      center.dx +
+          math.sin(
+                brand.a * turn + brand.phase + math.min(0, t - landAt) * 0.25,
+              ) *
+              radius,
       center.dy + math.sin(brand.b * turn) * radius,
     );
     return Offset.lerp(wave, sign, m)!;

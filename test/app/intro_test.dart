@@ -215,10 +215,11 @@ void main() {
       const brand = SignatureParams.brand;
       for (var i = 0; i <= IntroCurve.points; i += 7) {
         final turn = i / IntroCurve.points * math.pi * 2;
+        // Logo: tras asentarse, la curva es la marca exacta (fase 0,6).
         final expected =
             center +
             Offset(
-                  math.sin(brand.a * turn + brand.phase + t * 0.25),
+                  math.sin(brand.a * turn + brand.phase),
                   math.sin(brand.b * turn),
                 ) *
                 62;
@@ -227,6 +228,21 @@ void main() {
         expect(point.dy, closeTo(expected.dy, 1e-6));
       }
       expect(IntroCurve.dialAt(t), 1);
+    });
+
+    test('Logo: la curva aterriza en la marca (fase 0,6) al asentarse y se '
+        'queda en ella', () {
+      for (final i in [0, 37, 130, 211]) {
+        final turn = i / IntroCurve.points * 2 * math.pi;
+        final logo = Offset(
+          center.dx + math.sin(2 * turn + 0.6) * 62,
+          center.dy + math.sin(3 * turn) * 62,
+        );
+        final landed = IntroCurve.pointAt(i, IntroCurve.landAt, size);
+        final later = IntroCurve.pointAt(i, IntroCurve.landAt + 0.9, size);
+        expect((landed - logo).distance, lessThan(1e-6), reason: '$i');
+        expect((later - landed).distance, lessThan(1e-6), reason: '$i');
+      }
     });
   });
 }
