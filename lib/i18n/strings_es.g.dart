@@ -46,6 +46,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$room$es room = Translations$room$es.internal(_root);
 	late final Translations$permissions$es permissions = Translations$permissions$es.internal(_root);
 	late final Translations$settings$es settings = Translations$settings$es.internal(_root);
+	late final Translations$nfcIos$es nfcIos = Translations$nfcIos$es.internal(_root);
 	late final Translations$errors$es errors = Translations$errors$es.internal(_root);
 	late final Translations$splash$es splash = Translations$splash$es.internal(_root);
 	late final Translations$messages$es messages = Translations$messages$es.internal(_root);
@@ -71,6 +72,7 @@ class Translations$lobby$es {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+	late final Translations$lobby$nfc$es nfc = Translations$lobby$nfc$es.internal(_root);
 
 	/// es: 'frecu'
 	String get title => 'frecu';
@@ -328,6 +330,30 @@ class Translations$settings$es {
 	String appVersion({required Object version}) => 'Frecu ${version}';
 }
 
+// Path: nfcIos
+class Translations$nfcIos$es {
+	Translations$nfcIos$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Acerca el teléfono del anfitrión o la etiqueta de la frecu.'
+	String get read => 'Acerca el teléfono del anfitrión o la etiqueta de la frecu.';
+
+	/// es: 'Acerca la etiqueta NFC.'
+	String get write => 'Acerca la etiqueta NFC.';
+
+	/// es: 'Listo'
+	String get done => 'Listo';
+
+	/// es: 'No es una invitación de Frecu.'
+	String get notInvite => 'No es una invitación de Frecu.';
+
+	/// es: 'No se pudo. Inténtalo otra vez.'
+	String get failed => 'No se pudo. Inténtalo otra vez.';
+}
+
 // Path: errors
 class Translations$errors$es {
 	Translations$errors$es.internal(this._root);
@@ -362,6 +388,9 @@ class Translations$errors$es {
 
 	/// es: 'No se pudo conectar a la red de la frecu'
 	String get wifiJoin => 'No se pudo conectar a la red de la frecu';
+
+	/// es: 'No se pudo usar NFC'
+	String get nfc => 'No se pudo usar NFC';
 
 	/// es: 'Error inesperado'
 	String get unexpected => 'Error inesperado';
@@ -478,6 +507,48 @@ class Translations$location$es {
 
 	late final Translations$location$compass$es compass = Translations$location$compass$es.internal(_root);
 	late final Translations$location$compassLong$es compassLong = Translations$location$compassLong$es.internal(_root);
+}
+
+// Path: lobby.nfc
+class Translations$lobby$nfc$es {
+	Translations$lobby$nfc$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Por IP'
+	String get byIp => 'Por IP';
+
+	/// es: 'Por NFC'
+	String get button => 'Por NFC';
+
+	/// es: 'Unirse por NFC'
+	String get kicker => 'Unirse por NFC';
+
+	/// es: 'Acerca tu teléfono'
+	String get title => 'Acerca tu teléfono';
+
+	/// es: 'Junta el dorso de tu teléfono con el del anfitrión, o con una etiqueta de la frecu.'
+	String get message => 'Junta el dorso de tu teléfono con el del anfitrión, o con una etiqueta de la frecu.';
+
+	/// es: 'En iPhone, mantén la parte de arriba del teléfono junto al otro.'
+	String get iphoneHint => 'En iPhone, mantén la parte de arriba del teléfono junto al otro.';
+
+	/// es: 'Frecu encontrada'
+	String get foundTitle => 'Frecu encontrada';
+
+	/// es: 'Leímos la invitación. Ya trae el código.'
+	String get foundMessage => 'Leímos la invitación. Ya trae el código.';
+
+	/// es: 'Eso no trae una invitación de Frecu.'
+	String get notInvite => 'Eso no trae una invitación de Frecu.';
+
+	/// es: 'No se pudo leer. Vuelve a acercarlo.'
+	String get failed => 'No se pudo leer. Vuelve a acercarlo.';
+
+	/// es: 'Reintentar'
+	String get retry => 'Reintentar';
 }
 
 // Path: lobby.join
@@ -1590,6 +1661,20 @@ class Translations$room$sheets$invite$es {
 
 	// Translations
 
+	/// es: 'También por NFC'
+	String get nfcTitle => 'También por NFC';
+
+	/// es: 'Acerca otro teléfono al tuyo'
+	String get nfcMessage => 'Acerca otro teléfono al tuyo';
+
+	/// es: 'Grábala en una etiqueta NFC'
+	String get nfcMessageTag => 'Grábala en una etiqueta NFC';
+
+	/// es: 'Grabar etiqueta'
+	String get nfcWrite => 'Grabar etiqueta';
+
+	late final Translations$room$sheets$invite$nfcSheet$es nfcSheet = Translations$room$sheets$invite$nfcSheet$es.internal(_root);
+
 	/// es: 'Invitar a la frecu'
 	String get kicker => 'Invitar a la frecu';
 
@@ -2047,6 +2132,39 @@ class Translations$lobby$newRoom$network$steps$2$es with HotspotStep {
 	@override String get rest => ' La próxima tendrá otro nombre y otra clave.';
 }
 
+// Path: room.sheets.invite.nfcSheet
+class Translations$room$sheets$invite$nfcSheet$es {
+	Translations$room$sheets$invite$nfcSheet$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Grabar invitación'
+	String get kicker => 'Grabar invitación';
+
+	/// es: 'Acerca una etiqueta'
+	String get title => 'Acerca una etiqueta';
+
+	/// es: 'Junta una etiqueta NFC con el dorso de tu teléfono. Sirve mientras esta frecu siga abierta.'
+	String get message => 'Junta una etiqueta NFC con el dorso de tu teléfono. Sirve mientras esta frecu siga abierta.';
+
+	/// es: 'Invitación grabada'
+	String get done => 'Invitación grabada';
+
+	/// es: 'Esa etiqueta no se puede grabar.'
+	String get readOnly => 'Esa etiqueta no se puede grabar.';
+
+	/// es: 'La invitación no cabe en esa etiqueta.'
+	String get tooSmall => 'La invitación no cabe en esa etiqueta.';
+
+	/// es: 'No se pudo grabar. Vuelve a acercarla.'
+	String get failed => 'No se pudo grabar. Vuelve a acercarla.';
+
+	/// es: 'Reintentar'
+	String get retry => 'Reintentar';
+}
+
 /// The flat map containing all translations for locale <es>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -2056,6 +2174,17 @@ extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.title' => 'Frecu',
+			'lobby.nfc.byIp' => 'Por IP',
+			'lobby.nfc.button' => 'Por NFC',
+			'lobby.nfc.kicker' => 'Unirse por NFC',
+			'lobby.nfc.title' => 'Acerca tu teléfono',
+			'lobby.nfc.message' => 'Junta el dorso de tu teléfono con el del anfitrión, o con una etiqueta de la frecu.',
+			'lobby.nfc.iphoneHint' => 'En iPhone, mantén la parte de arriba del teléfono junto al otro.',
+			'lobby.nfc.foundTitle' => 'Frecu encontrada',
+			'lobby.nfc.foundMessage' => 'Leímos la invitación. Ya trae el código.',
+			'lobby.nfc.notInvite' => 'Eso no trae una invitación de Frecu.',
+			'lobby.nfc.failed' => 'No se pudo leer. Vuelve a acercarlo.',
+			'lobby.nfc.retry' => 'Reintentar',
 			'lobby.title' => 'frecu',
 			'lobby.join.bluetooth.via' => 'Por Bluetooth',
 			'lobby.join.bluetooth.hint' => 'Aún no estás en su Wi-Fi: al poner el código te conectamos.',
@@ -2285,6 +2414,18 @@ extension on Translations {
 			'room.header.note' => ({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invitar',
 			'room.sheets.close' => 'Cerrar',
+			'room.sheets.invite.nfcTitle' => 'También por NFC',
+			'room.sheets.invite.nfcMessage' => 'Acerca otro teléfono al tuyo',
+			'room.sheets.invite.nfcMessageTag' => 'Grábala en una etiqueta NFC',
+			'room.sheets.invite.nfcWrite' => 'Grabar etiqueta',
+			'room.sheets.invite.nfcSheet.kicker' => 'Grabar invitación',
+			'room.sheets.invite.nfcSheet.title' => 'Acerca una etiqueta',
+			'room.sheets.invite.nfcSheet.message' => 'Junta una etiqueta NFC con el dorso de tu teléfono. Sirve mientras esta frecu siga abierta.',
+			'room.sheets.invite.nfcSheet.done' => 'Invitación grabada',
+			'room.sheets.invite.nfcSheet.readOnly' => 'Esa etiqueta no se puede grabar.',
+			'room.sheets.invite.nfcSheet.tooSmall' => 'La invitación no cabe en esa etiqueta.',
+			'room.sheets.invite.nfcSheet.failed' => 'No se pudo grabar. Vuelve a acercarla.',
+			'room.sheets.invite.nfcSheet.retry' => 'Reintentar',
 			'room.sheets.invite.kicker' => 'Invitar a la frecu',
 			'room.sheets.invite.title' => 'Escanea para unirte',
 			'room.sheets.invite.message' => 'Desde Frecu › Escanear. El QR ya incluye el código.',
@@ -2445,6 +2586,11 @@ extension on Translations {
 			'settings.saveError' => 'No se pudo guardar',
 			'settings.footer' => ({required Object app}) => '${app} · 100% local · sin internet',
 			'settings.appVersion' => ({required Object version}) => 'Frecu ${version}',
+			'nfcIos.read' => 'Acerca el teléfono del anfitrión o la etiqueta de la frecu.',
+			'nfcIos.write' => 'Acerca la etiqueta NFC.',
+			'nfcIos.done' => 'Listo',
+			'nfcIos.notInvite' => 'No es una invitación de Frecu.',
+			'nfcIos.failed' => 'No se pudo. Inténtalo otra vez.',
 			'errors.network' => 'Error de red local',
 			'errors.permissionDenied' => 'Permiso denegado',
 			'errors.roomFull' => 'La frecu está llena (máximo 6 participantes)',
@@ -2454,6 +2600,7 @@ extension on Translations {
 			'errors.audio' => 'Error en el subsistema de audio',
 			'errors.hotspot' => 'No se pudo crear la red de la frecu',
 			'errors.wifiJoin' => 'No se pudo conectar a la red de la frecu',
+			'errors.nfc' => 'No se pudo usar NFC',
 			'errors.unexpected' => 'Error inesperado',
 			'splash.title' => 'frecu',
 			'splash.tagline' => 'Voz de grupo. Sin internet.',

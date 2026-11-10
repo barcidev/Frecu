@@ -4,3 +4,4 @@
 "NSCameraUsageDescription" = "Frecu needs camera access to scan a frecu's invitation QR codes.";
 "NSLocationWhenInUseUsageDescription" = "Frecu uses your location only if you turn on “Share my location” in a frecu, so your group can see how far away you are. It never leaves your group.";
 "NSBluetoothAlwaysUsageDescription" = "Frecu uses Bluetooth to find nearby frecus even before you are on their Wi-Fi, and to invite people nearby.";
+"NFCReaderUsageDescription" = "Frecu uses NFC to read the invitation from the host's phone or a tag, and to write it to a tag.";

@@ -60,6 +60,18 @@ Quien está cerca pero aún no en la red del anfitrión encuentra la frecu por B
 - **Comprobado** en el Samsung como anfitrión con un Mac como invitado (CoreBluetooth): encuentra la frecu, lee sus datos, la invitación sin código y con un código equivocado se rechazan, con el código correcto llega la URI completa, y al cerrar la frecu el anuncio se detiene. Falta probar el invitado en teléfonos reales (un iPhone y otro Android).
 - **Permisos:** Android 12+ pide «Dispositivos cercanos» (`BLUETOOTH_SCAN` con `neverForLocation`, `BLUETOOTH_ADVERTISE`, `BLUETOOTH_CONNECT`). El inicio no muestra el aviso: busca solo si el permiso ya se dio en la bienvenida. El anfitrión lo pide al anunciar. En iOS lo pide CoreBluetooth la primera vez que se busca.
 
+## Invitación por NFC y enlaces `frecu://`
+
+La invitación por NFC y por enlace es la misma URI del QR (`frecu://join?…`, con la red y su clave si las hay); se abre como un QR leído: la tarjeta «Frecu encontrada» del escáner, sin encender la cámara (`ScanQrPage(invite:)`), y Unirme sigue igual. Código en `lib/features/nfc_invite/`.
+
+- **Enlaces:** `frecu://join?…` abre Frecu desde otra app o la cámara del sistema (Android: `intent-filter` `VIEW` con `scheme="frecu" host="join"`; iOS: `CFBundleURLTypes`). Los lee `app_links` (por eso `flutter_deeplinking_enabled`/`FlutterDeepLinkingEnabled` van apagados) y el inicio abre su tarjeta, también el enlace que abrió la app; con una frecu activa se ignora. Otros enlaces no hacen nada.
+- **Leer (Por NFC):** con NFC, el dock del inicio lleva «Por IP» y «Por NFC» (sin NFC, «Conectar por IP» como antes). La hoja «Unirse por NFC» espera una etiqueta o el teléfono del anfitrión (`nfc_manager`, ISO 14443 y 15693), toma el primer registro URI `frecu:` del mensaje NDEF, lo muestra encontrado 700 ms y abre su tarjeta. Si no trae una invitación lo dice con Reintentar; cerrar (o cancelar el aviso de iPhone) corta la lectura.
+- **En Android, sin abrir la hoja:** el `intent-filter` `NDEF_DISCOVERED` con el mismo esquema hace que acercar una etiqueta o el teléfono del anfitrión abra Frecu con el enlace.
+- **El teléfono como etiqueta (Android, HCE):** mientras se está en una frecu (anfitrión o invitado, como el QR), `FrecuNfcHostService` emula una etiqueta NDEF tipo 4 de solo lectura (aplicación `D2760000850101`, archivos `E103` y `E104`) con un registro URI de la invitación; al salir deja de responder. Funciona con la pantalla encendida. El iPhone no puede hacer de etiqueta: en él solo se graban etiquetas.
+- **Grabar etiqueta:** la hoja de invitar lleva «También por NFC» con «Grabar etiqueta»: espera una etiqueta NDEF y graba un registro URI con la invitación (sin prefijo abreviado). Si es de solo lectura o no cabe, lo dice con Reintentar. La etiqueta sirve mientras la frecu siga abierta (el código y la red cambian con cada frecu).
+- **Comprobado en el Samsung:** un enlace `frecu://join` abre la tarjeta sin cámara («Escanear otro QR» la enciende); «Por NFC» y «Grabar etiqueta» activan y sueltan el modo lectura; Android registra `FrecuNfcHostService` como servicio por defecto de `D2760000850101`. Falta probar con otro teléfono y con una etiqueta: leer un Android que hace de etiqueta, en Android y en iPhone, y grabar una etiqueta.
+- **Fallos:** `Failure.nfc(NfcFailureReason)`: `notInvite`, `readOnly`, `tooSmall`, `cancelled`, `failed`.
+
 ## Mensajes de señalización
 
 JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed(unionKey: 'type')`.

@@ -39,6 +39,7 @@ void main() {
         Failure.audio(message: 'audio error'),
         Failure.hotspot(HotspotFailureReason.hotspotOn),
         Failure.wifiJoin(WifiJoinFailureReason.declined),
+        Failure.nfc(NfcFailureReason.notInvite),
         Failure.unexpected(message: 'crash'),
       ];
 
@@ -53,6 +54,7 @@ void main() {
           audio: (msg) => 'audio: $msg',
           hotspot: (reason) => 'hotspot: ${reason.name}',
           wifiJoin: (reason) => 'wifi: ${reason.name}',
+          nfc: (reason) => 'nfc: ${reason.name}',
           unexpected: (msg, err) => 'unexpected: $msg',
         );
         expect(description, isNotEmpty);

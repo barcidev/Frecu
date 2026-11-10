@@ -8,6 +8,7 @@ Permisos:
 - `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`
 - `POST_NOTIFICATIONS` (Android 13+)
 - `BLUETOOTH_CONNECT` (Android 12+)
+- Invitar por NFC: `NFC` (normal); `android.hardware.nfc` y `android.hardware.nfc.hce` no obligatorios. Servicio `FrecuNfcHostService` (`BIND_NFC_SERVICE`, `res/xml/frecu_apdu_service.xml` con la aplicación NDEF `D2760000850101` en la categoría `other`), canal `frecu/nfc_host`. `intent-filter` `VIEW` y `NDEF_DISCOVERED` para `frecu://join` y `flutter_deeplinking_enabled` apagado (los enlaces los lee `app_links`).
 - Invitar por Bluetooth: `BLUETOOTH_SCAN` con `neverForLocation` y `BLUETOOTH_ADVERTISE` (Android 12+), y `BLUETOOTH` y `BLUETOOTH_ADMIN` con `maxSdkVersion="30"`. `android.hardware.bluetooth_le` no es obligatorio. No hace falta el tipo de servicio `connectedDevice`: anunciar por BLE no lo exige.
 - `WAKE_LOCK`
 - `VIBRATE` (avisos de la frecu con la pantalla apagada)
@@ -26,6 +27,8 @@ Canales nativos de la red (en `MainActivity`): `frecu/hotspot` (`LocalHotspot.kt
 - `NSLocalNetworkUsageDescription`
 - `NSBonjourServices`: `_frecu._tcp`
 - `NSCameraUsageDescription` (escáner QR)
+- `NFCReaderUsageDescription` y `com.apple.developer.nfc.readersession.iso7816.select-identifiers` con `D2760000850101` (leer el teléfono Android del anfitrión, que hace de etiqueta tipo 4). Capacidad **NFC Tag Reading** (`com.apple.developer.nfc.readersession.formats`: `NDEF` y `TAG` en `Runner.entitlements`): hay que activarla en el App ID; no funciona en el simulador.
+- `CFBundleURLTypes` con el esquema `frecu` y `FlutterDeepLinkingEnabled` en falso (los enlaces los lee `app_links`).
 - `NSBluetoothAlwaysUsageDescription` (invitar por Bluetooth: buscar frecus cercanas). CoreBluetooth lo pide la primera vez que se busca; `permission_handler` no pide Bluetooth en iOS (sin `PERMISSION_BLUETOOTH`).
 - `UIBackgroundModes`: `audio` y `location`
 - `NSLocationWhenInUseUsageDescription` (solo «mientras se usa»; geolocator con `BYPASS_PERMISSION_LOCATION_ALWAYS=1` en el Podfile)

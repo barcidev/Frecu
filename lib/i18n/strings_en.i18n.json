@@ -3,6 +3,19 @@
     "title": "Frecu"
   },
   "lobby": {
+    "nfc": {
+      "byIp": "By IP",
+      "button": "By NFC",
+      "kicker": "Join by NFC",
+      "title": "Bring your phone close",
+      "message": "Touch the back of your phone to the host's, or to a frecu tag.",
+      "iphoneHint": "On iPhone, hold the top of your phone against the other one.",
+      "foundTitle": "Frecu found",
+      "foundMessage": "We read the invitation. It already has the code.",
+      "notInvite": "That doesn't carry a Frecu invitation.",
+      "failed": "Couldn't read it. Bring it close again.",
+      "retry": "Retry"
+    },
     "title": "frecu",
     "join": {
       "bluetooth": {
@@ -250,6 +263,20 @@
     "sheets": {
       "close": "Close",
       "invite": {
+        "nfcTitle": "Also by NFC",
+        "nfcMessage": "Bring another phone close to yours",
+        "nfcMessageTag": "Write it to an NFC tag",
+        "nfcWrite": "Write tag",
+        "nfcSheet": {
+          "kicker": "Write invitation",
+          "title": "Bring a tag close",
+          "message": "Touch an NFC tag to the back of your phone. It works while this frecu stays open.",
+          "done": "Invitation written",
+          "readOnly": "That tag can't be written.",
+          "tooSmall": "The invitation doesn't fit on that tag.",
+          "failed": "Couldn't write it. Bring it close again.",
+          "retry": "Retry"
+        },
         "kicker": "Invite to the frecu",
         "title": "Scan to join",
         "message": "From Frecu › Scan. The QR already includes the code.",
@@ -461,6 +488,13 @@
     "footer": "$app · 100% local · no internet",
     "appVersion": "Frecu $version"
   },
+  "nfcIos": {
+    "read": "Hold the host's phone or the frecu tag near.",
+    "write": "Hold the NFC tag near.",
+    "done": "Done",
+    "notInvite": "That's not a Frecu invitation.",
+    "failed": "Didn't work. Try again."
+  },
   "errors": {
     "network": "Local network error",
     "permissionDenied": "Required permission denied",
@@ -471,6 +505,7 @@
     "audio": "Audio subsystem error",
     "hotspot": "The room's network couldn't be created",
     "wifiJoin": "Couldn't connect to the room's network",
+    "nfc": "Could not use NFC",
     "unexpected": "Unexpected error"
   },
   "splash": {

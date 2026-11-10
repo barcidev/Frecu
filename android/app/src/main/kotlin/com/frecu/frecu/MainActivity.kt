@@ -22,6 +22,8 @@ class MainActivity : FlutterActivity() {
         // La red de la frecu: el anfitrión la crea y el invitado entra a ella.
         LocalHotspot.install(this, messenger)
         FrecuWifi.install(this, messenger)
+        // Invitar por NFC: el teléfono como etiqueta con la invitación.
+        FrecuNfcHostService.install(this, messenger)
     }
 
     // El botón de volumen habla en la frecu si la persona lo activó.

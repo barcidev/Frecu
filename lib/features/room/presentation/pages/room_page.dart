@@ -26,6 +26,7 @@ import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/pages/room_bluetooth_invite.dart';
 import 'package:frecu/features/room/presentation/pages/room_haptics.dart';
 import 'package:frecu/features/room/presentation/pages/room_messages.dart';
+import 'package:frecu/features/room/presentation/pages/room_nfc_share.dart';
 import 'package:frecu/features/room/presentation/pages/room_proximity.dart';
 import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/pages/room_wind_filter.dart';
@@ -80,6 +81,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   /// Filtro de viento del micrófono.
   final RoomWindFilter _wind = RoomWindFilter();
   final RoomBluetoothInvite _bluetooth = RoomBluetoothInvite();
+  final RoomNfcShare _nfc = RoomNfcShare();
 
   /// Mensajes rápidos: enviar y avisar de los que llegan.
   late final RoomMessages _messages = RoomMessages(
@@ -132,6 +134,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _proximity.start(ref);
     _wind.start(ref);
     _bluetooth.start(ref);
+    _nfc.start(ref);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => unawaited(_startVoice()),
     );
@@ -144,6 +147,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _proximity.stop();
     _wind.stop();
     _bluetooth.stop();
+    _nfc.stop();
     // Si la pantalla se va sin salir de la frecu, sale: nunca deja servidor,
     // anuncio, servicio ni micrófono vivos.
     if (_inRoom && !_leaving && _closure == null) {

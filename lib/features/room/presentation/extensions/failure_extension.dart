@@ -17,6 +17,7 @@ extension FailureLocalization on Failure {
       audio: (msg) => msg ?? t.errors.audio,
       hotspot: (_) => t.errors.hotspot,
       wifiJoin: (_) => t.errors.wifiJoin,
+      nfc: (_) => t.errors.nfc,
       unexpected: (msg, _) => msg ?? t.errors.unexpected,
     );
   }

@@ -146,10 +146,15 @@ class ScanQrRoute extends _i8.PageRouteInfo<ScanQrRouteArgs> {
   ScanQrRoute({
     _i9.Key? key,
     _i6.ScannerWidgetBuilder? scannerBuilder,
+    String? invite,
     List<_i8.PageRouteInfo>? children,
   }) : super(
          ScanQrRoute.name,
-         args: ScanQrRouteArgs(key: key, scannerBuilder: scannerBuilder),
+         args: ScanQrRouteArgs(
+           key: key,
+           scannerBuilder: scannerBuilder,
+           invite: invite,
+         ),
          initialChildren: children,
        );
 
@@ -161,32 +166,40 @@ class ScanQrRoute extends _i8.PageRouteInfo<ScanQrRouteArgs> {
       final args = data.argsAs<ScanQrRouteArgs>(
         orElse: () => const ScanQrRouteArgs(),
       );
-      return _i6.ScanQrPage(key: args.key, scannerBuilder: args.scannerBuilder);
+      return _i6.ScanQrPage(
+        key: args.key,
+        scannerBuilder: args.scannerBuilder,
+        invite: args.invite,
+      );
     },
   );
 }
 
 class ScanQrRouteArgs {
-  const ScanQrRouteArgs({this.key, this.scannerBuilder});
+  const ScanQrRouteArgs({this.key, this.scannerBuilder, this.invite});
 
   final _i9.Key? key;
 
   final _i6.ScannerWidgetBuilder? scannerBuilder;
 
+  final String? invite;
+
   @override
   String toString() {
-    return 'ScanQrRouteArgs{key: $key, scannerBuilder: $scannerBuilder}';
+    return 'ScanQrRouteArgs{key: $key, scannerBuilder: $scannerBuilder, invite: $invite}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ScanQrRouteArgs) return false;
-    return key == other.key && scannerBuilder == other.scannerBuilder;
+    return key == other.key &&
+        scannerBuilder == other.scannerBuilder &&
+        invite == other.invite;
   }
 
   @override
-  int get hashCode => key.hashCode ^ scannerBuilder.hashCode;
+  int get hashCode => key.hashCode ^ scannerBuilder.hashCode ^ invite.hashCode;
 }
 
 /// generated route for

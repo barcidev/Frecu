@@ -16,9 +16,15 @@ import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icon_data.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
+import 'package:frecu/core/design/widgets/fr_banner.dart';
+import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_segmented.dart';
+import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/nfc_invite/domain/repositories/nfc_invite_repository.dart';
+import 'package:frecu/features/nfc_invite/presentation/providers/nfc_invite_provider.dart';
+import 'package:frecu/features/nfc_invite/presentation/widgets/nfc_write_sheet.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
@@ -42,6 +48,32 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 class _MockRoomRepository extends Mock implements RoomRepository {}
 
 class _MockVoiceRepository extends Mock implements VoiceRepository {}
+
+/// NFC de prueba: sin NFC salvo que la prueba lo pida; la grabación espera
+/// a que la prueba la conteste.
+class _FakeNfc implements NfcInviteRepository {
+  bool supported = false;
+  final List<String> writes = [];
+  Completer<Result<void>>? writing;
+
+  @override
+  Future<bool> isSupported() async => supported;
+
+  @override
+  Future<Result<String>> readInvite() => Completer<Result<String>>().future;
+
+  @override
+  Future<Result<void>> writeInvite(String uri) {
+    writes.add(uri);
+    return (writing = Completer()).future;
+  }
+
+  @override
+  Future<void> cancel() async {}
+
+  @override
+  Future<bool> share(String? uri) async => false;
+}
 
 class _ActiveRoom extends RoomNotifier {
   _ActiveRoom(this._room);
@@ -88,8 +120,10 @@ void main() {
   late StreamController<Set<AudioRoute>> available;
   late StreamController<Set<String>> speaking;
   late String localId;
+  late _FakeNfc nfc;
 
   setUp(() {
+    nfc = _FakeNfc();
     // El núcleo PTT, la malla y el inicio animan sin fin: con movimiento
     // reducido quedan quietos y pumpAndSettle termina.
     final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher
@@ -146,6 +180,7 @@ void main() {
             roomNotifierProvider.overrideWith(
               () => _ActiveRoom(active ?? _ruta40),
             ),
+            nfcInviteRepositoryProvider.overrideWithValue(nfc),
           ],
           child: FrecuApp(appRouter: router),
         ),
@@ -182,6 +217,67 @@ void main() {
       );
 
   group('Invitar', () {
+    testWidgets('Sin NFC no hay recuadro de NFC', (tester) async {
+      await enterRoom(tester);
+      await tapKey(tester, 'invite_button');
+
+      expect(find.byKey(const Key('invite_nfc')), findsNothing);
+    });
+
+    testWidgets('Con NFC, «También por NFC» graba la invitación del QR en una '
+        'etiqueta; si no se puede, lo dice y Reintentar vuelve a '
+        'intentarlo', (tester) async {
+      nfc.supported = true;
+      await enterRoom(tester);
+      await tapKey(tester, 'invite_button');
+
+      final box = find.byKey(const Key('invite_nfc'));
+      await tester.ensureVisible(box);
+      expect(
+        find.descendant(of: box, matching: find.text('También por NFC')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: box,
+          matching: find.text('Acerca otro teléfono al tuyo'),
+        ),
+        findsOneWidget,
+      );
+      await tapKey(tester, 'invite_nfc_write');
+
+      expect(find.byType(NfcWriteSheet), findsOneWidget);
+      expect(find.text('Acerca una etiqueta'), findsOneWidget);
+      expect(nfc.writes, [tester.widget<InviteQr>(find.byType(InviteQr)).data]);
+
+      nfc.writing!.complete(
+        const Result.failure(Failure.nfc(NfcFailureReason.readOnly)),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<FrBanner>(find.byKey(const Key('nfc_write_failure')))
+            .title,
+        'Esa etiqueta no se puede grabar.',
+      );
+
+      await tester.tap(
+        find.byWidgetPredicate(
+          (widget) => widget is FrButton && widget.label == 'Reintentar',
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(nfc.writes, hasLength(2));
+      nfc.writing!.complete(const Result.success(null));
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('Invitación grabada'), findsOneWidget);
+      await tester.pump(NfcWriteSheet.doneDelay);
+      await tester.pumpAndSettle();
+      expect(find.byType(NfcWriteSheet), findsNothing);
+      expect(find.byType(InviteSheet), findsOneWidget);
+    });
+
     testWidgets('AC1: Invitar de la cabecera abre la hoja con el QR, la '
         'nota, el código y el anfitrión', (tester) async {
       await enterRoom(tester);

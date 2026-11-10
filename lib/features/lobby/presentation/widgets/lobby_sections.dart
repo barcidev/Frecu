@@ -268,11 +268,16 @@ class LobbyBluetoothHint extends StatelessWidget {
 /// Dock: Crear frecu y Escanear en una fila (1,25 : 1) y Conectar por IP
 /// debajo.
 class LobbyDock extends StatelessWidget {
-  /// Crea el dock; Conectar por IP llama a [onJoinByIp].
-  const LobbyDock({required this.onJoinByIp, super.key});
+  /// Crea el dock; Conectar por IP llama a [onJoinByIp] y, con NFC, Por
+  /// NFC a [onJoinByNfc].
+  const LobbyDock({required this.onJoinByIp, this.onJoinByNfc, super.key});
 
   /// Abre el diálogo de unión por IP.
   final VoidCallback onJoinByIp;
+
+  /// Abre la unión por NFC; nulo si el teléfono no tiene NFC (entonces va
+  /// solo «Conectar por IP»).
+  final VoidCallback? onJoinByNfc;
 
   @override
   Widget build(BuildContext context) {
@@ -310,15 +315,46 @@ class LobbyDock extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        _FitWidth(
-          child: FrButton.drawn(
-            label: lobby.joinRoom,
-            icon: FrIcons.nodes,
-            variant: FrButtonVariant.ghost,
-            expand: true,
-            onPressed: onJoinByIp,
+        if (onJoinByNfc case final byNfc?)
+          // `.two.ghosts` del prototipo: Por IP y Por NFC en una fila.
+          Row(
+            children: [
+              Expanded(
+                child: _FitWidth(
+                  child: FrButton.drawn(
+                    label: lobby.nfc.byIp,
+                    icon: FrIcons.nodes,
+                    variant: FrButtonVariant.ghost,
+                    expand: true,
+                    onPressed: onJoinByIp,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _FitWidth(
+                  child: FrButton.drawn(
+                    key: const Key('lobby_join_nfc'),
+                    label: lobby.nfc.button,
+                    icon: FrIcons.nfc,
+                    variant: FrButtonVariant.ghost,
+                    expand: true,
+                    onPressed: byNfc,
+                  ),
+                ),
+              ),
+            ],
+          )
+        else
+          _FitWidth(
+            child: FrButton.drawn(
+              label: lobby.joinRoom,
+              icon: FrIcons.nodes,
+              variant: FrButtonVariant.ghost,
+              expand: true,
+              onPressed: onJoinByIp,
+            ),
           ),
-        ),
       ],
     );
   }

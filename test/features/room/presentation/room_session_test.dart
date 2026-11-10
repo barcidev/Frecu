@@ -24,6 +24,8 @@ import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_layer.dart';
 import 'package:frecu/features/messages/presentation/widgets/sos_alert_view.dart';
 import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
+import 'package:frecu/features/nfc_invite/domain/repositories/nfc_invite_repository.dart';
+import 'package:frecu/features/nfc_invite/presentation/providers/nfc_invite_provider.dart';
 import 'package:frecu/features/room/data/datasources/audio_session_datasource.dart';
 import 'package:frecu/features/room/data/datasources/peer_connection_datasource.dart';
 import 'package:frecu/features/room/data/datasources/proximity_datasource.dart';
@@ -154,6 +156,29 @@ class _FakeServer extends SignalingServerDataSource {
 }
 
 class _MockVoice extends Mock implements VoiceRepository {}
+
+/// NFC: anota qué invitación sirve el teléfono como etiqueta.
+class _FakeNfc implements NfcInviteRepository {
+  final List<String?> shared = [];
+
+  @override
+  Future<bool> isSupported() async => false;
+
+  @override
+  Future<Result<String>> readInvite() => throw UnimplementedError();
+
+  @override
+  Future<Result<void>> writeInvite(String uri) => throw UnimplementedError();
+
+  @override
+  Future<void> cancel() async {}
+
+  @override
+  Future<bool> share(String? uri) async {
+    shared.add(uri);
+    return true;
+  }
+}
 
 /// Bluetooth del anfitrión: anota qué anuncia y cuándo deja de hacerlo.
 class _FakeBluetooth implements BluetoothInviteRepository {
@@ -415,6 +440,7 @@ void main() {
     late List<bool> volumeEnabled;
     late List<bool> windFilter;
     late _FakeBluetooth bleInvite;
+    late _FakeNfc nfc;
     late bool windFilterReady;
 
     setUp(() {
@@ -444,6 +470,7 @@ void main() {
       proximityEnabled = [];
       windFilter = [];
       bleInvite = _FakeBluetooth();
+      nfc = _FakeNfc();
       windFilterReady = true;
       when(() => voice.initializeAudio()).thenAnswer((_) async => _ok);
       when(
@@ -527,6 +554,7 @@ void main() {
                 ),
               ),
               bluetoothInviteRepositoryProvider.overrideWithValue(bleInvite),
+              nfcInviteRepositoryProvider.overrideWithValue(nfc),
               windFilterProvider.overrideWithValue(
                 WindFilterDataSource(
                   invoke: (_, enabled) async {
@@ -1100,6 +1128,27 @@ void main() {
       router.popUntilRoot();
       await tester.pumpAndSettle();
       expect(bleInvite.calls.last, 'stop');
+    });
+
+    testWidgets('Invitar por NFC: mientras se está en la frecu, el teléfono '
+        'hace de etiqueta con la invitación del QR, con la red nueva si '
+        'cambia, y deja de hacerlo al salir', (tester) async {
+      final router = await enter(tester);
+      expect(nfc.shared, hasLength(1));
+      final first = Uri.parse(nfc.shared.single!);
+      expect(first.scheme, 'frecu');
+      expect(first.host, 'join');
+      expect(first.queryParameters['c'], '4821');
+
+      ProviderScope.containerOf(tester.element(find.byType(FrecuApp)))
+          .read(roomNotifierProvider.notifier)
+          .useNetwork(const WifiCredentials(ssid: 'DIRECT-a'));
+      await tester.pumpAndSettle();
+      expect(Uri.parse(nfc.shared.last!).queryParameters['ws'], 'DIRECT-a');
+
+      router.popUntilRoot();
+      await tester.pumpAndSettle();
+      expect(nfc.shared.last, isNull);
     });
 
     testWidgets('Invitar por Bluetooth: quien se unió no anuncia, aunque '

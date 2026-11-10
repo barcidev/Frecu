@@ -67,11 +67,17 @@ enum ScanCameraIssue {
 /// al volver de Ajustes ([ScanCameraLifecycle]).
 @RoutePage()
 class ScanQrPage extends ConsumerStatefulWidget {
-  /// Constructor constante con escáner inyectable para pruebas.
-  const ScanQrPage({super.key, this.scannerBuilder});
+  /// Constructor constante con escáner inyectable para pruebas; con
+  /// [invite] abre con esa invitación ya leída.
+  const ScanQrPage({super.key, this.scannerBuilder, this.invite});
 
   /// Constructor opcional para construir el widget del escáner en pruebas.
   final ScannerWidgetBuilder? scannerBuilder;
+
+  /// Invitación ya leída (`frecu://join?…`) de un enlace o por NFC: se ve
+  /// su tarjeta sin encender la cámara, que solo se enciende con «Escanear
+  /// otro QR».
+  final String? invite;
 
   @override
   ConsumerState<ScanQrPage> createState() => _ScanQrPageState();
@@ -112,8 +118,18 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _network = ref.read(wifiJoinRepositoryProvider);
+    final link = widget.invite;
+    if (link != null) {
+      switch (_parser.parse(link)) {
+        case Success(:final data):
+          _invite = data;
+        case FailureResult():
+          _invalid = true;
+      }
+    }
     if (widget.scannerBuilder == null) {
-      _camera = MobileScannerController()..addListener(_onCameraState);
+      _camera = MobileScannerController(autoStart: _invite == null)
+        ..addListener(_onCameraState);
     }
   }
 
@@ -200,6 +216,11 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
       _failure = null;
       _invalid = false;
     });
+    // Si se abrió con una invitación ya leída, la cámara aún no arrancó.
+    final camera = _camera;
+    if (camera != null && !camera.value.isRunning && !camera.value.isStarting) {
+      unawaited(_run('start', camera.start));
+    }
   }
 
   Future<void> _join() async {

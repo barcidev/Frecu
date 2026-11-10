@@ -37,3 +37,21 @@ enum WifiJoinFailureReason {
   /// Cualquier otro fallo del sistema.
   failed,
 }
+
+/// Por qué no se leyó o grabó la invitación por NFC.
+enum NfcFailureReason {
+  /// Lo que se acercó no trae una invitación de Frecu.
+  notInvite,
+
+  /// La etiqueta no se puede grabar (es de solo lectura o no es NDEF).
+  readOnly,
+
+  /// La invitación no cabe en la etiqueta.
+  tooSmall,
+
+  /// Se canceló (en iPhone, el aviso del sistema).
+  cancelled,
+
+  /// Cualquier otro fallo (se alejó antes de terminar…).
+  failed,
+}
