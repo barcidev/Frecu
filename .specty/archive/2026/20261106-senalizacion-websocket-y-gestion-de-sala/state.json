@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "20261106-senalizacion-websocket-y-gestion-de-sala",
+  "kind": "standard",
+  "phase": "cancelled",
+  "branch": "feature/senalizacion-websocket-y-gestion-de-sala",
+  "baseCommit": "a84954298a7e23c8e8abef84422d92cc6a294843",
+  "revision": 0,
+  "items": {},
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {}
+}
