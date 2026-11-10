@@ -37,6 +37,9 @@ sealed class Failure with _$Failure {
   const factory Failure.wifiJoin(WifiJoinFailureReason reason) =
       _WifiJoinFailure;
 
+  /// No se pudo leer o grabar la invitación por NFC.
+  const factory Failure.nfc(NfcFailureReason reason) = _NfcFailure;
+
   /// Error inesperado no categorizado.
   const factory Failure.unexpected({String? message, Object? error}) =
       _UnexpectedFailure;

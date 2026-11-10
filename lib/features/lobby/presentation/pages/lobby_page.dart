@@ -10,6 +10,7 @@ import 'package:frecu/features/bluetooth_invite/presentation/providers/bluetooth
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
 import 'package:frecu/features/lobby/domain/usecases/merge_nearby_rooms.dart';
 import 'package:frecu/features/lobby/presentation/providers/discovery_provider.dart';
+import 'package:frecu/features/lobby/presentation/providers/invite_links_provider.dart';
 import 'package:frecu/features/lobby/presentation/widgets/ip_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_sections.dart';
 import 'package:frecu/features/lobby/presentation/widgets/lobby_tuner.dart';
@@ -18,6 +19,8 @@ import 'package:frecu/features/lobby/presentation/widgets/pin_join_sheet.dart';
 import 'package:frecu/features/lobby/presentation/widgets/rise_in.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/nfc_invite/presentation/providers/nfc_invite_provider.dart';
+import 'package:frecu/features/nfc_invite/presentation/widgets/nfc_join_sheet.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 
@@ -68,6 +71,9 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
   /// Frecu elegida.
   String? _selectedRoomId;
 
+  /// Enlaces de invitación que abren la app (y, en Android, NFC).
+  StreamSubscription<Uri>? _links;
+
   @override
   void initState() {
     super.initState();
@@ -83,13 +89,29 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
         bluetoothNearbyRoomsProvider,
         (_, _) => _dropMissingSelection(),
       );
+    _links = ref.read(inviteLinksProvider).watch().listen(_onLink);
   }
 
   @override
   void dispose() {
+    unawaited(_links?.cancel());
     _retry?.cancel();
     _pick.dispose();
     super.dispose();
+  }
+
+  /// Un enlace de invitación (o, en Android, NFC) abre su tarjeta como un
+  /// QR leído; con una frecu activa se ignora.
+  void _onLink(Uri link) {
+    if (!mounted || ref.read(roomNotifierProvider) != null) return;
+    unawaited(context.router.push(ScanQrRoute(invite: link.toString())));
+  }
+
+  /// Lee la invitación por NFC y la abre como un QR leído.
+  Future<void> _joinByNfc() async {
+    final invite = await NfcJoinSheet.show(context);
+    if (invite == null || !mounted) return;
+    unawaited(context.router.push(ScanQrRoute(invite: invite)));
   }
 
   /// Abre la hoja de conexión por IP y, si se une, la frecu activa.
@@ -195,7 +217,12 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
         final network = snapshot.data;
         final offline = rooms.isEmpty && network is NetworkDisconnected;
         return FrScaffold(
-          dock: LobbyDock(onJoinByIp: _joinByIp),
+          dock: LobbyDock(
+            onJoinByIp: _joinByIp,
+            onJoinByNfc: ref.watch(nfcSupportedProvider).value ?? false
+                ? _joinByNfc
+                : null,
+          ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

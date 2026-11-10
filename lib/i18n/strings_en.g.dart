@@ -44,6 +44,7 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$room$en room = _Translations$room$en._(_root);
 	@override late final _Translations$permissions$en permissions = _Translations$permissions$en._(_root);
 	@override late final _Translations$settings$en settings = _Translations$settings$en._(_root);
+	@override late final _Translations$nfcIos$en nfcIos = _Translations$nfcIos$en._(_root);
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 	@override late final _Translations$splash$en splash = _Translations$splash$en._(_root);
 	@override late final _Translations$messages$en messages = _Translations$messages$en._(_root);
@@ -67,6 +68,7 @@ class _Translations$lobby$en extends Translations$lobby$es {
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	@override late final _Translations$lobby$nfc$en nfc = _Translations$lobby$nfc$en._(_root);
 	@override String get title => 'frecu';
 	@override late final _Translations$lobby$join$en join = _Translations$lobby$join$en._(_root);
 	@override String get settings => 'Settings';
@@ -204,6 +206,20 @@ class _Translations$settings$en extends Translations$settings$es {
 	@override String appVersion({required Object version}) => 'Frecu ${version}';
 }
 
+// Path: nfcIos
+class _Translations$nfcIos$en extends Translations$nfcIos$es {
+	_Translations$nfcIos$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get read => 'Hold the host\'s phone or the frecu tag near.';
+	@override String get write => 'Hold the NFC tag near.';
+	@override String get done => 'Done';
+	@override String get notInvite => 'That\'s not a Frecu invitation.';
+	@override String get failed => 'Didn\'t work. Try again.';
+}
+
 // Path: errors
 class _Translations$errors$en extends Translations$errors$es {
 	_Translations$errors$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -220,6 +236,7 @@ class _Translations$errors$en extends Translations$errors$es {
 	@override String get audio => 'Audio subsystem error';
 	@override String get hotspot => 'The room\'s network couldn\'t be created';
 	@override String get wifiJoin => 'Couldn\'t connect to the room\'s network';
+	@override String get nfc => 'Could not use NFC';
 	@override String get unexpected => 'Unexpected error';
 }
 
@@ -279,6 +296,26 @@ class _Translations$location$en extends Translations$location$es {
 	@override String kilometers({required Object value}) => '${value} km';
 	@override late final _Translations$location$compass$en compass = _Translations$location$compass$en._(_root);
 	@override late final _Translations$location$compassLong$en compassLong = _Translations$location$compassLong$en._(_root);
+}
+
+// Path: lobby.nfc
+class _Translations$lobby$nfc$en extends Translations$lobby$nfc$es {
+	_Translations$lobby$nfc$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get byIp => 'By IP';
+	@override String get button => 'By NFC';
+	@override String get kicker => 'Join by NFC';
+	@override String get title => 'Bring your phone close';
+	@override String get message => 'Touch the back of your phone to the host\'s, or to a frecu tag.';
+	@override String get iphoneHint => 'On iPhone, hold the top of your phone against the other one.';
+	@override String get foundTitle => 'Frecu found';
+	@override String get foundMessage => 'We read the invitation. It already has the code.';
+	@override String get notInvite => 'That doesn\'t carry a Frecu invitation.';
+	@override String get failed => 'Couldn\'t read it. Bring it close again.';
+	@override String get retry => 'Retry';
 }
 
 // Path: lobby.join
@@ -898,6 +935,11 @@ class _Translations$room$sheets$invite$en extends Translations$room$sheets$invit
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	@override String get nfcTitle => 'Also by NFC';
+	@override String get nfcMessage => 'Bring another phone close to yours';
+	@override String get nfcMessageTag => 'Write it to an NFC tag';
+	@override String get nfcWrite => 'Write tag';
+	@override late final _Translations$room$sheets$invite$nfcSheet$en nfcSheet = _Translations$room$sheets$invite$nfcSheet$en._(_root);
 	@override String get kicker => 'Invite to the frecu';
 	@override String get title => 'Scan to join';
 	@override String get message => 'From Frecu › Scan. The QR already includes the code.';
@@ -1160,6 +1202,23 @@ class _Translations$lobby$newRoom$network$steps$2$en extends Translations$lobby$
 	@override String get rest => ' The next one gets a new name and a new password.';
 }
 
+// Path: room.sheets.invite.nfcSheet
+class _Translations$room$sheets$invite$nfcSheet$en extends Translations$room$sheets$invite$nfcSheet$es {
+	_Translations$room$sheets$invite$nfcSheet$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Write invitation';
+	@override String get title => 'Bring a tag close';
+	@override String get message => 'Touch an NFC tag to the back of your phone. It works while this frecu stays open.';
+	@override String get done => 'Invitation written';
+	@override String get readOnly => 'That tag can\'t be written.';
+	@override String get tooSmall => 'The invitation doesn\'t fit on that tag.';
+	@override String get failed => 'Couldn\'t write it. Bring it close again.';
+	@override String get retry => 'Retry';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -1169,6 +1228,17 @@ extension on TranslationsEn {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.title' => 'Frecu',
+			'lobby.nfc.byIp' => 'By IP',
+			'lobby.nfc.button' => 'By NFC',
+			'lobby.nfc.kicker' => 'Join by NFC',
+			'lobby.nfc.title' => 'Bring your phone close',
+			'lobby.nfc.message' => 'Touch the back of your phone to the host\'s, or to a frecu tag.',
+			'lobby.nfc.iphoneHint' => 'On iPhone, hold the top of your phone against the other one.',
+			'lobby.nfc.foundTitle' => 'Frecu found',
+			'lobby.nfc.foundMessage' => 'We read the invitation. It already has the code.',
+			'lobby.nfc.notInvite' => 'That doesn\'t carry a Frecu invitation.',
+			'lobby.nfc.failed' => 'Couldn\'t read it. Bring it close again.',
+			'lobby.nfc.retry' => 'Retry',
 			'lobby.title' => 'frecu',
 			'lobby.join.bluetooth.via' => 'Via Bluetooth',
 			'lobby.join.bluetooth.hint' => 'You\'re not on their Wi-Fi yet: enter the code and we\'ll connect you.',
@@ -1398,6 +1468,18 @@ extension on TranslationsEn {
 			'room.header.note' => ({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invite',
 			'room.sheets.close' => 'Close',
+			'room.sheets.invite.nfcTitle' => 'Also by NFC',
+			'room.sheets.invite.nfcMessage' => 'Bring another phone close to yours',
+			'room.sheets.invite.nfcMessageTag' => 'Write it to an NFC tag',
+			'room.sheets.invite.nfcWrite' => 'Write tag',
+			'room.sheets.invite.nfcSheet.kicker' => 'Write invitation',
+			'room.sheets.invite.nfcSheet.title' => 'Bring a tag close',
+			'room.sheets.invite.nfcSheet.message' => 'Touch an NFC tag to the back of your phone. It works while this frecu stays open.',
+			'room.sheets.invite.nfcSheet.done' => 'Invitation written',
+			'room.sheets.invite.nfcSheet.readOnly' => 'That tag can\'t be written.',
+			'room.sheets.invite.nfcSheet.tooSmall' => 'The invitation doesn\'t fit on that tag.',
+			'room.sheets.invite.nfcSheet.failed' => 'Couldn\'t write it. Bring it close again.',
+			'room.sheets.invite.nfcSheet.retry' => 'Retry',
 			'room.sheets.invite.kicker' => 'Invite to the frecu',
 			'room.sheets.invite.title' => 'Scan to join',
 			'room.sheets.invite.message' => 'From Frecu › Scan. The QR already includes the code.',
@@ -1558,6 +1640,11 @@ extension on TranslationsEn {
 			'settings.saveError' => 'Couldn\'t save',
 			'settings.footer' => ({required Object app}) => '${app} · 100% local · no internet',
 			'settings.appVersion' => ({required Object version}) => 'Frecu ${version}',
+			'nfcIos.read' => 'Hold the host\'s phone or the frecu tag near.',
+			'nfcIos.write' => 'Hold the NFC tag near.',
+			'nfcIos.done' => 'Done',
+			'nfcIos.notInvite' => 'That\'s not a Frecu invitation.',
+			'nfcIos.failed' => 'Didn\'t work. Try again.',
 			'errors.network' => 'Local network error',
 			'errors.permissionDenied' => 'Required permission denied',
 			'errors.roomFull' => 'Room is full (max 6 participants)',
@@ -1567,6 +1654,7 @@ extension on TranslationsEn {
 			'errors.audio' => 'Audio subsystem error',
 			'errors.hotspot' => 'The room\'s network couldn\'t be created',
 			'errors.wifiJoin' => 'Couldn\'t connect to the room\'s network',
+			'errors.nfc' => 'Could not use NFC',
 			'errors.unexpected' => 'Unexpected error',
 			'splash.title' => 'frecu',
 			'splash.tagline' => 'Group voice. No internet.',

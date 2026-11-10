@@ -3,6 +3,19 @@
     "title": "Frecu"
   },
   "lobby": {
+    "nfc": {
+      "byIp": "Por IP",
+      "button": "Por NFC",
+      "kicker": "Unirse por NFC",
+      "title": "Acerca tu teléfono",
+      "message": "Junta el dorso de tu teléfono con el del anfitrión, o con una etiqueta de la frecu.",
+      "iphoneHint": "En iPhone, mantén la parte de arriba del teléfono junto al otro.",
+      "foundTitle": "Frecu encontrada",
+      "foundMessage": "Leímos la invitación. Ya trae el código.",
+      "notInvite": "Eso no trae una invitación de Frecu.",
+      "failed": "No se pudo leer. Vuelve a acercarlo.",
+      "retry": "Reintentar"
+    },
     "title": "frecu",
     "join": {
       "bluetooth": {
@@ -250,6 +263,20 @@
     "sheets": {
       "close": "Cerrar",
       "invite": {
+        "nfcTitle": "También por NFC",
+        "nfcMessage": "Acerca otro teléfono al tuyo",
+        "nfcMessageTag": "Grábala en una etiqueta NFC",
+        "nfcWrite": "Grabar etiqueta",
+        "nfcSheet": {
+          "kicker": "Grabar invitación",
+          "title": "Acerca una etiqueta",
+          "message": "Junta una etiqueta NFC con el dorso de tu teléfono. Sirve mientras esta frecu siga abierta.",
+          "done": "Invitación grabada",
+          "readOnly": "Esa etiqueta no se puede grabar.",
+          "tooSmall": "La invitación no cabe en esa etiqueta.",
+          "failed": "No se pudo grabar. Vuelve a acercarla.",
+          "retry": "Reintentar"
+        },
         "kicker": "Invitar a la frecu",
         "title": "Escanea para unirte",
         "message": "Desde Frecu › Escanear. El QR ya incluye el código.",
@@ -461,6 +488,13 @@
     "footer": "$app · 100% local · sin internet",
     "appVersion": "Frecu $version"
   },
+  "nfcIos": {
+    "read": "Acerca el teléfono del anfitrión o la etiqueta de la frecu.",
+    "write": "Acerca la etiqueta NFC.",
+    "done": "Listo",
+    "notInvite": "No es una invitación de Frecu.",
+    "failed": "No se pudo. Inténtalo otra vez."
+  },
   "errors": {
     "network": "Error de red local",
     "permissionDenied": "Permiso denegado",
@@ -471,6 +505,7 @@
     "audio": "Error en el subsistema de audio",
     "hotspot": "No se pudo crear la red de la frecu",
     "wifiJoin": "No se pudo conectar a la red de la frecu",
+    "nfc": "No se pudo usar NFC",
     "unexpected": "Error inesperado"
   },
   "splash": {

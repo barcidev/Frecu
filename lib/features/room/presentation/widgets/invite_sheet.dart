@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/motion/reduced_motion.dart';
+import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/core/design/widgets/signal_signature.dart';
 import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
+import 'package:frecu/features/nfc_invite/presentation/providers/nfc_invite_provider.dart';
+import 'package:frecu/features/nfc_invite/presentation/widgets/nfc_write_sheet.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/usecases/build_invite_qr.dart';
@@ -19,7 +24,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 /// Hoja para invitar a la frecu (`SH.invite` del prototipo): el QR de la
 /// invitación y, debajo, la nota, el código de acceso y la IP del anfitrión.
-class InviteSheet extends StatelessWidget {
+class InviteSheet extends ConsumerWidget {
   /// Crea la hoja de [room].
   const InviteSheet({required this.room, super.key});
 
@@ -31,9 +36,10 @@ class InviteSheet extends StatelessWidget {
       showFrSheet<void>(context, builder: (_) => InviteSheet(room: room));
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final fr = context.fr;
     final copy = t.room.sheets.invite;
+    final nfc = ref.watch(nfcSupportedProvider).value ?? false;
     final wifi = room.wifi;
     final uri = const BuildInviteQr().buildUri(
       RoomInvite(
@@ -57,10 +63,91 @@ class InviteSheet extends StatelessWidget {
           Center(child: InviteQr(data: uri)),
           _InviteFacts(room: room),
           if (wifi != null) InviteNetwork(wifi: wifi),
+          if (nfc) InviteNfc(invite: uri),
           Text(
             copy.footer(list: t.lobby.nearbyRooms),
             textAlign: TextAlign.center,
             style: fr.type.bodyS.copyWith(color: fr.colors.tx3),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// «También por NFC» (`.nfc-box` del prototipo): en Android, acercar otro
+/// teléfono lee la invitación (este hace de etiqueta mientras dura la
+/// frecu); en los dos, «Grabar etiqueta» la graba en una etiqueta NFC.
+class InviteNfc extends StatelessWidget {
+  /// Crea el recuadro de [invite].
+  const InviteNfc({required this.invite, super.key});
+
+  /// Invitación (`frecu://join?…`).
+  final String invite;
+
+  @override
+  Widget build(BuildContext context) {
+    final fr = context.fr;
+    final c = fr.colors;
+    final copy = t.room.sheets.invite;
+    final iphone = Theme.of(context).platform == TargetPlatform.iOS;
+    return Container(
+      key: const Key('invite_nfc'),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: c.bg2,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: c.line1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: c.line2),
+                ),
+                child: Center(
+                  child: FrIcon(FrIcons.nfc, size: 20, color: c.tx2),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      copy.nfcTitle,
+                      style: fr.type.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontVariations: const [FontVariation.weight(600)],
+                        color: c.tx1,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      iphone ? copy.nfcMessageTag : copy.nfcMessage,
+                      style: fr.type.bodyS.copyWith(color: c.tx3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Debajo del texto: a su lado lo aplastaba en un teléfono real.
+          FrButton.drawn(
+            key: const Key('invite_nfc_write'),
+            label: copy.nfcWrite,
+            icon: FrIcons.nfc,
+            variant: FrButtonVariant.secondary,
+            size: FrButtonSize.small,
+            expand: true,
+            onPressed: () => unawaited(NfcWriteSheet.show(context, invite)),
           ),
         ],
       ),
