@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frecu · Notificación de la frecu — Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,100..800&family=Roboto:wght@400;500&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="screens.css">
+<style>
+  /* ---------- Página ---------- */
+  .nt { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 0 32px 140px; }
+  .nt-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 0 0; }
+  .nt-top .wordmark svg { width: 26px; height: 26px; }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .seg button { padding: 8px 12px; border-radius: 10px; font: 500 12px/1 var(--f-mono); color: var(--tx-2); box-shadow: inset 0 0 0 1px var(--line-1); }
+  .seg button.on { color: var(--tx-1); background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .nt .sec { padding-top: 64px; }
+  .nt .sec-t { font-size: 40px; }
+  .nt-dec { max-width: 880px; }
+  .nt-dec li { font-size: 15px; }
+  .nt-dec code { font: 500 12.5px/1 var(--f-mono); color: var(--tx-1); }
+
+  .nstage { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: start; }
+  .ctl { display: flex; flex-direction: column; gap: 22px; padding-top: 8px; max-width: 520px; }
+  .ctl h4 { font: 500 11px/1 var(--f-mono); color: var(--tx-3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+  .ctl p { color: var(--tx-2); font: 400 14.5px/1.55 var(--f-ui); }
+  .ctl p b { color: var(--tx-1); font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips button { padding: 9px 12px; border-radius: 999px; font: 500 13px/1 var(--f-ui); color: var(--tx-2); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .chips button.on { color: var(--tx-1); background: var(--bg-2); box-shadow: inset 0 0 0 1.5px var(--tx-2); }
+  .chips button i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+  .note-box { padding: 14px 16px; border-radius: 14px; background: var(--bg-1); box-shadow: inset 0 0 0 1px var(--line-1); }
+  .legend { display: grid; grid-template-columns: 34px 1fr; gap: 10px 12px; align-items: center; }
+  .legend span.k { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; background: var(--bg-2); color: var(--tx-1); box-shadow: inset 0 0 0 1px var(--line-1); }
+  .legend span.k.main { background: var(--signal); color: var(--signal-ink); box-shadow: none; }
+  .legend p { font-size: 14px; }
+
+  .row { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
+  .cap { margin-top: 12px; text-align: center; font: 500 10.5px/1.4 var(--f-mono); color: var(--tx-3); letter-spacing: .08em; text-transform: uppercase; }
+
+  /* ---------- Teléfono ---------- */
+  .nph { --sys-font: 'Roboto', 'Google Sans', system-ui, sans-serif; width: 360px; height: 740px; border-radius: 46px; padding: 10px; background: #0b0c0d; box-shadow: 0 0 0 1.5px #2a2e33, 0 30px 70px -30px #000; position: relative; flex: none; }
+  .nph.short { height: 560px; }
+  .scr { width: 100%; height: 100%; border-radius: 37px; overflow: hidden; position: relative; font-family: var(--sys-font); }
+  .shade { --sh-bg: #141517; --sh-tile: #2b2d31; --sh-tile-on: #d8e2ff; --sh-tx: #e3e3e6; --sh-tx2: #b5b8bd; --sh-card: #222428; background: var(--sh-bg); color: var(--sh-tx); }
+  [data-sys="light"] .shade { --sh-bg: #eef0f3; --sh-tile: #ffffff; --sh-tile-on: #2f5bc0; --sh-tx: #1b1c1f; --sh-tx2: #55585e; --sh-card: #ffffff; }
+  .sb { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 6px 24px 0 26px; font: 500 14px/1 var(--sys-font); color: var(--sb-tx, var(--sh-tx)); }
+  .sb .l, .sb .r { display: flex; align-items: center; gap: 7px; }
+  .sb svg { display: block; }
+  .pi { display: inline-flex; align-items: center; justify-content: center; height: 20px; padding: 0 7px; border-radius: 10px; background: #2fbf71; }
+  .nqs { padding: 14px 18px 6px; }
+  .nqs .bri { height: 38px; border-radius: 19px; background: var(--sh-tile); position: relative; overflow: hidden; }
+  .nqs .bri::before { content: ""; position: absolute; inset: 0 45% 0 0; background: color-mix(in srgb, var(--sh-tile-on) 30%, transparent); }
+  .nqs .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+  .nqs .tiles span { height: 52px; border-radius: 18px; background: var(--sh-tile); }
+  .nqs .tiles span.on { background: var(--sh-tile-on); opacity: .9; }
+  .nlist { padding: 8px 12px; display: flex; flex-direction: column; gap: 3px; }
+
+  /* Notificación del sistema (hoy y otras apps) */
+  .sys { background: var(--sh-card); color: var(--sh-tx); border-radius: 8px; padding: 14px 16px 12px; }
+  .sys.top { border-radius: 26px 26px 8px 8px; }
+  .sys.last { border-radius: 8px 8px 26px 26px; }
+  .sys.solo { border-radius: 26px; }
+  .an-g { display: grid; grid-template-columns: 40px 1fr auto; gap: 0 12px; }
+  .an-ic { width: 40px; height: 40px; border-radius: 50%; background: color-mix(in srgb, var(--sh-tx) 10%, transparent); display: grid; place-items: center; }
+  .an-ic.blob span { width: 18px; height: 18px; border-radius: 50%; background: var(--sh-tx); }
+  .an-hd { font: 400 12px/16px var(--sys-font); color: var(--sh-tx2); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .an-hd b { font-weight: 500; color: var(--sh-tx); }
+  .an-hd .dotsep { opacity: .7; }
+  .an-ti { font: 500 15px/20px var(--sys-font); margin-top: 2px; }
+  .an-tx { font: 400 14px/19px var(--sys-font); color: var(--sh-tx2); margin-top: 1px; }
+  .an-ac { grid-column: 2 / -1; display: flex; gap: 2px; margin: 8px 0 0 -12px; }
+  .an-ac button { padding: 11px 12px; border-radius: 18px; font: 500 14px/1 var(--sys-font); color: var(--sh-tile-on); }
+
+  /* ---------- Reproductor (estilo MediaStyle) ---------- */
+  .mp { --a: #C4E05C; --bg: #0F130A; --on-a: #0A0C05; position: relative; height: 184px; border-radius: 28px; overflow: hidden; background: var(--bg); color: #F2F4F3; transition: background .4s ease; isolation: isolate; }
+  .mp-art { position: absolute; inset: 0 0 0 auto; width: 74%; z-index: -2; }
+  .mp-art svg { width: 100%; height: 100%; display: block; }
+  .mp-scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, var(--bg) 22%, color-mix(in srgb, var(--bg) 55%, transparent) 58%, transparent 100%); transition: background .4s ease; }
+  .mp-in { height: 100%; padding: 16px 16px 12px 18px; display: grid; grid-template-rows: auto 1fr auto; }
+  .mp-top { display: flex; align-items: center; justify-content: space-between; }
+  .mp-app { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); }
+  .mp-app path { stroke: #F2F4F3; }
+  .mp-out { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px 0 9px; border-radius: 14px; background: color-mix(in srgb, var(--a) 22%, rgba(0,0,0,.35)); color: #F2F4F3; font: 500 12.5px/1 var(--sys-font); }
+  .mp-mid { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .mp-ti { font: 500 19px/24px var(--sys-font); text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+  .mp-su { margin-top: 2px; font: 400 14px/19px var(--sys-font); color: rgba(242,244,243,.78); text-shadow: 0 1px 8px rgba(0,0,0,.4); white-space: nowrap; }
+  .mp-main { flex: none; width: 58px; height: 58px; border-radius: 20px; background: var(--a); color: var(--on-a); display: grid; place-items: center; transition: border-radius .35s cubic-bezier(.3,1.4,.5,1), background .4s ease, transform .15s; }
+  .mp-main:active { transform: scale(.94); }
+  .mp-main.live { border-radius: 29px; box-shadow: 0 0 0 6px color-mix(in srgb, var(--a) 22%, transparent); animation: live 1.6s ease-in-out infinite; }
+  .mp-main.off { opacity: .35; pointer-events: none; }
+  @keyframes live { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--a) 8%, transparent); } }
+  .mp-bot { display: flex; align-items: center; gap: 4px; margin-left: -8px; }
+  .mp-bot button { width: 42px; height: 42px; border-radius: 21px; display: grid; place-items: center; color: #F2F4F3; }
+  .mp-bot button:hover { background: rgba(255,255,255,.08); }
+  .mp-bot .sp { flex: 1; }
+  .mp-bot .lbl { font: 500 11px/1 var(--sys-font); color: rgba(242,244,243,.6); letter-spacing: .02em; }
+  .mp.gone { display: none; }
+
+  /* Notificación compacta (lista, Android 12 o anterior) */
+  .mc { --a: #C4E05C; --bg: #0F130A; display: grid; grid-template-columns: 1fr 56px; gap: 12px; padding: 12px 12px 10px 16px; border-radius: 26px 26px 8px 8px; background: var(--bg); color: #F2F4F3; }
+  .mc .hd { font: 400 12px/16px var(--sys-font); color: rgba(242,244,243,.7); display: flex; gap: 5px; align-items: center; }
+  .mc .hd b { font-weight: 500; color: #F2F4F3; }
+  .mc .ti { font: 500 15px/20px var(--sys-font); margin-top: 2px; }
+  .mc .su { font: 400 13.5px/18px var(--sys-font); color: rgba(242,244,243,.75); }
+  .mc .ac { display: flex; gap: 6px; margin-top: 6px; margin-left: -8px; }
+  .mc .ac span { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 18px; color: #F2F4F3; }
+  .mc .ac span.m { color: var(--a); }
+  .mc .art { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; }
+
+  .toast { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%) translateY(10px); padding: 10px 16px; border-radius: 20px; background: #303236; color: #f1f1f1; font: 400 13px/1.3 var(--sys-font); opacity: 0; transition: .25s; white-space: nowrap; pointer-events: none; }
+  .toast.on { opacity: 1; transform: translateX(-50%); }
+  .left-room { padding: 14px 16px; border-radius: 26px; background: var(--sh-card); color: var(--sh-tx2); font: 400 13.5px/1.4 var(--sys-font); display: flex; justify-content: space-between; align-items: center; }
+  .left-room button { color: var(--sh-tile-on); font-weight: 500; }
+  .mpwrap { padding: 4px 12px 8px; }
+
+  /* Pantalla bloqueada */
+  .lock { position: absolute; inset: 0; background: radial-gradient(120% 70% at 30% 10%, #2a3a2c, #0c0f12 60%), #0c0f12; color: #fff; }
+  .lock .clock { text-align: center; margin-top: 46px; font: 300 82px/1 var(--sys-font); letter-spacing: -2px; }
+  .lock .date { text-align: center; margin-top: 6px; font: 400 15px/1 var(--sys-font); opacity: .85; }
+  .lock .mpwrap { position: absolute; left: 0; right: 0; top: 214px; }
+
+  /* ---------- iOS ---------- */
+  .ios { --sys-font: -apple-system, 'SF Pro Text', system-ui, sans-serif; }
+  .ios .scr { background: radial-gradient(120% 70% at 70% 0%, #3b3f52, #101218 65%); color: #fff; }
+  .ios .clock { text-align: center; margin-top: 64px; font: 600 84px/1 -apple-system, 'SF Pro Display', system-ui; letter-spacing: -1px; }
+  .ios .date { text-align: center; margin-top: 4px; font: 500 18px/1 var(--sys-font); opacity: .85; }
+  .ios .di { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); height: 34px; width: 150px; border-radius: 20px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 6px; }
+  .ios .di .art { width: 22px; height: 22px; border-radius: 6px; overflow: hidden; }
+  .ios .di .bars { display: flex; gap: 2px; align-items: center; height: 14px; }
+  .ios .di .bars i { width: 2.5px; border-radius: 2px; background: #C9A0FF; animation: eq 1s ease-in-out infinite; }
+  .ios .di .bars i:nth-child(2) { animation-delay: -.3s; } .ios .di .bars i:nth-child(3) { animation-delay: -.6s; } .ios .di .bars i:nth-child(4) { animation-delay: -.15s; }
+  @keyframes eq { 0%, 100% { height: 4px; } 50% { height: 14px; } }
+  .ib { margin: 0 12px; padding: 12px 14px; border-radius: 20px; background: rgba(245,245,250,.72); color: #000; backdrop-filter: blur(10px); font: 400 14px/1.3 var(--sys-font); display: grid; grid-template-columns: 34px 1fr auto; gap: 0 10px; }
+  .ib + .ib { margin-top: 8px; }
+  .ib .ap { width: 34px; height: 34px; border-radius: 8px; background: #0C0E10; display: grid; place-items: center; }
+  .ib b { font-weight: 600; }
+  .ib small { color: rgba(0,0,0,.5); font-size: 12.5px; }
+  .ios .stack { position: absolute; left: 0; right: 0; top: 250px; }
+  .np { margin: 0 12px; padding: 16px; border-radius: 26px; background: rgba(40,30,58,.62); backdrop-filter: blur(20px); color: #fff; }
+  .np-h { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; }
+  .np-h .art { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; }
+  .np-h b { display: block; font: 600 16px/1.2 var(--sys-font); }
+  .np-h small { display: block; margin-top: 2px; font: 400 14px/1.2 var(--sys-font); color: rgba(255,255,255,.65); }
+  .np-c { display: flex; justify-content: center; gap: 46px; margin-top: 18px; align-items: center; }
+  .np-c span { opacity: .3; } .np-c span.m { opacity: 1; }
+  .np-v { margin-top: 18px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.25); position: relative; } .np-v::before { content: ""; position: absolute; inset: 0 40% 0 0; border-radius: 3px; background: #fff; }
+  .tag { align-self: flex-start; display: inline-block; padding: 4px 8px; border-radius: 6px; font: 500 10px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--warn); box-shadow: inset 0 0 0 1px rgba(var(--warn-rgb), .4); }
+
+  @media (max-width: 980px) { .nstage { grid-template-columns: 1fr; } .nph { margin: 0 auto; } }
+  @media (max-width: 720px) { .nt { padding: 0 16px 96px; } .nph { transform: scale(.92); transform-origin: top center; } }
+</style>
+</head>
+<body>
+<main class="nt">
+  <div class="nt-top">
+    <span class="wordmark"><svg viewBox="0 0 26 26" data-liss="13,13,10.5" data-stroke="var(--signal-fg)" data-w="1.6"></svg>frecu</span>
+    <div class="seg"><button class="on" data-theme-set="dark">Noche</button><button data-theme-set="light">Día</button></div>
+  </div>
+
+  <!-- ============ Hoy ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="sec-n">HOY</span><h2 class="sec-t">La notificación de la frecu</h2>
+      <p class="sec-d">Mientras estás en una frecu, Android muestra una notificación fija para que la voz siga con la pantalla apagada. Hoy es la plantilla genérica: el ícono de la app sale como una mancha blanca, el título siempre dice «Frecu activa» y solo hay un botón. En iPhone, cada cambio de estado lanza un banner nuevo.</p></div>
+    <div class="row">
+      <div>
+        <div class="nph short" data-sys="dark"><div class="scr shade">
+          <div class="sb"><div class="l">9:41 <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="currentColor"/></svg></div><div class="r" data-sbr></div></div>
+          <div class="nqs"><div class="bri"></div><div class="tiles"><span class="on"></span><span></span><span></span><span class="on"></span></div></div>
+          <div class="nlist">
+            <div class="sys top"><div class="an-g">
+              <div class="an-ic blob"><span></span></div>
+              <div><div class="an-hd"><b>Frecu</b><span class="dotsep">•</span>ahora</div><div class="an-ti">Frecu activa</div><div class="an-tx">Montaña · Conectado</div></div><div></div>
+              <div class="an-ac"><button>Salir de la frecu</button></div>
+            </div></div>
+            <div class="sys last" data-other></div>
+          </div>
+        </div></div>
+        <div class="cap">Android · hoy</div>
+      </div>
+      <div>
+        <div class="nph ios short"><div class="scr">
+          <div class="clock">9:41</div><div class="date">lunes, 10 de noviembre</div>
+          <div class="stack">
+            <div class="ib"><span class="ap"><svg width="22" height="22" viewBox="0 0 22 22" data-liss="11,11,8" data-stroke="#C4E05C" data-w="1.5"></svg></span><div><b>Frecu activa</b><br>Montaña · Conectado</div><small>ahora</small></div>
+            <div class="ib"><span class="ap"><svg width="22" height="22" viewBox="0 0 22 22" data-liss="11,11,8" data-stroke="#C4E05C" data-w="1.5"></svg></span><div><b>Frecu activa</b><br>Montaña · Reconectando…</div><small>hace 1 min</small></div>
+            <div class="ib"><span class="ap"><svg width="22" height="22" viewBox="0 0 22 22" data-liss="11,11,8" data-stroke="#C4E05C" data-w="1.5"></svg></span><div><b>Frecu activa</b><br>Montaña · Conectado</div><small>hace 3 min</small></div>
+          </div>
+        </div></div>
+        <div class="cap">iPhone · hoy: un banner por cambio</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Android ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="sec-n">ANDROID</span><h2 class="sec-t">La frecu, como un reproductor</h2>
+      <p class="sec-d">Como YouTube Music: una tarjeta grande arriba de la cortina y en la pantalla bloqueada, con carátula, un botón principal y botones con íconos. La carátula la dibuja Frecu (la malla de la frecu, su firma y su nota) y Android tiñe la tarjeta con sus colores: lima en línea, el color de quien habla, ámbar al reconectar y rojo con un SOS. Prueba los estados y toca los botones.</p></div>
+    <div class="nstage">
+      <div>
+        <div class="nph" data-sys="dark" id="pa"><div class="scr shade">
+          <div class="sb"><div class="l">9:41 <svg width="15" height="15" viewBox="0 0 15 15" data-liss="7.5,7.5,6" data-stroke="currentColor" data-w="1.5"></svg></div><div class="r" data-sbr data-mic></div></div>
+          <div class="nqs"><div class="bri"></div><div class="tiles"><span class="on"></span><span></span><span></span><span class="on"></span></div></div>
+          <div class="mpwrap" id="player"></div>
+          <div class="nlist"><div class="sys solo" data-other></div></div>
+          <div class="toast" id="toast"></div>
+        </div></div>
+        <div class="cap">Cortina desplegada</div>
+      </div>
+      <div class="ctl">
+        <div><h4>Estado de la frecu</h4><div class="chips" id="states"></div></div>
+        <div><h4>Teléfono en modo</h4><div class="seg" id="sys"><button class="on" data-v="dark">Oscuro</button><button data-v="light">Claro</button></div></div>
+        <div class="note-box"><p id="explain"></p></div>
+        <div><h4>Botones</h4>
+          <div class="legend" id="legend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub"><h3>Bloqueado y en la lista</h3><small>la misma tarjeta, y la versión compacta</small></div>
+    <div class="row">
+      <div><div class="nph short"><div class="scr"><div class="lock">
+        <div class="sb" style="--sb-tx:#fff"><div class="l">9:41 <svg width="15" height="15" viewBox="0 0 15 15" data-liss="7.5,7.5,6" data-stroke="currentColor" data-w="1.5"></svg></div><div class="r" data-sbr></div></div>
+        <div class="clock">9:41</div><div class="date">lun, 10 nov</div>
+        <div class="mpwrap" id="lockPlayer"></div>
+      </div></div></div><div class="cap">Pantalla bloqueada · Ana habla</div></div>
+
+      <div><div class="nph short" data-sys="dark"><div class="scr shade">
+        <div class="sb"><div class="l">9:41 <svg width="15" height="15" viewBox="0 0 15 15" data-liss="7.5,7.5,6" data-stroke="currentColor" data-w="1.5"></svg></div><div class="r" data-sbr></div></div>
+        <div class="nlist" style="padding-top:14px">
+          <div id="compact"></div>
+          <div class="sys last" data-other></div>
+        </div>
+      </div></div><div class="cap">Compacta · Android 12 o anterior</div></div>
+    </div>
+  </section>
+
+  <!-- ============ iPhone ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="sec-n">IPHONE</span><h2 class="sec-t">Sin banners repetidos</h2>
+      <p class="sec-d">En iPhone no hay notificaciones fijas: lo que hoy se ve es un banner nuevo en cada cambio de estado, y se quitan. Lo parecido a YouTube Music es «Reproduciendo»: la tarjeta de la pantalla bloqueada y la Dynamic Island. Como iOS dibuja sus propios botones de música, el botón central sería el micrófono con forma de pausa y reproducir.</p></div>
+    <div class="row">
+      <div>
+        <div class="nph ios short"><div class="scr">
+          <div class="di"><span class="art" data-art="rx" data-small></span><span class="bars"><i></i><i></i><i></i><i></i></span></div>
+          <div class="clock">9:41</div><div class="date">lunes, 10 de noviembre</div>
+          <div class="stack" style="top:262px">
+            <div class="np">
+              <div class="np-h"><span class="art" data-art="rx" data-small></span><div><b>Montaña</b><small>Ana · hablando</small></div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"><path d="M4 16V5h16v11h-3M8 21l4-5 4 5z"/></svg></div>
+              <div class="np-c">
+                <span><svg width="30" height="22" viewBox="0 0 30 22" fill="#fff"><path d="M14 2v18L2 11zM28 2v18L16 11z"/></svg></span>
+                <span class="m"><svg width="26" height="30" viewBox="0 0 26 30" fill="#fff"><rect x="3" width="7" height="30" rx="1.5"/><rect x="16" width="7" height="30" rx="1.5"/></svg></span>
+                <span><svg width="30" height="22" viewBox="0 0 30 22" fill="#fff"><path d="M2 2v18l12-9zM16 2v18l12-9z"/></svg></span>
+              </div>
+              <div class="np-v"></div>
+            </div>
+          </div>
+        </div></div>
+        <div class="cap">Fase 2 · «Reproduciendo»</div>
+      </div>
+      <div class="ctl" style="max-width:440px">
+        <span class="tag">Fase 2 · por probar</span>
+        <p><b>Fase 1 (ahora):</b> se quitan los banners repetidos. El iPhone sigue mostrando su indicador de micrófono, y al tocarlo vuelves a la frecu.</p>
+        <p><b>Fase 2, «Reproduciendo»:</b> carátula, nombre de la frecu y quién habla. Pausa silencia tu micrófono y reproducir lo activa. Atrás y adelante quedan apagados.</p>
+        <p><b>Por probar:</b> iOS solo muestra «Reproduciendo» a las apps que suenan como reproductor. Frecu usa una sesión de audio de voz, así que hay que confirmarlo en un iPhone real. Si no aparece, la alternativa es una Actividad en vivo, con botones propios pero más trabajo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Decisiones ============ -->
+  <section class="sec">
+    <div class="sec-h"><span class="sec-n">DECIDE</span><h2 class="sec-t">Qué cambia</h2></div>
+    <ol class="stepsl nt-dec">
+      <li><span><b>Tarjeta de reproductor (Android).</b> La notificación pasa a ser de medios, como la de YouTube Music: arriba de la cortina, en la pantalla bloqueada y, en Android 12 o anterior, compacta en la lista con carátula y tres botones.</span></li>
+      <li><span><b>Carátula propia.</b> Frecu la dibuja en cada cambio: la malla de 6 lugares, su firma Lissajous y la nota (SOL4), con el brillo del estado o del color de quien habla. Android toma de ella los colores de la tarjeta.</span></li>
+      <li><span><b>Título y subtítulo.</b> Título: el nombre de la frecu. Subtítulo, como la isla: «En línea · 4/6», «Ana · hablando», «Al aire · 0:04», «Silenciado · 4/6», «Beto · Parada en la próxima», «Reconectando · 9 s».</span></li>
+      <li><span><b>Botón grande = micrófono.</b> Con «Mantén para hablar», hablar y cortar (como el volumen con la pantalla apagada). Con micrófono abierto, silenciarte y activarlo. Al aire se vuelve redondo y late.</span></li>
+      <li><span><b>Botones pequeños:</b> salida de audio (el ícono dice cuál suena) y salir. El anfitrión solo ve además «invitar», que abre el QR. Con un SOS: «voy en camino» y «entendido».</span></li>
+      <li><span><b>Play/pausa de los audífonos hace de micrófono.</b> El botón de unos audífonos Bluetooth hablaría y cortaría, igual que el botón grande.</span></li>
+      <li><span><b>Sin barra de progreso ni ruido.</b> No suena ni vibra al cambiar, y se actualiza como mucho una vez por segundo.</span></li>
+      <li><span><b>Por dentro.</b> Un servicio propio en Kotlin reemplaza a <code>flutter_foreground_task</code>, que solo hace notificaciones simples. Reutiliza la sesión de medios del botón de volumen (<code>VolumePtt.kt</code>) y mantiene los tipos <code>microphone</code> y <code>location</code>.</span></li>
+      <li><span><b>A tener en cuenta.</b> Si suena otra app de música, Android pone las dos tarjetas en un carrusel y la que suena va primero. El selector de salida de arriba a la derecha lo dibuja Android: hay que probar si mueve la voz de la frecu o solo la música.</span></li>
+      <li><span><b>Por verificar en el Samsung.</b> One UI dibuja su propio reproductor en el panel rápido; carátula, textos y botones deberían mantenerse.</span></li>
+    </ol>
+  </section>
+</main>
+
+<script>
+/* ---------- Dibujo ---------- */
+const TAU = Math.PI * 2;
+function lissPath(cx, cy, r, a = 2, b = 3, ph = .6, n = 180) {
+  let d = '';
+  for (let i = 0; i <= n; i++) {
+    const u = i / n * TAU;
+    d += (i ? 'L' : 'M') + (cx + Math.sin(a * u + ph) * r).toFixed(2) + ',' + (cy + Math.sin(b * u) * r * .96).toFixed(2);
+  }
+  return d + 'Z';
+}
+function paintLiss(root = document) {
+  root.querySelectorAll('svg[data-liss]').forEach((s) => {
+    const [cx, cy, r] = s.dataset.liss.split(',').map(Number);
+    s.innerHTML = `<path d="${lissPath(cx, cy, r)}" fill="none" stroke="${s.dataset.stroke}" stroke-width="${s.dataset.w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  });
+}
+const P = { me: '#C4E05C', ana: '#C9A0FF', beto: '#7FD6FF', caro: '#FF8E7A' };
+const MESHES = {
+  base: [['me', 0], ['ana', 0], ['beto', 0], ['caro', 0], null, null],
+  rx:   [['me', 0], ['ana', 1], ['beto', 0], ['caro', 0], null, null],
+  tx:   [['me', 1], ['ana', 0], ['beto', 0], ['caro', 0], null, null],
+  muted:[['me', -1], ['ana', 0], ['beto', 0], ['caro', 0], null, null],
+  rec:  [['me', 0], ['ana', 'r'], ['beto', 'r'], ['caro', 'r'], null, null],
+  sos:  [['me', 0], ['ana', 's'], ['beto', 0], ['caro', 0], null, null],
+  host: [['me', 0], null, null, null, null, null],
+  msg:  [['me', 0], ['ana', 0], ['beto', 1], ['caro', 0], null, null],
+};
+/* Malla en miniatura en un cuadro de 48 × 48. */
+function meshG(kind, uid) {
+  const nodes = MESHES[kind] || MESHES.base;
+  const cx = 24, cy = 24, R = 15;
+  const pts = [90, 150, 210, 270, 330, 30].map((d) => [cx + Math.cos(d * Math.PI / 180) * R, cy + Math.sin(d * Math.PI / 180) * R]);
+  let s = `<defs><filter id="gl${uid}" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="1.6"/></filter></defs>`;
+  for (let i = 0; i < 6; i++) for (let j = i + 1; j < 6; j++) {
+    if (!nodes[i] || !nodes[j]) continue;
+    const weak = nodes[i][1] === 'r' || nodes[j][1] === 'r';
+    s += `<line x1="${pts[i][0]}" y1="${pts[i][1]}" x2="${pts[j][0]}" y2="${pts[j][1]}" stroke="${weak ? 'rgba(255,181,71,.5)' : 'rgba(255,255,255,.2)'}" stroke-width=".7" ${weak ? 'stroke-dasharray="1.5 2"' : ''}/>`;
+  }
+  nodes.forEach((n, i) => {
+    const [x, y] = pts[i];
+    if (!n) { s += `<circle cx="${x}" cy="${y}" r="3.2" fill="none" stroke="rgba(255,255,255,.3)" stroke-width=".6" stroke-dasharray="1 1.6"/>`; return; }
+    const [who, st] = n; const col = st === 'r' ? '#FFB547' : st === 's' ? '#FF5A4E' : P[who];
+    const hot = st === 1 || st === 's';
+    if (hot) s += `<circle cx="${x}" cy="${y}" r="7" fill="${col}" opacity=".6" filter="url(#gl${uid})"/>`;
+    s += `<circle cx="${x}" cy="${y}" r="${hot ? 4.4 : 3.5}" fill="${hot ? col : '#0C0E10'}" stroke="${col}" stroke-width="1.2" ${st === 'r' ? 'stroke-dasharray="1.6 1.4"' : ''} opacity="${st === -1 ? .45 : 1}"/>`;
+    if (st === -1) s += `<line x1="${x - 3}" y1="${y + 3}" x2="${x + 3}" y2="${y - 3}" stroke="${col}" stroke-width="1.1"/>`;
+  });
+  return s;
+}
+/* Carátula que dibuja Frecu: fondo grafito, brillo del estado, firma y malla, y la nota. */
+let _uid = 0;
+function artSvg(k, { small = false } = {}) {
+  const v = VIEW[k]; const u = ++_uid;
+  return `<svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid slice">
+    <defs><radialGradient id="ag${u}" cx="${small ? .5 : .42}" cy=".48" r=".62"><stop offset="0" stop-color="${v.glow}" stop-opacity="${v.gi}"/><stop offset=".55" stop-color="${v.glow}" stop-opacity="${v.gi * .25}"/><stop offset="1" stop-color="${v.glow}" stop-opacity="0"/></radialGradient></defs>
+    <rect width="120" height="120" fill="${v.bg}"/>
+    <rect width="120" height="120" fill="url(#ag${u})"/>
+    <path d="${lissPath(small ? 60 : 50, small ? 60 : 58, small ? 40 : 40)}" fill="none" stroke="${v.glow}" stroke-opacity=".28" stroke-width="${small ? 2.2 : 1.3}" stroke-linecap="round"/>
+    <svg x="${small ? 24 : 22}" y="${small ? 24 : 30}" width="${small ? 72 : 56}" height="${small ? 72 : 56}" viewBox="0 0 48 48">${meshG(v.mesh, u)}</svg>
+    ${small ? '' : `<text x="113" y="102" text-anchor="end" font-family="Martian Mono, monospace" font-size="8" font-weight="500" letter-spacing="1" fill="${v.glow}" fill-opacity=".85">SOL4</text>`}
+  </svg>`;
+}
+
+/* ---------- Íconos ---------- */
+const sv = (d, extra = '') => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" ${extra}>${d}</svg>`;
+const IC = {
+  mic: sv('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>'),
+  micOff: sv('<path d="M15 10V6a3 3 0 0 0-5.7-1.3M9 9v2a3 3 0 0 0 4.6 2.5M5.5 11a6.5 6.5 0 0 0 10.6 5M18.4 12.5c.1-.5.1-1 .1-1.5M12 17.5V21M4 4l16 16"/>'),
+  stop: `<svg width="22" height="22" viewBox="0 0 22 22"><rect x="5" y="5" width="12" height="12" rx="2.5" fill="currentColor"/></svg>`,
+  speaker: sv('<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/>'),
+  ear: sv('<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 5.5h3"/>'),
+  bt: sv('<path d="M7 7.5l10 9-5 4.5V3l5 4.5-10 9"/>'),
+  exit: sv('<path d="M14 4h4.5v16H14M10 8l-4 4 4 4M6 12h10"/>'),
+  qr: sv('<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2v2M20 14v.01M18 18h2v2M14 20h.01"/>'),
+  check: sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+  close: sv('<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>'),
+};
+const ROUTES = [['Altavoz', 'speaker', 'Este teléfono'], ['Auricular', 'ear', 'Este teléfono'], ['JBL Flip 5', 'bt', 'JBL Flip 5']];
+const ACT = {
+  talk:   { ic: () => IC.mic, t: 'Hablar' },
+  cut:    { ic: () => IC.stop, t: 'Cortar' },
+  mute:   { ic: () => IC.mic, t: 'Silenciarme' },
+  unmute: { ic: () => IC.micOff, t: 'Activar micrófono' },
+  wait:   { ic: () => IC.mic, t: 'Micrófono en espera' },
+  go:     { ic: () => IC.check, t: 'Voy en camino' },
+  route:  { ic: () => IC[ROUTES[S.route][1]], t: () => `Salida: ${ROUTES[S.route][0]}` },
+  invite: { ic: () => IC.qr, t: 'Invitar (abre el QR)' },
+  ack:    { ic: () => IC.close, t: 'Entendido' },
+  quit:   { ic: () => IC.exit, t: 'Salir de la frecu' },
+};
+
+/* ---------- Estados ---------- */
+const VIEW = {
+  online: { label: 'En línea', a: '#C4E05C', bg: '#0E1209', glow: '#C4E05C', gi: .38, mesh: 'base', main: 'talk', acts: ['route', 'quit'],
+    sub: () => 'En línea · 4/6', explain: '<b>En línea.</b> Tarjeta oscura con brillo lima: el color de la señal. El botón grande es el micrófono; con «Mantén para hablar» se toca para hablar y otra vez para cortar.' },
+  rx: { label: 'Ana habla', a: '#C9A0FF', bg: '#130E1B', glow: '#C9A0FF', gi: .5, mesh: 'rx', main: 'talk', acts: ['route', 'quit'],
+    sub: () => 'Ana · hablando', explain: '<b>Alguien habla.</b> Su lugar se enciende en la malla y la tarjeta toma su color de canal (Ana es orquídea). Cuando termina, vuelve el lima.' },
+  tx: { label: 'Al aire', a: '#C4E05C', bg: '#141B07', glow: '#D9F27A', gi: .7, mesh: 'tx', main: 'cut', live: true, acts: ['route', 'quit'],
+    sub: () => `Al aire · ${txTime()}`, explain: '<b>Estás transmitiendo.</b> El botón se vuelve redondo y late, como el núcleo del botón al aire; tocarlo corta. Un micrófono abierto por error se ve desde la cortina.' },
+  open: { label: 'Micrófono abierto', a: '#C4E05C', bg: '#0E1209', glow: '#C4E05C', gi: .45, mesh: 'tx', main: 'mute', live: true, acts: ['route', 'quit'],
+    sub: () => 'Micrófono abierto · 4/6', explain: '<b>Micrófono abierto.</b> El botón grande te silencia sin abrir la app, por ejemplo con el teléfono en el bolsillo.' },
+  muted: { label: 'Silenciado', a: '#A3ABA8', bg: '#101214', glow: '#7A8380', gi: .3, mesh: 'muted', main: 'unmute', acts: ['route', 'quit'],
+    sub: () => 'Silenciado · 4/6', explain: '<b>Silenciado.</b> Tarjeta gris y tu lugar tachado en la malla. Escuchas a tu grupo pero nadie te oye; el botón grande vuelve a abrir el micrófono.' },
+  msg: { label: 'Mensaje rápido', a: '#7FD6FF', bg: '#0B141A', glow: '#7FD6FF', gi: .45, mesh: 'msg', main: 'talk', acts: ['route', 'quit'],
+    sub: () => 'Beto · Parada en la próxima', explain: '<b>Mensaje rápido.</b> Se queda unos segundos en el subtítulo, con el color de quien lo manda, y luego vuelve el estado normal. No suena: la vibración de la app ya avisa.' },
+  rec: { label: 'Reconectando', a: '#FFB547', bg: '#1A1306', glow: '#FFB547', gi: .4, mesh: 'rec', main: 'wait', off: true, acts: ['quit'],
+    sub: () => `Reconectando · ${S.rec} s`, explain: '<b>Reconectando.</b> Tarjeta ámbar con cuenta atrás y la malla punteada. El micrófono queda en espera; solo se puede salir.' },
+  sos: { label: 'SOS', a: '#FF8A80', bg: '#230B0A', glow: '#FF5A4E', gi: .6, mesh: 'sos', main: 'go', acts: ['ack', 'quit'], title: 'SOS de Ana',
+    sub: () => '120 m al noreste · Montaña', explain: '<b>SOS.</b> Tarjeta roja. El botón grande responde «Voy en camino» sin abrir la app; la X quita el aviso. Tocar la tarjeta abre la frecu con la flecha hacia Ana.' },
+  host: { label: 'Anfitrión esperando', a: '#C4E05C', bg: '#0E1209', glow: '#C4E05C', gi: .3, mesh: 'host', main: 'talk', acts: ['route', 'invite', 'quit'],
+    sub: () => 'Esperando a tu grupo', explain: '<b>Anfitrión solo.</b> Aparece «invitar»: abre la frecu con el QR a la vista. Se va cuando llega la primera persona. Para el anfitrión, salir cierra la frecu.' },
+};
+const S = { k: 'online', route: 0, gone: false, tx0: 0, rec: 9 };
+function txTime() { const s = Math.max(0, Math.floor((Date.now() - S.tx0) / 1000)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; }
+const t = (a) => (typeof ACT[a].t === 'function' ? ACT[a].t() : ACT[a].t);
+
+function player(k, interactive = true) {
+  const v = VIEW[k];
+  const da = (a) => (interactive ? `data-act="${a}"` : '');
+  return `<div class="mp" style="--a:${v.a};--bg:${v.bg}">
+    <div class="mp-art">${artSvg(k)}</div><div class="mp-scrim"></div>
+    <div class="mp-in">
+      <div class="mp-top"><span class="mp-app"><svg width="16" height="16" viewBox="0 0 16 16"><path d="${lissPath(8, 8, 6)}" fill="none" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        <span class="mp-out">${IC[ROUTES[S.route][2] === 'Este teléfono' ? 'speaker' : 'bt'].replace('width="24" height="24"', 'width="15" height="15"')}${ROUTES[S.route][2]}</span></div>
+      <div class="mp-mid"><div style="min-width:0"><div class="mp-ti">${v.title || 'Montaña'}</div><div class="mp-su" ${interactive ? 'data-sub' : ''}>${v.sub()}</div></div>
+        <button class="mp-main ${v.live ? 'live' : ''} ${v.off ? 'off' : ''}" ${da(v.main)} title="${t(v.main)}" aria-label="${t(v.main)}">${ACT[v.main].ic()}</button></div>
+      <div class="mp-bot">${v.acts.map((a) => `<button ${da(a)} title="${t(a)}" aria-label="${t(a)}">${ACT[a].ic()}</button>`).join('')}</div>
+    </div></div>`;
+}
+function compact(k) {
+  const v = VIEW[k];
+  return `<div class="mc" style="--a:${v.a};--bg:${v.bg}"><div>
+      <div class="hd"><svg width="14" height="14" viewBox="0 0 14 14"><path d="${lissPath(7, 7, 5.4)}" fill="none" stroke="#F2F4F3" stroke-width="1.4" stroke-linecap="round"/></svg><b>Frecu</b>•<span>Sol4</span></div>
+      <div class="ti">${v.title || 'Montaña'}</div><div class="su">${v.sub()}</div>
+      <div class="ac">${v.acts.slice(0, 1).map((a) => `<span>${ACT[a].ic()}</span>`).join('')}<span class="m">${ACT[v.main].ic()}</span>${v.acts.slice(1).map((a) => `<span>${ACT[a].ic()}</span>`).join('')}</div>
+    </div><div class="art">${artSvg(k, { small: true })}</div></div>`;
+}
+const OTHER = `<div class="an-g"><div class="an-ic"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 5.5h14v8H8l-4 3v-3H3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+  <div><div class="an-hd"><b>Mensajes</b><span class="dotsep">•</span>8 min</div><div class="an-ti">Mamá</div><div class="an-tx">¿Ya llegaron a la cabaña?</div></div><div></div></div>`;
+const SBR = (mic) => `${mic ? `<span class="pi"><svg width="10" height="12" viewBox="0 0 10 12"><rect x="3" y="0.5" width="4" height="7" rx="2" fill="#fff"/><path d="M1 5.5a4 4 0 0 0 8 0M5 9.5v2" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></span>` : ''}
+  <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 0.6 3.6a10.5 10.5 0 0 1 14.8 0Z" fill="currentColor"/></svg>
+  <svg width="22" height="12" viewBox="0 0 22 12"><rect x=".5" y=".5" width="19" height="11" rx="3" fill="none" stroke="currentColor" opacity=".6"/><rect x="2" y="2" width="13" height="8" rx="1.6" fill="currentColor"/><rect x="20" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".6"/></svg>`;
+
+function render() {
+  const v = VIEW[S.k];
+  document.getElementById('player').innerHTML = S.gone
+    ? `<div class="left-room">Saliste de Montaña <button data-back>Volver a entrar</button></div>`
+    : player(S.k);
+  document.getElementById('lockPlayer').innerHTML = player('rx', false);
+  document.getElementById('compact').innerHTML = compact(S.k);
+  document.querySelectorAll('[data-other]').forEach((el) => { el.innerHTML = OTHER; });
+  document.querySelectorAll('[data-art]').forEach((el) => { el.innerHTML = artSvg(el.dataset.art, { small: el.hasAttribute('data-small') }); });
+  document.getElementById('states').innerHTML = Object.entries(VIEW).map(([k, s]) => `<button data-st="${k}" class="${k === S.k ? 'on' : ''}"><i style="background:${s.glow}"></i>${s.label}</button>`).join('');
+  document.getElementById('explain').innerHTML = v.explain;
+  document.getElementById('legend').innerHTML = [v.main, ...v.acts].map((a, i) => `<span class="k ${i ? '' : 'main'}">${ACT[a].ic()}</span><p><b>${t(a)}</b>${i ? '' : ' · botón grande'}</p>`).join('');
+  document.querySelectorAll('[data-sbr]').forEach((el) => { el.innerHTML = SBR(el.hasAttribute('data-mic') && VIEW[S.k].live && !S.gone); });
+  paintLiss();
+}
+function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 1800); }
+function go(k) { S.k = k; S.gone = false; if (k === 'tx') S.tx0 = Date.now(); if (k === 'rec') S.rec = 9; render(); }
+document.addEventListener('click', (e) => {
+  const st = e.target.closest('[data-st]'); if (st) { go(st.dataset.st); return; }
+  if (e.target.closest('[data-back]')) { go('online'); return; }
+  const sys = e.target.closest('#sys button');
+  if (sys) { document.getElementById('pa').dataset.sys = sys.dataset.v; document.querySelectorAll('#sys button').forEach((b) => b.classList.toggle('on', b === sys)); return; }
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  switch (a.dataset.act) {
+    case 'talk': go('tx'); break;
+    case 'cut': go('online'); break;
+    case 'mute': go('muted'); break;
+    case 'unmute': go('open'); break;
+    case 'route': S.route = (S.route + 1) % ROUTES.length; render(); toast(`Audio por ${ROUTES[S.route][0]}`); break;
+    case 'quit': S.gone = true; render(); break;
+    case 'go': go('online'); toast('Enviado · Voy en camino'); break;
+    case 'ack': go('online'); break;
+    case 'invite': toast('Abre la frecu con el QR'); break;
+  }
+});
+document.querySelectorAll('[data-theme-set]').forEach((b) => b.addEventListener('click', () => {
+  document.documentElement.dataset.theme = b.dataset.themeSet;
+  document.querySelectorAll('[data-theme-set]').forEach((x) => x.classList.toggle('on', x === b));
+}));
+setInterval(() => {
+  if (S.k === 'rec') S.rec = S.rec > 1 ? S.rec - 1 : 9;
+  if ((S.k === 'tx' || S.k === 'rec') && !S.gone) { const el = document.querySelector('[data-sub]'); if (el) el.textContent = VIEW[S.k].sub(); }
+}, 1000);
+render();
+</script>
+</body>
+</html>

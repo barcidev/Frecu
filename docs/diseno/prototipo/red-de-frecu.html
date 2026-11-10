@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frecu · La red la crea Frecu — Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,100..800&family=Doto:wght,ROND@100..900,0..100&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="screens.css">
+<style>
+  .rf { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 32px 140px; }
+  .rf-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 0 0; }
+  .rf-top .wordmark canvas { width: 26px; height: 26px; }
+  .rf-theme { display: flex; gap: 6px; }
+  .rf-theme button { padding: 8px 12px; border-radius: 10px; font: 500 12px/1 var(--f-mono); color: var(--tx-2); box-shadow: inset 0 0 0 1px var(--line-1); }
+  .rf-theme button.on { color: var(--tx-1); background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .rf .sec { padding-top: 56px; }
+  .rf-dec { max-width: 860px; }
+  .rf-dec li { font-size: 15px; }
+  .rf-dec code { font: 500 12.5px/1 var(--f-mono); color: var(--tx-1); }
+  .rf-netline { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+  .rf-net .ot b { font-size: 15px; }
+  .rf-wait { opacity: .55; pointer-events: none; }
+  .echo .banner.alert { background: linear-gradient(rgba(var(--alert-rgb), .1), rgba(var(--alert-rgb), .1)), var(--bg-1); box-shadow: inset 0 0 0 1px rgba(var(--alert-rgb), .4), var(--shadow-pop); }
+  .rf-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rf-sys { position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(0, 0, 0, .38); }
+  .rf-tag { color: #fff; opacity: .8; }
+  .rf-alert { width: 270px; border-radius: 14px; overflow: hidden; text-align: center; color: #000; background: rgba(242, 242, 247, .96); font: 600 16px/1.3 -apple-system, "SF Pro Text", system-ui, sans-serif; }
+  .rf-alert b { display: block; padding: 20px 16px 18px; font-weight: 600; }
+  .rf-alert-b { display: grid; grid-template-columns: 1fr 1fr; border-top: .5px solid rgba(60, 60, 67, .3); }
+  .rf-alert-b button { padding: 12px 0; font: 400 17px/1.2 -apple-system, "SF Pro Text", system-ui, sans-serif; color: #007aff; }
+  .rf-alert-b button + button { font-weight: 600; border-left: .5px solid rgba(60, 60, 67, .3); }
+  @media (max-width: 720px) { .rf { padding: 0 16px 96px; } }
+</style>
+</head>
+<body>
+<main class="rf">
+  <div class="rf-top">
+    <span class="wordmark"><canvas data-c="brand"></canvas>frecu</span>
+    <div class="rf-theme"><button class="on" data-theme-set="dark">Noche</button><button data-theme-set="light">Día</button></div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><span class="sec-n">LOHS</span><h2 class="sec-t">La red la crea Frecu</h2>
+      <p class="sec-d">El anfitrión Android ya no activa la zona Wi-Fi a mano: Frecu crea una red sin internet, con nombre y clave nuevos en cada frecu, y los mete en el QR. El invitado escanea, acepta el aviso del sistema y entra.</p></div>
+    <ol class="stepsl rf-dec">
+      <li><span><b>Android crea la red primero.</b> En «Prepara la red», el botón principal es «Crear la red». La guía de la zona Wi-Fi sigue detrás de «Prefiero mi zona Wi-Fi», para quien quiera compartir internet o si la red de Frecu falla.</span></li>
+      <li><span><b>La red dura lo que dura la frecu.</b> Se crea al tocar el botón y se apaga al cerrar la frecu, o al salir de la creación sin abrirla. El paso 2, «Nueva frecu», no cambia.</span></li>
+      <li><span><b>Un solo QR.</b> La invitación suma el nombre de la red y su clave (<code>ws</code> y <code>wk</code>) a la IP y el código. Es aditivo: una app anterior los ignora.</span></li>
+      <li><span><b>El invitado no pasa por Ajustes.</b> Escanea, acepta el aviso del sistema y entra. En Android, Frecu usa esa red mientras dura la frecu aunque no tenga internet; al salir, el teléfono la olvida y vuelve a su Wi-Fi.</span></li>
+      <li><span><b>Respaldo a mano.</b> Si el invitado cancela el aviso, o su teléfono no puede conectarse solo (Android 7 a 9), la hoja muestra la red y la clave.</span></li>
+      <li><span><b>Un permiso nuevo, solo para el anfitrión Android:</b> dispositivos cercanos (Android 13 o posterior) o ubicación (Android 12 o anterior), pedido al tocar «Crear la red». En Android 7 no hay red de Frecu: queda la guía.</span></li>
+      <li><span><b>iPhone.</b> Como invitado se conecta solo, con la capacidad Hotspot Configuration de Apple. Como anfitrión sigue con su punto de acceso personal.</span></li>
+      <li><span><b>Le sirve al corte 8 (Bluetooth).</b> La conexión a la Wi-Fi desde la app queda hecha, y con la red de Frecu el anfitrión ya no tiene que escribir el nombre y la clave para invitar por Bluetooth.</span></li>
+    </ol>
+  </section>
+
+  <div id="gallery"></div>
+</main>
+<script src="engine.js"></script>
+<script src="components.js"></script>
+<script src="screens.js"></script>
+<script src="red-de-frecu.js"></script>
+</body>
+</html>

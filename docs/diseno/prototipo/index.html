@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frecu · Sistema de diseño Portadora — Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,100..800&family=Doto:wght,ROND@100..900,0..100&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="screens.css">
+</head>
+<body>
+<div class="doc">
+  <aside class="side">
+    <div class="brand"><canvas data-c="brand"></canvas><b>frecu</b></div>
+    <nav>
+      <a href="#inicio"><span>00</span>Portadora</a>
+      <a href="#concepto"><span>01</span>Concepto</a>
+      <a href="#nota"><span>02</span>La nota de la frecu</a>
+      <a href="#color"><span>03</span>Color</a>
+      <a href="#tipografia"><span>04</span>Tipografía</a>
+      <a href="#forma"><span>05</span>Espacio, forma y luz</a>
+      <a href="#movimiento"><span>06</span>Movimiento</a>
+      <a href="#iconos"><span>07</span>Íconos</a>
+      <a href="#componentes"><span>08</span>Componentes</a>
+      <a href="#pantallas"><span>09</span>Pantallas</a>
+      <a href="#flujo"><span>10</span>Prototipo navegable</a>
+      <a href="#flutter"><span>11</span>Paso a Flutter</a>
+      <a href="#decisiones"><span>12</span>Decisiones</a>
+    </nav>
+    <div class="tweaks">
+      <span class="t-label-s c3">Tema</span>
+      <div class="tweak-row"><button class="on" data-theme-set="dark">Noche</button><button data-theme-set="light">Día</button></div>
+      <span class="t-label-s c3">Movimiento</span>
+      <div class="tweak-row"><button class="on" data-motion="full">Completo</button><button data-motion="reduced">Reducido</button></div>
+    </div>
+  </aside>
+
+  <main>
+    <header class="hero" id="inicio">
+      <div>
+        <span class="kicker t-label"><i></i>Sistema de diseño · prototipo v0.1</span>
+        <h1 style="margin-top:20px">Portadora.<br>La voz del grupo, <em>hecha señal.</em></h1>
+        <p>Frecu convierte varios teléfonos en un intercomunicador sin internet. Su interfaz se comporta como un instrumento de radio de precisión: oscuridad profunda, una sola luz de señal y movimiento orgánico que despierta cuando alguien habla.</p>
+        <div class="meta">
+          <div><span class="t-label-s c3">Plataforma</span><b>Flutter · Android e iOS</b></div>
+          <div><span class="t-label-s c3">Tema</span><b>Claro y oscuro</b></div>
+          <div><span class="t-label-s c3">Idiomas</span><b>Español · inglés</b></div>
+          <div><span class="t-label-s c3">Estado</span><b class="cs">Decidido · por aprobar</b></div>
+        </div>
+      </div>
+      <div class="hero-visual"><canvas data-c="hero"></canvas></div>
+    </header>
+
+    <!-- 01 CONCEPTO -->
+    <section class="sec" id="concepto">
+      <div class="sec-h"><span class="sec-n">01</span><h2 class="sec-t">Concepto</h2><p class="sec-d">En radio, la portadora es la onda que transporta la voz. Permanece invisible hasta que alguien habla; entonces se modula. Ese es el principio de toda la interfaz: calma cuando no pasa nada y luz cuando hay voz.</p><i class="ruler"></i></div>
+      <div class="pillars">
+        <div class="pillar"><canvas data-c="pillar" data-k="0"></canvas><span class="t-label-s cs">01 · Luz</span><h4>La luz solo la emite la señal</h4><p>Todo descansa en grafito. El color aparece con la voz, la conexión o la acción principal. Si algo brilla, importa.</p></div>
+        <div class="pillar"><canvas data-c="pillar" data-k="1"></canvas><span class="t-label-s cs">02 · Precisión</span><h4>Instrumento, no plantilla</h4><p>Reglas, marcas de dial y datos reales en mono (nota, IP, puerto, personas), con numerales en matriz de puntos.</p></div>
+        <div class="pillar"><canvas data-c="pillar" data-k="2"></canvas><span class="t-label-s cs">03 · Orgánico</span><h4>Movimiento que respira</h4><p>Resortes en vez de curvas lineales y ruido continuo en vez de bucles mecánicos. Todo nace desde donde tocaste.</p></div>
+        <div class="pillar"><canvas data-c="pillar" data-k="3"></canvas><span class="t-label-s cs">04 · Robusto</span><h4>Hecho para guantes y sol</h4><p>Moto, bici, montaña u obra: objetivos de 56 dp o más, PTT enorme bajo el pulgar, contraste alto y lectura de un vistazo.</p></div>
+      </div>
+      <div class="dont">
+        <div><b>Lo que evitamos</b>Degradados morado-azul, vidrio esmerilado por todas partes, sombras difusas, avatares con iniciales, spinners, íconos de librería y textos de relleno.</div>
+        <div><b>Lo que nos hace únicos</b>Firmas de señal por persona, sintonizador de frecus, malla hexagonal de 6 lugares, núcleo PTT con VU circular, isla de estado y transiciones en onda.</div>
+      </div>
+    </section>
+
+    <!-- 02 NOTA -->
+    <section class="sec" id="nota">
+      <div class="sec-h"><span class="sec-n">02</span><h2 class="sec-t">La nota de cada frecu</h2><p class="sec-d">Frecu viene de frecuencia, y las notas musicales son frecuencias. Por eso una frecu no lleva un número arbitrario: suena en una nota, calculada con la hora en que se abre sobre el círculo de quintas. Se dice fácil en voz alta: “estamos en Mi”.</p><i class="ruler"></i></div>
+      <div class="nota">
+        <div class="nota-clock" id="nota-clock"></div>
+        <div>
+          <div class="rule"><span class="t-label-s cs">01 · Reloj</span><p><b>La hora señala la nota.</b> El círculo de quintas ordena las 12 notas como un reloj: a las 12 Do, a la 1 Sol, a las 2 Re, a las 3 La, a las 4 Mi… Cada paso es una quinta justa, el intervalo con el que Pitágoras construyó su afinación.</p></div>
+          <div class="rule"><span class="t-label-s cs">02 · Octava</span><p><b>Mañana grave, tarde aguda.</b> Entre las 0 y las 11 h la frecu suena en la cuarta octava; entre las 12 y las 23 h, en la quinta.</p></div>
+          <div class="rule"><span class="t-label-s cs">03 · Afinación</span><p><b>La₄ = 440 Hz.</b> La frecuencia se calcula con el diapasón internacional (ISO 16) y el temperamento igual. Una frecu abierta a las 16:24 suena en Mi₅: 659,3 Hz.</p></div>
+          <div class="rule"><span class="t-label-s cs">04 · Consonancia</span><p><b>Nunca chocan.</b> Si una frecu cercana ya usa esa nota, la nueva avanza a la siguiente quinta: dos grupos vecinos siempre quedan en notas distintas y consonantes.</p></div>
+          <div class="rule"><span class="t-label-s c3">05 · Opcional</span><p><b>Diapasón al entrar.</b> Al unirse, el teléfono podría sonar la nota medio segundo como confirmación. No entra al MVP sin tu aprobación.</p></div>
+        </div>
+      </div>
+      <div class="sub"><h3>Las 12 posiciones</h3><small>noteAt(hora) · cuarta octava · la quinta octava duplica la frecuencia</small></div>
+      <div class="notes-grid" id="notes-grid"></div>
+    </section>
+
+    <!-- 03 COLOR -->
+    <section class="sec" id="color">
+      <div class="sec-h"><span class="sec-n">03</span><h2 class="sec-t">Color</h2><p class="sec-d">Dos temas con la misma estructura: Noche, grafito casi negro (amable con OLED y con la batería en rutas largas), y Día, papel claro para leer bajo el sol. Un único acento lima, mate para no cansar la vista, inspirado en la ropa de alta visibilidad de motociclistas y ciclistas, y seis canales para distinguir a cada persona.</p><i class="ruler"></i></div>
+      <div id="palette"></div>
+      <div class="sub"><h3>Mismo diseño, dos luces</h3><small>ThemeMode.system · selector en Ajustes</small></div>
+      <div class="pairs" id="pairs"></div>
+    </section>
+
+    <!-- 03 TIPOGRAFÍA -->
+    <section class="sec" id="tipografia">
+      <div class="sec-h"><span class="sec-n">04</span><h2 class="sec-t">Tipografía</h2><p class="sec-d">Tres voces con roles estrictos, todas con licencia libre (OFL) y empaquetadas dentro de la app: Frecu funciona sin internet, así que no puede descargar fuentes.</p><i class="ruler"></i></div>
+      <div class="families">
+        <div class="family"><div><span class="t-label-s c3">Interfaz y titulares</span><div class="big" style="font:760 72px/1 var(--f-ui);font-stretch:125%;letter-spacing:-.04em;margin-top:14px">Aa</div></div><div><b style="font:600 18px/1 var(--f-ui)">Archivo</b><p>Variable de ancho y peso. Expandida en titulares, con aire de instrumental automotriz; normal para leer.</p></div></div>
+        <div class="family"><div><span class="t-label-s c3">Datos y etiquetas</span><div class="big" style="font:500 50px/1.2 var(--f-mono);font-stretch:87.5%;margin-top:14px">659 HZ</div></div><div><b style="font:600 18px/1 var(--f-ui)">Martian Mono</b><p>Mayúsculas espaciadas para etiquetas. IP, puertos y estados con aspecto de lectura técnica.</p></div></div>
+        <div class="family"><div><span class="t-label-s c3">Numerales de señal</span><div class="big t-dot" style="font-size:76px;margin-top:10px">4827</div></div><div><b style="font:600 18px/1 var(--f-ui)">Doto</b><p>Matriz de puntos para canal, código de acceso y cronómetro: la pantalla de una radio.</p></div></div>
+      </div>
+      <div class="type-row"><span class="k"><b>display</b>Archivo 125 · 720</span><span class="t-display">Todo tu grupo en la misma frecu.</span><span class="spec">34/38 · −1.5%</span></div>
+      <div class="type-row"><span class="k"><b>title-l</b>Archivo 118 · 650</span><span class="t-title-l">Ruta del domingo</span><span class="spec">24/28 · −1%</span></div>
+      <div class="type-row"><span class="k"><b>title</b>Archivo 110 · 620</span><span class="t-title">Código de acceso</span><span class="spec">18/24</span></div>
+      <div class="type-row"><span class="k"><b>body-l</b>Archivo 100 · 400</span><span class="t-body-l c2">Habla en tiempo real con hasta 6 personas cerca de ti.</span><span class="spec">17/25</span></div>
+      <div class="type-row"><span class="k"><b>body</b>Archivo 100 · 400</span><span class="t-body c2">Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.</span><span class="spec">15/22</span></div>
+      <div class="type-row"><span class="k"><b>label</b>Martian 87.5 · 500</span><span class="t-label">En línea · 5/6</span><span class="spec">11/14 · +8% · mayúsculas</span></div>
+      <div class="type-row"><span class="k"><b>label-s</b>Martian 87.5 · 500</span><span class="t-label-s c3">192.168.43.1 · puerto 47800</span><span class="spec">9.5/12 · +10% · mayúsculas</span></div>
+      <div class="type-row"><span class="k"><b>digits</b>Doto · 800 · ROND 100</span><span class="t-dot" style="font-size:56px;line-height:1">Mi5 · 4827</span><span class="spec">22–72 · nota, PIN, tiempo</span></div>
+    </section>
+
+    <!-- 04 FORMA -->
+    <section class="sec" id="forma">
+      <div class="sec-h"><span class="sec-n">05</span><h2 class="sec-t">Espacio, forma y luz</h2><p class="sec-d">Rejilla de 4 pt, esquinas continuas (superelipse) y profundidad por luminancia, filo especular y brillo de señal; nunca sombras difusas. Una retícula de puntos y un grano sutil dan textura física al negro.</p><i class="ruler"></i></div>
+      <div class="sub"><h3>Espaciado</h3><small>FrSpace · s1–s18</small></div>
+      <div class="spaces">
+        <div class="space"><i style="width:4px;height:4px"></i><span>4</span></div><div class="space"><i style="width:8px;height:8px"></i><span>8</span></div><div class="space"><i style="width:12px;height:12px"></i><span>12</span></div><div class="space"><i style="width:16px;height:16px"></i><span>16</span></div><div class="space"><i style="width:20px;height:20px"></i><span>20 · margen</span></div><div class="space"><i style="width:24px;height:24px"></i><span>24</span></div><div class="space"><i style="width:32px;height:32px"></i><span>32</span></div><div class="space"><i style="width:40px;height:40px"></i><span>40</span></div><div class="space"><i style="width:56px;height:56px"></i><span>56 · toque mín.</span></div><div class="space"><i style="width:72px;height:72px"></i><span>72</span></div>
+      </div>
+      <div class="sub"><h3>Radios</h3><small>FrRadii · RoundedSuperellipseBorder</small></div>
+      <div class="radii">
+        <div class="radius" style="border-radius:6px">xs · 6<br>etiquetas</div><div class="radius" style="border-radius:10px">s · 10<br>chips</div><div class="radius" style="border-radius:16px">m · 16<br>campos, teclas</div><div class="radius" style="border-radius:18px">btn · 18<br>botones</div><div class="radius" style="border-radius:24px">l · 24<br>tarjetas</div><div class="radius" style="border-radius:32px">xl · 32<br>paneles</div><div class="radius" style="border-radius:40px">hoja · 40<br>flotante</div><div class="radius" style="border-radius:56px">full<br>núcleo</div>
+      </div>
+      <div class="sub"><h3>Luz y profundidad</h3><small>FrElevation</small></div>
+      <div class="lights">
+        <div class="light" style="background:linear-gradient(90deg,var(--bg-0) 0 20%,var(--bg-1) 20% 40%,var(--bg-2) 40% 60%,var(--bg-3) 60% 80%,var(--bg-4) 80%)"><b>Niveles</b>Cada capa sube un paso de luminancia, de 0 a 4.</div>
+        <div class="light" style="background:var(--bg-2);box-shadow:inset 0 0 0 1px var(--line-2),inset 0 1px 0 rgba(255,255,255,.14)"><b>Filo especular</b>Línea de 1 px y brillo superior, como aluminio mecanizado.</div>
+        <div class="light" style="background:var(--bg-1);box-shadow:inset 0 0 0 1px rgba(var(--signal-rgb),.55),0 0 54px -12px rgba(var(--signal-rgb),.7)"><b>Brillo de señal</b>Solo para lo vivo: voz, transmisión y selección.</div>
+        <div class="light" style="background:var(--bg-0);background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1.3px),var(--grain);background-size:22px 22px,160px;box-shadow:inset 0 0 0 1px var(--line-1)"><b>Textura</b>Retícula de puntos y grano al 4%: el negro deja de ser plano.</div>
+      </div>
+    </section>
+
+    <!-- 05 MOVIMIENTO -->
+    <section class="sec" id="movimiento">
+      <div class="sec-h"><span class="sec-n">06</span><h2 class="sec-t">Movimiento</h2><p class="sec-d">Responde en menos de 100 ms, fluye con resortes y respira en reposo. Cada curva tiene equivalente directo en Flutter (SpringDescription y Curves). Con “Movimiento reducido” los bucles se detienen y las transiciones pasan a fundido.</p><i class="ruler"></i></div>
+      <div class="motion-grid">
+        <div class="mcard"><canvas data-c="curve" data-k="press" data-dur=".45"></canvas><h4>Responde</h4><p>Botones y teclas: hunden rápido y rebotan apenas.</p><span class="tok">spring.press · rigidez 600 · amortiguación 0.62</span></div>
+        <div class="mcard"><canvas data-c="curve" data-k="flow" data-dur=".7"></canvas><h4>Fluye</h4><p>Navegación, hojas y aguja del sintonizador, sin rebote visible.</p><span class="tok">spring.flow · rigidez 220 · amortiguación 0.9</span></div>
+        <div class="mcard"><canvas data-c="curve" data-k="organic" data-dur="1"></canvas><h4>Orgánico</h4><p>Pulgares líquidos, isla de estado, nodos que entran a la malla.</p><span class="tok">spring.organic · rigidez 160 · amortiguación 0.5</span></div>
+        <div class="mcard"><canvas data-c="curve" data-k="out" data-dur=".46"></canvas><h4>Entra</h4><p>Lo que aparece: rápido al inicio y suave al final.</p><span class="tok">ease.out · cubic(.16, 1, .3, 1) · 280–460 ms</span></div>
+        <div class="mcard"><canvas data-c="curve" data-k="in" data-dur=".24"></canvas><h4>Sale</h4><p>Lo que se va acelera y no compite con lo que entra.</p><span class="tok">ease.in · cubic(.7, 0, .84, 0) · 160–240 ms</span></div>
+        <div class="mcard"><canvas data-c="curve" data-k="breath" data-dur="4.2"></canvas><h4>Respira</h4><p>Reposo: firmas, halos y aguja buscando señal.</p><span class="tok">breath · seno 4.2 s + ruido Perlin</span></div>
+      </div>
+      <div class="trans">
+        <div><b>Onda</b><p>Entrar a un modo (crear, escanear, unirse): la pantalla nueva se revela en círculo desde el dedo, con un frente de onda luminoso.</p><span>ClipPath + CustomPainter · 760 ms</span></div>
+        <div><b>Deslizamiento</b><p>Jerarquía (ajustes, guía, atrás): entra de lado con paralaje y la anterior se oscurece.</p><span>CustomRoute · spring.flow</span></div>
+        <div><b>Hoja elástica</b><p>Tareas cortas (código, invitar, audio, salir): sube con resorte; el fondo se aleja y se vela.</p><span>Hoja modal propia · spring.flow</span></div>
+        <div><b>Expansión</b><p>Código correcto: la hoja crece hasta ocupar la pantalla y se convierte en la frecu.</p><span>Hero + animación de bordes</span></div>
+      </div>
+    </section>
+
+    <!-- 06 ÍCONOS -->
+    <section class="sec" id="iconos">
+      <div class="sec-h"><span class="sec-n">07</span><h2 class="sec-t">Íconos</h2><p class="sec-d">Set propio en rejilla de 24, trazo de 1.6 y extremos redondos. Se exportan como fuente de íconos para no sumar dependencias. El anfitrión se representa con una antena, no con una estrella.</p><i class="ruler"></i></div>
+      <div class="icons" id="icons"></div>
+    </section>
+
+    <!-- 07 COMPONENTES -->
+    <section class="sec" id="componentes">
+      <div class="sec-h"><span class="sec-n">08</span><h2 class="sec-t">Componentes</h2><p class="sec-d">Cada tarjeta es un widget de Flutter con su ruta propuesta: los compartidos viven en <code>core/design</code> y los propios de una feature en su <code>presentation/widgets</code>. Todos son interactivos.</p><i class="ruler"></i></div>
+      <div class="cgrid" id="comp"></div>
+    </section>
+
+    <!-- 08 PANTALLAS -->
+    <section class="sec" id="pantallas">
+      <div class="sec-h"><span class="sec-n">09</span><h2 class="sec-t">Pantallas</h2><p class="sec-d">38 estados: las 6 rutas actuales, la guía de punto de acceso, las hojas modales y las novedades de V1 (señal, ubicación, mensajes, SOS, Bluetooth y NFC). Toca cualquiera para abrirla en el prototipo navegable.</p><i class="ruler"></i></div>
+      <div id="gallery"></div>
+    </section>
+
+    <!-- 09 PROTOTIPO -->
+    <section class="sec" id="flujo">
+      <div class="sec-h"><span class="sec-n">10</span><h2 class="sec-t">Prototipo navegable</h2><p class="sec-d">La app completa con sus transiciones reales. Mantén presionado el núcleo PTT (o la barra espaciadora) para hablar; toca la tarjeta de una frecu para unirte.</p><i class="ruler"></i></div>
+      <div class="proto">
+        <div class="proto-col">
+          <h4>Recorridos</h4>
+          <button class="sim-btn" data-tour="splash"><i style="background:var(--signal)"></i><span>Primera vez<small>Arranque, nombre y permisos</small></span></button>
+          <button class="sim-btn" data-tour="lobby"><i style="background:var(--signal)"></i><span>Unirse desde la lista<small>Sintonizador y código 4827</small></span></button>
+          <button class="sim-btn" data-tour="scan"><i style="background:var(--signal)"></i><span>Unirse con QR<small>El escáner se bloquea solo</small></span></button>
+          <button class="sim-btn" data-tour="hotspot"><i style="background:var(--signal)"></i><span>Crear una frecu<small>Guía de red y nueva frecu</small></span></button>
+          <button class="sim-btn" data-tour="room"><i style="background:var(--signal)"></i><span>Frecu activa<small>PTT, modos y salida de audio</small></span></button>
+          <button class="sim-btn" data-tour="settings"><i style="background:var(--signal)"></i><span>Ajustes<small>Firma, modo por defecto e idioma</small></span></button>
+          <button class="sim-btn" data-tour="room:geo"><i style="background:var(--p4)"></i><span>Grupo con ubicación · V1<small>Distancias, mensajes rápidos y SOS</small></span></button>
+          <button class="sim-btn" data-tour="lobby:ble"><i style="background:var(--p1)"></i><span>Unirse por Bluetooth · V1<small>Sin estar aún en su Wi-Fi</small></span></button>
+          <ul class="legend" style="margin-top:8px">
+            <li><b>Hablar</b>Mantén el núcleo o la barra espaciadora</li>
+            <li><b>Código</b>4827 (otro número muestra el error)</li>
+            <li><b>Por IP</b>El primer intento falla a propósito</li>
+          </ul>
+        </div>
+        <div id="proto-holder"></div>
+        <div class="proto-col">
+          <h4>Simular eventos</h4>
+          <button class="sim-btn" data-sim="speak"><i style="background:var(--p2)"></i><span>Ana habla<small>Recepción a través de la malla</small></span></button>
+          <button class="sim-btn" data-sim="join"><i style="background:var(--p5)"></i><span>Alguien entra o sale<small>El nodo nace con resorte</small></span></button>
+          <button class="sim-btn" data-sim="rec"><i style="background:var(--warn)"></i><span>Pérdida de conexión<small>Reconexión con cuenta regresiva</small></span></button>
+          <button class="sim-btn" data-sim="bt"><i style="background:var(--p1)"></i><span>Conectar audífonos<small>La salida cambia sola</small></span></button>
+          <button class="sim-btn" data-sim="close"><i style="background:var(--alert)"></i><span>El anfitrión cierra<small>Fin de la transmisión</small></span></button>
+          <button class="sim-btn" data-sim="weak"><i style="background:var(--warn)"></i><span>Señal débil · V1<small>Enlace ámbar y vibración</small></span></button>
+          <button class="sim-btn" data-sim="msg"><i style="background:var(--p2)"></i><span>Mensaje rápido · V1<small>Llega a la isla y vibra</small></span></button>
+          <button class="sim-btn" data-sim="behind"><i style="background:var(--warn)"></i><span>Alguien se queda atrás · V1<small>Distancia y rumbo</small></span></button>
+          <button class="sim-btn" data-sim="sos"><i style="background:var(--alert)"></i><span>SOS recibido · V1<small>Alarma a pantalla completa</small></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 FLUTTER -->
+    <section class="sec" id="flutter">
+      <div class="sec-h"><span class="sec-n">11</span><h2 class="sec-t">Paso a Flutter</h2><p class="sec-d">Cómo se traduce el prototipo al código respetando la arquitectura actual: Riverpod, auto_route, slang y <code>domain</code> puro.</p><i class="ruler"></i></div>
+      <table class="map">
+        <tr><th>Pieza</th><th>Implementación</th><th>Ubicación propuesta</th></tr>
+        <tr><td>Tokens</td><td>ThemeExtension inmutables: <code>FrColors</code>, <code>FrType</code>, <code>FrSpace</code>, <code>FrRadii</code>, <code>FrMotion</code>, con acceso por <code>context.fr</code>.</td><td><code>lib/core/design/tokens/</code></td></tr>
+        <tr><td>Tema</td><td><code>AppTheme.dark</code> construido desde los tokens; componentes Material sobrescritos para que nada genérico se cuele.</td><td><code>lib/app/theme/app_theme.dart</code></td></tr>
+        <tr><td>Fuentes</td><td>Archivo, Martian Mono y Doto como TTF variables en assets (OFL), con ejes vía <code>FontVariation</code>. Sin <code>google_fonts</code>: nada puede depender de internet.</td><td><code>assets/fonts/</code> + pubspec</td></tr>
+        <tr><td>Íconos</td><td>SVG propios convertidos en fuente de íconos <code>FrIcons</code> (IconData). Sin dependencias nuevas.</td><td><code>assets/fonts/fr_icons.ttf</code></td></tr>
+        <tr><td>Firmas, malla, sintonizador, PTT</td><td><code>CustomPainter</code> con <code>Ticker</code>. El nivel real de voz sale de <code>talk_state</code> y de las estadísticas de WebRTC (docs/audio.md); el ruido solo anima el reposo.</td><td><code>features/*/presentation/widgets/</code></td></tr>
+        <tr><td>Movimiento</td><td><code>SpringDescription</code> y <code>SpringSimulation</code>; transiciones propias con <code>CustomRoute</code> de auto_route; respeta <code>MediaQuery.disableAnimations</code>.</td><td><code>lib/core/design/motion/</code></td></tr>
+        <tr><td>Textura</td><td>Grano como PNG de 128 px en mosaico y retícula con <code>CustomPainter</code>, ambos dentro de <code>FrScaffold</code>.</td><td><code>lib/core/design/widgets/</code></td></tr>
+        <tr><td>Hápticos</td><td><code>HapticFeedback</code> al iniciar y soltar PTT, al bloquear el QR y en código incorrecto.</td><td>En cada widget</td></tr>
+        <tr><td>Claro y oscuro</td><td><code>AppTheme.light</code> y <code>AppTheme.dark</code> desde los mismos tokens; <code>ThemeMode</code> Auto/Claro/Oscuro elegido en Ajustes. Un solo verde (<code>signal</code>); de día <code>signalFg</code> es tinta y el verde se usa como relleno, halo y marcatexto (<code>TextDecoration</code> grueso bajo el texto).</td><td><code>lib/app/theme/</code></td></tr>
+        <tr><td>Nota de la frecu</td><td>Caso de uso puro <code>AssignRoomNote(createdAt, notasCercanas)</code> en <code>domain</code>, con pruebas. La nota viaja en el TXT de mDNS y en el QR para que todos vean la misma.</td><td><code>features/room/domain/</code> + docs/protocolo.md</td></tr>
+        <tr><td>Preferencias</td><td>Nombre visible (se pide una vez), modo de habla por defecto y tema, guardados en el teléfono. Requiere una dependencia nueva (<code>shared_preferences</code>).</td><td><code>features/settings/data/</code></td></tr>
+        <tr><td>Textos</td><td>Todo el texto del prototipo pasa a slang: <code>strings.i18n.json</code> (es) y <code>strings_en.i18n.json</code> (en).</td><td><code>lib/i18n/</code></td></tr>
+      </table>
+    </section>
+
+    <!-- 11 DECISIONES -->
+    <section class="sec" id="decisiones">
+      <div class="sec-h"><span class="sec-n">12</span><h2 class="sec-t">Decisiones</h2><p class="sec-d">Lo que decidiste sobre este prototipo. Con esto se escribe la spec.</p><i class="ruler"></i></div>
+      <div class="done">
+        <div><span class="t-label-s cs">D1 · Color</span><b>Acento lima mate, el mismo verde en noche y día</b></div>
+        <div><span class="t-label-s cs">D2 · Sala</span><b>Malla hexagonal como vista principal</b></div>
+        <div><span class="t-label-s cs">D3 · Canal</span><b>Dinámico: la nota de la hora en el círculo de quintas</b></div>
+        <div><span class="t-label-s cs">D4 · Nombre</span><b>Se pide una sola vez, en la bienvenida</b></div>
+        <div><span class="t-label-s cs">D5 · Tema</span><b>Claro y oscuro, elegido en Ajustes (Auto por defecto)</b></div>
+        <div><span class="t-label-s cs">D6 · Orden</span><b>Tokens y tema · widgets base · inicio y unión · frecu activa</b></div>
+        <div><span class="t-label-s cs">D7 · Nota</span><b>La nota musical es el canal; viaja en el TXT de mDNS y en el QR</b></div>
+        <div><span class="t-label-s cs">D8 · Día</span><b>De día el verde rellena y subraya como marcatexto; el texto va en tinta</b></div>
+      </div>
+      <p class="t-label-s c3" style="margin-top:64px">Frecu · Portadora v0.1 · prototipo de diseño · noviembre 2026</p>
+    </section>
+  </main>
+</div>
+<script src="engine.js"></script>
+<script src="components.js"></script>
+<script src="screens.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
