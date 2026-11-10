@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261108-pendientes-portadora",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "cancelled",
   "branch": "feature/pendientes-portadora",
   "baseCommit": "a61f4dce35b702768f872a28618707c24571541a",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:bf6580e4e1d127cec1c9a6662dac2d2218e9fe7a2bb8fa07b8c31f8e15059353",
+    "at": "2026-11-08T01:50:37.986Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -58,12 +65,5 @@
     "AC": 6,
     "C": 8,
     "R": 3
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:bf6580e4e1d127cec1c9a6662dac2d2218e9fe7a2bb8fa07b8c31f8e15059353",
-    "at": "2026-11-08T01:50:37.986Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
