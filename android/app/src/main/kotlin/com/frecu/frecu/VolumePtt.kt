@@ -3,8 +3,6 @@ package com.frecu.frecu
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.media.VolumeProviderCompat
 import io.flutter.plugin.common.BinaryMessenger
@@ -18,9 +16,10 @@ import io.flutter.plugin.common.MethodChannel
  * - Con la app al frente, la actividad recibe las teclas antes que el
  *   sistema: «down» al pulsar y «up» al soltar, para mantener pulsado y
  *   hablar. El volumen no cambia.
- * - Con la pantalla apagada las teclas no llegan a la actividad. Una sesión
- *   de medios con volumen propio recibe cada pulsación como un ajuste, sin
- *   soltar: se envía «toggle» (pulsa para empezar y otra vez para terminar).
+ * - Con la pantalla apagada las teclas no llegan a la actividad. La sesión
+ *   de medios de Frecu ([FrecuMediaSession]), con volumen propio, recibe cada
+ *   pulsación como un ajuste, sin soltar: se envía «toggle» (pulsa para
+ *   empezar y otra vez para terminar).
  */
 object VolumePtt {
     private const val METHODS = "frecu/volume_ptt"
@@ -28,7 +27,7 @@ object VolumePtt {
 
     private val main = Handler(Looper.getMainLooper())
     private var sink: EventChannel.EventSink? = null
-    private var session: MediaSessionCompat? = null
+    private var provider: VolumeProviderCompat? = null
     private var appContext: Context? = null
 
     /** Activado por la app: preferencia encendida y una frecu abierta. */
@@ -86,9 +85,9 @@ object VolumePtt {
     }
 
     private fun startSession() {
-        if (session != null) return
+        if (provider != null) return
         val context = appContext ?: return
-        val provider = object : VolumeProviderCompat(
+        val volume = object : VolumeProviderCompat(
             VOLUME_CONTROL_RELATIVE,
             100,
             50,
@@ -97,22 +96,13 @@ object VolumePtt {
                 if (direction != 0) emit("toggle")
             }
         }
-        session = MediaSessionCompat(context, "FrecuVolumePtt").apply {
-            setPlaybackToRemote(provider)
-            setPlaybackState(
-                PlaybackStateCompat.Builder()
-                    .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1f)
-                    .build(),
-            )
-            isActive = true
-        }
+        provider = volume
+        FrecuMediaSession.setVolumeProvider(context, volume)
     }
 
     private fun stopSession() {
-        session?.run {
-            isActive = false
-            release()
-        }
-        session = null
+        if (provider == null) return
+        provider = null
+        appContext?.let { FrecuMediaSession.setVolumeProvider(it, null) }
     }
 }

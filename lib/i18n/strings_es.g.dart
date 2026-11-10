@@ -914,14 +914,44 @@ class Translations$room$notification$es {
 	/// es: 'Frecu activa'
 	String get title => 'Frecu activa';
 
-	/// es: '$room · Conectado'
-	String connected({required Object room}) => '${room} · Conectado';
+	/// es: 'Conectado'
+	String get connected => 'Conectado';
 
-	/// es: '$room · Reconectando…'
-	String reconnecting({required Object room}) => '${room} · Reconectando…';
+	/// es: 'Reconectando…'
+	String get reconnecting => 'Reconectando…';
 
 	/// es: 'Salir de la frecu'
 	String get leave => 'Salir de la frecu';
+
+	/// es: 'Cerrar la frecu'
+	String get close => 'Cerrar la frecu';
+
+	/// es: 'Hablar'
+	String get talk => 'Hablar';
+
+	/// es: 'Cortar'
+	String get cut => 'Cortar';
+
+	/// es: 'Silenciarme'
+	String get mute => 'Silenciarme';
+
+	/// es: 'Activar micrófono'
+	String get unmute => 'Activar micrófono';
+
+	/// es: 'Salida de audio: $route'
+	String route({required Object route}) => 'Salida de audio: ${route}';
+
+	/// es: 'SOS · $where'
+	String sos({required Object where}) => 'SOS · ${where}';
+
+	/// es: '$distance hacia el $direction'
+	String towards({required Object distance, required Object direction}) => '${distance} hacia el ${direction}';
+
+	/// es: 'Voy en camino'
+	String get sosGo => 'Voy en camino';
+
+	/// es: 'Entendido'
+	String get sosAck => 'Entendido';
 }
 
 // Path: permissions.welcome
@@ -2507,9 +2537,19 @@ extension on Translations {
 			'room.notification.channelName' => 'Frecu en segundo plano',
 			'room.notification.channelDescription' => 'Mantiene activa la conexión de Frecu con la pantalla apagada.',
 			'room.notification.title' => 'Frecu activa',
-			'room.notification.connected' => ({required Object room}) => '${room} · Conectado',
-			'room.notification.reconnecting' => ({required Object room}) => '${room} · Reconectando…',
+			'room.notification.connected' => 'Conectado',
+			'room.notification.reconnecting' => 'Reconectando…',
 			'room.notification.leave' => 'Salir de la frecu',
+			'room.notification.close' => 'Cerrar la frecu',
+			'room.notification.talk' => 'Hablar',
+			'room.notification.cut' => 'Cortar',
+			'room.notification.mute' => 'Silenciarme',
+			'room.notification.unmute' => 'Activar micrófono',
+			'room.notification.route' => ({required Object route}) => 'Salida de audio: ${route}',
+			'room.notification.sos' => ({required Object where}) => 'SOS · ${where}',
+			'room.notification.towards' => ({required Object distance, required Object direction}) => '${distance} hacia el ${direction}',
+			'room.notification.sosGo' => 'Voy en camino',
+			'room.notification.sosAck' => 'Entendido',
 			'permissions.back' => 'Atrás',
 			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
 			'permissions.welcome.kicker' => 'Sin internet · sin cobertura',

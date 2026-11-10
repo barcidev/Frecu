@@ -103,8 +103,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- La frecu activa: voz con la pantalla apagada y tarjeta de reproductor
+             (FrecuRoomService.kt). Ubicación solo mientras se comparte. -->
         <service
-            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
+            android:name=".FrecuRoomService"
             android:foregroundServiceType="microphone|location"
             android:exported="false" />
     </application>

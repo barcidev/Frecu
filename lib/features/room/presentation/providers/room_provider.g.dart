@@ -114,17 +114,17 @@ final class ForegroundServiceDataSourceProvider
 String _$foregroundServiceDataSourceHash() =>
     r'a963c648e1ae10bae2de89398365e0188529abb7';
 
-/// Toques en «Salir» de la notificación de la frecu (Android).
+/// Toques en «Salir» de la tarjeta de la frecu (Android).
 
 @ProviderFor(notificationLeaveRequests)
 final notificationLeaveRequestsProvider = NotificationLeaveRequestsProvider._();
 
-/// Toques en «Salir» de la notificación de la frecu (Android).
+/// Toques en «Salir» de la tarjeta de la frecu (Android).
 
 final class NotificationLeaveRequestsProvider
     extends $FunctionalProvider<AsyncValue<int>, int, Stream<int>>
     with $FutureModifier<int>, $StreamProvider<int> {
-  /// Toques en «Salir» de la notificación de la frecu (Android).
+  /// Toques en «Salir» de la tarjeta de la frecu (Android).
   NotificationLeaveRequestsProvider._()
     : super(
         from: null,

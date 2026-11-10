@@ -18,7 +18,7 @@ Frecu funciona sin internet y sin cuentas. No recogemos, guardamos ni vendemos d
 | Micrófono | Enviar tu voz a las personas de tu frecu mientras hablas (PTT) o con el micrófono abierto. | Solo en directo, por la red Wi-Fi local, a los teléfonos de tu frecu. No se graba. |
 | Red local (Wi-Fi, mDNS) | Encontrar frecus cercanas y conectar los teléfonos entre sí. | Solo dentro de la red local. |
 | Cámara | Escanear el código QR de invitación a una frecu. | No. Las imágenes no se guardan ni se envían. |
-| Notificaciones | Mostrar que la frecu sigue activa con la pantalla apagada y permitir salir de ella. | No. |
+| Notificaciones | Mostrar que la frecu sigue activa con la pantalla apagada y manejarla desde ahí: micrófono, salida de audio, salir y responder a un SOS. | No. |
 | Bluetooth | Usar audífonos o intercomunicadores Bluetooth y encontrar frecus cercanas aunque aún no estés en su Wi-Fi. | Quien crea la frecu anuncia por Bluetooth su nombre y su nota; el nombre de la red y su clave solo se entregan a quien escribe el código de la frecu. Nada más sale por Bluetooth. |
 | NFC | Leer la invitación del teléfono del anfitrión o de una etiqueta, grabarla en una etiqueta y, en Android, dejar que otro teléfono la lea del tuyo mientras estás en una frecu. | Solo la invitación de la frecu (la misma del QR), y solo al acercar los teléfonos o la etiqueta. |
 | Ubicación (solo si activas «Compartir mi ubicación») | Que tu grupo vea a qué distancia y hacia dónde estás, y avisar si alguien se queda atrás. | Solo a los teléfonos de tu frecu, por la red local, mientras la compartes. No se guarda. |

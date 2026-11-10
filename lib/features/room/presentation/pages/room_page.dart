@@ -27,7 +27,9 @@ import 'package:frecu/features/room/presentation/pages/room_bluetooth_invite.dar
 import 'package:frecu/features/room/presentation/pages/room_haptics.dart';
 import 'package:frecu/features/room/presentation/pages/room_messages.dart';
 import 'package:frecu/features/room/presentation/pages/room_nfc_share.dart';
+import 'package:frecu/features/room/presentation/pages/room_notification.dart';
 import 'package:frecu/features/room/presentation/pages/room_proximity.dart';
+import 'package:frecu/features/room/presentation/pages/room_state.dart';
 import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/pages/room_wind_filter.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
@@ -77,6 +79,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
 
   /// Auricular al acercar el teléfono a la oreja.
   final RoomProximity _proximity = RoomProximity();
+
+  /// Tarjeta de reproductor de la frecu (Android).
+  final RoomNotification _notification = RoomNotification();
 
   /// Filtro de viento del micrófono.
   final RoomWindFilter _wind = RoomWindFilter();
@@ -135,6 +140,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _wind.start(ref);
     _bluetooth.start(ref);
     _nfc.start(ref);
+    _notification.start(ref, onInvite: _inviteFromNotification);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => unawaited(_startVoice()),
     );
@@ -148,6 +154,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _wind.stop();
     _bluetooth.stop();
     _nfc.stop();
+    _notification.stop();
     // Si la pantalla se va sin salir de la frecu, sale: nunca deja servidor,
     // anuncio, servicio ni micrófono vivos.
     if (_inRoom && !_leaving && _closure == null) {
@@ -392,52 +399,20 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     if (!mounted || _closure != null) return;
     _eventTimer?.cancel();
     setState(() => _event = event);
+    // La notificación también lo dice, aunque la pantalla esté apagada.
+    _notification.showEvent(event);
     _eventTimer = Timer(RoomIslandEvent.duration, () {
+      _notification.showEvent(null);
       if (mounted) setState(() => _event = null);
     });
   }
 
-  /// Participantes con lo que sabe la voz: quién se silenció en micrófono
-  /// abierto (también la persona propia) y cómo va el enlace con cada uno.
-  static List<Participant> _withVoice(
-    List<Participant> participants,
-    String? localId,
-    VoiceState voice,
-  ) {
-    final selfMuted = voice.talkMode == TalkMode.openMic && !voice.isTalking;
-    return [
-      for (final participant in participants)
-        if (participant.id == localId)
-          participant.copyWith(isMuted: participant.isMuted || selfMuted)
-        else
-          participant.copyWith(
-            isMuted:
-                participant.isMuted ||
-                voice.mutedPeers.contains(participant.id),
-            connectionState:
-                voice.peerLinks[participant.id] ?? participant.connectionState,
-            linkQuality: voice.peerQuality[participant.id] ?? LinkQuality.good,
-          ),
-    ];
-  }
-
-  /// Mientras se negocian los enlaces de voz y ninguno está arriba, la frecu
-  /// está conectando (3.0 del prototipo).
-  static RoomStatus? _negotiating(
-    RoomStatus? status,
-    List<Participant> participants,
-    String? localId,
-  ) {
-    final connected =
-        status?.maybeWhen(connected: () => true, orElse: () => false) ?? false;
-    if (!connected) return status;
-    final others = participants.where((p) => p.id != localId).toList();
-    final linking =
-        others.isNotEmpty &&
-        others.every(
-          (p) => p.connectionState == PeerConnectionState.connecting,
-        );
-    return linking ? const RoomStatus.connecting() : status;
+  /// Tocar la tarjeta de la frecu con el anfitrión solo abre el QR.
+  void _inviteFromNotification() {
+    final room = ref.read(roomNotifierProvider);
+    if (!mounted || room == null || _closure != null) return;
+    Navigator.of(context).popUntil((route) => route is! PopupRoute);
+    unawaited(InviteSheet.show(context, room));
   }
 
   /// Estado de habla con los lugares de la malla al día.
@@ -501,12 +476,12 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     final voiceState = ref.watch(voiceNotifierProvider);
     final localId = ref.watch(roomRepositoryProvider).localParticipantId;
     if (localId != null) _ownIds.add(localId);
-    final participants = _withVoice(
+    final participants = participantsWithVoice(
       ref.watch(roomParticipantsProvider).value ?? const <Participant>[],
       localId,
       voiceState,
     );
-    final status = _negotiating(
+    final status = negotiatingStatus(
       ref.watch(roomStatusProvider).value,
       participants,
       localId,

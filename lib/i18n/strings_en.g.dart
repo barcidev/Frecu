@@ -526,9 +526,19 @@ class _Translations$room$notification$en extends Translations$room$notification$
 	@override String get channelName => 'Frecu in the background';
 	@override String get channelDescription => 'Keeps the Frecu connection alive with the screen off.';
 	@override String get title => 'Frecu active';
-	@override String connected({required Object room}) => '${room} · Connected';
-	@override String reconnecting({required Object room}) => '${room} · Reconnecting…';
+	@override String get connected => 'Connected';
+	@override String get reconnecting => 'Reconnecting…';
 	@override String get leave => 'Leave the room';
+	@override String get close => 'Close the room';
+	@override String get talk => 'Talk';
+	@override String get cut => 'Stop talking';
+	@override String get mute => 'Mute me';
+	@override String get unmute => 'Unmute';
+	@override String route({required Object route}) => 'Audio output: ${route}';
+	@override String sos({required Object where}) => 'SOS · ${where}';
+	@override String towards({required Object distance, required Object direction}) => '${distance} to the ${direction}';
+	@override String get sosGo => 'On my way';
+	@override String get sosAck => 'Got it';
 }
 
 // Path: permissions.welcome
@@ -1561,9 +1571,19 @@ extension on TranslationsEn {
 			'room.notification.channelName' => 'Frecu in the background',
 			'room.notification.channelDescription' => 'Keeps the Frecu connection alive with the screen off.',
 			'room.notification.title' => 'Frecu active',
-			'room.notification.connected' => ({required Object room}) => '${room} · Connected',
-			'room.notification.reconnecting' => ({required Object room}) => '${room} · Reconnecting…',
+			'room.notification.connected' => 'Connected',
+			'room.notification.reconnecting' => 'Reconnecting…',
 			'room.notification.leave' => 'Leave the room',
+			'room.notification.close' => 'Close the room',
+			'room.notification.talk' => 'Talk',
+			'room.notification.cut' => 'Stop talking',
+			'room.notification.mute' => 'Mute me',
+			'room.notification.unmute' => 'Unmute',
+			'room.notification.route' => ({required Object route}) => 'Audio output: ${route}',
+			'room.notification.sos' => ({required Object where}) => 'SOS · ${where}',
+			'room.notification.towards' => ({required Object distance, required Object direction}) => '${distance} to the ${direction}',
+			'room.notification.sosGo' => 'On my way',
+			'room.notification.sosAck' => 'Got it',
 			'permissions.back' => 'Back',
 			'permissions.stepOf' => ({required Object current, required Object total}) => '${current} / ${total}',
 			'permissions.welcome.kicker' => 'No internet · no coverage',

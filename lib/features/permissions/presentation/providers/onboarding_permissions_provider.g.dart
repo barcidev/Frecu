@@ -12,9 +12,9 @@ part of 'onboarding_permissions_provider.dart';
 ///
 /// Al leer, `denied` cuenta como pendiente (Android no distingue «nunca
 /// pedido») y `permanentlyDenied` o `restricted` como negado; tras pedirlo,
-/// lo que no queda concedido es negado. En iOS no hay permiso de ejecución
-/// para la red local ni para audífonos Bluetooth: no se pide y cuenta como
-/// concedido.
+/// lo que no queda concedido es negado. En iOS la red local no tiene
+/// permiso que pedir (lo pide el sistema al buscar); la fila de dispositivos
+/// cercanos pide ahí el de Bluetooth, para encontrar frecus por Bluetooth.
 
 @ProviderFor(OnboardingPermissions)
 final onboardingPermissionsProvider = OnboardingPermissionsProvider._();
@@ -23,9 +23,9 @@ final onboardingPermissionsProvider = OnboardingPermissionsProvider._();
 ///
 /// Al leer, `denied` cuenta como pendiente (Android no distingue «nunca
 /// pedido») y `permanentlyDenied` o `restricted` como negado; tras pedirlo,
-/// lo que no queda concedido es negado. En iOS no hay permiso de ejecución
-/// para la red local ni para audífonos Bluetooth: no se pide y cuenta como
-/// concedido.
+/// lo que no queda concedido es negado. En iOS la red local no tiene
+/// permiso que pedir (lo pide el sistema al buscar); la fila de dispositivos
+/// cercanos pide ahí el de Bluetooth, para encontrar frecus por Bluetooth.
 final class OnboardingPermissionsProvider
     extends
         $AsyncNotifierProvider<
@@ -36,9 +36,9 @@ final class OnboardingPermissionsProvider
   ///
   /// Al leer, `denied` cuenta como pendiente (Android no distingue «nunca
   /// pedido») y `permanentlyDenied` o `restricted` como negado; tras pedirlo,
-  /// lo que no queda concedido es negado. En iOS no hay permiso de ejecución
-  /// para la red local ni para audífonos Bluetooth: no se pide y cuenta como
-  /// concedido.
+  /// lo que no queda concedido es negado. En iOS la red local no tiene
+  /// permiso que pedir (lo pide el sistema al buscar); la fila de dispositivos
+  /// cercanos pide ahí el de Bluetooth, para encontrar frecus por Bluetooth.
   OnboardingPermissionsProvider._()
     : super(
         from: null,
@@ -59,15 +59,15 @@ final class OnboardingPermissionsProvider
 }
 
 String _$onboardingPermissionsHash() =>
-    r'a472a3e37c126f5bce89a019d6b5f1905ba46378';
+    r'41e44d7e131164ab5067515a75d44d393187cc14';
 
 /// Lee, pide y vuelve a leer los permisos del recorrido.
 ///
 /// Al leer, `denied` cuenta como pendiente (Android no distingue «nunca
 /// pedido») y `permanentlyDenied` o `restricted` como negado; tras pedirlo,
-/// lo que no queda concedido es negado. En iOS no hay permiso de ejecución
-/// para la red local ni para audífonos Bluetooth: no se pide y cuenta como
-/// concedido.
+/// lo que no queda concedido es negado. En iOS la red local no tiene
+/// permiso que pedir (lo pide el sistema al buscar); la fila de dispositivos
+/// cercanos pide ahí el de Bluetooth, para encontrar frecus por Bluetooth.
 
 abstract class _$OnboardingPermissions
     extends $AsyncNotifier<OnboardingPermissionsState> {
