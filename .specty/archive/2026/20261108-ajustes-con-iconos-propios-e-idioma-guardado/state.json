@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261108-ajustes-con-iconos-propios-e-idioma-guardado",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "cancelled",
   "branch": "feature/ajustes-con-iconos-propios-e-idioma-guardado",
   "baseCommit": "f7322a7a419739e74589ce8c0753ed26c92da6e7",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:d895e72a4fd15c824e5de3710507678fa13d85d285b56d6c0440a0e616b44b74",
+    "at": "2026-11-08T02:13:19.056Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -68,12 +75,5 @@
     "AC": 5,
     "T": 4,
     "R": 3
-  },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:d895e72a4fd15c824e5de3710507678fa13d85d285b56d6c0440a0e616b44b74",
-    "at": "2026-11-08T02:13:19.056Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
