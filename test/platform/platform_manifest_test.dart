@@ -179,7 +179,11 @@ void main() {
       final adaptive = _findFile('$res/mipmap-anydpi-v26/ic_launcher.xml')
           .readAsStringSync();
       expect(adaptive, contains('@drawable/ic_launcher_foreground'));
-      expect(adaptive, contains('@color/ic_launcher_background'));
+      expect(adaptive, contains('@drawable/ic_launcher_background'));
+      expect(adaptive, contains('<monochrome'));
+      final background = _findFile('$res/drawable/ic_launcher_background.xml')
+          .readAsStringSync();
+      expect(background, contains('android:type="radial"'));
       final foreground = _findFile('$res/drawable/ic_launcher_foreground.xml')
           .readAsStringSync();
       expect(foreground, contains('@color/portadora_signal'));
@@ -209,6 +213,25 @@ void main() {
         expect((width, height), (size, size), reason: density);
       }
     });
+
+    // Logo: la notificación de la frecu lleva la marca en silueta.
+    test(
+      'Logo: la notificación usa la marca en silueta como ícono pequeño',
+      () {
+        const res = 'android/app/src/main/res';
+        final service = _findFile(
+          'android/app/src/main/kotlin/com/frecu/frecu/FrecuRoomService.kt',
+        ).readAsStringSync();
+        expect(service, contains('.setSmallIcon(R.drawable.ic_stat_frecu)'));
+        final icon = _findFile('$res/drawable/ic_stat_frecu.xml')
+            .readAsStringSync();
+        // Silueta: blanca y sin relleno; Android la tiñe.
+        expect(icon, contains('android:strokeColor="#FFFFFFFF"'));
+        expect(icon, contains('android:fillColor="#00000000"'));
+        expect(icon, contains('android:width="24dp"'));
+        expect(icon, contains('android:viewportWidth="24"'));
+      },
+    );
 
     // F16: los textos de los permisos del sistema, en español e inglés.
     test('F16: Info.plist tiene sus textos en español e inglés', () {
