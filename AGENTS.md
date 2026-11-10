@@ -40,6 +40,7 @@ Este repositorio usa Specty. Antes de crear, modificar o borrar código, ejecuta
 - [docs/audio.md](docs/audio.md): `audio_session`, PTT por `track.enabled`, micrófono abierto y ruteo altavoz / Bluetooth.
 - [docs/plataforma.md](docs/plataforma.md): Permisos Android / iOS y Foreground Service persistente.
 - [docs/fases.md](docs/fases.md): Plan de fases (0 a 6), estrategia de pruebas y Definition of Done.
+- [docs/tiendas.md](docs/tiendas.md): Declaraciones para Google Play y App Store (datos, servicios en primer plano, permisos, capacidades) y lo pendiente antes de enviar.
 
 ## Convenciones
 

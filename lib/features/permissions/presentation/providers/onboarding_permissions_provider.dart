@@ -66,9 +66,9 @@ abstract class OnboardingPermissionsState with _$OnboardingPermissionsState {
 ///
 /// Al leer, `denied` cuenta como pendiente (Android no distingue «nunca
 /// pedido») y `permanentlyDenied` o `restricted` como negado; tras pedirlo,
-/// lo que no queda concedido es negado. En iOS no hay permiso de ejecución
-/// para la red local ni para audífonos Bluetooth: no se pide y cuenta como
-/// concedido.
+/// lo que no queda concedido es negado. En iOS la red local no tiene
+/// permiso que pedir (lo pide el sistema al buscar); la fila de dispositivos
+/// cercanos pide ahí el de Bluetooth, para encontrar frecus por Bluetooth.
 @riverpod
 class OnboardingPermissions extends _$OnboardingPermissions {
   @override
@@ -156,7 +156,6 @@ class OnboardingPermissions extends _$OnboardingPermissions {
     PermissionRepository repository,
     AppPermission permission,
   ) async {
-    if (_notAsked(permission)) return PermissionState.granted;
     final result = await repository.checkStatus(permission);
     return switch (result.dataOrNull) {
       null => PermissionState.pending,
@@ -166,10 +165,6 @@ class OnboardingPermissions extends _$OnboardingPermissions {
       _ => PermissionState.pending,
     };
   }
-
-  static bool _notAsked(AppPermission permission) =>
-      permission == AppPermission.bluetoothConnect &&
-      defaultTargetPlatform == TargetPlatform.iOS;
 
   static bool _isGranted(AppPermissionStatus status) => switch (status) {
     AppPermissionStatus.granted ||

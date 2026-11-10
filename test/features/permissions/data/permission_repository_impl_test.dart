@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/features/permissions/data/datasources/permission_datasource.dart';
@@ -87,6 +88,23 @@ void main() {
         final map = result.dataOrNull!;
         expect(map[AppPermission.microphone], AppPermissionStatus.granted);
         expect(map[AppPermission.bluetoothConnect], AppPermissionStatus.denied);
+      },
+    );
+
+    test(
+      'en iOS los dispositivos cercanos son el permiso de Bluetooth',
+      () async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        when(() => mockDataSource.request(Permission.bluetooth))
+            .thenAnswer((_) async => PermissionStatus.granted);
+
+        final result = await repository.request(AppPermission.bluetoothConnect);
+
+        debugDefaultTargetPlatformOverride = null;
+        expect(result.dataOrNull, AppPermissionStatus.granted);
+        verify(() => mockDataSource.request(Permission.bluetooth)).called(1);
+        verifyNever(() => mockDataSource.request(Permission.bluetoothConnect));
       },
     );
 

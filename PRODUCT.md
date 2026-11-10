@@ -24,6 +24,10 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - Vibración con los avisos de la frecu (transmitir, alguien habla, conexión perdida), que se apaga en Ajustes.
 - Mensajes rápidos predefinidos para toda la frecu y SOS con alarma.
 - Ubicación compartida voluntaria: distancia y rumbo a cada persona y aviso de quién se quedó atrás.
+- Hablar con el botón de volumen (solo Android, opcional).
+- Auricular al acercar el teléfono a la oreja y filtro de viento en el micrófono (los dos se apagan en Ajustes).
+- Unirse por Bluetooth sin estar aún en la red del anfitrión: el código entrega la red y su clave.
+- Invitar por NFC (acercar el teléfono del anfitrión Android o una etiqueta grabada) y enlaces `frecu://join`.
 
 ## Fuera de alcance del MVP
 
@@ -31,6 +35,7 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - Topología SFU o mezcla en el anfitrión.
 - Video, chat de texto libre (solo hay mensajes predefinidos), grabación, cuentas de usuario, backend en la nube.
 - Activación por voz (VOX).
+- UWB, detección de caídas, app de reloj y botones PTT Bluetooth dedicados.
 
 ## Stack
 
@@ -46,6 +51,10 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - **Descubrimiento mDNS**: `nsd`
 - **QR**: `qr_flutter` (generar), `mobile_scanner` (leer)
 - **Permisos**: `permission_handler`
+- **Bluetooth (BLE)**: `bluetooth_low_energy`
+- **NFC**: `nfc_manager`, `nfc_manager_ndef`
+- **Enlaces**: `app_links`
+- **Ubicación**: `geolocator`
 - **Foreground Service (Android)**: `flutter_foreground_task`
 - **IP local**: `network_info_plus`
 - **Identificadores**: `uuid`
