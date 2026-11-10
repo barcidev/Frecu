@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "id": "20261107-correccion-de-advertencias-de-linter-en-ruteo",
+  "kind": "quick",
+  "phase": "cancelled",
+  "branch": "feature/correccion-de-advertencias-de-linter-en-ruteo",
+  "baseCommit": "fcaba01bf2d5f14228a943d6745555acf8badef5",
+  "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:70b2c0f7437842037f3292ab31851890e59275d32c8a89c548941024985100b8",
+    "at": "2026-11-07T02:01:15.466Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "S",
+    "score": 1,
+    "adjust": 0,
+    "reasons": [
+      "1 archivo"
+    ]
+  },
+  "items": {},
+  "tasks": {
+    "T1": {
+      "status": "active",
+      "baseCommit": "bbbb6f12a64ac5a17be1838dd0c2143e7bd9a30c",
+      "attempts": 0,
+      "startedAt": "2026-11-07T02:01:41.599Z",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "T": 1
+  },
+  "lockedTests": {
+    "test/linter_config_test.dart": "sha256:de9bb0e62e45c291a3f9503e144b281f7a7d4a2c40f91ff3b13a56008bfd4431"
+  }
+}
