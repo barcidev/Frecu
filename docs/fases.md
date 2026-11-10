@@ -32,6 +32,10 @@ Criterio: la frecu sobrevive 10 minutos con pantalla apagada y se recupera tras 
 Onboarding de permisos, guía para activar el hotspot, ajustes, textos completos en es/en, estados vacíos y de error.
 Criterio: un usuario nuevo puede crear o unirse a una frecu sin ayuda.
 
+### Fase 7 — Sensores y hardware del teléfono
+Señal débil por persona, vibración, mensajes rápidos y SOS, ubicación compartida voluntaria, PTT con el botón de volumen (Android), auricular al acercar, filtro de viento, unión por Bluetooth, invitación por NFC y enlaces `frecu://`. Detalle en `docs/audio.md`, `docs/protocolo.md` y `docs/plataforma.md`.
+Criterio: cada función se apaga o no se ofrece donde la plataforma no la permite, y se comprobó en teléfonos reales: en el Samsung, volumen, proximidad, filtro de viento, anfitrión Bluetooth, enlaces y NFC de lectura; con otro teléfono, faltan el invitado Bluetooth, leer un Android que hace de etiqueta y grabar una etiqueta.
+
 ---
 
 ## Pruebas requeridas

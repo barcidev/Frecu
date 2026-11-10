@@ -221,26 +221,22 @@ void main() {
       expect(state.canContinue, isTrue);
     });
 
-    test(
-      'AC7: en iOS la red local no se pide y cuenta como concedida',
-      () async {
-        debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-        addTearDown(() => debugDefaultTargetPlatformOverride = null);
-        final permissions = _FakePermissions();
-        final container = _container(permissions);
+    test('AC7: en iOS la fila de dispositivos cercanos también se pide (es el '
+        'Bluetooth, para encontrar frecus por Bluetooth)', () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      final permissions = _FakePermissions();
+      final container = _container(permissions);
 
-        final state = await container.read(
-          onboardingPermissionsProvider.future,
-        );
-        expect(state.stateOf(_nearby), PermissionState.granted);
-        await container
-            .read(onboardingPermissionsProvider.notifier)
-            .requestMissing();
+      final state = await container.read(onboardingPermissionsProvider.future);
+      expect(state.stateOf(_nearby), PermissionState.pending);
+      await container
+          .read(onboardingPermissionsProvider.notifier)
+          .requestMissing();
 
-        expect(permissions.checked, isNot(contains(_nearby)));
-        expect(permissions.requested, [_microphone, _notification]);
-      },
-    );
+      expect(permissions.checked, contains(_nearby));
+      expect(permissions.requested, [_microphone, _nearby, _notification]);
+    });
 
     test('AC8: pide uno por uno solo los que faltan', () async {
       final permissions = _FakePermissions(

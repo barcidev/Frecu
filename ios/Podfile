@@ -39,10 +39,12 @@ end
 # permission_handler compila solo los permisos que se activan aquí: sin su
 # macro, el permiso queda en `UnknownPermissionStrategy` y sale negado para
 # siempre sin mostrar el diálogo del sistema. Frecu pide el micrófono, las
-# notificaciones y la cámara (escáner QR); cada uno tiene su texto en
-# Info.plist. La red local y los audífonos Bluetooth no se piden en iOS.
+# notificaciones, la cámara (escáner QR), la ubicación al compartirla y el
+# Bluetooth (frecus cercanas por Bluetooth); cada uno tiene su texto en
+# Info.plist. La red local no tiene permiso que pedir en iOS.
 PERMISSION_HANDLER_MACROS = [
   'PERMISSION_MICROPHONE=1',
+  'PERMISSION_BLUETOOTH=1',
   'PERMISSION_NOTIFICATIONS=1',
   'PERMISSION_CAMERA=1',
   'PERMISSION_LOCATION_WHENINUSE=1',

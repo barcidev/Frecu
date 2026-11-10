@@ -126,9 +126,9 @@ void main() {
           );
         }
       }
-      // permission_handler no pide Bluetooth en iOS: lo pide CoreBluetooth
-      // al buscar o anunciar frecus (invitar por Bluetooth), con su texto.
-      expect(podfile, isNot(contains('PERMISSION_BLUETOOTH=1')));
+      // La bienvenida pide el Bluetooth en iOS (frecus cercanas por
+      // Bluetooth): su macro y su texto.
+      expect(podfile, contains("'PERMISSION_BLUETOOTH=1'"));
       expect(plist, contains('<key>NSBluetoothAlwaysUsageDescription</key>'));
     });
 

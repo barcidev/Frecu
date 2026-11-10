@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/permissions/data/datasources/permission_datasource.dart';
@@ -74,7 +75,12 @@ class PermissionRepositoryImpl implements PermissionRepository {
       AppPermission.microphone => Permission.microphone,
       AppPermission.camera => Permission.camera,
       AppPermission.notification => Permission.notification,
-      AppPermission.bluetoothConnect => Permission.bluetoothConnect,
+      // En iOS no hay «dispositivos cercanos»: es el permiso de Bluetooth
+      // (buscar frecus por Bluetooth y audífonos).
+      AppPermission.bluetoothConnect =>
+        defaultTargetPlatform == TargetPlatform.iOS
+            ? Permission.bluetooth
+            : Permission.bluetoothConnect,
       AppPermission.location => Permission.locationWhenInUse,
     };
   }
