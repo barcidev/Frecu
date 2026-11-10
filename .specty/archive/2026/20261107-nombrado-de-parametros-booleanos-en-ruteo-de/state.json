@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "20261107-nombrado-de-parametros-booleanos-en-ruteo-de",
+  "kind": "standard",
+  "phase": "cancelled",
+  "branch": "feature/nombrado-de-parametros-booleanos-en-ruteo-de",
+  "baseCommit": "fcaba01bf2d5f14228a943d6745555acf8badef5",
+  "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:932f888f4f876c2264b848f1192a02f7af32c3179e0ef756bd8e8b3360bd7125",
+    "at": "2026-11-07T02:11:12.388Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 10,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:65af609bf841faa832d818ab3f97a8db49a5d27dec4ddf0054a3dcc8d3738bfb",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "active",
+      "baseCommit": "cbe940accf89b25c9ed229720c3a77abe3c6e180",
+      "attempts": 1,
+      "startedAt": "2026-11-07T02:11:12.706Z",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": {
+      "request": "Unificar T1 y T2 en una sola tarea atómica para evitar romper la compilación entre capas",
+      "at": "2026-11-07T02:12:35.599Z"
+    }
+  },
+  "maxIds": {
+    "A": 1,
+    "AC": 1,
+    "T": 2
+  }
+}
