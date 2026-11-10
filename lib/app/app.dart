@@ -58,6 +58,7 @@ class _FrecuAppState extends ConsumerState<FrecuApp> {
     return MaterialApp.router(
       title: t.app.title,
       theme: AppTheme.light,
+      debugShowCheckedModeBanner: false,
       darkTheme: AppTheme.dark,
       themeMode: _themeModeOf(themePreference),
       routerConfig: _appRouter.config(
