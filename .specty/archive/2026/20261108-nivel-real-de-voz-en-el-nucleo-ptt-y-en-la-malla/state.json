@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261108-nivel-real-de-voz-en-el-nucleo-ptt-y-en-la-malla",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "cancelled",
   "branch": "feature/nivel-real-de-voz-en-el-nucleo-ptt-y-en-la-malla",
   "baseCommit": "5ca1a47c0544c3b690a9cc329381509f6342e7f5",
   "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:0903c747e67ea3509e3b3dd4666663e93812520f0c33876cd1e50d3aa8930f5d",
+    "at": "2026-11-08T02:06:24.695Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -59,12 +66,5 @@
     "AC": 4,
     "T": 4,
     "R": 3
-  },
-  "approved": {
-    "revision": 2,
-    "hash": "sha256:0903c747e67ea3509e3b3dd4666663e93812520f0c33876cd1e50d3aa8930f5d",
-    "at": "2026-11-08T02:06:24.695Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
