@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261108-iconos-propios-en-las-hojas-de-union-por-codigo",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "cancelled",
   "branch": "feature/iconos-propios-en-las-hojas-de-union-por-codigo",
   "baseCommit": "f7322a7a419739e74589ce8c0753ed26c92da6e7",
   "revision": 1,
@@ -38,10 +38,10 @@
   "tasks": {
     "T1": {
       "status": "active",
+      "baseCommit": "3cd396a83de83000b88789ba1edb9180dbb46920",
       "attempts": 0,
-      "scopeExtra": [],
       "startedAt": "2026-11-08T02:04:51.966Z",
-      "baseCommit": "3cd396a83de83000b88789ba1edb9180dbb46920"
+      "scopeExtra": []
     }
   },
   "pending": {
