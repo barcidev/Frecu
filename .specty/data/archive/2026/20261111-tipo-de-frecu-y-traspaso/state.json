@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-tipo-de-frecu-y-traspaso",
   "kind": "epic",
-  "phase": "implementing",
+  "phase": "done",
   "branch": "feature/tipo-de-frecu-y-traspaso",
   "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
-  "revision": 4,
+  "revision": 5,
   "approved": {
     "revision": 4,
     "hash": "sha256:8f6397e413ffc84f2eb6e68d2470920439ca8e6c5b8077ff73baa4aec75410f6",
@@ -53,5 +53,6 @@
     "AC": 12,
     "C": 11,
     "R": 4
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T16:29:54.362Z"
 }

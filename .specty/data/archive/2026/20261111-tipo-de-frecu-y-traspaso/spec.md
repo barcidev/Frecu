@@ -95,3 +95,36 @@ Al crear una frecu, el anfitrión elige si es **Local** (todos en la misma Wi-Fi
 - R2: El sucesor no tiene permiso de red local en iOS, o el puerto 47800 está ocupado — se salta al siguiente de la sucesión.
 - R3: Es la épica más grande de la app y toca `room_repository_impl.dart` (626 líneas) — se extrae la lógica de traspaso a una pieza propia en `data` en C3, en lugar de hacer crecer el repositorio.
 - R4: Las pruebas con varios teléfonos son difíciles en CI — se prueba con datasources falsos en Dart y con `vitest` en el Worker. Lo real queda en AC12 (manual).
+
+## Cierre
+
+### Resumen
+
+Al crear una frecu se elige Local o Por internet, sin mezcla. Con la red creada por el anfitrión, al salir solo se puede cerrar, y si se cae la frecu se cierra tras los reintentos. En una Wi-Fi compartida o por internet, el anfitrión pasa la frecu al salir. Si se cae, la toma sola el siguiente de la sucesión, tras una espera visible de unos 4 s. El anterior que vuelve entra como invitado. La voz entre invitados no se corta durante el traspaso. Once cortes fusionados en develop, con 1249 pruebas en verde y las pruebas del Worker con vitest.
+
+### Desviaciones
+
+- C1 salió XL: el paso «¿Cómo se une tu grupo?» pasó a un corte nuevo, C8 (revisión 2).
+- C5 salió XL: se dividió en C5 (datos de la caída), C9 (la espera en pantalla) y C10 (regreso y dos anfitriones) (revisión 3).
+- C6 dejó sin cubrir el regreso por internet: se añadió C11 (revisión 4).
+- `welcome` no cambió: dos pruebas aprobadas dependen de su firma. Por eso el estado va en un mensaje nuevo, `room_state`, y el dato de la red, en el participante.
+- C3 cambió varios `switch` sobre `SignalingMessage` a `default`, para no pasar el límite de complejidad.
+- La hoja de salir dice «Llevas la frecu y hay N personas más.», sin suponer género.
+- AC10 y AC12 (teléfonos reales) se aceptaron sin probar, por decisión del usuario. El guion quedó en P185.
+
+### Decisiones
+
+- «Local / Por internet» en lugar de «privada / pública». La palabra «router» no aparece en la app.
+- El anfitrión elige el sucesor al salir. En una caída, decide el orden de llegada.
+- `RoomRepository` no cambió. El traspaso se expone con una interfaz aparte, `RoomHandover`, para no romper los dobles de las pruebas aprobadas.
+- El Worker no se desplegó: lo decide el usuario (P179).
+
+### Pendientes
+
+- P179: desplegar el Worker (`cd cloud && npx wrangler deploy`).
+- P185: probar en teléfonos reales con el guion.
+- P187: el sucesor que recibe un 409 al abrir su relé da la frecu por perdida.
+- P158: una reconexión normal vuelve al final de la sucesión.
+- P177 y P161: anuncios mDNS del que cede y del que recibe la frecu.
+- P186: la notificación oculta el micrófono durante la espera del anfitrión.
+- P162: dividir `room_repository_impl.dart` (961 líneas) y `room_page.dart`, y devolver los `switch` exhaustivos sobre `SignalingMessage`.
