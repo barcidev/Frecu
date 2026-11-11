@@ -66,7 +66,7 @@ Al crear una frecu, el anfitrión elige primero cómo se une su grupo: **Local**
   - files: lib/features/lobby/presentation/widgets/new_room_step.dart, lib/features/lobby/presentation/widgets/new_room_hero.dart, lib/features/lobby/presentation/widgets/create_room_layout.dart, lib/features/lobby/presentation/pages/create_room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart
   - ac: AC1
   - verify: flutter test test/features/lobby/presentation/new_room_test.dart
-- [ ] T2: Paso «¿Cómo se une tu grupo?» antes de la red
+- [x] T2: Paso «¿Cómo se une tu grupo?» antes de la red
   - files: lib/features/lobby/presentation/widgets/room_reach_step.dart, lib/features/lobby/presentation/widgets/room_reach_step.g.dart, lib/features/lobby/presentation/pages/create_room_page.dart, lib/features/lobby/presentation/widgets/local_network_step.dart, lib/features/lobby/presentation/widgets/hotspot_guide_step.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/new_room_test.dart, test/features/lobby/presentation/hotspot_guide_test.dart, test/features/lobby/presentation/local_network_step_test.dart
   - ac: AC1
   - verify: flutter test test/features/lobby/presentation/new_room_test.dart test/features/lobby/presentation/hotspot_guide_test.dart test/features/lobby/presentation/local_network_step_test.dart

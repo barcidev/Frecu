@@ -1,5 +1,5 @@
-// AC1: CUANDO el usuario toca Crear frecu en el inicio ENTONCES se abre la guía en Portadora (`FrScaffold`) con Atrás, «Paso 1 de 2» y «Prepara la red», la ilustración del teléfono emisor, «Activa tu punto de acceso», «Tu teléfono será la antena del grupo.», el selector Android | iPhone y los tres pasos de la plataforma elegida numerados 01 a 03 con su inicio en negrita, y abajo «Ya está activo» y «Ya estamos en la misma Wi-Fi»; el selector empieza en Android en todos los teléfonos (se prioriza como anfitrión), elegir la otra plataforma cambia los pasos y los nuevos entran con un fundido; bajo los pasos de la plataforma del teléfono, «Abrir ajustes de zona Wi-Fi» (en iPhone, «Abrir Ajustes») abre los ajustes de su punto de acceso; todos los textos salen de slang en español y en inglés.
-// AC2: CUANDO el usuario toca «Ya está activo» o «Ya estamos en la misma Wi-Fi» ENTONCES pasa a la nueva frecu con «Paso 2 de 2» y «Nueva frecu»; Atrás en la nueva frecu vuelve a la guía y, al volver a entrar, conserva el nombre y el código; Atrás en la guía vuelve al inicio.
+// AC1: CUANDO el usuario toca Crear frecu en el inicio y sigue con Local ENTONCES se abre la guía en Portadora (`FrScaffold`) con Atrás, «Paso 2 de 3» y «Prepara la red», la ilustración del teléfono emisor, «Activa tu punto de acceso», «Tu teléfono será la antena del grupo.», el selector Android | iPhone y los tres pasos de la plataforma elegida numerados 01 a 03 con su inicio en negrita, y abajo «Ya está activo» y «Ya estamos en la misma Wi-Fi»; el selector empieza en Android en todos los teléfonos (se prioriza como anfitrión), elegir la otra plataforma cambia los pasos y los nuevos entran con un fundido; bajo los pasos de la plataforma del teléfono, «Abrir ajustes de zona Wi-Fi» (en iPhone, «Abrir Ajustes») abre los ajustes de su punto de acceso; todos los textos salen de slang en español y en inglés.
+// AC2: CUANDO el usuario toca «Ya está activo» o «Ya estamos en la misma Wi-Fi» ENTONCES pasa a la nueva frecu con «Paso 3 de 3» y «Nueva frecu»; Atrás en la nueva frecu vuelve a la guía y, al volver a entrar, conserva el nombre y el código; Atrás en la guía vuelve a «¿Cómo se une tu grupo?».
 // AC6: CUANDO el sistema pide reducir el movimiento ENTONCES la ilustración del punto de acceso queda quieta y no pide cuadros; sin movimiento reducido sus anillos se mueven en cada cuadro.
 import 'dart:async';
 
@@ -187,7 +187,7 @@ void main() {
   });
 
   /// Abre la app en el inicio, en un teléfono de 390 × 844 y con movimiento
-  /// reducido, y toca Crear frecu.
+  /// reducido, toca Crear frecu y sigue con Local, marcada.
   Future<void> pumpGuide(WidgetTester tester) async {
     tester.view
       ..physicalSize = const Size(1170, 2532)
@@ -216,6 +216,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(t.lobby.createRoom));
     await tester.pumpAndSettle();
+    await tester.tap(find.text(t.lobby.newRoom.reach.kContinue));
+    await tester.pumpAndSettle();
   }
 
   group('Guía del punto de acceso', () {
@@ -233,7 +235,7 @@ void main() {
           findsOneWidget,
         );
         expect(_iconButton('Atrás'), findsOneWidget);
-        expect(_label('Paso 1 de 2'), findsOneWidget);
+        expect(_label('Paso 2 de 3'), findsOneWidget);
         expect(find.text('Prepara la red'), findsOneWidget);
         expect(find.byType(HotspotIllustration), findsOneWidget);
         expect(find.text('Activa tu punto de acceso'), findsOneWidget);
@@ -362,7 +364,7 @@ void main() {
       await pumpGuide(tester);
 
       expect(_iconButton('Back'), findsOneWidget);
-      expect(_label('Step 1 of 2'), findsOneWidget);
+      expect(_label('Step 2 of 3'), findsOneWidget);
       expect(find.text('Set up the network'), findsOneWidget);
       expect(find.text('Turn on your hotspot'), findsOneWidget);
       expect(
@@ -398,7 +400,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(NewRoomStep), findsOneWidget);
-      expect(_label('Paso 2 de 2'), findsOneWidget);
+      expect(_label('Paso 3 de 3'), findsOneWidget);
       expect(find.text('Nueva frecu'), findsOneWidget);
       expect(find.byType(HotspotGuideStep), findsNothing);
     });
@@ -411,7 +413,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(NewRoomStep), findsOneWidget);
-      expect(_label('Paso 2 de 2'), findsOneWidget);
+      expect(_label('Paso 3 de 3'), findsOneWidget);
     });
 
     testWidgets('AC2: Atrás en la nueva frecu vuelve a la guía y al volver '
@@ -455,8 +457,15 @@ void main() {
       expect(find.byType(HotspotGuideStep), findsOneWidget);
     });
 
-    testWidgets('AC2: Atrás en la guía vuelve al inicio', (tester) async {
+    testWidgets('AC1: Atrás en la guía vuelve a «¿Cómo se une tu grupo?» y, '
+        'desde ahí, al inicio', (tester) async {
       await pumpGuide(tester);
+
+      await tester.tap(_iconButton('Atrás'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(HotspotGuideStep), findsNothing);
+      expect(find.text('¿Cómo se une tu grupo?'), findsOneWidget);
 
       await tester.tap(_iconButton('Atrás'));
       await tester.pumpAndSettle();

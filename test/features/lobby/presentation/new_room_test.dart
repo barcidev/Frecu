@@ -27,6 +27,7 @@ import 'package:frecu/features/lobby/presentation/widgets/fifths_clock.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_hero.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
+import 'package:frecu/features/lobby/presentation/widgets/room_reach_step.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
@@ -210,13 +211,15 @@ void main() {
   });
 
   /// Abre la app en el inicio (390 × 844, movimiento reducido), con el
-  /// nombre [savedName] guardado, y va a la nueva frecu por la guía.
+  /// nombre [savedName] guardado, y va a la nueva frecu [reach]: Local por
+  /// la guía, Por internet directo (con internet).
   Future<ProviderContainer> pumpNewRoom(
     WidgetTester tester, {
     String? savedName = 'Ana',
     List<NearbyRoom> nearbyRooms = const [],
     CloudConfig cloud = CloudConfig.disabled,
     String? savedHotspot,
+    RoomReach reach = RoomReach.local,
   }) async {
     tester.view
       ..physicalSize = const Size(1170, 2532)
@@ -241,6 +244,7 @@ void main() {
         newRoomClockProvider.overrideWithValue(() => now),
         accessCodeGeneratorProvider.overrideWithValue(() => codes.removeAt(0)),
         cloudConfigProvider.overrideWithValue(cloud),
+        internetCheckProvider.overrideWithValue(() async => true),
       ],
     );
     addTearDown(container.dispose);
@@ -260,8 +264,16 @@ void main() {
     }
     await tester.tap(find.text(t.lobby.createRoom));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+    if (reach == RoomReach.internet) {
+      await tester.tap(find.text(t.lobby.newRoom.reach.internet));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(find.text(t.lobby.newRoom.reach.kContinue));
     await tester.pumpAndSettle();
+    if (reach == RoomReach.local) {
+      await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+      await tester.pumpAndSettle();
+    }
     return container;
   }
 
@@ -550,6 +562,58 @@ void main() {
 
       await openRoom(tester);
       verifyCreated(reach: RoomReach.local);
+      await _unmountRoomPage(tester);
+    });
+
+    testWidgets('AC1: una frecu por internet es «Paso 2 de 2», lleva «Por '
+        'internet» bajo la hora, no lleva red y no se anuncia en la red '
+        'local', (tester) async {
+      // Zona Wi-Fi guardada y encendida: una frecu local la llevaría.
+      when(() => network.getNetworkState()).thenAnswer(
+        (_) async => const Result.success(
+          NetworkState.connected(
+            ipAddress: '192.168.43.1',
+            interfaceName: 'ap0',
+            isHotspot: true,
+          ),
+        ),
+      );
+      final container = await pumpNewRoom(
+        tester,
+        cloud: cloud,
+        reach: RoomReach.internet,
+        savedHotspot: '{"ssid":"Moto de Ana","passphrase":"clave-1234"}',
+      );
+
+      expect(_label('Paso 2 de 2'), findsOneWidget);
+      expect(find.text('Nueva frecu'), findsOneWidget);
+      expect(find.byType(FrToggle), findsNothing);
+      final tag = find.byKey(const Key('new_room_reach_tag'));
+      expect(
+        find.descendant(of: tag, matching: _label('Por internet')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: tag,
+          matching: find.byWidgetPredicate(
+            (widget) => widget is FrIcon && widget.icon == FrIcons.globe,
+          ),
+        ),
+        findsOneWidget,
+      );
+
+      await openRoom(tester);
+      verifyCreated(reach: RoomReach.internet);
+      expect(container.read(roomNotifierProvider)?.wifi, isNull);
+      verifyNever(
+        () => discovery.publishRoom(
+          roomId: any(named: 'roomId'),
+          name: any(named: 'name'),
+          port: any(named: 'port'),
+          note: any(named: 'note'),
+        ),
+      );
       await _unmountRoomPage(tester);
     });
   });
