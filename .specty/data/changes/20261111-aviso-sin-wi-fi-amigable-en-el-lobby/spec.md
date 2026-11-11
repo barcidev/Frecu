@@ -50,7 +50,7 @@ Con el modo internet, estar sin Wi-Fi ya no es un error: el lobby deja de mostra
   - files: lib/features/lobby/presentation/widgets/lobby_sections.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC1, AC2, AC3
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart
-- [ ] T2: La prueba de íconos dibujados del inicio sin red sigue al estado vacío tranquilo
+- [x] T2: La prueba de íconos dibujados del inicio sin red sigue al estado vacío tranquilo
   - files: test/features/lobby/presentation/lobby_drawn_icons_test.dart
   - ac: AC2
   - verify: flutter test test/features/lobby/presentation/lobby_drawn_icons_test.dart

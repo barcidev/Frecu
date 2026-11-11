@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-aviso-sin-wi-fi-amigable-en-el-lobby",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "bugfix/aviso-sin-wi-fi-amigable-en-el-lobby",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
   "revision": 3,
@@ -45,6 +45,15 @@
       "doneAt": "2026-11-11T05:31:22.600Z",
       "summary": "Píldora «Sin Wi-Fi» en tono off y, sin red ni frecus, estado vacío tranquilo (título, mensaje en tx2 y botón fantasma pequeño «Abrir ajustes de Wi-Fi») en lugar del FrBanner rojo; textos es/en en slang; pruebas AC2/AC6 del lobby actualizadas",
       "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "71e7712239700a12a3a081d67408178221bec809",
+      "startedAt": "2026-11-11T05:35:18.699Z",
+      "doneAt": "2026-11-11T05:39:39.326Z",
+      "summary": "La prueba AC3 «Inicio sin red» de lobby_drawn_icons_test busca el botón «Abrir ajustes de Wi-Fi» del estado vacío (FrIcons.wifi, sin Icon de Material) y comprueba que no hay FrBanner"
     }
   },
   "pending": {

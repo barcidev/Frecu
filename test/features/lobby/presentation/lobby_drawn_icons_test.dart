@@ -1,6 +1,6 @@
 // AC1: CUANDO se abre la hoja de conexión por IP ENTONCES el campo «IP del anfitrión» dibuja `FrIcons.nodes` y el de «Código de acceso» dibuja `FrIcons.lock`, con `FrIcon` y sin ningún `Icon` de Material en la hoja.
 // AC2: CUANDO una unión por código o por IP falla porque la frecu está llena ENTONCES el aviso ámbar dibuja `FrIcons.users`; CUANDO falla por otro motivo que no es el código (por ejemplo, el anfitrión no responde) ENTONCES el aviso de alerta dibuja `FrIcons.alert`; en los dos casos con `FrIcon` y sin ningún `Icon` de Material en la hoja.
-// AC3: CUANDO el inicio no tiene red local ni frecus cercanas ENTONCES el aviso de alerta «No estás en ninguna red Wi-Fi.» dibuja `FrIcons.wifi` con `FrIcon`, sin ningún `Icon` de Material en el aviso.
+// AC3: CUANDO el inicio no tiene red local ni frecus cercanas ENTONCES el botón «Abrir ajustes de Wi-Fi» del estado vacío «Sin Wi-Fi por ahora» dibuja `FrIcons.wifi` con `FrIcon`, sin ningún `Icon` de Material, y no hay aviso de alerta.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -258,18 +258,25 @@ void main() {
 
   group('Inicio sin red', () {
     testWidgets(
-      'AC3: el aviso «No estás en ninguna red Wi-Fi.» dibuja FrIcons.wifi, '
-      'sin íconos de Material',
+      'AC3: el botón «Abrir ajustes de Wi-Fi» del estado vacío dibuja '
+      'FrIcons.wifi, sin íconos de Material ni aviso de alerta',
       (tester) async {
         answerNetwork(const NetworkState.disconnected());
         await pumpLobby(tester);
         nearby.add([]);
         await tester.pumpAndSettle();
 
-        expect(_banner(tester).tone, FrBannerTone.alert);
-        expect(_banner(tester).title, 'No estás en ninguna red Wi-Fi.');
-        expect(_inBanner(_drawn(FrIcons.wifi)), findsOneWidget);
-        expect(_inBanner(find.byType(Icon)), findsNothing);
+        final button = find.widgetWithText(FrButton, 'Abrir ajustes de Wi-Fi');
+        expect(find.byType(FrBanner), findsNothing);
+        expect(find.text('Sin Wi-Fi por ahora'), findsOneWidget);
+        expect(
+          find.descendant(of: button, matching: _drawn(FrIcons.wifi)),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(of: button, matching: find.byType(Icon)),
+          findsNothing,
+        );
       },
     );
   });
