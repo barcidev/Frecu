@@ -48,3 +48,23 @@ Por internet, cuando a quien le toca tomar la frecu por caída abre su relé y l
 ## Riesgos
 
 - R1: `room_repository_impl.dart` ya es grande (P162) — el cambio reutiliza `_outranked`, `_afterWelcome` y la reconexión normal, y suma un método corto.
+
+## Cierre
+
+### Resumen
+
+Por internet, cuando a quien le toca tomar la frecu por caída la nube le rechaza el relé con 409, ya no da la frecu por perdida. En el `catch` de `_takeOver`, `_joinAsGuestIfRefused` reconoce el 409 con `CloudRelayDataSource.isOutranked`. Entonces detiene el relé y el servidor que acababa de abrir, deja de ser anfitrión y vuelve por `guestSocket(internetId)` con su id. Al llegar el `welcome` emite `HostChange(you: false, reason: outranked)` con quien lleva la frecu. Los demás fallos (por ejemplo un 503) siguen en `_giveUp`. Pruebas: AC1 y AC2 con el punto de encuentro falso. La verificación de la tarea y `specty check` pasan.
+
+### Desviaciones
+
+- Antes de escribir código se trajo develop (34aabb0): `room_repository_impl.dart` ya estaba repartido en archivos `part`, así que el cambio quedó en `room_repository_takeover.dart` (S1) y no en `room_repository_impl.dart`. Los archivos que llegaron con esa fusión se sumaron al alcance (S2) sin editarlos.
+- El aviso se emite en un método aparte (`_joinAsGuestIfRefused`) para que `_takeOver` no pase de 50 líneas.
+
+### Decisiones
+
+- Reutiliza `_outranked` y `_afterWelcome` de C10/C11 para el aviso, y la reconexión normal (`_following` anula el plan de caída) para volver como invitado.
+- En la prueba, el «otro con turno mayor» es Ana con un turno vigente subido en la nube falsa, y Beto cree que Ana cayó porque la nube le corta solo su socket de invitado.
+
+### Pendientes
+
+- Probar en teléfonos reales que el sucesor rechazado por internet entra como invitado.

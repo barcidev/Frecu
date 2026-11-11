@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-sucesor-rechazado-por-internet-entra-como",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "bugfix/sucesor-rechazado-por-internet-entra-como",
   "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:23ae1fcb18488e22ef3059fe4da4df6511f172867ff1cad8c95335b391a2de0c",
@@ -38,6 +38,11 @@
   "tasks": {
     "T1": {
       "status": "done",
+      "baseCommit": "0a52ed5624627f1ef8894f0acc9c93b4aee6c639",
+      "attempts": 1,
+      "startedAt": "2026-11-11T16:54:20.173Z",
+      "doneAt": "2026-11-11T16:57:38.979Z",
+      "summary": "Un 409 al abrir el relé al tomar la frecu por internet ya no la da por perdida: el sucesor cierra su servidor y vuelve como invitado por guestSocket con su id y aviso outranked; los demás fallos siguen igual.",
       "scopeExtra": [
         "lib/features/room/data/repositories/room_repository_takeover.dart",
         "lib/features/lobby/presentation/pages/lobby_page.dart",
@@ -52,12 +57,7 @@
         "lib/features/room/presentation/pages/room_notification.dart",
         "test/features/lobby/presentation/lobby_page_test.dart",
         "test/features/room/presentation/room_notification_test.dart"
-      ],
-      "attempts": 1,
-      "baseCommit": "0a52ed5624627f1ef8894f0acc9c93b4aee6c639",
-      "startedAt": "2026-11-11T16:54:20.173Z",
-      "doneAt": "2026-11-11T16:57:38.979Z",
-      "summary": "Un 409 al abrir el relé al tomar la frecu por internet ya no la da por perdida: el sucesor cierra su servidor y vuelve como invitado por guestSocket con su id y aviso outranked; los demás fallos siguen igual."
+      ]
     }
   },
   "pending": {
@@ -70,5 +70,6 @@
     "T": 1,
     "R": 1,
     "S": 2
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T16:57:53.961Z"
 }
