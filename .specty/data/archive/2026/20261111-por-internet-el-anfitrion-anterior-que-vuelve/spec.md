@@ -62,3 +62,25 @@ Por internet, cuando el anfitrión anterior recupera la red después de que otra
 - R1: Un 4000 que no viene de otro anfitrión haría ceder al anfitrión legítimo — solo cuenta en el socket vigente, y el mismo teléfono que reconecta recibe el 4000 en el socket viejo, que se ignora. Ceder deja la frecu en manos de quien la lleva, sin cerrarla.
 - R2: Cambiar el canal por defecto del relé — `IOWebSocketChannel` usa el mismo `WebSocket.connect` de dart:io que `WebSocketChannel.connect` en Android e iOS; las pruebas de la frecu por internet lo cubren.
 - R3: `room_repository_impl.dart` ya es grande (P162) — la detección vive en el relé y el repositorio reutiliza `_yieldTo` de C10 en lugar de sumar otro camino.
+
+## Cierre
+
+### Resumen
+
+Por internet, el anfitrión anterior que vuelve con un turno menor ya no reintenta su relé sin fin. El relé reconoce el 409 de la reconexión y el cierre 4000 de su socket vigente: deja de reconectar y avisa una vez con `onOutranked`. Las demás caídas (sin red, 403, 404, 503, otros códigos) siguen reconectando como antes. Su canal por defecto pasa a `IOWebSocketChannel.connect`, que conserva el código HTTP del rechazo. Con ese aviso, el repositorio cede como en C10. `_yieldTo` se generalizó con `_yieldUri` y `_release`: por internet detiene el relé y el servidor, y vuelve por `guestSocket(internetId)` con su id en `join.peerId`. Al llegar el `welcome`, emite `HostChange(outranked)` con quien lleva la frecu, que muestra el aviso «Volviste como invitado · «nombre» lleva la frecu» de C10. Pruebas: 10 del relé (409, 4000 y otras caídas) y una de punta a punta con un punto de encuentro falso. `flutter analyze` no da problemas y `flutter test` pasa entero (1249).
+
+### Desviaciones
+
+- AC1 dice «con su mismo id». El anterior lo envía en `join.peerId`, pero quien tomó la frecu por caída no le guarda el lugar del anfitrión perdido, así que entra con un id nuevo (supuesto A4, como en C10). La prueba comprueba que quien la lleva lo ve como invitado con el id que recibió.
+- No hizo falta tocar el Worker: el 409 basta y el cliente no necesita el turno vigente.
+
+### Decisiones
+
+- Un cierre 4000 en el socket vigente también cuenta como que otro tomó la sala. Así, dos anfitriones con el mismo turno no se quitan la sala una y otra vez. El 4000 que recibe el socket viejo del mismo teléfono al reconectar se ignora, porque ese socket ya no es el vigente.
+- Por internet, quien cede no manda `host_handover` a sus invitados: la nube ya los cerró y vuelven solos a quien la lleva.
+
+### Pendientes
+
+- Probar en teléfonos reales el regreso del anfitrión anterior por internet.
+- El sucesor que recibe un 409 al abrir su relé (otro la tomó antes) sigue dando la frecu por perdida, en lugar de entrar como invitado.
+- P162 sigue abierto: `room_repository_impl.dart` va en 961 líneas de código.

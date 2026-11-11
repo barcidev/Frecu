@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-por-internet-el-anfitrion-anterior-que-vuelve",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/por-internet-el-anfitrion-anterior-que-vuelve",
   "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:4a4c0aac5c955f8e5b5758d4499cfa920c558822048e38d4be14cbd935641e90",
@@ -51,12 +51,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "46624e186d4589599787a7d8d4c6899b127f17e2",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:59:52.271Z",
       "doneAt": "2026-11-11T16:02:18.481Z",
-      "summary": "Al aviso onOutranked del relé, el repositorio cede como en C10 (_yieldTo generalizado): detiene relé y servidor, vuelve por guestSocket con su id y emite HostChange(outranked). Prueba de punta a punta con 409."
+      "summary": "Al aviso onOutranked del relé, el repositorio cede como en C10 (_yieldTo generalizado): detiene relé y servidor, vuelve por guestSocket con su id y emite HostChange(outranked). Prueba de punta a punta con 409.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -68,5 +68,6 @@
     "AC": 3,
     "T": 2,
     "R": 3
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T16:03:25.221Z"
 }
