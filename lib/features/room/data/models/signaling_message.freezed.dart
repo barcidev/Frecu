@@ -281,10 +281,10 @@ return roomClosed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId,  String type)?  join,TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult Function( String reason,  String type)?  rejected,TResult Function( Participant participant,  String type)?  peerJoined,TResult Function( String peerId,  String type)?  peerLeft,TResult Function( String from,  String to,  String sdp,  String type)?  offer,TResult Function( String from,  String to,  String sdp,  String type)?  answer,TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult Function( String peerId,  String kind,  String type)?  quickMessage,TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult Function( int timestamp,  String type)?  ping,TResult Function( int timestamp,  String type)?  pong,TResult Function( RoomSuccession state,  String type)?  roomState,TResult Function( String to,  int term,  String type)?  hostHandover,TResult Function( String host,  int term,  String reason,  String type)?  hostChanged,TResult Function( String reason,  String type)?  roomClosed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId, @JsonKey(includeIfNull: false)  int? term,  String type)?  join,TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult Function( String reason,  String type)?  rejected,TResult Function( Participant participant,  String type)?  peerJoined,TResult Function( String peerId,  String type)?  peerLeft,TResult Function( String from,  String to,  String sdp,  String type)?  offer,TResult Function( String from,  String to,  String sdp,  String type)?  answer,TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult Function( String peerId,  String kind,  String type)?  quickMessage,TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult Function( int timestamp,  String type)?  ping,TResult Function( int timestamp,  String type)?  pong,TResult Function( RoomSuccession state,  String type)?  roomState,TResult Function( String to,  int term,  String type)?  hostHandover,TResult Function( String host,  int term,  String reason,  String type)?  hostChanged,TResult Function( String reason,  String type)?  roomClosed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
-return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.type);case SignalingWelcomeMessage() when welcome != null:
+return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.term,_that.type);case SignalingWelcomeMessage() when welcome != null:
 return welcome(_that.peerId,_that.participants,_that.note,_that.roomName,_that.type);case SignalingRejectedMessage() when rejected != null:
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage() when peerJoined != null:
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage() when peerLeft != null:
@@ -318,10 +318,10 @@ return roomClosed(_that.reason,_that.type);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId,  String type)  join,required TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)  welcome,required TResult Function( String reason,  String type)  rejected,required TResult Function( Participant participant,  String type)  peerJoined,required TResult Function( String peerId,  String type)  peerLeft,required TResult Function( String from,  String to,  String sdp,  String type)  offer,required TResult Function( String from,  String to,  String sdp,  String type)  answer,required TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)  ice,required TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)  talkState,required TResult Function( String peerId,  String kind,  String type)  quickMessage,required TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)  position,required TResult Function( int timestamp,  String type)  ping,required TResult Function( int timestamp,  String type)  pong,required TResult Function( RoomSuccession state,  String type)  roomState,required TResult Function( String to,  int term,  String type)  hostHandover,required TResult Function( String host,  int term,  String reason,  String type)  hostChanged,required TResult Function( String reason,  String type)  roomClosed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId, @JsonKey(includeIfNull: false)  int? term,  String type)  join,required TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)  welcome,required TResult Function( String reason,  String type)  rejected,required TResult Function( Participant participant,  String type)  peerJoined,required TResult Function( String peerId,  String type)  peerLeft,required TResult Function( String from,  String to,  String sdp,  String type)  offer,required TResult Function( String from,  String to,  String sdp,  String type)  answer,required TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)  ice,required TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)  talkState,required TResult Function( String peerId,  String kind,  String type)  quickMessage,required TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)  position,required TResult Function( int timestamp,  String type)  ping,required TResult Function( int timestamp,  String type)  pong,required TResult Function( RoomSuccession state,  String type)  roomState,required TResult Function( String to,  int term,  String type)  hostHandover,required TResult Function( String host,  int term,  String reason,  String type)  hostChanged,required TResult Function( String reason,  String type)  roomClosed,}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage():
-return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.type);case SignalingWelcomeMessage():
+return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.term,_that.type);case SignalingWelcomeMessage():
 return welcome(_that.peerId,_that.participants,_that.note,_that.roomName,_that.type);case SignalingRejectedMessage():
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage():
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage():
@@ -351,10 +351,10 @@ return roomClosed(_that.reason,_that.type);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId,  String type)?  join,TResult? Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult? Function( String reason,  String type)?  rejected,TResult? Function( Participant participant,  String type)?  peerJoined,TResult? Function( String peerId,  String type)?  peerLeft,TResult? Function( String from,  String to,  String sdp,  String type)?  offer,TResult? Function( String from,  String to,  String sdp,  String type)?  answer,TResult? Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult? Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult? Function( String peerId,  String kind,  String type)?  quickMessage,TResult? Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult? Function( int timestamp,  String type)?  ping,TResult? Function( int timestamp,  String type)?  pong,TResult? Function( RoomSuccession state,  String type)?  roomState,TResult? Function( String to,  int term,  String type)?  hostHandover,TResult? Function( String host,  int term,  String reason,  String type)?  hostChanged,TResult? Function( String reason,  String type)?  roomClosed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId, @JsonKey(includeIfNull: false)  int? term,  String type)?  join,TResult? Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult? Function( String reason,  String type)?  rejected,TResult? Function( Participant participant,  String type)?  peerJoined,TResult? Function( String peerId,  String type)?  peerLeft,TResult? Function( String from,  String to,  String sdp,  String type)?  offer,TResult? Function( String from,  String to,  String sdp,  String type)?  answer,TResult? Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult? Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult? Function( String peerId,  String kind,  String type)?  quickMessage,TResult? Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult? Function( int timestamp,  String type)?  ping,TResult? Function( int timestamp,  String type)?  pong,TResult? Function( RoomSuccession state,  String type)?  roomState,TResult? Function( String to,  int term,  String type)?  hostHandover,TResult? Function( String host,  int term,  String reason,  String type)?  hostChanged,TResult? Function( String reason,  String type)?  roomClosed,}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
-return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.type);case SignalingWelcomeMessage() when welcome != null:
+return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.term,_that.type);case SignalingWelcomeMessage() when welcome != null:
 return welcome(_that.peerId,_that.participants,_that.note,_that.roomName,_that.type);case SignalingRejectedMessage() when rejected != null:
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage() when peerJoined != null:
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage() when peerLeft != null:
@@ -382,13 +382,14 @@ return roomClosed(_that.reason,_that.type);case _:
 @JsonSerializable()
 
 class SignalingJoinMessage implements SignalingMessage {
-  const SignalingJoinMessage({required this.displayName, required this.accessCode, this.protocolVersion = signalingProtocolVersion, @JsonKey(includeIfNull: false) this.peerId, this.type = 'join'});
+  const SignalingJoinMessage({required this.displayName, required this.accessCode, this.protocolVersion = signalingProtocolVersion, @JsonKey(includeIfNull: false) this.peerId, @JsonKey(includeIfNull: false) this.term, this.type = 'join'});
   factory SignalingJoinMessage.fromJson(Map<String, dynamic> json) => _$SignalingJoinMessageFromJson(json);
 
  final  String displayName;
  final  String accessCode;
 @JsonKey() final  int protocolVersion;
 @JsonKey(includeIfNull: false) final  String? peerId;
+@JsonKey(includeIfNull: false) final  int? term;
 @override@JsonKey() final  String type;
 
 /// Create a copy of SignalingMessage
@@ -404,16 +405,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingJoinMessage&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.protocolVersion, protocolVersion) || other.protocolVersion == protocolVersion)&&(identical(other.peerId, peerId) || other.peerId == peerId)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingJoinMessage&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.protocolVersion, protocolVersion) || other.protocolVersion == protocolVersion)&&(identical(other.peerId, peerId) || other.peerId == peerId)&&(identical(other.term, term) || other.term == term)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,displayName,accessCode,protocolVersion,peerId,type);
+int get hashCode => Object.hash(runtimeType,displayName,accessCode,protocolVersion,peerId,term,type);
 
 @override
 String toString() {
-  return 'SignalingMessage.join(displayName: $displayName, accessCode: $accessCode, protocolVersion: $protocolVersion, peerId: $peerId, type: $type)';
+  return 'SignalingMessage.join(displayName: $displayName, accessCode: $accessCode, protocolVersion: $protocolVersion, peerId: $peerId, term: $term, type: $type)';
 }
 
 
@@ -424,7 +425,7 @@ abstract mixin class $SignalingJoinMessageCopyWith<$Res> implements $SignalingMe
   factory $SignalingJoinMessageCopyWith(SignalingJoinMessage value, $Res Function(SignalingJoinMessage) _then) = _$SignalingJoinMessageCopyWithImpl;
 @override @useResult
 $Res call({
- String displayName, String accessCode, int protocolVersion,@JsonKey(includeIfNull: false) String? peerId, String type
+ String displayName, String accessCode, int protocolVersion,@JsonKey(includeIfNull: false) String? peerId,@JsonKey(includeIfNull: false) int? term, String type
 });
 
 
@@ -441,13 +442,14 @@ class _$SignalingJoinMessageCopyWithImpl<$Res>
 
 /// Create a copy of SignalingMessage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? displayName = null,Object? accessCode = null,Object? protocolVersion = null,Object? peerId = freezed,Object? type = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? displayName = null,Object? accessCode = null,Object? protocolVersion = null,Object? peerId = freezed,Object? term = freezed,Object? type = null,}) {
   return _then(SignalingJoinMessage(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,accessCode: null == accessCode ? _self.accessCode : accessCode // ignore: cast_nullable_to_non_nullable
 as String,protocolVersion: null == protocolVersion ? _self.protocolVersion : protocolVersion // ignore: cast_nullable_to_non_nullable
 as int,peerId: freezed == peerId ? _self.peerId : peerId // ignore: cast_nullable_to_non_nullable
-as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,term: freezed == term ? _self.term : term // ignore: cast_nullable_to_non_nullable
+as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

@@ -15,12 +15,15 @@ const int signalingProtocolVersion = 1;
 sealed class SignalingMessage with _$SignalingMessage {
   /// Solicitud de unión a la sala enviada por un participante al anfitrión.
   /// Con [peerId] (aditivo), vuelve a su lugar en la frecu que heredó otro
-  /// anfitrión, con su mismo id y su mismo orden de sucesión.
+  /// anfitrión, con su mismo id y su mismo orden de sucesión. Con [term]
+  /// (aditivo), el turno de la sucesión que conoce: un servidor con un turno
+  /// menor lo rechaza con `stale_term`.
   const factory SignalingMessage.join({
     required String displayName,
     required String accessCode,
     @Default(signalingProtocolVersion) int protocolVersion,
     @JsonKey(includeIfNull: false) String? peerId,
+    @JsonKey(includeIfNull: false) int? term,
     @Default('join') String type,
   }) = SignalingJoinMessage;
 

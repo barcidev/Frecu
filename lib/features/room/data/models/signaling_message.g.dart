@@ -14,6 +14,7 @@ SignalingJoinMessage _$SignalingJoinMessageFromJson(
   protocolVersion:
       (json['protocolVersion'] as num?)?.toInt() ?? signalingProtocolVersion,
   peerId: json['peerId'] as String?,
+  term: (json['term'] as num?)?.toInt(),
   type: json['type'] as String? ?? 'join',
 );
 
@@ -24,6 +25,7 @@ Map<String, dynamic> _$SignalingJoinMessageToJson(
   'accessCode': instance.accessCode,
   'protocolVersion': instance.protocolVersion,
   'peerId': ?instance.peerId,
+  'term': ?instance.term,
   'type': instance.type,
 };
 

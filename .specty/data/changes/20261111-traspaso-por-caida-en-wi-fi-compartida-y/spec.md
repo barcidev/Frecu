@@ -52,7 +52,7 @@ En una frecu local sobre una Wi-Fi que no depende del teléfono del anfitrión, 
 
 ## Tareas
 
-- [ ] T1: Turno en el `join` y rechazo `stale_term`
+- [x] T1: Turno en el `join` y rechazo `stale_term`
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/signaling_term_test.dart, docs/protocolo.md
   - ac: AC8
   - verify: flutter test test/features/room/data/signaling_term_test.dart test/features/room/data/signaling_access_test.dart test/features/room/data/signaling_server_test.dart

@@ -6,6 +6,13 @@
   "branch": "feature/traspaso-por-caida-en-wi-fi-compartida-y",
   "baseCommit": "4a31ead5ded81850c5b28e0bcf3d81314ab12b07",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:99efefda7e94cd6e69659a39387e6354dd017b67f74009160ec158b044dee110",
+    "at": "2026-11-11T14:56:52.551Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 6,
@@ -28,7 +35,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "673f3babcf252876bb7016b9a3ed578d56e4270f",
+      "startedAt": "2026-11-11T14:56:52.976Z",
+      "doneAt": "2026-11-11T14:58:44.837Z",
+      "summary": "join gana term opcional (se omite si es nulo); el servidor rechaza con stale_term (RejectReason.staleTerm, tras validar el código) un join con un turno mayor que el suyo. Prueba signaling_term_test (3) y protocolo.md con term, stale_term y el plan de caída."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -38,12 +55,5 @@
     "AC": 8,
     "T": 2,
     "R": 4
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:99efefda7e94cd6e69659a39387e6354dd017b67f74009160ec158b044dee110",
-    "at": "2026-11-11T14:56:52.551Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

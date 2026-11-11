@@ -66,6 +66,10 @@ abstract final class RejectReason {
 
   /// El `join` habla otra versión del protocolo.
   static const String versionMismatch = 'versionMismatch';
+
+  /// El `join` conoce un turno mayor que el de este servidor: otra persona
+  /// ya tomó la frecu.
+  static const String staleTerm = 'stale_term';
 }
 
 /// Servidor WebSocket de señalización para el anfitrión de la sala.
@@ -477,6 +481,11 @@ class SignalingServerDataSource {
     if (join.accessCode != _accessCode) {
       _recordWrongCode(address);
       _reject(channel, RejectReason.invalidAccessCode);
+      return false;
+    }
+    final term = join.term;
+    if (term != null && term > succession.term) {
+      _reject(channel, RejectReason.staleTerm);
       return false;
     }
     if (!returning &&
