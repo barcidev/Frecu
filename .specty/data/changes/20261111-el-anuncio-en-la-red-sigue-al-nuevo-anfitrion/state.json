@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "id": "20261111-el-anuncio-en-la-red-sigue-al-nuevo-anfitrion",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "bugfix/el-anuncio-en-la-red-sigue-al-nuevo-anfitrion",
+  "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 2,
+    "adjust": 0,
+    "reasons": [
+      "2 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:b3e428e7f5dcf7ba233c201e2c96e49c8086b7366cb298caa74d650941d99c61",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:12d56c4a8ad40283e0010a5aee7f010b48a60962511682a176f552f46fde2b2b",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:48899776f4482369268d85b9242851f5a61de953bec2d01901ad1f65260db621",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:a44cabc880f75ec1db92a5ca6c0fa8cba4edf1f17d700047e0648925a79f4fe6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 1,
+    "R": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:7d37eef7e036a67d0006ca2210053bc87e1845acc7c52498fbcd79dc480758d5",
+    "at": "2026-11-11T16:36:06.729Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
