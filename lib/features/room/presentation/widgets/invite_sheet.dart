@@ -17,6 +17,8 @@ import 'package:frecu/features/nfc_invite/presentation/widgets/nfc_write_sheet.d
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_invite.dart';
 import 'package:frecu/features/room/domain/usecases/build_invite_qr.dart';
+import 'package:frecu/features/room/presentation/providers/room_provider.dart';
+import 'package:frecu/features/room/presentation/providers/share_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
 import 'package:frecu/features/room/presentation/widgets/room_sheets.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -50,27 +52,108 @@ class InviteSheet extends ConsumerWidget {
         note: room.note,
         name: room.name,
         wifi: wifi,
+        internetId: room.internetId,
       ),
     );
+    final internetId = room.internetId;
+    final cloud = ref.watch(cloudConfigProvider);
+    final link = internetId == null || !cloud.isEnabled
+        ? null
+        : cloud.inviteLink(internetId, {
+            'c': room.accessCode,
+            if (room.note case final note?) 'n': note.semitone.toString(),
+            if (room.name.trim().isNotEmpty) 'name': room.name.trim(),
+          });
+    final net = copy.internet;
     return SingleChildScrollView(
       child: FrSheet(
         children: [
-          RoomSheetHeader(
-            kicker: copy.kicker,
-            title: copy.title,
-            message: wifi == null ? copy.message : copy.messageWifi,
-          ),
+          if (link != null)
+            RoomSheetHeader(
+              kicker: net.kicker,
+              title: net.title,
+              message: net.message,
+            )
+          else
+            RoomSheetHeader(
+              kicker: copy.kicker,
+              title: copy.title,
+              message: wifi == null ? copy.message : copy.messageWifi,
+            ),
           Center(child: InviteQr(data: uri)),
-          _InviteFacts(room: room),
-          if (wifi != null) InviteNetwork(wifi: wifi),
-          if (nfc) InviteNfc(invite: uri),
-          Text(
-            copy.footer(list: t.lobby.nearbyRooms),
-            textAlign: TextAlign.center,
-            style: fr.type.bodyS.copyWith(color: fr.colors.tx3),
-          ),
+          _InviteFacts(room: room, internet: link != null),
+          if (link != null)
+            InviteShareLink(link: link, roomName: room.name)
+          else ...[
+            if (wifi != null) InviteNetwork(wifi: wifi),
+            if (nfc) InviteNfc(invite: uri),
+            Text(
+              copy.footer(list: t.lobby.nearbyRooms),
+              textAlign: TextAlign.center,
+              style: fr.type.bodyS.copyWith(color: fr.colors.tx3),
+            ),
+          ],
         ],
       ),
+    );
+  }
+}
+
+/// «Compartir enlace» (`.share-box` del prototipo): abre la hoja de
+/// compartir del sistema con el enlace https de la frecu, que sirve desde
+/// cualquier lugar y ya lleva el código; debajo, el enlace.
+class InviteShareLink extends ConsumerWidget {
+  /// Crea el recuadro con el [link] de la frecu [roomName].
+  const InviteShareLink({
+    required this.link,
+    required this.roomName,
+    super.key,
+  });
+
+  /// Enlace https de la invitación.
+  final Uri link;
+
+  /// Nombre de la frecu, para el texto que se comparte.
+  final String roomName;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fr = context.fr;
+    final c = fr.colors;
+    final copy = t.room.sheets.invite.internet;
+    final shown = '${link.host}${link.path}';
+    return Column(
+      key: const Key('invite_share'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 10,
+      children: [
+        FrButton.drawn(
+          key: const Key('invite_share_button'),
+          label: copy.share,
+          icon: FrIcons.share,
+          expand: true,
+          onPressed: () => unawaited(
+            ref.read(shareTextProvider)(
+              copy.shareText(name: roomName, link: link.toString()),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 6,
+          children: [
+            FrIcon(FrIcons.link, size: 16, color: c.tx3),
+            Flexible(
+              child: Text(
+                shown,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: fr.type.data.copyWith(fontSize: 12, color: c.tx3),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -412,9 +495,12 @@ class _ScanBeamPainter extends CustomPainter {
 
 /// Ficha de la invitación (`.inv-meta`): nota, código y anfitrión.
 class _InviteFacts extends StatelessWidget {
-  const _InviteFacts({required this.room});
+  const _InviteFacts({required this.room, required this.internet});
 
   final Room room;
+
+  /// Frecu por internet: en vez de la IP, cómo se conectan.
+  final bool internet;
 
   @override
   Widget build(BuildContext context) {
@@ -448,21 +534,41 @@ class _InviteFacts extends StatelessWidget {
             Text(room.accessCode, key: const Key('invite_code'), style: big),
           ],
         ),
-        RoomFact(
-          flex: 13,
-          label: copy.host,
-          values: [
-            Text(
-              room.hostAddress,
-              key: const Key('invite_host'),
-              style: fr.type.data.copyWith(color: c.tx1),
-            ),
-            Text(
-              copy.port(port: room.port).toUpperCase(),
-              style: fr.type.labelS.copyWith(color: c.tx3),
-            ),
-          ],
-        ),
+        if (internet)
+          RoomFact(
+            flex: 13,
+            label: copy.internet.connection,
+            values: [
+              Text(
+                copy.internet.internet,
+                key: const Key('invite_connection'),
+                style: fr.type.data.copyWith(color: c.tx1),
+              ),
+              if (room.wifi case final wifi?)
+                Text(
+                  copy.internet.andWifi(name: wifi.ssid).toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: fr.type.labelS.copyWith(color: c.tx3),
+                ),
+            ],
+          )
+        else
+          RoomFact(
+            flex: 13,
+            label: copy.host,
+            values: [
+              Text(
+                room.hostAddress,
+                key: const Key('invite_host'),
+                style: fr.type.data.copyWith(color: c.tx1),
+              ),
+              Text(
+                copy.port(port: room.port).toUpperCase(),
+                style: fr.type.labelS.copyWith(color: c.tx3),
+              ),
+            ],
+          ),
       ],
     );
   }

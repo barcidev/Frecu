@@ -60,6 +60,107 @@ final class SignalingClientProvider
 
 String _$signalingClientHash() => r'52ee2a32cec51314ad03c66a3b98970915a38929';
 
+/// Punto de encuentro del modo internet; sin `FRECU_CLOUD_URL` no hay modo
+/// internet.
+
+@ProviderFor(cloudConfig)
+final cloudConfigProvider = CloudConfigProvider._();
+
+/// Punto de encuentro del modo internet; sin `FRECU_CLOUD_URL` no hay modo
+/// internet.
+
+final class CloudConfigProvider
+    extends $FunctionalProvider<CloudConfig, CloudConfig, CloudConfig>
+    with $Provider<CloudConfig> {
+  /// Punto de encuentro del modo internet; sin `FRECU_CLOUD_URL` no hay modo
+  /// internet.
+  CloudConfigProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cloudConfigProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cloudConfigHash();
+
+  @$internal
+  @override
+  $ProviderElement<CloudConfig> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  CloudConfig create(Ref ref) {
+    return cloudConfig(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CloudConfig value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CloudConfig>(value),
+    );
+  }
+}
+
+String _$cloudConfigHash() => r'0336b9b10292b5986f4bb754fda4e6291de89227';
+
+/// Servidores STUN y TURN de las frecus por internet.
+
+@ProviderFor(turnCredentials)
+final turnCredentialsProvider = TurnCredentialsProvider._();
+
+/// Servidores STUN y TURN de las frecus por internet.
+
+final class TurnCredentialsProvider
+    extends
+        $FunctionalProvider<
+          TurnCredentialsDataSource,
+          TurnCredentialsDataSource,
+          TurnCredentialsDataSource
+        >
+    with $Provider<TurnCredentialsDataSource> {
+  /// Servidores STUN y TURN de las frecus por internet.
+  TurnCredentialsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'turnCredentialsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$turnCredentialsHash();
+
+  @$internal
+  @override
+  $ProviderElement<TurnCredentialsDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  TurnCredentialsDataSource create(Ref ref) {
+    return turnCredentials(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TurnCredentialsDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TurnCredentialsDataSource>(value),
+    );
+  }
+}
+
+String _$turnCredentialsHash() => r'ae59df9e24dc9aeec44335454632c1b51503d014';
+
 /// Datasource del servicio en primer plano para persistencia.
 
 @ProviderFor(foregroundServiceDataSource)
@@ -197,7 +298,7 @@ final class RoomRepositoryProvider
   }
 }
 
-String _$roomRepositoryHash() => r'e0973550a61a20db3289d0dbcfaf14da72fc70de';
+String _$roomRepositoryHash() => r'2fa043e4227227878e20c0d3eb278f70487c0224';
 
 /// Stream de los participantes de la sala activa.
 
@@ -362,7 +463,7 @@ final class RoomNotifierProvider
   }
 }
 
-String _$roomNotifierHash() => r'0522d443bea8bacdba3d2f4f3251f66c7e4e8fe6';
+String _$roomNotifierHash() => r'ab87dd7108aef614d52548cf2d30cc2d36c67a4e';
 
 /// Gestor del ciclo de vida y estado de la sala activa.
 

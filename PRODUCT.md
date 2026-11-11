@@ -4,6 +4,8 @@
 
 Frecu convierte varios teléfonos en un intercomunicador de voz grupal que funciona sin internet. Un teléfono actúa como anfitrión: crea la red Wi-Fi del grupo (en Android, Frecu la crea; si no, comparte su punto de acceso) y crea una frecu (sala). Los demás teléfonos se conectan a esa red, se unen a la frecu y hablan entre todos en tiempo real.
 
+Con señal, la frecu también puede abrirse **por internet**: quien está lejos se une con un enlace o el QR, sin servidor propio (punto de encuentro, STUN y TURN en Cloudflare). Una frecu por internet acepta a la vez a quien está cerca en la red local.
+
 ## Para quién
 
 Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipos de trabajo que necesitan comunicarse por voz en tiempo real sin depender de conexión a internet ni cobertura celular.
@@ -33,7 +35,7 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 
 - Migración de anfitrión: si el anfitrión sale, la frecu se cierra.
 - Topología SFU o mezcla en el anfitrión.
-- Video, chat de texto libre (solo hay mensajes predefinidos), grabación, cuentas de usuario, backend en la nube.
+- Video, chat de texto libre (solo hay mensajes predefinidos), grabación, cuentas de usuario. (El registro y los 30 min gratis del modo internet son la fase siguiente.)
 - Activación por voz (VOX).
 - UWB, detección de caídas, app de reloj y botones PTT Bluetooth dedicados.
 
@@ -44,7 +46,7 @@ Para grupos de personas como caravanas de motos, senderistas, ciclistas o equipo
 - **Modelos y uniones**: `freezed`, `freezed_annotation`, `json_serializable`, `json_annotation`
 - **Navegación**: `auto_route`, `auto_route_generator`
 - **i18n**: `slang`, `slang_flutter`, `slang_build_runner`
-- **Audio RTC**: `flutter_webrtc` (solo audio local mesh, sin STUN/TURN)
+- **Audio RTC**: `flutter_webrtc` (solo audio, mesh; STUN/TURN solo en el modo internet)
 - **Sesión de audio**: `audio_session`
 - **Señalización host**: `shelf`, `shelf_web_socket`
 - **Señalización cliente**: `web_socket_channel`
@@ -70,4 +72,4 @@ Android e iOS.
 
 - Clean Architecture por feature: `presentation -> domain <- data`.
 - `domain` es Dart puro: prohibido importar `flutter` o plugins nativos.
-- 100% offline: cero dependencias de internet (sin servidores STUN/TURN, sin nubes).
+- El modo local sigue 100% offline: sin internet, ni STUN/TURN, ni nube. El modo internet es opcional y solo existe si la app se compila con `FRECU_CLOUD_URL`.

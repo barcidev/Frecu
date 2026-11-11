@@ -56,6 +56,9 @@ const prototypeNames = [
   'ear',
   'fuel',
   'flag',
+  'share',
+  'link',
+  'globeOff',
 ];
 
 /// Puntos sobre el trazado, cada 0,01 unidades.
@@ -90,7 +93,7 @@ void expectRect(Rect actual, Rect expected, {double tolerance = 0.02}) {
 }
 
 void main() {
-  test('AC2: el catálogo tiene los 46 íconos del prototipo, en su orden', () {
+  test('AC2: el catálogo tiene los 49 íconos del prototipo, en su orden', () {
     expect(FrIcons.values.map((icon) => icon.name).toList(), prototypeNames);
   });
 

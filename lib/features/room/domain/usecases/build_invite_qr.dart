@@ -28,14 +28,15 @@ final class BuildInviteQr implements UseCase<String, RoomInvite> {
       scheme: 'frecu',
       host: 'join',
       queryParameters: {
-        'h': invite.host,
-        'p': invite.port.toString(),
+        if (invite.host.isNotEmpty) 'h': invite.host,
+        if (invite.host.isNotEmpty) 'p': invite.port.toString(),
         'r': invite.roomId,
         'c': invite.accessCode,
         if (invite.note case final note?) 'n': note.semitone.toString(),
         if (name.isNotEmpty) 'name': name,
         if (ssid.isNotEmpty) 'ws': ssid,
         if (ssid.isNotEmpty && key.isNotEmpty) 'wk': key,
+        if (invite.internetId case final internetId?) 'x': internetId,
       },
     );
     return uri.toString();

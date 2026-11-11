@@ -103,6 +103,9 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
   bool _torch = false;
   Failure? _failure;
 
+  /// El último intento de unirse fue por internet.
+  bool _byInternet = false;
+
   /// Cómo llega el teléfono a la red de la frecu.
   late final WifiJoinRepository _network;
 
@@ -230,21 +233,35 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
       _joining = true;
       _failure = null;
     });
-    if (invite.wifi != null && !await _onRoomNetwork(invite)) {
-      if (mounted) setState(() => _joining = false);
-      return;
+    final Result<Room> result;
+    _byInternet = await _joinsByInternet(invite);
+    if (_byInternet) {
+      if (!mounted) return;
+      result = await ref
+          .read(roomNotifierProvider.notifier)
+          .joinInternetRoom(
+            internetId: invite.internetId!,
+            accessCode: invite.accessCode,
+            displayName: ref.joinDisplayName,
+            note: invite.note,
+          );
+    } else {
+      if (invite.wifi != null && !await _onRoomNetwork(invite)) {
+        if (mounted) setState(() => _joining = false);
+        return;
+      }
+      if (!mounted) return;
+      result = await ref
+          .read(roomNotifierProvider.notifier)
+          .joinRoom(
+            hostAddress: invite.host,
+            port: invite.port,
+            accessCode: invite.accessCode,
+            displayName: ref.joinDisplayName,
+            note: invite.note,
+            wifi: invite.wifi,
+          );
     }
-    if (!mounted) return;
-    final result = await ref
-        .read(roomNotifierProvider.notifier)
-        .joinRoom(
-          hostAddress: invite.host,
-          port: invite.port,
-          accessCode: invite.accessCode,
-          displayName: ref.joinDisplayName,
-          note: invite.note,
-          wifi: invite.wifi,
-        );
     if (!mounted) return;
     switch (result) {
       case Success(:final data):
@@ -256,6 +273,16 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
           _failure = failure;
         });
     }
+  }
+
+  /// Una frecu abierta también por internet se une por la nube, salvo que
+  /// el anfitrión ya responda en la red local: entonces la voz va directa.
+  Future<bool> _joinsByInternet(RoomInvite invite) async {
+    if (invite.internetId == null) return false;
+    if (!ref.read(cloudConfigProvider).isEnabled) return invite.host.isEmpty;
+    if (invite.host.isEmpty) return true;
+    _networkTouched = true;
+    return !await _network.reaches(invite.host, invite.port);
   }
 
   /// Verdadero si el teléfono está en la red de la frecu que trae [invite]:
@@ -369,7 +396,10 @@ class _ScanQrPageState extends ConsumerState<ScanQrPage>
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (failure != null) ...[
-          JoinFailureBanner(failure: failure),
+          JoinFailureBanner(
+            failure: failure,
+            viaInternet: invite.internetId != null && _byInternet,
+          ),
           const SizedBox(height: 14),
         ],
         ScanFoundCard(invite: invite, joining: _joining, onJoin: _join),
@@ -751,14 +781,20 @@ class ScanFoundCard extends StatelessWidget {
     final name = invite.name;
     final title =
         name ?? (note == null ? scan.noNote : '${note.label} · ${note.hzText}');
+    final where = invite.host.isEmpty ? t.lobby.join.internet : invite.host;
     final subtitle = name != null
-        ? [?note?.label, invite.host].join(' · ')
+        ? [?note?.label, where].join(' · ')
+        : invite.host.isEmpty
+        ? where
         : '${invite.host} · ${t.lobby.join.port(port: invite.port)}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          scan.found.toUpperCase(),
+          (invite.internetId != null && invite.host.isEmpty
+                  ? scan.foundInternet
+                  : scan.found)
+              .toUpperCase(),
           style: fr.type.labelS.copyWith(color: c.signalFg),
         ),
         const SizedBox(height: 7),

@@ -11,6 +11,8 @@ const NEARBY = [
   { name: 'Brigada Norte', note: noteAt(15, 5), ip: '192.168.43.87' },
 ];
 const BLE_ROOM = { name: 'Caravana Sur', note: noteAt(9, 40), ble: true, ssid: 'Moto de Andrés' };
+// Modo internet: la frecu se abre por internet; quien comparta tu Wi-Fi entra sin gastar datos.
+const NET = { link: 'frecu.app/j/7KQ2X9', wifi: 'Casa' };
 const noteTxt = (n) => `${n.name}${n.oct}`;
 
 const SBAR = `<div class="sbar"><b>08:24</b><span class="sic">
@@ -50,6 +52,8 @@ function meshFor(kind) {
   if (kind === 'connecting') { me.state = 'link'; andres.state = 'link'; nodes = [me, null, null, andres, null, null]; }
   if (kind === 'alone') { me.host = true; nodes = [me, null, null, null, null, null]; }
   if (kind === 'weak') leo.state = 'weak';
+  // Por internet: Leo y Sofi entran desde lejos. «mixed»: tú estás en la red de Frecu sin internet y no hay ruta hasta ellos.
+  if (kind === 'net' || kind === 'mixed') [leo, sofi].forEach((n) => { n.net = true; if (kind === 'mixed') { n.cut = true; n.state = 'weak'; } });
   const ms = { nodes, status };
   if (GEO_KINDS.includes(kind)) applyGeo(ms, { behind: kind === 'behind' });
   return ms;
@@ -63,8 +67,10 @@ function meshLabels(ms) {
     let cls = '';
     if (n.dist && !n.host) sub = `${n.dist} ${arrow(n.dir)}`;
     if (n.dist && n.host) sub = `Anfitrión · ${n.dist} ${arrow(n.dir)}`;
+    if (n.net && !sub) sub = 'Por internet';
     if (n.levelFn) { cls = 'speak'; sub = n.me ? 'Al aire' : 'Hablando'; }
     if (n.state === 'weak') { cls = 'weak'; sub = n.dist ? `Señal débil · ${n.dist}` : 'Señal débil'; }
+    if (n.cut) sub = 'Sin audio';
     if (n.behind) { cls = 'weak'; sub = `Atrás · ${n.dist} ${arrow(n.dir)}`; }
     if (n.state === 'rec' || ms.status === 'rec') { cls = 'rec'; sub = 'Reconectando'; }
     if (n.muted) sub = 'Silenciado';
@@ -140,6 +146,10 @@ function roomView(kind = 'idle', o = {}) {
     ? `<div class="echo">${UI.banner('warn', 'headset', '<b>Micrófono abierto con altavoz.</b> Usa audífonos para evitar eco.')}</div>` : '';
   const behind = kind === 'behind'
     ? `<div class="echo">${UI.banner('warn', 'pin', '<b>Sofi se quedó atrás.</b> Va a 850 m del grupo, hacia el sur.')}</div>` : '';
+  const net = o.net || kind === 'net' || kind === 'mixed' ? `<div class="net-tag">${I('globe', 's16')}<span class="t-label-s">Por internet</span></div>` : '';
+  const cutNames = ms.nodes.filter((n) => n && n.cut).map((n) => n.name);
+  const cut = cutNames.length
+    ? `<div class="echo">${UI.banner('warn', 'globeOff', `<b>La red de Frecu no tiene internet.</b> No oirás a ${cutNames.join(' ni a ')}, que entraron por internet, ni ellos a ti.`)}</div>` : '';
   const geo = GEO_KINDS.includes(kind) || o.geo ? `<div class="geo-tag">${I('pin', 's16')}<span class="t-label-s">Compartes tu ubicación</span></div>` : '';
   return `<section class="view v-room ${o.cls || ''}" data-screen="room">
     ${isleFor(kind, count)}
@@ -147,12 +157,16 @@ function roomView(kind = 'idle', o = {}) {
       <div class="rl"><span class="chip"><small class="t-label-s c3">${Math.round(ROOM.note.hz)} Hz</small>${UI.note(ROOM.note)}</span><span class="rn"><b>${ROOM.name}</b><span class="t-label-s">${host ? 'Eres el anfitrión' : 'Anfitrión · Andrés'}</span></span></div>
       <div class="rr">${UI.ibtn('msg', { attrs: 'data-sheet="quick"', label: 'Mensajes' })}${UI.ibtn('qr', { attrs: 'data-sheet="invite"', label: 'Invitar' })}${UI.ibtn('exit', { cls: 'danger', attrs: 'data-sheet="leave"', label: 'Salir' })}</div>
     </div>
-    <div class="mesh"><canvas data-c="mesh" data-st="${st(ms)}"></canvas><div class="labels">${meshLabels(ms)}</div>${geo}</div>
-    ${echo}${behind}${kind === 'sos' ? sosOverlay() : ''}
+    <div class="mesh"><canvas data-c="mesh" data-st="${st(ms)}"></canvas><div class="labels">${meshLabels(ms)}</div>${geo}${net}</div>
+    ${echo}${behind}${cut}${kind === 'sos' ? sosOverlay() : ''}
     <div class="ctrls">${UI.route(route)}${UI.seg([{ label: 'PTT', icon: 'walkie' }, { label: 'Abierto', icon: 'openMic' }], pst.mode === 'open' ? 1 : 0, { attrs: 'data-mode-seg' })}</div>
     ${pttZone(kind, pst)}
   </section>`;
 }
+
+/* Modo internet: interruptor bajo el código de acceso (apagado = solo la red local, como hoy).
+   Solo aparece si la app tiene punto de encuentro configurado. */
+const netToggle = (on) => `<div class="group" data-net-row>${UI.row('Permitir internet', on ? 'También pueden unirse desde lejos con el enlace. Usa datos móviles.' : 'Solo se unen quienes estén en tu red.', UI.tog(on, 'data-net-tog'))}</div>`;
 
 /* ---------- Pantallas ---------- */
 const V = {
@@ -227,20 +241,21 @@ const V = {
   create: (s = {}) => `<section class="view v-create" data-screen="create">
     <div class="appbar">${back}<span class="ttl"><span class="t-label-s c3">Paso 2 de 2</span><b>Nueva frecu</b></span>${spacer}</div>
     <div class="ch-hero fifths"><canvas data-c="fifths" data-st="${st({ hour: 16, minute: 24 })}"></canvas>
-      <div class="chv"><span class="t-label-s c3">Tu frecu suena en</span>${UI.note(ROOM.note, 'big')}<span class="t-label-s c2">${fmtHz(ROOM.note.hz)} Hz</span><span class="t-label-s c3">Abierta a las ${ROOM.opened}</span></div></div>
+      <div class="chv"><span class="t-label-s c3">Tu frecu suena en</span>${UI.note(ROOM.note, 'big')}<span class="t-label-s c2">${fmtHz(ROOM.note.hz)} Hz</span><span class="t-label-s c3">Abierta a las ${ROOM.opened}</span>${s.net ? `<span class="tag s t-label-s">${I('globe', 's12')}Por internet</span>` : ''}</div></div>
     <div class="pad" style="display:flex;flex-direction:column;gap:22px;margin-top:22px">
       ${UI.field('Nombre de la frecu', ROOM.name, { count: '16/24', ph: 'Ej. Ruta del domingo' })}
       <div class="field"><span class="field-l">${UI.label('Código de acceso')}<span class="t-label-s c3">4 dígitos</span></span>
         <div class="pinrow">${UI.pin(s.pin || ROOM.pin, { cls: 'read', attrs: 'data-create-pin' })}${UI.ibtn('regen', { label: 'Generar otro', attrs: 'data-regen' })}</div>
-        <span class="field-h">Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.</span></div>
+        <span class="field-h">${s.net ? 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.' : 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.'}</span></div>
+      ${netToggle(!!s.net)}
     </div>
-    <div class="dock">${UI.btn('Abrir frecu', { icon: 'antenna', attrs: 'data-create' })}</div></section>`,
+    <div class="dock">${UI.btn('Abrir frecu', { icon: 'antenna', attrs: s.net ? 'data-create="net"' : 'data-create' })}</div></section>`,
 
   scan: (s = {}) => `<section class="view v-scan" data-screen="scan" data-theme="dark"><canvas class="cam" data-c="cam"></canvas>
     <div class="scan-top"><div class="appbar">${UI.ibtn('back', { attrs: 'data-back', label: 'Atrás' })}<span class="ttl"><b>Escanear invitación</b><span class="t-label-s c3">QR de la frecu</span></span>${UI.ibtn('flash', { label: 'Linterna', attrs: 'data-flash' })}</div></div>
     <div class="reticle ${s.lock ? 'lock' : ''}"><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i><span class="beam"></span><span class="found"><i>${I('check', 's28')}</i></span></div>
     <div class="scan-bottom">${s.lock
-      ? `<div class="scan-card"><span><span class="t-label-s cs">Frecu encontrada</span><b style="display:block;font:660 18px/1.2 var(--f-ui);font-stretch:108%;margin:7px 0 6px">${ROOM.name}</b><span class="t-label-s c3">${noteTxt(ROOM.note)} · ${ROOM.ip}</span></span>${UI.btn('Unirme', { cls: 'btn-s', attrs: 'data-join="qr"' })}</div>`
+      ? `<div class="scan-card"><span><span class="t-label-s cs">${s.net ? 'Frecu encontrada · por internet' : 'Frecu encontrada'}</span><b style="display:block;font:660 18px/1.2 var(--f-ui);font-stretch:108%;margin:7px 0 6px">${ROOM.name}</b><span class="t-label-s c3">${noteTxt(ROOM.note)} · ${s.net ? 'Anfitrión · Andrés' : ROOM.ip}</span></span>${UI.btn('Unirme', { cls: 'btn-s', attrs: s.net ? 'data-join="net"' : 'data-join="qr"' })}</div>`
       : `<p>Apunta al QR que muestra el anfitrión en su teléfono.</p>${UI.btn('Conectar por IP', { v: 'secondary', icon: 'nodes', cls: 'btn-s', attrs: 'data-sheet="ip"' })}`}</div></section>`,
 
   room: (s = {}) => roomView(s.kind || 'idle', s),
@@ -300,12 +315,14 @@ const SH = {
     ${UI.field('Código de acceso', ROOM.pin, { mono: true, icon: 'lock' })}
     ${s.error ? UI.banner('alert', 'alert', '<b>El anfitrión no responde.</b> Revisa que estés en su misma red Wi-Fi.', { close: false }) : ''}
     ${UI.btn('Conectar', { icon: 'arrow', attrs: 'data-join="ip"' })}</div>`,
-  invite: () => `<div class="sheet" data-sheet-el="invite"><span class="grab"></span>
-    <div class="sh-h"><div><span class="t-label-s c3">Invitar a la frecu</span><h3 style="margin-top:8px">Escanea para unirte</h3><p>Desde Frecu › Escanear. El QR ya incluye el código.</p></div>${UI.ibtn('close', { cls: 's40', attrs: 'data-close', label: 'Cerrar' })}</div>
-    <div class="qr-frame"><canvas data-c="qr" data-seed="77"></canvas></div>
-    <div class="inv-meta"><div><span class="t-label-s c3">Nota</span>${UI.note(ROOM.note)}</div><div><span class="t-label-s c3">Código</span><b class="t-dot">${ROOM.pin}</b></div><div><span class="t-label-s c3">Anfitrión</span><span class="t-data">${ROOM.ip}</span><span class="t-label-s c3">Puerto ${ROOM.port}</span></div></div>
-    <div class="nfc-box"><span class="oic">${I('nfc')}</span><span class="ot"><b>También por NFC</b><span class="t-body-s">Acerca otro teléfono al tuyo</span></span>
-      <button class="btn btn-secondary btn-s nfc-w" data-nfc-write>${I('nfc', 's16')}<span class="lbl">Grabar etiqueta</span></button></div></div>`,
+  invite: (s = {}) => `<div class="sheet" data-sheet-el="invite"><span class="grab"></span>
+    <div class="sh-h"><div><span class="t-label-s c3">${s.net ? 'Invitar · por internet' : 'Invitar a la frecu'}</span><h3 style="margin-top:8px">${s.net ? 'Escanea o comparte' : 'Escanea para unirte'}</h3><p>${s.net ? 'Sirven desde cualquier lugar y ya incluyen el código.' : 'Desde Frecu › Escanear. El QR ya incluye el código.'}</p></div>${UI.ibtn('close', { cls: 's40', attrs: 'data-close', label: 'Cerrar' })}</div>
+    <div class="qr-frame"><canvas data-c="qr" data-seed="${s.net ? 91 : 77}"></canvas></div>
+    <div class="inv-meta"><div><span class="t-label-s c3">Nota</span>${UI.note(ROOM.note)}</div><div><span class="t-label-s c3">Código</span><b class="t-dot">${ROOM.pin}</b></div>${s.net
+      ? `<div><span class="t-label-s c3">Conexión</span><span class="t-data">Internet</span><span class="t-label-s c3">y Wi-Fi «${NET.wifi}»</span></div>`
+      : `<div><span class="t-label-s c3">Anfitrión</span><span class="t-data">${ROOM.ip}</span><span class="t-label-s c3">Puerto ${ROOM.port}</span></div>`}</div>
+    ${s.net ? `<div class="share-box">${UI.btn('Compartir enlace', { icon: 'share', attrs: 'data-share' })}<span class="share-link t-label-s">${I('link', 's16')}${NET.link}</span></div>` : `<div class="nfc-box"><span class="oic">${I('nfc')}</span><span class="ot"><b>También por NFC</b><span class="t-body-s">Acerca otro teléfono al tuyo</span></span>
+      <button class="btn btn-secondary btn-s nfc-w" data-nfc-write>${I('nfc', 's16')}<span class="lbl">Grabar etiqueta</span></button></div>`}</div>`,
   hscred: () => `<div class="sheet" data-sheet-el="hscred"><span class="grab"></span>
     <div class="sh-h"><div><span class="t-label-s c3">Invitar por Bluetooth · opcional</span><h3 style="margin-top:8px">Tu zona Wi-Fi</h3><p>Quien esté cerca y tenga el código de la frecu se conecta a tu red sin buscarla. Se guarda solo en tu teléfono.</p></div>${UI.ibtn('close', { cls: 's40', attrs: 'data-close', label: 'Cerrar' })}</div>
     ${UI.field('Nombre de la zona Wi-Fi', 'Moto de Andrés', { ph: 'Tal como aparece en Ajustes', cls: 'focus' })}
@@ -326,6 +343,16 @@ const SH = {
     ${s.found
       ? `<div class="scan-card"><span><span class="t-label-s cs">Por NFC</span><b style="display:block;font:660 18px/1.2 var(--f-ui);font-stretch:108%;margin:7px 0 6px">${ROOM.name}</b><span class="t-label-s c3">${noteTxt(ROOM.note)} · ${ROOM.ip}</span></span>${UI.btn('Unirme', { cls: 'btn-s', attrs: 'data-join="qr"' })}</div>`
       : '<p class="t-label-s c3" style="text-align:center">En iPhone, mantén la parte de arriba del teléfono junto al otro.</p>'}</div>`,
+  /* Al abrir un enlace https de invitación (o frecu://join), la app abre el inicio con esta hoja. */
+  link: (s = {}) => {
+    const nonet = s.state === 'nonet';
+    return `<div class="sheet" data-sheet-el="link"><span class="grab"></span>
+    <div class="sh-h"><div><span class="t-label-s c3">Invitación por enlace</span><h3 style="margin-top:8px">${nonet ? 'No tienes internet' : 'Frecu encontrada'}</h3><p>${nonet ? 'Esta frecu es por internet. Para unirte necesitas conexión.' : 'Abriste un enlace de invitación. Ya trae el código.'}</p></div>${UI.ibtn('close', { cls: 's40', attrs: 'data-close', label: 'Cerrar' })}</div>
+    <div class="nfc-stage ${nonet ? 'off' : 'found'}"><span class="nfc-ring"></span><span class="nfc-ring b"></span><span class="nfc-ic">${I(nonet ? 'globeOff' : 'globe', 's34')}</span></div>
+    ${nonet
+      ? `${UI.banner('alert', 'globeOff', '<b>Activa tus datos móviles</b> o conéctate a una Wi-Fi con internet.', { close: false })}${UI.btn('Reintentar', { v: 'secondary', icon: 'regen', attrs: 'data-link-retry' })}`
+      : `<div class="scan-card"><span><span class="t-label-s cs">Por internet</span><b style="display:block;font:660 18px/1.2 var(--f-ui);font-stretch:108%;margin:7px 0 6px">${ROOM.name}</b><span class="t-label-s c3">${noteTxt(ROOM.note)} · Anfitrión · Andrés</span></span>${UI.btn('Unirme', { cls: 'btn-s', attrs: 'data-join="net"' })}</div>`}</div>`;
+  },
   route: (s = {}) => {
     const r = s.route || 'speaker'; const bt = s.bt !== false;
     return `<div class="sheet" data-sheet-el="route"><span class="grab"></span>
@@ -394,6 +421,16 @@ const GALLERY = [
     { title: 'Conectando a su Wi-Fi', route: 'Hoja · unión por BLE', desc: 'Con el código correcto, el anfitrión entrega su red y el teléfono se conecta.', html: () => V.lobby({ kind: 'ble' }).replace('class="view v-lobby"', 'class="view v-lobby under"') + scrim + SH.blepin(), go: ['lobby', { kind: 'ble' }, 'blepin'] },
     { title: 'Invitar por NFC', route: 'Hoja · InviteSheet', desc: 'El QR de siempre, y además acercar otro teléfono o grabar una etiqueta NFC.', html: () => roomView('alone').replace('class="view v-room ', 'class="view v-room under ') + scrim + SH.invite(), go: ['room', { kind: 'alone', host: true }, 'invite'] },
     { title: 'Unirse por NFC', route: 'Hoja · NfcJoinSheet', desc: 'Leer la invitación del teléfono del anfitrión o de una etiqueta.', html: () => V.lobby({ sel: ROOM.note.s }).replace('class="view v-lobby"', 'class="view v-lobby under"') + scrim + SH.nfc({ found: true }), go: ['lobby', {}, 'nfc'] },
+  ] },
+  { flow: 'Modo internet', items: [
+    { title: 'Permitir internet · apagado', route: 'CreateRoomRoute · NewRoomStep', desc: 'Interruptor bajo el código, apagado por defecto: solo la red local, como hoy. Solo aparece con punto de encuentro configurado.', html: () => V.create(), go: ['create'] },
+    { title: 'Nueva frecu por internet', route: 'CreateRoomRoute · internet', desc: 'Con «Permitir internet» encendido: también se unen desde lejos con el enlace; los de tu red siguen entrando sin datos.', html: () => V.create({ net: true }), go: ['create', { net: true }] },
+    { title: 'Invitar con enlace', route: 'Hoja · InviteSheet · internet', desc: 'El QR de siempre y «Compartir enlace» (https) para WhatsApp. En vez de la IP, cómo se conectan.', html: () => roomView('alone', { net: true }).replace('class="view v-room ', 'class="view v-room under ') + scrim + SH.invite({ net: true }), go: ['room', { kind: 'alone', host: true, net: true }, 'invite'] },
+    { title: 'Frecu por internet', route: 'RoomRoute · internet', desc: 'Indicador discreto bajo la malla. Quien entró desde lejos lleva «Por internet» bajo su nombre.', html: () => roomView('net', { host: true }), go: ['room', { kind: 'net', host: true }] },
+    { title: 'Unirse por enlace', route: 'Hoja · JoinLinkSheet', desc: 'Al tocar el enlace, la app abre el inicio con la frecu encontrada, lista para unirse.', html: () => V.lobby({ sel: ROOM.note.s }).replace('class="view v-lobby"', 'class="view v-lobby under"') + scrim + SH.link(), go: ['lobby', {}, 'link'] },
+    { title: 'Sin internet', route: 'Failure.noInternet', desc: 'La frecu es por internet y el teléfono no tiene conexión: qué hacer y reintentar.', html: () => V.lobby({ sel: ROOM.note.s }).replace('class="view v-lobby"', 'class="view v-lobby under"') + scrim + SH.link({ state: 'nonet' }), go: ['lobby', {}, 'link', { state: 'nonet' }] },
+    { title: 'QR de frecu por internet', route: 'ScanQrRoute · internet', desc: 'El mismo escáner; la tarjeta dice «por internet» en vez de mostrar una IP.', html: () => V.scan({ lock: true, net: true }), go: ['scan', { net: true }] },
+    { title: 'Frecu mezclada sin internet', route: 'RoomRoute · aviso sin ruta', desc: 'En la red de Frecu (sin internet) no oyes a los que entraron por internet: aviso y «Sin audio» en sus nombres.', html: () => roomView('mixed'), go: ['room', { kind: 'mixed' }] },
   ] },
   { flow: 'Cierre y ajustes', items: [
     { title: 'Fin de la transmisión', route: 'RoomStatus.closed', desc: 'La firma se aplana en una línea: la frecu salió del aire.', html: () => V.closed(), go: ['closed'] },

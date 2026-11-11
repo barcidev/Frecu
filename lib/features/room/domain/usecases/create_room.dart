@@ -12,6 +12,7 @@ final class CreateRoomParams {
     required this.accessCode,
     this.displayName,
     this.note,
+    this.internet = false,
   });
 
   /// Nombre de la frecu.
@@ -25,6 +26,9 @@ final class CreateRoomParams {
 
   /// Nota musical de la frecu si está asignada.
   final RoomNote? note;
+
+  /// Si la frecu se abre también por internet.
+  final bool internet;
 }
 
 /// Caso de uso para crear una nueva frecu como anfitrión.
@@ -44,6 +48,7 @@ final class CreateRoom implements UseCase<Room, CreateRoomParams> {
       accessCode: params.accessCode,
       displayName: params.displayName,
       note: params.note,
+      internet: params.internet,
     );
   }
 }

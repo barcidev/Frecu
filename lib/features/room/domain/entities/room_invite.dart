@@ -24,6 +24,11 @@ sealed class RoomInvite with _$RoomInvite {
     /// Red de la frecu que creó el anfitrión; nula si la invitación no la
     /// trae (la red es la de siempre).
     WifiCredentials? wifi,
+
+    /// Id de la frecu en el punto de encuentro, si se abrió por internet
+    /// (`x`). Con él, [host] y [port] pueden venir vacíos: se entra por
+    /// internet.
+    String? internetId,
   }) = _RoomInvite;
 
   /// Deserializa desde JSON.

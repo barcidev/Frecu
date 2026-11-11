@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:frecu/core/constants/cloud_config.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/result/result.dart';
@@ -9,7 +10,9 @@ import 'package:frecu/features/network/presentation/providers/network_provider.d
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
+import 'package:frecu/features/room/data/datasources/turn_credentials_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
+import 'package:frecu/features/room/domain/entities/ice_server.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -30,6 +33,16 @@ SignalingClientDataSource signalingClient(Ref ref) {
   ref.onDispose(client.dispose);
   return client;
 }
+
+/// Punto de encuentro del modo internet; sin `FRECU_CLOUD_URL` no hay modo
+/// internet.
+@Riverpod(keepAlive: true)
+CloudConfig cloudConfig(Ref ref) => CloudConfig.fromEnvironment;
+
+/// Servidores STUN y TURN de las frecus por internet.
+@Riverpod(keepAlive: true)
+TurnCredentialsDataSource turnCredentials(Ref ref) =>
+    TurnCredentialsDataSource(config: ref.watch(cloudConfigProvider));
 
 /// Datasource del servicio en primer plano para persistencia.
 @Riverpod(keepAlive: true)
@@ -69,6 +82,7 @@ RoomRepository roomRepository(Ref ref) {
     serverDataSource: server,
     clientDataSource: client,
     foregroundServiceDataSource: foregroundService,
+    cloudConfig: ref.watch(cloudConfigProvider),
     // Con la red de Frecu al aire, su IPv4 es la de la invitación.
     preferredLanInterface: () => ref.exists(localHotspotProvider)
         ? ref.read(localHotspotProvider.notifier).interfaceName
@@ -124,6 +138,7 @@ class RoomNotifier extends _$RoomNotifier {
     Iterable<RoomNote> nearbyNotes = const [],
     RoomNote? note,
     WifiCredentials? wifi,
+    bool internet = false,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final voice = _voiceListening();
@@ -132,6 +147,7 @@ class RoomNotifier extends _$RoomNotifier {
       accessCode: accessCode,
       displayName: displayName ?? t.room.host,
       note: note,
+      internet: internet,
     );
     switch (result) {
       case Success(:final data):
@@ -146,7 +162,7 @@ class RoomNotifier extends _$RoomNotifier {
           hosting: true,
         );
         state = room;
-        _joinVoice(repository, voice);
+        unawaited(_joinVoice(repository, voice, room));
         return Result.success(room);
       case FailureResult():
         return result;
@@ -184,7 +200,37 @@ class RoomNotifier extends _$RoomNotifier {
       case Success(:final data):
         final room = data.copyWith(note: data.note ?? note, wifi: wifi);
         state = room;
-        _joinVoice(repository, voice);
+        unawaited(_joinVoice(repository, voice, room));
+        return Result.success(room);
+      case FailureResult():
+        return result;
+    }
+  }
+
+  /// Se une a una frecu abierta por internet, por su [internetId] (lo trae
+  /// el QR o el enlace), a través del punto de encuentro.
+  ///
+  /// Antes suelta cualquier Wi-Fi a la que la app se haya atado: una red sin
+  /// internet no llega a la nube.
+  Future<Result<Room>> joinInternetRoom({
+    required String internetId,
+    required String accessCode,
+    required String displayName,
+    RoomNote? note,
+  }) async {
+    final repository = ref.read(roomRepositoryProvider);
+    final voice = _voiceListening();
+    await ref.read(wifiJoinRepositoryProvider).release();
+    final result = await repository.joinInternetRoom(
+      internetId: internetId,
+      accessCode: accessCode,
+      displayName: displayName,
+    );
+    switch (result) {
+      case Success(:final data):
+        final room = data.copyWith(note: data.note ?? note);
+        state = room;
+        unawaited(_joinVoice(repository, voice, room));
         return Result.success(room);
       case FailureResult():
         return result;
@@ -265,16 +311,28 @@ class RoomNotifier extends _$RoomNotifier {
   /// Une la voz a la malla con el id local y quienes ya estaban, aunque el
   /// `welcome` se haya consumido antes de que la voz existiera. Es
   /// idempotente: si la voz ya entró con ese id, no hace nada.
-  void _joinVoice(RoomRepository rooms, VoiceRepository? voice) {
+  ///
+  /// En una frecu por internet, antes pide los STUN y TURN (como mucho unos
+  /// segundos; si no llegan, queda el STUN público).
+  Future<void> _joinVoice(
+    RoomRepository rooms,
+    VoiceRepository? voice,
+    Room room,
+  ) async {
     final localId = rooms.localParticipantId;
     if (voice == null || localId == null) return;
-    unawaited(_joinMesh(rooms, voice, localId));
+    final internetId = room.internetId;
+    final iceServers = internetId == null
+        ? const <IceServer>[]
+        : await ref.read(turnCredentialsProvider).fetch(internetId);
+    unawaited(_joinMesh(rooms, voice, localId, iceServers));
   }
 
   Future<void> _joinMesh(
     RoomRepository rooms,
     VoiceRepository voice,
     String localId,
+    List<IceServer> iceServers,
   ) async {
     try {
       final present = await rooms.watchParticipants().first;
@@ -282,7 +340,11 @@ class RoomNotifier extends _$RoomNotifier {
       final earlier = [for (final participant in present) participant.id]
           .takeWhile((id) => id != localId)
           .toList();
-      await voice.joinMesh(localPeerId: localId, peerIds: earlier);
+      await voice.joinMesh(
+        localPeerId: localId,
+        peerIds: earlier,
+        iceServers: iceServers,
+      );
     } on Object catch (error, stackTrace) {
       AppLogger.w('Could not join the voice mesh', error, stackTrace);
     }

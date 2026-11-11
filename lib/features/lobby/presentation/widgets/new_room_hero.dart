@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:frecu/core/design/fr_theme.dart';
+import 'package:frecu/core/design/icons/fr_icon.dart';
+import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/features/lobby/presentation/widgets/fifths_clock.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -11,13 +13,21 @@ import 'package:frecu/i18n/strings.g.dart';
 /// lado, la nota, sus Hz y la hora de apertura.
 class NewRoomHero extends StatelessWidget {
   /// Crea el héroe con la [note] de la frecu abierta en [openedAt].
-  const NewRoomHero({required this.note, required this.openedAt, super.key});
+  const NewRoomHero({
+    required this.note,
+    required this.openedAt,
+    this.internet = false,
+    super.key,
+  });
 
   /// Nota que tendrá la frecu.
   final RoomNote note;
 
   /// Hora de apertura.
   final DateTime openedAt;
+
+  /// «Permitir internet» encendido: lleva la etiqueta «Por internet».
+  final bool internet;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +52,11 @@ class NewRoomHero extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.topRight,
-              child: _NoteReading(note: note, openedAt: openedAt),
+              child: _NoteReading(
+                note: note,
+                openedAt: openedAt,
+                internet: internet,
+              ),
             ),
           ),
         ),
@@ -115,10 +129,15 @@ class _HeroBox extends StatelessWidget {
 
 /// «Tu frecu suena en», la nota grande, sus Hz y «Abierta a las HH:MM».
 class _NoteReading extends StatelessWidget {
-  const _NoteReading({required this.note, required this.openedAt});
+  const _NoteReading({
+    required this.note,
+    required this.openedAt,
+    required this.internet,
+  });
 
   final RoomNote note;
   final DateTime openedAt;
+  final bool internet;
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +164,21 @@ class _NoteReading extends StatelessWidget {
           newRoom.openedAt(time: time).toUpperCase(),
           style: fr.type.labelS.copyWith(color: c.tx3),
         ),
+        if (internet) ...[
+          const SizedBox(height: 8),
+          Row(
+            key: const Key('new_room_internet_tag'),
+            mainAxisSize: MainAxisSize.min,
+            spacing: 5,
+            children: [
+              FrIcon(FrIcons.globe, size: 12, color: c.signalFg),
+              Text(
+                t.room.header.internetTag.toUpperCase(),
+                style: fr.type.labelS.copyWith(color: c.tx2),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }

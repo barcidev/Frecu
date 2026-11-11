@@ -181,6 +181,28 @@ abstract final class FrIcons {
     FrIconPath('M3 12h18M12 3a13.5 13.5 0 0 1 0 18M12 3a13.5 13.5 0 0 0 0 18'),
   ]);
 
+  /// Sin internet.
+  static const globeOff = FrIconData('globeOff', [
+    FrIconPath(
+      'M3 12h18M12 3a13.5 13.5 0 0 1 3.4 6M12 3a13.5 13.5 0 0 0-3.1 15.4',
+    ),
+    FrIconPath('M20.2 15.6A9 9 0 1 1 8.4 3.8M4 4l16 16'),
+  ]);
+
+  /// Compartir.
+  static const share = FrIconData('share', [
+    FrIconPath('M12 3.5v11M8 7.5l4-4 4 4'),
+    FrIconPath(
+      'M8 10.5H6.5a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6.5a2 2 0 0 0-2-2H16',
+    ),
+  ]);
+
+  /// Enlace.
+  static const link = FrIconData('link', [
+    FrIconPath('M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2'),
+    FrIconPath('M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2'),
+  ]);
+
   /// Rayo.
   static const flash = FrIconData('flash', [
     FrIconPath('M13.5 3L5.5 13.5H11L10 21l8.5-11H13z'),
@@ -347,5 +369,8 @@ abstract final class FrIcons {
     ear,
     fuel,
     flag,
+    share,
+    link,
+    globeOff,
   ];
 }

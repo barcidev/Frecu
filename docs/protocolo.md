@@ -133,7 +133,7 @@ Solo la envía quien activó «Compartir mi ubicación» (apagado por defecto): 
 ## WebRTC
 
 - Topología **mesh**: cada participante tiene un `RTCPeerConnection` con cada uno de los demás.
-- `iceServers: []`. **No agregues STUN ni TURN**: la app debe funcionar sin internet usando solo candidatos locales.
+- `iceServers: []` en la red local: **no agregues STUN ni TURN** ahí; debe funcionar sin internet con solo candidatos locales. Solo una frecu por internet usa STUN y TURN (ver «Modo internet»).
 - Solo audio. Restricciones: `echoCancellation`, `noiseSuppression` y `autoGainControl` en `true`.
 - Para evitar *glare*, **el participante que llega crea las offers** hacia los que ya estaban (los que trae su `welcome`).
 - La voz escucha la señalización desde que se crea y entra a la malla con el id del `welcome` en cuanto se crea o se une a la frecu, sin esperar a la pantalla. Una offer que llega antes de conocer el id local se atiende al conocerlo; los mensajes de cada par se procesan en orden y los candidatos ICE que llegan antes que la descripción remota se aplican después de ella.
@@ -152,3 +152,19 @@ Solo la envía quien activó «Compartir mi ubicación» (apagado por defecto): 
 - Reconexión del cliente con backoff exponencial (1, 2, 4, 8 s, tope 15 s), hasta 5 intentos. Hay un solo bucle de reconexión por frecu y solo tras una unión con `welcome`: una unión fallida no reconecta. `RoomStatus.reconnecting` lleva el intento y el tiempo al próximo, para la cuenta atrás.
 - Al reconectar, el participante vuelve a enviar `join`, recibe otro id y se recrean sus peer connections (vuelve a ofrecer, como quien llega). Mientras reconecta no transmite; el micrófono abierto se retoma al volver.
 - Si se agotan los intentos, la frecu pasa a `RoomStatus.closed('host_unreachable')` una sola vez. Si el anfitrión cierra la frecu, todos pasan a `RoomStatus.closed`.
+
+## Modo internet
+
+Una frecu puede abrirse también por internet, sin servidor propio: un Worker de Cloudflare con un Durable Object por frecu (código en `cloud/`). Solo existe si la app se compila con `--dart-define=FRECU_CLOUD_URL=https://…` (`CloudConfig`); sin ella, todo sigue local.
+
+- **El anfitrión sigue siendo la autoridad.** Levanta su servidor local como siempre (también acepta a los cercanos) y además abre un relé (`CloudRelayDataSource`) a `wss://<worker>/rooms/<id>/host?secret=<s>`. `<id>` son 128 bits en hexadecimal (`CloudConfig.newRoomId`) y `<s>` un secreto nuevo por frecu: el primero que llega reclama la sala.
+- **Los invitados por internet** se conectan a `wss://<worker>/rooms/<id>/guest` y hablan el mismo protocolo JSON de este documento (`v=1`), con el mismo `SignalingClientDataSource`.
+- **Sobres entre el Durable Object y el anfitrión:** `{"t":"open","c":<conexión>,"k":<resumen de la IP>}`, `{"t":"msg","c","d":<mensaje JSON en texto>}` y `{"t":"close","c"}`, en los dos sentidos salvo `open`. Cada invitado llega al servidor como una `SignalingConnection` más; `k` es la clave del bloqueo por códigos incorrectos. Los invitados nunca se hablan entre sí por el Durable Object.
+- **Caídas:** si el relé del anfitrión se cae, el Durable Object cierra a sus invitados, el anfitrión reconecta con espera creciente (hasta 15 s) y los invitados vuelven con su reconexión de siempre (nuevo id).
+- **ICE:** quien está en una frecu por internet pide `POST /rooms/<id>/turn` (`TurnCredentialsDataSource`), que responde `{"iceServers":[…]}` con STUN y TURN de Cloudflare (credenciales que vencen en 24 h). Si no responde en 5 s, queda `stun:stun.cloudflare.com:3478`. Los enlaces nuevos usan esos servidores (`PeerConnectionDataSource.iceServers`).
+- **Invitación:** dato aditivo `x=<id>` (`v=1` no cambia). Con `x`, `h` y `p` son opcionales: sin red local, el QR lleva solo `r`, `c`, `x` y los opcionales. Si `r` falta, vale `x`. Un `x` mal formado se ignora. Al escanear, si el anfitrión responde en la red local se entra por ella; si no, por internet. El enlace para compartir es `https://<worker>/j/<id>#c=<código>`: la página abre `frecu://join?x=…&c=…`, y el código va en el fragmento, que no llega al Worker.
+- **Red en Android:** al unirse por internet, la app suelta cualquier Wi-Fi a la que se haya atado (`release`), porque una red sin internet no llega a la nube.
+- **Frecus mezcladas:** la voz entre un invitado local y uno por internet conecta si el local tiene salida a internet (Wi-Fi con internet o la zona Wi-Fi del iPhone). En la red de Frecu de Android (sin internet) no hay ruta: queda para una fase con reenvío por el anfitrión.
+- **Quién entró por internet:** cada participante lleva `remote` (aditivo, `v=1`; sin él vale `false`), que pone el anfitrión según por dónde llegó. La frecu muestra «Por internet» bajo su nombre y, a quien está en la red de la frecu sin internet, «Sin audio» y un aviso para quienes no conectan.
+- **Pendiente de esta fase:** registro y tope de 30 min gratis, y reinicio de ICE al cambiar entre Wi-Fi y datos (hoy la voz se rehace al reconectar la señalización). Un enlace abre la pantalla de escaneo con la frecu encontrada (no una hoja en el inicio, como dibuja el prototipo).
+

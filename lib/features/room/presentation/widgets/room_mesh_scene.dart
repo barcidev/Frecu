@@ -92,6 +92,8 @@ class MeshNode {
     this.distance,
     this.behind = false,
     this.level = 0,
+    this.remote = false,
+    this.noAudio = false,
   });
 
   /// Id del participante.
@@ -131,6 +133,13 @@ class MeshNode {
   /// Nivel real de su voz, de 0 a 1.
   final double level;
 
+  /// Entró por internet.
+  final bool remote;
+
+  /// Entró por internet y este teléfono, en una red sin internet, no tiene
+  /// ruta de voz con esa persona.
+  final bool noAudio;
+
   /// Se le oye: habla, no está silenciado y su enlace está bien.
   bool get onAir => speaking && !muted && link == MeshLink.ok;
 
@@ -148,7 +157,9 @@ class MeshNode {
       other.weak == weak &&
       other.distance == distance &&
       other.behind == behind &&
-      other.level == level;
+      other.level == level &&
+      other.remote == remote &&
+      other.noAudio == noAudio;
 
   @override
   int get hashCode => Object.hash(
@@ -164,6 +175,8 @@ class MeshNode {
     distance,
     behind,
     level,
+    remote,
+    noAudio,
   );
 }
 
@@ -186,6 +199,7 @@ List<MeshNode?> buildMeshNodes({
   RoomStatus? status,
   Map<String, String> distances = const {},
   Set<String> behind = const {},
+  bool cutRemotes = false,
 }) {
   final nodes = List<MeshNode?>.filled(meshSlotCount, null);
   final roomLink = status?.maybeWhen(
@@ -197,6 +211,7 @@ List<MeshNode?> buildMeshNodes({
     final slot = slots[participant.id];
     if (slot == null) continue;
     final isMe = participant.id == localId;
+    final link = roomLink ?? _peerLink(participant.connectionState);
     nodes[slot] = MeshNode(
       id: participant.id,
       name: participant.displayName,
@@ -207,11 +222,14 @@ List<MeshNode?> buildMeshNodes({
           ? localTalking
           : participant.isSpeaking || speakingPeers.contains(participant.id),
       muted: participant.isMuted,
-      link: roomLink ?? _peerLink(participant.connectionState),
+      link: link,
       weak: !isMe && participant.linkQuality == LinkQuality.weak,
       distance: isMe ? null : distances[participant.id],
       behind: behind.contains(participant.id),
       level: levels[participant.id] ?? 0,
+      remote: participant.remote,
+      noAudio:
+          cutRemotes && !isMe && participant.remote && link == MeshLink.off,
     );
   }
   return nodes;
@@ -264,6 +282,12 @@ enum MeshCaption {
 
   /// «Atrás · 850 m»: se quedó atrás del grupo.
   behind,
+
+  /// «Por internet»: entró desde lejos.
+  internet,
+
+  /// «Sin audio»: entró por internet y este teléfono no tiene cómo oírlo.
+  noAudio,
 }
 
 /// Leyenda de [node]: el enlace manda sobre el silencio, el silencio sobre
@@ -272,6 +296,7 @@ MeshCaption meshCaption(MeshNode node) {
   if (node.link == MeshLink.link) return MeshCaption.connecting;
   if (node.link == MeshLink.rec) return MeshCaption.reconnecting;
   if (node.muted) return MeshCaption.muted;
+  if (node.noAudio) return MeshCaption.noAudio;
   if (node.behind && node.link == MeshLink.ok) return MeshCaption.behind;
   if (node.weak && node.link == MeshLink.ok) return MeshCaption.weak;
   if (node.onAir) return node.isMe ? MeshCaption.onAir : MeshCaption.speaking;
@@ -279,7 +304,8 @@ MeshCaption meshCaption(MeshNode node) {
   if (node.distance != null) {
     return node.isHost ? MeshCaption.hostDistance : MeshCaption.distance;
   }
-  return node.isHost ? MeshCaption.host : MeshCaption.none;
+  if (node.isHost) return MeshCaption.host;
+  return node.remote ? MeshCaption.internet : MeshCaption.none;
 }
 
 /// Escala de un nodo [age] segundos después de llegar: el resorte del

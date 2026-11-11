@@ -4,7 +4,7 @@ Lista de lo que piden Google Play y App Store por las funciones de la V1, con lo
 
 ## Lo que sale de cada teléfono
 
-Frecu no tiene servidores ni cuentas: nada va a internet ni al desarrollador. Lo único que sale del teléfono va directo a otros teléfonos de la misma frecu, por la red local, Bluetooth o NFC, y solo por una acción del usuario:
+Frecu no tiene cuentas. En la red local nada va a internet ni al desarrollador. En una frecu **por internet**, la señalización (nombre, código, mensajes rápidos, estado de habla, ubicación si se comparte) pasa por el punto de encuentro en Cloudflare sin guardarse, y la voz cifrada puede pasar por un relé TURN de Cloudflare. Lo que sale del teléfono va a otros teléfonos de la misma frecu, por la red local, Bluetooth, NFC o el punto de encuentro, y solo por una acción del usuario:
 
 - **Voz:** en directo, cifrada (WebRTC, DTLS-SRTP), sin grabarse.
 - **Nombre visible**, mensajes rápidos y SOS: por la señalización local.
@@ -15,7 +15,7 @@ La política de privacidad está en `docs/privacidad.md`: hay que publicarla en 
 
 ## Google Play
 
-- **Seguridad de los datos:** Frecu no recoge datos (no los envía a su desarrollador ni a terceros). Si el formulario cuenta como «compartir» lo que va de un usuario a otro, declarar **Ubicación precisa** (opcional, la activa el usuario, no se guarda) y **Nombre** (visible para los demás de la frecu).
+- **Seguridad de los datos:** Frecu no recoge datos para su desarrollador. Por el modo internet, declarar que **Nombre**, **Ubicación precisa** (opcional) y **Audio (voz)** se transfieren a un proveedor de servicios (Cloudflare) cifrados en tránsito, sin guardarse, solo para que la frecu funcione. Si el formulario cuenta como «compartir» lo que va de un usuario a otro, declarar **Ubicación precisa** (opcional, la activa el usuario, no se guarda) y **Nombre** (visible para los demás de la frecu).
 - **Servicio en primer plano** (formulario de permisos, con un video corto por tipo):
   - `microphone`: mantener la voz de la frecu con la pantalla apagada.
   - `location`: solo mientras el usuario comparte su ubicación con la frecu.

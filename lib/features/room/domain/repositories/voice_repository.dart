@@ -1,5 +1,6 @@
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/ice_server.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -16,9 +17,13 @@ abstract interface class VoiceRepository {
   ///
   /// Es idempotente por frecu: con el mismo id no hace nada; con otro (al
   /// reconectar) rehace los enlaces con el id nuevo.
+  ///
+  /// [iceServers] son los STUN y TURN de una frecu por internet; en la red
+  /// local van vacíos y la voz usa solo direcciones locales.
   Future<void> joinMesh({
     required String localPeerId,
     required List<String> peerIds,
+    List<IceServer> iceServers = const [],
   });
 
   /// Sale de la malla: cierra los enlaces, suelta el micrófono y la sesión

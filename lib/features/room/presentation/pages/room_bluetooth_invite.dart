@@ -38,6 +38,7 @@ class RoomBluetoothInvite {
       note: room.note,
       name: room.name,
       wifi: wifi,
+      internetId: room.internetId,
     );
   });
 

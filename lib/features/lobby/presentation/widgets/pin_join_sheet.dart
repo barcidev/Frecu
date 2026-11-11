@@ -396,6 +396,7 @@ class JoinFailureBanner extends StatelessWidget {
   const JoinFailureBanner({
     required this.failure,
     this.viaBluetooth = false,
+    this.viaInternet = false,
     super.key,
   });
 
@@ -404,6 +405,9 @@ class JoinFailureBanner extends StatelessWidget {
 
   /// Si se habló con el anfitrión por Bluetooth (otra pista si no responde).
   final bool viaBluetooth;
+
+  /// Si se intentó entrar por internet (otra pista si no responde).
+  final bool viaInternet;
 
   @override
   Widget build(BuildContext context) {
@@ -414,8 +418,13 @@ class JoinFailureBanner extends StatelessWidget {
           (join.full(max: NetworkConstants.maxParticipants), join.roomFullHint),
       hostUnreachable: () => viaBluetooth
           ? (join.bluetooth.unreachable, join.bluetooth.unreachableHint)
+          : viaInternet
+          ? (join.unreachable, join.internetUnreachableHint)
           : (join.unreachable, join.unreachableHint),
       invalidAccessCode: () => (join.wrongCode, null),
+      network: (_) => viaInternet
+          ? (join.noInternet, join.noInternetHint)
+          : (join.failed, join.failedHint),
       versionMismatch: () => (join.versionMismatch, join.versionMismatchHint),
       orElse: () => (join.failed, join.failedHint),
     );

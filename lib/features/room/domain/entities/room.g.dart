@@ -18,6 +18,7 @@ _Room _$RoomFromJson(Map<String, dynamic> json) => _Room(
   wifi: json['wifi'] == null
       ? null
       : WifiCredentials.fromJson(json['wifi'] as Map<String, dynamic>),
+  internetId: json['internetId'] as String?,
 );
 
 Map<String, dynamic> _$RoomToJson(_Room instance) => <String, dynamic>{
@@ -30,4 +31,5 @@ Map<String, dynamic> _$RoomToJson(_Room instance) => <String, dynamic>{
   'maxParticipants': instance.maxParticipants,
   'note': const RoomNoteConverter().toJson(instance.note),
   'wifi': instance.wifi,
+  'internetId': instance.internetId,
 };

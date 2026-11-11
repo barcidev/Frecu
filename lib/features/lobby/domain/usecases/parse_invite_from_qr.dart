@@ -1,3 +1,4 @@
+import 'package:frecu/core/constants/cloud_config.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
@@ -45,6 +46,11 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
   }
 
   /// Lee la nota `n`; ausente o inválida es sin nota.
+  String? _parseInternetId(String? value) {
+    final id = value?.trim().toLowerCase() ?? '';
+    return CloudConfig.isRoomId(id) ? id : null;
+  }
+
   RoomNote? _parseNote(String? noteStr) {
     return RoomNote.tryFromSemitone(int.tryParse(noteStr?.trim() ?? ''));
   }
@@ -67,12 +73,19 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
   }
 
   Result<RoomInvite> _extractInvite(Uri uri) {
-    final host = uri.queryParameters['h']?.trim() ?? '';
-    final port = _parsePort(uri.queryParameters['p']);
-    final roomId = uri.queryParameters['r']?.trim() ?? '';
+    final internetId = _parseInternetId(uri.queryParameters['x']);
+    final rawHost = uri.queryParameters['h']?.trim() ?? '';
+    final rawPort = _parsePort(uri.queryParameters['p']);
+    // Por internet basta el id: sin una dirección local válida, se entra
+    // solo por la nube.
+    final local = rawHost.isNotEmpty && rawPort != null;
+    final host = local ? rawHost : '';
+    final port = local ? rawPort : 0;
+    final roomId =
+        uri.queryParameters['r']?.trim().nonEmpty ?? internetId ?? '';
     final accessCode = uri.queryParameters['c']?.trim() ?? '';
 
-    if (host.isEmpty || port == null) {
+    if (!local && internetId == null) {
       return const Result.failure(
         Failure.unexpected(message: 'Host o puerto inválido en la invitación'),
       );
@@ -93,7 +106,12 @@ final class ParseInviteFromQr implements UseCase<RoomInvite, String> {
         note: _parseNote(uri.queryParameters['n']),
         name: _parseName(uri.queryParameters['name']),
         wifi: _parseWifi(uri.queryParameters['ws'], uri.queryParameters['wk']),
+        internetId: internetId,
       ),
     );
   }
+}
+
+extension on String {
+  String? get nonEmpty => isEmpty ? null : this;
 }

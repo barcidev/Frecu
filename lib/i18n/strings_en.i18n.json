@@ -25,6 +25,10 @@
         "unreachableHint": "Move closer to their phone and try again."
       },
       "close": "Close",
+      "internet": "Over the internet",
+      "internetUnreachableHint": "Check that you have internet and that the frecu is still open.",
+      "noInternet": "You're offline",
+      "noInternetHint": "Turn on mobile data or connect to a Wi-Fi with internet.",
       "port": "Port $port",
       "wrongCode": "Wrong code. Check it and try again.",
       "roomFullHint": "You can join when someone leaves.",
@@ -84,6 +88,7 @@
         "hint": "Point at the QR the host shows on their phone.",
         "invalid": "This QR isn't a Frecu invite.",
         "found": "Room found",
+        "foundInternet": "Room found · over the internet",
         "noNote": "Room without a note",
         "join": "Join",
         "another": "Scan another QR",
@@ -213,6 +218,12 @@
       "codeDigits": "4 digits",
       "regenerate": "Generate another",
       "codeHelp": "Share it only with your group: it keeps strangers on the same network out.",
+      "codeHelpInternet": "The link and the QR already include it: share them only with your group.",
+      "internet": {
+        "title": "Allow internet",
+        "on": "People far away can also join with the link. Uses mobile data.",
+        "off": "Only people on your network can join."
+      },
       "open": "Open room",
       "clockLabel": "Circle of fifths clock: $time, $note"
     },
@@ -250,11 +261,14 @@
       "connecting": "Connecting",
       "reconnecting": "Reconnecting",
       "weak": "Weak signal",
+      "internet": "Over the internet",
+      "noAudio": "No audio",
       "free": "Free",
       "invite": "Invite"
     },
     "header": {
       "youAreHost": "You're the host",
+      "internetTag": "Over the internet",
       "hostedBy": "Host · $name",
       "hz": "$value Hz",
       "note": "Note $note, $hz Hz",
@@ -263,6 +277,16 @@
     "sheets": {
       "close": "Close",
       "invite": {
+        "internet": {
+          "kicker": "Invite · over the internet",
+          "title": "Scan or share",
+          "message": "They work from anywhere and already include the code.",
+          "connection": "Connection",
+          "internet": "Internet",
+          "andWifi": "and Wi-Fi “$name”",
+          "share": "Share link",
+          "shareText": "Join my frecu “$name” on Frecu: $link"
+        },
         "nfcTitle": "Also by NFC",
         "nfcMessage": "Bring another phone close to yours",
         "nfcMessageTag": "Write it to an NFC tag",
@@ -325,6 +349,11 @@
       "people": "People",
       "note": "Note",
       "home": "Back to home"
+    },
+    "internet": {
+      "cutTitle": "The Frecu network has no internet.",
+      "cutMessage": "You won't hear $names, who joined over the internet, and they won't hear you.",
+      "nor": " or "
     },
     "talk": {
       "modePtt": "PTT",

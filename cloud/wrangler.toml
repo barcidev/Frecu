@@ -1,0 +1,24 @@
+# Punto de encuentro de Frecu en modo internet.
+# El anfitrión sigue siendo la autoridad de la frecu; este Worker solo es un
+# relé en estrella entre el anfitrión y sus invitados.
+name = "frecu-cloud"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+
+[observability]
+enabled = true
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "Room"
+
+# Durable Object con almacenamiento SQLite (disponible en el plan gratis).
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
+
+# Secretos de Cloudflare Realtime TURN (los valores no van aquí):
+#   npx wrangler secret put TURN_KEY_ID
+#   npx wrangler secret put TURN_KEY
+[secrets]
+required = ["TURN_KEY_ID", "TURN_KEY"]
