@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261111-traspaso-por-internet-worker-con-gracia-turno-y",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/traspaso-por-internet-worker-con-gracia-turno-y",
+  "baseCommit": "3fe7564ad82ae93c04f7b46477fb9e4df1a2a6b7",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "7 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:1c4c564aab61fe3435d21c30ebe2e3e802dcdf9efedcb18ecb29f86741255ac0",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:ebc9af1b8890eb9a7570b5a2ba813bcdf973edd87ee63580ce86219403b40fba",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:6bb89a7c8f4dcecff0069ec0c2ee0a36f1145be64cc55b883a96f1eb6bd75b19",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:4f465a04bae62988d551a0a6337fe4eaf7eb23ad4b1f8eae2b43b5702f7ca90b",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 11,
+    "T": 2,
+    "R": 4
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b18f5841c6f76e350cdd84006d42f7c46f7e3add159b5a7e94e77b341c3086a5",
+    "at": "2026-11-11T15:40:58.111Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
