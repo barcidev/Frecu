@@ -78,7 +78,7 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 
 | type | Dirección | Contenido |
 |---|---|---|
-| `join` | cliente → host | displayName, accessCode, protocolVersion |
+| `join` | cliente → host | displayName, accessCode, protocolVersion, `peerId` (opcional: volver a su lugar tras un traspaso) |
 | `welcome` | host → cliente | peerId asignado, lista de participantes, nota opcional (`note`), nombre de la frecu opcional (`roomName`) |
 | `rejected` | host → cliente | reason (`roomFull`, `invalidAccessCode`, `versionMismatch`) |
 | `peer_joined` | host → todos | participante |
@@ -91,6 +91,8 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 | `position` | peer → todos menos quien lo envía (vía host) | peerId, lat y lon opcionales, accuracy opcional |
 | `ping` / `pong` | ambos | timestamp |
 | `room_state` | host → todos | `state`: sucesión, turno y estado de la frecu |
+| `host_handover` | host → todos | `to`, `term`: el anfitrión pasa la frecu y sale |
+| `host_changed` | nuevo host → quien vuelve | `host`, `term`, `reason` (`left` o `lost`) |
 | `room_closed` | host → todos | reason |
 
 El servidor del anfitrión solo enruta mensajes y mantiene la lista de participantes. No procesa audio.
@@ -102,6 +104,10 @@ El `welcome` lleva el nombre de la frecu en `roomName`, para que quien se une (t
 ### Sucesión y estado de la frecu (`room_state`)
 
 Tras cada `join` aceptado (después de `welcome` y `peer_joined`) y cada salida, el anfitrión envía a todos `room_state` con `state`: el turno vigente (`term`, 1 al abrir la frecu), si admite traspaso (`handover`: por internet o en una Wi-Fi que no crea su teléfono), el nombre (`name`), el código (`accessCode`), la nota (`note`), el tipo (`reach`: `local` o `internet`) y quienes están (`members`) en orden de sucesión, que es el de llegada con el anfitrión primero. Cada miembro lleva `id`, `displayName`, su hora de llegada (`joinedAt`) y, si entró por la red local, su IPv4 (`address`; la del anfitrión es la de su invitación). Por internet también lleva `internetId` y el secreto de anfitrión (`hostSecret`). Cada teléfono guarda el último (`RoomRepositoryImpl.succession`) y lo olvida al salir o al cerrarse la frecu. Es aditivo (`v=1`): `welcome` no cambia y una app anterior descarta el tipo desconocido, así que sigue sin traspaso.
+
+### Traspaso voluntario (`host_handover`, `host_changed`)
+
+En una frecu local con traspaso (una Wi-Fi que no crea el teléfono del anfitrión), el anfitrión que sale con «Que siga sin mí» envía a todos `host_handover` con `to` (quien la recibe) y `term` (el turno siguiente), luego `peer_left` de sí mismo, y cierra su servidor sin `room_closed`. Quien la recibe abre su servidor en el mismo puerto con el estado de `room_state` y ese turno, y guarda un lugar a cada persona heredada (mismo id, orden y hora de llegada) hasta que se le acaba el latido. Se une a sí mismo con `join.peerId` = su id y queda como anfitrión. Los demás, en lugar de reintentar la IP vieja, se conectan a la `address` de quien la recibe (de `room_state`) con el código heredado y `join.peerId` = su id: ocupan su lugar sin `peer_joined` (ya estaban en las listas) y reciben `host_changed` con `host`, `term` y `reason: left`. Es aditivo: una app anterior descarta los tipos nuevos y su `join` sin `peerId` entra con un id nuevo.
 
 ### Silencio en micrófono abierto (`muted`)
 

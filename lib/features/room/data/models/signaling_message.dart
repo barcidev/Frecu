@@ -14,10 +14,13 @@ const int signalingProtocolVersion = 1;
 @Freezed(unionKey: 'type', makeCollectionsUnmodifiable: false)
 sealed class SignalingMessage with _$SignalingMessage {
   /// Solicitud de unión a la sala enviada por un participante al anfitrión.
+  /// Con [peerId] (aditivo), vuelve a su lugar en la frecu que heredó otro
+  /// anfitrión, con su mismo id y su mismo orden de sucesión.
   const factory SignalingMessage.join({
     required String displayName,
     required String accessCode,
     @Default(signalingProtocolVersion) int protocolVersion,
+    @JsonKey(includeIfNull: false) String? peerId,
     @Default('join') String type,
   }) = SignalingJoinMessage;
 
@@ -133,6 +136,27 @@ sealed class SignalingMessage with _$SignalingMessage {
     required RoomSuccession state,
     @Default('room_state') String type,
   }) = SignalingRoomStateMessage;
+
+  /// El anfitrión pasa la frecu a [to] y sale: quien la recibe la abre con
+  /// el turno [term], y los demás se reconectan a su IP con su mismo id. Es
+  /// aditivo: una app anterior lo descarta.
+  @FreezedUnionValue('host_handover')
+  const factory SignalingMessage.hostHandover({
+    required String to,
+    required int term,
+    @Default('host_handover') String type,
+  }) = SignalingHostHandoverMessage;
+
+  /// Quien tomó la frecu ([host], con el turno [term]) se lo dice a cada
+  /// persona que vuelve: [reason] es `left` si el anfitrión anterior se la
+  /// pasó al salir y `lost` si se cayó. Es aditivo.
+  @FreezedUnionValue('host_changed')
+  const factory SignalingMessage.hostChanged({
+    required String host,
+    required int term,
+    required String reason,
+    @Default('host_changed') String type,
+  }) = SignalingHostChangedMessage;
 
   /// Notificación de cierre de sala.
   @FreezedUnionValue('room_closed')

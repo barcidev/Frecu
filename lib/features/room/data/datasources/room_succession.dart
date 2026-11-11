@@ -16,6 +16,7 @@ class SuccessionLedger {
   String? _hostAddress;
   String? _internetId;
   String? _hostSecret;
+  String? _hostId;
   final Map<String, RoomMember> _members = {};
 
   /// Turno vigente del anfitrión.
@@ -45,20 +46,29 @@ class SuccessionLedger {
 
   /// Suma a [participant] al final de la sucesión. El anfitrión lleva la
   /// IPv4 de la invitación; un invitado, la de su socket local ([address]).
+  /// Quien vuelve a su lugar heredado lo conserva, con su hora de llegada.
   void add(Participant participant, {String? address}) {
+    if (participant.isHost) _hostId = participant.id;
     _members[participant.id] = RoomMember(
       id: participant.id,
       displayName: participant.displayName,
-      joinedAt: DateTime.now(),
+      joinedAt: _members[participant.id]?.joinedAt ?? DateTime.now(),
       address: participant.isHost ? _hostAddress : address,
     );
   }
+
+  /// Guarda el lugar heredado de [member] en una frecu que se toma, con su
+  /// id y su hora de llegada, hasta que vuelva o se vaya.
+  void seed(RoomMember member) => _members[member.id] = member;
 
   /// Saca a [peerId] de la sucesión.
   void remove(String peerId) => _members.remove(peerId);
 
   /// Vacía la sucesión al abrir una frecu nueva.
-  void clear() => _members.clear();
+  void clear() {
+    _members.clear();
+    _hostId = null;
+  }
 
   /// La sucesión con el estado de la frecu, para `room_state`.
   RoomSuccession snapshot({
@@ -74,8 +84,47 @@ class SuccessionLedger {
     reach: _reach,
     internetId: _internetId,
     hostSecret: _hostSecret,
-    members: List.unmodifiable(_members.values),
+    // El anfitrión primero; los demás, por orden de llegada.
+    members: List.unmodifiable([
+      ?_members[_hostId],
+      for (final member in _members.values)
+        if (member.id != _hostId) member,
+    ]),
   );
+}
+
+/// Frecu que toma este teléfono: su sucesión ([state]), quién la toma
+/// ([host]), quién la llevaba ([previous]) y por qué cambió ([reason]:
+/// `left` si se la pasó al salir, `lost` si se cayó).
+class InheritedRoom {
+  /// Crea la frecu heredada.
+  const InheritedRoom(
+    this.state, {
+    required this.host,
+    required this.previous,
+    this.reason = 'left',
+  });
+
+  /// Sucesión y estado heredados.
+  final RoomSuccession state;
+
+  /// Id de quien la toma.
+  final String host;
+
+  /// Id de quien la llevaba.
+  final String previous;
+
+  /// Por qué cambió el anfitrión.
+  final String reason;
+
+  /// A quiénes se guarda lugar: todos menos quien la llevaba.
+  Iterable<RoomMember> get seats =>
+      state.members.where((member) => member.id != previous);
+
+  /// El mayor número de los ids heredados (`peer_N`): los nuevos siguen.
+  int get lastPeerNumber => state.members
+      .map((member) => int.tryParse(member.id.replaceFirst('peer_', '')) ?? 0)
+      .fold(0, (a, b) => a > b ? a : b);
 }
 
 /// La última sucesión que mandó el anfitrión a este teléfono.

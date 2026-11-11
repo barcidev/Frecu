@@ -71,7 +71,7 @@ En una frecu local sobre una Wi-Fi que no depende del teléfono del anfitrión, 
 
 ## Tareas
 
-- [ ] T1: Toma de la frecu y reconexión de los demás con su mismo lugar
+- [x] T1: Toma de la frecu y reconexión de los demás con su mismo lugar
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, lib/features/room/data/datasources/room_succession.dart, lib/features/room/data/repositories/room_reconnection.dart, lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/domain/repositories/room_handover.dart, test/features/room/data/room_handover_test.dart, docs/protocolo.md
   - ac: AC7
   - verify: flutter test test/features/room/data/room_handover_test.dart test/features/room/data/room_reconnect_test.dart test/features/room/data/room_succession_test.dart

@@ -107,6 +107,19 @@ class SignalingServerDataSource {
   final Map<String, Participant> _participants = {};
   final Map<String, DateTime> _peerLastSeen = {};
   final Map<String, List<DateTime>> _failedCodes = {};
+
+  /// Lugares heredados que aún no ocupó nadie.
+  final Set<String> _seats = {};
+
+  /// Frecu que se tomó en el último [start]; nula en una frecu nueva, donde
+  /// el anfitrión es el primero en unirse.
+  InheritedRoom? _taken;
+
+  /// Se está deteniendo: no se aceptan conexiones nuevas.
+  bool _closing = false;
+
+  /// Se detiene porque pasó la frecu: no avisa `room_closed`.
+  bool _handingOver = false;
   final StreamController<SignalingMessage> _messagesController =
       StreamController<SignalingMessage>.broadcast();
 
@@ -152,6 +165,11 @@ class SignalingServerDataSource {
   /// `room_state` al entrar o salir alguien.
   final SuccessionLedger succession = SuccessionLedger();
 
+  /// Frecu que tomará el próximo [start] (que la consume): guarda un lugar
+  /// a cada persona heredada, y quien se une con su `host` es el anfitrión.
+  /// Se fija antes de [start], como [succession].
+  InheritedRoom? inherited;
+
   /// Inicia el servidor de señalización de una frecu nueva.
   ///
   /// Si ya había uno en marcha (una frecu anterior que no se cerró), lo
@@ -169,6 +187,7 @@ class SignalingServerDataSource {
       await stop();
     }
 
+    _closing = false;
     _accessCode = accessCode;
     _roomName = roomName;
     _note = note;
@@ -178,6 +197,7 @@ class SignalingServerDataSource {
     _failedCodes.clear();
     succession.clear();
     _peerCounter = 0;
+    _seedInherited();
 
     FutureOr<Response> handler(Request request) {
       final info = request.context['shelf.io.connection_info'];
@@ -197,6 +217,25 @@ class SignalingServerDataSource {
     } on Object catch (e, stackTrace) {
       AppLogger.e('Failed to start signaling server', e, stackTrace);
       rethrow;
+    }
+  }
+
+  /// Guarda los lugares de la frecu heredada, si la hay.
+  void _seedInherited() {
+    final inherited = _taken = this.inherited;
+    this.inherited = null;
+    _seats.clear();
+    if (inherited == null) return;
+    final now = DateTime.now();
+    _peerCounter = inherited.lastPeerNumber;
+    for (final member in inherited.seats) {
+      _seats.add(member.id);
+      _participants[member.id] = Participant(
+        id: member.id,
+        displayName: member.displayName,
+      );
+      _peerLastSeen[member.id] = now;
+      succession.seed(member);
     }
   }
 
@@ -236,7 +275,7 @@ class SignalingServerDataSource {
   /// Atiende una conexión nueva, venga de la red local o del relé de la
   /// nube: hasta su `join` aceptado, todo lo demás se ignora.
   void accept(SignalingConnection channel) {
-    if (!isRunning) {
+    if (!isRunning || _closing) {
       unawaited(channel.close());
       return;
     }
@@ -355,40 +394,21 @@ class SignalingServerDataSource {
 
   String? _processJoin(SignalingConnection channel, SignalingJoinMessage join) {
     final address = channel.remoteKey;
-    if (join.protocolVersion != signalingProtocolVersion) {
-      _reject(channel, RejectReason.versionMismatch);
-      return null;
-    }
+    final seat = _seats.contains(join.peerId) ? join.peerId : null;
+    if (!_admits(channel, join, returning: seat != null)) return null;
 
-    if (_isLockedOut(address)) {
-      AppLogger.w('Too many wrong access codes from $address');
-      _reject(channel, RejectReason.invalidAccessCode);
-      return null;
-    }
-
-    if (join.accessCode != _accessCode) {
-      _recordWrongCode(address);
-      _reject(channel, RejectReason.invalidAccessCode);
-      return null;
-    }
-
-    if (_participants.length >= NetworkConstants.maxParticipants) {
-      _reject(channel, RejectReason.roomFull);
-      return null;
-    }
-
-    final isFirstPeer = _participants.isEmpty;
-    _peerCounter++;
-    final peerId = 'peer_$_peerCounter';
-
+    final peerId = seat ?? 'peer_${++_peerCounter}';
+    final host = _taken?.host;
+    final isHost = host == null ? _participants.isEmpty : peerId == host;
     final participant = Participant(
       id: peerId,
       displayName: join.displayName,
-      isHost: isFirstPeer,
+      isHost: isHost,
       remote: channel.remote,
-      ownsNetwork: isFirstPeer && hostOwnsNetwork,
+      ownsNetwork: isHost && hostOwnsNetwork,
     );
 
+    _seats.remove(peerId);
     _participants[peerId] = participant;
     _clientChannels[peerId] = channel;
     _peerLastSeen[peerId] = DateTime.now();
@@ -402,16 +422,69 @@ class SignalingServerDataSource {
         roomName: _roomName,
       ),
     );
-
-    _broadcast(
-      SignalingMessage.peerJoined(participant: participant),
-      excludePeerId: peerId,
-    );
+    _announceJoin(channel, participant, returning: seat != null);
 
     succession.add(participant, address: channel.remote ? null : address);
     _broadcastSuccession();
 
     return peerId;
+  }
+
+  /// Avisa a los demás que entró [participant]. Quien vuelve a su lugar
+  /// heredado ya está en sus listas: solo se avisa si es el anfitrión, y a
+  /// él se le dice quién lleva ahora la frecu.
+  void _announceJoin(
+    SignalingConnection channel,
+    Participant participant, {
+    required bool returning,
+  }) {
+    if (!returning || participant.isHost) {
+      _broadcast(
+        SignalingMessage.peerJoined(participant: participant),
+        excludePeerId: participant.id,
+      );
+    }
+    final taken = _taken;
+    if (!returning || participant.isHost || taken == null) return;
+    _sendToChannel(
+      channel,
+      SignalingMessage.hostChanged(
+        host: taken.host,
+        term: succession.term,
+        reason: taken.reason,
+      ),
+    );
+  }
+
+  /// Si el `join` puede entrar: misma versión, sin bloqueo, código correcto
+  /// y lugar libre (quien vuelve a su lugar heredado ya lo tiene). Si no,
+  /// lo rechaza.
+  bool _admits(
+    SignalingConnection channel,
+    SignalingJoinMessage join, {
+    required bool returning,
+  }) {
+    final address = channel.remoteKey;
+    if (join.protocolVersion != signalingProtocolVersion) {
+      _reject(channel, RejectReason.versionMismatch);
+      return false;
+    }
+    if (_isLockedOut(address)) {
+      AppLogger.w('Too many wrong access codes from $address');
+      _reject(channel, RejectReason.invalidAccessCode);
+      return false;
+    }
+    if (join.accessCode != _accessCode) {
+      _recordWrongCode(address);
+      _reject(channel, RejectReason.invalidAccessCode);
+      return false;
+    }
+    if (!returning &&
+        _participants.length >= NetworkConstants.maxParticipants) {
+      _reject(channel, RejectReason.roomFull);
+      return false;
+    }
+    return true;
   }
 
   void _reject(SignalingConnection channel, String reason) {
@@ -442,6 +515,7 @@ class SignalingServerDataSource {
     }
     _clientChannels.remove(peerId);
     _peerLastSeen.remove(peerId);
+    _seats.remove(peerId);
     final removed = _participants.remove(peerId);
     if (removed != null) {
       AppLogger.i('Peer left room: $peerId');
@@ -501,17 +575,42 @@ class SignalingServerDataSource {
     }
   }
 
+  /// Pasa la frecu a [to] y se detiene sin cerrarla: avisa a todos
+  /// `host_handover` con el turno siguiente y la salida del anfitrión. Es
+  /// `false` si [to] no está conectado o ya es el anfitrión.
+  Future<bool> handOver(String to) async {
+    final heir = _participants[to];
+    if (!isRunning || heir == null || heir.isHost) return false;
+    if (!_clientChannels.containsKey(to)) return false;
+    final host = _participants.values.where((p) => p.isHost).firstOrNull;
+    _broadcast(
+      SignalingMessage.hostHandover(to: to, term: succession.term + 1),
+    );
+    if (host != null) _broadcast(SignalingMessage.peerLeft(peerId: host.id));
+    _handingOver = true;
+    try {
+      await stop();
+    } finally {
+      _handingOver = false;
+    }
+    return true;
+  }
+
   /// Detiene el servidor y cierra todas las conexiones activas.
   Future<void> stop({String reason = 'host_closed'}) async {
     if (!isRunning) return;
 
+    _closing = true;
     _watchdogTimer?.cancel();
     _watchdogTimer = null;
     _peerLastSeen.clear();
+    _seats.clear();
     _note = null;
     _roomName = null;
 
-    _broadcast(SignalingMessage.roomClosed(reason: reason));
+    if (!_handingOver) {
+      _broadcast(SignalingMessage.roomClosed(reason: reason));
+    }
 
     final channels = List<SignalingConnection>.from(_clientChannels.values);
     _clientChannels.clear();
@@ -526,6 +625,7 @@ class SignalingServerDataSource {
 
     await _server?.close(force: true);
     _server = null;
+    _closing = false;
     AppLogger.i('Signaling server stopped');
   }
 
