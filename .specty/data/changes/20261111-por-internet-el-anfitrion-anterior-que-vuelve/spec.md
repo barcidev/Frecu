@@ -52,7 +52,7 @@ Por internet, cuando el anfitrión anterior recupera la red después de que otra
   - files: lib/features/room/data/datasources/cloud_relay_datasource.dart, test/features/room/data/cloud_relay_outranked_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/features/room/data/cloud_relay_outranked_test.dart test/features/room/data/internet_room_test.dart
-- [ ] T2: El anfitrión anterior cede por internet y vuelve como invitado
+- [x] T2: El anfitrión anterior cede por internet y vuelve como invitado
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/internet_outranked_test.dart
   - ac: AC1
   - verify: flutter test test/features/room/data/internet_outranked_test.dart test/features/room/data/internet_handover_test.dart test/features/room/data/host_rivalry_test.dart test/features/room/data/room_succession_test.dart

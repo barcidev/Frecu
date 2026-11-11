@@ -87,6 +87,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
       _handleClientConnectionChange,
     );
     _server.onRival = _onRival;
+    _relay.onOutranked = _onRelayOutranked;
   }
 
   final SignalingServerDataSource _server;
@@ -790,27 +791,35 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
 
   void _onRival(HostRival rival) => unawaited(_yieldTo(rival));
 
-  /// Otro teléfono lleva esta frecu local con traspaso con un turno que gana
-  /// ([rival]): le cede la frecu con sus invitados y vuelve a ella como
-  /// invitado, como quien sigue un `host_handover`.
+  /// Por internet, la nube rechazó el relé de este teléfono: otro lleva la
+  /// frecu con un turno mayor, y se le cede por el mismo socket de invitado.
+  void _onRelayOutranked() => unawaited(
+    _yieldTo(const HostRival(host: '', term: 0, address: '', port: 0)),
+  );
+
+  /// Otro teléfono lleva esta frecu con traspaso con un turno que gana
+  /// ([rival]): le cede la frecu y vuelve a ella como invitado, como quien
+  /// sigue un `host_handover`. En local, sus invitados van al rival; por
+  /// internet ya volvieron solos a la nube, y él vuelve por el socket de
+  /// invitado.
   Future<void> _yieldTo(HostRival rival) async {
     final state = _succession.current;
     final me = _participants
         .where((p) => p.id == _localParticipantId)
         .firstOrNull;
-    if (!_isHost || _outranked != null || state == null || me == null) return;
-    if (!state.handover || state.reach != RoomReach.local) return;
+    final back = _yieldUri(state, rival);
+    if (!_isHost || _outranked != null || me == null || back == null) return;
     final session = _session;
     _outranked = rival;
     _probe.stop();
     unawaited(_clientSubscription?.cancel());
     _clientSubscription = null;
-    await _server.yieldTo(rival);
+    await _release(rival, internet: state!.reach == RoomReach.internet);
     if (session != _session) return;
     _isHost = false;
     _following = true;
     _target = _JoinTarget(
-      uri: Uri.parse('ws://${rival.address}:${rival.port}'),
+      uri: back,
       host: rival.address,
       port: rival.port,
       accessCode: state.accessCode,
@@ -819,6 +828,26 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     );
     await _client.disconnect();
     _handleClientConnectionChange(false);
+  }
+
+  /// A dónde vuelve como invitado quien cede la frecu de [state] a [rival]:
+  /// en local, al servidor del rival; por internet, al socket de invitado.
+  /// Nulo si la frecu no admite traspaso.
+  Uri? _yieldUri(RoomSuccession? state, HostRival rival) {
+    if (state == null || !state.handover) return null;
+    if (state.reach == RoomReach.local) {
+      return Uri.parse('ws://${rival.address}:${rival.port}');
+    }
+    final internetId = _internetId;
+    return internetId == null ? null : cloudConfig.guestSocket(internetId);
+  }
+
+  /// Suelta la frecu que cede a [rival]: en local, sus invitados van al
+  /// rival; por internet ya volvieron solos a la nube.
+  Future<void> _release(HostRival rival, {required bool internet}) async {
+    if (!internet) return _server.yieldTo(rival);
+    await _relay.stop();
+    await _server.stop();
   }
 
   /// Mensajes del traspaso: `host_handover` del anfitrión que sale y

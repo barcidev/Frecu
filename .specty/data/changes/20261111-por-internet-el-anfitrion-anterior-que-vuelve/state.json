@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-por-internet-el-anfitrion-anterior-que-vuelve",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/por-internet-el-anfitrion-anterior-que-vuelve",
   "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
   "revision": 1,
@@ -42,12 +42,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "ba0e7221577c62cc15cd95ffef68e6d51c0872a4",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:57:42.126Z",
       "doneAt": "2026-11-11T15:59:51.995Z",
-      "summary": "El relé reconoce el 409 de la reconexión (IOWebSocketChannel conserva el código HTTP) y el cierre 4000 del socket vigente: deja de reconectar y avisa una vez con onOutranked; otras caídas (403/404/503, sin red, otros códigos) siguen reconectando."
+      "summary": "El relé reconoce el 409 de la reconexión (IOWebSocketChannel conserva el código HTTP) y el cierre 4000 del socket vigente: deja de reconectar y avisa una vez con onOutranked; otras caídas (403/404/503, sin red, otros códigos) siguen reconectando.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "46624e186d4589599787a7d8d4c6899b127f17e2",
+      "startedAt": "2026-11-11T15:59:52.271Z",
+      "doneAt": "2026-11-11T16:02:18.481Z",
+      "summary": "Al aviso onOutranked del relé, el repositorio cede como en C10 (_yieldTo generalizado): detiene relé y servidor, vuelve por guestSocket con su id y emite HostChange(outranked). Prueba de punta a punta con 409."
     }
   },
   "pending": {
