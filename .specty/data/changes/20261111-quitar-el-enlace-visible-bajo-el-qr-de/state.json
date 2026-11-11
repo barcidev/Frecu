@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "id": "20261111-quitar-el-enlace-visible-bajo-el-qr-de",
+  "kind": "quick",
+  "phase": "implementing",
+  "branch": "bugfix/quitar-el-enlace-visible-bajo-el-qr-de",
+  "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 1,
+    "adjust": 0,
+    "reasons": [
+      "1 archivo"
+    ]
+  },
+  "items": {},
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "T": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:0f7b8f3befb10eb5bb788da8ff5a9fa730e29cd26a3bd4a9082836691a139b65",
+    "at": "2026-11-11T05:28:33.526Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
