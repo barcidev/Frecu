@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-la-espera-en-pantalla-cuando-el-anfitrion-no",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/la-espera-en-pantalla-cuando-el-anfitrion-no",
   "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
   "revision": 1,
@@ -43,12 +43,23 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "b762ca2421ed35c158f08ea375c829b67b9ca53a",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:10:01.690Z",
       "doneAt": "2026-11-11T15:14:43.749Z",
-      "summary": "HostSilence (quién no responde, sucesor como en FailoverPlan, textos y vista de la frecu), hostSilenceProvider y hostSilenceClockProvider (cuenta hacia arriba), textos slang es/en y pruebas"
+      "summary": "HostSilence (quién no responde, sucesor como en FailoverPlan, textos y vista de la frecu), hostSilenceProvider y hostSilenceClockProvider (cuenta hacia arriba), textos slang es/en y pruebas",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/presentation/pages/room_state.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "b854abe7acb7c33664d3b6787d240f66621d6a70",
+      "startedAt": "2026-11-11T15:14:44.016Z",
+      "doneAt": "2026-11-11T15:19:29.386Z",
+      "summary": "Isla ámbar ««anfitrión» no responde · N s», pista del PTT con el sucesor y solo el anfitrión reconectando en la malla; room_page baja a 738 líneas (shownRoom y voiceLevelsOf en room_state.dart)."
     }
   },
   "pending": {
@@ -59,6 +70,7 @@
     "A": 4,
     "AC": 5,
     "T": 2,
-    "R": 2
+    "R": 2,
+    "S": 1
   }
 }

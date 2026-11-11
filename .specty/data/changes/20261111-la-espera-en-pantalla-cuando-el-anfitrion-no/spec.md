@@ -66,7 +66,7 @@ Cuando el anfitrión de una frecu con traspaso deja de responder, los invitados 
   - files: lib/features/room/presentation/widgets/host_silence.dart, lib/features/room/presentation/providers/host_silence_provider.dart, lib/features/room/presentation/providers/host_silence_provider.g.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, lib/i18n/strings.g.dart, test/features/room/presentation/host_silence_test.dart
   - ac: AC3, AC4, AC5
   - verify: flutter test test/features/room/presentation/host_silence_test.dart
-- [ ] T2: La espera en la pantalla de la frecu: isla, malla y pista del PTT
+- [x] T2: La espera en la pantalla de la frecu: isla, malla y pista del PTT
   - files: lib/features/room/presentation/widgets/room_talk.dart, lib/features/room/presentation/widgets/ptt_core_face.dart, lib/features/room/presentation/widgets/ptt_core.dart, lib/features/room/presentation/widgets/mic_control_section.dart, lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/host_silence_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/room/presentation
