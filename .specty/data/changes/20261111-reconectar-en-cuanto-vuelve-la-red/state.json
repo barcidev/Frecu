@@ -43,12 +43,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "01d85bb24377321202495f5d9360dda03f8e9a86",
+      "attempts": 1,
       "startedAt": "2026-11-11T05:29:49.288Z",
       "doneAt": "2026-11-11T05:31:39.217Z",
-      "summary": "Vigía NetworkReturnWatcher en lib/core/network/network_return.dart: sondea las interfaces (500 ms) durante la espera y la corta si aparece una dirección no loopback respecto a la consulta anterior; cancelable; pruebas de aparición, reaparición, loopback, desaparición, cancelación y fallo."
+      "summary": "Vigía NetworkReturnWatcher en lib/core/network/network_return.dart: sondea las interfaces (500 ms) durante la espera y la corta si aparece una dirección no loopback respecto a la consulta anterior; cancelable; pruebas de aparición, reaparición, loopback, desaparición, cancelación y fallo.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "aeae627a54c4f5972858b52f8d7ff9e13cfc9d1f",
+      "startedAt": "2026-11-11T05:31:40.052Z",
+      "doneAt": "2026-11-11T05:34:50.703Z",
+      "summary": "El bucle de reconexión del invitado espera con NetworkReturnWatcher (referencia renovada antes de cada intento) y, si vuelve la red antes, publica reconnecting(retryIn: 0) y reintenta ya; nuevo parámetro networkReturnPollInterval; prueba AC3."
     }
   },
   "pending": {

@@ -53,7 +53,7 @@ Hoy, al caerse la conexión, el invitado y el relé del anfitrión en modo inter
   - files: lib/core/network/network_return.dart, lib/core/constants/network_constants.dart, test/core/network/network_return_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/core/network/network_return_test.dart
-- [ ] T2: El invitado reintenta en cuanto vuelve la red
+- [x] T2: El invitado reintenta en cuanto vuelve la red
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_reconnect_test.dart
   - ac: AC3
   - verify: flutter test test/features/room/data/room_reconnect_test.dart
