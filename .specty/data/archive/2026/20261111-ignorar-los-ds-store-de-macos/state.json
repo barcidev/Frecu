@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-ignorar-los-ds-store-de-macos",
   "kind": "quick",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/ignorar-los-ds-store-de-macos",
   "baseCommit": "34aabb092d81c69de38920c55a21cbf43164ea15",
   "revision": 1,
@@ -25,12 +25,12 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "5ba5edcbc22bf78ddd670cc5da98a8c1fbc1e266",
+      "attempts": 1,
       "startedAt": "2026-11-11T16:56:18.913Z",
       "doneAt": "2026-11-11T16:56:23.046Z",
-      "summary": "Añadido al final de .gitignore el bloque '# macOS' / '.DS_Store'; git check-ignore reconoce docs/diseno/.DS_Store como ignorado."
+      "summary": "Añadido al final de .gitignore el bloque '# macOS' / '.DS_Store'; git check-ignore reconoce docs/diseno/.DS_Store como ignorado.",
+      "scopeExtra": []
     }
   },
   "pending": {
