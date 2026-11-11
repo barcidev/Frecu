@@ -67,18 +67,24 @@ Al crear una frecu, el anfitrión elige si es **Local** (todos en la misma Wi-Fi
 - C4: Traspaso voluntario en Wi-Fi compartida: hojas de salir y de sucesor, toma de la frecu y reconexión de los demás
   - ac: AC6, AC7
   - depends: C3
-- C5: Traspaso por caída en Wi-Fi compartida y regreso del anfitrión anterior por turno
-  - ac: AC8, AC9
+- C5: Traspaso por caída en Wi-Fi compartida, solo datos: reintentos al anfitrión, sucesión en orden con el mismo id, toma por quien siga en la red y turno en el `join`
+  - ac: AC8
   - depends: C4
 - C6: Traspaso por internet: Worker con gracia, turno y sucesor; voluntario y por caída
   - ac: AC11, AC7, AC8
-  - depends: C5
+  - depends: C5, C10
 - C7: La voz entre invitados sigue durante el traspaso, y pruebas en teléfonos reales
   - ac: AC10, AC12
-  - depends: C6
+  - depends: C6, C9
 - C8: Paso «¿Cómo se une tu grupo?» al crear (Local o Por internet), pasos de 3 o 2, etiqueta bajo la hora y sin el interruptor «Permitir internet»
   - ac: AC1
   - depends: C1
+- C9: La espera en pantalla cuando el anfitrión no responde: isla ««anfitrión» no responde · N s», pista con el sucesor y solo el anfitrión en reconectando
+  - ac: AC8
+  - depends: C5
+- C10: Regreso del anfitrión anterior y dos anfitriones a la vez: gana el turno mayor y el otro entra como invitado
+  - ac: AC9
+  - depends: C5
 
 ## Riesgos
 
