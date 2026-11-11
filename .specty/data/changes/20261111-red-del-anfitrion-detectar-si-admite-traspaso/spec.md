@@ -62,7 +62,7 @@ La frecu sabe si su red la crea el teléfono del anfitrión (red de Frecu o zona
   - files: lib/features/room/domain/entities/participant.dart, lib/features/room/domain/entities/participant.freezed.dart, lib/features/room/domain/entities/participant.g.dart, lib/features/room/domain/entities/room.dart, lib/features/room/domain/entities/room.freezed.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/host_network_test.dart
   - ac: AC4
   - verify: flutter test test/features/room/data/host_network_test.dart
-- [ ] T2: Hoja de salir y cierre con la red del anfitrión
+- [x] T2: Hoja de salir y cierre con la red del anfitrión
   - files: lib/features/room/presentation/widgets/leave_sheet.dart, lib/features/room/presentation/widgets/room_closed_view.dart, lib/features/room/presentation/pages/room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/room/presentation/host_network_ui_test.dart
   - ac: AC4
   - verify: flutter test test/features/room/presentation/host_network_ui_test.dart

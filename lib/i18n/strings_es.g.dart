@@ -890,6 +890,9 @@ class Translations$room$closure$es {
 	/// es: 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.'
 	String get lost => 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.';
 
+	/// es: 'Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.'
+	String get lostNetwork => 'Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.';
+
 	/// es: 'Duración'
 	String get duration => 'Duración';
 
@@ -1877,6 +1880,15 @@ class Translations$room$sheets$leave$es {
 	/// es: 'Eres el anfitrión. Si sales, la frecu se cierra para las otras $count personas.'
 	String hostMany({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.';
 
+	/// es: 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.'
+	String get networkAlone => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.';
+
+	/// es: 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.'
+	String get networkOne => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.';
+
+	/// es: 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras $count personas.'
+	String networkMany({required Object count}) => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras ${count} personas.';
+
 	/// es: 'Cerrar frecu'
 	String get hostConfirm => 'Cerrar frecu';
 
@@ -2605,6 +2617,9 @@ extension on Translations {
 			'room.sheets.leave.hostAlone' => 'Eres el anfitrión. Si sales, la frecu se cierra.',
 			'room.sheets.leave.hostOne' => 'Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.',
 			'room.sheets.leave.hostMany' => ({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.',
+			'room.sheets.leave.networkAlone' => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.',
+			'room.sheets.leave.networkOne' => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.',
+			'room.sheets.leave.networkMany' => ({required Object count}) => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras ${count} personas.',
 			'room.sheets.leave.hostConfirm' => 'Cerrar frecu',
 			'room.sheets.leave.cancel' => 'Cancelar',
 			'room.closure.offAir' => 'Fuera del aire',
@@ -2613,6 +2628,7 @@ extension on Translations {
 			'room.closure.host' => 'Cerraste la frecu. Todos los participantes fueron desconectados.',
 			'room.closure.peer' => 'El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.',
 			'room.closure.lost' => 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.',
+			'room.closure.lostNetwork' => 'Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.',
 			'room.closure.duration' => 'Duración',
 			'room.closure.people' => 'Personas',
 			'room.closure.note' => 'Nota',
@@ -2811,12 +2827,12 @@ extension on Translations {
 			'location.compass.se' => 'SE',
 			'location.compass.s' => 'S',
 			'location.compass.sw' => 'SO',
+			_ => null,
+		} ?? switch (path) {
 			'location.compass.w' => 'O',
 			'location.compass.nw' => 'NO',
 			'location.compassLong.n' => 'norte',
 			'location.compassLong.ne' => 'noreste',
-			_ => null,
-		} ?? switch (path) {
 			'location.compassLong.e' => 'este',
 			'location.compassLong.se' => 'sureste',
 			'location.compassLong.s' => 'sur',

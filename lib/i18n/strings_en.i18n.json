@@ -334,6 +334,9 @@
         "hostAlone": "You're the host. If you leave, the frecu closes.",
         "hostOne": "You're the host. If you leave, the frecu closes for the other person.",
         "hostMany": "You're the host. If you leave, the frecu closes for the other $count people.",
+        "networkAlone": "Your phone is the frecu's network. If you leave, the frecu closes.",
+        "networkOne": "Your phone is the frecu's network. If you leave, the frecu closes for the other person.",
+        "networkMany": "Your phone is the frecu's network. If you leave, the frecu closes for the other $count people.",
         "hostConfirm": "Close frecu",
         "cancel": "Cancel"
       }
@@ -345,6 +348,7 @@
       "host": "You closed the frecu. Everyone was disconnected.",
       "peer": "The host closed the frecu. You can join another one whenever you like.",
       "lost": "The host's signal was lost. You can join another one whenever you like.",
+      "lostNetwork": "The host's network was lost and didn't come back. You can join another one whenever you like.",
       "duration": "Duration",
       "people": "People",
       "note": "Note",

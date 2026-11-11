@@ -334,6 +334,9 @@
         "hostAlone": "Eres el anfitrión. Si sales, la frecu se cierra.",
         "hostOne": "Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.",
         "hostMany": "Eres el anfitrión. Si sales, la frecu se cierra para las otras $count personas.",
+        "networkAlone": "Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.",
+        "networkOne": "Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.",
+        "networkMany": "Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras $count personas.",
         "hostConfirm": "Cerrar frecu",
         "cancel": "Cancelar"
       }
@@ -345,6 +348,7 @@
       "host": "Cerraste la frecu. Todos los participantes fueron desconectados.",
       "peer": "El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.",
       "lost": "Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.",
+      "lostNetwork": "Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.",
       "duration": "Duración",
       "people": "Personas",
       "note": "Nota",

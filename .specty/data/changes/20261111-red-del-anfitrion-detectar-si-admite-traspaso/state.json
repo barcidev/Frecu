@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-red-del-anfitrion-detectar-si-admite-traspaso",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/red-del-anfitrion-detectar-si-admite-traspaso",
   "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
   "revision": 1,
@@ -35,12 +35,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "2d028c3a9b6742d6c1698161716e5153afe688cb",
+      "attempts": 1,
       "startedAt": "2026-11-11T13:51:36.838Z",
       "doneAt": "2026-11-11T13:54:19.417Z",
-      "summary": "Participant.ownsNetwork (aditivo) y Room.hostOwnsNetwork/handover; el repositorio detecta al crear si la red es del anfitrión (red de Frecu, zona Wi-Fi o sin red local) y el servidor lo marca en el participante anfitrión, que llega en welcome"
+      "summary": "Participant.ownsNetwork (aditivo) y Room.hostOwnsNetwork/handover; el repositorio detecta al crear si la red es del anfitrión (red de Frecu, zona Wi-Fi o sin red local) y el servidor lo marca en el participante anfitrión, que llega en welcome",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "ca33104f141a3dd0fbe8a08f85de58b90566d006",
+      "startedAt": "2026-11-11T13:54:19.686Z",
+      "doneAt": "2026-11-11T13:57:18.905Z",
+      "summary": "LeaveSheet con hostNetwork (textos «Tu teléfono es la red de la frecu…», solo «Cerrar frecu»), RoomClosureKind.lostHostNetwork con «Se perdió la red del anfitrión y no volvió.», RoomPage los elige por Room.hostOwnsNetwork; textos es/en"
     }
   },
   "pending": {

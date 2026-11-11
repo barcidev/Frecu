@@ -191,6 +191,11 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     }
   }
 
+  /// La red de la frecu la crea el teléfono del anfitrión: sin él no hay
+  /// frecu.
+  bool get _hostNetwork =>
+      ref.read(roomNotifierProvider)?.hostOwnsNetwork ?? false;
+
   /// Confirma la salida con la hoja de salir: quien no es anfitrión vuelve
   /// al inicio y el anfitrión cierra la frecu y ve la pantalla de cierre.
   Future<void> _confirmLeave({required bool host, required int others}) async {
@@ -198,6 +203,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       context,
       host: host,
       others: others,
+      hostNetwork: _hostNetwork,
     );
     if (!confirmed) return;
     await _leave(host: host);
@@ -265,9 +271,11 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           if (reason == 'user_left') return;
           unawaited(
             _close(
-              reason == 'host_unreachable'
-                  ? RoomClosureKind.lostHost
-                  : RoomClosureKind.closedByHost,
+              reason != 'host_unreachable'
+                  ? RoomClosureKind.closedByHost
+                  : _hostNetwork
+                  ? RoomClosureKind.lostHostNetwork
+                  : RoomClosureKind.lostHost,
             ),
           );
         },

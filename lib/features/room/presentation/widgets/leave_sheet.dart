@@ -10,10 +10,16 @@ import 'package:frecu/core/design/widgets/fr_sheet.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Hoja que confirma salir de la frecu (`SH.leave` del prototipo). Para el
-/// anfitrión dice que la frecu se cierra para las [others] personas.
+/// anfitrión dice que la frecu se cierra para las [others] personas, y si su
+/// teléfono es la red de la frecu ([hostNetwork]), que por eso se cierra.
 class LeaveSheet extends StatelessWidget {
   /// Crea la hoja; [host] si la persona propia es la anfitriona.
-  const LeaveSheet({required this.host, required this.others, super.key});
+  const LeaveSheet({
+    required this.host,
+    required this.others,
+    this.hostNetwork = false,
+    super.key,
+  });
 
   /// La persona propia es la anfitriona.
   final bool host;
@@ -21,21 +27,32 @@ class LeaveSheet extends StatelessWidget {
   /// Personas en la frecu además de la propia.
   final int others;
 
+  /// La red de la frecu la crea el teléfono del anfitrión (red de Frecu o
+  /// zona Wi-Fi): sin él no hay frecu.
+  final bool hostNetwork;
+
   /// Abre la hoja; devuelve si se confirmó.
   static Future<bool> show(
     BuildContext context, {
     required bool host,
     required int others,
+    bool hostNetwork = false,
   }) async =>
       await showFrSheet<bool>(
         context,
-        builder: (_) => LeaveSheet(host: host, others: others),
+        builder: (_) =>
+            LeaveSheet(host: host, others: others, hostNetwork: hostNetwork),
       ) ??
       false;
 
   String get _message {
     final copy = t.room.sheets.leave;
     if (!host) return copy.peerMessage;
+    if (hostNetwork) {
+      if (others <= 0) return copy.networkAlone;
+      if (others == 1) return copy.networkOne;
+      return copy.networkMany(count: others);
+    }
     if (others <= 0) return copy.hostAlone;
     if (others == 1) return copy.hostOne;
     return copy.hostMany(count: others);
