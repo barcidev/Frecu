@@ -38,12 +38,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "57a701445d173b64ca5a2a37bb8e7804fe8ed6f9",
+      "attempts": 1,
       "startedAt": "2026-11-11T16:36:58.865Z",
       "doneAt": "2026-11-11T16:39:06.071Z",
-      "summary": "room_repository_impl.dart baja de 1150 a 472 líneas: reconexión, conexión del cliente (sesiones, join, mensajes) y traspaso pasan a tres archivos part con extensiones privadas; dispose también cancela _clientSubscription."
+      "summary": "room_repository_impl.dart baja de 1150 a 472 líneas: reconexión, conexión del cliente (sesiones, join, mensajes) y traspaso pasan a tres archivos part con extensiones privadas; dispose también cancela _clientSubscription.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "79c4af02963a60716a7bf523a3fbba7f917bf9ec",
+      "startedAt": "2026-11-11T16:39:06.372Z",
+      "doneAt": "2026-11-11T16:42:03.441Z",
+      "summary": "Los switch de room_repository y voice_repository pasan a switch expression que nombra cada mensaje sin efecto, sin default:; _onHostMessage desaparece y el filtro de anfitrión pasa a _onHostHandover/_onHostChanged."
     }
   },
   "pending": {

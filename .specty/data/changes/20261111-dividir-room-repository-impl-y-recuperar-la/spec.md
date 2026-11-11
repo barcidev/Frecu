@@ -56,7 +56,7 @@ Pagar deuda técnica sin cambiar el comportamiento: `room_repository_impl.dart` 
   - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/data/repositories/room_repository_reconnection.dart, lib/features/room/data/repositories/room_repository_messages.dart, lib/features/room/data/repositories/room_repository_takeover.dart
   - ac: AC1, AC2
   - verify: flutter test test/features/room/data
-- [ ] T2: Quitar `default:` de los `switch` de los repositorios
+- [x] T2: Quitar `default:` de los `switch` de los repositorios
   - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/data/repositories/room_repository_messages.dart, lib/features/room/data/repositories/room_repository_takeover.dart, lib/features/room/data/repositories/voice_repository_impl.dart
   - ac: AC2, AC3, AC4
   - verify: flutter test test/features/room/data

@@ -547,33 +547,44 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _setSpeakingPeers(const {});
   }
 
-  void _handleSignalingMessage(SignalingMessage msg) {
-    switch (msg) {
-      case SignalingWelcomeMessage(:final peerId, :final participants):
-        _handleWelcome(peerId, participants);
-      case SignalingTalkStateMessage(
-        :final peerId,
-        :final isSpeaking,
-        :final muted,
-      ):
-        _handleTalkState(peerId, isSpeaking, muted: muted ?? false);
-      case SignalingPeerJoinedMessage():
-        // Quien llega no sabe si alguien ya habla o está silenciado.
-        if (_meshPeerId != null &&
-            (_isTalking || _talkMode == TalkMode.openMic)) {
-          _announce();
-        }
-      case SignalingPeerLeftMessage(:final peerId):
-        _setSpeakingPeers({..._speakingPeers}..remove(peerId));
-        _setMutedPeers({..._mutedPeers}..remove(peerId));
-      case SignalingRoomStateMessage(:final state):
-        _dropHost(_handover.onRoomState(state, localId: _meshPeerId));
-      case SignalingRoomClosedMessage():
-        unawaited(leaveMesh());
-      default:
-        // El resto de la señalización no toca la voz.
-        break;
+  void _handleSignalingMessage(SignalingMessage msg) => switch (msg) {
+    SignalingWelcomeMessage(:final peerId, :final participants) =>
+      _handleWelcome(peerId, participants),
+    SignalingTalkStateMessage(:final peerId, :final isSpeaking, :final muted) =>
+      _handleTalkState(peerId, isSpeaking, muted: muted ?? false),
+    SignalingPeerJoinedMessage() => _greetNewcomer(),
+    SignalingPeerLeftMessage(:final peerId) => _forgetPeer(peerId),
+    SignalingRoomStateMessage(:final state) => _dropHost(
+      _handover.onRoomState(state, localId: _meshPeerId),
+    ),
+    SignalingRoomClosedMessage() => unawaited(leaveMesh()),
+    // El resto de la señalización no toca la voz. Cada mensaje va nombrado
+    // para que el compilador avise si llega uno nuevo.
+    SignalingJoinMessage() => null,
+    SignalingRejectedMessage() => null,
+    SignalingOfferMessage() => null,
+    SignalingAnswerMessage() => null,
+    SignalingIceMessage() => null,
+    SignalingQuickMessage() => null,
+    SignalingPositionMessage() => null,
+    SignalingPingMessage() => null,
+    SignalingPongMessage() => null,
+    SignalingHostHandoverMessage() => null,
+    SignalingHostProbeMessage() => null,
+    SignalingHostChangedMessage() => null,
+  };
+
+  /// Quien llega no sabe si alguien ya habla o está silenciado.
+  void _greetNewcomer() {
+    if (_meshPeerId != null && (_isTalking || _talkMode == TalkMode.openMic)) {
+      _announce();
     }
+  }
+
+  /// Quien se fue deja de hablar y de estar silenciado.
+  void _forgetPeer(String peerId) {
+    _setSpeakingPeers({..._speakingPeers}..remove(peerId));
+    _setMutedPeers({..._mutedPeers}..remove(peerId));
   }
 
   /// `welcome` al entrar o volver a la frecu como [peerId].

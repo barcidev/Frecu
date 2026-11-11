@@ -91,25 +91,12 @@ extension _Takeover on RoomRepositoryImpl {
     await _server.stop();
   }
 
-  /// Mensajes del traspaso: `host_handover` del anfitrión que sale y
-  /// `host_changed` de quien tomó la frecu.
-  void _onHostMessage(int session, SignalingMessage message) {
-    // El anfitrión que pasa la frecu ya sale: no sigue a nadie.
-    if (_isHost) return;
-    switch (message) {
-      case SignalingHostHandoverMessage():
-        _onHostHandover(session, message);
-      case SignalingHostChangedMessage(:final host, :final reason):
-        _onHostChanged(host, reason);
-      default:
-        break;
-    }
-  }
-
   /// El anfitrión pasa la frecu a `to`: si es este teléfono, la toma; si
   /// no, la reconexión apunta a la IP de `to` (o a la `address` y el `port`
   /// del mensaje, si vienen) con el mismo id.
   void _onHostHandover(int session, SignalingHostHandoverMessage message) {
+    // El anfitrión que pasa la frecu ya sale: no sigue a nadie.
+    if (_isHost) return;
     final SignalingHostHandoverMessage(:to, :term) = message;
     final state = _succession.current;
     final target = _target;
@@ -225,7 +212,8 @@ extension _Takeover on RoomRepositoryImpl {
   /// Quien tomó la frecu ([host]) avisa al volver a ella.
   void _onHostChanged(String host, String reason) {
     final target = _target;
-    if (target == null) return;
+    // El anfitrión que pasó la frecu ya sale: no sigue a nadie.
+    if (_isHost || target == null) return;
     final person = _participants.where((p) => p.id == host).firstOrNull;
     _takeover.announce(
       hostId: host,

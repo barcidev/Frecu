@@ -117,27 +117,41 @@ extension _Messages on RoomRepositoryImpl {
     );
   }
 
-  void _onMessage(int session, SignalingMessage message, _Joining join) {
-    switch (message) {
-      case SignalingWelcomeMessage():
-        _onWelcomeMessage(message, join);
-      case SignalingRejectedMessage(:final reason):
-        _onRejected(join.welcome, reason, rejoin: join.rejoin);
-      case SignalingPeerJoinedMessage(:final participant):
-        _onPeerJoined(participant);
-      case SignalingPeerLeftMessage(:final peerId):
-        _onPeerLeft(peerId);
-      case SignalingRoomStateMessage(:final state):
-        _succession.update(state);
-        _probe.remember(state);
-      case SignalingRoomClosedMessage(:final reason):
-        _onRoomClosed(reason);
-      case SignalingHostHandoverMessage() || SignalingHostChangedMessage():
-        _onHostMessage(session, message);
-      default:
-        // El resto de la señalización no cambia la frecu.
-        break;
-    }
+  void _onMessage(int session, SignalingMessage message, _Joining join) =>
+      switch (message) {
+        SignalingWelcomeMessage() => _onWelcomeMessage(message, join),
+        SignalingRejectedMessage(:final reason) => _onRejected(
+          join.welcome,
+          reason,
+          rejoin: join.rejoin,
+        ),
+        SignalingPeerJoinedMessage(:final participant) => _onPeerJoined(
+          participant,
+        ),
+        SignalingPeerLeftMessage(:final peerId) => _onPeerLeft(peerId),
+        SignalingRoomStateMessage(:final state) => _onRoomState(state),
+        SignalingRoomClosedMessage(:final reason) => _onRoomClosed(reason),
+        SignalingHostHandoverMessage() => _onHostHandover(session, message),
+        SignalingHostChangedMessage(:final host, :final reason) =>
+          _onHostChanged(host, reason),
+        // El resto de la señalización no cambia la frecu. Cada mensaje va
+        // nombrado para que el compilador avise si llega uno nuevo.
+        SignalingJoinMessage() => null,
+        SignalingOfferMessage() => null,
+        SignalingAnswerMessage() => null,
+        SignalingIceMessage() => null,
+        SignalingTalkStateMessage() => null,
+        SignalingQuickMessage() => null,
+        SignalingPositionMessage() => null,
+        SignalingPingMessage() => null,
+        SignalingPongMessage() => null,
+        SignalingHostProbeMessage() => null,
+      };
+
+  /// Estado compartido de la frecu: sucesión y turno.
+  void _onRoomState(RoomSuccession state) {
+    _succession.update(state);
+    _probe.remember(state);
   }
 
   void _onWelcomeMessage(SignalingWelcomeMessage message, _Joining join) {
