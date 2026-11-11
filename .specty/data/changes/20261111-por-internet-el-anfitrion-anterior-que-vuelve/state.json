@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "id": "20261111-por-internet-el-anfitrion-anterior-que-vuelve",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/por-internet-el-anfitrion-anterior-que-vuelve",
+  "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 4,
+    "adjust": 0,
+    "reasons": [
+      "4 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:af569fbce6882e0ac2d16e0bf342c14b212fbd8e9b81253c3fb3170644644aa8",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:2ff4c29c4cc0c9867076e4f5b4ab25e81bff54dfb8f93120553a10f1250dd27c",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:e62055126c651eab77ad33194412ad6f48feb5fa872ad5ecdeb1c29b94523d9c",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:e632399dee2da425553ccc09e3c3933a77ce6a7264972eee4df1378c61ea595f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 3,
+    "T": 2,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:4a4c0aac5c955f8e5b5758d4499cfa920c558822048e38d4be14cbd935641e90",
+    "at": "2026-11-11T15:57:41.762Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
