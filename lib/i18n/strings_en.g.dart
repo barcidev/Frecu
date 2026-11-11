@@ -504,6 +504,7 @@ class _Translations$room$closure$en extends Translations$room$closure$es {
 	@override String get host => 'You closed the frecu. Everyone was disconnected.';
 	@override String get peer => 'The host closed the frecu. You can join another one whenever you like.';
 	@override String get lost => 'The host\'s signal was lost. You can join another one whenever you like.';
+	@override String get lostNetwork => 'The host\'s network was lost and didn\'t come back. You can join another one whenever you like.';
 	@override String get duration => 'Duration';
 	@override String get people => 'People';
 	@override String get note => 'Note';
@@ -1039,6 +1040,9 @@ class _Translations$room$sheets$leave$en extends Translations$room$sheets$leave$
 	@override String get hostAlone => 'You\'re the host. If you leave, the frecu closes.';
 	@override String get hostOne => 'You\'re the host. If you leave, the frecu closes for the other person.';
 	@override String hostMany({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.';
+	@override String get networkAlone => 'Your phone is the frecu\'s network. If you leave, the frecu closes.';
+	@override String get networkOne => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other person.';
+	@override String networkMany({required Object count}) => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other ${count} people.';
 	@override String get hostConfirm => 'Close frecu';
 	@override String get cancel => 'Cancel';
 }
@@ -1604,6 +1608,9 @@ extension on TranslationsEn {
 			'room.sheets.leave.hostAlone' => 'You\'re the host. If you leave, the frecu closes.',
 			'room.sheets.leave.hostOne' => 'You\'re the host. If you leave, the frecu closes for the other person.',
 			'room.sheets.leave.hostMany' => ({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.',
+			'room.sheets.leave.networkAlone' => 'Your phone is the frecu\'s network. If you leave, the frecu closes.',
+			'room.sheets.leave.networkOne' => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other person.',
+			'room.sheets.leave.networkMany' => ({required Object count}) => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other ${count} people.',
 			'room.sheets.leave.hostConfirm' => 'Close frecu',
 			'room.sheets.leave.cancel' => 'Cancel',
 			'room.closure.offAir' => 'Off the air',
@@ -1612,6 +1619,7 @@ extension on TranslationsEn {
 			'room.closure.host' => 'You closed the frecu. Everyone was disconnected.',
 			'room.closure.peer' => 'The host closed the frecu. You can join another one whenever you like.',
 			'room.closure.lost' => 'The host\'s signal was lost. You can join another one whenever you like.',
+			'room.closure.lostNetwork' => 'The host\'s network was lost and didn\'t come back. You can join another one whenever you like.',
 			'room.closure.duration' => 'Duration',
 			'room.closure.people' => 'People',
 			'room.closure.note' => 'Note',
@@ -1804,12 +1812,12 @@ extension on TranslationsEn {
 			'location.sosDetail' => ({required Object distance, required Object direction}) => 'They\'re ${distance} to the ${direction}. Tell the group if you\'re heading there.',
 			'location.meters' => ({required Object value}) => '${value} m',
 			'location.kilometers' => ({required Object value}) => '${value} km',
+			_ => null,
+		} ?? switch (path) {
 			'location.compass.n' => 'N',
 			'location.compass.ne' => 'NE',
 			'location.compass.e' => 'E',
 			'location.compass.se' => 'SE',
-			_ => null,
-		} ?? switch (path) {
 			'location.compass.s' => 'S',
 			'location.compass.sw' => 'SW',
 			'location.compass.w' => 'W',

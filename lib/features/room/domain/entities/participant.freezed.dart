@@ -17,7 +17,10 @@ mixin _$Participant {
 
  String get id; String get displayName; bool get isHost; bool get isSpeaking; bool get isMuted; PeerConnectionState get connectionState;/// Entró por internet (por el punto de encuentro), no por la red local.
 /// Lo pone el anfitrión; una app anterior no lo manda y vale `false`.
- bool get remote;/// Calidad del enlace de voz que mide este teléfono; es local, así que
+ bool get remote;/// Su teléfono es la red de la frecu (la red de Frecu o su zona Wi-Fi):
+/// solo el anfitrión, y entonces la frecu no admite traspaso. Lo pone el
+/// anfitrión; una app anterior no lo manda y vale `false`.
+ bool get ownsNetwork;/// Calidad del enlace de voz que mide este teléfono; es local, así que
 /// no viaja en la señalización.
 @JsonKey(includeFromJson: false, includeToJson: false) LinkQuality get linkQuality;
 /// Create a copy of Participant
@@ -32,16 +35,16 @@ $ParticipantCopyWith<Participant> get copyWith => _$ParticipantCopyWithImpl<Part
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isHost, isHost) || other.isHost == isHost)&&(identical(other.isSpeaking, isSpeaking) || other.isSpeaking == isSpeaking)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.remote, remote) || other.remote == remote)&&(identical(other.linkQuality, linkQuality) || other.linkQuality == linkQuality));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isHost, isHost) || other.isHost == isHost)&&(identical(other.isSpeaking, isSpeaking) || other.isSpeaking == isSpeaking)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.remote, remote) || other.remote == remote)&&(identical(other.ownsNetwork, ownsNetwork) || other.ownsNetwork == ownsNetwork)&&(identical(other.linkQuality, linkQuality) || other.linkQuality == linkQuality));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,isHost,isSpeaking,isMuted,connectionState,remote,linkQuality);
+int get hashCode => Object.hash(runtimeType,id,displayName,isHost,isSpeaking,isMuted,connectionState,remote,ownsNetwork,linkQuality);
 
 @override
 String toString() {
-  return 'Participant(id: $id, displayName: $displayName, isHost: $isHost, isSpeaking: $isSpeaking, isMuted: $isMuted, connectionState: $connectionState, remote: $remote, linkQuality: $linkQuality)';
+  return 'Participant(id: $id, displayName: $displayName, isHost: $isHost, isSpeaking: $isSpeaking, isMuted: $isMuted, connectionState: $connectionState, remote: $remote, ownsNetwork: $ownsNetwork, linkQuality: $linkQuality)';
 }
 
 
@@ -52,7 +55,7 @@ abstract mixin class $ParticipantCopyWith<$Res>  {
   factory $ParticipantCopyWith(Participant value, $Res Function(Participant) _then) = _$ParticipantCopyWithImpl;
 @useResult
 $Res call({
- String id, String displayName, bool isHost, bool isSpeaking, bool isMuted, PeerConnectionState connectionState, bool remote,@JsonKey(includeFromJson: false, includeToJson: false) LinkQuality linkQuality
+ String id, String displayName, bool isHost, bool isSpeaking, bool isMuted, PeerConnectionState connectionState, bool remote, bool ownsNetwork,@JsonKey(includeFromJson: false, includeToJson: false) LinkQuality linkQuality
 });
 
 
@@ -69,7 +72,7 @@ class _$ParticipantCopyWithImpl<$Res>
 
 /// Create a copy of Participant
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = null,Object? isHost = null,Object? isSpeaking = null,Object? isMuted = null,Object? connectionState = null,Object? remote = null,Object? linkQuality = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = null,Object? isHost = null,Object? isSpeaking = null,Object? isMuted = null,Object? connectionState = null,Object? remote = null,Object? ownsNetwork = null,Object? linkQuality = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
@@ -78,6 +81,7 @@ as bool,isSpeaking: null == isSpeaking ? _self.isSpeaking : isSpeaking // ignore
 as bool,isMuted: null == isMuted ? _self.isMuted : isMuted // ignore: cast_nullable_to_non_nullable
 as bool,connectionState: null == connectionState ? _self.connectionState : connectionState // ignore: cast_nullable_to_non_nullable
 as PeerConnectionState,remote: null == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
+as bool,ownsNetwork: null == ownsNetwork ? _self.ownsNetwork : ownsNetwork // ignore: cast_nullable_to_non_nullable
 as bool,linkQuality: null == linkQuality ? _self.linkQuality : linkQuality // ignore: cast_nullable_to_non_nullable
 as LinkQuality,
   ));
@@ -161,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String displayName,  bool isHost,  bool isSpeaking,  bool isMuted,  PeerConnectionState connectionState,  bool remote, @JsonKey(includeFromJson: false, includeToJson: false)  LinkQuality linkQuality)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String displayName,  bool isHost,  bool isSpeaking,  bool isMuted,  PeerConnectionState connectionState,  bool remote,  bool ownsNetwork, @JsonKey(includeFromJson: false, includeToJson: false)  LinkQuality linkQuality)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Participant() when $default != null:
-return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.isMuted,_that.connectionState,_that.remote,_that.linkQuality);case _:
+return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.isMuted,_that.connectionState,_that.remote,_that.ownsNetwork,_that.linkQuality);case _:
   return orElse();
 
 }
@@ -182,10 +186,10 @@ return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.i
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String displayName,  bool isHost,  bool isSpeaking,  bool isMuted,  PeerConnectionState connectionState,  bool remote, @JsonKey(includeFromJson: false, includeToJson: false)  LinkQuality linkQuality)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String displayName,  bool isHost,  bool isSpeaking,  bool isMuted,  PeerConnectionState connectionState,  bool remote,  bool ownsNetwork, @JsonKey(includeFromJson: false, includeToJson: false)  LinkQuality linkQuality)  $default,) {final _that = this;
 switch (_that) {
 case _Participant():
-return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.isMuted,_that.connectionState,_that.remote,_that.linkQuality);}
+return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.isMuted,_that.connectionState,_that.remote,_that.ownsNetwork,_that.linkQuality);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -199,10 +203,10 @@ return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.i
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String displayName,  bool isHost,  bool isSpeaking,  bool isMuted,  PeerConnectionState connectionState,  bool remote, @JsonKey(includeFromJson: false, includeToJson: false)  LinkQuality linkQuality)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String displayName,  bool isHost,  bool isSpeaking,  bool isMuted,  PeerConnectionState connectionState,  bool remote,  bool ownsNetwork, @JsonKey(includeFromJson: false, includeToJson: false)  LinkQuality linkQuality)?  $default,) {final _that = this;
 switch (_that) {
 case _Participant() when $default != null:
-return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.isMuted,_that.connectionState,_that.remote,_that.linkQuality);case _:
+return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.isMuted,_that.connectionState,_that.remote,_that.ownsNetwork,_that.linkQuality);case _:
   return null;
 
 }
@@ -214,7 +218,7 @@ return $default(_that.id,_that.displayName,_that.isHost,_that.isSpeaking,_that.i
 @JsonSerializable()
 
 class _Participant implements Participant {
-  const _Participant({required this.id, required this.displayName, this.isHost = false, this.isSpeaking = false, this.isMuted = false, this.connectionState = PeerConnectionState.connected, this.remote = false, @JsonKey(includeFromJson: false, includeToJson: false) this.linkQuality = LinkQuality.good});
+  const _Participant({required this.id, required this.displayName, this.isHost = false, this.isSpeaking = false, this.isMuted = false, this.connectionState = PeerConnectionState.connected, this.remote = false, this.ownsNetwork = false, @JsonKey(includeFromJson: false, includeToJson: false) this.linkQuality = LinkQuality.good});
   factory _Participant.fromJson(Map<String, dynamic> json) => _$ParticipantFromJson(json);
 
 @override final  String id;
@@ -226,6 +230,10 @@ class _Participant implements Participant {
 /// Entró por internet (por el punto de encuentro), no por la red local.
 /// Lo pone el anfitrión; una app anterior no lo manda y vale `false`.
 @override@JsonKey() final  bool remote;
+/// Su teléfono es la red de la frecu (la red de Frecu o su zona Wi-Fi):
+/// solo el anfitrión, y entonces la frecu no admite traspaso. Lo pone el
+/// anfitrión; una app anterior no lo manda y vale `false`.
+@override@JsonKey() final  bool ownsNetwork;
 /// Calidad del enlace de voz que mide este teléfono; es local, así que
 /// no viaja en la señalización.
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  LinkQuality linkQuality;
@@ -243,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isHost, isHost) || other.isHost == isHost)&&(identical(other.isSpeaking, isSpeaking) || other.isSpeaking == isSpeaking)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.remote, remote) || other.remote == remote)&&(identical(other.linkQuality, linkQuality) || other.linkQuality == linkQuality));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isHost, isHost) || other.isHost == isHost)&&(identical(other.isSpeaking, isSpeaking) || other.isSpeaking == isSpeaking)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.remote, remote) || other.remote == remote)&&(identical(other.ownsNetwork, ownsNetwork) || other.ownsNetwork == ownsNetwork)&&(identical(other.linkQuality, linkQuality) || other.linkQuality == linkQuality));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,isHost,isSpeaking,isMuted,connectionState,remote,linkQuality);
+int get hashCode => Object.hash(runtimeType,id,displayName,isHost,isSpeaking,isMuted,connectionState,remote,ownsNetwork,linkQuality);
 
 @override
 String toString() {
-  return 'Participant(id: $id, displayName: $displayName, isHost: $isHost, isSpeaking: $isSpeaking, isMuted: $isMuted, connectionState: $connectionState, remote: $remote, linkQuality: $linkQuality)';
+  return 'Participant(id: $id, displayName: $displayName, isHost: $isHost, isSpeaking: $isSpeaking, isMuted: $isMuted, connectionState: $connectionState, remote: $remote, ownsNetwork: $ownsNetwork, linkQuality: $linkQuality)';
 }
 
 
@@ -263,7 +271,7 @@ abstract mixin class _$ParticipantCopyWith<$Res> implements $ParticipantCopyWith
   factory _$ParticipantCopyWith(_Participant value, $Res Function(_Participant) _then) = __$ParticipantCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String displayName, bool isHost, bool isSpeaking, bool isMuted, PeerConnectionState connectionState, bool remote,@JsonKey(includeFromJson: false, includeToJson: false) LinkQuality linkQuality
+ String id, String displayName, bool isHost, bool isSpeaking, bool isMuted, PeerConnectionState connectionState, bool remote, bool ownsNetwork,@JsonKey(includeFromJson: false, includeToJson: false) LinkQuality linkQuality
 });
 
 
@@ -280,7 +288,7 @@ class __$ParticipantCopyWithImpl<$Res>
 
 /// Create a copy of Participant
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? displayName = null,Object? isHost = null,Object? isSpeaking = null,Object? isMuted = null,Object? connectionState = null,Object? remote = null,Object? linkQuality = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? displayName = null,Object? isHost = null,Object? isSpeaking = null,Object? isMuted = null,Object? connectionState = null,Object? remote = null,Object? ownsNetwork = null,Object? linkQuality = null,}) {
   return _then(_Participant(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
@@ -289,6 +297,7 @@ as bool,isSpeaking: null == isSpeaking ? _self.isSpeaking : isSpeaking // ignore
 as bool,isMuted: null == isMuted ? _self.isMuted : isMuted // ignore: cast_nullable_to_non_nullable
 as bool,connectionState: null == connectionState ? _self.connectionState : connectionState // ignore: cast_nullable_to_non_nullable
 as PeerConnectionState,remote: null == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
+as bool,ownsNetwork: null == ownsNetwork ? _self.ownsNetwork : ownsNetwork // ignore: cast_nullable_to_non_nullable
 as bool,linkQuality: null == linkQuality ? _self.linkQuality : linkQuality // ignore: cast_nullable_to_non_nullable
 as LinkQuality,
   ));

@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "id": "20261111-red-del-anfitrion-detectar-si-admite-traspaso",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/red-del-anfitrion-detectar-si-admite-traspaso",
+  "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:6e0db163e015d06ae3dcbbcc7b136f4c5088500a85ac56f91c7306b84908d617",
+    "at": "2026-11-11T13:51:36.484Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "11 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:7a464027f76f0513bc19782bdd4c7ca4d21946aa8e62be8a0d0d37edb5f1aa6c",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:65e1b2e1a70a90c01365abd1cdffc5ede41dd0daf28b5cb59f021f194854365f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "2d028c3a9b6742d6c1698161716e5153afe688cb",
+      "attempts": 1,
+      "startedAt": "2026-11-11T13:51:36.838Z",
+      "doneAt": "2026-11-11T13:54:19.417Z",
+      "summary": "Participant.ownsNetwork (aditivo) y Room.hostOwnsNetwork/handover; el repositorio detecta al crear si la red es del anfitrión (red de Frecu, zona Wi-Fi o sin red local) y el servidor lo marca en el participante anfitrión, que llega en welcome",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "ca33104f141a3dd0fbe8a08f85de58b90566d006",
+      "attempts": 1,
+      "startedAt": "2026-11-11T13:54:19.686Z",
+      "doneAt": "2026-11-11T13:57:18.905Z",
+      "summary": "LeaveSheet con hostNetwork (textos «Tu teléfono es la red de la frecu…», solo «Cerrar frecu»), RoomClosureKind.lostHostNetwork con «Se perdió la red del anfitrión y no volvió.», RoomPage los elige por Room.hostOwnsNetwork; textos es/en",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 4,
+    "T": 2,
+    "R": 2
+  },
+  "closingSubmittedAt": "2026-11-11T13:57:30.613Z"
+}

@@ -142,6 +142,11 @@ class SignalingServerDataSource {
   /// Nombre de la frecu que viaja en el `welcome`.
   String? get roomName => _roomName;
 
+  /// La red de la frecu la crea el teléfono del anfitrión: va en su
+  /// participante (`ownsNetwork`) para que todos lo sepan. Se fija antes de
+  /// [start].
+  bool hostOwnsNetwork = false;
+
   /// Inicia el servidor de señalización de una frecu nueva.
   ///
   /// Si ya había uno en marcha (una frecu anterior que no se cerró), lo
@@ -381,6 +386,7 @@ class SignalingServerDataSource {
       displayName: join.displayName,
       isHost: isFirstPeer,
       remote: channel.remote,
+      ownsNetwork: isFirstPeer && hostOwnsNetwork,
     );
 
     _participants[peerId] = participant;
