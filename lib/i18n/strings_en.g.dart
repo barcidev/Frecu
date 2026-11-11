@@ -517,6 +517,7 @@ class _Translations$room$handover$en extends Translations$room$handover$es {
 	@override String left({required Object previous, required Object name}) => '${previous} left · ${name} carries the frecu now';
 	@override String lost({required Object previous, required Object name}) => '${previous} disconnected · ${name} carries the frecu now';
 	@override String taken({required Object name}) => '${name} carries the frecu now';
+	@override String backAsGuest({required Object name}) => 'You\'re back as a guest · ${name} carries the frecu';
 	@override String get heirTitle => 'You carry the frecu now.';
 	@override String heirLeft({required Object name}) => '${name} passed it to you on leaving.';
 	@override String heirLost({required Object name}) => '${name} disconnected.';
@@ -1664,6 +1665,7 @@ extension on TranslationsEn {
 			'room.handover.left' => ({required Object previous, required Object name}) => '${previous} left · ${name} carries the frecu now',
 			'room.handover.lost' => ({required Object previous, required Object name}) => '${previous} disconnected · ${name} carries the frecu now',
 			'room.handover.taken' => ({required Object name}) => '${name} carries the frecu now',
+			'room.handover.backAsGuest' => ({required Object name}) => 'You\'re back as a guest · ${name} carries the frecu',
 			'room.handover.heirTitle' => 'You carry the frecu now.',
 			'room.handover.heirLeft' => ({required Object name}) => '${name} passed it to you on leaving.',
 			'room.handover.heirLost' => ({required Object name}) => '${name} disconnected.',
@@ -1844,9 +1846,9 @@ extension on TranslationsEn {
 			'messages.kinds.ok' => 'All good',
 			'messages.kinds.onMyWay' => 'On my way',
 			'messages.kinds.sos' => 'SOS',
-			'messages.sosHold' => 'Hold to send SOS',
 			_ => null,
 		} ?? switch (path) {
+			'messages.sosHold' => 'Hold to send SOS',
 			'messages.sosHoldHelp' => 'Alarm for everyone until someone answers',
 			'messages.sent' => ({required Object text}) => 'Sent · ${text}',
 			'messages.sosSent' => 'SOS sent to your group',

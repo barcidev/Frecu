@@ -341,6 +341,16 @@ class _HandoverNoticeState extends ConsumerState<HandoverNotice> {
       return;
     }
     final copy = t.room.handover;
+    if (change.reason == HostChangeReason.outranked) {
+      showFrToast(
+        context,
+        FrToast.drawn(
+          icon: FrIcons.check,
+          message: copy.backAsGuest(name: change.hostName),
+        ),
+      );
+      return;
+    }
     final previous = change.previousHost;
     final message = previous == null
         ? copy.taken(name: change.hostName)

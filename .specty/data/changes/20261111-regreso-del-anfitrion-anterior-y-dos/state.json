@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-regreso-del-anfitrion-anterior-y-dos",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/regreso-del-anfitrion-anterior-y-dos",
   "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
   "revision": 1,
@@ -54,12 +54,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "6e9c908eac7028031fd03bb3b42e1bea12be2903",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:19:12.872Z",
       "doneAt": "2026-11-11T15:22:23.298Z",
-      "summary": "El repositorio pregunta con HostProbe mientras lleva una frecu local con traspaso, cede al rival que gana (yieldTo), vuelve como invitado siguiendo al ganador y emite HostChange outranked; los invitados siguen host_handover con address/port."
+      "summary": "El repositorio pregunta con HostProbe mientras lleva una frecu local con traspaso, cede al rival que gana (yieldTo), vuelve como invitado siguiendo al ganador y emite HostChange outranked; los invitados siguen host_handover con address/port.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "a95e567a2fc91f9dea528f382b3f80bbe8320be9",
+      "startedAt": "2026-11-11T15:22:23.557Z",
+      "doneAt": "2026-11-11T15:23:59.340Z",
+      "summary": "HandoverNotice muestra «Volviste como invitado · «nombre» lleva la frecu» (ícono check) con outranked, y applyHostChange deja de llevar la frecu; textos es/en por slang."
     }
   },
   "pending": {

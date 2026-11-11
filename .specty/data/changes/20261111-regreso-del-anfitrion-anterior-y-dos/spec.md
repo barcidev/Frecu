@@ -72,7 +72,7 @@ En una frecu local sobre una Wi-Fi compartida, cuando el anfitrión anterior vue
   - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/domain/repositories/room_handover.dart, test/features/room/data/host_rivalry_test.dart
   - ac: AC9
   - verify: flutter test test/features/room/data/host_rivalry_test.dart test/features/room/data/host_failover_test.dart test/features/room/data/room_handover_test.dart test/features/room/data/room_reconnect_test.dart
-- [ ] T3: Aviso «Volviste como invitado» y deja de llevar la frecu
+- [x] T3: Aviso «Volviste como invitado» y deja de llevar la frecu
   - files: lib/features/room/presentation/providers/room_provider.dart, lib/features/room/presentation/widgets/room_handover.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/room/presentation/host_outranked_ui_test.dart
   - ac: AC9
   - verify: flutter test test/features/room/presentation/host_outranked_ui_test.dart test/features/room/presentation/room_handover_ui_test.dart

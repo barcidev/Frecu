@@ -926,6 +926,9 @@ class Translations$room$handover$es {
 	/// es: '$name lleva ahora la frecu'
 	String taken({required Object name}) => '${name} lleva ahora la frecu';
 
+	/// es: 'Volviste como invitado · $name lleva la frecu'
+	String backAsGuest({required Object name}) => 'Volviste como invitado · ${name} lleva la frecu';
+
 	/// es: 'Ahora llevas la frecu.'
 	String get heirTitle => 'Ahora llevas la frecu.';
 
@@ -2742,6 +2745,7 @@ extension on Translations {
 			'room.handover.left' => ({required Object previous, required Object name}) => '${previous} salió · ${name} lleva ahora la frecu',
 			'room.handover.lost' => ({required Object previous, required Object name}) => '${previous} se desconectó · ${name} lleva ahora la frecu',
 			'room.handover.taken' => ({required Object name}) => '${name} lleva ahora la frecu',
+			'room.handover.backAsGuest' => ({required Object name}) => 'Volviste como invitado · ${name} lleva la frecu',
 			'room.handover.heirTitle' => 'Ahora llevas la frecu.',
 			'room.handover.heirLeft' => ({required Object name}) => '${name} te la pasó al salir.',
 			'room.handover.heirLost' => ({required Object name}) => '${name} se desconectó.',
@@ -2922,9 +2926,9 @@ extension on Translations {
 			'messages.kinds.ok' => 'Todo bien',
 			'messages.kinds.onMyWay' => 'Voy en camino',
 			'messages.kinds.sos' => 'SOS',
-			'messages.sosHold' => 'Mantén para enviar SOS',
 			_ => null,
 		} ?? switch (path) {
+			'messages.sosHold' => 'Mantén para enviar SOS',
 			'messages.sosHoldHelp' => 'Alarma para todos hasta que alguien la atienda',
 			'messages.sent' => ({required Object text}) => 'Enviado · ${text}',
 			'messages.sosSent' => 'SOS enviado a tu grupo',

@@ -366,6 +366,7 @@
       "left": "$previous salió · $name lleva ahora la frecu",
       "lost": "$previous se desconectó · $name lleva ahora la frecu",
       "taken": "$name lleva ahora la frecu",
+      "backAsGuest": "Volviste como invitado · $name lleva la frecu",
       "heirTitle": "Ahora llevas la frecu.",
       "heirLeft": "$name te la pasó al salir.",
       "heirLost": "$name se desconectó.",

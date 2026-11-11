@@ -294,15 +294,17 @@ class RoomNotifier extends _$RoomNotifier {
   }
 
   /// Otra persona (o este teléfono) lleva ahora la frecu: la invitación
-  /// lleva su IP y, si la recibió este teléfono, la lleva él.
+  /// lleva su IP y, si la recibió este teléfono, la lleva él. Si este
+  /// teléfono la cedió a un turno que gana (`outranked`), deja de llevarla.
   void applyHostChange(HostChange change) {
     final room = state;
     if (room == null) return;
+    final ceded = change.reason == HostChangeReason.outranked;
     state = room.copyWith(
       hostAddress: change.hostAddress,
       port: change.port,
-      hosting: room.hosting || change.you,
-      inherited: room.inherited || change.you,
+      hosting: change.you || (room.hosting && !ceded),
+      inherited: change.you || (room.inherited && !ceded),
     );
   }
 

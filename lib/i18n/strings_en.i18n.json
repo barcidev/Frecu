@@ -366,6 +366,7 @@
       "left": "$previous left · $name carries the frecu now",
       "lost": "$previous disconnected · $name carries the frecu now",
       "taken": "$name carries the frecu now",
+      "backAsGuest": "You're back as a guest · $name carries the frecu",
       "heirTitle": "You carry the frecu now.",
       "heirLeft": "$name passed it to you on leaving.",
       "heirLost": "$name disconnected.",
