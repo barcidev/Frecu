@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-quitar-el-enlace-visible-bajo-el-qr-de",
   "kind": "quick",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "bugfix/quitar-el-enlace-visible-bajo-el-qr-de",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
   "revision": 1,
@@ -25,14 +25,14 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "test/features/room/presentation/internet_room_ui_test.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "6dd3029de2ccdadf85d217b4ebc86984eca409bd",
+      "attempts": 1,
       "startedAt": "2026-11-11T05:28:33.908Z",
       "doneAt": "2026-11-11T05:35:02.002Z",
-      "summary": "Quitada la fila con el ícono y el texto del enlace bajo «Compartir enlace» en InviteShareLink (el botón sigue compartiendo el enlace completo); comentario actualizado y prueba AC1 añadida en internet_room_ui_test."
+      "summary": "Quitada la fila con el ícono y el texto del enlace bajo «Compartir enlace» en InviteShareLink (el botón sigue compartiendo el enlace completo); comentario actualizado y prueba AC1 añadida en internet_room_ui_test.",
+      "scopeExtra": [
+        "test/features/room/presentation/internet_room_ui_test.dart"
+      ]
     }
   },
   "pending": {

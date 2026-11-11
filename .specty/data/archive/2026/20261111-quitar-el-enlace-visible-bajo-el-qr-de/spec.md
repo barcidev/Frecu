@@ -19,3 +19,9 @@ Criterio: `InviteShareLink` muestra solo el botón «Compartir enlace» (key `in
 - [x] T1: Quitar la fila del enlace bajo el botón de compartir
   - files: lib/features/room/presentation/widgets/invite_sheet.dart
   - verify: flutter test test/features/room/presentation/internet_room_ui_test.dart
+
+## Cierre
+
+### Resumen
+
+Quitada la fila con el ícono y el texto del enlace bajo «Compartir enlace» en InviteShareLink (el botón sigue compartiendo el enlace completo); comentario actualizado y prueba AC1 añadida en internet_room_ui_test.
