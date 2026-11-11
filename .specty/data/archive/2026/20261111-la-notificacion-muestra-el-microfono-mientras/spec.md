@@ -44,3 +44,22 @@ Mientras el anfitrión de una frecu con traspaso no responde, la voz entre invit
   - files: lib/features/room/presentation/pages/room_notification.dart, test/features/room/presentation/room_notification_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/room/presentation/room_notification_test.dart
+
+## Cierre
+
+### Resumen
+
+La tarjeta de la notificación arma su estado como la pantalla, con `shownRoom` y la espera del anfitrión (`hostSilenceProvider`, más `hostSilenceClockProvider` para los segundos). Mientras un anfitrión con traspaso no responde, muestra el micrófono, la salida de audio y salir, y su subtítulo dice «<anfitrión> no responde · N s» en ámbar. Resuelve P186 y P170.
+
+### Desviaciones
+
+- El subtítulo de la tarjeta se movió a `_look` y `_phaseLook` para que `roomNotificationScene` no pase de 50 líneas.
+
+### Decisiones
+
+- La espera del anfitrión va después del SOS y antes de reconectando, como en la isla.
+
+### Pendientes
+
+- P191: probar AC4 en un Android real.
+- P192: room_notification.dart pasa de 300 líneas de código (451); separar la escena de `RoomNotification`.

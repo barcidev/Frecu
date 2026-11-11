@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-la-notificacion-muestra-el-microfono-mientras",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "bugfix/la-notificacion-muestra-el-microfono-mientras",
   "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:9899184827aa5dff490db612595a72d8f6df1302499822d03bbed7e829752efe",
@@ -34,12 +34,12 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "7d4f0ed8e5efe566aa6521fc7ed4a1a51b310e63",
+      "attempts": 1,
       "startedAt": "2026-11-11T16:35:55.285Z",
       "doneAt": "2026-11-11T16:38:32.881Z",
-      "summary": "La tarjeta de la notificación arma su estado con shownRoom y HostSilence (sigue hostSilenceProvider y su reloj): durante la espera del anfitrión muestra micrófono y salida de audio y dice «X no responde · N s» en ámbar. Subtítulo extraído a _look/_phaseLook. Tests AC1-AC3."
+      "summary": "La tarjeta de la notificación arma su estado con shownRoom y HostSilence (sigue hostSilenceProvider y su reloj): durante la espera del anfitrión muestra micrófono y salida de audio y dice «X no responde · N s» en ámbar. Subtítulo extraído a _look/_phaseLook. Tests AC1-AC3.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -50,5 +50,6 @@
     "A": 2,
     "AC": 4,
     "T": 1
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T16:38:49.507Z"
 }
