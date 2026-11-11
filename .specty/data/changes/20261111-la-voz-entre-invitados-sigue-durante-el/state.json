@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "id": "20261111-la-voz-entre-invitados-sigue-durante-el",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/la-voz-entre-invitados-sigue-durante-el",
+  "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 4,
+    "adjust": 0,
+    "reasons": [
+      "4 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:f1c47d26d704eb204f4cf35a337b8c16b502ad7adc104725947f80109d14234d",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:517663b001ae40786e16bcd9a69672af0e9b24e1b220c2e80ddf7c6591d19313",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:b64758a80e5ef0c6b635ed9810286a640c9cc2e70aad2930ecab0194f30f53f0",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:0e9ad019e3a83e50ad5a1ef87fb5525fc44165586c436878e7016488ffcc1ac0",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 6,
+    "T": 2,
+    "R": 3
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:a15cea4e70f0986bbab1806b790f39cd51a1f5e4f725cd88b6ae0563a613c72e",
+    "at": "2026-11-11T15:59:37.892Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
