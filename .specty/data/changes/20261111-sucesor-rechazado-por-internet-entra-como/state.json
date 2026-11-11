@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261111-sucesor-rechazado-por-internet-entra-como",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "bugfix/sucesor-rechazado-por-internet-entra-como",
   "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:23ae1fcb18488e22ef3059fe4da4df6511f172867ff1cad8c95335b391a2de0c",
+    "at": "2026-11-11T16:54:19.803Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 2,
@@ -28,7 +35,31 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/data/repositories/room_repository_takeover.dart",
+        "lib/features/lobby/presentation/pages/lobby_page.dart",
+        "lib/features/room/data/datasources/host_probe.dart",
+        "lib/features/room/data/datasources/peer_connection_datasource.dart",
+        "lib/features/room/data/datasources/peer_connection_signaling.dart",
+        "lib/features/room/data/datasources/signaling_server_datasource.dart",
+        "lib/features/room/data/datasources/signaling_server_routing.dart",
+        "lib/features/room/data/repositories/room_repository_messages.dart",
+        "lib/features/room/data/repositories/room_repository_reconnection.dart",
+        "lib/features/room/data/repositories/voice_repository_impl.dart",
+        "lib/features/room/presentation/pages/room_notification.dart",
+        "test/features/lobby/presentation/lobby_page_test.dart",
+        "test/features/room/presentation/room_notification_test.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "0a52ed5624627f1ef8894f0acc9c93b4aee6c639",
+      "startedAt": "2026-11-11T16:54:20.173Z",
+      "doneAt": "2026-11-11T16:57:38.979Z",
+      "summary": "Un 409 al abrir el relé al tomar la frecu por internet ya no la da por perdida: el sucesor cierra su servidor y vuelve como invitado por guestSocket con su id y aviso outranked; los demás fallos siguen igual."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -37,13 +68,7 @@
     "A": 3,
     "AC": 2,
     "T": 1,
-    "R": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:23ae1fcb18488e22ef3059fe4da4df6511f172867ff1cad8c95335b391a2de0c",
-    "at": "2026-11-11T16:54:19.803Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
+    "R": 1,
+    "S": 2
   }
 }

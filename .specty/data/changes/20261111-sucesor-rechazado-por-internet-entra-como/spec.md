@@ -40,7 +40,7 @@ Por internet, cuando a quien le toca tomar la frecu por caída abre su relé y l
 
 ## Tareas
 
-- [ ] T1: El sucesor rechazado por la nube entra como invitado
+- [x] T1: El sucesor rechazado por la nube entra como invitado
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/internet_successor_refused_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/features/room/data/internet_successor_refused_test.dart test/features/room/data/internet_outranked_test.dart test/features/room/data/internet_handover_test.dart

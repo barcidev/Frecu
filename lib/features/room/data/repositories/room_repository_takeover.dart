@@ -172,11 +172,47 @@ extension _Takeover on RoomRepositoryImpl {
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
       await _rejoinAsHost(session, me, state, address, target, reason);
     } on Object catch (e, st) {
-      AppLogger.e('Could not take over the room', e, st);
       if (session != _session) return;
+      if (await _joinAsGuestIfRefused(e, state, me, target)) return;
+      AppLogger.e('Could not take over the room', e, st);
       _giveUp();
       unawaited(_server.stop());
     }
+  }
+
+  /// Si [error] es el rechazo (409) de la nube al relé con que este
+  /// teléfono tomaba la frecu por internet de [state], otro ya la lleva con
+  /// un turno mayor: cierra el servidor que acababa de abrir, vuelve como
+  /// invitado ([me]) por el socket de invitado y, al llegar el `welcome`,
+  /// avisa quién la lleva. `false` si es otro fallo.
+  Future<bool> _joinAsGuestIfRefused(
+    Object error,
+    RoomSuccession state,
+    String me,
+    _JoinTarget target,
+  ) async {
+    final internetId = _internetId;
+    if (state.reach != RoomReach.internet ||
+        internetId == null ||
+        !CloudRelayDataSource.isOutranked(error)) {
+      return false;
+    }
+    AppLogger.i('Another host leads the room: joining as a guest');
+    await _relay.stop();
+    await _server.stop();
+    _isHost = false;
+    _following = true;
+    _outranked = const HostRival(host: '', term: 0, address: '', port: 0);
+    _target = _JoinTarget(
+      uri: cloudConfig.guestSocket(internetId),
+      host: '',
+      port: target.port,
+      accessCode: state.accessCode,
+      displayName: target.displayName,
+      peerId: me,
+    );
+    _handleClientConnectionChange(false);
+    return true;
   }
 
   /// Vuelve como anfitrión a su mismo lugar ([me]) en el servidor que acaba
