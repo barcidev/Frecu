@@ -71,3 +71,25 @@ La frecu sabe si su red la crea el teléfono del anfitrión (red de Frecu o zona
 
 - R1: Un Android que arma la zona Wi-Fi en una interfaz `wlanN` (sin la red de Frecu) se toma como Wi-Fi compartida y mostraría los textos de hoy — se acepta en este corte; el prefijo de IP queda fuera de alcance.
 - R2: En paralelo, C8 toca `lib/i18n/*.json` — conflictos menores al integrar, en claves distintas.
+
+## Cierre
+
+### Resumen
+
+`Participant.ownsNetwork` (aditivo) marca al anfitrión cuyo teléfono es la red de la frecu, y `Room` gana `hostOwnsNetwork` y el getter `handover` (`reach == internet || !hostOwnsNetwork`). Al crear una frecu local, `RoomRepositoryImpl` decide con `selectLanAddress` si la red es del anfitrión (red de Frecu al aire, interfaz de zona Wi-Fi o ninguna red local a la vista) y lo fija en `SignalingServerDataSource.hostOwnsNetwork`; el servidor lo pone en el participante anfitrión, que llega a todos en `welcome`, y `_onWelcome` lo pasa a la `Room`. Con la red del anfitrión, la hoja de salir del anfitrión dice «Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para …» (solo «Cerrar frecu»), y el cierre por `host_unreachable` tras los reintentos de hoy dice «Se perdió la red del anfitrión y no volvió.» (`RoomClosureKind.lostHostNetwork`). Textos en es/en. Pruebas AC4 en `host_network_test` y `host_network_ui_test`; `flutter analyze` sin problemas y `flutter test` completo en verde (1173).
+
+### Desviaciones
+
+- `createRoom` se partió en `_prepareHostAddress` y `_createFailure` para no pasar de 50 líneas ni de complejidad 10.
+
+### Decisiones
+
+- El dato viaja en el participante anfitrión y no en `welcome`: un campo nuevo en `welcome` cambia la firma posicional de `maybeWhen` que usan pruebas aprobadas (`signaling_message_test`, `signaling_server_test`).
+- `hostOwnsNetwork` es una propiedad del servidor y no un parámetro de `start`, porque pruebas aprobadas sobrescriben `start` (`room_session_test`, `ip_join_note_test`).
+- `Room.hostOwnsNetwork` vale `false` por defecto (textos de hoy) y no viaja en el JSON de `Room`, como `hosting`.
+
+### Pendientes
+
+- C3 tendrá el mismo problema si agrega campos a `welcome`: o los pone en un mensaje nuevo (`room_state`) o en los participantes, o pide al usuario desbloquear `signaling_message_test` y `signaling_server_test`.
+- Una zona Wi-Fi de Android en una interfaz `wlanN` (sin la red de Frecu) se toma como Wi-Fi compartida (R1).
+- Probar en teléfonos reales la hoja y el cierre con la red de Frecu y con zona Wi-Fi (Android e iPhone).

@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-red-del-anfitrion-detectar-si-admite-traspaso",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/red-del-anfitrion-detectar-si-admite-traspaso",
   "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:6e0db163e015d06ae3dcbbcc7b136f4c5088500a85ac56f91c7306b84908d617",
@@ -44,12 +44,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "ca33104f141a3dd0fbe8a08f85de58b90566d006",
+      "attempts": 1,
       "startedAt": "2026-11-11T13:54:19.686Z",
       "doneAt": "2026-11-11T13:57:18.905Z",
-      "summary": "LeaveSheet con hostNetwork (textos «Tu teléfono es la red de la frecu…», solo «Cerrar frecu»), RoomClosureKind.lostHostNetwork con «Se perdió la red del anfitrión y no volvió.», RoomPage los elige por Room.hostOwnsNetwork; textos es/en"
+      "summary": "LeaveSheet con hostNetwork (textos «Tu teléfono es la red de la frecu…», solo «Cerrar frecu»), RoomClosureKind.lostHostNetwork con «Se perdió la red del anfitrión y no volvió.», RoomPage los elige por Room.hostOwnsNetwork; textos es/en",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -61,5 +61,6 @@
     "AC": 4,
     "T": 2,
     "R": 2
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T13:57:30.613Z"
 }
