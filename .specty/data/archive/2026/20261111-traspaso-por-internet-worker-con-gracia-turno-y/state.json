@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-traspaso-por-internet-worker-con-gracia-turno-y",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/traspaso-por-internet-worker-con-gracia-turno-y",
   "baseCommit": "3fe7564ad82ae93c04f7b46477fb9e4df1a2a6b7",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:b18f5841c6f76e350cdd84006d42f7c46f7e3add159b5a7e94e77b341c3086a5",
@@ -52,12 +52,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "ca618b22304f39f5ced1846064f4438e7d72c182",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:42:41.683Z",
       "doneAt": "2026-11-11T15:46:34.889Z",
-      "summary": "Por internet, quien toma la frecu abre el relé con el mismo secreto y el turno siguiente (InternetHandover); host_lost suelta el socket, el plan de caída incluye a todos sin IP y seguir a alguien es volver al mismo socket con el id propio."
+      "summary": "Por internet, quien toma la frecu abre el relé con el mismo secreto y el turno siguiente (InternetHandover); host_lost suelta el socket, el plan de caída incluye a todos sin IP y seguir a alguien es volver al mismo socket con el id propio.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -69,5 +69,6 @@
     "AC": 11,
     "T": 2,
     "R": 4
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T15:47:45.497Z"
 }

@@ -69,3 +69,27 @@ Una frecu por internet sobrevive a la salida o a la caída de su anfitrión, com
 - R2: El sucesor tarda más que la gracia (p. ej. el primero no tiene red y le toca al tercero) — el plan por internet da dos pasos de 1 s y 2 s a cada persona, y la gracia de 10 s cubre al primero y al segundo. Si nadie llega, la frecu se cierra para todos, como hoy.
 - R3: `room_repository_impl.dart` ya es grande (P162) — el socket con turno y el relé del sucesor viven en `internet_handover.dart`; el repositorio solo elige la rama.
 - R4: El Worker nuevo cambia el comportamiento para apps anteriores solo si se conectan con `term`, y ninguna lo hace.
+
+## Cierre
+
+### Resumen
+
+Una frecu por internet sobrevive a la salida o a la caída de su anfitrión. El Worker guarda el turno vigente: a un anfitrión con un turno menor le responde 409, y uno con un turno igual o mayor retira al anterior (4000) y cierra a sus invitados (1012). Si cae un anfitrión con turno, los invitados reciben `{"t":"host_lost"}` y siguen abiertos durante una gracia de 10 s. Al acabar la gracia sin sucesor, una alarma los cierra (1001). Sin turno (app anterior), todo sigue como antes. En la app, el anfitrión se conecta con `term=1`. Por `host_lost`, el cliente suelta su socket. El plan de caída incluye por internet a todas las personas, aunque no tengan IP, y seguir a alguien es volver al mismo socket de invitado con el id propio. Tomar la frecu es abrir el servidor en un puerto libre y el relé de anfitrión con el secreto de `room_state` y el turno siguiente (`InternetHandover`). Pruebas: 9 del Worker con vitest y 3 de punta a punta en Dart, con un punto de encuentro falso que tiene turno y gracia (traspaso voluntario, caída, y un sucesor sin red que pasa al siguiente). `flutter analyze` no da problemas, `flutter test` pasa entero (1237) y `npm test` del Worker también (31).
+
+### Desviaciones
+
+- `acceptHost` del Worker se partió en `parseHostClaim`, `checkSecret` y `checkTerm`, porque superaba la complejidad permitida.
+- El repositorio no pasa la IP vacía por una rama propia: `_JoinTarget.toward('')` vuelve al mismo socket de invitado, y `openServer` no guarda una IP vacía como la del anfitrión.
+
+### Decisiones
+
+- La gracia solo rige para un anfitrión que se conecta con `term`. Así, una app anterior no ve ningún cambio, y el Worker desplegado (que ignora `term`) sigue funcionando con la app nueva.
+- `host_lost` es un sobre de la nube, no un mensaje del protocolo. La app nueva suelta el socket y sigue su plan de caída; una app anterior lo descarta y, al acabar la gracia, se cierra como antes.
+- El Worker no pone en cola a los invitados durante la gracia. Responde 404 y cada uno reintenta según su plan; cuando llega el sucesor, cierra a los que esperaban (1012) para que vuelvan a entrar.
+
+### Pendientes
+
+- Desplegar el Worker (`cd cloud && npx wrangler deploy`): lo decide la persona. Hasta entonces, por internet no hay gracia ni turno, y el traspaso solo funciona si el sucesor llega antes de que se cierren los invitados.
+- El anfitrión anterior que vuelve por internet con un turno menor recibe 409 y sigue reintentando su relé: falta que entre como invitado (AC9 por internet).
+- Probar en teléfonos reales el traspaso por internet, voluntario y por caída (AC12).
+- P162 sigue abierto: `room_repository_impl.dart` quedó en 944 líneas de código.
