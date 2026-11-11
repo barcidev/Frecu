@@ -5,7 +5,14 @@
   "phase": "implementing",
   "branch": "feature/tipo-de-frecu-y-traspaso",
   "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
-  "revision": 1,
+  "revision": 2,
+  "approved": {
+    "revision": 2,
+    "hash": "sha256:5def78185bd1ebc981cbb37ea5f88f510dfde3f5f90a33ab77f9d33d6c764389",
+    "at": "2026-11-11T13:43:59.168Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 0,
@@ -44,14 +51,7 @@
   "maxIds": {
     "A": 5,
     "AC": 12,
-    "C": 7,
+    "C": 8,
     "R": 4
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:9e776f00fb6fde879b1acb0bff623f2c4c37c438545c677a904449bc1dd2d081",
-    "at": "2026-11-11T13:23:38.121Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

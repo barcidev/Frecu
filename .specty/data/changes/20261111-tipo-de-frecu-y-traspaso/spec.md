@@ -76,6 +76,9 @@ Al crear una frecu, el anfitrión elige si es **Local** (todos en la misma Wi-Fi
 - C7: La voz entre invitados sigue durante el traspaso, y pruebas en teléfonos reales
   - ac: AC10, AC12
   - depends: C6
+- C8: Paso «¿Cómo se une tu grupo?» al crear (Local o Por internet), pasos de 3 o 2, etiqueta bajo la hora y sin el interruptor «Permitir internet»
+  - ac: AC1
+  - depends: C1
 
 ## Riesgos
 
