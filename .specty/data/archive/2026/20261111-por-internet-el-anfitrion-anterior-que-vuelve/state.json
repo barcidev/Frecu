@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "id": "20261111-por-internet-el-anfitrion-anterior-que-vuelve",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/por-internet-el-anfitrion-anterior-que-vuelve",
+  "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:4a4c0aac5c955f8e5b5758d4499cfa920c558822048e38d4be14cbd935641e90",
+    "at": "2026-11-11T15:57:41.762Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "S",
+    "score": 4,
+    "adjust": 0,
+    "reasons": [
+      "4 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:af569fbce6882e0ac2d16e0bf342c14b212fbd8e9b81253c3fb3170644644aa8",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:2ff4c29c4cc0c9867076e4f5b4ab25e81bff54dfb8f93120553a10f1250dd27c",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:e62055126c651eab77ad33194412ad6f48feb5fa872ad5ecdeb1c29b94523d9c",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:e632399dee2da425553ccc09e3c3933a77ce6a7264972eee4df1378c61ea595f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "ba0e7221577c62cc15cd95ffef68e6d51c0872a4",
+      "attempts": 1,
+      "startedAt": "2026-11-11T15:57:42.126Z",
+      "doneAt": "2026-11-11T15:59:51.995Z",
+      "summary": "El relé reconoce el 409 de la reconexión (IOWebSocketChannel conserva el código HTTP) y el cierre 4000 del socket vigente: deja de reconectar y avisa una vez con onOutranked; otras caídas (403/404/503, sin red, otros códigos) siguen reconectando.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "46624e186d4589599787a7d8d4c6899b127f17e2",
+      "attempts": 1,
+      "startedAt": "2026-11-11T15:59:52.271Z",
+      "doneAt": "2026-11-11T16:02:18.481Z",
+      "summary": "Al aviso onOutranked del relé, el repositorio cede como en C10 (_yieldTo generalizado): detiene relé y servidor, vuelve por guestSocket con su id y emite HostChange(outranked). Prueba de punta a punta con 409.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 3,
+    "T": 2,
+    "R": 3
+  },
+  "closingSubmittedAt": "2026-11-11T16:03:25.221Z"
+}
