@@ -8,3 +8,6 @@
 .packages
 build/
 /.specty/.worktrees/
+
+# Caché local de wrangler (Cloudflare)
+.wrangler/
