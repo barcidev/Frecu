@@ -2,23 +2,23 @@
   "schema": 1,
   "id": "20261111-aviso-sin-wi-fi-amigable-en-el-lobby",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "implementing",
   "branch": "bugfix/aviso-sin-wi-fi-amigable-en-el-lobby",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
-  "revision": 1,
+  "revision": 3,
   "approved": {
-    "revision": 1,
-    "hash": "sha256:561ca207415def43ae7a4fbcca9db61e914aadf255ff95b37bda97d96669e102",
-    "at": "2026-11-11T05:28:56.941Z",
+    "revision": 3,
+    "hash": "sha256:986f238bb20a2adcd17adb17ff2d36c32c0f39188c726d437eed87577026644f",
+    "at": "2026-11-11T05:35:18.357Z",
     "by": "Jorge Palacio Barcinilla",
     "channel": "delegated"
   },
   "size": {
     "level": "M",
-    "score": 6,
+    "score": 7,
     "adjust": 0,
     "reasons": [
-      "4 archivos",
+      "5 archivos",
       "2 módulos"
     ]
   },
@@ -39,12 +39,12 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "14c00c07eea9fdf22e95300f0aeb3f6e2ebaf851",
+      "attempts": 1,
       "startedAt": "2026-11-11T05:28:57.355Z",
       "doneAt": "2026-11-11T05:31:22.600Z",
-      "summary": "Píldora «Sin Wi-Fi» en tono off y, sin red ni frecus, estado vacío tranquilo (título, mensaje en tx2 y botón fantasma pequeño «Abrir ajustes de Wi-Fi») en lugar del FrBanner rojo; textos es/en en slang; pruebas AC2/AC6 del lobby actualizadas"
+      "summary": "Píldora «Sin Wi-Fi» en tono off y, sin red ni frecus, estado vacío tranquilo (título, mensaje en tx2 y botón fantasma pequeño «Abrir ajustes de Wi-Fi») en lugar del FrBanner rojo; textos es/en en slang; pruebas AC2/AC6 del lobby actualizadas",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -54,6 +54,6 @@
   "maxIds": {
     "A": 3,
     "AC": 3,
-    "T": 1
+    "T": 2
   }
 }
