@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261111-regreso-del-anfitrion-anterior-y-dos",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/regreso-del-anfitrion-anterior-y-dos",
+  "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "12 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:5bcda887147cd05b98dada2a8c143303eba493ee7114f6bdc29034a929c4730f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:6eb2c27169b84426a9025dacda1a1b298ffd60bc6b49c5a98bc92ac03b23e179",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:1655dcd95395cfdd0ccda140fac67e627502677ba1cecbaaa7c427393e381e7b",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:993447055f523e8b0886acb7aab0893764a1685c5f48058b8784bb96c10be4c6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 9,
+    "T": 3,
+    "R": 4
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:5bcbe28e2d658d34c5ab1c1a49bdf2b831ebf540275d6174273af2b67e9db103",
+    "at": "2026-11-11T15:13:50.562Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
