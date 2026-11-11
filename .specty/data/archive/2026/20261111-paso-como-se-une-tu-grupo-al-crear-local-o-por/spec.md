@@ -79,3 +79,26 @@ Al crear una frecu, el anfitrión elige primero cómo se une su grupo: **Local**
 
 - R1: La consulta DNS puede responder desde la caché sin internet — en ese caso «Por internet» se ve habilitada y, al abrir, la creación falla con el aviso de red de hoy.
 - R2: Las pruebas que entran a la creación desde el inicio cambian todas a la vez — se cubren en T2 y T3 y se corre `flutter test` completo al final.
+
+## Cierre
+
+### Resumen
+
+La creación empieza en `RoomReachStep` («¿Cómo se une tu grupo?»), con `RoomReachOption` (estructura de `AudioRouteOption`): Local (hotspot, marcada) y Por internet (globe), atenuada con «Necesitas internet para crearla…» sin internet o con «Esta versión de Frecu no crea frecus por internet.» sin punto de encuentro. El provider `internetCheck` resuelve el nombre del punto de encuentro (3 s) y se reintenta cada 5 s mientras falta. Local sigue a la red («Paso 2 de 3») y a «Nueva frecu» («Paso 3 de 3»); Por internet va directo a «Nueva frecu» («Paso 2 de 2») y apaga la red de Frecu si estaba creada. `CreateRoomAppBar` recibe el total (`stepsFor`). «Nueva frecu» recibe `reach`, ya no tiene «Permitir internet» y lleva la etiqueta Local o Por internet bajo «Abierta a las HH:MM». Textos en `lobby.newRoom.reach` (es/en); se borró `lobby.newRoom.internet`. `flutter analyze` sin problemas y `flutter test` completo en verde (1165).
+
+### Desviaciones
+
+- `local_network_step.dart`, `hotspot_guide_step.dart` y `new_room_test.dart` se añadieron también a T1 (`scope add`): el total de pasos obligatorio en `CreateRoomAppBar` y las pruebas del interruptor cambiaban ahí.
+- Las pruebas del paso del tipo van en un archivo nuevo, `test/features/lobby/presentation/room_reach_step_test.dart` (`scope add`), porque `new_room_test.dart` pasaba de 600 líneas.
+- `new_room_test.dart` tiene 2 casos menos: los tres del interruptor (N1–N3) y el de AC3 con interruptor pasan a un caso Local y uno Por internet (que conserva AC3: sin red ni mDNS); el resto del paso del tipo está en el archivo nuevo.
+
+### Decisiones
+
+- El provider `internetCheck` vive en el archivo del paso para no sumar otro archivo al corte (16 unidades, tamaño L); devuelve una función que las pruebas reemplazan, como `newRoomClock`.
+- El paso del tipo guarda la opción; la página solo la recibe al seguir y la pasa a `NewRoomStep`.
+- Volver de la red al paso del tipo no apaga la red de Frecu; solo se apaga al seguir Por internet o al salir de la creación.
+
+### Pendientes
+
+- P155: borrar `room.internet.*` y `room.sheets.invite.internet.andWifi` con la rama «y Wi-Fi» de la hoja de invitar (módulo `room`, fuera de este corte).
+- P156: probar en teléfonos reales el paso del tipo, la comprobación de internet y el apagado de la red al seguir Por internet.
