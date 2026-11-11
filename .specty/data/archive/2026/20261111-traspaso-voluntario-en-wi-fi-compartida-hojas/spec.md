@@ -85,3 +85,34 @@ En una frecu local sobre una Wi-Fi que no depende del teléfono del anfitrión, 
 - R1: Sacar el bucle de reintentos del repositorio podría cambiar la reconexión de hoy — se mueve sin cambiar tiempos ni orden, y T1 corre `room_reconnect_test` y `room_succession_test`.
 - R2: En pruebas, quien recibe la frecu abre su servidor en el mismo puerto que acaba de soltar el anfitrión — `HostTakeover` reintenta abrirlo unas veces antes de rendirse.
 - R3: Un `case` más en los `switch` del repositorio puede pasar el límite de complejidad de `specty check` — los mensajes de traspaso se atienden en funciones propias.
+
+## Cierre
+
+### Resumen
+
+Traspaso voluntario en una frecu local sobre una Wi-Fi compartida. Protocolo aditivo: `host_handover { to, term }`, `host_changed { host, term, reason }` y `join.peerId` (se omite si es nulo); `welcome` no cambia. El servidor del anfitrión pasa la frecu (`handOver`: difunde `host_handover` y `peer_left` propio, y se detiene sin `room_closed`); el de quien la recibe, con `inherited` (`InheritedRoom`), guarda un lugar a cada persona heredada (mismo id, orden y hora de llegada) que se ocupa con `join.peerId`, sin `peer_joined`, y responde `host_changed`. `RoomRepositoryImpl` implementa la interfaz nueva del dominio `RoomHandover` (`succession`, `watchSuccession`, `watchHostChanges`, `handOver`), sin tocar `RoomRepository`: quien recibe la frecu abre el servidor con `term + 1` y vuelve a su lugar como anfitrión; los demás reconectan a su IP con su mismo id. En la presentación, hojas «¿Qué pasa con la frecu?» y «¿Quién lleva la frecu?», `HandoverNotice` (toast con la firma a los demás y aviso «Ahora llevas la frecu.» con «Mostrar el QR» a quien la recibe), «Llevas la frecu» en la cabecera y la invitación con la IP nueva. 4 pruebas AC7 con servidores reales y 8 de interfaz (AC6, AC7); `flutter analyze` sin problemas y `flutter test` completo en verde (1197).
+
+### Desviaciones
+
+- `HostChange` vive en `domain/repositories/room_handover.dart` junto a la interfaz, para no sumar un archivo de código más.
+- El servidor recibe la frecu heredada como propiedad (`inherited`, una `InheritedRoom` de `room_succession.dart`) y no como método `inherit`, y la lógica de los lugares heredados se movió a `InheritedRoom` para no pasar de 500 líneas en `signaling_server_datasource.dart`.
+- `_listen` del repositorio se partió (`_onMessage`, `_onWelcomeMessage` y la clase `_Joining`), y el `join` del servidor (`_admits`), por los límites de líneas y complejidad de `specty check`.
+- La isla deja de avisar la salida del anfitrión (solo sale de una frecu que sigue cuando la pasa); el aviso lo da el cambio de anfitrión.
+- Los textos de `lost` («se desconectó») ya están en slang y en `HandoverNotice`, aunque la caída es de C5.
+
+### Decisiones
+
+- Lugares heredados en el servidor de quien recibe la frecu, en vez de dejar que cada uno vuelva como nuevo: la lista no parpadea, la isla no avisa entradas y salidas falsas, la malla WebRTC entre invitados no se rehace (mismo id) y el orden de sucesión se conserva. Quien no vuelve sale por latido (`peerTimeout`).
+- Mientras el servidor se detiene no acepta conexiones (`_closing`): en pruebas, todos en 127.0.0.1, un invitado podía entrar al servidor que se cerraba como anfitrión.
+- Quien recibe la frecu reintenta abrir el puerto 10 veces cada 300 ms, por si el anterior aún lo suelta.
+- `roomHandoverProvider` devuelve el repositorio solo si implementa `RoomHandover`: con los dobles de `RoomRepository` de las pruebas aprobadas la salida sigue como hoy.
+- La hoja de salir con traspaso dice «Llevas la frecu y hay N personas más.» en vez del «Eres el anfitrión…» del prototipo, para no suponer género.
+- Tras pasar la frecu, quien sale vuelve al inicio como un invitado que sale (sin pantalla de cierre).
+
+### Pendientes
+
+- P160: el micrófono abierto no se retoma solo tras el traspaso (C7).
+- P161: quien recibe la frecu no la anuncia por mDNS ni Bluetooth; solo con su QR.
+- P162: `room_repository_impl.dart` (788 líneas de código) y `room_page.dart` (615) siguen grandes; P159 sigue abierto.
+- P163: probar el traspaso voluntario en teléfonos reales.
+- C5: probar con el siguiente de la sucesión si quien recibe la frecu no responde, y el `term` en el `join`.
