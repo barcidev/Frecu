@@ -74,3 +74,26 @@ Una frecu es **Local** (todos en la misma Wi-Fi, sin internet) o **Por internet*
 
 - R1: Una invitación por internet de un anfitrión con versión anterior lleva IP y `x`: el escáner aún prueba la IP primero; es solo durante la transición.
 - R2: El interruptor «Permitir internet» queda con su texto viejo («También pueden unirse desde lejos») hasta el corte del paso del tipo — es un estado intermedio en develop, sin publicar.
+
+## Cierre
+
+### Resumen
+
+Nuevo `RoomReach { local, internet }` en el dominio; `Room.reach` se deduce de `internetId`, y `createRoom` (repositorio, caso de uso y notifier) recibe `reach` en lugar de `bool internet`. Una frecu por internet deja vacía la IP del anfitrión aunque haya Wi-Fi, así su invitación no lleva `h` ni `p`; «Nueva frecu» no le pasa red (Bluetooth no la anuncia) ni la publica por mDNS. Una local no abre el relé ni tiene `internetId`. `RoomPage` ya no muestra el aviso «La red de Frecu no tiene internet». Pruebas AC2/AC3 en `internet_room_test`, `new_room_test` e `internet_room_ui_test`; `flutter analyze` sin problemas.
+
+### Desviaciones
+
+- El corte se estrechó a AC2 y AC3: con AC1 (paso «¿Cómo se une tu grupo?») pasaba de 15 archivos de código y 2 módulos (tamaño XL) y Specty lo rechazó. AC1 queda para un corte nuevo de la épica.
+- Sin `RoomInvite.forRoom` ni cambios en la hoja de invitar, NFC, Bluetooth o el escáner: basta con que la frecu por internet no tenga IP ni red para que ninguna invitación las lleve.
+- U3 de `internet_room_ui_test` pasa a AC3: comprueba que el aviso ya no aparece y que «Sin audio» sigue.
+
+### Decisiones
+
+- `reach` es un getter sobre `internetId` y no un campo: no puede contradecirlo y el invitado lo conoce sin cambiar el protocolo.
+- El interruptor «Permitir internet» elige el tipo hasta que llegue el paso del tipo: encendido abre una frecu solo por internet.
+- Se quitó `_lanAddressOrNull` del repositorio, sin uso.
+
+### Pendientes
+
+- Corte nuevo de la épica para AC1: paso «¿Cómo se une tu grupo?» (Local / Por internet, atenuada sin internet o sin punto de encuentro), pasos de 3 o 2, sin el interruptor y con la etiqueta Local o Por internet bajo «Abierta a las HH:MM»; también borrar los textos sin uso `room.internet.*` y `room.sheets.invite.internet.andWifi` y la rama «y Wi-Fi» de la hoja de invitar.
+- Probar en teléfonos reales que un invitado en la misma Wi-Fi entra a una frecu por internet por la nube.

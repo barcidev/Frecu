@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-tipo-de-frecu-al-crear-local-o-por-internet-y",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/tipo-de-frecu-al-crear-local-o-por-internet-y",
   "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:0f4e2e53099f3a1a9f9086eccf7d99fd5cd46784ce169585638d538378e9446f",
@@ -61,12 +61,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "bf893aeab5969e1a49c236fef2d74441e41a7200",
+      "attempts": 1,
       "startedAt": "2026-11-11T13:37:04.064Z",
       "doneAt": "2026-11-11T13:37:45.514Z",
-      "summary": "RoomPage ya no muestra el aviso «La red de Frecu no tiene internet» (internet_cut_notice); la marca «Sin audio» de la malla sigue. Test AC3 en internet_room_ui_test."
+      "summary": "RoomPage ya no muestra el aviso «La red de Frecu no tiene internet» (internet_cut_notice); la marca «Sin audio» de la malla sigue. Test AC3 en internet_room_ui_test.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -78,5 +78,6 @@
     "AC": 3,
     "T": 3,
     "R": 2
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T13:38:02.813Z"
 }
