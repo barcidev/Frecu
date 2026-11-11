@@ -11,6 +11,10 @@ enum HostChangeReason {
 
   /// El anfitrión anterior se desconectó.
   lost,
+
+  /// Este teléfono llevaba la frecu y otro la lleva con un turno que gana:
+  /// entró como invitado.
+  outranked,
 }
 
 /// Otra persona lleva ahora la frecu.

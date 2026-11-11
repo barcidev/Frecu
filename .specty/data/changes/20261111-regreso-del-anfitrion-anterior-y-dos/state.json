@@ -43,14 +43,23 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [
-        "lib/features/room/data/datasources/signaling_connection.dart"
-      ],
-      "attempts": 1,
       "baseCommit": "c16c64202f807bf5bdba0a743933f6bad1e0bbfe",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:13:50.898Z",
       "doneAt": "2026-11-11T15:19:12.571Z",
-      "summary": "host_probe (un tipo en las dos direcciones) y address/port en host_handover; host_probe.dart con outranks, HostRival y HostProbe; el servidor responde host_probe, avisa onRival y cede con yieldTo sin room_closed."
+      "summary": "host_probe (un tipo en las dos direcciones) y address/port en host_handover; host_probe.dart con outranks, HostRival y HostProbe; el servidor responde host_probe, avisa onRival y cede con yieldTo sin room_closed.",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_connection.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "6e9c908eac7028031fd03bb3b42e1bea12be2903",
+      "startedAt": "2026-11-11T15:19:12.872Z",
+      "doneAt": "2026-11-11T15:22:23.298Z",
+      "summary": "El repositorio pregunta con HostProbe mientras lleva una frecu local con traspaso, cede al rival que gana (yieldTo), vuelve como invitado siguiendo al ganador y emite HostChange outranked; los invitados siguen host_handover con address/port."
     }
   },
   "pending": {

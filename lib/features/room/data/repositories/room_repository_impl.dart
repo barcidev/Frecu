@@ -10,6 +10,7 @@ import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/cloud_relay_datasource.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
+import 'package:frecu/features/room/data/datasources/host_probe.dart';
 import 'package:frecu/features/room/data/datasources/room_succession.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
@@ -52,7 +53,9 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     int maxReconnectAttempts = 5,
     this.welcomeTimeout = const Duration(seconds: 5),
     this.rejoinWelcomeTimeout = const Duration(seconds: 3),
+    HostProbe? hostProbe,
   }) : _server = serverDataSource,
+       _probe = hostProbe ?? HostProbe(),
        _client = clientDataSource,
        _relay =
            cloudRelayDataSource ??
@@ -82,6 +85,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     _connectionStateSub = _client.connectionState.listen(
       _handleClientConnectionChange,
     );
+    _server.onRival = _onRival;
   }
 
   final SignalingServerDataSource _server;
@@ -105,6 +109,14 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
 
   /// Traspaso de la frecu entre anfitriones.
   final HostTakeover _takeover = HostTakeover();
+
+  /// Pregunta, mientras este teléfono lleva la frecu, si otro la lleva con
+  /// un turno que gana.
+  final HostProbe _probe;
+
+  /// Otro teléfono lleva la frecu con un turno que gana: este teléfono le
+  /// cedió la suya y entra como invitado.
+  HostRival? _outranked;
 
   /// Intentos de reconexión antes de dar la frecu por perdida.
   int get maxReconnectAttempts => _rejoin.maxAttempts;
@@ -408,9 +420,11 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     _isHost = host;
     _internetId = null;
     _following = false;
+    _outranked = null;
     _localParticipantId = null;
     _takeover.forget();
     _succession.update(null);
+    _probe.remember(null);
     _setParticipants(const []);
     _setStatus(const RoomStatus.connecting());
     return session;
@@ -434,6 +448,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
   /// servidor (si es anfitrión) y socket.
   Future<void> _teardownConnection() async {
     _live = false;
+    _probe.stop();
     // Dejar de escuchar es inmediato; no hace falta esperar.
     unawaited(_clientSubscription?.cancel());
     _clientSubscription = null;
@@ -666,6 +681,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
         _onPeerLeft(peerId);
       case SignalingRoomStateMessage(:final state):
         _succession.update(state);
+        _probe.remember(state);
       case SignalingRoomClosedMessage(:final reason):
         _onRoomClosed(reason);
       case SignalingHostHandoverMessage() || SignalingHostChangedMessage():
@@ -737,6 +753,67 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     );
 
     if (!completer.isCompleted) completer.complete(Result.success(room));
+    _afterWelcome(peerId, participants);
+  }
+
+  /// Como anfitrión, empieza a preguntar si otro lleva la frecu; si acaba
+  /// de ceder la suya, avisa quién la lleva.
+  void _afterWelcome(String me, List<Participant> participants) {
+    if (_isHost) {
+      _probe.start(
+        state: () => _succession.current,
+        me: me,
+        serverPort: _server.port,
+        onRival: _onRival,
+      );
+    }
+    final rival = _outranked;
+    if (rival == null || _isHost) return;
+    _outranked = null;
+    final host = participants.where((p) => p.isHost).firstOrNull;
+    _takeover
+      ..forget()
+      ..announce(
+        hostId: host?.id ?? rival.host,
+        hostName: host?.displayName ?? '',
+        you: false,
+        reason: HostChangeReason.outranked,
+        hostAddress: rival.address,
+        port: rival.port,
+      );
+  }
+
+  void _onRival(HostRival rival) => unawaited(_yieldTo(rival));
+
+  /// Otro teléfono lleva esta frecu local con traspaso con un turno que gana
+  /// ([rival]): le cede la frecu con sus invitados y vuelve a ella como
+  /// invitado, como quien sigue un `host_handover`.
+  Future<void> _yieldTo(HostRival rival) async {
+    final state = _succession.current;
+    final me = _participants
+        .where((p) => p.id == _localParticipantId)
+        .firstOrNull;
+    if (!_isHost || _outranked != null || state == null || me == null) return;
+    if (!state.handover || state.reach != RoomReach.local) return;
+    final session = _session;
+    _outranked = rival;
+    _probe.stop();
+    unawaited(_clientSubscription?.cancel());
+    _clientSubscription = null;
+    await _server.yieldTo(rival);
+    if (session != _session) return;
+    _isHost = false;
+    _following = true;
+    _target = _JoinTarget(
+      uri: Uri.parse('ws://${rival.address}:${rival.port}'),
+      host: rival.address,
+      port: rival.port,
+      accessCode: state.accessCode,
+      displayName: me.displayName,
+      peerId: me.id,
+    );
+    await _client.disconnect();
+    _handleClientConnectionChange(false);
   }
 
   /// Mensajes del traspaso: `host_handover` del anfitrión que sale y
@@ -745,8 +822,8 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     // El anfitrión que pasa la frecu ya sale: no sigue a nadie.
     if (_isHost) return;
     switch (message) {
-      case SignalingHostHandoverMessage(:final to, :final term):
-        _onHostHandover(session, to, term);
+      case SignalingHostHandoverMessage():
+        _onHostHandover(session, message);
       case SignalingHostChangedMessage(:final host, :final reason):
         _onHostChanged(host, reason);
       default:
@@ -754,19 +831,25 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     }
   }
 
-  /// El anfitrión pasa la frecu a [to]: si es este teléfono, la toma; si
-  /// no, la reconexión apunta a la IP de [to] con el mismo id.
-  void _onHostHandover(int session, String to, int term) {
+  /// El anfitrión pasa la frecu a `to`: si es este teléfono, la toma; si
+  /// no, la reconexión apunta a la IP de `to` (o a la `address` y el `port`
+  /// del mensaje, si vienen) con el mismo id.
+  void _onHostHandover(int session, SignalingHostHandoverMessage message) {
+    final SignalingHostHandoverMessage(:to, :term) = message;
     final state = _succession.current;
     final target = _target;
     final heir = state?.members.where((m) => m.id == to).firstOrNull;
-    final address = heir?.address;
+    final address = message.address ?? heir?.address;
     if (state == null || target == null || address == null) return;
     final host = _participants.where((p) => p.isHost).firstOrNull;
     _takeover.previousHost = host?.displayName;
     if (to != _localParticipantId) {
       _following = true;
-      _target = target.toward(address, peerId: _localParticipantId);
+      _target = target.toward(
+        address,
+        port: message.port,
+        peerId: _localParticipantId,
+      );
       return;
     }
     unawaited(
@@ -998,11 +1081,12 @@ class _JoinTarget {
   /// anfitrión; nulo para volver con un id nuevo.
   final String? peerId;
 
-  /// La misma frecu en el servidor de quien la tomó, en [host].
-  _JoinTarget toward(String host, {String? peerId}) => _JoinTarget(
-    uri: Uri.parse('ws://$host:$port'),
+  /// La misma frecu en el servidor de quien la tomó, en [host] (y en
+  /// [port], si cambia).
+  _JoinTarget toward(String host, {int? port, String? peerId}) => _JoinTarget(
+    uri: Uri.parse('ws://$host:${port ?? this.port}'),
     host: host,
-    port: port,
+    port: port ?? this.port,
     accessCode: accessCode,
     displayName: displayName,
     peerId: peerId,

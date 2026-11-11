@@ -68,7 +68,7 @@ En una frecu local sobre una Wi-Fi compartida, cuando el anfitrión anterior vue
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/host_probe.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/host_probe_test.dart, docs/protocolo.md
   - ac: AC9
   - verify: flutter test test/features/room/data/host_probe_test.dart test/features/room/data/signaling_server_test.dart test/features/room/data/signaling_term_test.dart test/features/room/data/signaling_access_test.dart
-- [ ] T2: El repositorio pregunta mientras lleva la frecu, cede al turno mayor y entra como invitado
+- [x] T2: El repositorio pregunta mientras lleva la frecu, cede al turno mayor y entra como invitado
   - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/domain/repositories/room_handover.dart, test/features/room/data/host_rivalry_test.dart
   - ac: AC9
   - verify: flutter test test/features/room/data/host_rivalry_test.dart test/features/room/data/host_failover_test.dart test/features/room/data/room_handover_test.dart test/features/room/data/room_reconnect_test.dart
