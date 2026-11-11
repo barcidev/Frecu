@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "id": "20261111-la-notificacion-muestra-el-microfono-mientras",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "bugfix/la-notificacion-muestra-el-microfono-mientras",
+  "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 2,
+    "adjust": 0,
+    "reasons": [
+      "2 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:5ccbf43602096553be07ebe334238ebb8bf925de82f941b4b71091ac1f60d4ab",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:22038d8348f18dac61acc92dfe0789f8b04bec954ad9170b67c2797f0d0a17e9",
+      "decision": "confirmed"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 4,
+    "T": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:9899184827aa5dff490db612595a72d8f6df1302499822d03bbed7e829752efe",
+    "at": "2026-11-11T16:35:54.911Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
