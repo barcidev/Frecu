@@ -67,3 +67,29 @@ Cada participante de una frecu conoce, sin que nadie lo pida, lo necesario para 
 
 - R1: Un mensaje más tras cada `join` podría romper pruebas aprobadas que cuentan mensajes — las que usan el servidor real filtran por tipo (`maybeWhen`, `whereType`); se corre `flutter test` completo.
 - R2: `room_repository_impl.dart` ya pasa de 740 líneas — la lógica va en `room_succession.dart` y el repositorio solo delega.
+
+## Cierre
+
+### Resumen
+
+Mensaje nuevo `room_state` (`SignalingMessage.roomState`, aditivo; `welcome` no cambia) con `RoomSuccession` del dominio: turno (`term`, 1 al abrir), `handover`, nombre, código, nota, tipo (`reach`), por internet `internetId` y `hostSecret`, y `members` (`RoomMember`: id, nombre, IP local y hora de llegada) en orden de llegada con el anfitrión primero. `SuccessionLedger` (`data/datasources/room_succession.dart`) vive en `SignalingServerDataSource.succession`; el servidor difunde `room_state` a todos tras cada `join` aceptado y cada salida. `RoomRepositoryImpl` configura la sucesión al crear (genera el id y el secreto por internet antes de abrir el servidor) y guarda la que llega en `KnownSuccession`, expuesta como `succession` y `watchSuccession()`; se olvida al abrir otra sesión, cerrarse, rendirse o salir. 7 pruebas AC5 en `room_succession_test`; `flutter analyze` sin problemas y `flutter test` completo en verde (1185).
+
+### Desviaciones
+
+- Los `switch` sobre `SignalingMessage` del servidor, la malla, la voz y el repositorio cambiaron su lista de mensajes ignorados por `default`: sumar la variante a cada lista subía la complejidad de funciones que ya pasaban del límite (`specty check`).
+- `_prepareHostAddress` recibe el id y el secreto por internet y configura la sucesión, para que `createRoom` no pase de 50 líneas.
+- `docs/dominio.md` gana el término «Sucesión» (`RoomSuccession`), como pide el cierre.
+
+### Decisiones
+
+- Todo va en `room_state` y no en `welcome` ni en `Participant`: un campo nuevo en `welcome` rompe la firma posicional de `maybeWhen` de pruebas aprobadas, y uno en `Participant` cambiaría su igualdad en pruebas que lo comparan. Las pruebas aprobadas usan `maybeWhen` con `orElse`, así que la variante nueva no las rompe.
+- `succession` es una propiedad del servidor y no un parámetro de `start`, porque pruebas aprobadas sobrescriben `start`.
+- La sucesión se expone en `RoomRepositoryImpl` y no en el contrato `RoomRepository`, que implementan muchos dobles de pruebas aprobadas.
+- «Modo» es el tipo de frecu (`RoomReach`); el modo de habla es de cada teléfono.
+- `RoomSuccession` usa `makeCollectionsUnmodifiable: false` (como `SignalingMessage`): con la lista envuelta, Freezed generaba un constructor que no compila; el `SuccessionLedger` ya entrega la lista inmodificable.
+
+### Pendientes
+
+- C4 y C5: usar la sucesión para tomar la frecu (subir `term`, abrir el servidor con el estado heredado) y reconectar a los demás; si hace falta en la presentación, sumar `succession` al contrato `RoomRepository` (implica tocar los dobles de pruebas aprobadas).
+- Al reconectar, el lugar viejo propio puede seguir en `members` hasta que el anfitrión note la salida, y el regreso llega al final de la sucesión con un id nuevo.
+- `room_repository_impl.dart` (646 líneas de código) y `signaling_server_datasource.dart` (409) siguen grandes: en C4 conviene sacar la reconexión del repositorio a su propia pieza.
