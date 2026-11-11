@@ -34,10 +34,12 @@ import 'package:frecu/features/room/presentation/pages/room_proximity.dart';
 import 'package:frecu/features/room/presentation/pages/room_state.dart';
 import 'package:frecu/features/room/presentation/pages/room_volume_ptt.dart';
 import 'package:frecu/features/room/presentation/pages/room_wind_filter.dart';
+import 'package:frecu/features/room/presentation/providers/host_silence_provider.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/audio_route_sheet.dart';
+import 'package:frecu/features/room/presentation/widgets/host_silence.dart';
 import 'package:frecu/features/room/presentation/widgets/internet_room_tag.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
@@ -193,8 +195,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     }
   }
 
-  /// La red de la frecu la crea el teléfono del anfitrión: sin él no hay
-  /// frecu.
+  /// La red de la frecu la crea el teléfono del anfitrión: sin él, no hay.
   bool get _hostNetwork =>
       ref.read(roomNotifierProvider)?.hostOwnsNetwork ?? false;
 
@@ -485,12 +486,13 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   }
 
   /// Estado de habla con los lugares de la malla al día.
-  RoomTalk _talkOf({
-    required List<Participant> participants,
-    required String? localId,
-    required RoomStatus? status,
-    required VoiceState voice,
-  }) {
+  RoomTalk _talkOf(
+    List<Participant> participants,
+    String? localId,
+    RoomStatus? status,
+    VoiceState voice,
+    HostSilence? silence,
+  ) {
     _slots = assignMeshSlots(
       previous: _slots,
       participants: participants,
@@ -508,6 +510,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
         localTalking: voice.selfSpeaking,
         status: status,
       ),
+      silence: silence,
     );
     _peak = math.max(_peak, talk.count);
     return talk;
@@ -545,22 +548,15 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     final voiceState = ref.watch(voiceNotifierProvider);
     final localId = ref.watch(roomRepositoryProvider).localParticipantId;
     if (localId != null) _ownIds.add(localId);
-    final participants = participantsWithVoice(
+    final silence = ref.watch(hostSilenceProvider);
+    final (participants, status) = shownRoom(
       ref.watch(roomParticipantsProvider).value ?? const <Participant>[],
+      ref.watch(roomStatusProvider).value,
       localId,
       voiceState,
+      silence,
     );
-    final status = negotiatingStatus(
-      ref.watch(roomStatusProvider).value,
-      participants,
-      localId,
-    );
-    final talk = _talkOf(
-      participants: participants,
-      localId: localId,
-      status: status,
-      voice: voiceState,
-    );
+    final talk = _talkOf(participants, localId, status, voiceState, silence);
     final host = participants.any((p) => p.id == localId && p.isHost);
     _host = host;
     _others = talk.count - 1;
@@ -642,15 +638,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       onAirFor: ref.watch(onAirClockProvider),
       event: _event,
       retryIn: ref.watch(reconnectCountdownProvider),
+      silentFor: ref.watch(hostSilenceClockProvider),
     ),
   );
-
-  /// Nivel de voz de cada persona por id: el de los pares y, con [localId],
-  /// el propio.
-  static Map<String, double> _voiceLevels(WidgetRef ref, String? localId) => {
-    ...?ref.watch(peerVoiceLevelsProvider).value,
-    if (localId != null) localId: ref.watch(localVoiceLevelProvider).value ?? 0,
-  };
 
   /// Malla de la frecu con quién habla y, encima, el aviso de eco
   /// (micrófono abierto con altavoz).
@@ -681,7 +671,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                   localParticipantId: localId,
                   speakingPeers: voice.speakingPeers,
                   localTalking: voice.selfSpeaking,
-                  levels: _voiceLevels(ref, localId),
+                  levels: voiceLevelsOf(ref, localId),
                   status: status,
                   onInvite: onInvite,
                   distances: {

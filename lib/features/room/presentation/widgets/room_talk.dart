@@ -7,6 +7,7 @@ import 'package:frecu/core/design/widgets/signal_signature.dart';
 import 'package:frecu/core/design/widgets/status_island.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
+import 'package:frecu/features/room/presentation/widgets/host_silence.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
@@ -84,6 +85,9 @@ enum IslandPhase {
 
   /// Reconectando.
   reconnecting,
+
+  /// El anfitrión de una frecu con traspaso no responde.
+  hostSilent,
 }
 
 /// Estado de habla de la frecu activa: de él salen el núcleo PTT y la isla.
@@ -97,15 +101,18 @@ class RoomTalk {
     this.speaker,
     this.count = 0,
     this.alone = false,
+    this.silence,
   });
 
   /// Arma el estado con el [status] de la frecu, el [mode] de habla, si la
-  /// persona propia [talking] transmite y los [nodes] de la malla.
+  /// persona propia [talking] transmite y los [nodes] de la malla; con
+  /// [silence], el anfitrión no responde.
   factory RoomTalk.from({
     required RoomStatus? status,
     required TalkMode mode,
     required bool talking,
     required List<MeshNode?> nodes,
+    HostSilence? silence,
   }) {
     final present = nodes.nonNulls.toList();
     final link =
@@ -122,6 +129,7 @@ class RoomTalk {
       speaker: present.where((node) => !node.isMe && node.onAir).firstOrNull,
       count: present.length,
       alone: present.length == 1 && present.first.isMe && present.first.isHost,
+      silence: silence,
     );
   }
 
@@ -143,6 +151,9 @@ class RoomTalk {
   /// El anfitrión está solo en su frecu.
   final bool alone;
 
+  /// Espera si el anfitrión de una frecu con traspaso no responde.
+  final HostSilence? silence;
+
   /// Se puede hablar y cambiar de modo.
   bool get enabled => link == TalkLink.ready;
 
@@ -160,6 +171,7 @@ class RoomTalk {
 
   /// Fase de la isla.
   IslandPhase get islandPhase {
+    if (silence != null) return IslandPhase.hostSilent;
     if (link == TalkLink.reconnecting) return IslandPhase.reconnecting;
     if (link == TalkLink.connecting) return IslandPhase.connecting;
     final openMic = mode == TalkMode.openMic;
@@ -332,7 +344,8 @@ enum RoomIslandEventKind {
 /// [StatusIsland] centrada en una franja de 44 px.
 ///
 /// Como `isleSync` del prototipo, la reconexión (con la cuenta atrás
-/// [retryIn]) manda sobre el [event] pasajero, y este sobre el resto.
+/// [retryIn]) o la espera del anfitrión que no responde (con sus segundos
+/// [silentFor]) manda sobre el [event] pasajero, y este sobre el resto.
 class RoomStatusIsland extends StatelessWidget {
   /// Crea la isla de [talk].
   const RoomStatusIsland({
@@ -340,6 +353,7 @@ class RoomStatusIsland extends StatelessWidget {
     this.onAirFor,
     this.event,
     this.retryIn,
+    this.silentFor,
     super.key,
   });
 
@@ -354,6 +368,9 @@ class RoomStatusIsland extends StatelessWidget {
 
   /// Segundos para el próximo intento de reconexión.
   final int? retryIn;
+
+  /// Segundos que lleva sin responder el anfitrión.
+  final int? silentFor;
 
   @override
   Widget build(BuildContext context) {
@@ -372,6 +389,10 @@ class RoomStatusIsland extends StatelessWidget {
     const max = '$meshSlotCount';
     final speaker = talk.speaker;
     final phase = talk.islandPhase;
+    final silence = talk.silence;
+    if (silence != null) {
+      return StatusIsland.reconnecting(label: silence.islandLabel(silentFor));
+    }
     if (phase == IslandPhase.reconnecting) {
       final seconds = retryIn;
       return StatusIsland.reconnecting(
@@ -381,22 +402,7 @@ class RoomStatusIsland extends StatelessWidget {
       );
     }
     final event = this.event;
-    if (event != null) {
-      // La señal débil es un aviso: va en ámbar, como reconectando.
-      if (event.kind == RoomIslandEventKind.weak ||
-          event.kind == RoomIslandEventKind.behind) {
-        return StatusIsland(
-          label: event.label,
-          tone: StatusIslandTone.warn,
-          leading: _eventLead(event),
-        );
-      }
-      // El SOS enviado va en rojo, con el punto que parpadea.
-      if (event.kind == RoomIslandEventKind.sosSent) {
-        return StatusIsland(label: event.label, tone: StatusIslandTone.alert);
-      }
-      return StatusIsland.event(label: event.label, leading: _eventLead(event));
-    }
+    if (event != null) return _eventIsland(event);
     return switch (phase) {
       IslandPhase.connecting => StatusIsland.connecting(
         label: texts.connecting,
@@ -420,6 +426,24 @@ class RoomStatusIsland extends StatelessWidget {
         label: texts.online(count: count, max: max),
       ),
     };
+  }
+
+  /// La isla del evento pasajero [event].
+  static Widget _eventIsland(RoomIslandEvent event) {
+    // La señal débil es un aviso: va en ámbar, como reconectando.
+    if (event.kind == RoomIslandEventKind.weak ||
+        event.kind == RoomIslandEventKind.behind) {
+      return StatusIsland(
+        label: event.label,
+        tone: StatusIslandTone.warn,
+        leading: _eventLead(event),
+      );
+    }
+    // El SOS enviado va en rojo, con el punto que parpadea.
+    if (event.kind == RoomIslandEventKind.sosSent) {
+      return StatusIsland(label: event.label, tone: StatusIslandTone.alert);
+    }
+    return StatusIsland.event(label: event.label, leading: _eventLead(event));
   }
 
   /// Lo que va antes del texto del evento; la isla es siempre de noche.

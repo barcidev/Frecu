@@ -410,7 +410,9 @@
         "open": "Toca para silenciarte",
         "muted": "Toca para activar tu micrófono",
         "connecting": "Conectando con el anfitrión…",
-        "reconnecting": "Recuperando la conexión…"
+        "reconnecting": "Recuperando la conexión…",
+        "hostSilent": "Siguen hablando · si no vuelve, $name toma la frecu",
+        "hostSilentYou": "Siguen hablando · si no vuelve, tomas la frecu"
       },
       "island": {
         "online": "En línea · $count/$max",
@@ -422,6 +424,8 @@
         "connecting": "Conectando…",
         "reconnecting": "Reconectando…",
         "reconnectingIn": "Reconectando · $seconds s",
+        "hostSilent": "$name no responde",
+        "hostSilentFor": "$name no responde · $seconds s",
         "joined": "$name se unió",
         "left": "$name salió",
         "route": "Audio por $route",

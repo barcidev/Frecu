@@ -1,8 +1,37 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
+import 'package:frecu/features/room/presentation/widgets/host_silence.dart';
+
+/// Participantes y estado como se ven en la frecu: con lo que sabe la
+/// [voice], conectando mientras se negocian los enlaces y, si el anfitrión
+/// no responde ([silence]), con solo él reconectando.
+(List<Participant>, RoomStatus?) shownRoom(
+  List<Participant> participants,
+  RoomStatus? status,
+  String? localId,
+  VoiceState voice,
+  HostSilence? silence,
+) {
+  final shown = HostSilence.showParticipants(
+    silence,
+    participantsWithVoice(participants, localId, voice),
+  );
+  return (
+    shown,
+    negotiatingStatus(HostSilence.showStatus(silence, status), shown, localId),
+  );
+}
+
+/// Nivel de voz de cada persona por id: el de los pares y, con [localId],
+/// el propio.
+Map<String, double> voiceLevelsOf(WidgetRef ref, String? localId) => {
+  ...?ref.watch(peerVoiceLevelsProvider).value,
+  if (localId != null) localId: ref.watch(localVoiceLevelProvider).value ?? 0,
+};
 
 /// Participantes con lo que sabe la voz: quién se silenció en micrófono
 /// abierto (también la persona propia [localId]) y cómo va el enlace con

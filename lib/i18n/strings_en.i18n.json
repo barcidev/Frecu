@@ -410,7 +410,9 @@
         "open": "Tap to mute yourself",
         "muted": "Tap to turn on your microphone",
         "connecting": "Connecting to the host…",
-        "reconnecting": "Restoring the connection…"
+        "reconnecting": "Restoring the connection…",
+        "hostSilent": "Everyone can still talk · if they don't come back, $name takes the frecu",
+        "hostSilentYou": "Everyone can still talk · if they don't come back, you take the frecu"
       },
       "island": {
         "online": "Online · $count/$max",
@@ -422,6 +424,8 @@
         "connecting": "Connecting…",
         "reconnecting": "Reconnecting…",
         "reconnectingIn": "Reconnecting · $seconds s",
+        "hostSilent": "$name isn't responding",
+        "hostSilentFor": "$name isn't responding · $seconds s",
         "joined": "$name joined",
         "left": "$name left",
         "route": "Audio via $route",
