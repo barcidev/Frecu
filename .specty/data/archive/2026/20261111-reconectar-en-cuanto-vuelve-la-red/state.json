@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-reconectar-en-cuanto-vuelve-la-red",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/reconectar-en-cuanto-vuelve-la-red",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:1066176fbd927a93426056186aa01e3d4a251ce5ff2615cc31f7480e42dce9fb",
@@ -61,12 +61,12 @@
     },
     "T3": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "2209339fb535d5bfad915ce92889c6b774025bed",
+      "attempts": 1,
       "startedAt": "2026-11-11T05:34:50.999Z",
       "doneAt": "2026-11-11T05:39:34.379Z",
-      "summary": "El relé del anfitrión espera con NetworkReturnWatcher (cancelable por generación) en lugar de un Timer y reconecta en cuanto vuelve la red; el repositorio le pasa el mismo intervalo y fuente de interfaces; prueba AC4. Suite completa verde (1154)."
+      "summary": "El relé del anfitrión espera con NetworkReturnWatcher (cancelable por generación) en lugar de un Timer y reconecta en cuanto vuelve la red; el repositorio le pasa el mismo intervalo y fuente de interfaces; prueba AC4. Suite completa verde (1154).",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -78,5 +78,6 @@
     "AC": 4,
     "T": 3,
     "R": 2
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T05:39:42.570Z"
 }

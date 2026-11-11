@@ -66,3 +66,23 @@ Hoy, al caerse la conexión, el invitado y el relé del anfitrión en modo inter
 
 - R1: Un cambio de dirección sin red útil (p. ej. Wi-Fi sin el anfitrión) gasta un intento antes — la toma de referencia se renueva antes de cada intento, así que solo adelanta una vez por aparición.
 - R2: Pruebas que dejan el sondeo vivo — `cancelled` corta el sondeo al salir o al parar el relé.
+
+## Cierre
+
+### Resumen
+
+Nuevo `NetworkReturnWatcher` (lib/core/network/network_return.dart) que, durante la espera de reconexión, consulta las interfaces cada 500 ms y la corta si aparece una dirección no loopback respecto a la consulta anterior. Lo usan el bucle de reconexión del invitado (`RoomRepositoryImpl._reconnect`), que publica `reconnecting(retryIn: 0)` al adelantar el intento, y el relé del anfitrión en modo internet (`CloudRelayDataSource`), que deja el `Timer` por una espera cancelable por generación. Pruebas AC1–AC4; `flutter analyze` y `flutter test` (1154) verdes.
+
+### Desviaciones
+
+- Ninguna.
+
+### Decisiones
+
+- Se compara cada consulta con la anterior (no solo con la del inicio) para detectar también la misma IP que reaparece.
+- La referencia del invitado se renueva antes de cada intento: una misma aparición solo adelanta un intento.
+- Sin plugins nativos: basta `NetworkInterface.list`, que ya ve Wi-Fi, punto de acceso y datos móviles.
+
+### Pendientes
+
+- Probar en teléfonos reales que al volver la Wi-Fi o los datos el reintento llega antes de que termine la cuenta.
