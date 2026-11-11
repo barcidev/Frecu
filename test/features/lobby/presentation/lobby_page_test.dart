@@ -1,9 +1,9 @@
 // AC1: CUANDO se abre el inicio ENTONCES se ve en Portadora (`FrScaffold`) con la marca «frecu», la píldora de red, el botón Ajustes, «FRECUS CERCANAS» en mayúsculas como etiqueta, «Elige tu frecu» con el número de frecus cercanas en dos cifras («00»), el sintonizador y abajo Crear frecu, Escanear y Conectar por IP, con todos los textos de slang en español y en inglés; Ajustes abre Ajustes, Crear frecu abre la pantalla de nueva frecu de hoy, Escanear abre el escáner de hoy y Conectar por IP abre el diálogo de unión por IP de hoy.
-// AC2: CUANDO llega el estado de la red local ENTONCES la píldora dice «Red · <IP local>» si hay red o «Sin red local» en alerta si no la hay; mientras no llega dice «Buscando red».
+// AC2: CUANDO llega el estado de la red local ENTONCES la píldora dice «Red · <IP local>» si hay red o «Sin Wi-Fi» en tono neutro (nunca en alerta) si no la hay; mientras no llega dice «Buscando red».
 // AC3: CUANDO hay frecus cercanas ENTONCES la lista muestra una tarjeta por frecu, que entra con `rise` escalonado (0, 80 y 160 ms), con su nota (nombre en el idioma de la app, alteración y octava), sus Hz con un decimal («329,6 Hz» en español, «329.6 Hz» en inglés), su nombre y su IP; el número las cuenta, y el sintonizador recibe la nota de cada una para dibujar su pico sobre su tecla y dice «N señales»; una frecu sin nota sale con «—», sin Hz y sin pico, y una sin nombre, como «Frecu sin nombre».
 // AC4: CUANDO el usuario toca una frecu cercana ENTONCES queda elegida (su tarjeta encendida y la aguja del sintonizador va a su nota) y, 380 ms después, se abre el diálogo de código de hoy, que se une a esa frecu con su IP y su puerto; CUANDO cierra la hoja sin unirse o vuelve de la frecu ENTONCES la frecu deja de estar elegida. Mientras hay una frecu activa la búsqueda queda en pausa; CUANDO termina ENTONCES se retira su anuncio mDNS y se vuelve a buscar (F7).
 // AC5: CUANDO no hay frecus cercanas y la red está conectada o aún no se sabe ENTONCES se ve la búsqueda vacía: la onda, «Sin señales por ahora», «Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.» y «La búsqueda sigue activa»; el sintonizador dice «Escaneando · _frecu._tcp» y «0 señales». CUANDO la búsqueda no puede empezar ENTONCES dice «La búsqueda falló · reintentando», el sintonizador queda en pausa y se reintenta cada 5 s hasta que arranca.
-// AC6: CUANDO no hay frecus cercanas y no hay red local ENTONCES en lugar de la búsqueda vacía se ve un aviso de alerta «No estás en ninguna red Wi-Fi.» con «Únete al punto de acceso del anfitrión para encontrar frecus.» y la acción «Abrir ajustes de Wi-Fi», que abre los ajustes de Wi-Fi, y el sintonizador queda atenuado con «Búsqueda en pausa»; CUANDO vuelve la red ENTONCES vuelve la búsqueda vacía; CUANDO hay frecus sin red ENTONCES se ve la lista.
+// AC6: CUANDO no hay frecus cercanas y no hay red local ENTONCES en lugar de la búsqueda vacía se ve un estado vacío tranquilo, sin aviso de alerta ni onda, «Sin Wi-Fi por ahora» con «Las frecus cercanas aparecen al conectarte a una Wi-Fi. Por internet, escanea el QR del anfitrión.» y un botón fantasma pequeño «Abrir ajustes de Wi-Fi», que abre los ajustes de Wi-Fi, y el sintonizador queda atenuado con «Búsqueda en pausa»; CUANDO vuelve la red ENTONCES vuelve la búsqueda vacía; CUANDO hay frecus sin red ENTONCES se ve la lista.
 // AC7: CUANDO se dibuja el sintonizador ENTONCES sus 14 teclas blancas y 10 negras van de Do4 a Si5 y cada nota cae en el centro de su tecla (`keyX` del prototipo), la lectura nombra la nota más cercana a la aguja, la aguja sigue un resorte (rigidez 90, amortiguación 16) hacia la nota elegida o barre las dos octavas sin salirse; sin movimiento reducido anima en cada cuadro y con movimiento reducido queda quieto y no pide cuadros; sus textos maquetados se reutilizan entre cuadros y se liberan al quitarlo.
 import 'dart:async';
 import 'dart:math' as math;
@@ -17,6 +17,7 @@ import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
 import 'package:frecu/app/theme/app_theme.dart';
 import 'package:frecu/core/design/widgets/fr_banner.dart';
+import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_pill.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
@@ -365,7 +366,7 @@ void main() {
 
     testWidgets(
       'AC2: la píldora dice Buscando red hasta que llega la red, y luego la '
-      'IP local o Sin red local en alerta',
+      'IP local o Sin Wi-Fi en tono neutro',
       (tester) async {
         await pumpLobby(tester);
         FrPill pill() => tester.widget<FrPill>(find.byType(FrPill));
@@ -377,8 +378,8 @@ void main() {
         expect(pill().tone, FrPillTone.ok);
 
         await showNetwork(tester, const NetworkState.disconnected());
-        expect(pill().label, equalsIgnoringCase('Sin red local'));
-        expect(pill().tone, FrPillTone.alert);
+        expect(pill().label, equalsIgnoringCase('Sin Wi-Fi'));
+        expect(pill().tone, FrPillTone.off);
       },
     );
 
@@ -532,20 +533,28 @@ void main() {
     });
 
     testWidgets(
-      'AC6: sin frecus y sin red se ve el aviso de alerta y el sintonizador '
-      'en pausa; al volver la red vuelve la búsqueda vacía',
+      'AC6: sin frecus y sin red se ve el estado vacío tranquilo, sin aviso '
+      'de alerta, y el sintonizador en pausa; al volver la red vuelve la '
+      'búsqueda vacía',
       (tester) async {
         await pumpLobby(tester);
         await showRooms(tester, []);
         await showNetwork(tester, const NetworkState.disconnected());
 
-        final banner = tester.widget<FrBanner>(find.byType(FrBanner));
-        expect(banner.tone, FrBannerTone.alert);
-        expect(banner.title, 'No estás en ninguna red Wi-Fi.');
+        expect(find.byType(FrBanner), findsNothing);
+        expect(find.text('Sin Wi-Fi por ahora'), findsOneWidget);
         expect(
-          banner.message,
-          'Únete al punto de acceso del anfitrión para encontrar frecus.',
+          find.text(
+            'Las frecus cercanas aparecen al conectarte a una Wi-Fi. Por '
+            'internet, escanea el QR del anfitrión.',
+          ),
+          findsOneWidget,
         );
+        final button = tester.widget<FrButton>(
+          find.widgetWithText(FrButton, 'Abrir ajustes de Wi-Fi'),
+        );
+        expect(button.variant, FrButtonVariant.ghost);
+        expect(button.size, FrButtonSize.small);
         expect(find.text('Sin señales por ahora'), findsNothing);
         expect(find.byType(WaveLoader), findsNothing);
         expect(_tuner(tester).paused, isTrue);
@@ -553,7 +562,7 @@ void main() {
 
         await showNetwork(tester, _wifi);
 
-        expect(find.byType(FrBanner), findsNothing);
+        expect(find.text('Sin Wi-Fi por ahora'), findsNothing);
         expect(find.text('Sin señales por ahora'), findsOneWidget);
         expect(_tuner(tester).paused, isFalse);
         expect(_label('Escaneando · _frecu._tcp'), findsOneWidget);
@@ -730,16 +739,13 @@ void main() {
       await showRooms(tester, []);
       await showNetwork(tester, const NetworkState.disconnected());
 
-      final banner = tester.widget<FrBanner>(find.byType(FrBanner));
-      expect(banner.actionLabel, 'Abrir ajustes de Wi-Fi');
-
       await tester.tap(find.text('Abrir ajustes de Wi-Fi'));
       await tester.pumpAndSettle();
 
       expect(settings.opened, ['wifi']);
     });
 
-    testWidgets('AC6: en inglés la acción dice «Open Wi-Fi settings»', (
+    testWidgets('AC6: en inglés el estado vacío sin Wi-Fi está en inglés', (
       tester,
     ) async {
       await _useEnglish(tester);
@@ -747,10 +753,15 @@ void main() {
       await showRooms(tester, []);
       await showNetwork(tester, const NetworkState.disconnected());
 
+      expect(find.text('No Wi-Fi for now'), findsOneWidget);
       expect(
-        tester.widget<FrBanner>(find.byType(FrBanner)).actionLabel,
-        'Open Wi-Fi settings',
+        find.text(
+          'Nearby rooms show up when you join a Wi-Fi network. Over the '
+          "internet, scan the host's QR.",
+        ),
+        findsOneWidget,
       );
+      expect(find.text('Open Wi-Fi settings'), findsOneWidget);
     });
   });
 

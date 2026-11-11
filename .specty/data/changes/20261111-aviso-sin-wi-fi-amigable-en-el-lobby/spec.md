@@ -45,7 +45,7 @@ Con el modo internet, estar sin Wi-Fi ya no es un error: el lobby deja de mostra
 
 ## Tareas
 
-- [ ] T1: Píldora neutra y estado vacío tranquilo sin Wi-Fi en el lobby
+- [x] T1: Píldora neutra y estado vacío tranquilo sin Wi-Fi en el lobby
   - files: lib/features/lobby/presentation/widgets/lobby_sections.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC1, AC2, AC3
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart

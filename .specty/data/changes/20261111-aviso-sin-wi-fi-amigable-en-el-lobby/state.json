@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261111-aviso-sin-wi-fi-amigable-en-el-lobby",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "bugfix/aviso-sin-wi-fi-amigable-en-el-lobby",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:561ca207415def43ae7a4fbcca9db61e914aadf255ff95b37bda97d96669e102",
+    "at": "2026-11-11T05:28:56.941Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 6,
@@ -29,7 +36,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "14c00c07eea9fdf22e95300f0aeb3f6e2ebaf851",
+      "startedAt": "2026-11-11T05:28:57.355Z",
+      "doneAt": "2026-11-11T05:31:22.600Z",
+      "summary": "Píldora «Sin Wi-Fi» en tono off y, sin red ni frecus, estado vacío tranquilo (título, mensaje en tx2 y botón fantasma pequeño «Abrir ajustes de Wi-Fi») en lugar del FrBanner rojo; textos es/en en slang; pruebas AC2/AC6 del lobby actualizadas"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -38,12 +55,5 @@
     "A": 3,
     "AC": 3,
     "T": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:561ca207415def43ae7a4fbcca9db61e914aadf255ff95b37bda97d96669e102",
-    "at": "2026-11-11T05:28:56.941Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

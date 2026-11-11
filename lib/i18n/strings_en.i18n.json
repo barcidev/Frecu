@@ -112,7 +112,7 @@
     "network": {
       "checking": "Checking network",
       "connected": "Network · $ip",
-      "offline": "No local network"
+      "offline": "No Wi-Fi"
     },
     "tuner": {
       "scanning": "Scanning · _frecu._tcp",
@@ -129,8 +129,8 @@
       "failed": "Search failed · retrying"
     },
     "offline": {
-      "title": "You're not on any Wi-Fi network.",
-      "message": "Join the host's hotspot to find rooms.",
+      "title": "No Wi-Fi for now",
+      "message": "Nearby rooms show up when you join a Wi-Fi network. Over the internet, scan the host's QR.",
       "openSettings": "Open Wi-Fi settings"
     },
     "newRoom": {

@@ -629,8 +629,8 @@ class Translations$lobby$network$es {
 	/// es: 'Red · $ip'
 	String connected({required Object ip}) => 'Red · ${ip}';
 
-	/// es: 'Sin red local'
-	String get offline => 'Sin red local';
+	/// es: 'Sin Wi-Fi'
+	String get offline => 'Sin Wi-Fi';
 }
 
 // Path: lobby.tuner
@@ -683,11 +683,11 @@ class Translations$lobby$offline$es {
 
 	// Translations
 
-	/// es: 'No estás en ninguna red Wi-Fi.'
-	String get title => 'No estás en ninguna red Wi-Fi.';
+	/// es: 'Sin Wi-Fi por ahora'
+	String get title => 'Sin Wi-Fi por ahora';
 
-	/// es: 'Únete al punto de acceso del anfitrión para encontrar frecus.'
-	String get message => 'Únete al punto de acceso del anfitrión para encontrar frecus.';
+	/// es: 'Las frecus cercanas aparecen al conectarte a una Wi-Fi. Por internet, escanea el QR del anfitrión.'
+	String get message => 'Las frecus cercanas aparecen al conectarte a una Wi-Fi. Por internet, escanea el QR del anfitrión.';
 
 	/// es: 'Abrir ajustes de Wi-Fi'
 	String get openSettings => 'Abrir ajustes de Wi-Fi';
@@ -2396,7 +2396,7 @@ extension on Translations {
 			'lobby.unnamedRoom' => 'Frecu sin nombre',
 			'lobby.network.checking' => 'Buscando red',
 			'lobby.network.connected' => ({required Object ip}) => 'Red · ${ip}',
-			'lobby.network.offline' => 'Sin red local',
+			'lobby.network.offline' => 'Sin Wi-Fi',
 			'lobby.tuner.scanning' => 'Escaneando · _frecu._tcp',
 			'lobby.tuner.paused' => 'Búsqueda en pausa',
 			'lobby.tuner.signals' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n, one: '${n} señal', other: '${n} señales', ), 
@@ -2404,8 +2404,8 @@ extension on Translations {
 			'lobby.empty.message' => 'Conéctate a la Wi-Fi del anfitrión o pídele que te muestre su QR.',
 			'lobby.empty.searching' => 'La búsqueda sigue activa',
 			'lobby.empty.failed' => 'La búsqueda falló · reintentando',
-			'lobby.offline.title' => 'No estás en ninguna red Wi-Fi.',
-			'lobby.offline.message' => 'Únete al punto de acceso del anfitrión para encontrar frecus.',
+			'lobby.offline.title' => 'Sin Wi-Fi por ahora',
+			'lobby.offline.message' => 'Las frecus cercanas aparecen al conectarte a una Wi-Fi. Por internet, escanea el QR del anfitrión.',
 			'lobby.offline.openSettings' => 'Abrir ajustes de Wi-Fi',
 			'lobby.newRoom.back' => 'Atrás',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Paso ${current} de ${total}',

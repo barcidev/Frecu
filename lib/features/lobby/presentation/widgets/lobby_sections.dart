@@ -5,7 +5,6 @@ import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/tokens/fr_type.dart';
-import 'package:frecu/core/design/widgets/fr_banner.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_pill.dart';
@@ -31,7 +30,7 @@ class LobbyHeader extends StatelessWidget {
         lobby.network.connected(ip: ipAddress),
         FrPillTone.ok,
       ),
-      NetworkDisconnected() => (lobby.network.offline, FrPillTone.alert),
+      NetworkDisconnected() => (lobby.network.offline, FrPillTone.off),
     };
     return SizedBox(
       height: 60,
@@ -207,10 +206,11 @@ class LobbyEmptySearch extends StatelessWidget {
   }
 }
 
-/// Aviso sin red local: en lugar de la búsqueda vacía, con «Abrir ajustes
-/// de Wi-Fi».
+/// Sin Wi-Fi: en lugar de la búsqueda vacía, un estado vacío tranquilo (sin
+/// onda, porque la búsqueda cercana está en pausa) con «Abrir ajustes de
+/// Wi-Fi». No es un error: por internet se entra con el QR del anfitrión.
 class LobbyOfflineNotice extends StatelessWidget {
-  /// Crea el aviso; la acción llama a [onOpenSettings].
+  /// Crea el estado vacío; el botón llama a [onOpenSettings].
   const LobbyOfflineNotice({required this.onOpenSettings, super.key});
 
   /// Abre los ajustes de Wi-Fi del sistema.
@@ -218,21 +218,61 @@ class LobbyOfflineNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fr = context.fr;
+    final c = fr.colors;
     final offline = t.lobby.offline;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 200),
+      padding: const EdgeInsets.fromLTRB(26, 26, 26, 200),
       children: [
-        FrBanner.drawn(
-          tone: FrBannerTone.alert,
-          icon: FrIcons.wifi,
-          title: offline.title,
-          message: offline.message,
-          actionLabel: offline.openSettings,
-          onAction: onOpenSettings,
+        Column(
+          children: [
+            Text(
+              offline.title,
+              textAlign: TextAlign.center,
+              style: fr.type.title.copyWith(
+                fontSize: 18,
+                height: 1.2,
+                fontWeight: const FontWeight(640),
+                fontVariations: const [
+                  FontVariation.weight(640),
+                  FontVariation.width(112),
+                ],
+                color: c.tx1,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 290),
+              child: Text(
+                offline.message,
+                textAlign: TextAlign.center,
+                style: fr.type.body.copyWith(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: c.tx2,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _settingsButton(offline.openSettings),
+          ],
         ),
       ],
     );
   }
+
+  /// Botón discreto a los ajustes de Wi-Fi; se encoge en vez de desbordarse
+  /// con texto grande.
+  Widget _settingsButton(String label) => FittedBox(
+    fit: BoxFit.scaleDown,
+    child: FrButton.drawn(
+      label: label,
+      onPressed: onOpenSettings,
+      variant: FrButtonVariant.ghost,
+      size: FrButtonSize.small,
+      icon: FrIcons.wifi,
+    ),
+  );
 }
 
 /// Pista bajo las frecus encontradas solo por Bluetooth: aún no se está en

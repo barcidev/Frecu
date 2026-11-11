@@ -358,7 +358,7 @@ class _Translations$lobby$network$en extends Translations$lobby$network$es {
 	// Translations
 	@override String get checking => 'Checking network';
 	@override String connected({required Object ip}) => 'Network · ${ip}';
-	@override String get offline => 'No local network';
+	@override String get offline => 'No Wi-Fi';
 }
 
 // Path: lobby.tuner
@@ -396,8 +396,8 @@ class _Translations$lobby$offline$en extends Translations$lobby$offline$es {
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'You\'re not on any Wi-Fi network.';
-	@override String get message => 'Join the host\'s hotspot to find rooms.';
+	@override String get title => 'No Wi-Fi for now';
+	@override String get message => 'Nearby rooms show up when you join a Wi-Fi network. Over the internet, scan the host\'s QR.';
 	@override String get openSettings => 'Open Wi-Fi settings';
 }
 
@@ -1383,7 +1383,7 @@ extension on TranslationsEn {
 			'lobby.unnamedRoom' => 'Unnamed room',
 			'lobby.network.checking' => 'Checking network',
 			'lobby.network.connected' => ({required Object ip}) => 'Network · ${ip}',
-			'lobby.network.offline' => 'No local network',
+			'lobby.network.offline' => 'No Wi-Fi',
 			'lobby.tuner.scanning' => 'Scanning · _frecu._tcp',
 			'lobby.tuner.paused' => 'Search paused',
 			'lobby.tuner.signals' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: '${n} signal', other: '${n} signals', ), 
@@ -1391,8 +1391,8 @@ extension on TranslationsEn {
 			'lobby.empty.message' => 'Join the host\'s Wi-Fi or ask them to show you their QR.',
 			'lobby.empty.searching' => 'Still searching',
 			'lobby.empty.failed' => 'Search failed · retrying',
-			'lobby.offline.title' => 'You\'re not on any Wi-Fi network.',
-			'lobby.offline.message' => 'Join the host\'s hotspot to find rooms.',
+			'lobby.offline.title' => 'No Wi-Fi for now',
+			'lobby.offline.message' => 'Nearby rooms show up when you join a Wi-Fi network. Over the internet, scan the host\'s QR.',
 			'lobby.offline.openSettings' => 'Open Wi-Fi settings',
 			'lobby.newRoom.back' => 'Back',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Step ${current} of ${total}',

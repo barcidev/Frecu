@@ -112,7 +112,7 @@
     "network": {
       "checking": "Buscando red",
       "connected": "Red · $ip",
-      "offline": "Sin red local"
+      "offline": "Sin Wi-Fi"
     },
     "tuner": {
       "scanning": "Escaneando · _frecu._tcp",
@@ -129,8 +129,8 @@
       "failed": "La búsqueda falló · reintentando"
     },
     "offline": {
-      "title": "No estás en ninguna red Wi-Fi.",
-      "message": "Únete al punto de acceso del anfitrión para encontrar frecus.",
+      "title": "Sin Wi-Fi por ahora",
+      "message": "Las frecus cercanas aparecen al conectarte a una Wi-Fi. Por internet, escanea el QR del anfitrión.",
       "openSettings": "Abrir ajustes de Wi-Fi"
     },
     "newRoom": {
