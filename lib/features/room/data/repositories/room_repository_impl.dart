@@ -16,6 +16,7 @@ import 'package:frecu/features/room/data/datasources/signaling_client_datasource
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/current_then.dart';
+import 'package:frecu/features/room/data/repositories/internet_handover.dart';
 import 'package:frecu/features/room/data/repositories/room_reconnection.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
@@ -251,8 +252,9 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
       if (internetId != null && hostSecret != null) {
         _internetId = internetId;
+        // Con el primer turno: si se cae, la nube espera a su sucesor.
         await _relay.start(
-          cloudConfig.hostSocket(internetId, hostSecret),
+          InternetHandover.hostSocket(cloudConfig, internetId, hostSecret, 1),
           onGuest: _server.accept,
         );
       }
@@ -531,14 +533,14 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     );
   }
 
-  /// Plan de caída si el anfitrión de una frecu local con traspaso dejó de
-  /// responder; nulo para reconectar como siempre (otra frecu, sin sucesión
-  /// o siguiendo un `host_handover`).
+  /// Plan de caída si el anfitrión de una frecu con traspaso (local o por
+  /// internet) dejó de responder; nulo para reconectar como siempre (otra
+  /// frecu, sin sucesión o siguiendo un `host_handover`).
   FailoverPlan? _failoverPlan() {
     final state = _succession.current;
     final me = _localParticipantId;
     if (_following || state == null || me == null) return null;
-    if (!state.handover || state.reach != RoomReach.local) return null;
+    if (!state.handover) return null;
     final host = _participants.where((p) => p.isHost).firstOrNull?.id;
     final lost = host ?? state.order.firstOrNull;
     if (lost == null || lost == me) return null;
@@ -564,10 +566,13 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
         return _attemptRejoin(session, attempt);
       case FailoverFollow(:final member):
         _takeover.previousHost = plan.lostHostName;
-        _target = target.toward(member.address!, peerId: _localParticipantId);
+        _target = target.toward(
+          member.address ?? '',
+          peerId: _localParticipantId,
+        );
         return _attemptRejoin(session, attempt);
       case FailoverTake():
-        final address = plan.myAddress;
+        final address = plan.internet ? '' : plan.myAddress;
         if (address == null || !await _rejoin.networkUp()) return false;
         if (!_stillReconnecting(session)) return true;
         _takeover.previousHost = plan.lostHostName;
@@ -839,7 +844,10 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     final state = _succession.current;
     final target = _target;
     final heir = state?.members.where((m) => m.id == to).firstOrNull;
-    final address = message.address ?? heir?.address;
+    // Por internet se sigue a quien la recibe por el mismo socket.
+    final address = state?.reach == RoomReach.internet
+        ? ''
+        : message.address ?? heir?.address;
     if (state == null || target == null || address == null) return;
     final host = _participants.where((p) => p.isHost).firstOrNull;
     _takeover.previousHost = host?.displayName;
@@ -894,6 +902,15 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
         port: target.port,
         reason: reason,
       );
+      if (state.reach == RoomReach.internet) {
+        await InternetHandover.openRelay(
+          _relay,
+          cloudConfig,
+          state: state,
+          term: term,
+          onGuest: _server.accept,
+        );
+      }
       if (session != _session) return;
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
       await _rejoinAsHost(session, me, state, address, target, reason);
@@ -1082,13 +1099,23 @@ class _JoinTarget {
   final String? peerId;
 
   /// La misma frecu en el servidor de quien la tomó, en [host] (y en
-  /// [port], si cambia).
-  _JoinTarget toward(String host, {int? port, String? peerId}) => _JoinTarget(
-    uri: Uri.parse('ws://$host:${port ?? this.port}'),
-    host: host,
-    port: port ?? this.port,
-    accessCode: accessCode,
-    displayName: displayName,
-    peerId: peerId,
-  );
+  /// [port], si cambia). Sin [host] (por internet), el mismo socket de
+  /// invitado.
+  _JoinTarget toward(String host, {int? port, String? peerId}) => host.isEmpty
+      ? _JoinTarget(
+          uri: uri,
+          host: this.host,
+          port: this.port,
+          accessCode: accessCode,
+          displayName: displayName,
+          peerId: peerId,
+        )
+      : _JoinTarget(
+          uri: Uri.parse('ws://$host:${port ?? this.port}'),
+          host: host,
+          port: port ?? this.port,
+          accessCode: accessCode,
+          displayName: displayName,
+          peerId: peerId,
+        );
 }

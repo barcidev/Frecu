@@ -58,7 +58,7 @@ Una frecu por internet sobrevive a la salida o a la caída de su anfitrión, com
   - files: cloud/src/room.ts, cloud/test/handover.test.ts, cloud/README.md
   - ac: AC11
   - verify: cd cloud && npm test && npm run typecheck
-- [ ] T2: La app toma la frecu por internet, de forma voluntaria y por caída
+- [x] T2: La app toma la frecu por internet, de forma voluntaria y por caída
   - files: lib/features/room/data/repositories/internet_handover.dart, lib/features/room/data/repositories/room_reconnection.dart, lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/data/datasources/signaling_client_datasource.dart, test/features/room/data/internet_handover_test.dart, docs/protocolo.md
   - ac: AC7, AC8
   - verify: flutter test test/features/room/data/internet_handover_test.dart test/features/room/data/internet_room_test.dart test/features/room/data/host_failover_test.dart test/features/room/data/room_handover_test.dart test/features/room/data/room_reconnect_test.dart

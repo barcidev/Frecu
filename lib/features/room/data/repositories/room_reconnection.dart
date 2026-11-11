@@ -6,6 +6,7 @@ import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/features/room/data/datasources/room_succession.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_succession.dart';
 import 'package:frecu/features/room/domain/repositories/room_handover.dart';
 
@@ -170,7 +171,8 @@ class HostTakeover {
       ..succession.configure(
         reach: state.reach,
         hostOwnsNetwork: false,
-        hostAddress: address,
+        // Por internet no hay IP: nadie llega a su servidor directamente.
+        hostAddress: address.isEmpty ? null : address,
         internetId: state.internetId,
         hostSecret: state.hostSecret,
         term: term,
@@ -213,7 +215,8 @@ final class FailoverRetryHost extends FailoverStep {
   const FailoverRetryHost();
 }
 
-/// Volver a la frecu en la IP de [member], con el mismo id, por si la tomó.
+/// Volver a la frecu en la IP de [member] (o, por internet, a su mismo
+/// socket de invitado), con el mismo id, por si la tomó.
 final class FailoverFollow extends FailoverStep {
   /// Crea el paso hacia [member].
   const FailoverFollow(this.member);
@@ -228,10 +231,10 @@ final class FailoverTake extends FailoverStep {
   const FailoverTake();
 }
 
-/// Plan de un invitado cuando el anfitrión de una frecu local con traspaso
-/// deja de responder: [hostRetries] reintentos al anfitrión y, por cada
-/// persona de la sucesión sin él y en orden, [triesEach] pasos: volver a su
-/// IP o, si es este teléfono, tomarla. Todos siguen el mismo plan con la
+/// Plan de un invitado cuando el anfitrión de una frecu con traspaso deja
+/// de responder: [hostRetries] reintentos al anfitrión y, por cada persona
+/// de la sucesión sin él y en orden, [triesEach] pasos: volver a su IP (por
+/// internet, al mismo socket de invitado) o, si es este teléfono, tomarla. Todos siguen el mismo plan con la
 /// misma sucesión, así que cada uno llega a la misma persona, y a la vez.
 class FailoverPlan {
   /// Arma el plan con la sucesión [state], el anfitrión que se cayó
@@ -248,7 +251,7 @@ class FailoverPlan {
     for (final member in state.members) {
       if (member.id == lostHost) continue;
       final address = member.address;
-      if (member.id != me && address == null) continue;
+      if (member.id != me && address == null && !internet) continue;
       for (var n = 0; n < triesEach; n++) {
         _add(
           member.id == me ? const FailoverTake() : FailoverFollow(member),
@@ -272,6 +275,10 @@ class FailoverPlan {
 
   /// Id de este teléfono.
   final String me;
+
+  /// La frecu es por internet: se sigue a cada persona por el mismo socket
+  /// de invitado, sin su IP, y se toma abriendo el relé de anfitrión.
+  bool get internet => state.reach == RoomReach.internet;
 
   final List<FailoverStep> _steps = [];
   final List<Duration> _waits = [];

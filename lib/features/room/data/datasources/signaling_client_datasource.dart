@@ -142,11 +142,30 @@ class SignalingClientDataSource {
     _lastReceivedTime = DateTime.now();
     try {
       final jsonMap = jsonDecode(data as String) as Map<String, dynamic>;
+      if (jsonMap['t'] == hostLostSignal) {
+        _dropOnHostLost();
+        return;
+      }
       final message = SignalingMessage.fromJson(jsonMap);
       if (!_messagesController.isClosed) _messagesController.add(message);
     } on Object catch (e, stackTrace) {
       AppLogger.e('Failed to parse signaling message: $data', e, stackTrace);
     }
+  }
+
+  /// Aviso del punto de encuentro (`{"t":"host_lost"}`, fuera del
+  /// protocolo): el anfitrión de una frecu por internet se cayó y la nube
+  /// espera a su sucesor.
+  static const String hostLostSignal = 'host_lost';
+
+  /// El anfitrión por internet se cayó: el socket se suelta como en una
+  /// caída, para que la reconexión (o el plan de caída) empiece ya.
+  void _dropOnHostLost() {
+    final channel = _channel;
+    if (channel == null) return;
+    AppLogger.w('Internet host lost: dropping the guest socket');
+    channel.sink.close().ignore();
+    _handleDisconnected(channel);
   }
 
   /// Envía un mensaje de señalización al servidor.

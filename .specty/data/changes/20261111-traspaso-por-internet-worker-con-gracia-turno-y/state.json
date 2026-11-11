@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-traspaso-por-internet-worker-con-gracia-turno-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/traspaso-por-internet-worker-con-gracia-turno-y",
   "baseCommit": "3fe7564ad82ae93c04f7b46477fb9e4df1a2a6b7",
   "revision": 1,
@@ -43,12 +43,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "969fa0c25426c284c18b4003397636086a80bf82",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:40:58.405Z",
       "doneAt": "2026-11-11T15:42:41.425Z",
-      "summary": "El Worker guarda el turno vigente: 409 a un turno menor, retira al anterior con uno igual o mayor y, al caer un anfitrión con turno, avisa host_lost y espera 10 s antes de cerrar a los invitados; sin turno, como antes."
+      "summary": "El Worker guarda el turno vigente: 409 a un turno menor, retira al anterior con uno igual o mayor y, al caer un anfitrión con turno, avisa host_lost y espera 10 s antes de cerrar a los invitados; sin turno, como antes.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "ca618b22304f39f5ced1846064f4438e7d72c182",
+      "startedAt": "2026-11-11T15:42:41.683Z",
+      "doneAt": "2026-11-11T15:46:34.889Z",
+      "summary": "Por internet, quien toma la frecu abre el relé con el mismo secreto y el turno siguiente (InternetHandover); host_lost suelta el socket, el plan de caída incluye a todos sin IP y seguir a alguien es volver al mismo socket con el id propio."
     }
   },
   "pending": {
