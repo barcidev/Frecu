@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261111-la-espera-en-pantalla-cuando-el-anfitrion-no",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/la-espera-en-pantalla-cuando-el-anfitrion-no",
+  "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 12,
+    "adjust": 0,
+    "reasons": [
+      "10 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:8410352a3c1458ec8af1bc2bd272c6a9f8c2e4f31c9b4057717358a5f7d073e9",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:01c7fb9034f1e9c36c9f1021ecd6da9736997cd8f19ea17444f3128c692f7541",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:f54258d34f7b9e18789f6fce2b3505cff3b0215a39e1c77f2fcf3e7fd0881eaa",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:a0091f889d4750914f881a16ee096016841fa7c0e80b29c8d24af618ab7e173d",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 5,
+    "T": 2,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e318abd5427fcc65cf8c5aa8341978f168e1e1e5b09f00a7d8e92ce728756f6b",
+    "at": "2026-11-11T15:10:01.362Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
