@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "id": "20261111-sucesion-turno-y-estado-compartido-en-el",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/sucesion-turno-y-estado-compartido-en-el",
+  "baseCommit": "8a456817d7a8b067d977a84e015cdc16d803d264",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 8,
+    "adjust": 0,
+    "reasons": [
+      "8 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:d7a3ba105ec7c4f73463378334e8c7107fc5385f0adf4b93c80083ce22cb20ae",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:cb0d422f7dd9333b2b80a128a1d77e4d7f9d364e27f78e0fe427326665f3bafd",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:07dfaa8686201b1951a4aa10f10b5337a49e0e73ffe1b5fceb4dea9852795038",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:542a2104f6c59936f3c3668be4cf92b22b604a1c7a8852076135827d998f644a",
+      "decision": "confirmed"
+    },
+    "A5": {
+      "hash": "sha256:06162f171117fdedba79f324736550889ef8f0d2b1686d136337e0b3f654f5bd",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 5,
+    "T": 1,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:01683b85eae6ac14f44dc740df6b7a3a4c54807aa3df730becc1f882c093bbd3",
+    "at": "2026-11-11T14:09:43.654Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
