@@ -26,6 +26,7 @@ import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
@@ -113,19 +114,32 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     return state.dataOrNull?.isHotspot ?? false ? saved : null;
   }
 
+  /// Cómo se une el grupo: «Permitir internet» encendido (con punto de
+  /// encuentro) abre la frecu solo por internet.
+  RoomReach get _reach => _internet && ref.read(cloudConfigProvider).isEnabled
+      ? RoomReach.internet
+      : RoomReach.local;
+
+  /// La red de la frecu para invitar: la de Frecu al aire o la zona Wi-Fi
+  /// guardada. Por internet no hay: nadie entra por la red local.
+  Future<WifiCredentials?> _wifi(RoomReach reach) async {
+    if (reach == RoomReach.internet) return null;
+    final network = ref.exists(localHotspotProvider)
+        ? ref.read(localHotspotProvider)
+        : null;
+    return switch (network) {
+      LocalHotspotReady(:final hotspot) => hotspot.credentials,
+      _ => await _savedHotspot(),
+    };
+  }
+
   /// Abre la frecu con la [note] que muestra la pantalla.
   Future<void> _open(RoomNote note) async {
     final name = widget.name.text.trim();
     if (name.isEmpty || _opening) return;
     setState(() => _opening = true);
-    // Con la red de Frecu al aire, la invitación la lleva.
-    final network = ref.exists(localHotspotProvider)
-        ? ref.read(localHotspotProvider)
-        : null;
-    final wifi = switch (network) {
-      LocalHotspotReady(:final hotspot) => hotspot.credentials,
-      _ => await _savedHotspot(),
-    };
+    final reach = _reach;
+    final wifi = await _wifi(reach);
     if (!mounted) return;
     final result = await ref
         .read(roomNotifierProvider.notifier)
@@ -135,21 +149,24 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
           displayName: ref.savedDisplayName,
           note: note,
           wifi: wifi,
-          internet: _internet && ref.read(cloudConfigProvider).isEnabled,
+          reach: reach,
         );
     if (!mounted) return;
     switch (result) {
       case Success(:final data):
-        unawaited(
-          ref
-              .read(discoveryRepositoryProvider)
-              .publishRoom(
-                roomId: data.id,
-                name: data.name,
-                port: data.port,
-                note: data.note,
-              ),
-        );
+        // Por internet no se anuncia en la red local.
+        if (reach == RoomReach.local) {
+          unawaited(
+            ref
+                .read(discoveryRepositoryProvider)
+                .publishRoom(
+                  roomId: data.id,
+                  name: data.name,
+                  port: data.port,
+                  note: data.note,
+                ),
+          );
+        }
         unawaited(context.router.replace(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
         // Sin frecu abierta no queda ningún anuncio en la red.

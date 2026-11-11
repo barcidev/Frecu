@@ -61,7 +61,7 @@ Una frecu es **Local** (todos en la misma Wi-Fi, sin internet) o **Por internet*
   - files: lib/features/room/domain/entities/room_reach.dart, lib/features/room/domain/entities/room.dart, lib/features/room/domain/entities/room.freezed.dart, lib/features/room/domain/repositories/room_repository.dart, lib/features/room/domain/usecases/create_room.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/internet_room_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/features/room/data/internet_room_test.dart
-- [ ] T2: Nueva frecu por internet sin red ni mDNS
+- [x] T2: Nueva frecu por internet sin red ni mDNS
   - files: lib/features/room/presentation/providers/room_provider.dart, lib/features/lobby/presentation/widgets/new_room_step.dart, test/features/lobby/presentation/new_room_test.dart
   - ac: AC3
   - verify: flutter test test/features/lobby/presentation/new_room_test.dart

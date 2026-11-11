@@ -3,6 +3,7 @@
 // N1: CUANDO no hay punto de encuentro configurado ENTONCES la nueva frecu no muestra «Permitir internet» y se abre solo local.
 // N2: CUANDO hay punto de encuentro ENTONCES «Permitir internet» aparece apagado y, sin tocarlo, la frecu se abre solo local.
 // N3: CUANDO el anfitrión enciende «Permitir internet» ENTONCES la frecu se abre también por internet.
+// AC3: CUANDO la frecu es por internet ENTONCES todos los invitados entran por la nube, aunque estén en la misma Wi-Fi que el anfitrión. Su invitación no lleva IP local, no se anuncia por mDNS ni por Bluetooth, y ya no existe el aviso «La red de Frecu no tiene internet».
 // AC5: CUANDO el usuario toca «Abrir frecu» ENTONCES se crea la frecu con el nombre sin espacios sobrantes, el código mostrado, el nombre guardado como anfitrión y las notas de las frecus cercanas, se publica con su nota y se abre la frecu activa; con el nombre vacío el botón no responde; si la creación falla, avisa con el mensaje de la falla, sigue en la nueva frecu y no deja ningún anuncio mDNS (F7).
 import 'dart:async';
 
@@ -32,6 +33,7 @@ import 'package:frecu/features/network/domain/repositories/network_repository.da
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
@@ -130,6 +132,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(const RoomNote(semitone: 0));
+    registerFallbackValue(RoomReach.local);
   });
 
   late _MockDiscoveryRepository discovery;
@@ -158,7 +161,7 @@ void main() {
         accessCode: any(named: 'accessCode'),
         displayName: any(named: 'displayName'),
         note: any(named: 'note'),
-        internet: any(named: 'internet'),
+        reach: any(named: 'reach'),
       ),
     ).thenAnswer((_) => answer());
   }
@@ -209,11 +212,12 @@ void main() {
 
   /// Abre la app en el inicio (390 × 844, movimiento reducido), con el
   /// nombre [savedName] guardado, y va a la nueva frecu por la guía.
-  Future<void> pumpNewRoom(
+  Future<ProviderContainer> pumpNewRoom(
     WidgetTester tester, {
     String? savedName = 'Ana',
     List<NearbyRoom> nearbyRooms = const [],
     CloudConfig cloud = CloudConfig.disabled,
+    String? savedHotspot,
   }) async {
     tester.view
       ..physicalSize = const Size(1170, 2532)
@@ -226,6 +230,8 @@ void main() {
         ? InMemorySharedPreferencesAsync.empty()
         : InMemorySharedPreferencesAsync.withData({
             PreferencesRepositoryImpl.displayNameKey: savedName,
+            if (savedHotspot != null)
+              PreferencesRepositoryImpl.hotspotKey: savedHotspot,
           });
     final container = ProviderContainer(
       overrides: [
@@ -257,6 +263,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text(t.lobby.newRoom.guide.ready));
     await tester.pumpAndSettle();
+    return container;
   }
 
   group('Nota de la nueva frecu', () {
@@ -506,13 +513,13 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    void verifyCreated({required bool internet}) => verify(
+    void verifyCreated({required RoomReach reach}) => verify(
       () => rooms.createRoom(
         name: any(named: 'name'),
         accessCode: any(named: 'accessCode'),
         displayName: any(named: 'displayName'),
         note: any(named: 'note'),
-        internet: internet,
+        reach: reach,
       ),
     ).called(1);
 
@@ -522,7 +529,7 @@ void main() {
 
       expect(toggle, findsNothing);
       await openRoom(tester);
-      verifyCreated(internet: false);
+      verifyCreated(reach: RoomReach.local);
       await _unmountRoomPage(tester);
     });
 
@@ -534,7 +541,7 @@ void main() {
       expect(toggle, findsOneWidget);
       expect(find.text(t.lobby.newRoom.internet.off), findsOneWidget);
       await openRoom(tester);
-      verifyCreated(internet: false);
+      verifyCreated(reach: RoomReach.local);
       await _unmountRoomPage(tester);
     });
 
@@ -548,7 +555,43 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(t.lobby.newRoom.internet.on), findsOneWidget);
       await openRoom(tester);
-      verifyCreated(internet: true);
+      verifyCreated(reach: RoomReach.internet);
+      await _unmountRoomPage(tester);
+    });
+
+    testWidgets('AC3: an internet room carries no network and is not '
+        'announced on the local network', (tester) async {
+      // Zona Wi-Fi guardada y encendida: una frecu local la llevaría.
+      when(() => network.getNetworkState()).thenAnswer(
+        (_) async => const Result.success(
+          NetworkState.connected(
+            ipAddress: '192.168.43.1',
+            interfaceName: 'ap0',
+            isHotspot: true,
+          ),
+        ),
+      );
+      final container = await pumpNewRoom(
+        tester,
+        cloud: cloud,
+        savedHotspot: '{"ssid":"Moto de Ana","passphrase":"clave-1234"}',
+      );
+
+      await tester.ensureVisible(toggle);
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      await openRoom(tester);
+
+      verifyCreated(reach: RoomReach.internet);
+      expect(container.read(roomNotifierProvider)?.wifi, isNull);
+      verifyNever(
+        () => discovery.publishRoom(
+          roomId: any(named: 'roomId'),
+          name: any(named: 'name'),
+          port: any(named: 'port'),
+          note: any(named: 'note'),
+        ),
+      );
       await _unmountRoomPage(tester);
     });
   });

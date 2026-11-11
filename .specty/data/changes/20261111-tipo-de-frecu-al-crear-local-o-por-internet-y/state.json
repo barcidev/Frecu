@@ -43,12 +43,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "ac5b354ab00f9290a1e99e6d6666cce3a2e924c4",
+      "attempts": 1,
       "startedAt": "2026-11-11T13:32:52.346Z",
       "doneAt": "2026-11-11T13:35:16.623Z",
-      "summary": "RoomReach en el dominio (Room.reach por internetId); createRoom pasa de bool internet a reach. Por internet la IP del anfitrión queda vacía aunque haya Wi-Fi; local no abre el relé. Tests AC2/AC3 en internet_room_test."
+      "summary": "RoomReach en el dominio (Room.reach por internetId); createRoom pasa de bool internet a reach. Por internet la IP del anfitrión queda vacía aunque haya Wi-Fi; local no abre el relé. Tests AC2/AC3 en internet_room_test.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "82a025221ee0a20320454676529f0cfac8a31994",
+      "startedAt": "2026-11-11T13:35:16.921Z",
+      "doneAt": "2026-11-11T13:37:03.739Z",
+      "summary": "RoomNotifier.createRoom recibe reach. NewRoomStep elige el tipo con «Permitir internet»; por internet no pasa red a la frecu (Bluetooth no la anuncia) ni la publica por mDNS. Test AC3 en new_room_test."
     }
   },
   "pending": {
