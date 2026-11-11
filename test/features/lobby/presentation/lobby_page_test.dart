@@ -41,6 +41,7 @@ import 'package:frecu/features/network/domain/repositories/system_settings_repos
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/repositories/room_handover.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/settings/presentation/pages/settings_page.dart';
@@ -695,6 +696,114 @@ void main() {
         expect(_tuner(tester).selected, isNull);
       },
     );
+
+    /// Se une a la Ruta del domingo con [room] y devuelve el contenedor.
+    Future<ProviderContainer> joinRuta(WidgetTester tester, Room room) async {
+      when(
+        () => rooms.joinRoom(
+          hostAddress: any(named: 'hostAddress'),
+          port: any(named: 'port'),
+          accessCode: any(named: 'accessCode'),
+          displayName: any(named: 'displayName'),
+        ),
+      ).thenAnswer((_) async => Result.success(room));
+      when(
+        () => discovery.publishRoom(
+          roomId: any(named: 'roomId'),
+          name: any(named: 'name'),
+          port: any(named: 'port'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer((_) async => const Result<void>.success(null));
+      await pumpLobby(tester);
+      await showNetwork(tester, _wifi);
+      await showRooms(tester, [_ruta]);
+      await tester.tap(find.text(_ruta.name));
+      await tester.pumpAndSettle();
+      for (final digit in '4827'.split('')) {
+        await tester.tap(find.byKey(ValueKey('fr-key-$digit')));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+      return ProviderScope.containerOf(tester.element(find.byKey(_roomStub)));
+    }
+
+    HostChange change({required bool you, required HostChangeReason reason}) =>
+        HostChange(
+          hostId: you ? 'yo' : 'otro',
+          hostName: you ? 'Yo' : 'Otro',
+          you: you,
+          reason: reason,
+          hostAddress: you ? '192.168.43.27' : '192.168.43.87',
+          port: you ? 47900 : 47800,
+        );
+
+    testWidgets(
+      'AC1: al recibir una frecu local se anuncia con su id, nombre, nota y '
+      'el puerto de su servidor; AC2: al dejar de llevarla sin salir retira '
+      'el anuncio',
+      (tester) async {
+        final container = await joinRuta(
+          tester,
+          _joined('room-ruta').copyWith(note: const RoomNote(semitone: 4)),
+        );
+        verifyNever(
+          () => discovery.publishRoom(
+            roomId: any(named: 'roomId'),
+            name: any(named: 'name'),
+            port: any(named: 'port'),
+            note: any(named: 'note'),
+          ),
+        );
+
+        container
+            .read(roomNotifierProvider.notifier)
+            .applyHostChange(change(you: true, reason: HostChangeReason.left));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => discovery.publishRoom(
+            roomId: 'room-ruta',
+            name: 'Ruta del domingo',
+            port: 47900,
+            note: const RoomNote(semitone: 4),
+          ),
+        ).called(1);
+        verifyNever(() => discovery.stopPublishing());
+
+        container
+            .read(roomNotifierProvider.notifier)
+            .applyHostChange(
+              change(you: false, reason: HostChangeReason.outranked),
+            );
+        await tester.pumpAndSettle();
+
+        verify(() => discovery.stopPublishing()).called(1);
+      },
+    );
+
+    testWidgets('AC3: al recibir una frecu por internet no se anuncia en la '
+        'red local', (tester) async {
+      final container = await joinRuta(
+        tester,
+        _joined('room-ruta').copyWith(internetId: 'nube-1'),
+      );
+
+      container
+          .read(roomNotifierProvider.notifier)
+          .applyHostChange(change(you: true, reason: HostChangeReason.lost));
+      await tester.pumpAndSettle();
+
+      verifyNever(
+        () => discovery.publishRoom(
+          roomId: any(named: 'roomId'),
+          name: any(named: 'name'),
+          port: any(named: 'port'),
+          note: any(named: 'note'),
+        ),
+      );
+      verifyNever(() => discovery.stopPublishing());
+    });
 
     testWidgets(
       'AC5: si la búsqueda no puede empezar lo dice, el sintonizador queda '

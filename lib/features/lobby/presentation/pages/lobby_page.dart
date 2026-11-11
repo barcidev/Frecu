@@ -22,6 +22,7 @@ import 'package:frecu/features/network/presentation/providers/network_provider.d
 import 'package:frecu/features/nfc_invite/presentation/providers/nfc_invite_provider.dart';
 import 'package:frecu/features/nfc_invite/presentation/widgets/nfc_join_sheet.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 
 /// Inicio en Portadora (pantalla `lobby` del prototipo): la marca, el
@@ -154,11 +155,33 @@ class _LobbyPageState extends ConsumerState<LobbyPage>
   }
 
   /// Cuando la frecu activa termina, retira su anuncio (si este teléfono la
-  /// anunciaba) y suelta la elección.
+  /// anunciaba) y suelta la elección. Si este teléfono empieza a llevar una
+  /// frecu local por un traspaso, la anuncia con el puerto de su servidor; si
+  /// deja de llevarla sin salir, retira su anuncio.
   void _onRoomChanged(Room? previous, Room? next) {
-    if (previous == null || next != null) return;
-    unawaited(ref.read(stopPublishingRoomProvider)(const NoParams()));
-    _deselect();
+    if (previous == null) return;
+    if (next == null) {
+      unawaited(ref.read(stopPublishingRoomProvider)(const NoParams()));
+      _deselect();
+      return;
+    }
+    if (previous.id != next.id || previous.hosting == next.hosting) return;
+    if (!next.hosting) {
+      unawaited(ref.read(stopPublishingRoomProvider)(const NoParams()));
+      return;
+    }
+    // Por internet no se anuncia en la red local.
+    if (next.reach != RoomReach.local) return;
+    unawaited(
+      ref
+          .read(discoveryRepositoryProvider)
+          .publishRoom(
+            roomId: next.id,
+            name: next.name,
+            port: next.port,
+            note: next.note,
+          ),
+    );
   }
 
   /// Suelta la frecu elegida si desaparece y reintenta la búsqueda si no

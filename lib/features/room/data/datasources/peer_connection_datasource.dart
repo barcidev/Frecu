@@ -7,6 +7,8 @@ import 'package:frecu/features/room/data/datasources/signaling_client_datasource
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 
+part 'peer_connection_signaling.dart';
+
 /// Niveles de voz leídos de las conexiones, de 0 a 1: el propio (`local`) y
 /// el recibido de cada par por su id (`peers`).
 typedef VoiceLevels = ({double local, Map<String, double> peers});
@@ -404,42 +406,6 @@ class PeerConnectionDataSource {
           PeerConnectionState.disconnected,
         RTCIceConnectionState.RTCIceConnectionStateCount => null,
       };
-
-  void _handleSignalingMessage(SignalingMessage msg) {
-    switch (msg) {
-      case SignalingOfferMessage(:final from, :final to, :final sdp):
-        if (!_isForMe(msg, to)) return;
-        unawaited(_enqueue(from, (token) => _handleOffer(from, sdp, token)));
-      case SignalingAnswerMessage(:final from, :final to, :final sdp):
-        if (!_isForMe(msg, to)) return;
-        unawaited(_enqueue(from, (token) => _handleAnswer(from, sdp, token)));
-      case SignalingIceMessage(
-        :final from,
-        :final to,
-        :final candidate,
-        :final sdpMid,
-        :final sdpMLineIndex,
-      ):
-        if (!_isForMe(msg, to)) return;
-        final ice = RTCIceCandidate(candidate, sdpMid, sdpMLineIndex);
-        unawaited(_enqueue(from, (token) => _handleIce(from, ice)));
-      case SignalingPeerLeftMessage(:final peerId):
-        _closePeer(peerId);
-      default:
-        // El resto de la señalización no toca la malla.
-        break;
-    }
-  }
-
-  /// Si el mensaje va dirigido al id local; sin id aún (antes de la
-  /// primera frecu), lo guarda para atenderlo al fijarlo.
-  bool _isForMe(SignalingMessage msg, String to) {
-    if (_localPeerId.isEmpty) {
-      if (!_attachedOnce && _early.length < _maxEarlyMessages) _early.add(msg);
-      return false;
-    }
-    return to == _localPeerId;
-  }
 
   Future<void> _handleOffer(String from, String sdp, _PeerToken token) async {
     final pc = await _peerConnectionFor(from, token);
