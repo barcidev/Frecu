@@ -6,6 +6,13 @@
   "branch": "feature/la-voz-entre-invitados-sigue-durante-el",
   "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:a15cea4e70f0986bbab1806b790f39cd51a1f5e4f725cd88b6ae0563a613c72e",
+    "at": "2026-11-11T15:59:37.892Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 4,
@@ -32,7 +39,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "07dfc37d6425ec7e750540469f357f02c91bcf06",
+      "startedAt": "2026-11-11T15:59:38.272Z",
+      "doneAt": "2026-11-11T16:02:25.582Z",
+      "summary": "VoiceHandover sigue room_state y welcome: con traspaso la voz no se corta sin socket, se cierra solo el enlace del anfitrión anterior (closePeer) y al volver se retoma el micrófono abierto o se anuncia el PTT (P160, P178)."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -42,12 +59,5 @@
     "AC": 6,
     "T": 2,
     "R": 3
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:a15cea4e70f0986bbab1806b790f39cd51a1f5e4f725cd88b6ae0563a613c72e",
-    "at": "2026-11-11T15:59:37.892Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

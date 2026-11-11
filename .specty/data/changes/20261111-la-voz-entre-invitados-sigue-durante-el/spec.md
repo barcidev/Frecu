@@ -58,7 +58,7 @@ Hoy, al perder el socket con el anfitrión, la voz de cada invitado deja de tran
 
 ## Tareas
 
-- [ ] T1: La voz sigue durante el traspaso: no corta con traspaso, cierra solo el enlace del anfitrión anterior y retoma al volver
+- [x] T1: La voz sigue durante el traspaso: no corta con traspaso, cierra solo el enlace del anfitrión anterior y retoma al volver
   - files: lib/features/room/data/repositories/voice_handover.dart, lib/features/room/data/repositories/voice_repository_impl.dart, lib/features/room/data/datasources/peer_connection_datasource.dart, test/features/room/data/voice_handover_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5
   - verify: flutter test test/features/room/data/voice_handover_test.dart test/features/room/data/voice_mesh_test.dart test/features/room/data/open_mic_voice_test.dart test/features/room/data/voice_repository_test.dart test/features/room/data/peer_connection_datasource_test.dart

@@ -493,6 +493,13 @@ class PeerConnectionDataSource {
     }
   }
 
+  /// Cierra solo el enlace con [peerId] (p. ej. el anfitrión que se fue en
+  /// un traspaso); los demás siguen como están.
+  void closePeer(String peerId) {
+    if (peerId.isEmpty || peerId == _localPeerId) return;
+    _closePeer(peerId);
+  }
+
   void _closePeer(String peerId) {
     _peerEpochs[peerId] = (_peerEpochs[peerId] ?? 0) + 1;
     _linkTimers.remove(peerId)?.cancel();
