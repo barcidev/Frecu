@@ -48,7 +48,7 @@ Por internet, cuando el anfitrión anterior recupera la red después de que otra
 
 ## Tareas
 
-- [ ] T1: El relé reconoce el 409 y el cierre 4000, deja de reconectar y avisa
+- [x] T1: El relé reconoce el 409 y el cierre 4000, deja de reconectar y avisa
   - files: lib/features/room/data/datasources/cloud_relay_datasource.dart, test/features/room/data/cloud_relay_outranked_test.dart
   - ac: AC2, AC3
   - verify: flutter test test/features/room/data/cloud_relay_outranked_test.dart test/features/room/data/internet_room_test.dart

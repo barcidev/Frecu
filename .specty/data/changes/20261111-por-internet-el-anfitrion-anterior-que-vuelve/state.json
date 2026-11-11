@@ -6,6 +6,13 @@
   "branch": "feature/por-internet-el-anfitrion-anterior-que-vuelve",
   "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:4a4c0aac5c955f8e5b5758d4499cfa920c558822048e38d4be14cbd935641e90",
+    "at": "2026-11-11T15:57:41.762Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 4,
@@ -32,7 +39,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "ba0e7221577c62cc15cd95ffef68e6d51c0872a4",
+      "startedAt": "2026-11-11T15:57:42.126Z",
+      "doneAt": "2026-11-11T15:59:51.995Z",
+      "summary": "El relé reconoce el 409 de la reconexión (IOWebSocketChannel conserva el código HTTP) y el cierre 4000 del socket vigente: deja de reconectar y avisa una vez con onOutranked; otras caídas (403/404/503, sin red, otros códigos) siguen reconectando."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -42,12 +59,5 @@
     "AC": 3,
     "T": 2,
     "R": 3
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:4a4c0aac5c955f8e5b5758d4499cfa920c558822048e38d4be14cbd935641e90",
-    "at": "2026-11-11T15:57:41.762Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
