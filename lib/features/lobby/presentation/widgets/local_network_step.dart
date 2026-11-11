@@ -16,10 +16,11 @@ import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dar
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_illustration.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Paso 1 de 2 de la creación en Android (`hostNet` del prototipo de la red
-/// de Frecu): Frecu crea la red de la frecu con `LocalOnlyHotspot`.
+/// Paso 2 de 3 de la creación local en Android (`hostNet` del prototipo de
+/// la red de Frecu): Frecu crea la red de la frecu con `LocalOnlyHotspot`.
 ///
 /// Sin red, explica en tres pasos qué pasa, con «Crear la red» y «Prefiero
 /// mi zona Wi-Fi» (la guía de siempre). Mientras Android la crea, la onda y
@@ -64,7 +65,8 @@ class LocalNetworkStep extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CreateRoomAppBar(
-            step: 1,
+            step: 2,
+            steps: CreateRoomAppBar.stepsFor(RoomReach.local),
             title: t.lobby.newRoom.guide.title,
             onBack: onBack,
           ),

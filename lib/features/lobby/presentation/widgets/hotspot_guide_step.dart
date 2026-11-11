@@ -8,6 +8,7 @@ import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_segmented.dart';
 import 'package:frecu/features/lobby/presentation/widgets/create_room_layout.dart';
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_illustration.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Plataforma de los pasos de la guía.
@@ -19,8 +20,8 @@ enum HotspotPlatform {
   iphone,
 }
 
-/// Guía del punto de acceso (pantalla `hotspot` del prototipo), paso 1 de 2
-/// de la creación: la ilustración, cómo activar la zona Wi-Fi en Android o
+/// Guía del punto de acceso (pantalla `hotspot` del prototipo), paso 2 de 3
+/// de la creación local: la ilustración, cómo activar la zona Wi-Fi en Android o
 /// en iPhone y abajo «Ya está activo» y «Ya estamos en la misma Wi-Fi».
 ///
 /// Empieza en Android, que se prioriza como anfitrión; al cambiar de pestaña
@@ -55,7 +56,7 @@ class HotspotGuideStep extends StatefulWidget {
   /// Si ya hay una zona Wi-Fi guardada.
   final bool hotspotSaved;
 
-  /// Si muestra «Paso 1 de 2»; falso cuando se abre sola desde Ajustes.
+  /// Si muestra «Paso 2 de 3»; falso cuando se abre sola desde Ajustes.
   final bool showStep;
 
   /// Entrada de los pasos al cambiar de pestaña.
@@ -96,7 +97,8 @@ class _HotspotGuideStepState extends State<HotspotGuideStep> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CreateRoomAppBar(
-            step: widget.showStep ? 1 : null,
+            step: widget.showStep ? 2 : null,
+            steps: CreateRoomAppBar.stepsFor(RoomReach.local),
             title: guide.title,
             onBack: widget.onBack,
           ),

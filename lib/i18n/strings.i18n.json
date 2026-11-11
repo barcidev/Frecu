@@ -136,6 +136,17 @@
     "newRoom": {
       "back": "Atrás",
       "step": "Paso $current de $total",
+      "reach": {
+        "title": "¿Cómo se une tu grupo?",
+        "message": "Se elige una vez. La frecu no mezcla las dos formas.",
+        "local": "Local",
+        "localDetail": "Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.",
+        "internet": "Por internet",
+        "internetDetail": "Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.",
+        "internetOffline": "Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.",
+        "internetUnavailable": "Esta versión de Frecu no crea frecus por internet.",
+        "continue": "Seguir"
+      },
       "guide": {
         "saveForBluetooth": "Guardarla para invitar por Bluetooth",
         "savedForBluetooth": "Zona Wi-Fi guardada · editar",
@@ -219,11 +230,6 @@
       "regenerate": "Generar otro",
       "codeHelp": "Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.",
       "codeHelpInternet": "El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.",
-      "internet": {
-        "title": "Permitir internet",
-        "on": "También pueden unirse desde lejos con el enlace. Usa datos móviles.",
-        "off": "Solo se unen quienes estén en tu red."
-      },
       "open": "Abrir frecu",
       "clockLabel": "Reloj de quintas: $time, $note"
     },

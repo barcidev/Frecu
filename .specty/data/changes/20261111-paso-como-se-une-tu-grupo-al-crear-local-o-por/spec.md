@@ -62,7 +62,7 @@ Al crear una frecu, el anfitrión elige primero cómo se une su grupo: **Local**
 
 ## Tareas
 
-- [ ] T1: «Nueva frecu» con el tipo: sin interruptor, etiqueta bajo la hora y pasos de 3 o 2
+- [x] T1: «Nueva frecu» con el tipo: sin interruptor, etiqueta bajo la hora y pasos de 3 o 2
   - files: lib/features/lobby/presentation/widgets/new_room_step.dart, lib/features/lobby/presentation/widgets/new_room_hero.dart, lib/features/lobby/presentation/widgets/create_room_layout.dart, lib/features/lobby/presentation/pages/create_room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart
   - ac: AC1
   - verify: flutter test test/features/lobby/presentation/new_room_test.dart

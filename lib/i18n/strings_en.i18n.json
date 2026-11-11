@@ -136,6 +136,17 @@
     "newRoom": {
       "back": "Back",
       "step": "Step $current of $total",
+      "reach": {
+        "title": "How does your group join?",
+        "message": "You choose once. The room doesn't mix both ways.",
+        "local": "Local",
+        "localDetail": "Everyone on the same Wi-Fi: the one your phone creates or one you already have, like at home or the office. No internet and no data used.",
+        "internet": "Over the internet",
+        "internetDetail": "From anywhere, with the QR or the link. Uses mobile data.",
+        "internetOffline": "You need internet to create it. Connect to a Wi-Fi with internet or turn on your data.",
+        "internetUnavailable": "This version of Frecu doesn't create rooms over the internet.",
+        "continue": "Continue"
+      },
       "guide": {
         "saveForBluetooth": "Save it to invite via Bluetooth",
         "savedForBluetooth": "Hotspot saved · edit",
@@ -219,11 +230,6 @@
       "regenerate": "Generate another",
       "codeHelp": "Share it only with your group: it keeps strangers on the same network out.",
       "codeHelpInternet": "The link and the QR already include it: share them only with your group.",
-      "internet": {
-        "title": "Allow internet",
-        "on": "People far away can also join with the link. Uses mobile data.",
-        "off": "Only people on your network can join."
-      },
       "open": "Open room",
       "clockLabel": "Circle of fifths clock: $time, $note"
     },

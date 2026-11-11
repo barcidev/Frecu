@@ -6,6 +6,13 @@
   "branch": "feature/paso-como-se-une-tu-grupo-al-crear-local-o-por",
   "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e654737a686e5c39d2c8f4046ef8060cb80fadcf4949ccffe60b640ac50c79d9",
+    "at": "2026-11-11T13:53:42.341Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 18,
@@ -33,7 +40,21 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "test/features/lobby/presentation/new_room_test.dart",
+        "lib/features/lobby/presentation/widgets/local_network_step.dart",
+        "lib/features/lobby/presentation/widgets/hotspot_guide_step.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "3c2c6d886577f9988eb9a4ad7b3c0b7e129a1264",
+      "startedAt": "2026-11-11T13:53:42.674Z",
+      "doneAt": "2026-11-11T13:56:13.997Z",
+      "summary": "NewRoomStep recibe el tipo: sin interruptor, paso 3 de 3 o 2 de 2 y etiqueta Local/Por internet bajo la hora; CreateRoomAppBar con total de pasos (stepsFor); red y guía son Paso 2 de 3; textos lobby.newRoom.reach."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -43,12 +64,5 @@
     "AC": 1,
     "T": 3,
     "R": 2
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:e654737a686e5c39d2c8f4046ef8060cb80fadcf4949ccffe60b640ac50c79d9",
-    "at": "2026-11-11T13:53:42.341Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

@@ -7,6 +7,7 @@ import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/features/lobby/presentation/widgets/fifths_clock.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Héroe de la nueva frecu (`.ch-hero.fifths`): el reloj de quintas y, a su
@@ -16,7 +17,7 @@ class NewRoomHero extends StatelessWidget {
   const NewRoomHero({
     required this.note,
     required this.openedAt,
-    this.internet = false,
+    required this.reach,
     super.key,
   });
 
@@ -26,8 +27,8 @@ class NewRoomHero extends StatelessWidget {
   /// Hora de apertura.
   final DateTime openedAt;
 
-  /// «Permitir internet» encendido: lleva la etiqueta «Por internet».
-  final bool internet;
+  /// Tipo de frecu: su etiqueta va bajo la hora.
+  final RoomReach reach;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +53,7 @@ class NewRoomHero extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.topRight,
-              child: _NoteReading(
-                note: note,
-                openedAt: openedAt,
-                internet: internet,
-              ),
+              child: _NoteReading(note: note, openedAt: openedAt, reach: reach),
             ),
           ),
         ),
@@ -127,17 +124,18 @@ class _HeroBox extends StatelessWidget {
   }
 }
 
-/// «Tu frecu suena en», la nota grande, sus Hz y «Abierta a las HH:MM».
+/// «Tu frecu suena en», la nota grande, sus Hz, «Abierta a las HH:MM» y,
+/// debajo, el tipo de frecu.
 class _NoteReading extends StatelessWidget {
   const _NoteReading({
     required this.note,
     required this.openedAt,
-    required this.internet,
+    required this.reach,
   });
 
   final RoomNote note;
   final DateTime openedAt;
-  final bool internet;
+  final RoomReach reach;
 
   @override
   Widget build(BuildContext context) {
@@ -164,21 +162,36 @@ class _NoteReading extends StatelessWidget {
           newRoom.openedAt(time: time).toUpperCase(),
           style: fr.type.labelS.copyWith(color: c.tx3),
         ),
-        if (internet) ...[
-          const SizedBox(height: 8),
-          Row(
-            key: const Key('new_room_internet_tag'),
-            mainAxisSize: MainAxisSize.min,
-            spacing: 5,
-            children: [
-              FrIcon(FrIcons.globe, size: 12, color: c.signalFg),
-              Text(
-                t.room.header.internetTag.toUpperCase(),
-                style: fr.type.labelS.copyWith(color: c.tx2),
-              ),
-            ],
-          ),
-        ],
+        const SizedBox(height: 8),
+        _ReachTag(reach: reach),
+      ],
+    );
+  }
+}
+
+/// Etiqueta del tipo de frecu: `hotspot` y «Local», o `globe` y «Por
+/// internet».
+class _ReachTag extends StatelessWidget {
+  const _ReachTag({required this.reach});
+
+  final RoomReach reach;
+
+  @override
+  Widget build(BuildContext context) {
+    final fr = context.fr;
+    final c = fr.colors;
+    final copy = t.lobby.newRoom.reach;
+    final (icon, label) = switch (reach) {
+      RoomReach.local => (FrIcons.hotspot, copy.local),
+      RoomReach.internet => (FrIcons.globe, copy.internet),
+    };
+    return Row(
+      key: const Key('new_room_reach_tag'),
+      mainAxisSize: MainAxisSize.min,
+      spacing: 5,
+      children: [
+        FrIcon(icon, size: 12, color: c.signalFg),
+        Text(label.toUpperCase(), style: fr.type.labelS.copyWith(color: c.tx2)),
       ],
     );
   }

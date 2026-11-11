@@ -14,6 +14,7 @@ import 'package:frecu/features/lobby/presentation/widgets/local_network_step.dar
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
@@ -130,6 +131,7 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
   );
 
   Widget _newRoom(BuildContext _) => NewRoomStep(
+    reach: RoomReach.local,
     name: _name,
     code: _code,
     onCodeChanged: (code) => _code = code,

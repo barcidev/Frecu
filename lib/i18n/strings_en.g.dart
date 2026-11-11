@@ -410,6 +410,7 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	// Translations
 	@override String get back => 'Back';
 	@override String step({required Object current, required Object total}) => 'Step ${current} of ${total}';
+	@override late final _Translations$lobby$newRoom$reach$en reach = _Translations$lobby$newRoom$reach$en._(_root);
 	@override late final _Translations$lobby$newRoom$guide$en guide = _Translations$lobby$newRoom$guide$en._(_root);
 	@override late final _Translations$lobby$newRoom$network$en network = _Translations$lobby$newRoom$network$en._(_root);
 	@override String get title => 'New room';
@@ -424,7 +425,6 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	@override String get regenerate => 'Generate another';
 	@override String get codeHelp => 'Share it only with your group: it keeps strangers on the same network out.';
 	@override String get codeHelpInternet => 'The link and the QR already include it: share them only with your group.';
-	@override late final _Translations$lobby$newRoom$internet$en internet = _Translations$lobby$newRoom$internet$en._(_root);
 	@override String get open => 'Open room';
 	@override String clockLabel({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}';
 }
@@ -886,6 +886,24 @@ class _Translations$lobby$join$scan$en extends Translations$lobby$join$scan$es {
 	@override late final _Translations$lobby$join$scan$camera$en camera = _Translations$lobby$join$scan$camera$en._(_root);
 }
 
+// Path: lobby.newRoom.reach
+class _Translations$lobby$newRoom$reach$en extends Translations$lobby$newRoom$reach$es {
+	_Translations$lobby$newRoom$reach$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'How does your group join?';
+	@override String get message => 'You choose once. The room doesn\'t mix both ways.';
+	@override String get local => 'Local';
+	@override String get localDetail => 'Everyone on the same Wi-Fi: the one your phone creates or one you already have, like at home or the office. No internet and no data used.';
+	@override String get internet => 'Over the internet';
+	@override String get internetDetail => 'From anywhere, with the QR or the link. Uses mobile data.';
+	@override String get internetOffline => 'You need internet to create it. Connect to a Wi-Fi with internet or turn on your data.';
+	@override String get internetUnavailable => 'This version of Frecu doesn\'t create rooms over the internet.';
+	@override String get kContinue => 'Continue';
+}
+
 // Path: lobby.newRoom.guide
 class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$guide$es {
 	_Translations$lobby$newRoom$guide$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -959,18 +977,6 @@ class _Translations$lobby$newRoom$network$en extends Translations$lobby$newRoom$
 	@override String get failedMessage => 'Try again in a few seconds or use your hotspot.';
 	@override String get unsupportedTitle => 'This phone can\'t create the network.';
 	@override String get unsupportedMessage => 'It needs Android 8 or later. Use your hotspot.';
-}
-
-// Path: lobby.newRoom.internet
-class _Translations$lobby$newRoom$internet$en extends Translations$lobby$newRoom$internet$es {
-	_Translations$lobby$newRoom$internet$en._(TranslationsEn root) : this._root = root, super.internal(root);
-
-	final TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Allow internet';
-	@override String get on => 'People far away can also join with the link. Uses mobile data.';
-	@override String get off => 'Only people on your network can join.';
 }
 
 // Path: room.sheets.invite
@@ -1396,6 +1402,15 @@ extension on TranslationsEn {
 			'lobby.offline.openSettings' => 'Open Wi-Fi settings',
 			'lobby.newRoom.back' => 'Back',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Step ${current} of ${total}',
+			'lobby.newRoom.reach.title' => 'How does your group join?',
+			'lobby.newRoom.reach.message' => 'You choose once. The room doesn\'t mix both ways.',
+			'lobby.newRoom.reach.local' => 'Local',
+			'lobby.newRoom.reach.localDetail' => 'Everyone on the same Wi-Fi: the one your phone creates or one you already have, like at home or the office. No internet and no data used.',
+			'lobby.newRoom.reach.internet' => 'Over the internet',
+			'lobby.newRoom.reach.internetDetail' => 'From anywhere, with the QR or the link. Uses mobile data.',
+			'lobby.newRoom.reach.internetOffline' => 'You need internet to create it. Connect to a Wi-Fi with internet or turn on your data.',
+			'lobby.newRoom.reach.internetUnavailable' => 'This version of Frecu doesn\'t create rooms over the internet.',
+			'lobby.newRoom.reach.kContinue' => 'Continue',
 			'lobby.newRoom.guide.saveForBluetooth' => 'Save it to invite via Bluetooth',
 			'lobby.newRoom.guide.savedForBluetooth' => 'Hotspot saved · edit',
 			'lobby.newRoom.guide.hotspotSheet.kicker' => 'Invite via Bluetooth · optional',
@@ -1476,9 +1491,6 @@ extension on TranslationsEn {
 			'lobby.newRoom.regenerate' => 'Generate another',
 			'lobby.newRoom.codeHelp' => 'Share it only with your group: it keeps strangers on the same network out.',
 			'lobby.newRoom.codeHelpInternet' => 'The link and the QR already include it: share them only with your group.',
-			'lobby.newRoom.internet.title' => 'Allow internet',
-			'lobby.newRoom.internet.on' => 'People far away can also join with the link. Uses mobile data.',
-			'lobby.newRoom.internet.off' => 'Only people on your network can join.',
 			'lobby.newRoom.open' => 'Open room',
 			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}',
 			'lobby.noteNames.0' => 'C',
@@ -1796,14 +1808,14 @@ extension on TranslationsEn {
 			'location.compass.ne' => 'NE',
 			'location.compass.e' => 'E',
 			'location.compass.se' => 'SE',
+			_ => null,
+		} ?? switch (path) {
 			'location.compass.s' => 'S',
 			'location.compass.sw' => 'SW',
 			'location.compass.w' => 'W',
 			'location.compass.nw' => 'NW',
 			'location.compassLong.n' => 'north',
 			'location.compassLong.ne' => 'northeast',
-			_ => null,
-		} ?? switch (path) {
 			'location.compassLong.e' => 'east',
 			'location.compassLong.se' => 'southeast',
 			'location.compassLong.s' => 'south',

@@ -707,6 +707,7 @@ class Translations$lobby$newRoom$es {
 	/// es: 'Paso $current de $total'
 	String step({required Object current, required Object total}) => 'Paso ${current} de ${total}';
 
+	late final Translations$lobby$newRoom$reach$es reach = Translations$lobby$newRoom$reach$es.internal(_root);
 	late final Translations$lobby$newRoom$guide$es guide = Translations$lobby$newRoom$guide$es.internal(_root);
 	late final Translations$lobby$newRoom$network$es network = Translations$lobby$newRoom$network$es.internal(_root);
 
@@ -745,8 +746,6 @@ class Translations$lobby$newRoom$es {
 
 	/// es: 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.'
 	String get codeHelpInternet => 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.';
-
-	late final Translations$lobby$newRoom$internet$es internet = Translations$lobby$newRoom$internet$es.internal(_root);
 
 	/// es: 'Abrir frecu'
 	String get open => 'Abrir frecu';
@@ -1571,6 +1570,42 @@ class Translations$lobby$join$scan$es {
 	late final Translations$lobby$join$scan$camera$es camera = Translations$lobby$join$scan$camera$es.internal(_root);
 }
 
+// Path: lobby.newRoom.reach
+class Translations$lobby$newRoom$reach$es {
+	Translations$lobby$newRoom$reach$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: '¿Cómo se une tu grupo?'
+	String get title => '¿Cómo se une tu grupo?';
+
+	/// es: 'Se elige una vez. La frecu no mezcla las dos formas.'
+	String get message => 'Se elige una vez. La frecu no mezcla las dos formas.';
+
+	/// es: 'Local'
+	String get local => 'Local';
+
+	/// es: 'Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.'
+	String get localDetail => 'Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.';
+
+	/// es: 'Por internet'
+	String get internet => 'Por internet';
+
+	/// es: 'Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.'
+	String get internetDetail => 'Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.';
+
+	/// es: 'Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.'
+	String get internetOffline => 'Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.';
+
+	/// es: 'Esta versión de Frecu no crea frecus por internet.'
+	String get internetUnavailable => 'Esta versión de Frecu no crea frecus por internet.';
+
+	/// es: 'Seguir'
+	String get kContinue => 'Seguir';
+}
+
 // Path: lobby.newRoom.guide
 class Translations$lobby$newRoom$guide$es {
 	Translations$lobby$newRoom$guide$es.internal(this._root);
@@ -1729,24 +1764,6 @@ class Translations$lobby$newRoom$network$es {
 
 	/// es: 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.'
 	String get unsupportedMessage => 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.';
-}
-
-// Path: lobby.newRoom.internet
-class Translations$lobby$newRoom$internet$es {
-	Translations$lobby$newRoom$internet$es.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// es: 'Permitir internet'
-	String get title => 'Permitir internet';
-
-	/// es: 'También pueden unirse desde lejos con el enlace. Usa datos móviles.'
-	String get on => 'También pueden unirse desde lejos con el enlace. Usa datos móviles.';
-
-	/// es: 'Solo se unen quienes estén en tu red.'
-	String get off => 'Solo se unen quienes estén en tu red.';
 }
 
 // Path: room.sheets.invite
@@ -2409,6 +2426,15 @@ extension on Translations {
 			'lobby.offline.openSettings' => 'Abrir ajustes de Wi-Fi',
 			'lobby.newRoom.back' => 'Atrás',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Paso ${current} de ${total}',
+			'lobby.newRoom.reach.title' => '¿Cómo se une tu grupo?',
+			'lobby.newRoom.reach.message' => 'Se elige una vez. La frecu no mezcla las dos formas.',
+			'lobby.newRoom.reach.local' => 'Local',
+			'lobby.newRoom.reach.localDetail' => 'Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.',
+			'lobby.newRoom.reach.internet' => 'Por internet',
+			'lobby.newRoom.reach.internetDetail' => 'Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.',
+			'lobby.newRoom.reach.internetOffline' => 'Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.',
+			'lobby.newRoom.reach.internetUnavailable' => 'Esta versión de Frecu no crea frecus por internet.',
+			'lobby.newRoom.reach.kContinue' => 'Seguir',
 			'lobby.newRoom.guide.saveForBluetooth' => 'Guardarla para invitar por Bluetooth',
 			'lobby.newRoom.guide.savedForBluetooth' => 'Zona Wi-Fi guardada · editar',
 			'lobby.newRoom.guide.hotspotSheet.kicker' => 'Invitar por Bluetooth · opcional',
@@ -2489,9 +2515,6 @@ extension on Translations {
 			'lobby.newRoom.regenerate' => 'Generar otro',
 			'lobby.newRoom.codeHelp' => 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.',
 			'lobby.newRoom.codeHelpInternet' => 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.',
-			'lobby.newRoom.internet.title' => 'Permitir internet',
-			'lobby.newRoom.internet.on' => 'También pueden unirse desde lejos con el enlace. Usa datos móviles.',
-			'lobby.newRoom.internet.off' => 'Solo se unen quienes estén en tu red.',
 			'lobby.newRoom.open' => 'Abrir frecu',
 			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Reloj de quintas: ${time}, ${note}',
 			'lobby.noteNames.0' => 'Do',
@@ -2809,14 +2832,14 @@ extension on Translations {
 			'location.compass.ne' => 'NE',
 			'location.compass.e' => 'E',
 			'location.compass.se' => 'SE',
+			_ => null,
+		} ?? switch (path) {
 			'location.compass.s' => 'S',
 			'location.compass.sw' => 'SO',
 			'location.compass.w' => 'O',
 			'location.compass.nw' => 'NO',
 			'location.compassLong.n' => 'norte',
 			'location.compassLong.ne' => 'noreste',
-			_ => null,
-		} ?? switch (path) {
 			'location.compassLong.e' => 'este',
 			'location.compassLong.se' => 'sureste',
 			'location.compassLong.s' => 'sur',
