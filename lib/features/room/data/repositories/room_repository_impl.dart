@@ -155,21 +155,35 @@ class RoomRepositoryImpl implements RoomRepository {
       currentThen(() => _status, _statusController.stream);
 
   @override
-  Future<String?> getLocalIpAddress() async {
+  Future<String?> getLocalIpAddress() async =>
+      (await _lanAddress())?.address ?? _fallbackLanAddress;
+
+  /// IPv4 de la invitación si no hay red local a la vista: la habitual del
+  /// punto de acceso de Android.
+  static const String _fallbackLanAddress = '192.168.43.1';
+
+  /// La red local de la frecu, o nulo si no hay ninguna a la vista.
+  Future<LanAddress?> _lanAddress() async {
     try {
       // Solo Wi-Fi o punto de acceso: nunca datos móviles ni VPN. Con la
       // red de Frecu al aire, la suya.
       final interfaces = await _networkInterfacesProvider();
       return selectLanAddress(
-            interfaces.map(LanInterface.fromIo),
-            prefer: _lanInterfaceHint?.call(),
-          )?.address ??
-          '192.168.43.1';
+        interfaces.map(LanInterface.fromIo),
+        prefer: _lanInterfaceHint?.call(),
+      );
     } on Object catch (e) {
       AppLogger.w('Failed to get local IP: $e');
-      return '192.168.43.1';
+      return null;
     }
   }
+
+  /// La red de una frecu local la crea este teléfono: la red de Frecu está
+  /// al aire, [lan] es su zona Wi-Fi, o no hay red local a la vista (una
+  /// zona Wi-Fi de iPhone no aparece hasta que alguien se conecta, y la
+  /// invitación lleva la IP de respaldo).
+  bool _ownsNetwork(LanAddress? lan) =>
+      _lanInterfaceHint?.call() != null || lan?.kind != LanKind.wifi;
 
   @override
   Future<Result<Room>> createRoom({
@@ -186,9 +200,7 @@ class RoomRepositoryImpl implements RoomRepository {
       if (internet && !cloudConfig.isEnabled) {
         throw StateError('Internet mode is not configured');
       }
-      // Por internet no se invita por la red local: todos entran por la
-      // nube, aunque compartan la Wi-Fi del anfitrión.
-      final hostIp = internet ? '' : await getLocalIpAddress() ?? '127.0.0.1';
+      final hostIp = await _prepareHostAddress(internet: internet);
       await _server.start(
         accessCode: accessCode,
         roomName: name,
@@ -216,15 +228,30 @@ class RoomRepositoryImpl implements RoomRepository {
     } on Object catch (e, st) {
       AppLogger.e('Error creating room', e, st);
       await _abortSession(session);
-      return Result.failure(
-        e is SocketException ||
-                e is WebSocketChannelException ||
-                e is TimeoutException
-            ? const Failure.network()
-            : Failure.unexpected(error: e),
-      );
+      return Result.failure(_createFailure(e));
     }
   }
+
+  /// IPv4 de la invitación de una frecu nueva, y fija si su red la crea
+  /// este teléfono. Por internet no se invita por la red local: todos
+  /// entran por la nube, aunque compartan la Wi-Fi del anfitrión.
+  Future<String> _prepareHostAddress({required bool internet}) async {
+    if (internet) {
+      _server.hostOwnsNetwork = false;
+      return '';
+    }
+    final lan = await _lanAddress();
+    _server.hostOwnsNetwork = _ownsNetwork(lan);
+    return lan?.address ?? _fallbackLanAddress;
+  }
+
+  /// Fallo de abrir una frecu: sin red si no se pudo escuchar o conectar.
+  static Failure _createFailure(Object error) =>
+      error is SocketException ||
+          error is WebSocketChannelException ||
+          error is TimeoutException
+      ? const Failure.network()
+      : Failure.unexpected(error: error);
 
   Future<bool> _resolves(String host) async {
     try {
@@ -614,6 +641,7 @@ class RoomRepositoryImpl implements RoomRepository {
       createdAt: DateTime.now(),
       note: note,
       internetId: _internetId,
+      hostOwnsNetwork: participants.any((p) => p.isHost && p.ownsNetwork),
     );
 
     if (!completer.isCompleted) completer.complete(Result.success(room));

@@ -6,6 +6,13 @@
   "branch": "feature/red-del-anfitrion-detectar-si-admite-traspaso",
   "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:6e0db163e015d06ae3dcbbcc7b136f4c5088500a85ac56f91c7306b84908d617",
+    "at": "2026-11-11T13:51:36.484Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 13,
@@ -25,7 +32,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "2d028c3a9b6742d6c1698161716e5153afe688cb",
+      "startedAt": "2026-11-11T13:51:36.838Z",
+      "doneAt": "2026-11-11T13:54:19.417Z",
+      "summary": "Participant.ownsNetwork (aditivo) y Room.hostOwnsNetwork/handover; el repositorio detecta al crear si la red es del anfitrión (red de Frecu, zona Wi-Fi o sin red local) y el servidor lo marca en el participante anfitrión, que llega en welcome"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -35,12 +52,5 @@
     "AC": 4,
     "T": 2,
     "R": 2
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:6e0db163e015d06ae3dcbbcc7b136f4c5088500a85ac56f91c7306b84908d617",
-    "at": "2026-11-11T13:51:36.484Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

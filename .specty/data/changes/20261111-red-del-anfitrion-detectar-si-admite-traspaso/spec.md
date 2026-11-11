@@ -58,7 +58,7 @@ La frecu sabe si su red la crea el teléfono del anfitrión (red de Frecu o zona
 
 ## Tareas
 
-- [ ] T1: La frecu sabe si la red la crea el anfitrión
+- [x] T1: La frecu sabe si la red la crea el anfitrión
   - files: lib/features/room/domain/entities/participant.dart, lib/features/room/domain/entities/participant.freezed.dart, lib/features/room/domain/entities/participant.g.dart, lib/features/room/domain/entities/room.dart, lib/features/room/domain/entities/room.freezed.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/host_network_test.dart
   - ac: AC4
   - verify: flutter test test/features/room/data/host_network_test.dart

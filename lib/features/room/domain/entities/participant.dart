@@ -35,6 +35,11 @@ sealed class Participant with _$Participant {
     /// Lo pone el anfitrión; una app anterior no lo manda y vale `false`.
     @Default(false) bool remote,
 
+    /// Su teléfono es la red de la frecu (la red de Frecu o su zona Wi-Fi):
+    /// solo el anfitrión, y entonces la frecu no admite traspaso. Lo pone el
+    /// anfitrión; una app anterior no lo manda y vale `false`.
+    @Default(false) bool ownsNetwork,
+
     /// Calidad del enlace de voz que mide este teléfono; es local, así que
     /// no viaja en la señalización.
     @JsonKey(includeFromJson: false, includeToJson: false)
