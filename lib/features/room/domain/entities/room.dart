@@ -1,5 +1,6 @@
 import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'room.freezed.dart';
@@ -25,8 +26,8 @@ sealed class Room with _$Room {
     /// teléfono o la que traía la invitación. Va en el QR para invitar.
     WifiCredentials? wifi,
 
-    /// Id de la frecu en el punto de encuentro por internet, si se abrió
-    /// también por internet. Va en el QR y en el enlace para invitar.
+    /// Id de la frecu en el punto de encuentro, si es por internet. Va en el
+    /// QR y en el enlace para invitar.
     String? internetId,
 
     /// Si este teléfono la creó (es el anfitrión). Solo vale en este
@@ -36,6 +37,13 @@ sealed class Room with _$Room {
     bool hosting,
   }) = _Room;
 
+  const Room._();
+
   /// Deserializa desde JSON.
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
+
+  /// Cómo se une el grupo: por internet si tiene id en el punto de
+  /// encuentro; si no, local.
+  RoomReach get reach =>
+      internetId == null ? RoomReach.local : RoomReach.internet;
 }

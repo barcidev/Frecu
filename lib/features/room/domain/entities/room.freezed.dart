@@ -18,8 +18,8 @@ mixin _$Room {
  String get id; String get name; String get hostAddress; int get port; String get accessCode; DateTime get createdAt; int get maxParticipants;/// Nota musical de la frecu, calculada con su hora de apertura.
 @RoomNoteConverter() RoomNote? get note;/// Red de la frecu, si el anfitrión la creó con Frecu: la que creó este
 /// teléfono o la que traía la invitación. Va en el QR para invitar.
- WifiCredentials? get wifi;/// Id de la frecu en el punto de encuentro por internet, si se abrió
-/// también por internet. Va en el QR y en el enlace para invitar.
+ WifiCredentials? get wifi;/// Id de la frecu en el punto de encuentro, si es por internet. Va en el
+/// QR y en el enlace para invitar.
  String? get internetId;/// Si este teléfono la creó (es el anfitrión). Solo vale en este
 /// teléfono: no viaja en JSON.
 @JsonKey(includeFromJson: false, includeToJson: false) bool get hosting;
@@ -243,8 +243,8 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// @nodoc
 @JsonSerializable()
 
-class _Room implements Room {
-  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note, this.wifi, this.internetId, @JsonKey(includeFromJson: false, includeToJson: false) this.hosting = false});
+class _Room extends Room {
+  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note, this.wifi, this.internetId, @JsonKey(includeFromJson: false, includeToJson: false) this.hosting = false}): super._();
   factory _Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
 @override final  String id;
@@ -259,8 +259,8 @@ class _Room implements Room {
 /// Red de la frecu, si el anfitrión la creó con Frecu: la que creó este
 /// teléfono o la que traía la invitación. Va en el QR para invitar.
 @override final  WifiCredentials? wifi;
-/// Id de la frecu en el punto de encuentro por internet, si se abrió
-/// también por internet. Va en el QR y en el enlace para invitar.
+/// Id de la frecu en el punto de encuentro, si es por internet. Va en el
+/// QR y en el enlace para invitar.
 @override final  String? internetId;
 /// Si este teléfono la creó (es el anfitrión). Solo vale en este
 /// teléfono: no viaja en JSON.

@@ -17,6 +17,7 @@ import 'package:frecu/features/room/data/repositories/current_then.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -176,18 +177,18 @@ class RoomRepositoryImpl implements RoomRepository {
     required String accessCode,
     String? displayName,
     RoomNote? note,
-    bool internet = false,
+    RoomReach reach = RoomReach.local,
   }) async {
     final session = await _beginSession(host: true);
     _roomName = name;
+    final internet = reach == RoomReach.internet;
     try {
       if (internet && !cloudConfig.isEnabled) {
         throw StateError('Internet mode is not configured');
       }
-      // Por internet, sin red local no hay IP que invitar: no se inventa.
-      final hostIp = internet
-          ? await _lanAddressOrNull() ?? ''
-          : await getLocalIpAddress() ?? '127.0.0.1';
+      // Por internet no se invita por la red local: todos entran por la
+      // nube, aunque compartan la Wi-Fi del anfitrión.
+      final hostIp = internet ? '' : await getLocalIpAddress() ?? '127.0.0.1';
       await _server.start(
         accessCode: accessCode,
         roomName: name,
@@ -232,18 +233,6 @@ class RoomRepositoryImpl implements RoomRepository {
       return found.isNotEmpty;
     } on Object {
       return false;
-    }
-  }
-
-  Future<String?> _lanAddressOrNull() async {
-    try {
-      final interfaces = await _networkInterfacesProvider();
-      return selectLanAddress(
-        interfaces.map(LanInterface.fromIo),
-        prefer: _lanInterfaceHint?.call(),
-      )?.address;
-    } on Object {
-      return null;
     }
   }
 

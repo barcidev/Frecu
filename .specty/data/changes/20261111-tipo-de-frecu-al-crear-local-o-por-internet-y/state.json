@@ -6,6 +6,13 @@
   "branch": "feature/tipo-de-frecu-al-crear-local-o-por-internet-y",
   "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:0f4e2e53099f3a1a9f9086eccf7d99fd5cd46784ce169585638d538378e9446f",
+    "at": "2026-11-11T13:32:52.022Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 13,
@@ -33,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "ac5b354ab00f9290a1e99e6d6666cce3a2e924c4",
+      "startedAt": "2026-11-11T13:32:52.346Z",
+      "doneAt": "2026-11-11T13:35:16.623Z",
+      "summary": "RoomReach en el dominio (Room.reach por internetId); createRoom pasa de bool internet a reach. Por internet la IP del anfitrión queda vacía aunque haya Wi-Fi; local no abre el relé. Tests AC2/AC3 en internet_room_test."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -43,12 +60,5 @@
     "AC": 3,
     "T": 3,
     "R": 2
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:0f4e2e53099f3a1a9f9086eccf7d99fd5cd46784ce169585638d538378e9446f",
-    "at": "2026-11-11T13:32:52.022Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
