@@ -52,7 +52,7 @@ Pagar deuda técnica sin cambiar el comportamiento: `room_repository_impl.dart` 
 
 ## Tareas
 
-- [ ] T1: Dividir `room_repository_impl.dart` en archivos `part`
+- [x] T1: Dividir `room_repository_impl.dart` en archivos `part`
   - files: lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/data/repositories/room_repository_reconnection.dart, lib/features/room/data/repositories/room_repository_messages.dart, lib/features/room/data/repositories/room_repository_takeover.dart
   - ac: AC1, AC2
   - verify: flutter test test/features/room/data
