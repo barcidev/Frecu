@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-aviso-sin-wi-fi-amigable-en-el-lobby",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "bugfix/aviso-sin-wi-fi-amigable-en-el-lobby",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
-  "revision": 3,
+  "revision": 4,
   "approved": {
     "revision": 3,
     "hash": "sha256:986f238bb20a2adcd17adb17ff2d36c32c0f39188c726d437eed87577026644f",
@@ -48,12 +48,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "71e7712239700a12a3a081d67408178221bec809",
+      "attempts": 1,
       "startedAt": "2026-11-11T05:35:18.699Z",
       "doneAt": "2026-11-11T05:39:39.326Z",
-      "summary": "La prueba AC3 «Inicio sin red» de lobby_drawn_icons_test busca el botón «Abrir ajustes de Wi-Fi» del estado vacío (FrIcons.wifi, sin Icon de Material) y comprueba que no hay FrBanner"
+      "summary": "La prueba AC3 «Inicio sin red» de lobby_drawn_icons_test busca el botón «Abrir ajustes de Wi-Fi» del estado vacío (FrIcons.wifi, sin Icon de Material) y comprueba que no hay FrBanner",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -64,5 +64,6 @@
     "A": 3,
     "AC": 3,
     "T": 2
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T05:39:48.734Z"
 }

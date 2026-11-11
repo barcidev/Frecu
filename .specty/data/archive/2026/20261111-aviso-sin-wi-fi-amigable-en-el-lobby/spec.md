@@ -55,3 +55,24 @@ Con el modo internet, estar sin Wi-Fi ya no es un error: el lobby deja de mostra
   - ac: AC2
   - verify: flutter test test/features/lobby/presentation/lobby_drawn_icons_test.dart
   - type: fix
+
+## Cierre
+
+### Resumen
+
+Sin Wi-Fi, la píldora del lobby dice «Sin Wi-Fi» en tono neutro `off` y, si no hay frecus, en lugar del `FrBanner` rojo se ve un estado vacío tranquilo al estilo de la búsqueda vacía: «Sin Wi-Fi por ahora», un mensaje que remite al QR del anfitrión para entrar por internet y un botón fantasma pequeño «Abrir ajustes de Wi-Fi». El sintonizador sigue en pausa. `flutter analyze` sin problemas y la suite completa en verde (1146 pruebas).
+
+### Desviaciones
+
+- El botón va dentro de un `FittedBox(scaleDown)` en un método privado: con texto ancho se desbordaba, y así `build` cumple el máximo de 50 líneas.
+- Las pruebas conservan la numeración propia de `lobby_page_test.dart`: AC1 y AC3 de esta spec los comprueban sus pruebas «AC2: la píldora…» y «AC6: en inglés el estado vacío sin Wi-Fi está en inglés»; el id AC3 que Specty asocia a `lobby_drawn_icons_test.dart` es el de esa prueba (íconos dibujados), no el de esta spec.
+- Se añadió T2 en un ajuste: la verificación completa falló porque `lobby_drawn_icons_test.dart` aún buscaba el `FrBanner` de alerta.
+
+### Decisiones
+
+- Se reutilizan las claves `lobby.network.offline` y `lobby.offline.*` con textos nuevos, sin renombrarlas.
+
+### Pendientes
+
+- Verlo en teléfonos reales con y sin Wi-Fi.
+- El prototipo de `docs/diseno/prototipo` aún dibuja la píldora «Sin red local» en alerta.
