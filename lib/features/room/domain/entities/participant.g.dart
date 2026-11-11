@@ -19,6 +19,7 @@ _Participant _$ParticipantFromJson(Map<String, dynamic> json) => _Participant(
       ) ??
       PeerConnectionState.connected,
   remote: json['remote'] as bool? ?? false,
+  ownsNetwork: json['ownsNetwork'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$ParticipantToJson(
@@ -31,6 +32,7 @@ Map<String, dynamic> _$ParticipantToJson(
   'isMuted': instance.isMuted,
   'connectionState': _$PeerConnectionStateEnumMap[instance.connectionState]!,
   'remote': instance.remote,
+  'ownsNetwork': instance.ownsNetwork,
 };
 
 const _$PeerConnectionStateEnumMap = {

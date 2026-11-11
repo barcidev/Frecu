@@ -78,9 +78,9 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 
 | type | Dirección | Contenido |
 |---|---|---|
-| `join` | cliente → host | displayName, accessCode, protocolVersion |
+| `join` | cliente → host | displayName, accessCode, protocolVersion, `peerId` (opcional: volver a su lugar tras un traspaso), `term` (opcional: el turno de la sucesión que conoce) |
 | `welcome` | host → cliente | peerId asignado, lista de participantes, nota opcional (`note`), nombre de la frecu opcional (`roomName`) |
-| `rejected` | host → cliente | reason (`roomFull`, `invalidAccessCode`, `versionMismatch`) |
+| `rejected` | host → cliente | reason (`roomFull`, `invalidAccessCode`, `versionMismatch`, `stale_term`) |
 | `peer_joined` | host → todos | participante |
 | `peer_left` | host → todos | peerId |
 | `offer` | peer → peer (vía host) | from, to, sdp |
@@ -90,6 +90,10 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 | `quick_message` | peer → todos menos quien lo envía (vía host) | peerId, kind |
 | `position` | peer → todos menos quien lo envía (vía host) | peerId, lat y lon opcionales, accuracy opcional |
 | `ping` / `pong` | ambos | timestamp |
+| `room_state` | host → todos | `state`: sucesión, turno y estado de la frecu |
+| `host_handover` | host → todos | `to`, `term`, `address` y `port` opcionales: el anfitrión pasa (o cede) la frecu y sale |
+| `host_probe` | host → otro host, y su respuesta | `accessCode`, `term`, `host`, `port`: ¿llevas esta frecu y con qué turno? |
+| `host_changed` | nuevo host → quien vuelve | `host`, `term`, `reason` (`left` o `lost`) |
 | `room_closed` | host → todos | reason |
 
 El servidor del anfitrión solo enruta mensajes y mantiene la lista de participantes. No procesa audio.
@@ -97,6 +101,20 @@ El servidor del anfitrión solo enruta mensajes y mantiene la lista de participa
 ### Nombre de la frecu (`roomName`)
 
 El `welcome` lleva el nombre de la frecu en `roomName`, para que quien se une (también por IP) lo vea en la cabecera y en la notificación. Es aditivo, así que `v=1` no cambia: una app anterior lo ignora y, si falta (anfitrión anterior), la frecu queda sin nombre y la pantalla usa el título genérico.
+
+### Sucesión y estado de la frecu (`room_state`)
+
+Tras cada `join` aceptado (después de `welcome` y `peer_joined`) y cada salida, el anfitrión envía a todos `room_state` con `state`: el turno vigente (`term`, 1 al abrir la frecu), si admite traspaso (`handover`: por internet o en una Wi-Fi que no crea su teléfono), el nombre (`name`), el código (`accessCode`), la nota (`note`), el tipo (`reach`: `local` o `internet`) y quienes están (`members`) en orden de sucesión, que es el de llegada con el anfitrión primero. Cada miembro lleva `id`, `displayName`, su hora de llegada (`joinedAt`) y, si entró por la red local, su IPv4 (`address`; la del anfitrión es la de su invitación). Por internet también lleva `internetId` y el secreto de anfitrión (`hostSecret`). Cada teléfono guarda el último (`RoomRepositoryImpl.succession`) y lo olvida al salir o al cerrarse la frecu. Es aditivo (`v=1`): `welcome` no cambia y una app anterior descarta el tipo desconocido, así que sigue sin traspaso.
+
+### Traspaso voluntario (`host_handover`, `host_changed`)
+
+En una frecu local con traspaso (una Wi-Fi que no crea el teléfono del anfitrión), el anfitrión que sale con «Que siga sin mí» envía a todos `host_handover` con `to` (quien la recibe) y `term` (el turno siguiente), luego `peer_left` de sí mismo, y cierra su servidor sin `room_closed`. Quien la recibe abre su servidor en el mismo puerto con el estado de `room_state` y ese turno, y guarda un lugar a cada persona heredada (mismo id, orden y hora de llegada) hasta que se le acaba el latido. Se une a sí mismo con `join.peerId` = su id y queda como anfitrión. Los demás, en lugar de reintentar la IP vieja, se conectan a la `address` de quien la recibe (de `room_state`) con el código heredado y `join.peerId` = su id: ocupan su lugar sin `peer_joined` (ya estaban en las listas) y reciben `host_changed` con `host`, `term` y `reason: left`. Es aditivo: una app anterior descarta los tipos nuevos y su `join` sin `peerId` entra con un id nuevo.
+
+Si el anfitrión de una frecu local con traspaso deja de responder (sin `host_handover`), cada invitado sigue el mismo plan con la sucesión de `room_state`: reintenta al anfitrión dos veces (esperas de 1 s y 2 s) y, si no vuelve, recorre la sucesión en orden sin él. A cada persona le da dos intentos en su `address` con `join.peerId` = su id y `join.term` = el turno conocido (esperas de 1 s). Cuando le toca a sí mismo, si su red sigue arriba toma la frecu sin esperar, como en el traspaso voluntario, con `term + 1`, y su servidor responde `host_changed` con `reason: lost`; si su red no está arriba, pasa a la siguiente persona. Si nadie responde, la frecu se cierra con `host_unreachable`.
+
+### Dos anfitriones a la vez (`host_probe`)
+
+Si el anfitrión anterior vuelve con su frecu aún abierta (estuvo fuera de alcance) o una partición deja dos anfitriones de la misma frecu, se encuentran solos. Cada teléfono recuerda la `address` de todas las personas que vio en `room_state` durante la sesión, y mientras lleva una frecu local con traspaso, cada 3 s abre un socket en el puerto de la frecu de las IPs de quienes ya no están (sin la suya ni las de quienes siguen en la frecu) y envía `host_probe` con el código, su turno (`term`), su id (`host`) y el puerto de su servidor (`port`). Un servidor que lleva esa frecu responde con su propio `host_probe` y cierra el socket. Gana el turno mayor y, a igual turno, el `peer_N` menor. Quien pierde (lo sepa por la respuesta o por la pregunta que recibió) envía a sus invitados `host_handover` con `to`, `term`, `address` y `port` del ganador, cierra su servidor sin `room_closed` y entra como invitado al ganador con su id en `join.peerId`; sus invitados van a esa `address` y `port` aunque el ganador no esté en su sucesión, y quien tenía un lugar heredado allí vuelve a él. Un `host_probe` con el código incorrecto se rechaza con `rejected(invalidAccessCode)` y cuenta para el bloqueo, como un `join`; esa IP (que lleva otra frecu) no se vuelve a preguntar. Es aditivo: una app anterior descarta `host_probe`.
 
 ### Silencio en micrófono abierto (`muted`)
 
@@ -126,6 +144,7 @@ Solo la envía quien activó «Compartir mi ubicación» (apagado por defecto): 
 - Mientras un socket no hizo un `join` aceptado, el servidor ignora todo lo demás que mande; un segundo `join` del mismo socket también se ignora.
 - El remitente lo pone el servidor: `from` de `offer`, `answer` e `ice`, y `peerId` de `talk_state`, son siempre el id asignado a ese socket, diga lo que diga el mensaje. Solo se enruta a participantes que ya se unieron.
 - Un `join` con otra `protocolVersion` se rechaza con `rejected(versionMismatch)`.
+- Un `join` con un `term` mayor que el turno del servidor se rechaza con `rejected(stale_term)`: otra persona ya tomó la frecu. Sin `term` (app anterior) entra como hoy.
 - Tras 5 códigos incorrectos desde la misma IP en un minuto, esa IP queda bloqueada hasta que pase el minuto: sus `join` se rechazan con `invalidAccessCode` aunque traigan el código correcto. Cada código incorrecto cierra el socket.
 - El tope sigue en 6 participantes (`rejected(roomFull)`).
 - Abrir una frecu con el servidor de otra aún en marcha lo reinicia: quienes estaban reciben `room_closed` y la nueva usa solo su código.
@@ -150,7 +169,7 @@ Solo la envía quien activó «Compartir mi ubicación» (apagado por defecto): 
 - Heartbeat `ping` cada 5 s; un participante sin respuesta durante 15 s se considera desconectado.
 - Abrir el WebSocket espera como mucho 5 s. Sin respuesta, socket rechazado o handshake roto es `hostUnreachable`; la conexión solo se da por abierta cuando el WebSocket abrió.
 - Reconexión del cliente con backoff exponencial (1, 2, 4, 8 s, tope 15 s), hasta 5 intentos. Hay un solo bucle de reconexión por frecu y solo tras una unión con `welcome`: una unión fallida no reconecta. `RoomStatus.reconnecting` lleva el intento y el tiempo al próximo, para la cuenta atrás.
-- Al reconectar, el participante vuelve a enviar `join`, recibe otro id y se recrean sus peer connections (vuelve a ofrecer, como quien llega). Mientras reconecta no transmite; el micrófono abierto se retoma al volver.
+- Al reconectar, el participante vuelve a enviar `join`, recibe otro id y se recrean sus peer connections (vuelve a ofrecer, como quien llega). Mientras reconecta no transmite; el micrófono abierto se retoma al volver. En una frecu con traspaso la voz sigue mientras reconecta: la malla entre invitados no se desarma, solo se cierra el enlace con el anfitrión que se fue (al llegar `room_state` o `welcome` con otro anfitrión), y quien vuelve a su mismo lugar (`join.peerId`) conserva sus enlaces y vuelve a enviar su `talk_state`.
 - Si se agotan los intentos, la frecu pasa a `RoomStatus.closed('host_unreachable')` una sola vez. Si el anfitrión cierra la frecu, todos pasan a `RoomStatus.closed`.
 
 ## Modo internet
@@ -160,7 +179,8 @@ Una frecu puede abrirse también por internet, sin servidor propio: un Worker de
 - **El anfitrión sigue siendo la autoridad.** Levanta su servidor local como siempre (también acepta a los cercanos) y además abre un relé (`CloudRelayDataSource`) a `wss://<worker>/rooms/<id>/host?secret=<s>`. `<id>` son 128 bits en hexadecimal (`CloudConfig.newRoomId`) y `<s>` un secreto nuevo por frecu: el primero que llega reclama la sala.
 - **Los invitados por internet** se conectan a `wss://<worker>/rooms/<id>/guest` y hablan el mismo protocolo JSON de este documento (`v=1`), con el mismo `SignalingClientDataSource`.
 - **Sobres entre el Durable Object y el anfitrión:** `{"t":"open","c":<conexión>,"k":<resumen de la IP>}`, `{"t":"msg","c","d":<mensaje JSON en texto>}` y `{"t":"close","c"}`, en los dos sentidos salvo `open`. Cada invitado llega al servidor como una `SignalingConnection` más; `k` es la clave del bloqueo por códigos incorrectos. Los invitados nunca se hablan entre sí por el Durable Object.
-- **Caídas:** si el relé del anfitrión se cae, el Durable Object cierra a sus invitados, el anfitrión reconecta con espera creciente (hasta 15 s) y los invitados vuelven con su reconexión de siempre (nuevo id).
+- **Caídas:** el anfitrión se conecta con su turno (`/host?secret=<s>&term=<n>`, 1 al abrir la frecu). Si su relé se cae, el Durable Object no cierra a sus invitados durante una gracia de 10 s y les envía `{"t":"host_lost"}` (un sobre de la nube, fuera del protocolo: una app anterior lo descarta). El cliente suelta su socket al recibirlo y sigue el plan de caída. El anfitrión reconecta con espera creciente (hasta 15 s) con el mismo turno. Si nadie toma la frecu en la gracia, el Durable Object cierra a los invitados (`1001`). Un anfitrión sin `term` (app anterior) se trata como hasta ahora: al caer, se cierran sus invitados.
+- **Traspaso por internet:** el enlace y el QR no cambian. Tomar la frecu es abrir el servidor propio en un puerto libre (nadie llega a él directamente) y el relé de anfitrión con el `internetId` y el `hostSecret` de `room_state` y el turno siguiente (`InternetHandover`). El Durable Object acepta un turno igual o mayor que el vigente, retira al anfitrión anterior (`4000`) y cierra a sus invitados (`1012`); a un turno menor responde `409`. En el traspaso voluntario, `host_handover` no necesita `address`: los demás vuelven al mismo socket de invitado con `join.peerId` = su id. En la caída, el plan es el de la red local, con todas las personas de la sucesión (sin IP): dos reintentos al anfitrión y dos pasos por persona, en los que seguirla es volver al mismo socket con su id y, si le toca a este teléfono y tiene red, tomarla con `term + 1` y `reason: lost`. Mientras nadie la toma, el socket de invitado responde `404`. El anfitrión anterior que vuelve con un turno menor recibe `409` y sigue reintentando su relé: todavía no entra como invitado.
 - **ICE:** quien está en una frecu por internet pide `POST /rooms/<id>/turn` (`TurnCredentialsDataSource`), que responde `{"iceServers":[…]}` con STUN y TURN de Cloudflare (credenciales que vencen en 24 h). Si no responde en 5 s, queda `stun:stun.cloudflare.com:3478`. Los enlaces nuevos usan esos servidores (`PeerConnectionDataSource.iceServers`).
 - **Invitación:** dato aditivo `x=<id>` (`v=1` no cambia). Con `x`, `h` y `p` son opcionales: sin red local, el QR lleva solo `r`, `c`, `x` y los opcionales. Si `r` falta, vale `x`. Un `x` mal formado se ignora. Al escanear, si el anfitrión responde en la red local se entra por ella; si no, por internet. El enlace para compartir es `https://<worker>/j/<id>#c=<código>`: la página abre `frecu://join?x=…&c=…`, y el código va en el fragmento, que no llega al Worker.
 - **Red en Android:** al unirse por internet, la app suelta cualquier Wi-Fi a la que se haya atado (`release`), porque una red sin internet no llega a la nube.

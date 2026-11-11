@@ -22,6 +22,9 @@ enum RoomClosureKind {
 
   /// Se perdió la señal del anfitrión.
   lostHost,
+
+  /// Se perdió la red que creaba el teléfono del anfitrión y no volvió.
+  lostHostNetwork,
 }
 
 /// Resumen de una frecu que salió del aire.
@@ -122,6 +125,7 @@ class _ClosureCopy extends StatelessWidget {
     RoomClosureKind.hostClosed => t.room.closure.host,
     RoomClosureKind.closedByHost => t.room.closure.peer,
     RoomClosureKind.lostHost => t.room.closure.lost,
+    RoomClosureKind.lostHostNetwork => t.room.closure.lostNetwork,
   };
 
   @override

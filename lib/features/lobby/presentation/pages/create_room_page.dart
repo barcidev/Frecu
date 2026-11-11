@@ -12,19 +12,22 @@ import 'package:frecu/features/lobby/presentation/widgets/hotspot_credentials_sh
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/local_network_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
+import 'package:frecu/features/lobby/presentation/widgets/room_reach_step.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Crear una frecu como anfitrión, en dos pasos: la red y la nueva frecu con
-/// su nota en el reloj de quintas.
+/// Crear una frecu como anfitrión: primero cómo se une el grupo
+/// ([RoomReachStep]); en local, la red y la nueva frecu con su nota en el
+/// reloj de quintas (3 pasos); por internet, directo a la nueva frecu (2).
 ///
 /// En Android, la red la crea Frecu ([LocalNetworkStep]) y la guía del punto
-/// de acceso queda detrás de «Prefiero mi zona Wi-Fi»; en iPhone, el primer
-/// paso es la guía. Si se sale de la creación sin abrir la frecu, la red de
-/// Frecu se apaga.
+/// de acceso queda detrás de «Prefiero mi zona Wi-Fi»; en iPhone, la red es
+/// la guía. Si se sale de la creación sin abrir la frecu, o se sigue por
+/// internet, la red de Frecu se apaga.
 ///
 /// Los pasos viven en un [Navigator] propio: seguir entra deslizando, y Atrás
 /// o el gesto de volver regresan al paso anterior sin perder el nombre ni el
@@ -100,20 +103,44 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
 
   void _exit() => unawaited(context.router.maybePop());
 
-  void _toNewRoom() => unawaited(_steps.currentState?.push(_route(_newRoom)));
+  /// Tipo de frecu elegido en el primer paso.
+  RoomReach _reach = RoomReach.local;
+
+  void _push(WidgetBuilder builder) =>
+      unawaited(_steps.currentState?.push(_route(builder)));
+
+  void _toNewRoom() => _push(_newRoom);
+
+  /// Cómo se une el grupo: Local sigue a la red; Por internet, a la nueva
+  /// frecu, sin la red de Frecu.
+  Widget _reachStep(BuildContext _) => RoomReachStep(
+    onBack: _exit,
+    onContinue: (reach) {
+      _reach = reach;
+      switch (reach) {
+        case RoomReach.local:
+          _push(_createsNetwork ? _network : _guide);
+        case RoomReach.internet:
+          if (_createsNetwork) {
+            unawaited(ref.read(localHotspotProvider.notifier).stop());
+          }
+          _toNewRoom();
+      }
+    },
+  );
 
   /// La red de la frecu que crea Frecu (Android).
   Widget _network(BuildContext _) => LocalNetworkStep(
-    onBack: _exit,
+    onBack: _back,
     onContinue: _toNewRoom,
-    onUseHotspot: () => unawaited(_steps.currentState?.push(_route(_guide))),
+    onUseHotspot: () => _push(_guide),
   );
 
-  /// La guía del punto de acceso: el primer paso en iPhone; en Android,
-  /// detrás de «Prefiero mi zona Wi-Fi».
+  /// La guía del punto de acceso: la red en iPhone; en Android, detrás de
+  /// «Prefiero mi zona Wi-Fi».
   Widget _guide(BuildContext _) => Consumer(
     builder: (context, ref, _) => HotspotGuideStep(
-      onBack: _createsNetwork ? _back : _exit,
+      onBack: _back,
       onContinue: _toNewRoom,
       onOpenHotspotSettings: () => unawaited(
         ref.read(systemSettingsRepositoryProvider).openHotspotSettings(),
@@ -130,6 +157,7 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
   );
 
   Widget _newRoom(BuildContext _) => NewRoomStep(
+    reach: _reach,
     name: _name,
     code: _code,
     onCodeChanged: (code) => _code = code,
@@ -144,9 +172,7 @@ class _CreateRoomPageState extends ConsumerState<CreateRoomPage> {
       onPopWithResult: (_) => _back(),
       child: Navigator(
         key: _steps,
-        onGenerateInitialRoutes: (_, _) => [
-          _route(_createsNetwork ? _network : _guide),
-        ],
+        onGenerateInitialRoutes: (_, _) => [_route(_reachStep)],
       ),
     );
   }

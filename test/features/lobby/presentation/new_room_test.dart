@@ -1,8 +1,7 @@
 // AC3: CUANDO se ve la nueva frecu ENTONCES el reloj de quintas recibe la hora y los minutos actuales y la nota de la frecu, y a su lado se lee «Tu frecu suena en», la nota (nombre en el idioma de la app, alteración y octava), sus Hz con un decimal y el separador del idioma («659,3 Hz», «659.3 Hz») y «Abierta a las HH:MM»; la nota es la de su hora en el círculo de quintas (octava 4 de 0 a 11 h y 5 de 12 a 23 h) y, CUANDO aparece una frecu cercana con esa nota o cambia la hora, ENTONCES pasa a la siguiente quinta libre o a la nota de la nueva hora.
 // AC4: CUANDO se abre la nueva frecu ENTONCES el campo «Nombre de la frecu» trae «Frecu de <nombre guardado>» (o «Mi frecu» sin nombre guardado) con su contador de 24 y el ejemplo «Ej. Ruta del domingo» al vaciarlo, y el código de acceso muestra 4 cifras generadas en celdas de solo lectura con «4 dígitos» y «Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.»; CUANDO toca «Generar otro» ENTONCES el código cambia por uno nuevo, sus celdas aparecen escalonadas con el pop del prototipo y el botón gira con el resorte `organic`.
-// N1: CUANDO no hay punto de encuentro configurado ENTONCES la nueva frecu no muestra «Permitir internet» y se abre solo local.
-// N2: CUANDO hay punto de encuentro ENTONCES «Permitir internet» aparece apagado y, sin tocarlo, la frecu se abre solo local.
-// N3: CUANDO el anfitrión enciende «Permitir internet» ENTONCES la frecu se abre también por internet.
+// AC1: CUANDO el usuario toca «Crear frecu» ENTONCES el primer paso pregunta «¿Cómo se une tu grupo?» con «Local» (marcada por defecto) y «Por internet». Local sigue a «Prepara la red» y luego a «Nueva frecu» (pasos de 3); Por internet va directo a «Nueva frecu» (pasos de 2). Sin internet, o sin punto de encuentro configurado, «Por internet» se ve atenuada y dice qué falta. «Nueva frecu» ya no tiene el interruptor «Permitir internet», y bajo «Abierta a las HH:MM» lleva la etiqueta «Local» o «Por internet».
+// AC3: CUANDO la frecu es por internet ENTONCES todos los invitados entran por la nube, aunque estén en la misma Wi-Fi que el anfitrión. Su invitación no lleva IP local, no se anuncia por mDNS ni por Bluetooth, y ya no existe el aviso «La red de Frecu no tiene internet».
 // AC5: CUANDO el usuario toca «Abrir frecu» ENTONCES se crea la frecu con el nombre sin espacios sobrantes, el código mostrado, el nombre guardado como anfitrión y las notas de las frecus cercanas, se publica con su nota y se abre la frecu activa; con el nombre vacío el botón no responde; si la creación falla, avisa con el mensaje de la falla, sigue en la nueva frecu y no deja ningún anuncio mDNS (F7).
 import 'dart:async';
 
@@ -17,6 +16,7 @@ import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_pin_field.dart';
+import 'package:frecu/core/design/widgets/fr_toggle.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/lobby/domain/entities/nearby_room.dart';
@@ -27,11 +27,13 @@ import 'package:frecu/features/lobby/presentation/widgets/fifths_clock.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_hero.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/room_note_label.dart';
+import 'package:frecu/features/lobby/presentation/widgets/room_reach_step.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/repositories/network_repository.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
@@ -130,6 +132,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(const RoomNote(semitone: 0));
+    registerFallbackValue(RoomReach.local);
   });
 
   late _MockDiscoveryRepository discovery;
@@ -158,7 +161,7 @@ void main() {
         accessCode: any(named: 'accessCode'),
         displayName: any(named: 'displayName'),
         note: any(named: 'note'),
-        internet: any(named: 'internet'),
+        reach: any(named: 'reach'),
       ),
     ).thenAnswer((_) => answer());
   }
@@ -208,12 +211,15 @@ void main() {
   });
 
   /// Abre la app en el inicio (390 × 844, movimiento reducido), con el
-  /// nombre [savedName] guardado, y va a la nueva frecu por la guía.
-  Future<void> pumpNewRoom(
+  /// nombre [savedName] guardado, y va a la nueva frecu [reach]: Local por
+  /// la guía, Por internet directo (con internet).
+  Future<ProviderContainer> pumpNewRoom(
     WidgetTester tester, {
     String? savedName = 'Ana',
     List<NearbyRoom> nearbyRooms = const [],
     CloudConfig cloud = CloudConfig.disabled,
+    String? savedHotspot,
+    RoomReach reach = RoomReach.local,
   }) async {
     tester.view
       ..physicalSize = const Size(1170, 2532)
@@ -226,6 +232,8 @@ void main() {
         ? InMemorySharedPreferencesAsync.empty()
         : InMemorySharedPreferencesAsync.withData({
             PreferencesRepositoryImpl.displayNameKey: savedName,
+            if (savedHotspot != null)
+              PreferencesRepositoryImpl.hotspotKey: savedHotspot,
           });
     final container = ProviderContainer(
       overrides: [
@@ -236,6 +244,7 @@ void main() {
         newRoomClockProvider.overrideWithValue(() => now),
         accessCodeGeneratorProvider.overrideWithValue(() => codes.removeAt(0)),
         cloudConfigProvider.overrideWithValue(cloud),
+        internetCheckProvider.overrideWithValue(() async => true),
       ],
     );
     addTearDown(container.dispose);
@@ -255,8 +264,17 @@ void main() {
     }
     await tester.tap(find.text(t.lobby.createRoom));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+    if (reach == RoomReach.internet) {
+      await tester.tap(find.text(t.lobby.newRoom.reach.internet));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(find.text(t.lobby.newRoom.reach.kContinue));
     await tester.pumpAndSettle();
+    if (reach == RoomReach.local) {
+      await tester.tap(find.text(t.lobby.newRoom.guide.ready));
+      await tester.pumpAndSettle();
+    }
+    return container;
   }
 
   group('Nota de la nueva frecu', () {
@@ -325,12 +343,13 @@ void main() {
       await _useEnglish(tester);
       await pumpNewRoom(tester);
 
-      expect(_label('Step 2 of 2'), findsOneWidget);
+      expect(_label('Step 3 of 3'), findsOneWidget);
       expect(find.text('New room'), findsOneWidget);
       expect(_label('Your room sounds in'), findsOneWidget);
       expect(find.text('E'), findsOneWidget);
       expect(_label('659.3 Hz'), findsOneWidget);
       expect(_label('Opened at 16:24'), findsOneWidget);
+      expect(_label('Local'), findsOneWidget);
     });
   });
 
@@ -496,9 +515,8 @@ void main() {
     });
   });
 
-  group('Permitir internet', () {
+  group('Nueva frecu con el tipo', () {
     const cloud = CloudConfig('https://frecu.example.workers.dev');
-    final toggle = find.byKey(const Key('new_room_internet_toggle'));
 
     Future<void> openRoom(WidgetTester tester) async {
       await tester.ensureVisible(find.text(t.lobby.newRoom.open));
@@ -506,49 +524,96 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    void verifyCreated({required bool internet}) => verify(
+    void verifyCreated({required RoomReach reach}) => verify(
       () => rooms.createRoom(
         name: any(named: 'name'),
         accessCode: any(named: 'accessCode'),
         displayName: any(named: 'displayName'),
         note: any(named: 'note'),
-        internet: internet,
+        reach: reach,
       ),
     ).called(1);
 
-    testWidgets('N1: without a meeting point there is no internet switch and '
-        'the room is local', (tester) async {
-      await pumpNewRoom(tester);
+    testWidgets('AC1: una frecu local es «Paso 3 de 3», lleva «Local» bajo '
+        '«Abierta a las HH:MM» y no tiene el interruptor', (tester) async {
+      await pumpNewRoom(tester, cloud: cloud);
 
-      expect(toggle, findsNothing);
+      expect(_label('Paso 3 de 3'), findsOneWidget);
+      expect(find.byType(FrToggle), findsNothing);
+      expect(find.text('Permitir internet'), findsNothing);
+      final tag = find.byKey(const Key('new_room_reach_tag'));
+      expect(
+        find.descendant(of: tag, matching: _label('Local')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: tag,
+          matching: find.byWidgetPredicate(
+            (widget) => widget is FrIcon && widget.icon == FrIcons.hotspot,
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        tester.getTopLeft(tag).dy,
+        greaterThan(tester.getBottomLeft(_label('Abierta a las 16:24')).dy),
+      );
+
       await openRoom(tester);
-      verifyCreated(internet: false);
+      verifyCreated(reach: RoomReach.local);
       await _unmountRoomPage(tester);
     });
 
-    testWidgets('N2: the switch starts off and the room opens local only', (
-      tester,
-    ) async {
-      await pumpNewRoom(tester, cloud: cloud);
+    testWidgets('AC1: una frecu por internet es «Paso 2 de 2», lleva «Por '
+        'internet» bajo la hora, no lleva red y no se anuncia en la red '
+        'local', (tester) async {
+      // Zona Wi-Fi guardada y encendida: una frecu local la llevaría.
+      when(() => network.getNetworkState()).thenAnswer(
+        (_) async => const Result.success(
+          NetworkState.connected(
+            ipAddress: '192.168.43.1',
+            interfaceName: 'ap0',
+            isHotspot: true,
+          ),
+        ),
+      );
+      final container = await pumpNewRoom(
+        tester,
+        cloud: cloud,
+        reach: RoomReach.internet,
+        savedHotspot: '{"ssid":"Moto de Ana","passphrase":"clave-1234"}',
+      );
 
-      expect(toggle, findsOneWidget);
-      expect(find.text(t.lobby.newRoom.internet.off), findsOneWidget);
+      expect(_label('Paso 2 de 2'), findsOneWidget);
+      expect(find.text('Nueva frecu'), findsOneWidget);
+      expect(find.byType(FrToggle), findsNothing);
+      final tag = find.byKey(const Key('new_room_reach_tag'));
+      expect(
+        find.descendant(of: tag, matching: _label('Por internet')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: tag,
+          matching: find.byWidgetPredicate(
+            (widget) => widget is FrIcon && widget.icon == FrIcons.globe,
+          ),
+        ),
+        findsOneWidget,
+      );
+
       await openRoom(tester);
-      verifyCreated(internet: false);
-      await _unmountRoomPage(tester);
-    });
-
-    testWidgets('N3: turning it on opens the room over the internet too', (
-      tester,
-    ) async {
-      await pumpNewRoom(tester, cloud: cloud);
-
-      await tester.ensureVisible(toggle);
-      await tester.tap(toggle);
-      await tester.pumpAndSettle();
-      expect(find.text(t.lobby.newRoom.internet.on), findsOneWidget);
-      await openRoom(tester);
-      verifyCreated(internet: true);
+      verifyCreated(reach: RoomReach.internet);
+      expect(container.read(roomNotifierProvider)?.wifi, isNull);
+      verifyNever(
+        () => discovery.publishRoom(
+          roomId: any(named: 'roomId'),
+          name: any(named: 'name'),
+          port: any(named: 'port'),
+          note: any(named: 'note'),
+        ),
+      );
       await _unmountRoomPage(tester);
     });
   });

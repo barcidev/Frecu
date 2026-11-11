@@ -389,6 +389,142 @@ final class RoomStatusProvider
 
 String _$roomStatusHash() => r'af945dc9ce617e95f2fc40fdf93bb5da18f2334c';
 
+/// Traspaso de la frecu, si el repositorio lo admite (un doble de
+/// `RoomRepository` no): sin él, la frecu se sale como siempre.
+
+@ProviderFor(roomHandover)
+final roomHandoverProvider = RoomHandoverProvider._();
+
+/// Traspaso de la frecu, si el repositorio lo admite (un doble de
+/// `RoomRepository` no): sin él, la frecu se sale como siempre.
+
+final class RoomHandoverProvider
+    extends $FunctionalProvider<RoomHandover?, RoomHandover?, RoomHandover?>
+    with $Provider<RoomHandover?> {
+  /// Traspaso de la frecu, si el repositorio lo admite (un doble de
+  /// `RoomRepository` no): sin él, la frecu se sale como siempre.
+  RoomHandoverProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'roomHandoverProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$roomHandoverHash();
+
+  @$internal
+  @override
+  $ProviderElement<RoomHandover?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RoomHandover? create(Ref ref) {
+    return roomHandover(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RoomHandover? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RoomHandover?>(value),
+    );
+  }
+}
+
+String _$roomHandoverHash() => r'5a32dac9896c7d282b4877e3934d38506a9970d8';
+
+/// Sucesión, turno y estado de la frecu que mandó el anfitrión.
+
+@ProviderFor(roomSuccession)
+final roomSuccessionProvider = RoomSuccessionProvider._();
+
+/// Sucesión, turno y estado de la frecu que mandó el anfitrión.
+
+final class RoomSuccessionProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<RoomSuccession?>,
+          RoomSuccession?,
+          Stream<RoomSuccession?>
+        >
+    with $FutureModifier<RoomSuccession?>, $StreamProvider<RoomSuccession?> {
+  /// Sucesión, turno y estado de la frecu que mandó el anfitrión.
+  RoomSuccessionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'roomSuccessionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$roomSuccessionHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<RoomSuccession?> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<RoomSuccession?> create(Ref ref) {
+    return roomSuccession(ref);
+  }
+}
+
+String _$roomSuccessionHash() => r'13737b811e583c3068912b02785c1c717cee7808';
+
+/// Cada vez que otra persona (o este teléfono) toma la frecu.
+
+@ProviderFor(hostChanges)
+final hostChangesProvider = HostChangesProvider._();
+
+/// Cada vez que otra persona (o este teléfono) toma la frecu.
+
+final class HostChangesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<HostChange>,
+          HostChange,
+          Stream<HostChange>
+        >
+    with $FutureModifier<HostChange>, $StreamProvider<HostChange> {
+  /// Cada vez que otra persona (o este teléfono) toma la frecu.
+  HostChangesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hostChangesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$hostChangesHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<HostChange> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<HostChange> create(Ref ref) {
+    return hostChanges(ref);
+  }
+}
+
+String _$hostChangesHash() => r'81fb72d84065c43e96a6fdc4833853d77dbebb75';
+
 /// Dirección IP local del dispositivo.
 
 @ProviderFor(localIp)
@@ -463,7 +599,7 @@ final class RoomNotifierProvider
   }
 }
 
-String _$roomNotifierHash() => r'ab87dd7108aef614d52548cf2d30cc2d36c67a4e';
+String _$roomNotifierHash() => r'61897b520a1737fbd38ec3d10a30d6173437d54a';
 
 /// Gestor del ciclo de vida y estado de la sala activa.
 

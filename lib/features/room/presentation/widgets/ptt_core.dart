@@ -30,6 +30,7 @@ class PttCore extends StatefulWidget {
     this.speakerName,
     this.speakerColor,
     this.speakerLevel = 0,
+    this.idleHint,
     super.key,
   });
 
@@ -59,6 +60,9 @@ class PttCore extends StatefulWidget {
 
   /// Nivel real de la voz de quien habla, de 0 a 1.
   final double speakerLevel;
+
+  /// Pista en reposo en lugar de «Mantén para hablar», si la hay.
+  final String? idleHint;
 
   @override
   State<PttCore> createState() => _PttCoreState();
@@ -118,7 +122,11 @@ class _PttCoreState extends State<PttCore> {
   Widget build(BuildContext context) {
     final fr = context.fr;
     final shown = _shown;
-    final copy = PttCopy.of(shown, widget.speakerName);
+    final copy = PttCopy.of(
+      shown,
+      widget.speakerName,
+      idleHint: widget.idleHint,
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

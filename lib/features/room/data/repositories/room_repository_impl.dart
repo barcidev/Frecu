@@ -10,25 +10,33 @@ import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/cloud_relay_datasource.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
+import 'package:frecu/features/room/data/datasources/host_probe.dart';
+import 'package:frecu/features/room/data/datasources/room_succession.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/current_then.dart';
+import 'package:frecu/features/room/data/repositories/internet_handover.dart';
+import 'package:frecu/features/room/data/repositories/room_reconnection.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:frecu/features/room/domain/entities/room_succession.dart';
+import 'package:frecu/features/room/domain/repositories/room_handover.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-/// Implementación concreta de [RoomRepository].
+/// Implementación concreta de [RoomRepository] y del traspaso de la frecu
+/// ([RoomHandover]).
 ///
 /// Cada `createRoom`, `joinRoom` o `leaveRoom` abre una sesión nueva: lo que
 /// llega tarde de una sesión anterior (mensajes, intentos de reconexión) se
 /// descarta. `watchParticipants` y `watchStatus` entregan primero el valor
 /// actual, así que una pantalla que se abre después del `welcome` no queda
 /// vacía.
-class RoomRepositoryImpl implements RoomRepository {
+class RoomRepositoryImpl implements RoomRepository, RoomHandover {
   /// Constructor con inyección de datasources; los tiempos son
   /// configurables para pruebas.
   RoomRepositoryImpl({
@@ -43,10 +51,12 @@ class RoomRepositoryImpl implements RoomRepository {
     Duration? reconnectBaseDelay,
     Duration networkReturnPollInterval =
         NetworkConstants.networkReturnPollInterval,
-    this.maxReconnectAttempts = 5,
+    int maxReconnectAttempts = 5,
     this.welcomeTimeout = const Duration(seconds: 5),
     this.rejoinWelcomeTimeout = const Duration(seconds: 3),
+    HostProbe? hostProbe,
   }) : _server = serverDataSource,
+       _probe = hostProbe ?? HostProbe(),
        _client = clientDataSource,
        _relay =
            cloudRelayDataSource ??
@@ -61,18 +71,23 @@ class RoomRepositoryImpl implements RoomRepository {
        _networkInterfacesProvider =
            networkInterfacesProvider ?? NetworkInterface.list,
        _lanInterfaceHint = preferredLanInterface,
-       _networkReturn = NetworkReturnWatcher(
-         interfaces: networkInterfacesProvider ?? NetworkInterface.list,
-         pollInterval: networkReturnPollInterval,
-       ),
-       _reconnectBaseDelay =
-           reconnectBaseDelay ??
-           (_isTest
-               ? const Duration(milliseconds: 50)
-               : const Duration(seconds: 1)) {
+       _rejoin = RejoinLoop(
+         networkReturn: NetworkReturnWatcher(
+           interfaces: networkInterfacesProvider ?? NetworkInterface.list,
+           pollInterval: networkReturnPollInterval,
+         ),
+         baseDelay:
+             reconnectBaseDelay ??
+             (_isTest
+                 ? const Duration(milliseconds: 50)
+                 : const Duration(seconds: 1)),
+         maxAttempts: maxReconnectAttempts,
+       ) {
     _connectionStateSub = _client.connectionState.listen(
       _handleClientConnectionChange,
     );
+    _server.onRival = _onRival;
+    _relay.onOutranked = _onRelayOutranked;
   }
 
   final SignalingServerDataSource _server;
@@ -91,12 +106,22 @@ class RoomRepositoryImpl implements RoomRepository {
   /// IPv4 es la que va en la invitación.
   final String? Function()? _lanInterfaceHint;
 
-  /// Adelanta la espera de reconexión si el teléfono recupera la red.
-  final NetworkReturnWatcher _networkReturn;
-  final Duration _reconnectBaseDelay;
+  /// Reintentos para volver a la frecu tras perder el socket.
+  final RejoinLoop _rejoin;
+
+  /// Traspaso de la frecu entre anfitriones.
+  final HostTakeover _takeover = HostTakeover();
+
+  /// Pregunta, mientras este teléfono lleva la frecu, si otro la lleva con
+  /// un turno que gana.
+  final HostProbe _probe;
+
+  /// Otro teléfono lleva la frecu con un turno que gana: este teléfono le
+  /// cedió la suya y entra como invitado.
+  HostRival? _outranked;
 
   /// Intentos de reconexión antes de dar la frecu por perdida.
-  final int maxReconnectAttempts;
+  int get maxReconnectAttempts => _rejoin.maxAttempts;
 
   /// Espera máxima del `welcome` al crear o unirse.
   final Duration welcomeTimeout;
@@ -109,6 +134,7 @@ class RoomRepositoryImpl implements RoomRepository {
   final StreamController<RoomStatus> _statusController =
       StreamController<RoomStatus>.broadcast();
 
+  final KnownSuccession _succession = KnownSuccession();
   StreamSubscription<bool>? _connectionStateSub;
   StreamSubscription<SignalingMessage>? _clientSubscription;
   List<Participant> _participants = const [];
@@ -129,6 +155,10 @@ class RoomRepositoryImpl implements RoomRepository {
 
   /// Id por internet de la frecu de esta sesión, si tiene.
   String? _internetId;
+
+  /// Sigue un `host_handover`: la reconexión va a quien recibe la frecu, sin
+  /// plan de caída.
+  bool _following = false;
   _JoinTarget? _target;
 
   static bool get _isTest =>
@@ -146,6 +176,15 @@ class RoomRepositoryImpl implements RoomRepository {
   String? get localParticipantId => _localParticipantId;
 
   @override
+  RoomSuccession? get succession => _succession.current;
+
+  @override
+  Stream<RoomSuccession?> watchSuccession() => _succession.watch();
+
+  @override
+  Stream<HostChange> watchHostChanges() => _takeover.watch();
+
+  @override
   Stream<List<Participant>> watchParticipants() =>
       currentThen(() => _participants, _participantsController.stream);
 
@@ -154,21 +193,35 @@ class RoomRepositoryImpl implements RoomRepository {
       currentThen(() => _status, _statusController.stream);
 
   @override
-  Future<String?> getLocalIpAddress() async {
+  Future<String?> getLocalIpAddress() async =>
+      (await _lanAddress())?.address ?? _fallbackLanAddress;
+
+  /// IPv4 de la invitación si no hay red local a la vista: la habitual del
+  /// punto de acceso de Android.
+  static const String _fallbackLanAddress = '192.168.43.1';
+
+  /// La red local de la frecu, o nulo si no hay ninguna a la vista.
+  Future<LanAddress?> _lanAddress() async {
     try {
       // Solo Wi-Fi o punto de acceso: nunca datos móviles ni VPN. Con la
       // red de Frecu al aire, la suya.
       final interfaces = await _networkInterfacesProvider();
       return selectLanAddress(
-            interfaces.map(LanInterface.fromIo),
-            prefer: _lanInterfaceHint?.call(),
-          )?.address ??
-          '192.168.43.1';
+        interfaces.map(LanInterface.fromIo),
+        prefer: _lanInterfaceHint?.call(),
+      );
     } on Object catch (e) {
       AppLogger.w('Failed to get local IP: $e');
-      return '192.168.43.1';
+      return null;
     }
   }
+
+  /// La red de una frecu local la crea este teléfono: la red de Frecu está
+  /// al aire, [lan] es su zona Wi-Fi, o no hay red local a la vista (una
+  /// zona Wi-Fi de iPhone no aparece hasta que alguien se conecta, y la
+  /// invitación lleva la IP de respaldo).
+  bool _ownsNetwork(LanAddress? lan) =>
+      _lanInterfaceHint?.call() != null || lan?.kind != LanKind.wifi;
 
   @override
   Future<Result<Room>> createRoom({
@@ -176,18 +229,21 @@ class RoomRepositoryImpl implements RoomRepository {
     required String accessCode,
     String? displayName,
     RoomNote? note,
-    bool internet = false,
+    RoomReach reach = RoomReach.local,
   }) async {
     final session = await _beginSession(host: true);
     _roomName = name;
+    final internet = reach == RoomReach.internet;
     try {
       if (internet && !cloudConfig.isEnabled) {
         throw StateError('Internet mode is not configured');
       }
-      // Por internet, sin red local no hay IP que invitar: no se inventa.
-      final hostIp = internet
-          ? await _lanAddressOrNull() ?? ''
-          : await getLocalIpAddress() ?? '127.0.0.1';
+      final internetId = internet ? CloudConfig.newRoomId() : null;
+      final hostSecret = internet ? CloudConfig.newHostSecret() : null;
+      final hostIp = await _prepareHostAddress(
+        internetId: internetId,
+        hostSecret: hostSecret,
+      );
       await _server.start(
         accessCode: accessCode,
         roomName: name,
@@ -195,11 +251,11 @@ class RoomRepositoryImpl implements RoomRepository {
         port: signalingPort,
       );
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
-      if (internet) {
-        final internetId = CloudConfig.newRoomId();
+      if (internetId != null && hostSecret != null) {
         _internetId = internetId;
+        // Con el primer turno: si se cae, la nube espera a su sucesor.
         await _relay.start(
-          cloudConfig.hostSocket(internetId, CloudConfig.newHostSecret()),
+          InternetHandover.hostSocket(cloudConfig, internetId, hostSecret, 1),
           onGuest: _server.accept,
         );
       }
@@ -215,15 +271,39 @@ class RoomRepositoryImpl implements RoomRepository {
     } on Object catch (e, st) {
       AppLogger.e('Error creating room', e, st);
       await _abortSession(session);
-      return Result.failure(
-        e is SocketException ||
-                e is WebSocketChannelException ||
-                e is TimeoutException
-            ? const Failure.network()
-            : Failure.unexpected(error: e),
-      );
+      return Result.failure(_createFailure(e));
     }
   }
+
+  /// IPv4 de la invitación de una frecu nueva, y fija si su red la crea
+  /// este teléfono y su sucesión. Por internet ([internetId] y
+  /// [hostSecret]) no se invita por la red local: todos entran por la nube,
+  /// aunque compartan la Wi-Fi del anfitrión.
+  Future<String> _prepareHostAddress({
+    String? internetId,
+    String? hostSecret,
+  }) async {
+    final internet = internetId != null;
+    final lan = internet ? null : await _lanAddress();
+    _server.hostOwnsNetwork = !internet && _ownsNetwork(lan);
+    final hostIp = internet ? '' : lan?.address ?? _fallbackLanAddress;
+    _server.succession.configure(
+      reach: internet ? RoomReach.internet : RoomReach.local,
+      hostOwnsNetwork: _server.hostOwnsNetwork,
+      hostAddress: internet ? null : hostIp,
+      internetId: internetId,
+      hostSecret: hostSecret,
+    );
+    return hostIp;
+  }
+
+  /// Fallo de abrir una frecu: sin red si no se pudo escuchar o conectar.
+  static Failure _createFailure(Object error) =>
+      error is SocketException ||
+          error is WebSocketChannelException ||
+          error is TimeoutException
+      ? const Failure.network()
+      : Failure.unexpected(error: error);
 
   Future<bool> _resolves(String host) async {
     try {
@@ -232,18 +312,6 @@ class RoomRepositoryImpl implements RoomRepository {
       return found.isNotEmpty;
     } on Object {
       return false;
-    }
-  }
-
-  Future<String?> _lanAddressOrNull() async {
-    try {
-      final interfaces = await _networkInterfacesProvider();
-      return selectLanAddress(
-        interfaces.map(LanInterface.fromIo),
-        prefer: _lanInterfaceHint?.call(),
-      )?.address;
-    } on Object {
-      return null;
     }
   }
 
@@ -354,7 +422,12 @@ class RoomRepositoryImpl implements RoomRepository {
     _isClosed = false;
     _isHost = host;
     _internetId = null;
+    _following = false;
+    _outranked = null;
     _localParticipantId = null;
+    _takeover.forget();
+    _succession.update(null);
+    _probe.remember(null);
     _setParticipants(const []);
     _setStatus(const RoomStatus.connecting());
     return session;
@@ -369,6 +442,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _isDeliberateLeave = true;
     await _teardownConnection();
     _isDeliberateLeave = false;
+    _succession.update(null);
     _setParticipants(const []);
     _setStatus(const RoomStatus.idle());
   }
@@ -377,6 +451,7 @@ class RoomRepositoryImpl implements RoomRepository {
   /// servidor (si es anfitrión) y socket.
   Future<void> _teardownConnection() async {
     _live = false;
+    _probe.stop();
     // Dejar de escuchar es inmediato; no hace falta esperar.
     unawaited(_clientSubscription?.cancel());
     _clientSubscription = null;
@@ -394,6 +469,7 @@ class RoomRepositoryImpl implements RoomRepository {
     required String accessCode,
     required String hostAddress,
     required int port,
+    String? peerId,
   }) async {
     final welcome = Completer<Result<Room>>();
     _listen(
@@ -405,7 +481,12 @@ class RoomRepositoryImpl implements RoomRepository {
       port: port,
     );
     _client.send(
-      SignalingMessage.join(displayName: displayName, accessCode: accessCode),
+      SignalingMessage.join(
+        displayName: displayName,
+        accessCode: accessCode,
+        peerId: peerId,
+        term: _succession.current?.term,
+      ),
     );
     return welcome.future.timeout(
       welcomeTimeout,
@@ -428,52 +509,87 @@ class RoomRepositoryImpl implements RoomRepository {
 
   bool _stillReconnecting(int session) => session == _session && _canReconnect;
 
-  Future<void> _reconnect(int session) async {
-    var delay = _reconnectBaseDelay;
-    try {
-      var baseline = await _networkReturn.addresses();
-      for (var attempt = 1; attempt <= maxReconnectAttempts; attempt++) {
-        if (!_stillReconnecting(session)) return;
-        _setStatus(RoomStatus.reconnecting(retryIn: delay, attempt: attempt));
-        unawaited(
-          _foregroundService.updateNotification(
-            roomName: _roomName,
-            status: ForegroundStatus.reconnecting,
-          ),
-        );
-        final networkBack = await _networkReturn.wait(
-          delay,
-          baseline: baseline,
-          cancelled: () => !_stillReconnecting(session),
-        );
-        if (!_stillReconnecting(session)) return;
-        if (networkBack) {
-          // Volvió la red antes de tiempo: la cuenta pasa a «intentando».
-          _setStatus(
-            RoomStatus.reconnecting(retryIn: Duration.zero, attempt: attempt),
-          );
-        }
-        // La referencia se renueva antes de cada intento: una misma red que
-        // aparece solo adelanta un intento.
-        baseline = await _networkReturn.addresses();
-        if (!_stillReconnecting(session)) return;
-        if (await _attemptRejoin(session, attempt)) return;
-        delay = _nextBackoffDelay(delay);
-      }
-      if (_stillReconnecting(session)) _giveUp();
-    } on Object catch (e, st) {
-      AppLogger.e('Reconnect loop failed', e, st);
-      if (_stillReconnecting(session)) _giveUp();
-    }
+  Future<void> _reconnect(int session) {
+    final plan = _failoverPlan();
+    return _rejoin.run(
+      active: () => _stillReconnecting(session),
+      onWaiting: _onReconnectWait,
+      waits: plan?.waits,
+      attempt: (attempt) => plan == null
+          ? _attemptRejoin(session, attempt)
+          : _failoverAttempt(session, plan, attempt),
+      onGiveUp: _giveUp,
+    );
   }
 
-  Duration _nextBackoffDelay(Duration current) {
-    return Duration(
-      milliseconds: (current.inMilliseconds * 2).clamp(
-        0,
-        NetworkConstants.maxReconnectBackoff.inMilliseconds,
+  /// Cuenta la espera de la reconexión en el estado y en la notificación.
+  void _onReconnectWait(Duration retryIn, int attempt) {
+    _setStatus(RoomStatus.reconnecting(retryIn: retryIn, attempt: attempt));
+    if (retryIn == Duration.zero) return;
+    unawaited(
+      _foregroundService.updateNotification(
+        roomName: _roomName,
+        status: ForegroundStatus.reconnecting,
       ),
     );
+  }
+
+  /// Plan de caída si el anfitrión de una frecu con traspaso (local o por
+  /// internet) dejó de responder; nulo para reconectar como siempre (otra
+  /// frecu, sin sucesión o siguiendo un `host_handover`).
+  FailoverPlan? _failoverPlan() {
+    final state = _succession.current;
+    final me = _localParticipantId;
+    if (_following || state == null || me == null) return null;
+    if (!state.handover) return null;
+    final host = _participants.where((p) => p.isHost).firstOrNull?.id;
+    final lost = host ?? state.order.firstOrNull;
+    if (lost == null || lost == me) return null;
+    return FailoverPlan(
+      state: state,
+      lostHost: lost,
+      me: me,
+      base: _rejoin.baseDelay,
+    );
+  }
+
+  /// Un paso del plan de caída; `true` si volvió, si tomó la frecu o si ya
+  /// no hay que seguir.
+  Future<bool> _failoverAttempt(
+    int session,
+    FailoverPlan plan,
+    int attempt,
+  ) async {
+    final target = _target;
+    if (target == null) return true;
+    switch (plan.steps[attempt - 1]) {
+      case FailoverRetryHost():
+        return _attemptRejoin(session, attempt);
+      case FailoverFollow(:final member):
+        _takeover.previousHost = plan.lostHostName;
+        _target = target.toward(
+          member.address ?? '',
+          peerId: _localParticipantId,
+        );
+        return _attemptRejoin(session, attempt);
+      case FailoverTake():
+        final address = plan.internet ? '' : plan.myAddress;
+        if (address == null || !await _rejoin.networkUp()) return false;
+        if (!_stillReconnecting(session)) return true;
+        _takeover.previousHost = plan.lostHostName;
+        unawaited(
+          _takeOver(
+            session,
+            state: plan.state,
+            term: plan.state.term + 1,
+            address: address,
+            previousHostId: plan.lostHost,
+            target: target,
+            reason: HostChangeReason.lost,
+          ),
+        );
+        return true;
+    }
   }
 
   /// Un intento de volver a la frecu; `true` si volvió o si ya no hay que
@@ -498,6 +614,8 @@ class RoomRepositoryImpl implements RoomRepository {
         SignalingMessage.join(
           displayName: target.displayName,
           accessCode: target.accessCode,
+          peerId: target.peerId,
+          term: _succession.current?.term,
         ),
       );
       final result = await welcome.future.timeout(
@@ -524,6 +642,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _clientSubscription = null;
     unawaited(_client.disconnect());
     _setStatus(const RoomStatus.closed(reason: 'host_unreachable'));
+    _succession.update(null);
     _setParticipants(const []);
   }
 
@@ -535,54 +654,17 @@ class RoomRepositoryImpl implements RoomRepository {
     required String hostAddress,
     required int port,
   }) {
+    final join = _Joining(
+      welcome: welcome,
+      rejoin: rejoin,
+      accessCode: accessCode,
+      hostAddress: hostAddress,
+      port: port,
+    );
     unawaited(_clientSubscription?.cancel());
     _clientSubscription = _client.messages.listen(
       (message) {
-        if (session != _session) return;
-        switch (message) {
-          case SignalingWelcomeMessage(
-            :final peerId,
-            :final participants,
-            :final note,
-            :final roomName,
-          ):
-            // Un intento de reconexión que ya se dio por fallido no revive.
-            if (rejoin && welcome.isCompleted) return;
-            // Al reconectar, el lugar viejo propio puede seguir en la lista
-            // hasta que el anfitrión note que se fue: no es otra persona.
-            final stale = rejoin ? _localParticipantId : null;
-            _onWelcome(
-              welcome,
-              peerId: peerId,
-              participants: [
-                for (final participant in participants)
-                  if (participant.id != stale) participant,
-              ],
-              note: note,
-              roomName: roomName,
-              accessCode: accessCode,
-              hostAddress: hostAddress,
-              port: port,
-            );
-          case SignalingRejectedMessage(:final reason):
-            _onRejected(welcome, reason, rejoin: rejoin);
-          case SignalingPeerJoinedMessage(:final participant):
-            _onPeerJoined(participant);
-          case SignalingPeerLeftMessage(:final peerId):
-            _onPeerLeft(peerId);
-          case SignalingRoomClosedMessage(:final reason):
-            _onRoomClosed(reason);
-          case SignalingJoinMessage() ||
-              SignalingOfferMessage() ||
-              SignalingAnswerMessage() ||
-              SignalingIceMessage() ||
-              SignalingTalkStateMessage() ||
-              SignalingPingMessage() ||
-              SignalingPongMessage() ||
-              SignalingQuickMessage() ||
-              SignalingPositionMessage():
-            break;
-        }
+        if (session == _session) _onMessage(session, message, join);
       },
       onError: (Object error) {
         AppLogger.w('Client message error: $error');
@@ -590,6 +672,53 @@ class RoomRepositoryImpl implements RoomRepository {
           welcome.complete(const Result.failure(Failure.hostUnreachable()));
         }
       },
+    );
+  }
+
+  void _onMessage(int session, SignalingMessage message, _Joining join) {
+    switch (message) {
+      case SignalingWelcomeMessage():
+        _onWelcomeMessage(message, join);
+      case SignalingRejectedMessage(:final reason):
+        _onRejected(join.welcome, reason, rejoin: join.rejoin);
+      case SignalingPeerJoinedMessage(:final participant):
+        _onPeerJoined(participant);
+      case SignalingPeerLeftMessage(:final peerId):
+        _onPeerLeft(peerId);
+      case SignalingRoomStateMessage(:final state):
+        _succession.update(state);
+        _probe.remember(state);
+      case SignalingRoomClosedMessage(:final reason):
+        _onRoomClosed(reason);
+      case SignalingHostHandoverMessage() || SignalingHostChangedMessage():
+        _onHostMessage(session, message);
+      default:
+        // El resto de la señalización no cambia la frecu.
+        break;
+    }
+  }
+
+  void _onWelcomeMessage(SignalingWelcomeMessage message, _Joining join) {
+    // Un intento de reconexión que ya se dio por fallido no revive.
+    if (join.rejoin && join.welcome.isCompleted) return;
+    // Al reconectar, el lugar viejo propio puede seguir en la lista hasta
+    // que el anfitrión note que se fue: no es otra persona. Si vuelve a su
+    // mismo lugar (traspaso), no hay lugar viejo.
+    final stale = join.rejoin && message.peerId != _localParticipantId
+        ? _localParticipantId
+        : null;
+    _onWelcome(
+      join.welcome,
+      peerId: message.peerId,
+      participants: [
+        for (final participant in message.participants)
+          if (participant.id != stale) participant,
+      ],
+      note: message.note,
+      roomName: message.roomName,
+      accessCode: join.accessCode,
+      hostAddress: join.hostAddress,
+      port: join.port,
     );
   }
 
@@ -605,6 +734,7 @@ class RoomRepositoryImpl implements RoomRepository {
   }) {
     _joined = true;
     _isClosed = false;
+    _following = false;
     _localParticipantId = peerId;
     if (roomName != null && roomName.isNotEmpty) _roomName = roomName;
     _setParticipants(participants);
@@ -625,9 +755,255 @@ class RoomRepositoryImpl implements RoomRepository {
       createdAt: DateTime.now(),
       note: note,
       internetId: _internetId,
+      hostOwnsNetwork: participants.any((p) => p.isHost && p.ownsNetwork),
     );
 
     if (!completer.isCompleted) completer.complete(Result.success(room));
+    _afterWelcome(peerId, participants);
+  }
+
+  /// Como anfitrión, empieza a preguntar si otro lleva la frecu; si acaba
+  /// de ceder la suya, avisa quién la lleva.
+  void _afterWelcome(String me, List<Participant> participants) {
+    if (_isHost) {
+      _probe.start(
+        state: () => _succession.current,
+        me: me,
+        serverPort: _server.port,
+        onRival: _onRival,
+      );
+    }
+    final rival = _outranked;
+    if (rival == null || _isHost) return;
+    _outranked = null;
+    final host = participants.where((p) => p.isHost).firstOrNull;
+    _takeover
+      ..forget()
+      ..announce(
+        hostId: host?.id ?? rival.host,
+        hostName: host?.displayName ?? '',
+        you: false,
+        reason: HostChangeReason.outranked,
+        hostAddress: rival.address,
+        port: rival.port,
+      );
+  }
+
+  void _onRival(HostRival rival) => unawaited(_yieldTo(rival));
+
+  /// Por internet, la nube rechazó el relé de este teléfono: otro lleva la
+  /// frecu con un turno mayor, y se le cede por el mismo socket de invitado.
+  void _onRelayOutranked() => unawaited(
+    _yieldTo(const HostRival(host: '', term: 0, address: '', port: 0)),
+  );
+
+  /// Otro teléfono lleva esta frecu con traspaso con un turno que gana
+  /// ([rival]): le cede la frecu y vuelve a ella como invitado, como quien
+  /// sigue un `host_handover`. En local, sus invitados van al rival; por
+  /// internet ya volvieron solos a la nube, y él vuelve por el socket de
+  /// invitado.
+  Future<void> _yieldTo(HostRival rival) async {
+    final state = _succession.current;
+    final me = _participants
+        .where((p) => p.id == _localParticipantId)
+        .firstOrNull;
+    final back = _yieldUri(state, rival);
+    if (!_isHost || _outranked != null || me == null || back == null) return;
+    final session = _session;
+    _outranked = rival;
+    _probe.stop();
+    unawaited(_clientSubscription?.cancel());
+    _clientSubscription = null;
+    await _release(rival, internet: state!.reach == RoomReach.internet);
+    if (session != _session) return;
+    _isHost = false;
+    _following = true;
+    _target = _JoinTarget(
+      uri: back,
+      host: rival.address,
+      port: rival.port,
+      accessCode: state.accessCode,
+      displayName: me.displayName,
+      peerId: me.id,
+    );
+    await _client.disconnect();
+    _handleClientConnectionChange(false);
+  }
+
+  /// A dónde vuelve como invitado quien cede la frecu de [state] a [rival]:
+  /// en local, al servidor del rival; por internet, al socket de invitado.
+  /// Nulo si la frecu no admite traspaso.
+  Uri? _yieldUri(RoomSuccession? state, HostRival rival) {
+    if (state == null || !state.handover) return null;
+    if (state.reach == RoomReach.local) {
+      return Uri.parse('ws://${rival.address}:${rival.port}');
+    }
+    final internetId = _internetId;
+    return internetId == null ? null : cloudConfig.guestSocket(internetId);
+  }
+
+  /// Suelta la frecu que cede a [rival]: en local, sus invitados van al
+  /// rival; por internet ya volvieron solos a la nube.
+  Future<void> _release(HostRival rival, {required bool internet}) async {
+    if (!internet) return _server.yieldTo(rival);
+    await _relay.stop();
+    await _server.stop();
+  }
+
+  /// Mensajes del traspaso: `host_handover` del anfitrión que sale y
+  /// `host_changed` de quien tomó la frecu.
+  void _onHostMessage(int session, SignalingMessage message) {
+    // El anfitrión que pasa la frecu ya sale: no sigue a nadie.
+    if (_isHost) return;
+    switch (message) {
+      case SignalingHostHandoverMessage():
+        _onHostHandover(session, message);
+      case SignalingHostChangedMessage(:final host, :final reason):
+        _onHostChanged(host, reason);
+      default:
+        break;
+    }
+  }
+
+  /// El anfitrión pasa la frecu a `to`: si es este teléfono, la toma; si
+  /// no, la reconexión apunta a la IP de `to` (o a la `address` y el `port`
+  /// del mensaje, si vienen) con el mismo id.
+  void _onHostHandover(int session, SignalingHostHandoverMessage message) {
+    final SignalingHostHandoverMessage(:to, :term) = message;
+    final state = _succession.current;
+    final target = _target;
+    final heir = state?.members.where((m) => m.id == to).firstOrNull;
+    // Por internet se sigue a quien la recibe por el mismo socket.
+    final address = state?.reach == RoomReach.internet
+        ? ''
+        : message.address ?? heir?.address;
+    if (state == null || target == null || address == null) return;
+    final host = _participants.where((p) => p.isHost).firstOrNull;
+    _takeover.previousHost = host?.displayName;
+    if (to != _localParticipantId) {
+      _following = true;
+      _target = target.toward(
+        address,
+        port: message.port,
+        peerId: _localParticipantId,
+      );
+      return;
+    }
+    unawaited(
+      _takeOver(
+        session,
+        state: state,
+        term: term,
+        address: address,
+        previousHostId: host?.id ?? state.order.first,
+        target: target,
+      ),
+    );
+  }
+
+  /// Este teléfono toma la frecu de [state]: deja de reconectar, abre el
+  /// servidor con el turno [term] y vuelve a su mismo lugar como anfitrión;
+  /// [reason] dice si se la pasaron al salir o si se cayó el anterior.
+  Future<void> _takeOver(
+    int session, {
+    required RoomSuccession state,
+    required int term,
+    required String address,
+    required String previousHostId,
+    required _JoinTarget target,
+    HostChangeReason reason = HostChangeReason.left,
+  }) async {
+    final me = _localParticipantId;
+    if (me == null) return;
+    _isHost = true;
+    _target = null;
+    unawaited(_clientSubscription?.cancel());
+    _clientSubscription = null;
+    try {
+      await _client.disconnect();
+      await HostTakeover.openServer(
+        _server,
+        state: state,
+        me: me,
+        previousHostId: previousHostId,
+        address: address,
+        term: term,
+        port: target.port,
+        reason: reason,
+      );
+      if (state.reach == RoomReach.internet) {
+        await InternetHandover.openRelay(
+          _relay,
+          cloudConfig,
+          state: state,
+          term: term,
+          onGuest: _server.accept,
+        );
+      }
+      if (session != _session) return;
+      await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
+      await _rejoinAsHost(session, me, state, address, target, reason);
+    } on Object catch (e, st) {
+      AppLogger.e('Could not take over the room', e, st);
+      if (session != _session) return;
+      _giveUp();
+      unawaited(_server.stop());
+    }
+  }
+
+  /// Vuelve como anfitrión a su mismo lugar ([me]) en el servidor que acaba
+  /// de abrir, y avisa que lleva la frecu.
+  Future<void> _rejoinAsHost(
+    int session,
+    String me,
+    RoomSuccession state,
+    String address,
+    _JoinTarget target,
+    HostChangeReason reason,
+  ) async {
+    final result = await _join(
+      session,
+      displayName: target.displayName,
+      accessCode: state.accessCode,
+      hostAddress: address,
+      port: _server.port,
+      peerId: me,
+    );
+    if (session != _session) return;
+    if (result.isFailure) throw StateError('No welcome after the takeover');
+    _takeover.announce(
+      hostId: me,
+      hostName: target.displayName,
+      you: true,
+      reason: reason,
+      hostAddress: address,
+      port: _server.port,
+    );
+  }
+
+  /// Quien tomó la frecu ([host]) avisa al volver a ella.
+  void _onHostChanged(String host, String reason) {
+    final target = _target;
+    if (target == null) return;
+    final person = _participants.where((p) => p.id == host).firstOrNull;
+    _takeover.announce(
+      hostId: host,
+      hostName: person?.displayName ?? '',
+      you: false,
+      reason: reason == 'lost' ? HostChangeReason.lost : HostChangeReason.left,
+      hostAddress: target.host,
+      port: target.port,
+    );
+  }
+
+  @override
+  Future<Result<void>> handOver(String peerId) async {
+    if (!_isHost || !await _server.handOver(peerId)) {
+      return Result.failure(
+        Failure.unexpected(error: 'Cannot hand the room over to $peerId'),
+      );
+    }
+    return leaveRoom();
   }
 
   void _onRejected(
@@ -664,6 +1040,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _localParticipantId = null;
     unawaited(_foregroundService.stopService());
     _setStatus(RoomStatus.closed(reason: reason));
+    _succession.update(null);
     _setParticipants(const []);
   }
 
@@ -687,9 +1064,11 @@ class RoomRepositoryImpl implements RoomRepository {
     _joined = false;
     _target = null;
     _localParticipantId = null;
+    _takeover.forget();
     try {
       await _teardownConnection();
       _setStatus(const RoomStatus.closed(reason: 'user_left'));
+      _succession.update(null);
       _setParticipants(const []);
       return const Result<void>.success(null);
     } on Object catch (e, st) {
@@ -705,7 +1084,26 @@ class RoomRepositoryImpl implements RoomRepository {
     _connectionStateSub = null;
     await _participantsController.close();
     await _statusController.close();
+    await _succession.dispose();
+    await _takeover.dispose();
   }
+}
+
+/// Lo que espera cada `join` enviado: su `welcome` y a qué frecu va.
+class _Joining {
+  const _Joining({
+    required this.welcome,
+    required this.rejoin,
+    required this.accessCode,
+    required this.hostAddress,
+    required this.port,
+  });
+
+  final Completer<Result<Room>> welcome;
+  final bool rejoin;
+  final String accessCode;
+  final String hostAddress;
+  final int port;
 }
 
 /// Frecu a la que volver al reconectar.
@@ -716,6 +1114,7 @@ class _JoinTarget {
     required this.port,
     required this.accessCode,
     required this.displayName,
+    this.peerId,
   });
 
   final Uri uri;
@@ -723,4 +1122,29 @@ class _JoinTarget {
   final int port;
   final String accessCode;
   final String displayName;
+
+  /// Lugar al que volver (su mismo id) en la frecu que tomó otro
+  /// anfitrión; nulo para volver con un id nuevo.
+  final String? peerId;
+
+  /// La misma frecu en el servidor de quien la tomó, en [host] (y en
+  /// [port], si cambia). Sin [host] (por internet), el mismo socket de
+  /// invitado.
+  _JoinTarget toward(String host, {int? port, String? peerId}) => host.isEmpty
+      ? _JoinTarget(
+          uri: uri,
+          host: this.host,
+          port: this.port,
+          accessCode: accessCode,
+          displayName: displayName,
+          peerId: peerId,
+        )
+      : _JoinTarget(
+          uri: Uri.parse('ws://$host:${port ?? this.port}'),
+          host: host,
+          port: port ?? this.port,
+          accessCode: accessCode,
+          displayName: displayName,
+          peerId: peerId,
+        );
 }

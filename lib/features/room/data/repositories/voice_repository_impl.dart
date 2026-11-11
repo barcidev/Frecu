@@ -12,6 +12,7 @@ import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/data/repositories/current_then.dart';
 import 'package:frecu/features/room/data/repositories/link_quality_monitor.dart';
 import 'package:frecu/features/room/data/repositories/voice_activity_detector.dart';
+import 'package:frecu/features/room/data/repositories/voice_handover.dart';
 import 'package:frecu/features/room/data/repositories/voice_level_sampler.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/ice_server.dart';
@@ -27,7 +28,9 @@ import 'package:permission_handler/permission_handler.dart';
 /// la frecu, y también el `welcome` que llegue mientras este repositorio
 /// existe, p. ej. al reconectar) y sale con [leaveMesh]. Sin anfitrión
 /// (señalización caída) deja de transmitir y, al volver, retoma el
-/// micrófono abierto si estaba abierto.
+/// micrófono abierto si estaba abierto; en una frecu con traspaso, en
+/// cambio, la voz entre los demás sigue y solo se cierra el enlace con el
+/// anfitrión que se fue ([VoiceHandover]).
 class VoiceRepositoryImpl implements VoiceRepository {
   /// Constructor con inyección de datasources y requester de permisos;
   /// [isAndroid] se inyecta en pruebas.
@@ -136,6 +139,9 @@ class VoiceRepositoryImpl implements VoiceRepository {
   /// El micrófono abierto se cortó al perder al anfitrión.
   bool _resumeOpenMic = false;
 
+  /// Si la frecu admite traspaso y quién la lleva.
+  final VoiceHandover _handover = VoiceHandover();
+
   bool _devicesKnown = false;
   bool _hadBluetooth = false;
   bool _hadWired = false;
@@ -215,13 +221,18 @@ class VoiceRepositoryImpl implements VoiceRepository {
         if (peerId != localPeerId) _peerConnection.connectToPeer(peerId),
     ]);
     if (_meshPeerId != localPeerId) return;
+    await _resume();
+  }
 
+  /// Al entrar o volver a la frecu: retoma el micrófono abierto que se cortó
+  /// sin anfitrión y, si no, anuncia el estado propio (en PTT, solo si
+  /// transmite).
+  Future<void> _resume() async {
     final resume = _resumeOpenMic;
     _resumeOpenMic = false;
-    if (_talkMode != TalkMode.openMic) return;
-    if (resume) {
+    if (_talkMode == TalkMode.openMic && resume) {
       await startTalking();
-    } else {
+    } else if (_talkMode == TalkMode.openMic || _isTalking) {
       _announce();
     }
   }
@@ -232,6 +243,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
     _meshPeerId = null;
     _audio = null;
     _resumeOpenMic = false;
+    _handover.reset();
     if (_isTalking) {
       _isTalking = false;
       _emit(_isTalkingController, false);
@@ -516,6 +528,13 @@ class VoiceRepositoryImpl implements VoiceRepository {
 
   void _handleConnectionChange(bool connected) {
     if (connected || _meshPeerId == null) return;
+    if (_handover.keepsVoice) {
+      // Con traspaso la malla entre invitados no depende del anfitrión: la
+      // voz sigue y solo él deja de verse hablando.
+      final host = _handover.hostId;
+      if (host != null) _setSpeakingPeers({..._speakingPeers}..remove(host));
+      return;
+    }
     // Sin anfitrión no se transmite; al volver se retoma según el modo.
     _resumeOpenMic =
         _resumeOpenMic || (_talkMode == TalkMode.openMic && _isTalking);
@@ -531,19 +550,7 @@ class VoiceRepositoryImpl implements VoiceRepository {
   void _handleSignalingMessage(SignalingMessage msg) {
     switch (msg) {
       case SignalingWelcomeMessage(:final peerId, :final participants):
-        // Al reconectar, el id viejo propio puede seguir en la lista un
-        // rato: no se le ofrece.
-        final previous = _meshPeerId;
-        unawaited(
-          joinMesh(
-            localPeerId: peerId,
-            peerIds: [
-              for (final participant in participants)
-                if (participant.id != peerId && participant.id != previous)
-                  participant.id,
-            ],
-          ),
-        );
+        _handleWelcome(peerId, participants);
       case SignalingTalkStateMessage(
         :final peerId,
         :final isSpeaking,
@@ -559,19 +566,46 @@ class VoiceRepositoryImpl implements VoiceRepository {
       case SignalingPeerLeftMessage(:final peerId):
         _setSpeakingPeers({..._speakingPeers}..remove(peerId));
         _setMutedPeers({..._mutedPeers}..remove(peerId));
+      case SignalingRoomStateMessage(:final state):
+        _dropHost(_handover.onRoomState(state, localId: _meshPeerId));
       case SignalingRoomClosedMessage():
         unawaited(leaveMesh());
-      case SignalingJoinMessage() ||
-          SignalingRejectedMessage() ||
-          SignalingOfferMessage() ||
-          SignalingAnswerMessage() ||
-          SignalingIceMessage() ||
-          SignalingPingMessage() ||
-          SignalingPongMessage() ||
-          SignalingQuickMessage() ||
-          SignalingPositionMessage():
+      default:
+        // El resto de la señalización no toca la voz.
         break;
     }
+  }
+
+  /// `welcome` al entrar o volver a la frecu como [peerId].
+  void _handleWelcome(String peerId, List<Participant> participants) {
+    final previous = _meshPeerId;
+    _dropHost(_handover.onWelcome(participants, localId: previous));
+    // De vuelta a su mismo lugar (traspaso): la malla sigue como está.
+    if (peerId == previous) {
+      unawaited(_resume());
+      return;
+    }
+    // Al reconectar, el id viejo propio puede seguir en la lista un rato:
+    // no se le ofrece.
+    unawaited(
+      joinMesh(
+        localPeerId: peerId,
+        peerIds: [
+          for (final participant in participants)
+            if (participant.id != peerId && participant.id != previous)
+              participant.id,
+        ],
+      ),
+    );
+  }
+
+  /// Cambió quien lleva la frecu: se cierra solo el enlace con [host], el
+  /// anfitrión que se fue; los demás siguen sin renegociar.
+  void _dropHost(String? host) {
+    if (host == null) return;
+    _peerConnection.closePeer(host);
+    _setSpeakingPeers({..._speakingPeers}..remove(host));
+    _setMutedPeers({..._mutedPeers}..remove(host));
   }
 
   void _handleTalkState(String peerId, bool isSpeaking, {required bool muted}) {

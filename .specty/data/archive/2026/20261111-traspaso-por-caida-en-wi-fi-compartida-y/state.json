@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "20261111-traspaso-por-caida-en-wi-fi-compartida-y",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/traspaso-por-caida-en-wi-fi-compartida-y",
+  "baseCommit": "4a31ead5ded81850c5b28e0bcf3d81314ab12b07",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:99efefda7e94cd6e69659a39387e6354dd017b67f74009160ec158b044dee110",
+    "at": "2026-11-11T14:56:52.551Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "M",
+    "score": 6,
+    "adjust": 0,
+    "reasons": [
+      "6 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:1a411a453aa1176955cfdf9e6e720a8793dc456c29225ff05884f58163997d8b",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:23b44ab261b86d617303f424958fe7c4ba98add62a9db91e60a0c2f1fe193d94",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:5e2b39afab210d01ca85814b32db7aa1befb84796d008b0ef1fa10649a02578d",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "673f3babcf252876bb7016b9a3ed578d56e4270f",
+      "attempts": 1,
+      "startedAt": "2026-11-11T14:56:52.976Z",
+      "doneAt": "2026-11-11T14:58:44.837Z",
+      "summary": "join gana term opcional (se omite si es nulo); el servidor rechaza con stale_term (RejectReason.staleTerm, tras validar el código) un join con un turno mayor que el suyo. Prueba signaling_term_test (3) y protocolo.md con term, stale_term y el plan de caída.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "5a1126d29ed51c84e97bcd02ebda81199d1b0210",
+      "attempts": 1,
+      "startedAt": "2026-11-11T14:58:45.098Z",
+      "doneAt": "2026-11-11T15:03:45.916Z",
+      "summary": "FailoverPlan (2 reintentos al anfitrión y 2 pasos por persona de la sucesión: seguirla con el mismo id o tomarla con term+1 y razón lost si hay red); el repositorio lo usa y envía term en todo join. host_failover_test (5) y suite en verde (1205).",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 8,
+    "T": 2,
+    "R": 4
+  },
+  "closingSubmittedAt": "2026-11-11T15:03:58.603Z"
+}

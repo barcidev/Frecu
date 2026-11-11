@@ -195,6 +195,7 @@ class Translations$room$es {
 	late final Translations$room$mesh$es mesh = Translations$room$mesh$es.internal(_root);
 	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
 	late final Translations$room$sheets$es sheets = Translations$room$sheets$es.internal(_root);
+	late final Translations$room$handover$es handover = Translations$room$handover$es.internal(_root);
 	late final Translations$room$closure$es closure = Translations$room$closure$es.internal(_root);
 	late final Translations$room$internet$es internet = Translations$room$internet$es.internal(_root);
 	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
@@ -707,6 +708,7 @@ class Translations$lobby$newRoom$es {
 	/// es: 'Paso $current de $total'
 	String step({required Object current, required Object total}) => 'Paso ${current} de ${total}';
 
+	late final Translations$lobby$newRoom$reach$es reach = Translations$lobby$newRoom$reach$es.internal(_root);
 	late final Translations$lobby$newRoom$guide$es guide = Translations$lobby$newRoom$guide$es.internal(_root);
 	late final Translations$lobby$newRoom$network$es network = Translations$lobby$newRoom$network$es.internal(_root);
 
@@ -745,8 +747,6 @@ class Translations$lobby$newRoom$es {
 
 	/// es: 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.'
 	String get codeHelpInternet => 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.';
-
-	late final Translations$lobby$newRoom$internet$es internet = Translations$lobby$newRoom$internet$es.internal(_root);
 
 	/// es: 'Abrir frecu'
 	String get open => 'Abrir frecu';
@@ -832,6 +832,9 @@ class Translations$room$header$es {
 	/// es: 'Eres el anfitrión'
 	String get youAreHost => 'Eres el anfitrión';
 
+	/// es: 'Llevas la frecu'
+	String get carrying => 'Llevas la frecu';
+
 	/// es: 'Por internet'
 	String get internetTag => 'Por internet';
 
@@ -864,6 +867,84 @@ class Translations$room$sheets$es {
 	late final Translations$room$sheets$leave$es leave = Translations$room$sheets$leave$es.internal(_root);
 }
 
+// Path: room.handover
+class Translations$room$handover$es {
+	Translations$room$handover$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: '¿Qué pasa con la frecu?'
+	String get leaveTitle => '¿Qué pasa con la frecu?';
+
+	/// es: 'Llevas la frecu y hay una persona más.'
+	String get leaveOne => 'Llevas la frecu y hay una persona más.';
+
+	/// es: 'Llevas la frecu y hay $count personas más.'
+	String leaveMany({required Object count}) => 'Llevas la frecu y hay ${count} personas más.';
+
+	/// es: 'Que siga sin mí'
+	String get keep => 'Que siga sin mí';
+
+	/// es: 'Pasas la frecu a otra persona y sales. Los demás siguen hablando.'
+	String get keepDetail => 'Pasas la frecu a otra persona y sales. Los demás siguen hablando.';
+
+	/// es: 'Cerrarla para todos'
+	String get close => 'Cerrarla para todos';
+
+	/// es: 'La frecu se cierra y todos salen.'
+	String get closeDetail => 'La frecu se cierra y todos salen.';
+
+	/// es: 'Seguir'
+	String get next => 'Seguir';
+
+	/// es: 'Cancelar'
+	String get cancel => 'Cancelar';
+
+	/// es: '¿Quién lleva la frecu?'
+	String get pickTitle => '¿Quién lleva la frecu?';
+
+	/// es: 'Esa persona muestra el QR y decide cuándo cerrarla.'
+	String get pickMessage => 'Esa persona muestra el QR y decide cuándo cerrarla.';
+
+	/// es: 'Lleva más tiempo · sugerida'
+	String get suggested => 'Lleva más tiempo · sugerida';
+
+	/// es: 'Desde las $time'
+	String since({required Object time}) => 'Desde las ${time}';
+
+	/// es: 'Pasar a $name y salir'
+	String pass({required Object name}) => 'Pasar a ${name} y salir';
+
+	/// es: '$previous salió · $name lleva ahora la frecu'
+	String left({required Object previous, required Object name}) => '${previous} salió · ${name} lleva ahora la frecu';
+
+	/// es: '$previous se desconectó · $name lleva ahora la frecu'
+	String lost({required Object previous, required Object name}) => '${previous} se desconectó · ${name} lleva ahora la frecu';
+
+	/// es: '$name lleva ahora la frecu'
+	String taken({required Object name}) => '${name} lleva ahora la frecu';
+
+	/// es: 'Volviste como invitado · $name lleva la frecu'
+	String backAsGuest({required Object name}) => 'Volviste como invitado · ${name} lleva la frecu';
+
+	/// es: 'Ahora llevas la frecu.'
+	String get heirTitle => 'Ahora llevas la frecu.';
+
+	/// es: '$name te la pasó al salir.'
+	String heirLeft({required Object name}) => '${name} te la pasó al salir.';
+
+	/// es: '$name se desconectó.'
+	String heirLost({required Object name}) => '${name} se desconectó.';
+
+	/// es: 'Mostrar el QR'
+	String get showQr => 'Mostrar el QR';
+
+	/// es: 'Cerrar aviso'
+	String get dismiss => 'Cerrar aviso';
+}
+
 // Path: room.closure
 class Translations$room$closure$es {
 	Translations$room$closure$es.internal(this._root);
@@ -889,6 +970,9 @@ class Translations$room$closure$es {
 
 	/// es: 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.'
 	String get lost => 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.';
+
+	/// es: 'Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.'
+	String get lostNetwork => 'Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.';
 
 	/// es: 'Duración'
 	String get duration => 'Duración';
@@ -1571,6 +1655,42 @@ class Translations$lobby$join$scan$es {
 	late final Translations$lobby$join$scan$camera$es camera = Translations$lobby$join$scan$camera$es.internal(_root);
 }
 
+// Path: lobby.newRoom.reach
+class Translations$lobby$newRoom$reach$es {
+	Translations$lobby$newRoom$reach$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: '¿Cómo se une tu grupo?'
+	String get title => '¿Cómo se une tu grupo?';
+
+	/// es: 'Se elige una vez. La frecu no mezcla las dos formas.'
+	String get message => 'Se elige una vez. La frecu no mezcla las dos formas.';
+
+	/// es: 'Local'
+	String get local => 'Local';
+
+	/// es: 'Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.'
+	String get localDetail => 'Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.';
+
+	/// es: 'Por internet'
+	String get internet => 'Por internet';
+
+	/// es: 'Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.'
+	String get internetDetail => 'Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.';
+
+	/// es: 'Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.'
+	String get internetOffline => 'Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.';
+
+	/// es: 'Esta versión de Frecu no crea frecus por internet.'
+	String get internetUnavailable => 'Esta versión de Frecu no crea frecus por internet.';
+
+	/// es: 'Seguir'
+	String get kContinue => 'Seguir';
+}
+
 // Path: lobby.newRoom.guide
 class Translations$lobby$newRoom$guide$es {
 	Translations$lobby$newRoom$guide$es.internal(this._root);
@@ -1731,24 +1851,6 @@ class Translations$lobby$newRoom$network$es {
 	String get unsupportedMessage => 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.';
 }
 
-// Path: lobby.newRoom.internet
-class Translations$lobby$newRoom$internet$es {
-	Translations$lobby$newRoom$internet$es.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// es: 'Permitir internet'
-	String get title => 'Permitir internet';
-
-	/// es: 'También pueden unirse desde lejos con el enlace. Usa datos móviles.'
-	String get on => 'También pueden unirse desde lejos con el enlace. Usa datos móviles.';
-
-	/// es: 'Solo se unen quienes estén en tu red.'
-	String get off => 'Solo se unen quienes estén en tu red.';
-}
-
 // Path: room.sheets.invite
 class Translations$room$sheets$invite$es {
 	Translations$room$sheets$invite$es.internal(this._root);
@@ -1877,6 +1979,15 @@ class Translations$room$sheets$leave$es {
 	/// es: 'Eres el anfitrión. Si sales, la frecu se cierra para las otras $count personas.'
 	String hostMany({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.';
 
+	/// es: 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.'
+	String get networkAlone => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.';
+
+	/// es: 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.'
+	String get networkOne => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.';
+
+	/// es: 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras $count personas.'
+	String networkMany({required Object count}) => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras ${count} personas.';
+
 	/// es: 'Cerrar frecu'
 	String get hostConfirm => 'Cerrar frecu';
 
@@ -1942,6 +2053,12 @@ class Translations$room$talk$hint$es {
 
 	/// es: 'Recuperando la conexión…'
 	String get reconnecting => 'Recuperando la conexión…';
+
+	/// es: 'Siguen hablando · si no vuelve, $name toma la frecu'
+	String hostSilent({required Object name}) => 'Siguen hablando · si no vuelve, ${name} toma la frecu';
+
+	/// es: 'Siguen hablando · si no vuelve, tomas la frecu'
+	String get hostSilentYou => 'Siguen hablando · si no vuelve, tomas la frecu';
 }
 
 // Path: room.talk.island
@@ -1978,6 +2095,12 @@ class Translations$room$talk$island$es {
 
 	/// es: 'Reconectando · $seconds s'
 	String reconnectingIn({required Object seconds}) => 'Reconectando · ${seconds} s';
+
+	/// es: '$name no responde'
+	String hostSilent({required Object name}) => '${name} no responde';
+
+	/// es: '$name no responde · $seconds s'
+	String hostSilentFor({required Object name, required Object seconds}) => '${name} no responde · ${seconds} s';
 
 	/// es: '$name se unió'
 	String joined({required Object name}) => '${name} se unió';
@@ -2409,6 +2532,15 @@ extension on Translations {
 			'lobby.offline.openSettings' => 'Abrir ajustes de Wi-Fi',
 			'lobby.newRoom.back' => 'Atrás',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Paso ${current} de ${total}',
+			'lobby.newRoom.reach.title' => '¿Cómo se une tu grupo?',
+			'lobby.newRoom.reach.message' => 'Se elige una vez. La frecu no mezcla las dos formas.',
+			'lobby.newRoom.reach.local' => 'Local',
+			'lobby.newRoom.reach.localDetail' => 'Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.',
+			'lobby.newRoom.reach.internet' => 'Por internet',
+			'lobby.newRoom.reach.internetDetail' => 'Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.',
+			'lobby.newRoom.reach.internetOffline' => 'Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.',
+			'lobby.newRoom.reach.internetUnavailable' => 'Esta versión de Frecu no crea frecus por internet.',
+			'lobby.newRoom.reach.kContinue' => 'Seguir',
 			'lobby.newRoom.guide.saveForBluetooth' => 'Guardarla para invitar por Bluetooth',
 			'lobby.newRoom.guide.savedForBluetooth' => 'Zona Wi-Fi guardada · editar',
 			'lobby.newRoom.guide.hotspotSheet.kicker' => 'Invitar por Bluetooth · opcional',
@@ -2489,9 +2621,6 @@ extension on Translations {
 			'lobby.newRoom.regenerate' => 'Generar otro',
 			'lobby.newRoom.codeHelp' => 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.',
 			'lobby.newRoom.codeHelpInternet' => 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.',
-			'lobby.newRoom.internet.title' => 'Permitir internet',
-			'lobby.newRoom.internet.on' => 'También pueden unirse desde lejos con el enlace. Usa datos móviles.',
-			'lobby.newRoom.internet.off' => 'Solo se unen quienes estén en tu red.',
 			'lobby.newRoom.open' => 'Abrir frecu',
 			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Reloj de quintas: ${time}, ${note}',
 			'lobby.noteNames.0' => 'Do',
@@ -2550,6 +2679,7 @@ extension on Translations {
 			'room.mesh.free' => 'Libre',
 			'room.mesh.invite' => 'Invitar',
 			'room.header.youAreHost' => 'Eres el anfitrión',
+			'room.header.carrying' => 'Llevas la frecu',
 			'room.header.internetTag' => 'Por internet',
 			'room.header.hostedBy' => ({required Object name}) => 'Anfitrión · ${name}',
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
@@ -2605,14 +2735,41 @@ extension on Translations {
 			'room.sheets.leave.hostAlone' => 'Eres el anfitrión. Si sales, la frecu se cierra.',
 			'room.sheets.leave.hostOne' => 'Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.',
 			'room.sheets.leave.hostMany' => ({required Object count}) => 'Eres el anfitrión. Si sales, la frecu se cierra para las otras ${count} personas.',
+			'room.sheets.leave.networkAlone' => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.',
+			'room.sheets.leave.networkOne' => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.',
+			'room.sheets.leave.networkMany' => ({required Object count}) => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras ${count} personas.',
 			'room.sheets.leave.hostConfirm' => 'Cerrar frecu',
 			'room.sheets.leave.cancel' => 'Cancelar',
+			'room.handover.leaveTitle' => '¿Qué pasa con la frecu?',
+			'room.handover.leaveOne' => 'Llevas la frecu y hay una persona más.',
+			'room.handover.leaveMany' => ({required Object count}) => 'Llevas la frecu y hay ${count} personas más.',
+			'room.handover.keep' => 'Que siga sin mí',
+			'room.handover.keepDetail' => 'Pasas la frecu a otra persona y sales. Los demás siguen hablando.',
+			'room.handover.close' => 'Cerrarla para todos',
+			'room.handover.closeDetail' => 'La frecu se cierra y todos salen.',
+			'room.handover.next' => 'Seguir',
+			'room.handover.cancel' => 'Cancelar',
+			'room.handover.pickTitle' => '¿Quién lleva la frecu?',
+			'room.handover.pickMessage' => 'Esa persona muestra el QR y decide cuándo cerrarla.',
+			'room.handover.suggested' => 'Lleva más tiempo · sugerida',
+			'room.handover.since' => ({required Object time}) => 'Desde las ${time}',
+			'room.handover.pass' => ({required Object name}) => 'Pasar a ${name} y salir',
+			'room.handover.left' => ({required Object previous, required Object name}) => '${previous} salió · ${name} lleva ahora la frecu',
+			'room.handover.lost' => ({required Object previous, required Object name}) => '${previous} se desconectó · ${name} lleva ahora la frecu',
+			'room.handover.taken' => ({required Object name}) => '${name} lleva ahora la frecu',
+			'room.handover.backAsGuest' => ({required Object name}) => 'Volviste como invitado · ${name} lleva la frecu',
+			'room.handover.heirTitle' => 'Ahora llevas la frecu.',
+			'room.handover.heirLeft' => ({required Object name}) => '${name} te la pasó al salir.',
+			'room.handover.heirLost' => ({required Object name}) => '${name} se desconectó.',
+			'room.handover.showQr' => 'Mostrar el QR',
+			'room.handover.dismiss' => 'Cerrar aviso',
 			'room.closure.offAir' => 'Fuera del aire',
 			'room.closure.noteOffAir' => ({required Object note}) => '${note} · fuera del aire',
 			'room.closure.title' => 'Fin de la transmisión',
 			'room.closure.host' => 'Cerraste la frecu. Todos los participantes fueron desconectados.',
 			'room.closure.peer' => 'El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.',
 			'room.closure.lost' => 'Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.',
+			'room.closure.lostNetwork' => 'Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.',
 			'room.closure.duration' => 'Duración',
 			'room.closure.people' => 'Personas',
 			'room.closure.note' => 'Nota',
@@ -2636,6 +2793,8 @@ extension on Translations {
 			'room.talk.hint.muted' => 'Toca para activar tu micrófono',
 			'room.talk.hint.connecting' => 'Conectando con el anfitrión…',
 			'room.talk.hint.reconnecting' => 'Recuperando la conexión…',
+			'room.talk.hint.hostSilent' => ({required Object name}) => 'Siguen hablando · si no vuelve, ${name} toma la frecu',
+			'room.talk.hint.hostSilentYou' => 'Siguen hablando · si no vuelve, tomas la frecu',
 			'room.talk.island.online' => ({required Object count, required Object max}) => 'En línea · ${count}/${max}',
 			'room.talk.island.openMic' => ({required Object count, required Object max}) => 'Micrófono abierto · ${count}/${max}',
 			'room.talk.island.muted' => ({required Object count, required Object max}) => 'Silenciado · ${count}/${max}',
@@ -2645,6 +2804,8 @@ extension on Translations {
 			'room.talk.island.connecting' => 'Conectando…',
 			'room.talk.island.reconnecting' => 'Reconectando…',
 			'room.talk.island.reconnectingIn' => ({required Object seconds}) => 'Reconectando · ${seconds} s',
+			'room.talk.island.hostSilent' => ({required Object name}) => '${name} no responde',
+			'room.talk.island.hostSilentFor' => ({required Object name, required Object seconds}) => '${name} no responde · ${seconds} s',
 			'room.talk.island.joined' => ({required Object name}) => '${name} se unió',
 			'room.talk.island.left' => ({required Object name}) => '${name} salió',
 			'room.talk.island.route' => ({required Object route}) => 'Audio por ${route}',
@@ -2777,6 +2938,8 @@ extension on Translations {
 			'messages.message' => 'Llegan al instante y vibran, aunque tengan la pantalla apagada.',
 			'messages.kinds.behind' => 'Me quedé atrás',
 			'messages.kinds.stop' => 'Parada en la próxima',
+			_ => null,
+		} ?? switch (path) {
 			'messages.kinds.fuel' => 'Necesito combustible',
 			'messages.kinds.ok' => 'Todo bien',
 			'messages.kinds.onMyWay' => 'Voy en camino',
@@ -2815,8 +2978,6 @@ extension on Translations {
 			'location.compass.nw' => 'NO',
 			'location.compassLong.n' => 'norte',
 			'location.compassLong.ne' => 'noreste',
-			_ => null,
-		} ?? switch (path) {
 			'location.compassLong.e' => 'este',
 			'location.compassLong.se' => 'sureste',
 			'location.compassLong.s' => 'sur',

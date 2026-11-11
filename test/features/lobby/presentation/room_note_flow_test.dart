@@ -203,6 +203,9 @@ void main() {
 
       await tester.tap(find.text(t.lobby.createRoom));
       await tester.pumpAndSettle();
+      // Local, marcada: sigue a la guía.
+      await tester.tap(find.text(t.lobby.newRoom.reach.kContinue));
+      await tester.pumpAndSettle();
       await tester.tap(find.text(t.lobby.newRoom.guide.ready));
       await tester.pumpAndSettle();
       await tester.tap(find.text(t.lobby.newRoom.open));

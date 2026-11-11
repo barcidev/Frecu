@@ -136,6 +136,17 @@
     "newRoom": {
       "back": "Atrás",
       "step": "Paso $current de $total",
+      "reach": {
+        "title": "¿Cómo se une tu grupo?",
+        "message": "Se elige una vez. La frecu no mezcla las dos formas.",
+        "local": "Local",
+        "localDetail": "Todos conectados a la misma Wi-Fi: la que crea tu teléfono o una que ya tengan, como la de la casa o la oficina. Sin internet y sin gastar datos.",
+        "internet": "Por internet",
+        "internetDetail": "Desde cualquier lugar, con el QR o el enlace. Usa datos móviles.",
+        "internetOffline": "Necesitas internet para crearla. Conéctate a una Wi-Fi con internet o activa tus datos.",
+        "internetUnavailable": "Esta versión de Frecu no crea frecus por internet.",
+        "continue": "Seguir"
+      },
       "guide": {
         "saveForBluetooth": "Guardarla para invitar por Bluetooth",
         "savedForBluetooth": "Zona Wi-Fi guardada · editar",
@@ -219,11 +230,6 @@
       "regenerate": "Generar otro",
       "codeHelp": "Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.",
       "codeHelpInternet": "El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.",
-      "internet": {
-        "title": "Permitir internet",
-        "on": "También pueden unirse desde lejos con el enlace. Usa datos móviles.",
-        "off": "Solo se unen quienes estén en tu red."
-      },
       "open": "Abrir frecu",
       "clockLabel": "Reloj de quintas: $time, $note"
     },
@@ -268,6 +274,7 @@
     },
     "header": {
       "youAreHost": "Eres el anfitrión",
+      "carrying": "Llevas la frecu",
       "internetTag": "Por internet",
       "hostedBy": "Anfitrión · $name",
       "hz": "$value Hz",
@@ -334,9 +341,37 @@
         "hostAlone": "Eres el anfitrión. Si sales, la frecu se cierra.",
         "hostOne": "Eres el anfitrión. Si sales, la frecu se cierra para la otra persona.",
         "hostMany": "Eres el anfitrión. Si sales, la frecu se cierra para las otras $count personas.",
+        "networkAlone": "Tu teléfono es la red de la frecu. Si sales, la frecu se cierra.",
+        "networkOne": "Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para la otra persona.",
+        "networkMany": "Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras $count personas.",
         "hostConfirm": "Cerrar frecu",
         "cancel": "Cancelar"
       }
+    },
+    "handover": {
+      "leaveTitle": "¿Qué pasa con la frecu?",
+      "leaveOne": "Llevas la frecu y hay una persona más.",
+      "leaveMany": "Llevas la frecu y hay $count personas más.",
+      "keep": "Que siga sin mí",
+      "keepDetail": "Pasas la frecu a otra persona y sales. Los demás siguen hablando.",
+      "close": "Cerrarla para todos",
+      "closeDetail": "La frecu se cierra y todos salen.",
+      "next": "Seguir",
+      "cancel": "Cancelar",
+      "pickTitle": "¿Quién lleva la frecu?",
+      "pickMessage": "Esa persona muestra el QR y decide cuándo cerrarla.",
+      "suggested": "Lleva más tiempo · sugerida",
+      "since": "Desde las $time",
+      "pass": "Pasar a $name y salir",
+      "left": "$previous salió · $name lleva ahora la frecu",
+      "lost": "$previous se desconectó · $name lleva ahora la frecu",
+      "taken": "$name lleva ahora la frecu",
+      "backAsGuest": "Volviste como invitado · $name lleva la frecu",
+      "heirTitle": "Ahora llevas la frecu.",
+      "heirLeft": "$name te la pasó al salir.",
+      "heirLost": "$name se desconectó.",
+      "showQr": "Mostrar el QR",
+      "dismiss": "Cerrar aviso"
     },
     "closure": {
       "offAir": "Fuera del aire",
@@ -345,6 +380,7 @@
       "host": "Cerraste la frecu. Todos los participantes fueron desconectados.",
       "peer": "El anfitrión cerró la frecu. Puedes unirte a otra cuando quieras.",
       "lost": "Se perdió la señal del anfitrión. Puedes unirte a otra cuando quieras.",
+      "lostNetwork": "Se perdió la red del anfitrión y no volvió. Puedes unirte a otra cuando quieras.",
       "duration": "Duración",
       "people": "Personas",
       "note": "Nota",
@@ -374,7 +410,9 @@
         "open": "Toca para silenciarte",
         "muted": "Toca para activar tu micrófono",
         "connecting": "Conectando con el anfitrión…",
-        "reconnecting": "Recuperando la conexión…"
+        "reconnecting": "Recuperando la conexión…",
+        "hostSilent": "Siguen hablando · si no vuelve, $name toma la frecu",
+        "hostSilentYou": "Siguen hablando · si no vuelve, tomas la frecu"
       },
       "island": {
         "online": "En línea · $count/$max",
@@ -386,6 +424,8 @@
         "connecting": "Conectando…",
         "reconnecting": "Reconectando…",
         "reconnectingIn": "Reconectando · $seconds s",
+        "hostSilent": "$name no responde",
+        "hostSilentFor": "$name no responde · $seconds s",
         "joined": "$name se unió",
         "left": "$name salió",
         "route": "Audio por $route",

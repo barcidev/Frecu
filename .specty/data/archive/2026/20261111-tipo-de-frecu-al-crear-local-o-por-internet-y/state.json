@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "id": "20261111-tipo-de-frecu-al-crear-local-o-por-internet-y",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/tipo-de-frecu-al-crear-local-o-por-internet-y",
+  "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:0f4e2e53099f3a1a9f9086eccf7d99fd5cd46784ce169585638d538378e9446f",
+    "at": "2026-11-11T13:32:52.022Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "11 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:44d99f6df9326f35e9079cd9589644e1333a8f01c3e50ecd2f2282ec7230a47f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a96fd969eb7b7c5e8ee016bd7e571899e7e346028851c7a39ae10228b9c99148",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:767e2e521d0ea037493b276d82b425cb734fc6022bb98cb8395ec40957c1c524",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:0e82f91ff05c0672b98d4157c636c3e08e45f2add040e7f5a5e6597a8b67109d",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "ac5b354ab00f9290a1e99e6d6666cce3a2e924c4",
+      "attempts": 1,
+      "startedAt": "2026-11-11T13:32:52.346Z",
+      "doneAt": "2026-11-11T13:35:16.623Z",
+      "summary": "RoomReach en el dominio (Room.reach por internetId); createRoom pasa de bool internet a reach. Por internet la IP del anfitrión queda vacía aunque haya Wi-Fi; local no abre el relé. Tests AC2/AC3 en internet_room_test.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "82a025221ee0a20320454676529f0cfac8a31994",
+      "attempts": 1,
+      "startedAt": "2026-11-11T13:35:16.921Z",
+      "doneAt": "2026-11-11T13:37:03.739Z",
+      "summary": "RoomNotifier.createRoom recibe reach. NewRoomStep elige el tipo con «Permitir internet»; por internet no pasa red a la frecu (Bluetooth no la anuncia) ni la publica por mDNS. Test AC3 en new_room_test.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "bf893aeab5969e1a49c236fef2d74441e41a7200",
+      "attempts": 1,
+      "startedAt": "2026-11-11T13:37:04.064Z",
+      "doneAt": "2026-11-11T13:37:45.514Z",
+      "summary": "RoomPage ya no muestra el aviso «La red de Frecu no tiene internet» (internet_cut_notice); la marca «Sin audio» de la malla sigue. Test AC3 en internet_room_ui_test.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 3,
+    "T": 3,
+    "R": 2
+  },
+  "closingSubmittedAt": "2026-11-11T13:38:02.813Z"
+}

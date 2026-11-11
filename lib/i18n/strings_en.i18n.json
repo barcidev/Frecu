@@ -136,6 +136,17 @@
     "newRoom": {
       "back": "Back",
       "step": "Step $current of $total",
+      "reach": {
+        "title": "How does your group join?",
+        "message": "You choose once. The room doesn't mix both ways.",
+        "local": "Local",
+        "localDetail": "Everyone on the same Wi-Fi: the one your phone creates or one you already have, like at home or the office. No internet and no data used.",
+        "internet": "Over the internet",
+        "internetDetail": "From anywhere, with the QR or the link. Uses mobile data.",
+        "internetOffline": "You need internet to create it. Connect to a Wi-Fi with internet or turn on your data.",
+        "internetUnavailable": "This version of Frecu doesn't create rooms over the internet.",
+        "continue": "Continue"
+      },
       "guide": {
         "saveForBluetooth": "Save it to invite via Bluetooth",
         "savedForBluetooth": "Hotspot saved · edit",
@@ -219,11 +230,6 @@
       "regenerate": "Generate another",
       "codeHelp": "Share it only with your group: it keeps strangers on the same network out.",
       "codeHelpInternet": "The link and the QR already include it: share them only with your group.",
-      "internet": {
-        "title": "Allow internet",
-        "on": "People far away can also join with the link. Uses mobile data.",
-        "off": "Only people on your network can join."
-      },
       "open": "Open room",
       "clockLabel": "Circle of fifths clock: $time, $note"
     },
@@ -268,6 +274,7 @@
     },
     "header": {
       "youAreHost": "You're the host",
+      "carrying": "You carry the frecu",
       "internetTag": "Over the internet",
       "hostedBy": "Host · $name",
       "hz": "$value Hz",
@@ -334,9 +341,37 @@
         "hostAlone": "You're the host. If you leave, the frecu closes.",
         "hostOne": "You're the host. If you leave, the frecu closes for the other person.",
         "hostMany": "You're the host. If you leave, the frecu closes for the other $count people.",
+        "networkAlone": "Your phone is the frecu's network. If you leave, the frecu closes.",
+        "networkOne": "Your phone is the frecu's network. If you leave, the frecu closes for the other person.",
+        "networkMany": "Your phone is the frecu's network. If you leave, the frecu closes for the other $count people.",
         "hostConfirm": "Close frecu",
         "cancel": "Cancel"
       }
+    },
+    "handover": {
+      "leaveTitle": "What happens to the frecu?",
+      "leaveOne": "You carry the frecu and there's one more person.",
+      "leaveMany": "You carry the frecu and there are $count more people.",
+      "keep": "Keep it going without me",
+      "keepDetail": "You pass the frecu to someone else and leave. Everyone else keeps talking.",
+      "close": "Close it for everyone",
+      "closeDetail": "The frecu closes and everyone leaves.",
+      "next": "Continue",
+      "cancel": "Cancel",
+      "pickTitle": "Who carries the frecu?",
+      "pickMessage": "That person shows the QR and decides when to close it.",
+      "suggested": "Here the longest · suggested",
+      "since": "Since $time",
+      "pass": "Pass to $name and leave",
+      "left": "$previous left · $name carries the frecu now",
+      "lost": "$previous disconnected · $name carries the frecu now",
+      "taken": "$name carries the frecu now",
+      "backAsGuest": "You're back as a guest · $name carries the frecu",
+      "heirTitle": "You carry the frecu now.",
+      "heirLeft": "$name passed it to you on leaving.",
+      "heirLost": "$name disconnected.",
+      "showQr": "Show the QR",
+      "dismiss": "Dismiss notice"
     },
     "closure": {
       "offAir": "Off the air",
@@ -345,6 +380,7 @@
       "host": "You closed the frecu. Everyone was disconnected.",
       "peer": "The host closed the frecu. You can join another one whenever you like.",
       "lost": "The host's signal was lost. You can join another one whenever you like.",
+      "lostNetwork": "The host's network was lost and didn't come back. You can join another one whenever you like.",
       "duration": "Duration",
       "people": "People",
       "note": "Note",
@@ -374,7 +410,9 @@
         "open": "Tap to mute yourself",
         "muted": "Tap to turn on your microphone",
         "connecting": "Connecting to the host…",
-        "reconnecting": "Restoring the connection…"
+        "reconnecting": "Restoring the connection…",
+        "hostSilent": "Everyone can still talk · if they don't come back, $name takes the frecu",
+        "hostSilentYou": "Everyone can still talk · if they don't come back, you take the frecu"
       },
       "island": {
         "online": "Online · $count/$max",
@@ -386,6 +424,8 @@
         "connecting": "Connecting…",
         "reconnecting": "Reconnecting…",
         "reconnectingIn": "Reconnecting · $seconds s",
+        "hostSilent": "$name isn't responding",
+        "hostSilentFor": "$name isn't responding · $seconds s",
         "joined": "$name joined",
         "left": "$name left",
         "route": "Audio via $route",

@@ -2,25 +2,34 @@ import 'package:flutter/widgets.dart';
 import 'package:frecu/core/design/fr_theme.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Cabecera de 60 px de la creación de una frecu (`.appbar` con `.ttl`):
 /// Atrás, el paso y el título centrados y un hueco del ancho del botón.
 class CreateRoomAppBar extends StatelessWidget {
-  /// Crea la cabecera del paso [step] con su [title]; sin [step], solo el
-  /// título.
+  /// Crea la cabecera del paso [step] de [steps] con su [title]; sin
+  /// [step], solo el título.
   const CreateRoomAppBar({
     required this.step,
+    required this.steps,
     required this.title,
     required this.onBack,
     super.key,
   });
 
-  /// Pasos de la creación: la guía y la nueva frecu.
-  static const int steps = 2;
+  /// Pasos de la creación según el tipo de frecu: Local tiene el tipo, la
+  /// red y la nueva frecu; Por internet, el tipo y la nueva frecu.
+  static int stepsFor(RoomReach reach) => switch (reach) {
+    RoomReach.local => 3,
+    RoomReach.internet => 2,
+  };
 
   /// Paso actual, desde 1; nulo si la pantalla se abre fuera de la creación.
   final int? step;
+
+  /// Total de pasos de la creación.
+  final int steps;
 
   /// Título del paso.
   final String title;
@@ -44,7 +53,7 @@ class CreateRoomAppBar extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: _StepTitle(step: step, title: title),
+              child: _StepTitle(step: step, steps: steps, title: title),
             ),
             const SizedBox(width: 58),
           ],
@@ -54,11 +63,16 @@ class CreateRoomAppBar extends StatelessWidget {
   }
 }
 
-/// «Paso N de 2» sobre el título, centrados (`.ttl`).
+/// «Paso N de M» sobre el título, centrados (`.ttl`).
 class _StepTitle extends StatelessWidget {
-  const _StepTitle({required this.step, required this.title});
+  const _StepTitle({
+    required this.step,
+    required this.steps,
+    required this.title,
+  });
 
   final int? step;
+  final int steps;
   final String title;
 
   @override
@@ -71,9 +85,7 @@ class _StepTitle extends StatelessWidget {
       children: [
         if (step != null) ...[
           Text(
-            t.lobby.newRoom
-                .step(current: step, total: CreateRoomAppBar.steps)
-                .toUpperCase(),
+            t.lobby.newRoom.step(current: step, total: steps).toUpperCase(),
             maxLines: 1,
             style: fr.type.labelS.copyWith(color: c.tx3),
           ),

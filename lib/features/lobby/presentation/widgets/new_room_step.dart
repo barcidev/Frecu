@@ -13,7 +13,6 @@ import 'package:frecu/core/design/widgets/fr_field.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_toast.dart';
-import 'package:frecu/core/design/widgets/fr_toggle.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
@@ -26,22 +25,25 @@ import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
 import 'package:frecu/features/network/presentation/providers/local_hotspot_provider.dart';
 import 'package:frecu/features/network/presentation/providers/network_provider.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
-import 'package:frecu/features/settings/presentation/widgets/settings_group.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
-/// Nueva frecu (pantalla `create` del prototipo), paso 2 de 2 de la
-/// creación: el reloj de quintas con la nota que tendrá la frecu a esta
-/// hora, el nombre, el código de acceso generado y «Abrir frecu».
+/// Nueva frecu (pantalla `create` del prototipo), el último paso de la
+/// creación (3 de 3 en local, 2 de 2 por internet): el reloj de quintas con
+/// la nota que tendrá la frecu a esta hora y su tipo, el nombre, el código
+/// de acceso generado y «Abrir frecu».
 ///
 /// La nota se recalcula con la hora (se relee cada 15 s) y con las notas de
 /// las frecus cercanas, para no repetir ninguna.
 class NewRoomStep extends ConsumerStatefulWidget {
-  /// Crea el paso con el nombre en [name] y el código [code].
+  /// Crea el paso de una frecu [reach] con el nombre en [name] y el código
+  /// [code].
   const NewRoomStep({
+    required this.reach,
     required this.name,
     required this.code,
     required this.onCodeChanged,
@@ -51,6 +53,9 @@ class NewRoomStep extends ConsumerStatefulWidget {
 
   /// Máximo de caracteres del nombre.
   static const int maxNameLength = 24;
+
+  /// Tipo de frecu elegido en el primer paso.
+  final RoomReach reach;
 
   /// Nombre de la frecu; lo guarda la página para volver a la guía.
   final TextEditingController name;
@@ -76,9 +81,6 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
   Timer? _clock;
   bool _opening = false;
   double _regenTurns = 0;
-
-  /// «Permitir internet»: apagado, la frecu es solo local.
-  bool _internet = false;
 
   @override
   void initState() {
@@ -113,19 +115,26 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     return state.dataOrNull?.isHotspot ?? false ? saved : null;
   }
 
+  /// La red de la frecu para invitar: la de Frecu al aire o la zona Wi-Fi
+  /// guardada. Por internet no hay: nadie entra por la red local.
+  Future<WifiCredentials?> _wifi(RoomReach reach) async {
+    if (reach == RoomReach.internet) return null;
+    final network = ref.exists(localHotspotProvider)
+        ? ref.read(localHotspotProvider)
+        : null;
+    return switch (network) {
+      LocalHotspotReady(:final hotspot) => hotspot.credentials,
+      _ => await _savedHotspot(),
+    };
+  }
+
   /// Abre la frecu con la [note] que muestra la pantalla.
   Future<void> _open(RoomNote note) async {
     final name = widget.name.text.trim();
     if (name.isEmpty || _opening) return;
     setState(() => _opening = true);
-    // Con la red de Frecu al aire, la invitación la lleva.
-    final network = ref.exists(localHotspotProvider)
-        ? ref.read(localHotspotProvider)
-        : null;
-    final wifi = switch (network) {
-      LocalHotspotReady(:final hotspot) => hotspot.credentials,
-      _ => await _savedHotspot(),
-    };
+    final reach = widget.reach;
+    final wifi = await _wifi(reach);
     if (!mounted) return;
     final result = await ref
         .read(roomNotifierProvider.notifier)
@@ -135,21 +144,24 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
           displayName: ref.savedDisplayName,
           note: note,
           wifi: wifi,
-          internet: _internet && ref.read(cloudConfigProvider).isEnabled,
+          reach: reach,
         );
     if (!mounted) return;
     switch (result) {
       case Success(:final data):
-        unawaited(
-          ref
-              .read(discoveryRepositoryProvider)
-              .publishRoom(
-                roomId: data.id,
-                name: data.name,
-                port: data.port,
-                note: data.note,
-              ),
-        );
+        // Por internet no se anuncia en la red local.
+        if (reach == RoomReach.local) {
+          unawaited(
+            ref
+                .read(discoveryRepositoryProvider)
+                .publishRoom(
+                  roomId: data.id,
+                  name: data.name,
+                  port: data.port,
+                  note: data.note,
+                ),
+          );
+        }
         unawaited(context.router.replace(RoomRoute(roomId: data.id)));
       case FailureResult(:final failure):
         // Sin frecu abierta no queda ningún anuncio en la red.
@@ -168,6 +180,7 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
   @override
   Widget build(BuildContext context) {
     final newRoom = t.lobby.newRoom;
+    final steps = CreateRoomAppBar.stepsFor(widget.reach);
     final rooms = ref.watch(nearbyRoomsProvider).value ?? const [];
     final nearbyNotes = rooms.map((room) => room.note).nonNulls.toList();
     final note = const AssignRoomNote().assign(
@@ -180,7 +193,8 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CreateRoomAppBar(
-            step: 2,
+            step: steps,
+            steps: steps,
             title: newRoom.title,
             onBack: widget.onBack,
           ),
@@ -188,7 +202,7 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
             child: CreateRoomScroll(
               dockHeight: CreateRoomScroll.oneButtonDock,
               children: [
-                NewRoomHero(note: note, openedAt: _now, internet: _internet),
+                NewRoomHero(note: note, openedAt: _now, reach: widget.reach),
                 _form(),
               ],
             ),
@@ -213,27 +227,6 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     ),
   );
 
-  /// «Permitir internet»: apagado por defecto, la frecu es solo local.
-  Widget _internetRow() {
-    final copy = t.lobby.newRoom.internet;
-    return SettingsGroup(
-      margin: EdgeInsets.zero,
-      children: [
-        SettingsRow(
-          key: const Key('new_room_internet_row'),
-          title: copy.title,
-          subtitle: _internet ? copy.on : copy.off,
-          trailing: FrToggle(
-            key: const Key('new_room_internet_toggle'),
-            value: _internet,
-            semanticLabel: copy.title,
-            onChanged: _opening ? null : (on) => setState(() => _internet = on),
-          ),
-        ),
-      ],
-    );
-  }
-
   /// Nombre de la frecu y código de acceso.
   Widget _form() {
     final newRoom = t.lobby.newRoom;
@@ -254,13 +247,8 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
             code: _code,
             turns: _regenTurns,
             onRegenerate: _regenerate,
-            internet: _internet,
+            internet: widget.reach == RoomReach.internet,
           ),
-          // Sin punto de encuentro configurado, la frecu es siempre local.
-          if (ref.watch(cloudConfigProvider).isEnabled) ...[
-            const SizedBox(height: 22),
-            _internetRow(),
-          ],
         ],
       ),
     );

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_succession.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signaling_message.freezed.dart';
@@ -13,10 +16,16 @@ const int signalingProtocolVersion = 1;
 @Freezed(unionKey: 'type', makeCollectionsUnmodifiable: false)
 sealed class SignalingMessage with _$SignalingMessage {
   /// Solicitud de unión a la sala enviada por un participante al anfitrión.
+  /// Con [peerId] (aditivo), vuelve a su lugar en la frecu que heredó otro
+  /// anfitrión, con su mismo id y su mismo orden de sucesión. Con [term]
+  /// (aditivo), el turno de la sucesión que conoce: un servidor con un turno
+  /// menor lo rechaza con `stale_term`.
   const factory SignalingMessage.join({
     required String displayName,
     required String accessCode,
     @Default(signalingProtocolVersion) int protocolVersion,
+    @JsonKey(includeIfNull: false) String? peerId,
+    @JsonKey(includeIfNull: false) int? term,
     @Default('join') String type,
   }) = SignalingJoinMessage;
 
@@ -124,6 +133,53 @@ sealed class SignalingMessage with _$SignalingMessage {
     @Default('pong') String type,
   }) = SignalingPongMessage;
 
+  /// Sucesión, turno y estado de la frecu ([state]): el anfitrión lo envía a
+  /// todos al entrar alguien y en cada cambio. Es aditivo: una app anterior
+  /// no lo conoce y lo descarta.
+  @FreezedUnionValue('room_state')
+  const factory SignalingMessage.roomState({
+    required RoomSuccession state,
+    @Default('room_state') String type,
+  }) = SignalingRoomStateMessage;
+
+  /// El anfitrión pasa la frecu a [to] y sale: quien la recibe la abre con
+  /// el turno [term], y los demás se reconectan a su IP con su mismo id. Con
+  /// [address] y [port] (aditivos), la frecu ya la lleva [to] allí: así va
+  /// quien no lo tiene en su sucesión. Es aditivo: una app anterior lo
+  /// descarta.
+  @FreezedUnionValue('host_handover')
+  const factory SignalingMessage.hostHandover({
+    required String to,
+    required int term,
+    @JsonKey(includeIfNull: false) String? address,
+    @JsonKey(includeIfNull: false) int? port,
+    @Default('host_handover') String type,
+  }) = SignalingHostHandoverMessage;
+
+  /// Un anfitrión pregunta a otro servidor si lleva la misma frecu
+  /// ([accessCode]), con su turno [term], su id [host] y el [port] de su
+  /// servidor; el otro responde con el suyo. Gana el turno mayor y, a igual
+  /// turno, el `peer_N` menor: el otro entra como invitado. Es aditivo.
+  @FreezedUnionValue('host_probe')
+  const factory SignalingMessage.hostProbe({
+    required String accessCode,
+    required int term,
+    required String host,
+    required int port,
+    @Default('host_probe') String type,
+  }) = SignalingHostProbeMessage;
+
+  /// Quien tomó la frecu ([host], con el turno [term]) se lo dice a cada
+  /// persona que vuelve: [reason] es `left` si el anfitrión anterior se la
+  /// pasó al salir y `lost` si se cayó. Es aditivo.
+  @FreezedUnionValue('host_changed')
+  const factory SignalingMessage.hostChanged({
+    required String host,
+    required int term,
+    required String reason,
+    @Default('host_changed') String type,
+  }) = SignalingHostChangedMessage;
+
   /// Notificación de cierre de sala.
   @FreezedUnionValue('room_closed')
   const factory SignalingMessage.roomClosed({
@@ -134,4 +190,16 @@ sealed class SignalingMessage with _$SignalingMessage {
   /// Deserializa un mensaje desde JSON.
   factory SignalingMessage.fromJson(Map<String, dynamic> json) =>
       _$SignalingMessageFromJson(json);
+
+  /// Lee un mensaje de texto del socket; nulo si no es un mensaje válido.
+  static SignalingMessage? tryDecode(Object? data) {
+    if (data is! String) return null;
+    try {
+      return SignalingMessage.fromJson(
+        jsonDecode(data) as Map<String, dynamic>,
+      );
+    } on Object {
+      return null;
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 
 /// Parámetros para crear una frecu.
@@ -12,7 +13,7 @@ final class CreateRoomParams {
     required this.accessCode,
     this.displayName,
     this.note,
-    this.internet = false,
+    this.reach = RoomReach.local,
   });
 
   /// Nombre de la frecu.
@@ -27,8 +28,8 @@ final class CreateRoomParams {
   /// Nota musical de la frecu si está asignada.
   final RoomNote? note;
 
-  /// Si la frecu se abre también por internet.
-  final bool internet;
+  /// Cómo se une el grupo: en la red local o por internet.
+  final RoomReach reach;
 }
 
 /// Caso de uso para crear una nueva frecu como anfitrión.
@@ -48,7 +49,7 @@ final class CreateRoom implements UseCase<Room, CreateRoomParams> {
       accessCode: params.accessCode,
       displayName: params.displayName,
       note: params.note,
-      internet: params.internet,
+      reach: params.reach,
     );
   }
 }

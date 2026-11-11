@@ -80,24 +80,30 @@ class MicControlSection extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        // Solo el núcleo se reconstruye con el reloj y los niveles de voz.
-        Consumer(
-          builder: (context, ref, _) => PttCore(
-            phase: talk.pttPhase(),
-            onAirFor: ref.watch(onAirClockProvider) ?? Duration.zero,
-            level: ref.watch(localVoiceLevelProvider).value ?? 0,
-            speakerName: speaker?.name,
-            speakerColor: speaker == null
-                ? null
-                : meshNodeColor(context.fr.colors, speaker),
-            speakerLevel:
-                ref.watch(peerVoiceLevelsProvider).value?[speaker?.id] ?? 0,
-            onStart: voice.startTalking,
-            onStop: voice.stopTalking,
-            onToggle: voice.toggleMicrophone,
-          ),
-        ),
+        _core(voice),
       ],
+    );
+  }
+
+  /// Núcleo PTT; solo él se reconstruye con el reloj y los niveles de voz.
+  Widget _core(VoiceNotifier voice) {
+    final speaker = talk.speaker;
+    return Consumer(
+      builder: (context, ref, _) => PttCore(
+        phase: talk.pttPhase(),
+        onAirFor: ref.watch(onAirClockProvider) ?? Duration.zero,
+        level: ref.watch(localVoiceLevelProvider).value ?? 0,
+        speakerName: speaker?.name,
+        speakerColor: speaker == null
+            ? null
+            : meshNodeColor(context.fr.colors, speaker),
+        speakerLevel:
+            ref.watch(peerVoiceLevelsProvider).value?[speaker?.id] ?? 0,
+        idleHint: talk.silence?.hint,
+        onStart: voice.startTalking,
+        onStop: voice.stopTalking,
+        onToggle: voice.toggleMicrophone,
+      ),
     );
   }
 

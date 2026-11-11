@@ -140,6 +140,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override late final _Translations$room$mesh$en mesh = _Translations$room$mesh$en._(_root);
 	@override late final _Translations$room$header$en header = _Translations$room$header$en._(_root);
 	@override late final _Translations$room$sheets$en sheets = _Translations$room$sheets$en._(_root);
+	@override late final _Translations$room$handover$en handover = _Translations$room$handover$en._(_root);
 	@override late final _Translations$room$closure$en closure = _Translations$room$closure$en._(_root);
 	@override late final _Translations$room$internet$en internet = _Translations$room$internet$en._(_root);
 	@override late final _Translations$room$talk$en talk = _Translations$room$talk$en._(_root);
@@ -410,6 +411,7 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	// Translations
 	@override String get back => 'Back';
 	@override String step({required Object current, required Object total}) => 'Step ${current} of ${total}';
+	@override late final _Translations$lobby$newRoom$reach$en reach = _Translations$lobby$newRoom$reach$en._(_root);
 	@override late final _Translations$lobby$newRoom$guide$en guide = _Translations$lobby$newRoom$guide$en._(_root);
 	@override late final _Translations$lobby$newRoom$network$en network = _Translations$lobby$newRoom$network$en._(_root);
 	@override String get title => 'New room';
@@ -424,7 +426,6 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	@override String get regenerate => 'Generate another';
 	@override String get codeHelp => 'Share it only with your group: it keeps strangers on the same network out.';
 	@override String get codeHelpInternet => 'The link and the QR already include it: share them only with your group.';
-	@override late final _Translations$lobby$newRoom$internet$en internet = _Translations$lobby$newRoom$internet$en._(_root);
 	@override String get open => 'Open room';
 	@override String clockLabel({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}';
 }
@@ -471,6 +472,7 @@ class _Translations$room$header$en extends Translations$room$header$es {
 
 	// Translations
 	@override String get youAreHost => 'You\'re the host';
+	@override String get carrying => 'You carry the frecu';
 	@override String get internetTag => 'Over the internet';
 	@override String hostedBy({required Object name}) => 'Host · ${name}';
 	@override String hz({required Object value}) => '${value} Hz';
@@ -491,6 +493,38 @@ class _Translations$room$sheets$en extends Translations$room$sheets$es {
 	@override late final _Translations$room$sheets$leave$en leave = _Translations$room$sheets$leave$en._(_root);
 }
 
+// Path: room.handover
+class _Translations$room$handover$en extends Translations$room$handover$es {
+	_Translations$room$handover$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get leaveTitle => 'What happens to the frecu?';
+	@override String get leaveOne => 'You carry the frecu and there\'s one more person.';
+	@override String leaveMany({required Object count}) => 'You carry the frecu and there are ${count} more people.';
+	@override String get keep => 'Keep it going without me';
+	@override String get keepDetail => 'You pass the frecu to someone else and leave. Everyone else keeps talking.';
+	@override String get close => 'Close it for everyone';
+	@override String get closeDetail => 'The frecu closes and everyone leaves.';
+	@override String get next => 'Continue';
+	@override String get cancel => 'Cancel';
+	@override String get pickTitle => 'Who carries the frecu?';
+	@override String get pickMessage => 'That person shows the QR and decides when to close it.';
+	@override String get suggested => 'Here the longest · suggested';
+	@override String since({required Object time}) => 'Since ${time}';
+	@override String pass({required Object name}) => 'Pass to ${name} and leave';
+	@override String left({required Object previous, required Object name}) => '${previous} left · ${name} carries the frecu now';
+	@override String lost({required Object previous, required Object name}) => '${previous} disconnected · ${name} carries the frecu now';
+	@override String taken({required Object name}) => '${name} carries the frecu now';
+	@override String backAsGuest({required Object name}) => 'You\'re back as a guest · ${name} carries the frecu';
+	@override String get heirTitle => 'You carry the frecu now.';
+	@override String heirLeft({required Object name}) => '${name} passed it to you on leaving.';
+	@override String heirLost({required Object name}) => '${name} disconnected.';
+	@override String get showQr => 'Show the QR';
+	@override String get dismiss => 'Dismiss notice';
+}
+
 // Path: room.closure
 class _Translations$room$closure$en extends Translations$room$closure$es {
 	_Translations$room$closure$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -504,6 +538,7 @@ class _Translations$room$closure$en extends Translations$room$closure$es {
 	@override String get host => 'You closed the frecu. Everyone was disconnected.';
 	@override String get peer => 'The host closed the frecu. You can join another one whenever you like.';
 	@override String get lost => 'The host\'s signal was lost. You can join another one whenever you like.';
+	@override String get lostNetwork => 'The host\'s network was lost and didn\'t come back. You can join another one whenever you like.';
 	@override String get duration => 'Duration';
 	@override String get people => 'People';
 	@override String get note => 'Note';
@@ -886,6 +921,24 @@ class _Translations$lobby$join$scan$en extends Translations$lobby$join$scan$es {
 	@override late final _Translations$lobby$join$scan$camera$en camera = _Translations$lobby$join$scan$camera$en._(_root);
 }
 
+// Path: lobby.newRoom.reach
+class _Translations$lobby$newRoom$reach$en extends Translations$lobby$newRoom$reach$es {
+	_Translations$lobby$newRoom$reach$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'How does your group join?';
+	@override String get message => 'You choose once. The room doesn\'t mix both ways.';
+	@override String get local => 'Local';
+	@override String get localDetail => 'Everyone on the same Wi-Fi: the one your phone creates or one you already have, like at home or the office. No internet and no data used.';
+	@override String get internet => 'Over the internet';
+	@override String get internetDetail => 'From anywhere, with the QR or the link. Uses mobile data.';
+	@override String get internetOffline => 'You need internet to create it. Connect to a Wi-Fi with internet or turn on your data.';
+	@override String get internetUnavailable => 'This version of Frecu doesn\'t create rooms over the internet.';
+	@override String get kContinue => 'Continue';
+}
+
 // Path: lobby.newRoom.guide
 class _Translations$lobby$newRoom$guide$en extends Translations$lobby$newRoom$guide$es {
 	_Translations$lobby$newRoom$guide$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -961,18 +1014,6 @@ class _Translations$lobby$newRoom$network$en extends Translations$lobby$newRoom$
 	@override String get unsupportedMessage => 'It needs Android 8 or later. Use your hotspot.';
 }
 
-// Path: lobby.newRoom.internet
-class _Translations$lobby$newRoom$internet$en extends Translations$lobby$newRoom$internet$es {
-	_Translations$lobby$newRoom$internet$en._(TranslationsEn root) : this._root = root, super.internal(root);
-
-	final TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Allow internet';
-	@override String get on => 'People far away can also join with the link. Uses mobile data.';
-	@override String get off => 'Only people on your network can join.';
-}
-
 // Path: room.sheets.invite
 class _Translations$room$sheets$invite$en extends Translations$room$sheets$invite$es {
 	_Translations$room$sheets$invite$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -1033,6 +1074,9 @@ class _Translations$room$sheets$leave$en extends Translations$room$sheets$leave$
 	@override String get hostAlone => 'You\'re the host. If you leave, the frecu closes.';
 	@override String get hostOne => 'You\'re the host. If you leave, the frecu closes for the other person.';
 	@override String hostMany({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.';
+	@override String get networkAlone => 'Your phone is the frecu\'s network. If you leave, the frecu closes.';
+	@override String get networkOne => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other person.';
+	@override String networkMany({required Object count}) => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other ${count} people.';
 	@override String get hostConfirm => 'Close frecu';
 	@override String get cancel => 'Cancel';
 }
@@ -1067,6 +1111,8 @@ class _Translations$room$talk$hint$en extends Translations$room$talk$hint$es {
 	@override String get muted => 'Tap to turn on your microphone';
 	@override String get connecting => 'Connecting to the host…';
 	@override String get reconnecting => 'Restoring the connection…';
+	@override String hostSilent({required Object name}) => 'Everyone can still talk · if they don\'t come back, ${name} takes the frecu';
+	@override String get hostSilentYou => 'Everyone can still talk · if they don\'t come back, you take the frecu';
 }
 
 // Path: room.talk.island
@@ -1085,6 +1131,8 @@ class _Translations$room$talk$island$en extends Translations$room$talk$island$es
 	@override String get connecting => 'Connecting…';
 	@override String get reconnecting => 'Reconnecting…';
 	@override String reconnectingIn({required Object seconds}) => 'Reconnecting · ${seconds} s';
+	@override String hostSilent({required Object name}) => '${name} isn\'t responding';
+	@override String hostSilentFor({required Object name, required Object seconds}) => '${name} isn\'t responding · ${seconds} s';
 	@override String joined({required Object name}) => '${name} joined';
 	@override String left({required Object name}) => '${name} left';
 	@override String route({required Object route}) => 'Audio via ${route}';
@@ -1396,6 +1444,15 @@ extension on TranslationsEn {
 			'lobby.offline.openSettings' => 'Open Wi-Fi settings',
 			'lobby.newRoom.back' => 'Back',
 			'lobby.newRoom.step' => ({required Object current, required Object total}) => 'Step ${current} of ${total}',
+			'lobby.newRoom.reach.title' => 'How does your group join?',
+			'lobby.newRoom.reach.message' => 'You choose once. The room doesn\'t mix both ways.',
+			'lobby.newRoom.reach.local' => 'Local',
+			'lobby.newRoom.reach.localDetail' => 'Everyone on the same Wi-Fi: the one your phone creates or one you already have, like at home or the office. No internet and no data used.',
+			'lobby.newRoom.reach.internet' => 'Over the internet',
+			'lobby.newRoom.reach.internetDetail' => 'From anywhere, with the QR or the link. Uses mobile data.',
+			'lobby.newRoom.reach.internetOffline' => 'You need internet to create it. Connect to a Wi-Fi with internet or turn on your data.',
+			'lobby.newRoom.reach.internetUnavailable' => 'This version of Frecu doesn\'t create rooms over the internet.',
+			'lobby.newRoom.reach.kContinue' => 'Continue',
 			'lobby.newRoom.guide.saveForBluetooth' => 'Save it to invite via Bluetooth',
 			'lobby.newRoom.guide.savedForBluetooth' => 'Hotspot saved · edit',
 			'lobby.newRoom.guide.hotspotSheet.kicker' => 'Invite via Bluetooth · optional',
@@ -1476,9 +1533,6 @@ extension on TranslationsEn {
 			'lobby.newRoom.regenerate' => 'Generate another',
 			'lobby.newRoom.codeHelp' => 'Share it only with your group: it keeps strangers on the same network out.',
 			'lobby.newRoom.codeHelpInternet' => 'The link and the QR already include it: share them only with your group.',
-			'lobby.newRoom.internet.title' => 'Allow internet',
-			'lobby.newRoom.internet.on' => 'People far away can also join with the link. Uses mobile data.',
-			'lobby.newRoom.internet.off' => 'Only people on your network can join.',
 			'lobby.newRoom.open' => 'Open room',
 			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}',
 			'lobby.noteNames.0' => 'C',
@@ -1537,6 +1591,7 @@ extension on TranslationsEn {
 			'room.mesh.free' => 'Free',
 			'room.mesh.invite' => 'Invite',
 			'room.header.youAreHost' => 'You\'re the host',
+			'room.header.carrying' => 'You carry the frecu',
 			'room.header.internetTag' => 'Over the internet',
 			'room.header.hostedBy' => ({required Object name}) => 'Host · ${name}',
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
@@ -1592,14 +1647,41 @@ extension on TranslationsEn {
 			'room.sheets.leave.hostAlone' => 'You\'re the host. If you leave, the frecu closes.',
 			'room.sheets.leave.hostOne' => 'You\'re the host. If you leave, the frecu closes for the other person.',
 			'room.sheets.leave.hostMany' => ({required Object count}) => 'You\'re the host. If you leave, the frecu closes for the other ${count} people.',
+			'room.sheets.leave.networkAlone' => 'Your phone is the frecu\'s network. If you leave, the frecu closes.',
+			'room.sheets.leave.networkOne' => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other person.',
+			'room.sheets.leave.networkMany' => ({required Object count}) => 'Your phone is the frecu\'s network. If you leave, the frecu closes for the other ${count} people.',
 			'room.sheets.leave.hostConfirm' => 'Close frecu',
 			'room.sheets.leave.cancel' => 'Cancel',
+			'room.handover.leaveTitle' => 'What happens to the frecu?',
+			'room.handover.leaveOne' => 'You carry the frecu and there\'s one more person.',
+			'room.handover.leaveMany' => ({required Object count}) => 'You carry the frecu and there are ${count} more people.',
+			'room.handover.keep' => 'Keep it going without me',
+			'room.handover.keepDetail' => 'You pass the frecu to someone else and leave. Everyone else keeps talking.',
+			'room.handover.close' => 'Close it for everyone',
+			'room.handover.closeDetail' => 'The frecu closes and everyone leaves.',
+			'room.handover.next' => 'Continue',
+			'room.handover.cancel' => 'Cancel',
+			'room.handover.pickTitle' => 'Who carries the frecu?',
+			'room.handover.pickMessage' => 'That person shows the QR and decides when to close it.',
+			'room.handover.suggested' => 'Here the longest · suggested',
+			'room.handover.since' => ({required Object time}) => 'Since ${time}',
+			'room.handover.pass' => ({required Object name}) => 'Pass to ${name} and leave',
+			'room.handover.left' => ({required Object previous, required Object name}) => '${previous} left · ${name} carries the frecu now',
+			'room.handover.lost' => ({required Object previous, required Object name}) => '${previous} disconnected · ${name} carries the frecu now',
+			'room.handover.taken' => ({required Object name}) => '${name} carries the frecu now',
+			'room.handover.backAsGuest' => ({required Object name}) => 'You\'re back as a guest · ${name} carries the frecu',
+			'room.handover.heirTitle' => 'You carry the frecu now.',
+			'room.handover.heirLeft' => ({required Object name}) => '${name} passed it to you on leaving.',
+			'room.handover.heirLost' => ({required Object name}) => '${name} disconnected.',
+			'room.handover.showQr' => 'Show the QR',
+			'room.handover.dismiss' => 'Dismiss notice',
 			'room.closure.offAir' => 'Off the air',
 			'room.closure.noteOffAir' => ({required Object note}) => '${note} · off the air',
 			'room.closure.title' => 'End of transmission',
 			'room.closure.host' => 'You closed the frecu. Everyone was disconnected.',
 			'room.closure.peer' => 'The host closed the frecu. You can join another one whenever you like.',
 			'room.closure.lost' => 'The host\'s signal was lost. You can join another one whenever you like.',
+			'room.closure.lostNetwork' => 'The host\'s network was lost and didn\'t come back. You can join another one whenever you like.',
 			'room.closure.duration' => 'Duration',
 			'room.closure.people' => 'People',
 			'room.closure.note' => 'Note',
@@ -1623,6 +1705,8 @@ extension on TranslationsEn {
 			'room.talk.hint.muted' => 'Tap to turn on your microphone',
 			'room.talk.hint.connecting' => 'Connecting to the host…',
 			'room.talk.hint.reconnecting' => 'Restoring the connection…',
+			'room.talk.hint.hostSilent' => ({required Object name}) => 'Everyone can still talk · if they don\'t come back, ${name} takes the frecu',
+			'room.talk.hint.hostSilentYou' => 'Everyone can still talk · if they don\'t come back, you take the frecu',
 			'room.talk.island.online' => ({required Object count, required Object max}) => 'Online · ${count}/${max}',
 			'room.talk.island.openMic' => ({required Object count, required Object max}) => 'Open mic · ${count}/${max}',
 			'room.talk.island.muted' => ({required Object count, required Object max}) => 'Muted · ${count}/${max}',
@@ -1632,6 +1716,8 @@ extension on TranslationsEn {
 			'room.talk.island.connecting' => 'Connecting…',
 			'room.talk.island.reconnecting' => 'Reconnecting…',
 			'room.talk.island.reconnectingIn' => ({required Object seconds}) => 'Reconnecting · ${seconds} s',
+			'room.talk.island.hostSilent' => ({required Object name}) => '${name} isn\'t responding',
+			'room.talk.island.hostSilentFor' => ({required Object name, required Object seconds}) => '${name} isn\'t responding · ${seconds} s',
 			'room.talk.island.joined' => ({required Object name}) => '${name} joined',
 			'room.talk.island.left' => ({required Object name}) => '${name} left',
 			'room.talk.island.route' => ({required Object route}) => 'Audio via ${route}',
@@ -1764,6 +1850,8 @@ extension on TranslationsEn {
 			'messages.message' => 'They arrive instantly and vibrate, even with the screen off.',
 			'messages.kinds.behind' => 'I fell behind',
 			'messages.kinds.stop' => 'Stop at the next one',
+			_ => null,
+		} ?? switch (path) {
 			'messages.kinds.fuel' => 'I need fuel',
 			'messages.kinds.ok' => 'All good',
 			'messages.kinds.onMyWay' => 'On my way',
@@ -1802,8 +1890,6 @@ extension on TranslationsEn {
 			'location.compass.nw' => 'NW',
 			'location.compassLong.n' => 'north',
 			'location.compassLong.ne' => 'northeast',
-			_ => null,
-		} ?? switch (path) {
 			'location.compassLong.e' => 'east',
 			'location.compassLong.se' => 'southeast',
 			'location.compassLong.s' => 'south',

@@ -3,6 +3,8 @@
 // I3: CUANDO un invitado por internet manda un código incorrecto ENTONCES lo rechaza el anfitrión, igual que en la red local.
 // I4: CUANDO el relé del anfitrión se cae ENTONCES sus invitados por internet salen de la frecu.
 // I5: CUANDO no hay punto de encuentro configurado ENTONCES abrir o unirse por internet falla sin dejar nada abierto.
+// AC2: CUANDO la frecu es local ENTONCES no abre el relé de la nube, su invitación (QR, NFC, Bluetooth) no lleva id de internet ni enlace, y un QR por internet no permite entrar a ella.
+// AC3: CUANDO la frecu es por internet ENTONCES todos los invitados entran por la nube, aunque estén en la misma Wi-Fi que el anfitrión. Su invitación no lleva IP local, no se anuncia por mDNS ni por Bluetooth, y ya no existe el aviso «La red de Frecu no tiene internet».
 // AC4: CUANDO el relé del anfitrión en modo internet se cae y aparece una red nueva durante la espera ENTONCES vuelve a conectar con la nube antes de que termine la espera.
 import 'dart:async';
 import 'dart:convert';
@@ -17,6 +19,7 @@ import 'package:frecu/features/room/data/datasources/signaling_client_datasource
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/repositories/room_repository_impl.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -164,7 +167,7 @@ void main() {
       name: 'Ruta',
       accessCode: '1234',
       displayName: 'Ana',
-      internet: true,
+      reach: RoomReach.internet,
     );
 
     final room = result.dataOrNull!;
@@ -178,7 +181,7 @@ void main() {
       name: 'Ruta',
       accessCode: '1234',
       displayName: 'Ana',
-      internet: true,
+      reach: RoomReach.internet,
     )).dataOrNull!;
 
     final joined = await guest.joinInternetRoom(
@@ -210,7 +213,7 @@ void main() {
     final room = (await host.createRoom(
       name: 'Ruta',
       accessCode: '1234',
-      internet: true,
+      reach: RoomReach.internet,
     )).dataOrNull!;
 
     final joined = await guest.joinInternetRoom(
@@ -229,7 +232,7 @@ void main() {
         name: 'Ruta',
         accessCode: '1234',
         displayName: 'Ana',
-        internet: true,
+        reach: RoomReach.internet,
       )).dataOrNull!;
       await guest.joinInternetRoom(
         internetId: room.internetId!,
@@ -261,7 +264,7 @@ void main() {
       final created = await offline.createRoom(
         name: 'Ruta',
         accessCode: '1234',
-        internet: true,
+        reach: RoomReach.internet,
       );
       final joined = await offline.joinInternetRoom(
         internetId: CloudConfig.newRoomId(),
@@ -297,7 +300,7 @@ void main() {
       name: 'Ruta',
       accessCode: '1234',
       displayName: 'Ana',
-      internet: true,
+      reach: RoomReach.internet,
     );
     expect(created.isSuccess, isTrue);
     expect(relay.isConnected, isTrue);
@@ -314,5 +317,104 @@ void main() {
     ];
     await back;
     expect(relay.isConnected, isTrue);
+  });
+
+  group('Tipo de frecu', () {
+    /// Anfitrión en una Wi-Fi con su IP de la red local.
+    RoomRepositoryImpl onWifi() {
+      final repository = RoomRepositoryImpl(
+        serverDataSource: SignalingServerDataSource(),
+        clientDataSource: SignalingClientDataSource(),
+        cloudRelayDataSource: CloudRelayDataSource(
+          reconnectBaseDelay: const Duration(seconds: 30),
+        ),
+        cloudConfig: cloud.config,
+        networkInterfacesProvider: () async => [
+          _Interface('wlan0', ['192.168.1.20']),
+        ],
+        signalingPort: 0,
+      );
+      addTearDown(repository.dispose);
+      return repository;
+    }
+
+    test('AC2: a local room does not open the cloud relay and has no '
+        'internet id', () async {
+      final result = await onWifi().createRoom(
+        name: 'Ruta',
+        accessCode: '1234',
+        displayName: 'Ana',
+      );
+
+      final room = result.dataOrNull!;
+      expect(room.reach, RoomReach.local);
+      expect(room.internetId, isNull);
+      expect(room.hostAddress, '192.168.1.20');
+      expect(cloud.host, isNull);
+    });
+
+    test('AC2: an internet invite cannot reach a local room', () async {
+      await onWifi().createRoom(
+        name: 'Ruta',
+        accessCode: '1234',
+        displayName: 'Ana',
+      );
+      final stranger = RoomRepositoryImpl(
+        serverDataSource: SignalingServerDataSource(),
+        clientDataSource: SignalingClientDataSource(),
+        cloudConfig: cloud.config,
+        networkInterfacesProvider: () async => [],
+        signalingPort: 0,
+        welcomeTimeout: const Duration(milliseconds: 300),
+      );
+      addTearDown(stranger.dispose);
+
+      final joined = await stranger.joinInternetRoom(
+        internetId: CloudConfig.newRoomId(),
+        accessCode: '1234',
+        displayName: 'Beto',
+      );
+
+      expect(joined.isFailure, isTrue);
+    });
+
+    test(
+      'AC3: an internet room on a Wi-Fi invites with no local address',
+      () async {
+        final result = await onWifi().createRoom(
+          name: 'Ruta',
+          accessCode: '1234',
+          displayName: 'Ana',
+          reach: RoomReach.internet,
+        );
+
+        final room = result.dataOrNull!;
+        expect(room.reach, RoomReach.internet);
+        expect(room.hostAddress, isEmpty);
+        expect(CloudConfig.isRoomId(room.internetId!), isTrue);
+        expect(cloud.host, isNotNull);
+      },
+    );
+
+    test(
+      'AC3: a guest of an internet room knows it is an internet room',
+      () async {
+        final room = (await host.createRoom(
+          name: 'Ruta',
+          accessCode: '1234',
+          displayName: 'Ana',
+          reach: RoomReach.internet,
+        )).dataOrNull!;
+
+        final joined = await guest.joinInternetRoom(
+          internetId: room.internetId!,
+          accessCode: '1234',
+          displayName: 'Beto',
+        );
+
+        expect(joined.dataOrNull!.reach, RoomReach.internet);
+        expect(joined.dataOrNull!.hostAddress, isEmpty);
+      },
+    );
   });
 }

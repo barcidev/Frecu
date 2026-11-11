@@ -10,7 +10,7 @@ SHA-256 del secreto del anfitrión. No hay servidor propio que mantener.
 
 | Ruta | Qué hace |
 | --- | --- |
-| `GET /rooms/<id>/host?secret=<s>` (WebSocket) | El primero que llega reclama la sala. Secreto distinto → `403`. El mismo secreto reemplaza la conexión anterior (y cierra a sus invitados). |
+| `GET /rooms/<id>/host?secret=<s>&term=<n>` (WebSocket) | El primero que llega reclama la sala. Secreto distinto → `403`. El mismo secreto con un turno igual o mayor reemplaza la conexión anterior (`4000`) y cierra a sus invitados (`1012`); con un turno menor que el vigente → `409`. `term` es opcional (entero ≥ 1; sin él cuenta como 0; mal formado → `400`). |
 | `GET /rooms/<id>/guest` (WebSocket) | Sin anfitrión conectado → `404`. Máximo 16 invitados a la vez (`503`). |
 | `POST /rooms/<id>/turn` | Credenciales TURN de Cloudflare Realtime (24 h) como `{"iceServers":[…]}`, más `stun:stun.cloudflare.com:3478`. Sin anfitrión → `404`. |
 | `GET /j/<id>` | Página para abrir una invitación: lee `#c=…&n=…&name=…` y ofrece «Abrir en Frecu» hacia `frecu://join?x=<id>&c=…`. |
@@ -26,8 +26,13 @@ Sobres entre el Durable Object y el anfitrión (JSON de texto):
 - Del anfitrión: `{"t":"msg","c":"…","d":"…"}` (se entrega `d` tal cual a ese
   invitado) y `{"t":"close","c":"…"}` (se cierra a ese invitado).
 
-Los invitados nunca se hablan entre sí. Si el anfitrión se desconecta, se
-cierra a todos los invitados (código `1001`). Mensajes de más de 64 KB o
+Los invitados nunca se hablan entre sí. Si el anfitrión se desconecta sin
+turno (app anterior), se cierra a todos los invitados (código `1001`). Si se
+conectó con turno, la frecu admite traspaso: los invitados siguen abiertos
+durante la gracia (10 s) y reciben `{"t":"host_lost"}`; el sucesor la toma
+conectándose como anfitrión con el mismo secreto y un turno mayor, y los
+invitados vuelven a entrar por su socket. Si nadie la toma en la gracia, se
+cierra a los invitados (`1001`). Mensajes de más de 64 KB o
 binarios cierran al invitado (`1009` / `1003`). Una sala sin anfitrión durante
 24 h olvida su secreto.
 

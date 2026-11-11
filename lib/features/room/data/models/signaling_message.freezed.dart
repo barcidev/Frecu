@@ -67,6 +67,22 @@ SignalingMessage _$SignalingMessageFromJson(
           return SignalingPongMessage.fromJson(
             json
           );
+                case 'room_state':
+          return SignalingRoomStateMessage.fromJson(
+            json
+          );
+                case 'host_handover':
+          return SignalingHostHandoverMessage.fromJson(
+            json
+          );
+                case 'host_probe':
+          return SignalingHostProbeMessage.fromJson(
+            json
+          );
+                case 'host_changed':
+          return SignalingHostChangedMessage.fromJson(
+            json
+          );
                 case 'room_closed':
           return SignalingRoomClosedMessage.fromJson(
             json
@@ -160,7 +176,7 @@ extension SignalingMessagePatterns on SignalingMessage {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SignalingJoinMessage value)?  join,TResult Function( SignalingWelcomeMessage value)?  welcome,TResult Function( SignalingRejectedMessage value)?  rejected,TResult Function( SignalingPeerJoinedMessage value)?  peerJoined,TResult Function( SignalingPeerLeftMessage value)?  peerLeft,TResult Function( SignalingOfferMessage value)?  offer,TResult Function( SignalingAnswerMessage value)?  answer,TResult Function( SignalingIceMessage value)?  ice,TResult Function( SignalingTalkStateMessage value)?  talkState,TResult Function( SignalingQuickMessage value)?  quickMessage,TResult Function( SignalingPositionMessage value)?  position,TResult Function( SignalingPingMessage value)?  ping,TResult Function( SignalingPongMessage value)?  pong,TResult Function( SignalingRoomClosedMessage value)?  roomClosed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SignalingJoinMessage value)?  join,TResult Function( SignalingWelcomeMessage value)?  welcome,TResult Function( SignalingRejectedMessage value)?  rejected,TResult Function( SignalingPeerJoinedMessage value)?  peerJoined,TResult Function( SignalingPeerLeftMessage value)?  peerLeft,TResult Function( SignalingOfferMessage value)?  offer,TResult Function( SignalingAnswerMessage value)?  answer,TResult Function( SignalingIceMessage value)?  ice,TResult Function( SignalingTalkStateMessage value)?  talkState,TResult Function( SignalingQuickMessage value)?  quickMessage,TResult Function( SignalingPositionMessage value)?  position,TResult Function( SignalingPingMessage value)?  ping,TResult Function( SignalingPongMessage value)?  pong,TResult Function( SignalingRoomStateMessage value)?  roomState,TResult Function( SignalingHostHandoverMessage value)?  hostHandover,TResult Function( SignalingHostProbeMessage value)?  hostProbe,TResult Function( SignalingHostChangedMessage value)?  hostChanged,TResult Function( SignalingRoomClosedMessage value)?  roomClosed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
@@ -176,7 +192,11 @@ return talkState(_that);case SignalingQuickMessage() when quickMessage != null:
 return quickMessage(_that);case SignalingPositionMessage() when position != null:
 return position(_that);case SignalingPingMessage() when ping != null:
 return ping(_that);case SignalingPongMessage() when pong != null:
-return pong(_that);case SignalingRoomClosedMessage() when roomClosed != null:
+return pong(_that);case SignalingRoomStateMessage() when roomState != null:
+return roomState(_that);case SignalingHostHandoverMessage() when hostHandover != null:
+return hostHandover(_that);case SignalingHostProbeMessage() when hostProbe != null:
+return hostProbe(_that);case SignalingHostChangedMessage() when hostChanged != null:
+return hostChanged(_that);case SignalingRoomClosedMessage() when roomClosed != null:
 return roomClosed(_that);case _:
   return orElse();
 
@@ -195,7 +215,7 @@ return roomClosed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SignalingJoinMessage value)  join,required TResult Function( SignalingWelcomeMessage value)  welcome,required TResult Function( SignalingRejectedMessage value)  rejected,required TResult Function( SignalingPeerJoinedMessage value)  peerJoined,required TResult Function( SignalingPeerLeftMessage value)  peerLeft,required TResult Function( SignalingOfferMessage value)  offer,required TResult Function( SignalingAnswerMessage value)  answer,required TResult Function( SignalingIceMessage value)  ice,required TResult Function( SignalingTalkStateMessage value)  talkState,required TResult Function( SignalingQuickMessage value)  quickMessage,required TResult Function( SignalingPositionMessage value)  position,required TResult Function( SignalingPingMessage value)  ping,required TResult Function( SignalingPongMessage value)  pong,required TResult Function( SignalingRoomClosedMessage value)  roomClosed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SignalingJoinMessage value)  join,required TResult Function( SignalingWelcomeMessage value)  welcome,required TResult Function( SignalingRejectedMessage value)  rejected,required TResult Function( SignalingPeerJoinedMessage value)  peerJoined,required TResult Function( SignalingPeerLeftMessage value)  peerLeft,required TResult Function( SignalingOfferMessage value)  offer,required TResult Function( SignalingAnswerMessage value)  answer,required TResult Function( SignalingIceMessage value)  ice,required TResult Function( SignalingTalkStateMessage value)  talkState,required TResult Function( SignalingQuickMessage value)  quickMessage,required TResult Function( SignalingPositionMessage value)  position,required TResult Function( SignalingPingMessage value)  ping,required TResult Function( SignalingPongMessage value)  pong,required TResult Function( SignalingRoomStateMessage value)  roomState,required TResult Function( SignalingHostHandoverMessage value)  hostHandover,required TResult Function( SignalingHostProbeMessage value)  hostProbe,required TResult Function( SignalingHostChangedMessage value)  hostChanged,required TResult Function( SignalingRoomClosedMessage value)  roomClosed,}){
 final _that = this;
 switch (_that) {
 case SignalingJoinMessage():
@@ -211,7 +231,11 @@ return talkState(_that);case SignalingQuickMessage():
 return quickMessage(_that);case SignalingPositionMessage():
 return position(_that);case SignalingPingMessage():
 return ping(_that);case SignalingPongMessage():
-return pong(_that);case SignalingRoomClosedMessage():
+return pong(_that);case SignalingRoomStateMessage():
+return roomState(_that);case SignalingHostHandoverMessage():
+return hostHandover(_that);case SignalingHostProbeMessage():
+return hostProbe(_that);case SignalingHostChangedMessage():
+return hostChanged(_that);case SignalingRoomClosedMessage():
 return roomClosed(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -226,7 +250,7 @@ return roomClosed(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SignalingJoinMessage value)?  join,TResult? Function( SignalingWelcomeMessage value)?  welcome,TResult? Function( SignalingRejectedMessage value)?  rejected,TResult? Function( SignalingPeerJoinedMessage value)?  peerJoined,TResult? Function( SignalingPeerLeftMessage value)?  peerLeft,TResult? Function( SignalingOfferMessage value)?  offer,TResult? Function( SignalingAnswerMessage value)?  answer,TResult? Function( SignalingIceMessage value)?  ice,TResult? Function( SignalingTalkStateMessage value)?  talkState,TResult? Function( SignalingQuickMessage value)?  quickMessage,TResult? Function( SignalingPositionMessage value)?  position,TResult? Function( SignalingPingMessage value)?  ping,TResult? Function( SignalingPongMessage value)?  pong,TResult? Function( SignalingRoomClosedMessage value)?  roomClosed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SignalingJoinMessage value)?  join,TResult? Function( SignalingWelcomeMessage value)?  welcome,TResult? Function( SignalingRejectedMessage value)?  rejected,TResult? Function( SignalingPeerJoinedMessage value)?  peerJoined,TResult? Function( SignalingPeerLeftMessage value)?  peerLeft,TResult? Function( SignalingOfferMessage value)?  offer,TResult? Function( SignalingAnswerMessage value)?  answer,TResult? Function( SignalingIceMessage value)?  ice,TResult? Function( SignalingTalkStateMessage value)?  talkState,TResult? Function( SignalingQuickMessage value)?  quickMessage,TResult? Function( SignalingPositionMessage value)?  position,TResult? Function( SignalingPingMessage value)?  ping,TResult? Function( SignalingPongMessage value)?  pong,TResult? Function( SignalingRoomStateMessage value)?  roomState,TResult? Function( SignalingHostHandoverMessage value)?  hostHandover,TResult? Function( SignalingHostProbeMessage value)?  hostProbe,TResult? Function( SignalingHostChangedMessage value)?  hostChanged,TResult? Function( SignalingRoomClosedMessage value)?  roomClosed,}){
 final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
@@ -242,7 +266,11 @@ return talkState(_that);case SignalingQuickMessage() when quickMessage != null:
 return quickMessage(_that);case SignalingPositionMessage() when position != null:
 return position(_that);case SignalingPingMessage() when ping != null:
 return ping(_that);case SignalingPongMessage() when pong != null:
-return pong(_that);case SignalingRoomClosedMessage() when roomClosed != null:
+return pong(_that);case SignalingRoomStateMessage() when roomState != null:
+return roomState(_that);case SignalingHostHandoverMessage() when hostHandover != null:
+return hostHandover(_that);case SignalingHostProbeMessage() when hostProbe != null:
+return hostProbe(_that);case SignalingHostChangedMessage() when hostChanged != null:
+return hostChanged(_that);case SignalingRoomClosedMessage() when roomClosed != null:
 return roomClosed(_that);case _:
   return null;
 
@@ -260,10 +288,10 @@ return roomClosed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String displayName,  String accessCode,  int protocolVersion,  String type)?  join,TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult Function( String reason,  String type)?  rejected,TResult Function( Participant participant,  String type)?  peerJoined,TResult Function( String peerId,  String type)?  peerLeft,TResult Function( String from,  String to,  String sdp,  String type)?  offer,TResult Function( String from,  String to,  String sdp,  String type)?  answer,TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult Function( String peerId,  String kind,  String type)?  quickMessage,TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult Function( int timestamp,  String type)?  ping,TResult Function( int timestamp,  String type)?  pong,TResult Function( String reason,  String type)?  roomClosed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId, @JsonKey(includeIfNull: false)  int? term,  String type)?  join,TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult Function( String reason,  String type)?  rejected,TResult Function( Participant participant,  String type)?  peerJoined,TResult Function( String peerId,  String type)?  peerLeft,TResult Function( String from,  String to,  String sdp,  String type)?  offer,TResult Function( String from,  String to,  String sdp,  String type)?  answer,TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult Function( String peerId,  String kind,  String type)?  quickMessage,TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult Function( int timestamp,  String type)?  ping,TResult Function( int timestamp,  String type)?  pong,TResult Function( RoomSuccession state,  String type)?  roomState,TResult Function( String to,  int term, @JsonKey(includeIfNull: false)  String? address, @JsonKey(includeIfNull: false)  int? port,  String type)?  hostHandover,TResult Function( String accessCode,  int term,  String host,  int port,  String type)?  hostProbe,TResult Function( String host,  int term,  String reason,  String type)?  hostChanged,TResult Function( String reason,  String type)?  roomClosed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
-return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.type);case SignalingWelcomeMessage() when welcome != null:
+return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.term,_that.type);case SignalingWelcomeMessage() when welcome != null:
 return welcome(_that.peerId,_that.participants,_that.note,_that.roomName,_that.type);case SignalingRejectedMessage() when rejected != null:
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage() when peerJoined != null:
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage() when peerLeft != null:
@@ -275,7 +303,11 @@ return talkState(_that.peerId,_that.isSpeaking,_that.muted,_that.type);case Sign
 return quickMessage(_that.peerId,_that.kind,_that.type);case SignalingPositionMessage() when position != null:
 return position(_that.peerId,_that.lat,_that.lon,_that.accuracy,_that.type);case SignalingPingMessage() when ping != null:
 return ping(_that.timestamp,_that.type);case SignalingPongMessage() when pong != null:
-return pong(_that.timestamp,_that.type);case SignalingRoomClosedMessage() when roomClosed != null:
+return pong(_that.timestamp,_that.type);case SignalingRoomStateMessage() when roomState != null:
+return roomState(_that.state,_that.type);case SignalingHostHandoverMessage() when hostHandover != null:
+return hostHandover(_that.to,_that.term,_that.address,_that.port,_that.type);case SignalingHostProbeMessage() when hostProbe != null:
+return hostProbe(_that.accessCode,_that.term,_that.host,_that.port,_that.type);case SignalingHostChangedMessage() when hostChanged != null:
+return hostChanged(_that.host,_that.term,_that.reason,_that.type);case SignalingRoomClosedMessage() when roomClosed != null:
 return roomClosed(_that.reason,_that.type);case _:
   return orElse();
 
@@ -294,10 +326,10 @@ return roomClosed(_that.reason,_that.type);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String displayName,  String accessCode,  int protocolVersion,  String type)  join,required TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)  welcome,required TResult Function( String reason,  String type)  rejected,required TResult Function( Participant participant,  String type)  peerJoined,required TResult Function( String peerId,  String type)  peerLeft,required TResult Function( String from,  String to,  String sdp,  String type)  offer,required TResult Function( String from,  String to,  String sdp,  String type)  answer,required TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)  ice,required TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)  talkState,required TResult Function( String peerId,  String kind,  String type)  quickMessage,required TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)  position,required TResult Function( int timestamp,  String type)  ping,required TResult Function( int timestamp,  String type)  pong,required TResult Function( String reason,  String type)  roomClosed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId, @JsonKey(includeIfNull: false)  int? term,  String type)  join,required TResult Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)  welcome,required TResult Function( String reason,  String type)  rejected,required TResult Function( Participant participant,  String type)  peerJoined,required TResult Function( String peerId,  String type)  peerLeft,required TResult Function( String from,  String to,  String sdp,  String type)  offer,required TResult Function( String from,  String to,  String sdp,  String type)  answer,required TResult Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)  ice,required TResult Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)  talkState,required TResult Function( String peerId,  String kind,  String type)  quickMessage,required TResult Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)  position,required TResult Function( int timestamp,  String type)  ping,required TResult Function( int timestamp,  String type)  pong,required TResult Function( RoomSuccession state,  String type)  roomState,required TResult Function( String to,  int term, @JsonKey(includeIfNull: false)  String? address, @JsonKey(includeIfNull: false)  int? port,  String type)  hostHandover,required TResult Function( String accessCode,  int term,  String host,  int port,  String type)  hostProbe,required TResult Function( String host,  int term,  String reason,  String type)  hostChanged,required TResult Function( String reason,  String type)  roomClosed,}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage():
-return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.type);case SignalingWelcomeMessage():
+return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.term,_that.type);case SignalingWelcomeMessage():
 return welcome(_that.peerId,_that.participants,_that.note,_that.roomName,_that.type);case SignalingRejectedMessage():
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage():
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage():
@@ -309,7 +341,11 @@ return talkState(_that.peerId,_that.isSpeaking,_that.muted,_that.type);case Sign
 return quickMessage(_that.peerId,_that.kind,_that.type);case SignalingPositionMessage():
 return position(_that.peerId,_that.lat,_that.lon,_that.accuracy,_that.type);case SignalingPingMessage():
 return ping(_that.timestamp,_that.type);case SignalingPongMessage():
-return pong(_that.timestamp,_that.type);case SignalingRoomClosedMessage():
+return pong(_that.timestamp,_that.type);case SignalingRoomStateMessage():
+return roomState(_that.state,_that.type);case SignalingHostHandoverMessage():
+return hostHandover(_that.to,_that.term,_that.address,_that.port,_that.type);case SignalingHostProbeMessage():
+return hostProbe(_that.accessCode,_that.term,_that.host,_that.port,_that.type);case SignalingHostChangedMessage():
+return hostChanged(_that.host,_that.term,_that.reason,_that.type);case SignalingRoomClosedMessage():
 return roomClosed(_that.reason,_that.type);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -324,10 +360,10 @@ return roomClosed(_that.reason,_that.type);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String displayName,  String accessCode,  int protocolVersion,  String type)?  join,TResult? Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult? Function( String reason,  String type)?  rejected,TResult? Function( Participant participant,  String type)?  peerJoined,TResult? Function( String peerId,  String type)?  peerLeft,TResult? Function( String from,  String to,  String sdp,  String type)?  offer,TResult? Function( String from,  String to,  String sdp,  String type)?  answer,TResult? Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult? Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult? Function( String peerId,  String kind,  String type)?  quickMessage,TResult? Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult? Function( int timestamp,  String type)?  ping,TResult? Function( int timestamp,  String type)?  pong,TResult? Function( String reason,  String type)?  roomClosed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String displayName,  String accessCode,  int protocolVersion, @JsonKey(includeIfNull: false)  String? peerId, @JsonKey(includeIfNull: false)  int? term,  String type)?  join,TResult? Function( String peerId,  List<Participant> participants, @RoomNoteConverter()  RoomNote? note, @JsonKey(includeIfNull: false)  String? roomName,  String type)?  welcome,TResult? Function( String reason,  String type)?  rejected,TResult? Function( Participant participant,  String type)?  peerJoined,TResult? Function( String peerId,  String type)?  peerLeft,TResult? Function( String from,  String to,  String sdp,  String type)?  offer,TResult? Function( String from,  String to,  String sdp,  String type)?  answer,TResult? Function( String from,  String to,  String candidate,  String? sdpMid,  int? sdpMLineIndex,  String type)?  ice,TResult? Function( String peerId,  bool isSpeaking, @JsonKey(includeIfNull: false)  bool? muted,  String type)?  talkState,TResult? Function( String peerId,  String kind,  String type)?  quickMessage,TResult? Function( String peerId, @JsonKey(includeIfNull: false)  double? lat, @JsonKey(includeIfNull: false)  double? lon, @JsonKey(includeIfNull: false)  double? accuracy,  String type)?  position,TResult? Function( int timestamp,  String type)?  ping,TResult? Function( int timestamp,  String type)?  pong,TResult? Function( RoomSuccession state,  String type)?  roomState,TResult? Function( String to,  int term, @JsonKey(includeIfNull: false)  String? address, @JsonKey(includeIfNull: false)  int? port,  String type)?  hostHandover,TResult? Function( String accessCode,  int term,  String host,  int port,  String type)?  hostProbe,TResult? Function( String host,  int term,  String reason,  String type)?  hostChanged,TResult? Function( String reason,  String type)?  roomClosed,}) {final _that = this;
 switch (_that) {
 case SignalingJoinMessage() when join != null:
-return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.type);case SignalingWelcomeMessage() when welcome != null:
+return join(_that.displayName,_that.accessCode,_that.protocolVersion,_that.peerId,_that.term,_that.type);case SignalingWelcomeMessage() when welcome != null:
 return welcome(_that.peerId,_that.participants,_that.note,_that.roomName,_that.type);case SignalingRejectedMessage() when rejected != null:
 return rejected(_that.reason,_that.type);case SignalingPeerJoinedMessage() when peerJoined != null:
 return peerJoined(_that.participant,_that.type);case SignalingPeerLeftMessage() when peerLeft != null:
@@ -339,7 +375,11 @@ return talkState(_that.peerId,_that.isSpeaking,_that.muted,_that.type);case Sign
 return quickMessage(_that.peerId,_that.kind,_that.type);case SignalingPositionMessage() when position != null:
 return position(_that.peerId,_that.lat,_that.lon,_that.accuracy,_that.type);case SignalingPingMessage() when ping != null:
 return ping(_that.timestamp,_that.type);case SignalingPongMessage() when pong != null:
-return pong(_that.timestamp,_that.type);case SignalingRoomClosedMessage() when roomClosed != null:
+return pong(_that.timestamp,_that.type);case SignalingRoomStateMessage() when roomState != null:
+return roomState(_that.state,_that.type);case SignalingHostHandoverMessage() when hostHandover != null:
+return hostHandover(_that.to,_that.term,_that.address,_that.port,_that.type);case SignalingHostProbeMessage() when hostProbe != null:
+return hostProbe(_that.accessCode,_that.term,_that.host,_that.port,_that.type);case SignalingHostChangedMessage() when hostChanged != null:
+return hostChanged(_that.host,_that.term,_that.reason,_that.type);case SignalingRoomClosedMessage() when roomClosed != null:
 return roomClosed(_that.reason,_that.type);case _:
   return null;
 
@@ -352,12 +392,14 @@ return roomClosed(_that.reason,_that.type);case _:
 @JsonSerializable()
 
 class SignalingJoinMessage implements SignalingMessage {
-  const SignalingJoinMessage({required this.displayName, required this.accessCode, this.protocolVersion = signalingProtocolVersion, this.type = 'join'});
+  const SignalingJoinMessage({required this.displayName, required this.accessCode, this.protocolVersion = signalingProtocolVersion, @JsonKey(includeIfNull: false) this.peerId, @JsonKey(includeIfNull: false) this.term, this.type = 'join'});
   factory SignalingJoinMessage.fromJson(Map<String, dynamic> json) => _$SignalingJoinMessageFromJson(json);
 
  final  String displayName;
  final  String accessCode;
 @JsonKey() final  int protocolVersion;
+@JsonKey(includeIfNull: false) final  String? peerId;
+@JsonKey(includeIfNull: false) final  int? term;
 @override@JsonKey() final  String type;
 
 /// Create a copy of SignalingMessage
@@ -373,16 +415,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingJoinMessage&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.protocolVersion, protocolVersion) || other.protocolVersion == protocolVersion)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingJoinMessage&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.protocolVersion, protocolVersion) || other.protocolVersion == protocolVersion)&&(identical(other.peerId, peerId) || other.peerId == peerId)&&(identical(other.term, term) || other.term == term)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,displayName,accessCode,protocolVersion,type);
+int get hashCode => Object.hash(runtimeType,displayName,accessCode,protocolVersion,peerId,term,type);
 
 @override
 String toString() {
-  return 'SignalingMessage.join(displayName: $displayName, accessCode: $accessCode, protocolVersion: $protocolVersion, type: $type)';
+  return 'SignalingMessage.join(displayName: $displayName, accessCode: $accessCode, protocolVersion: $protocolVersion, peerId: $peerId, term: $term, type: $type)';
 }
 
 
@@ -393,7 +435,7 @@ abstract mixin class $SignalingJoinMessageCopyWith<$Res> implements $SignalingMe
   factory $SignalingJoinMessageCopyWith(SignalingJoinMessage value, $Res Function(SignalingJoinMessage) _then) = _$SignalingJoinMessageCopyWithImpl;
 @override @useResult
 $Res call({
- String displayName, String accessCode, int protocolVersion, String type
+ String displayName, String accessCode, int protocolVersion,@JsonKey(includeIfNull: false) String? peerId,@JsonKey(includeIfNull: false) int? term, String type
 });
 
 
@@ -410,12 +452,14 @@ class _$SignalingJoinMessageCopyWithImpl<$Res>
 
 /// Create a copy of SignalingMessage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? displayName = null,Object? accessCode = null,Object? protocolVersion = null,Object? type = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? displayName = null,Object? accessCode = null,Object? protocolVersion = null,Object? peerId = freezed,Object? term = freezed,Object? type = null,}) {
   return _then(SignalingJoinMessage(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,accessCode: null == accessCode ? _self.accessCode : accessCode // ignore: cast_nullable_to_non_nullable
 as String,protocolVersion: null == protocolVersion ? _self.protocolVersion : protocolVersion // ignore: cast_nullable_to_non_nullable
-as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,peerId: freezed == peerId ? _self.peerId : peerId // ignore: cast_nullable_to_non_nullable
+as String?,term: freezed == term ? _self.term : term // ignore: cast_nullable_to_non_nullable
+as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1323,6 +1367,315 @@ class _$SignalingPongMessageCopyWithImpl<$Res>
   return _then(SignalingPongMessage(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class SignalingRoomStateMessage implements SignalingMessage {
+  const SignalingRoomStateMessage({required this.state, this.type = 'room_state'});
+  factory SignalingRoomStateMessage.fromJson(Map<String, dynamic> json) => _$SignalingRoomStateMessageFromJson(json);
+
+ final  RoomSuccession state;
+@override@JsonKey() final  String type;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SignalingRoomStateMessageCopyWith<SignalingRoomStateMessage> get copyWith => _$SignalingRoomStateMessageCopyWithImpl<SignalingRoomStateMessage>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SignalingRoomStateMessageToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingRoomStateMessage&&(identical(other.state, state) || other.state == state)&&(identical(other.type, type) || other.type == type));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,state,type);
+
+@override
+String toString() {
+  return 'SignalingMessage.roomState(state: $state, type: $type)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SignalingRoomStateMessageCopyWith<$Res> implements $SignalingMessageCopyWith<$Res> {
+  factory $SignalingRoomStateMessageCopyWith(SignalingRoomStateMessage value, $Res Function(SignalingRoomStateMessage) _then) = _$SignalingRoomStateMessageCopyWithImpl;
+@override @useResult
+$Res call({
+ RoomSuccession state, String type
+});
+
+
+$RoomSuccessionCopyWith<$Res> get state;
+
+}
+/// @nodoc
+class _$SignalingRoomStateMessageCopyWithImpl<$Res>
+    implements $SignalingRoomStateMessageCopyWith<$Res> {
+  _$SignalingRoomStateMessageCopyWithImpl(this._self, this._then);
+
+  final SignalingRoomStateMessage _self;
+  final $Res Function(SignalingRoomStateMessage) _then;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? state = null,Object? type = null,}) {
+  return _then(SignalingRoomStateMessage(
+state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as RoomSuccession,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RoomSuccessionCopyWith<$Res> get state {
+  
+  return $RoomSuccessionCopyWith<$Res>(_self.state, (value) {
+    return _then(_self.copyWith(state: value));
+  });
+}
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class SignalingHostHandoverMessage implements SignalingMessage {
+  const SignalingHostHandoverMessage({required this.to, required this.term, @JsonKey(includeIfNull: false) this.address, @JsonKey(includeIfNull: false) this.port, this.type = 'host_handover'});
+  factory SignalingHostHandoverMessage.fromJson(Map<String, dynamic> json) => _$SignalingHostHandoverMessageFromJson(json);
+
+ final  String to;
+ final  int term;
+@JsonKey(includeIfNull: false) final  String? address;
+@JsonKey(includeIfNull: false) final  int? port;
+@override@JsonKey() final  String type;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SignalingHostHandoverMessageCopyWith<SignalingHostHandoverMessage> get copyWith => _$SignalingHostHandoverMessageCopyWithImpl<SignalingHostHandoverMessage>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SignalingHostHandoverMessageToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingHostHandoverMessage&&(identical(other.to, to) || other.to == to)&&(identical(other.term, term) || other.term == term)&&(identical(other.address, address) || other.address == address)&&(identical(other.port, port) || other.port == port)&&(identical(other.type, type) || other.type == type));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,to,term,address,port,type);
+
+@override
+String toString() {
+  return 'SignalingMessage.hostHandover(to: $to, term: $term, address: $address, port: $port, type: $type)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SignalingHostHandoverMessageCopyWith<$Res> implements $SignalingMessageCopyWith<$Res> {
+  factory $SignalingHostHandoverMessageCopyWith(SignalingHostHandoverMessage value, $Res Function(SignalingHostHandoverMessage) _then) = _$SignalingHostHandoverMessageCopyWithImpl;
+@override @useResult
+$Res call({
+ String to, int term,@JsonKey(includeIfNull: false) String? address,@JsonKey(includeIfNull: false) int? port, String type
+});
+
+
+
+
+}
+/// @nodoc
+class _$SignalingHostHandoverMessageCopyWithImpl<$Res>
+    implements $SignalingHostHandoverMessageCopyWith<$Res> {
+  _$SignalingHostHandoverMessageCopyWithImpl(this._self, this._then);
+
+  final SignalingHostHandoverMessage _self;
+  final $Res Function(SignalingHostHandoverMessage) _then;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? to = null,Object? term = null,Object? address = freezed,Object? port = freezed,Object? type = null,}) {
+  return _then(SignalingHostHandoverMessage(
+to: null == to ? _self.to : to // ignore: cast_nullable_to_non_nullable
+as String,term: null == term ? _self.term : term // ignore: cast_nullable_to_non_nullable
+as int,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,port: freezed == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class SignalingHostProbeMessage implements SignalingMessage {
+  const SignalingHostProbeMessage({required this.accessCode, required this.term, required this.host, required this.port, this.type = 'host_probe'});
+  factory SignalingHostProbeMessage.fromJson(Map<String, dynamic> json) => _$SignalingHostProbeMessageFromJson(json);
+
+ final  String accessCode;
+ final  int term;
+ final  String host;
+ final  int port;
+@override@JsonKey() final  String type;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SignalingHostProbeMessageCopyWith<SignalingHostProbeMessage> get copyWith => _$SignalingHostProbeMessageCopyWithImpl<SignalingHostProbeMessage>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SignalingHostProbeMessageToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingHostProbeMessage&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.term, term) || other.term == term)&&(identical(other.host, host) || other.host == host)&&(identical(other.port, port) || other.port == port)&&(identical(other.type, type) || other.type == type));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,accessCode,term,host,port,type);
+
+@override
+String toString() {
+  return 'SignalingMessage.hostProbe(accessCode: $accessCode, term: $term, host: $host, port: $port, type: $type)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SignalingHostProbeMessageCopyWith<$Res> implements $SignalingMessageCopyWith<$Res> {
+  factory $SignalingHostProbeMessageCopyWith(SignalingHostProbeMessage value, $Res Function(SignalingHostProbeMessage) _then) = _$SignalingHostProbeMessageCopyWithImpl;
+@override @useResult
+$Res call({
+ String accessCode, int term, String host, int port, String type
+});
+
+
+
+
+}
+/// @nodoc
+class _$SignalingHostProbeMessageCopyWithImpl<$Res>
+    implements $SignalingHostProbeMessageCopyWith<$Res> {
+  _$SignalingHostProbeMessageCopyWithImpl(this._self, this._then);
+
+  final SignalingHostProbeMessage _self;
+  final $Res Function(SignalingHostProbeMessage) _then;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? accessCode = null,Object? term = null,Object? host = null,Object? port = null,Object? type = null,}) {
+  return _then(SignalingHostProbeMessage(
+accessCode: null == accessCode ? _self.accessCode : accessCode // ignore: cast_nullable_to_non_nullable
+as String,term: null == term ? _self.term : term // ignore: cast_nullable_to_non_nullable
+as int,host: null == host ? _self.host : host // ignore: cast_nullable_to_non_nullable
+as String,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class SignalingHostChangedMessage implements SignalingMessage {
+  const SignalingHostChangedMessage({required this.host, required this.term, required this.reason, this.type = 'host_changed'});
+  factory SignalingHostChangedMessage.fromJson(Map<String, dynamic> json) => _$SignalingHostChangedMessageFromJson(json);
+
+ final  String host;
+ final  int term;
+ final  String reason;
+@override@JsonKey() final  String type;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SignalingHostChangedMessageCopyWith<SignalingHostChangedMessage> get copyWith => _$SignalingHostChangedMessageCopyWithImpl<SignalingHostChangedMessage>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SignalingHostChangedMessageToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignalingHostChangedMessage&&(identical(other.host, host) || other.host == host)&&(identical(other.term, term) || other.term == term)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.type, type) || other.type == type));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,host,term,reason,type);
+
+@override
+String toString() {
+  return 'SignalingMessage.hostChanged(host: $host, term: $term, reason: $reason, type: $type)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SignalingHostChangedMessageCopyWith<$Res> implements $SignalingMessageCopyWith<$Res> {
+  factory $SignalingHostChangedMessageCopyWith(SignalingHostChangedMessage value, $Res Function(SignalingHostChangedMessage) _then) = _$SignalingHostChangedMessageCopyWithImpl;
+@override @useResult
+$Res call({
+ String host, int term, String reason, String type
+});
+
+
+
+
+}
+/// @nodoc
+class _$SignalingHostChangedMessageCopyWithImpl<$Res>
+    implements $SignalingHostChangedMessageCopyWith<$Res> {
+  _$SignalingHostChangedMessageCopyWithImpl(this._self, this._then);
+
+  final SignalingHostChangedMessage _self;
+  final $Res Function(SignalingHostChangedMessage) _then;
+
+/// Create a copy of SignalingMessage
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? host = null,Object? term = null,Object? reason = null,Object? type = null,}) {
+  return _then(SignalingHostChangedMessage(
+host: null == host ? _self.host : host // ignore: cast_nullable_to_non_nullable
+as String,term: null == term ? _self.term : term // ignore: cast_nullable_to_non_nullable
+as int,reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

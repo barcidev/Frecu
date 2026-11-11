@@ -16,7 +16,10 @@ import 'package:frecu/features/room/domain/entities/ice_server.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:frecu/features/room/domain/entities/room_succession.dart';
+import 'package:frecu/features/room/domain/repositories/room_handover.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:frecu/features/room/domain/repositories/voice_repository.dart';
 import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
@@ -106,6 +109,25 @@ Stream<RoomStatus> roomStatus(Ref ref) {
   return repository.watchStatus();
 }
 
+/// Traspaso de la frecu, si el repositorio lo admite (un doble de
+/// `RoomRepository` no): sin él, la frecu se sale como siempre.
+@riverpod
+RoomHandover? roomHandover(Ref ref) =>
+    switch (ref.watch(roomRepositoryProvider)) {
+      final RoomHandover handover => handover,
+      _ => null,
+    };
+
+/// Sucesión, turno y estado de la frecu que mandó el anfitrión.
+@riverpod
+Stream<RoomSuccession?> roomSuccession(Ref ref) =>
+    ref.watch(roomHandoverProvider)?.watchSuccession() ?? Stream.value(null);
+
+/// Cada vez que otra persona (o este teléfono) toma la frecu.
+@riverpod
+Stream<HostChange> hostChanges(Ref ref) =>
+    ref.watch(roomHandoverProvider)?.watchHostChanges() ?? const Stream.empty();
+
 /// Dirección IP local del dispositivo.
 @riverpod
 Future<String?> localIp(Ref ref) {
@@ -130,7 +152,7 @@ class RoomNotifier extends _$RoomNotifier {
   /// frecus cercanas.
   ///
   /// Con [wifi] (la red de la frecu que creó este teléfono), la invitación
-  /// la lleva.
+  /// la lleva. [reach] dice si se une en la red local o por internet.
   Future<Result<Room>> createRoom({
     required String name,
     required String accessCode,
@@ -138,7 +160,7 @@ class RoomNotifier extends _$RoomNotifier {
     Iterable<RoomNote> nearbyNotes = const [],
     RoomNote? note,
     WifiCredentials? wifi,
-    bool internet = false,
+    RoomReach reach = RoomReach.local,
   }) async {
     final repository = ref.read(roomRepositoryProvider);
     final voice = _voiceListening();
@@ -147,7 +169,7 @@ class RoomNotifier extends _$RoomNotifier {
       accessCode: accessCode,
       displayName: displayName ?? t.room.host,
       note: note,
-      internet: internet,
+      reach: reach,
     );
     switch (result) {
       case Success(:final data):
@@ -245,22 +267,7 @@ class RoomNotifier extends _$RoomNotifier {
     Result<void> result;
     try {
       final repository = ref.read(roomRepositoryProvider);
-      final voice = ref.exists(voiceRepositoryProvider)
-          ? ref.read(voiceRepositoryProvider)
-          : null;
-      if (voice != null) {
-        try {
-          // Dejar de transmitir y cerrar los enlaces pasa ya; soltar el
-          // micrófono y la sesión de audio termina por su cuenta.
-          unawaited(
-            voice.leaveMesh().catchError((Object error, StackTrace stack) {
-              AppLogger.w('Could not leave the voice mesh', error, stack);
-            }),
-          );
-        } on Object catch (error, stackTrace) {
-          AppLogger.w('Could not leave the voice mesh', error, stackTrace);
-        }
-      }
+      _leaveVoice();
       result = await repository.leaveRoom();
     } on Object catch (error, stackTrace) {
       AppLogger.e('Error leaving room', error, stackTrace);
@@ -271,6 +278,52 @@ class RoomNotifier extends _$RoomNotifier {
       _releaseNetwork();
     }
     return result;
+  }
+
+  /// El anfitrión pasa la frecu a [peerId] y sale de ella: suelta la voz y
+  /// la red como al salir. Si no se pudo pasar, sigue en la frecu.
+  Future<Result<void>> handOverAndLeave(String peerId) async {
+    final handover = ref.read(roomHandoverProvider);
+    if (handover == null) return leaveRoom();
+    final result = await handover.handOver(peerId);
+    if (result.isFailure || !ref.mounted) return result;
+    _leaveVoice();
+    state = null;
+    _releaseNetwork();
+    return result;
+  }
+
+  /// Otra persona (o este teléfono) lleva ahora la frecu: la invitación
+  /// lleva su IP y, si la recibió este teléfono, la lleva él. Si este
+  /// teléfono la cedió a un turno que gana (`outranked`), deja de llevarla.
+  void applyHostChange(HostChange change) {
+    final room = state;
+    if (room == null) return;
+    final ceded = change.reason == HostChangeReason.outranked;
+    state = room.copyWith(
+      hostAddress: change.hostAddress,
+      port: change.port,
+      hosting: change.you || (room.hosting && !ceded),
+      inherited: change.you || (room.inherited && !ceded),
+    );
+  }
+
+  /// Deja de transmitir y cierra los enlaces de voz ya; soltar el micrófono
+  /// y la sesión de audio termina por su cuenta.
+  void _leaveVoice() {
+    if (!ref.exists(voiceRepositoryProvider)) return;
+    try {
+      unawaited(
+        ref.read(voiceRepositoryProvider).leaveMesh().catchError((
+          Object error,
+          StackTrace stack,
+        ) {
+          AppLogger.w('Could not leave the voice mesh', error, stack);
+        }),
+      );
+    } on Object catch (error, stackTrace) {
+      AppLogger.w('Could not leave the voice mesh', error, stackTrace);
+    }
   }
 
   /// La red de la frecu se volvió a crear: la invitación lleva la nueva red

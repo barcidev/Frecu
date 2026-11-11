@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show WebSocketException;
 
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 /// Relé del anfitrión con el punto de encuentro en la nube.
@@ -13,7 +15,9 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 /// `{t:'msg',c,d}` y `{t:'close',c}`, y cada invitado llega al servidor de
 /// señalización como una [SignalingConnection] más, igual que uno de la red
 /// local. Si el socket se cae, cierra a todos sus invitados y vuelve a
-/// conectar con espera creciente mientras la frecu siga abierta.
+/// conectar con espera creciente mientras la frecu siga abierta, salvo si
+/// otro anfitrión tomó la sala: entonces deja de conectar y avisa
+/// [onOutranked].
 class CloudRelayDataSource {
   /// Crea el relé; [channelFactory] permite inyectar un canal en pruebas.
   CloudRelayDataSource({
@@ -22,7 +26,7 @@ class CloudRelayDataSource {
     this.reconnectBaseDelay = const Duration(seconds: 1),
     this.maxReconnectDelay = const Duration(seconds: 15),
     NetworkReturnWatcher? networkWatcher,
-  }) : _channelFactory = channelFactory ?? WebSocketChannel.connect,
+  }) : _channelFactory = channelFactory ?? IOWebSocketChannel.connect,
        _networkReturn = networkWatcher ?? NetworkReturnWatcher();
 
   final WebSocketChannel Function(Uri uri) _channelFactory;
@@ -48,6 +52,26 @@ class CloudRelayDataSource {
   final Map<String, _RelayConnection> _guests = {};
   final StreamController<bool> _connectionController =
       StreamController<bool>.broadcast();
+
+  /// Código con que la nube cierra el socket de un anfitrión al que otro, con
+  /// el mismo secreto, le tomó la sala.
+  static const int replacedCloseCode = 4000;
+
+  /// Código HTTP con que la nube rechaza un turno menor que el vigente.
+  static const int outrankedStatus = 409;
+
+  /// Otro anfitrión lleva la sala con un turno igual o mayor: la nube
+  /// rechazó la reconexión (409) o retiró el socket vigente (4000). El relé
+  /// ya no vuelve a conectar.
+  void Function()? onOutranked;
+
+  /// Si [error], de abrir el socket, es el rechazo de la nube a un turno
+  /// menor que el vigente.
+  static bool isOutranked(Object error) {
+    final cause = error is WebSocketChannelException ? error.inner : error;
+    return cause is WebSocketException &&
+        cause.httpStatusCode == outrankedStatus;
+  }
 
   /// Si el relé está conectado con la nube.
   bool get isConnected => _channel != null;
@@ -131,6 +155,7 @@ class CloudRelayDataSource {
     _endGuests();
     _connectionController.add(false);
     if (generation != _generation || _uri == null) return;
+    if (channel.closeCode == replacedCloseCode) return _outranked(generation);
     AppLogger.w('Cloud relay dropped: reconnecting');
     _scheduleReconnect(generation);
   }
@@ -158,8 +183,19 @@ class CloudRelayDataSource {
       await _connect(generation);
     } on Object catch (e) {
       AppLogger.w('Cloud relay reconnect failed: $e');
-      if (generation == _generation) _scheduleReconnect(generation);
+      if (generation != _generation) return;
+      if (isOutranked(e)) return _outranked(generation);
+      _scheduleReconnect(generation);
     }
+  }
+
+  /// Otro anfitrión tomó la sala: no vuelve a conectar y avisa una vez.
+  void _outranked(int generation) {
+    if (generation != _generation) return;
+    AppLogger.i('Cloud relay outranked: another host leads the room');
+    _generation++;
+    _uri = null;
+    onOutranked?.call();
   }
 
   void _send(Map<String, String> envelope) {

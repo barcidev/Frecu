@@ -425,16 +425,8 @@ class PeerConnectionDataSource {
         unawaited(_enqueue(from, (token) => _handleIce(from, ice)));
       case SignalingPeerLeftMessage(:final peerId):
         _closePeer(peerId);
-      case SignalingJoinMessage() ||
-          SignalingWelcomeMessage() ||
-          SignalingRejectedMessage() ||
-          SignalingPeerJoinedMessage() ||
-          SignalingTalkStateMessage() ||
-          SignalingPingMessage() ||
-          SignalingPongMessage() ||
-          SignalingQuickMessage() ||
-          SignalingPositionMessage() ||
-          SignalingRoomClosedMessage():
+      default:
+        // El resto de la señalización no toca la malla.
         break;
     }
   }
@@ -499,6 +491,13 @@ class PeerConnectionDataSource {
         AppLogger.w('Could not apply an early ICE candidate from $peerId: $e');
       }
     }
+  }
+
+  /// Cierra solo el enlace con [peerId] (p. ej. el anfitrión que se fue en
+  /// un traspaso); los demás siguen como están.
+  void closePeer(String peerId) {
+    if (peerId.isEmpty || peerId == _localPeerId) return;
+    _closePeer(peerId);
   }
 
   void _closePeer(String peerId) {

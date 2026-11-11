@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "id": "20261111-traspaso-voluntario-en-wi-fi-compartida-hojas",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/traspaso-voluntario-en-wi-fi-compartida-hojas",
+  "baseCommit": "a2b95d993ad829c86397dc5adf4bc81fa0e60ad5",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:2a81351c18e3cbff3fb23632de3ab9d7af9f27aa3a0a1136cc09ca89b1b9d00a",
+    "at": "2026-11-11T14:26:40.241Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 17,
+    "adjust": 0,
+    "reasons": [
+      "15 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:80ed043c5912c4061477af335948e35535bb9ea25c235c35d02b10a7658e38e1",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:fbfa5ef11579ce13cacb99fda10928b7b6700dd66a37c753fb0c0a2de9a87a6f",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:bd642d74689e7b76fe7761e6a1cff265d7e5bcde8b878a62513c660155b9c7b1",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:e7977228f74c4f538e72e2bb79790191395578e2d5c451e603f8df43faff66a2",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "c4272ece746c29152edcff7736978a8fc626110c",
+      "attempts": 1,
+      "startedAt": "2026-11-11T14:26:40.629Z",
+      "doneAt": "2026-11-11T14:34:38.714Z",
+      "summary": "host_handover/host_changed y join.peerId; el servidor de quien recibe guarda lugares heredados; RoomRepositoryImpl implementa RoomHandover (toma con term+1 y reconexión con el mismo id); reintentos y traspaso en room_reconnection.dart.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "980e65089649b8a63dc06f0e270580933cce657b",
+      "attempts": 1,
+      "startedAt": "2026-11-11T14:34:38.994Z",
+      "doneAt": "2026-11-11T14:41:05.686Z",
+      "summary": "Hojas «¿Qué pasa con la frecu?» y «¿Quién lleva la frecu?», HandoverNotice (toast a los demás y aviso con «Mostrar el QR» a quien la recibe), «Llevas la frecu» en la cabecera, roomHandoverProvider y handOverAndLeave/applyHostChange; textos es/en.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 7,
+    "T": 2,
+    "R": 3
+  },
+  "closingSubmittedAt": "2026-11-11T14:41:54.579Z"
+}

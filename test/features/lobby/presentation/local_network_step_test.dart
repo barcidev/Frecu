@@ -1,4 +1,5 @@
-// Red de Frecu (anfitrión Android): Crear frecu abre «Frecu crea la red» en el paso 1 de 2, con la ilustración, los tres pasos, «Crear la red» y «Prefiero mi zona Wi-Fi». Crear la red muestra «Creando la red…» con Cancelar (que la apaga) y, al aire, «Tu red está al aire» con su nombre y Seguir, que lleva a la nueva frecu; al abrirla, la frecu lleva la red y la red sigue. Si falla, el aviso dice qué pasó con su acción (ajustes de la zona Wi-Fi, de Frecu o de ubicación) y Reintentar; con la zona Wi-Fi encendida se puede seguir con ella; sin Android 8, solo queda la guía. «Prefiero mi zona Wi-Fi» abre la guía de siempre, y Atrás vuelve. Salir de la creación sin abrir la frecu apaga la red. En iPhone el primer paso sigue siendo la guía.
+// Red de Frecu (anfitrión Android): Crear frecu y Seguir con Local abren «Frecu crea la red» en el paso 2 de 3, con la ilustración, los tres pasos, «Crear la red» y «Prefiero mi zona Wi-Fi». Crear la red muestra «Creando la red…» con Cancelar (que la apaga) y, al aire, «Tu red está al aire» con su nombre y Seguir, que lleva a la nueva frecu; al abrirla, la frecu lleva la red y la red sigue. Si falla, el aviso dice qué pasó con su acción (ajustes de la zona Wi-Fi, de Frecu o de ubicación) y Reintentar; con la zona Wi-Fi encendida se puede seguir con ella; sin Android 8, solo queda la guía. «Prefiero mi zona Wi-Fi» abre la guía de siempre, y Atrás vuelve. Salir de la creación sin abrir la frecu apaga la red. En iPhone, tras el tipo, sigue la guía.
+// AC1: CUANDO el usuario toca «Crear frecu» ENTONCES el primer paso pregunta «¿Cómo se une tu grupo?» con «Local» (marcada por defecto) y «Por internet». Local sigue a «Prepara la red» y luego a «Nueva frecu» (pasos de 3); Por internet va directo a «Nueva frecu» (pasos de 2).
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
 import 'package:frecu/app/router/app_router.gr.dart';
+import 'package:frecu/core/constants/cloud_config.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/error/failure.dart';
@@ -20,6 +22,7 @@ import 'package:frecu/features/lobby/presentation/widgets/hotspot_guide_step.dar
 import 'package:frecu/features/lobby/presentation/widgets/hotspot_illustration.dart';
 import 'package:frecu/features/lobby/presentation/widgets/local_network_step.dart';
 import 'package:frecu/features/lobby/presentation/widgets/new_room_step.dart';
+import 'package:frecu/features/lobby/presentation/widgets/room_reach_step.dart';
 import 'package:frecu/features/network/domain/entities/local_hotspot.dart';
 import 'package:frecu/features/network/domain/entities/network_state.dart';
 import 'package:frecu/features/network/domain/entities/wifi_credentials.dart';
@@ -212,7 +215,7 @@ void main() {
   tearDown(() => hotspots.stopped.close());
 
   /// Abre la app en Android (o, sin [android], en iPhone) con movimiento
-  /// reducido y toca Crear frecu.
+  /// reducido, toca Crear frecu y sigue con Local, marcada.
   Future<ProviderContainer> pumpCreate(
     WidgetTester tester, {
     bool android = true,
@@ -237,6 +240,10 @@ void main() {
           () => DateTime(2026, 11, 9, 20, 15),
         ),
         accessCodeGeneratorProvider.overrideWithValue(() => '4827'),
+        cloudConfigProvider.overrideWithValue(
+          const CloudConfig('https://frecu.example.workers.dev'),
+        ),
+        internetCheckProvider.overrideWithValue(() async => true),
       ],
     );
     addTearDown(container.dispose);
@@ -250,6 +257,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.tap(find.text(t.lobby.createRoom));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Seguir'));
     await tester.pumpAndSettle();
     return container;
   }
@@ -270,7 +279,7 @@ void main() {
     await pumpCreate(tester);
 
     expect(find.byType(LocalNetworkStep), findsOneWidget);
-    expect(_label('Paso 1 de 2'), findsOneWidget);
+    expect(_label('Paso 2 de 3'), findsOneWidget);
     expect(find.text('Prepara la red'), findsOneWidget);
     expect(find.byType(HotspotIllustration), findsOneWidget);
     expect(find.text('Frecu crea la red'), findsOneWidget);
@@ -366,9 +375,31 @@ void main() {
     );
 
     await tap(tester, _iconButton('Atrás'));
+    expect(find.text('¿Cómo se une tu grupo?'), findsOneWidget);
+    await tap(tester, _iconButton('Atrás'));
 
     expect(find.byType(LocalNetworkStep), findsNothing);
     expect(hotspots.stops, 1);
+  });
+
+  testWidgets('AC1: volver al tipo y seguir Por internet apaga la red y va '
+      'directo a «Nueva frecu»', (tester) async {
+    await pumpCreate(tester);
+    await tap(tester, _button('Crear la red'));
+    await answer(
+      tester,
+      const Result.success(LocalHotspot(credentials: _wifi)),
+    );
+
+    await tap(tester, _iconButton('Atrás'));
+    await tap(tester, find.text('Por internet'));
+    await tap(tester, find.text('Seguir'));
+
+    expect(hotspots.stops, 1);
+    expect(find.byType(LocalNetworkStep), findsNothing);
+    expect(find.byType(NewRoomStep), findsOneWidget);
+    expect(_label('Paso 2 de 2'), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
   });
 
   testWidgets('con la zona Wi-Fi encendida lo dice, abre sus ajustes y deja '
@@ -562,7 +593,9 @@ void main() {
     expect(_button('Guardarla para invitar por Bluetooth'), findsNothing);
   });
 
-  testWidgets('en iPhone el primer paso sigue siendo la guía', (tester) async {
+  testWidgets('AC1: en iPhone, tras «¿Cómo se une tu grupo?», sigue la guía', (
+    tester,
+  ) async {
     await pumpCreate(tester, android: false);
 
     expect(find.byType(HotspotGuideStep), findsOneWidget);

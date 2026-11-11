@@ -17,12 +17,13 @@ class PttCopy {
   /// Crea los textos con su [icon].
   const PttCopy(this.icon, this.label, this.hint);
 
-  /// Textos de [phase]; la pista nombra a [speaker] al recibir.
-  factory PttCopy.of(PttPhase phase, String? speaker) {
+  /// Textos de [phase]; la pista nombra a [speaker] al recibir y, en
+  /// reposo, es [idleHint] si lo hay.
+  factory PttCopy.of(PttPhase phase, String? speaker, {String? idleHint}) {
     final core = t.room.talk.core;
     final hint = t.room.talk.hint;
     return switch (phase) {
-      PttPhase.idle => PttCopy(FrIcons.mic, core.hold, hint.idle),
+      PttPhase.idle => PttCopy(FrIcons.mic, core.hold, idleHint ?? hint.idle),
       PttPhase.alone => PttCopy(FrIcons.mic, core.hold, hint.alone),
       PttPhase.receiving => PttCopy(
         FrIcons.mic,

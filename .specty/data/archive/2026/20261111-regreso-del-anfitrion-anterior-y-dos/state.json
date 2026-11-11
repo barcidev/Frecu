@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "id": "20261111-regreso-del-anfitrion-anterior-y-dos",
+  "kind": "standard",
+  "phase": "done",
+  "branch": "feature/regreso-del-anfitrion-anterior-y-dos",
+  "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
+  "revision": 2,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:5bcbe28e2d658d34c5ab1c1a49bdf2b831ebf540275d6174273af2b67e9db103",
+    "at": "2026-11-11T15:13:50.562Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
+  "size": {
+    "level": "L",
+    "score": 14,
+    "adjust": 0,
+    "reasons": [
+      "12 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:5bcda887147cd05b98dada2a8c143303eba493ee7114f6bdc29034a929c4730f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:6eb2c27169b84426a9025dacda1a1b298ffd60bc6b49c5a98bc92ac03b23e179",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:1655dcd95395cfdd0ccda140fac67e627502677ba1cecbaaa7c427393e381e7b",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:993447055f523e8b0886acb7aab0893764a1685c5f48058b8784bb96c10be4c6",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "baseCommit": "c16c64202f807bf5bdba0a743933f6bad1e0bbfe",
+      "attempts": 1,
+      "startedAt": "2026-11-11T15:13:50.898Z",
+      "doneAt": "2026-11-11T15:19:12.571Z",
+      "summary": "host_probe (un tipo en las dos direcciones) y address/port en host_handover; host_probe.dart con outranks, HostRival y HostProbe; el servidor responde host_probe, avisa onRival y cede con yieldTo sin room_closed.",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_connection.dart"
+      ]
+    },
+    "T2": {
+      "status": "done",
+      "baseCommit": "6e9c908eac7028031fd03bb3b42e1bea12be2903",
+      "attempts": 1,
+      "startedAt": "2026-11-11T15:19:12.872Z",
+      "doneAt": "2026-11-11T15:22:23.298Z",
+      "summary": "El repositorio pregunta con HostProbe mientras lleva una frecu local con traspaso, cede al rival que gana (yieldTo), vuelve como invitado siguiendo al ganador y emite HostChange outranked; los invitados siguen host_handover con address/port.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "baseCommit": "a95e567a2fc91f9dea528f382b3f80bbe8320be9",
+      "attempts": 1,
+      "startedAt": "2026-11-11T15:22:23.557Z",
+      "doneAt": "2026-11-11T15:23:59.340Z",
+      "summary": "HandoverNotice muestra «Volviste como invitado · «nombre» lleva la frecu» (ícono check) con outranked, y applyHostChange deja de llevar la frecu; textos es/en por slang.",
+      "scopeExtra": []
+    }
+  },
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 9,
+    "T": 3,
+    "R": 4,
+    "S": 1
+  },
+  "closingSubmittedAt": "2026-11-11T15:25:09.459Z",
+  "integration": {
+    "target": "develop",
+    "commit": "f5dc3c532c79e34af63419e27af80842fc7cbcf9",
+    "reason": "conflicts",
+    "conflicts": [
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_es.g.dart"
+    ],
+    "paths": [
+      "docs/protocolo.md",
+      "lib/features/room/data/datasources/host_probe.dart",
+      "lib/features/room/data/datasources/signaling_connection.dart",
+      "lib/features/room/data/datasources/signaling_server_datasource.dart",
+      "lib/features/room/data/models/signaling_message.dart",
+      "lib/features/room/data/models/signaling_message.freezed.dart",
+      "lib/features/room/data/models/signaling_message.g.dart",
+      "lib/features/room/data/repositories/room_repository_impl.dart",
+      "lib/features/room/domain/repositories/room_handover.dart",
+      "lib/features/room/presentation/pages/room_page.dart",
+      "lib/features/room/presentation/pages/room_state.dart",
+      "lib/features/room/presentation/providers/host_silence_provider.dart",
+      "lib/features/room/presentation/providers/host_silence_provider.g.dart",
+      "lib/features/room/presentation/providers/room_provider.dart",
+      "lib/features/room/presentation/widgets/host_silence.dart",
+      "lib/features/room/presentation/widgets/mic_control_section.dart",
+      "lib/features/room/presentation/widgets/ptt_core.dart",
+      "lib/features/room/presentation/widgets/ptt_core_face.dart",
+      "lib/features/room/presentation/widgets/room_handover.dart",
+      "lib/features/room/presentation/widgets/room_talk.dart",
+      "lib/i18n/strings.g.dart",
+      "lib/i18n/strings.i18n.json",
+      "lib/i18n/strings_en.g.dart",
+      "lib/i18n/strings_en.i18n.json",
+      "lib/i18n/strings_es.g.dart",
+      "test/features/room/data/host_probe_test.dart",
+      "test/features/room/data/host_rivalry_test.dart",
+      "test/features/room/presentation/host_outranked_ui_test.dart",
+      "test/features/room/presentation/host_silence_test.dart"
+    ],
+    "at": "2026-11-11T15:25:18.018Z",
+    "resolved": {
+      "commit": "025bf8b",
+      "at": "2026-11-11T15:32:46.018Z"
+    }
+  }
+}

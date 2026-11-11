@@ -2,17 +2,21 @@ import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
 
 /// Contrato del repositorio para la gestión de salas (frecus).
 abstract interface class RoomRepository {
   /// Crea una nueva frecu actuando como anfitrión en el puerto especificado.
+  ///
+  /// Con [reach] local, la frecu solo se abre en la red local; por
+  /// internet, solo por el punto de encuentro, sin invitar por la IP.
   Future<Result<Room>> createRoom({
     required String name,
     required String accessCode,
     String? displayName,
     RoomNote? note,
-    bool internet = false,
+    RoomReach reach = RoomReach.local,
   });
 
   /// Se une a una frecu existente dada la dirección del anfitrión y credenciales.

@@ -13,6 +13,8 @@ SignalingJoinMessage _$SignalingJoinMessageFromJson(
   accessCode: json['accessCode'] as String,
   protocolVersion:
       (json['protocolVersion'] as num?)?.toInt() ?? signalingProtocolVersion,
+  peerId: json['peerId'] as String?,
+  term: (json['term'] as num?)?.toInt(),
   type: json['type'] as String? ?? 'join',
 );
 
@@ -22,6 +24,8 @@ Map<String, dynamic> _$SignalingJoinMessageToJson(
   'displayName': instance.displayName,
   'accessCode': instance.accessCode,
   'protocolVersion': instance.protocolVersion,
+  'peerId': ?instance.peerId,
+  'term': ?instance.term,
   'type': instance.type,
 };
 
@@ -217,6 +221,75 @@ SignalingPongMessage _$SignalingPongMessageFromJson(
 Map<String, dynamic> _$SignalingPongMessageToJson(
   SignalingPongMessage instance,
 ) => <String, dynamic>{'timestamp': instance.timestamp, 'type': instance.type};
+
+SignalingRoomStateMessage _$SignalingRoomStateMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingRoomStateMessage(
+  state: RoomSuccession.fromJson(json['state'] as Map<String, dynamic>),
+  type: json['type'] as String? ?? 'room_state',
+);
+
+Map<String, dynamic> _$SignalingRoomStateMessageToJson(
+  SignalingRoomStateMessage instance,
+) => <String, dynamic>{'state': instance.state, 'type': instance.type};
+
+SignalingHostHandoverMessage _$SignalingHostHandoverMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingHostHandoverMessage(
+  to: json['to'] as String,
+  term: (json['term'] as num).toInt(),
+  address: json['address'] as String?,
+  port: (json['port'] as num?)?.toInt(),
+  type: json['type'] as String? ?? 'host_handover',
+);
+
+Map<String, dynamic> _$SignalingHostHandoverMessageToJson(
+  SignalingHostHandoverMessage instance,
+) => <String, dynamic>{
+  'to': instance.to,
+  'term': instance.term,
+  'address': ?instance.address,
+  'port': ?instance.port,
+  'type': instance.type,
+};
+
+SignalingHostProbeMessage _$SignalingHostProbeMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingHostProbeMessage(
+  accessCode: json['accessCode'] as String,
+  term: (json['term'] as num).toInt(),
+  host: json['host'] as String,
+  port: (json['port'] as num).toInt(),
+  type: json['type'] as String? ?? 'host_probe',
+);
+
+Map<String, dynamic> _$SignalingHostProbeMessageToJson(
+  SignalingHostProbeMessage instance,
+) => <String, dynamic>{
+  'accessCode': instance.accessCode,
+  'term': instance.term,
+  'host': instance.host,
+  'port': instance.port,
+  'type': instance.type,
+};
+
+SignalingHostChangedMessage _$SignalingHostChangedMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingHostChangedMessage(
+  host: json['host'] as String,
+  term: (json['term'] as num).toInt(),
+  reason: json['reason'] as String,
+  type: json['type'] as String? ?? 'host_changed',
+);
+
+Map<String, dynamic> _$SignalingHostChangedMessageToJson(
+  SignalingHostChangedMessage instance,
+) => <String, dynamic>{
+  'host': instance.host,
+  'term': instance.term,
+  'reason': instance.reason,
+  'type': instance.type,
+};
 
 SignalingRoomClosedMessage _$SignalingRoomClosedMessageFromJson(
   Map<String, dynamic> json,
