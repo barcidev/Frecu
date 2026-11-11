@@ -67,3 +67,27 @@ En una frecu local sobre una Wi-Fi que no depende del teléfono del anfitrión, 
 - R2: El sucesor no puede abrir el puerto 47800 o no tiene red — su toma falla (`_giveUp`) o se salta, y los demás pasan al siguiente tras 2 intentos.
 - R3: `room_repository_impl.dart` ya es grande (P159, P162) — el plan y sus pasos viven en `room_reconnection.dart`; el repositorio solo los conecta.
 - R4: En pruebas todos están en 127.0.0.1 y en el mismo puerto — la caída se simula con un proxy TCP que se corta delante del anfitrión, y quien la toma abre su servidor en el puerto del proxy.
+
+## Cierre
+
+### Resumen
+
+Traspaso por caída en una frecu local sobre una Wi-Fi compartida, en la capa de datos. `join` gana `term` (opcional, se omite si es nulo) y el servidor rechaza con `stale_term` un `join` cuyo turno supera el suyo. `FailoverPlan` (en `room_reconnection.dart`) arma el mismo plan para todos con la sucesión: 2 reintentos al anfitrión (esperas de base y 2×base) y, por cada persona de la sucesión sin él, 2 pasos (base y 2×base): volver a su IP con el mismo id, o tomarla este teléfono si su red sigue arriba (`RejoinLoop.networkUp`). La toma reutiliza `_takeOver` de C4 con `term + 1` y la razón `lost`, que llega a `host_changed` y a los `HostChange`. `RejoinLoop.run` acepta la lista de esperas. 3 pruebas del turno, 5 de la caída (plan, toma por la primera, seguimiento con el mismo id, salto a la siguiente sin red) con servidores reales detrás de un proxy TCP; `flutter analyze` sin problemas y `flutter test` completo en verde (1205).
+
+### Desviaciones
+
+- `RejectReason.staleTerm` vive en `signaling_server_datasource.dart`, donde ya estaban los demás motivos, y no en `signaling_message.dart`.
+- El paso de este teléfono también ocupa 2 pasos (base y 2×base) en lugar de tomarla sin esperar: así, si su red no está arriba, consume el mismo tiempo que los demás le dan, y todos llegan a la siguiente persona a la vez.
+- `RejoinLoop.run` se partió (`_pause` y `_backoff`) por el límite de complejidad de `specty check`.
+
+### Decisiones
+
+- El rechazo por turno va después del código de acceso: un código incorrecto no revela el turno.
+- Sin sucesión, en otras frecus o siguiendo un `host_handover` (`_following`), la reconexión es la de siempre; `_following` se limpia con el siguiente `welcome`.
+- El nombre del anfitrión que se cayó se guarda en `HostTakeover.previousHost` solo en los pasos de seguir o tomar, no en los reintentos al anfitrión.
+
+### Pendientes
+
+- C9: la espera en pantalla (isla ««anfitrión» no responde · N s», pista con el sucesor y solo el anfitrión en reconectando).
+- C10: regreso del anfitrión anterior y dos anfitriones a la vez.
+- P162 sigue abierto: `room_repository_impl.dart` quedó en 852 líneas de código (el plan de caída suma `_failoverPlan` y `_failoverAttempt`).
