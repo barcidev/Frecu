@@ -25,6 +25,10 @@
         "unreachableHint": "Acércate a su teléfono e intenta otra vez."
       },
       "close": "Cerrar",
+      "internet": "Por internet",
+      "internetUnreachableHint": "Revisa que tengas internet y que la frecu siga abierta.",
+      "noInternet": "No tienes internet",
+      "noInternetHint": "Activa tus datos móviles o conéctate a una Wi-Fi con internet.",
       "port": "Puerto $port",
       "wrongCode": "Código incorrecto. Revisa e intenta otra vez.",
       "roomFullHint": "Podrás entrar cuando alguien salga.",
@@ -84,6 +88,7 @@
         "hint": "Apunta al QR que muestra el anfitrión en su teléfono.",
         "invalid": "Este QR no es una invitación de Frecu.",
         "found": "Frecu encontrada",
+        "foundInternet": "Frecu encontrada · por internet",
         "noNote": "Frecu sin nota",
         "join": "Unirme",
         "another": "Escanear otro QR",
@@ -213,6 +218,12 @@
       "codeDigits": "4 dígitos",
       "regenerate": "Generar otro",
       "codeHelp": "Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.",
+      "codeHelpInternet": "El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.",
+      "internet": {
+        "title": "Permitir internet",
+        "on": "También pueden unirse desde lejos con el enlace. Usa datos móviles.",
+        "off": "Solo se unen quienes estén en tu red."
+      },
       "open": "Abrir frecu",
       "clockLabel": "Reloj de quintas: $time, $note"
     },
@@ -250,11 +261,14 @@
       "connecting": "Conectando",
       "reconnecting": "Reconectando",
       "weak": "Señal débil",
+      "internet": "Por internet",
+      "noAudio": "Sin audio",
       "free": "Libre",
       "invite": "Invitar"
     },
     "header": {
       "youAreHost": "Eres el anfitrión",
+      "internetTag": "Por internet",
       "hostedBy": "Anfitrión · $name",
       "hz": "$value Hz",
       "note": "Nota $note, $hz Hz",
@@ -263,6 +277,16 @@
     "sheets": {
       "close": "Cerrar",
       "invite": {
+        "internet": {
+          "kicker": "Invitar · por internet",
+          "title": "Escanea o comparte",
+          "message": "Sirven desde cualquier lugar y ya incluyen el código.",
+          "connection": "Conexión",
+          "internet": "Internet",
+          "andWifi": "y Wi-Fi «$name»",
+          "share": "Compartir enlace",
+          "shareText": "Únete a mi frecu «$name» en Frecu: $link"
+        },
         "nfcTitle": "También por NFC",
         "nfcMessage": "Acerca otro teléfono al tuyo",
         "nfcMessageTag": "Grábala en una etiqueta NFC",
@@ -325,6 +349,11 @@
       "people": "Personas",
       "note": "Nota",
       "home": "Volver al inicio"
+    },
+    "internet": {
+      "cutTitle": "La red de Frecu no tiene internet.",
+      "cutMessage": "No oirás a $names, que entraron por internet, ni ellos a ti.",
+      "nor": " ni a "
     },
     "talk": {
       "modePtt": "PTT",

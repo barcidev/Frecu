@@ -32,6 +32,7 @@ class RoomMesh extends StatefulWidget {
     this.onInvite,
     this.distances = const {},
     this.behind = const {},
+    this.cutRemotes = false,
     super.key,
   });
 
@@ -63,6 +64,10 @@ class RoomMesh extends StatefulWidget {
 
   /// Quiénes se quedaron atrás.
   final Set<String> behind;
+
+  /// Este teléfono está en una red sin internet: quienes entraron por
+  /// internet y no conectan quedan «Sin audio».
+  final bool cutRemotes;
 
   @override
   State<RoomMesh> createState() => _RoomMeshState();
@@ -106,6 +111,7 @@ class _RoomMeshState extends State<RoomMesh> {
       status: widget.status,
       distances: widget.distances,
       behind: widget.behind,
+      cutRemotes: widget.cutRemotes,
     );
     _bornAt.removeWhere((id, _) => !_slots.containsKey(id));
     // Sin nodos, el bucle se desmonta y su tiempo vuelve a empezar.
@@ -308,5 +314,7 @@ class _RoomMeshState extends State<RoomMesh> {
     MeshCaption.behind => t.location.behindCaption(
       distance: node.distance ?? '',
     ),
+    MeshCaption.internet => t.room.mesh.internet,
+    MeshCaption.noAudio => t.room.mesh.noAudio,
   };
 }

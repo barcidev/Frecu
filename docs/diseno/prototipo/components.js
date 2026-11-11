@@ -53,6 +53,10 @@ const ICONS = {
   fuel: '<rect x="4" y="4" width="10" height="16.5" rx="2"/><path d="M4 10.5h10M14 8.5l3.2 2.3a2 2 0 0 1 .8 1.6V17a1.5 1.5 0 0 0 3 0V9l-2.5-3"/>',
   flag: '<path d="M5.5 21V3.5M5.5 4.5h11l-2.2 4 2.2 4h-11"/>',
   dir: '<path d="M12 3.5l5.5 16-5.5-3.6-5.5 3.6z" fill="currentColor" stroke="none"/>',
+  /* Modo internet */
+  share: '<path d="M12 3.5v11M8 7.5l4-4 4 4"/><path d="M8 10.5H6.5a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6.5a2 2 0 0 0-2-2H16"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2"/>',
+  globeOff: '<path d="M3 12h18M12 3a13.5 13.5 0 0 1 3.4 6M12 3a13.5 13.5 0 0 0-3.1 15.4M20.2 15.6A9 9 0 1 1 8.4 3.8M4 4l16 16"/>',
 };
 const I = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 

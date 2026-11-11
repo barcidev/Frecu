@@ -12,6 +12,49 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+/// Una conexión de un participante con el servidor de señalización, sea cual
+/// sea su transporte: un WebSocket de la red local o un invitado que llega
+/// por el relé de la nube.
+abstract interface class SignalingConnection {
+  /// Mensajes de texto que manda el participante; termina al cerrarse.
+  Stream<Object?> get incoming;
+
+  /// Clave del origen para el bloqueo por códigos incorrectos (la IP en la
+  /// red local, un resumen de la IP por internet), o `null` si no se conoce.
+  String? get remoteKey;
+
+  /// Si llega por internet (el relé de la nube) y no por la red local.
+  bool get remote;
+
+  /// Manda un mensaje de texto al participante.
+  void send(String data);
+
+  /// Cierra la conexión.
+  Future<void> close();
+}
+
+/// [SignalingConnection] sobre un WebSocket aceptado por el servidor local.
+class _ChannelConnection implements SignalingConnection {
+  _ChannelConnection(this._channel, this.remoteKey);
+
+  final WebSocketChannel _channel;
+
+  @override
+  final String? remoteKey;
+
+  @override
+  bool get remote => false;
+
+  @override
+  Stream<Object?> get incoming => _channel.stream;
+
+  @override
+  void send(String data) => _channel.sink.add(data);
+
+  @override
+  Future<void> close() async => _channel.sink.close();
+}
+
 /// Motivos de rechazo del `join` (`rejected.reason` del protocolo).
 abstract final class RejectReason {
   /// La frecu ya tiene 6 personas.
@@ -59,7 +102,7 @@ class SignalingServerDataSource {
   Timer? _watchdogTimer;
   RoomNote? _note;
 
-  final Map<String, WebSocketChannel> _clientChannels = {};
+  final Map<String, SignalingConnection> _clientChannels = {};
   final Map<String, Participant> _participants = {};
   final Map<String, DateTime> _peerLastSeen = {};
   final Map<String, List<DateTime>> _failedCodes = {};
@@ -132,7 +175,7 @@ class SignalingServerDataSource {
           : null;
       return webSocketHandler(
         (WebSocketChannel channel, String? subprotocol) =>
-            _handleConnection(channel, address),
+            accept(_ChannelConnection(channel, address)),
       )(request);
     }
 
@@ -175,14 +218,20 @@ class SignalingServerDataSource {
       AppLogger.w('Peer $peerId timed out due to heartbeat inactivity');
       final channel = _clientChannels[peerId];
       _handlePeerLeft(peerId);
-      unawaited(channel?.sink.close());
+      unawaited(channel?.close());
     }
   }
 
-  void _handleConnection(WebSocketChannel channel, String? address) {
+  /// Atiende una conexión nueva, venga de la red local o del relé de la
+  /// nube: hasta su `join` aceptado, todo lo demás se ignora.
+  void accept(SignalingConnection channel) {
+    if (!isRunning) {
+      unawaited(channel.close());
+      return;
+    }
     String? assignedPeerId;
 
-    channel.stream.listen(
+    channel.incoming.listen(
       (data) {
         final message = _decode(data);
         if (message == null) return;
@@ -191,7 +240,7 @@ class SignalingServerDataSource {
           // Antes del `join` no se enruta nada.
           if (message is SignalingJoinMessage) {
             _messagesController.add(message);
-            assignedPeerId = _processJoin(channel, message, address);
+            assignedPeerId = _processJoin(channel, message);
           }
           return;
         }
@@ -299,11 +348,8 @@ class SignalingServerDataSource {
     }
   }
 
-  String? _processJoin(
-    WebSocketChannel channel,
-    SignalingJoinMessage join,
-    String? address,
-  ) {
+  String? _processJoin(SignalingConnection channel, SignalingJoinMessage join) {
+    final address = channel.remoteKey;
     if (join.protocolVersion != signalingProtocolVersion) {
       _reject(channel, RejectReason.versionMismatch);
       return null;
@@ -334,6 +380,7 @@ class SignalingServerDataSource {
       id: peerId,
       displayName: join.displayName,
       isHost: isFirstPeer,
+      remote: channel.remote,
     );
 
     _participants[peerId] = participant;
@@ -358,11 +405,11 @@ class SignalingServerDataSource {
     return peerId;
   }
 
-  void _reject(WebSocketChannel channel, String reason) {
+  void _reject(SignalingConnection channel, String reason) {
     final rejected = SignalingMessage.rejected(reason: reason);
     _messagesController.add(rejected);
     _sendToChannel(channel, rejected);
-    unawaited(channel.sink.close());
+    unawaited(channel.close());
   }
 
   bool _isLockedOut(String? address) {
@@ -380,7 +427,7 @@ class SignalingServerDataSource {
   }
 
   /// Saca a [peerId]; con [channel], solo si ese sigue siendo su socket.
-  void _handlePeerLeft(String peerId, {WebSocketChannel? channel}) {
+  void _handlePeerLeft(String peerId, {SignalingConnection? channel}) {
     if (channel != null && !identical(_clientChannels[peerId], channel)) {
       return;
     }
@@ -410,9 +457,9 @@ class SignalingServerDataSource {
     }
   }
 
-  void _sendToChannel(WebSocketChannel channel, SignalingMessage message) {
+  void _sendToChannel(SignalingConnection channel, SignalingMessage message) {
     try {
-      channel.sink.add(jsonEncode(message.toJson()));
+      channel.send(jsonEncode(message.toJson()));
     } on Object catch (e) {
       AppLogger.w('Could not send signaling message: $e');
     }
@@ -420,11 +467,11 @@ class SignalingServerDataSource {
 
   void _broadcast(SignalingMessage message, {String? excludePeerId}) {
     final payload = jsonEncode(message.toJson());
-    final snapshot = Map<String, WebSocketChannel>.from(_clientChannels);
+    final snapshot = Map<String, SignalingConnection>.from(_clientChannels);
     for (final entry in snapshot.entries) {
       if (entry.key != excludePeerId) {
         try {
-          entry.value.sink.add(payload);
+          entry.value.send(payload);
         } on Object catch (e) {
           AppLogger.w('Could not broadcast to ${entry.key}: $e');
         }
@@ -444,12 +491,12 @@ class SignalingServerDataSource {
 
     _broadcast(SignalingMessage.roomClosed(reason: reason));
 
-    final channels = List<WebSocketChannel>.from(_clientChannels.values);
+    final channels = List<SignalingConnection>.from(_clientChannels.values);
     _clientChannels.clear();
     _participants.clear();
     for (final channel in channels) {
       try {
-        await channel.sink.close().timeout(const Duration(seconds: 1));
+        await channel.close().timeout(const Duration(seconds: 1));
       } on Object catch (e) {
         AppLogger.w('Could not close client socket: $e');
       }

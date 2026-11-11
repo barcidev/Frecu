@@ -141,6 +141,7 @@ class _Translations$room$en extends Translations$room$es {
 	@override late final _Translations$room$header$en header = _Translations$room$header$en._(_root);
 	@override late final _Translations$room$sheets$en sheets = _Translations$room$sheets$en._(_root);
 	@override late final _Translations$room$closure$en closure = _Translations$room$closure$en._(_root);
+	@override late final _Translations$room$internet$en internet = _Translations$room$internet$en._(_root);
 	@override late final _Translations$room$talk$en talk = _Translations$room$talk$en._(_root);
 	@override late final _Translations$room$notification$en notification = _Translations$room$notification$en._(_root);
 }
@@ -327,6 +328,10 @@ class _Translations$lobby$join$en extends Translations$lobby$join$es {
 	// Translations
 	@override late final _Translations$lobby$join$bluetooth$en bluetooth = _Translations$lobby$join$bluetooth$en._(_root);
 	@override String get close => 'Close';
+	@override String get internet => 'Over the internet';
+	@override String get internetUnreachableHint => 'Check that you have internet and that the frecu is still open.';
+	@override String get noInternet => 'You\'re offline';
+	@override String get noInternetHint => 'Turn on mobile data or connect to a Wi-Fi with internet.';
 	@override String port({required Object port}) => 'Port ${port}';
 	@override String get wrongCode => 'Wrong code. Check it and try again.';
 	@override String get roomFullHint => 'You can join when someone leaves.';
@@ -418,6 +423,8 @@ class _Translations$lobby$newRoom$en extends Translations$lobby$newRoom$es {
 	@override String get codeDigits => '4 digits';
 	@override String get regenerate => 'Generate another';
 	@override String get codeHelp => 'Share it only with your group: it keeps strangers on the same network out.';
+	@override String get codeHelpInternet => 'The link and the QR already include it: share them only with your group.';
+	@override late final _Translations$lobby$newRoom$internet$en internet = _Translations$lobby$newRoom$internet$en._(_root);
 	@override String get open => 'Open room';
 	@override String clockLabel({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}';
 }
@@ -450,6 +457,8 @@ class _Translations$room$mesh$en extends Translations$room$mesh$es {
 	@override String get connecting => 'Connecting';
 	@override String get reconnecting => 'Reconnecting';
 	@override String get weak => 'Weak signal';
+	@override String get internet => 'Over the internet';
+	@override String get noAudio => 'No audio';
 	@override String get free => 'Free';
 	@override String get invite => 'Invite';
 }
@@ -462,6 +471,7 @@ class _Translations$room$header$en extends Translations$room$header$es {
 
 	// Translations
 	@override String get youAreHost => 'You\'re the host';
+	@override String get internetTag => 'Over the internet';
 	@override String hostedBy({required Object name}) => 'Host · ${name}';
 	@override String hz({required Object value}) => '${value} Hz';
 	@override String note({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz';
@@ -498,6 +508,18 @@ class _Translations$room$closure$en extends Translations$room$closure$es {
 	@override String get people => 'People';
 	@override String get note => 'Note';
 	@override String get home => 'Back to home';
+}
+
+// Path: room.internet
+class _Translations$room$internet$en extends Translations$room$internet$es {
+	_Translations$room$internet$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get cutTitle => 'The Frecu network has no internet.';
+	@override String cutMessage({required Object names}) => 'You won\'t hear ${names}, who joined over the internet, and they won\'t hear you.';
+	@override String get nor => ' or ';
 }
 
 // Path: room.talk
@@ -857,6 +879,7 @@ class _Translations$lobby$join$scan$en extends Translations$lobby$join$scan$es {
 	@override String get hint => 'Point at the QR the host shows on their phone.';
 	@override String get invalid => 'This QR isn\'t a Frecu invite.';
 	@override String get found => 'Room found';
+	@override String get foundInternet => 'Room found · over the internet';
 	@override String get noNote => 'Room without a note';
 	@override String get join => 'Join';
 	@override String get another => 'Scan another QR';
@@ -938,6 +961,18 @@ class _Translations$lobby$newRoom$network$en extends Translations$lobby$newRoom$
 	@override String get unsupportedMessage => 'It needs Android 8 or later. Use your hotspot.';
 }
 
+// Path: lobby.newRoom.internet
+class _Translations$lobby$newRoom$internet$en extends Translations$lobby$newRoom$internet$es {
+	_Translations$lobby$newRoom$internet$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Allow internet';
+	@override String get on => 'People far away can also join with the link. Uses mobile data.';
+	@override String get off => 'Only people on your network can join.';
+}
+
 // Path: room.sheets.invite
 class _Translations$room$sheets$invite$en extends Translations$room$sheets$invite$es {
 	_Translations$room$sheets$invite$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -945,6 +980,7 @@ class _Translations$room$sheets$invite$en extends Translations$room$sheets$invit
 	final TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	@override late final _Translations$room$sheets$invite$internet$en internet = _Translations$room$sheets$invite$internet$en._(_root);
 	@override String get nfcTitle => 'Also by NFC';
 	@override String get nfcMessage => 'Bring another phone close to yours';
 	@override String get nfcMessageTag => 'Write it to an NFC tag';
@@ -1212,6 +1248,23 @@ class _Translations$lobby$newRoom$network$steps$2$en extends Translations$lobby$
 	@override String get rest => ' The next one gets a new name and a new password.';
 }
 
+// Path: room.sheets.invite.internet
+class _Translations$room$sheets$invite$internet$en extends Translations$room$sheets$invite$internet$es {
+	_Translations$room$sheets$invite$internet$en._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get kicker => 'Invite · over the internet';
+	@override String get title => 'Scan or share';
+	@override String get message => 'They work from anywhere and already include the code.';
+	@override String get connection => 'Connection';
+	@override String get internet => 'Internet';
+	@override String andWifi({required Object name}) => 'and Wi-Fi “${name}”';
+	@override String get share => 'Share link';
+	@override String shareText({required Object name, required Object link}) => 'Join my frecu “${name}” on Frecu: ${link}';
+}
+
 // Path: room.sheets.invite.nfcSheet
 class _Translations$room$sheets$invite$nfcSheet$en extends Translations$room$sheets$invite$nfcSheet$es {
 	_Translations$room$sheets$invite$nfcSheet$en._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -1255,6 +1308,10 @@ extension on TranslationsEn {
 			'lobby.join.bluetooth.unreachable' => 'The host isn\'t answering over Bluetooth.',
 			'lobby.join.bluetooth.unreachableHint' => 'Move closer to their phone and try again.',
 			'lobby.join.close' => 'Close',
+			'lobby.join.internet' => 'Over the internet',
+			'lobby.join.internetUnreachableHint' => 'Check that you have internet and that the frecu is still open.',
+			'lobby.join.noInternet' => 'You\'re offline',
+			'lobby.join.noInternetHint' => 'Turn on mobile data or connect to a Wi-Fi with internet.',
 			'lobby.join.port' => ({required Object port}) => 'Port ${port}',
 			'lobby.join.wrongCode' => 'Wrong code. Check it and try again.',
 			'lobby.join.roomFullHint' => 'You can join when someone leaves.',
@@ -1307,6 +1364,7 @@ extension on TranslationsEn {
 			'lobby.join.scan.hint' => 'Point at the QR the host shows on their phone.',
 			'lobby.join.scan.invalid' => 'This QR isn\'t a Frecu invite.',
 			'lobby.join.scan.found' => 'Room found',
+			'lobby.join.scan.foundInternet' => 'Room found · over the internet',
 			'lobby.join.scan.noNote' => 'Room without a note',
 			'lobby.join.scan.join' => 'Join',
 			'lobby.join.scan.another' => 'Scan another QR',
@@ -1417,6 +1475,10 @@ extension on TranslationsEn {
 			'lobby.newRoom.codeDigits' => '4 digits',
 			'lobby.newRoom.regenerate' => 'Generate another',
 			'lobby.newRoom.codeHelp' => 'Share it only with your group: it keeps strangers on the same network out.',
+			'lobby.newRoom.codeHelpInternet' => 'The link and the QR already include it: share them only with your group.',
+			'lobby.newRoom.internet.title' => 'Allow internet',
+			'lobby.newRoom.internet.on' => 'People far away can also join with the link. Uses mobile data.',
+			'lobby.newRoom.internet.off' => 'Only people on your network can join.',
 			'lobby.newRoom.open' => 'Open room',
 			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Circle of fifths clock: ${time}, ${note}',
 			'lobby.noteNames.0' => 'C',
@@ -1470,14 +1532,25 @@ extension on TranslationsEn {
 			'room.mesh.connecting' => 'Connecting',
 			'room.mesh.reconnecting' => 'Reconnecting',
 			'room.mesh.weak' => 'Weak signal',
+			'room.mesh.internet' => 'Over the internet',
+			'room.mesh.noAudio' => 'No audio',
 			'room.mesh.free' => 'Free',
 			'room.mesh.invite' => 'Invite',
 			'room.header.youAreHost' => 'You\'re the host',
+			'room.header.internetTag' => 'Over the internet',
 			'room.header.hostedBy' => ({required Object name}) => 'Host · ${name}',
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Note ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invite',
 			'room.sheets.close' => 'Close',
+			'room.sheets.invite.internet.kicker' => 'Invite · over the internet',
+			'room.sheets.invite.internet.title' => 'Scan or share',
+			'room.sheets.invite.internet.message' => 'They work from anywhere and already include the code.',
+			'room.sheets.invite.internet.connection' => 'Connection',
+			'room.sheets.invite.internet.internet' => 'Internet',
+			'room.sheets.invite.internet.andWifi' => ({required Object name}) => 'and Wi-Fi “${name}”',
+			'room.sheets.invite.internet.share' => 'Share link',
+			'room.sheets.invite.internet.shareText' => ({required Object name, required Object link}) => 'Join my frecu “${name}” on Frecu: ${link}',
 			'room.sheets.invite.nfcTitle' => 'Also by NFC',
 			'room.sheets.invite.nfcMessage' => 'Bring another phone close to yours',
 			'room.sheets.invite.nfcMessageTag' => 'Write it to an NFC tag',
@@ -1531,6 +1604,9 @@ extension on TranslationsEn {
 			'room.closure.people' => 'People',
 			'room.closure.note' => 'Note',
 			'room.closure.home' => 'Back to home',
+			'room.internet.cutTitle' => 'The Frecu network has no internet.',
+			'room.internet.cutMessage' => ({required Object names}) => 'You won\'t hear ${names}, who joined over the internet, and they won\'t hear you.',
+			'room.internet.nor' => ' or ',
 			'room.talk.modePtt' => 'PTT',
 			'room.talk.modeOpen' => 'Open',
 			'room.talk.core.hold' => 'Hold',
@@ -1726,6 +1802,8 @@ extension on TranslationsEn {
 			'location.compass.nw' => 'NW',
 			'location.compassLong.n' => 'north',
 			'location.compassLong.ne' => 'northeast',
+			_ => null,
+		} ?? switch (path) {
 			'location.compassLong.e' => 'east',
 			'location.compassLong.se' => 'southeast',
 			'location.compassLong.s' => 'south',

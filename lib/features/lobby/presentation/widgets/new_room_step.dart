@@ -13,6 +13,7 @@ import 'package:frecu/core/design/widgets/fr_field.dart';
 import 'package:frecu/core/design/widgets/fr_icon_button.dart';
 import 'package:frecu/core/design/widgets/fr_scaffold.dart';
 import 'package:frecu/core/design/widgets/fr_toast.dart';
+import 'package:frecu/core/design/widgets/fr_toggle.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/core/usecase/usecase.dart';
 import 'package:frecu/features/lobby/presentation/extensions/display_name_extension.dart';
@@ -29,6 +30,7 @@ import 'package:frecu/features/room/domain/usecases/assign_room_note.dart';
 import 'package:frecu/features/room/presentation/extensions/failure_extension.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:frecu/features/settings/presentation/widgets/settings_group.dart';
 import 'package:frecu/i18n/strings.g.dart';
 
 /// Nueva frecu (pantalla `create` del prototipo), paso 2 de 2 de la
@@ -74,6 +76,9 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
   Timer? _clock;
   bool _opening = false;
   double _regenTurns = 0;
+
+  /// «Permitir internet»: apagado, la frecu es solo local.
+  bool _internet = false;
 
   @override
   void initState() {
@@ -130,6 +135,7 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
           displayName: ref.savedDisplayName,
           note: note,
           wifi: wifi,
+          internet: _internet && ref.read(cloudConfigProvider).isEnabled,
         );
     if (!mounted) return;
     switch (result) {
@@ -182,7 +188,7 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
             child: CreateRoomScroll(
               dockHeight: CreateRoomScroll.oneButtonDock,
               children: [
-                NewRoomHero(note: note, openedAt: _now),
+                NewRoomHero(note: note, openedAt: _now, internet: _internet),
                 _form(),
               ],
             ),
@@ -207,6 +213,27 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
     ),
   );
 
+  /// «Permitir internet»: apagado por defecto, la frecu es solo local.
+  Widget _internetRow() {
+    final copy = t.lobby.newRoom.internet;
+    return SettingsGroup(
+      margin: EdgeInsets.zero,
+      children: [
+        SettingsRow(
+          key: const Key('new_room_internet_row'),
+          title: copy.title,
+          subtitle: _internet ? copy.on : copy.off,
+          trailing: FrToggle(
+            key: const Key('new_room_internet_toggle'),
+            value: _internet,
+            semanticLabel: copy.title,
+            onChanged: _opening ? null : (on) => setState(() => _internet = on),
+          ),
+        ),
+      ],
+    );
+  }
+
   /// Nombre de la frecu y código de acceso.
   Widget _form() {
     final newRoom = t.lobby.newRoom;
@@ -227,7 +254,13 @@ class _NewRoomStepState extends ConsumerState<NewRoomStep> {
             code: _code,
             turns: _regenTurns,
             onRegenerate: _regenerate,
+            internet: _internet,
           ),
+          // Sin punto de encuentro configurado, la frecu es siempre local.
+          if (ref.watch(cloudConfigProvider).isEnabled) ...[
+            const SizedBox(height: 22),
+            _internetRow(),
+          ],
         ],
       ),
     );
@@ -241,9 +274,11 @@ class _AccessCode extends StatelessWidget {
     required this.code,
     required this.turns,
     required this.onRegenerate,
+    required this.internet,
   });
 
   final String code;
+  final bool internet;
   final double turns;
   final VoidCallback onRegenerate;
 
@@ -273,7 +308,7 @@ class _AccessCode extends StatelessWidget {
         _pinRow(context),
         const SizedBox(height: 9),
         Text(
-          newRoom.codeHelp,
+          internet ? newRoom.codeHelpInternet : newRoom.codeHelp,
           style: fr.type.bodyS.copyWith(
             fontSize: 12.5,
             height: 1.45,

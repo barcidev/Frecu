@@ -63,12 +63,12 @@ Una tarea se considera terminada solo si:
 - No tiene textos visibles sin pasar por slang.
 - Tiene pruebas para la lógica nueva de `domain` y `data`.
 - `dart run build_runner build -d`, `flutter analyze` y `flutter test` pasan sin errores.
-- No agrega dependencias de internet (STUN, TURN, APIs en la nube).
+- No agrega dependencias de internet fuera del modo internet (`CloudConfig`, `CloudRelayDataSource`, `TurnCredentialsDataSource`).
 
 ## Qué no hacer
 
 - No uses multicast ni broadcast UDP para transportar audio; muchos hotspots lo bloquean.
-- No asumas que hay internet en ninguna parte del flujo.
+- No asumas que hay internet en el flujo local; solo el modo internet lo usa.
 - No agregues video ni tracks innecesarios.
 - No metas plugins de plataforma en `domain`.
 - No implementes funcionalidades fuera de alcance del MVP sin aprobación explícita.

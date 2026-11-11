@@ -216,20 +216,20 @@ const Proto = {
     this.token++; this.closeSheetNow(); this.stack = [{ key: 'lobby', state: {} }];
     this.transition(this.render('lobby', {}), 'fade');
   },
-  open(key, state = {}, sheet) {
+  open(key, state = {}, sheet, sheetState) {
     this.token++; this.busy = false; this.closeSheetNow();
     this.stack = ['splash', 'welcome', 'name', 'perms', 'lobby'].includes(key) ? [] : [{ key: 'lobby', state: {} }];
     this.stack.push({ key, state });
     const nv = this.render(key, state); this.after(key, state);
     this.transition(nv, this.cur ? 'fade' : 'none');
-    if (sheet) this.later(() => (sheet === 'pin' ? this.pickRoom(ROOM.note.s) : this.openSheet(sheet)), 650);
+    if (sheet) this.later(() => (sheet === 'pin' ? this.pickRoom(ROOM.note.s) : this.openSheet(sheet, sheetState)), 650);
   },
 
   /* ----- Hojas ----- */
   openSheet(name, state = {}) {
     if ($('.sheet', this.screen) || this.busy) return;
     const R = this.R;
-    const s = name === 'route' ? { route: R?.route, bt: R?.bt } : name === 'leave' ? { host: R?.host, others: R ? R.ms.nodes.filter(Boolean).length - 1 : 4 } : name === 'quick' ? { geo: R?.geo } : state;
+    const s = name === 'route' ? { route: R?.route, bt: R?.bt } : name === 'leave' ? { host: R?.host, others: R ? R.ms.nodes.filter(Boolean).length - 1 : 4 } : name === 'quick' ? { geo: R?.geo } : name === 'invite' ? { net: R?.net } : state;
     const sc = el(scrim), sh = el(SH[name](s));
     this.screen.append(sc, sh); hydrate(sh);
     this.cur.classList.remove('restore'); this.cur.classList.add('under');
@@ -297,7 +297,8 @@ const Proto = {
   lockScan() {
     const v = this.cur; if (!v || v.dataset.screen !== 'scan') return;
     $('.reticle', v).classList.add('lock');
-    const b = $('.scan-bottom', v); b.innerHTML = el(V.scan({ lock: true })).querySelector('.scan-bottom').innerHTML; hydrate(b);
+    const net = !!this.stack.at(-1)?.state?.net;
+    const b = $('.scan-bottom', v); b.innerHTML = el(V.scan({ lock: true, net })).querySelector('.scan-bottom').innerHTML; hydrate(b);
     if (navigator.vibrate) navigator.vibrate(18);
   },
 
@@ -305,11 +306,11 @@ const Proto = {
   enterRoom(s) {
     const kind = s.kind || 'idle';
     const base = kind === 'connecting' || kind === 'alone' ? kind : 'idle';
-    const v1 = ['weak', ...GEO_KINDS].includes(kind);
+    const v1 = ['weak', ...GEO_KINDS, 'net', 'mixed'].includes(kind);
     const ms = meshFor(v1 ? kind : base);
-    const R = this.R = { host: base === 'alone' || !!s.host, mode: 'ptt', route: this.route, bt: this.bt, muted: false, status: 'ok', speaker: null, event: null, txStart: 0, connecting: base === 'connecting', ms, pst: pttState(base === 'connecting' ? 'connecting' : 'idle'), geo: GEO_KINDS.includes(kind) };
+    const R = this.R = { host: base === 'alone' || !!s.host, mode: 'ptt', route: this.route, bt: this.bt, muted: false, status: 'ok', speaker: null, event: null, txStart: 0, connecting: base === 'connecting', ms, pst: pttState(base === 'connecting' ? 'connecting' : 'idle'), geo: GEO_KINDS.includes(kind), net: !!s.net || kind === 'net' || kind === 'mixed' };
     if (R.host && base !== 'alone') { ms.nodes[0].host = true; ms.nodes[3] = node('Marta', 'p5'); }
-    return el(roomView(v1 ? kind : base, { ms, pst: R.pst, host: R.host, route: R.route }));
+    return el(roomView(v1 ? kind : base, { ms, pst: R.pst, host: R.host, route: R.route, net: R.net }));
   },
   afterRoom(s) {
     const kind = s.kind || 'idle'; const R = this.R;
@@ -494,6 +495,33 @@ const Proto = {
       const o = el(sosOverlay()); this.cur.append(o); hydrate(o); this.event(ISLE_V1.sos, 'alert', 60000); this.buzz([200, 100, 200, 100, 200]);
     });
   },
+  /* ----- Modo internet ----- */
+  netClick(t, e) {
+    const nt = t.closest('[data-net-tog]');
+    if (nt) {
+      const net = !nt.classList.contains('on'); const top = this.stack.at(-1); if (top) top.state = { ...top.state, net };
+      const pin = $('[data-create-pin]', this.cur).textContent;
+      const nv = el(V.create({ net, pin }));
+      ['[data-net-row]', '.field-h', '.chv', '.dock'].forEach((q) => { const n = $(q, nv); $(q, this.cur).replaceWith(n); hydrate(n); });
+      this.buzz(8); return true;
+    }
+    const j = t.closest('[data-join="net"]');
+    if (j) { if (j.closest('.sheet')) this.expandToRoom({ kind: 'connecting', net: true }); else this.go('room', { kind: 'connecting', net: true }, 'wave', this.pointFrom(e)); return true; }
+    const sh = t.closest('[data-share]');
+    if (sh) {
+      if (sh.classList.contains('loading')) return true;
+      sh.classList.add('loading');
+      this.later(() => { sh.classList.remove('loading'); $('.lbl', sh).textContent = 'Enlace compartido'; $('svg', sh).outerHTML = I('check'); sh.classList.add('done'); this.buzz(20); }, 1100);
+      return true;
+    }
+    const rt = t.closest('[data-link-retry]');
+    if (rt) {
+      rt.classList.add('loading');
+      this.later(() => { const n = $('.sheet', this.screen); if (!n) return; const f = el(SH.link()); n.innerHTML = f.innerHTML; hydrate(n); this.buzz(20); }, 1400);
+      return true;
+    }
+    return false;
+  },
   v1Click(t) {
     const q = t.closest('[data-quick]');
     if (q) { const txt = q.dataset.quick; this.closeSheet(); this.later(() => this.event(ISLE_V1.sent(txt), '', 2600), 380); this.buzz(12); return true; }
@@ -544,7 +572,7 @@ const Proto = {
         return;
       }
       if (t.closest('[data-dismiss]')) { const b = t.closest('.echo') || t.closest('.banner'); b.animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(-8px)' }], { duration: 240, fill: 'forwards' }).finished.then(() => b.remove()); return; }
-      if (this.v1Click(t)) return;
+      if (this.v1Click(t) || this.netClick(t, e)) return;
       const a = t.closest('[data-go],[data-back],[data-sheet],[data-close],[data-grant],[data-regen],[data-create],[data-join],[data-route],[data-leave],[data-home],[data-flash],.ptt-core');
       if (!a) return;
       const d = a.dataset;
@@ -560,7 +588,7 @@ const Proto = {
         [...n.children].forEach((c, i) => { c.style.animationDelay = i * 60 + 'ms'; c.classList.add('pop'); });
         $('[data-create-pin]', this.cur).replaceWith(n); a.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], { duration: 700, easing: ease('organic') }); return;
       }
-      if ('create' in d) { a.classList.add('loading'); const o = this.pointOf(a); this.later(() => this.go('room', { kind: 'alone', host: true }, 'wave', o), 1100); return; }
+      if ('create' in d) { a.classList.add('loading'); const o = this.pointOf(a); this.later(() => this.go('room', { kind: 'alone', host: true, net: d.create === 'net' }, 'wave', o), 1100); return; }
       if (d.join === 'qr' && a.closest('.sheet')) return this.expandToRoom({ kind: 'connecting' });
       if (d.join === 'qr') return this.go('room', { kind: 'connecting' }, 'wave', this.pointFrom(e));
       if (d.join === 'ip') {
@@ -596,7 +624,7 @@ const Proto = {
       ({ speak: () => this.simSpeak(), rec: () => this.simRec(), join: () => this.simJoin(), bt: () => this.simBt(), close: () => this.simClose(), weak: () => this.simWeak(), msg: () => this.simMsg(), behind: () => this.simBehind(), sos: () => this.simSos() })[k]?.();
     }));
     $$('[data-tour]').forEach((b) => b.addEventListener('click', () => {
-      const [k, s] = b.dataset.tour.split(':'); this.open(k, s ? { kind: s, host: s === 'alone' } : {});
+      const [k, s, sh] = b.dataset.tour.split(':'); this.open(k, s ? { kind: s, host: s === 'alone' } : {}, sh);
     }));
   },
 };

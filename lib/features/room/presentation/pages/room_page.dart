@@ -36,6 +36,7 @@ import 'package:frecu/features/room/presentation/providers/reconnect_countdown_p
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
 import 'package:frecu/features/room/presentation/widgets/audio_route_sheet.dart';
+import 'package:frecu/features/room/presentation/widgets/internet_room_tag.dart';
 import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
@@ -592,6 +593,21 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     VoiceState voice,
     VoidCallback? onInvite,
   ) {
+    final room = ref.watch(roomNotifierProvider);
+    final me = participants.where((p) => p.id == localId).firstOrNull;
+    // En la red de la frecu (sin internet) no hay ruta hasta quienes
+    // entraron por internet.
+    final cutRemotes = room?.wifi != null && !(me?.remote ?? false);
+    final cut = [
+      for (final p in participants)
+        if (cutRemotes &&
+            p.id != localId &&
+            p.remote &&
+            p.connectionState == PeerConnectionState.disconnected)
+          p.displayName,
+    ];
+    final internet =
+        room?.internetId != null || participants.any((p) => p.remote);
     return Stack(
       children: [
         Positioned.fill(
@@ -614,11 +630,14 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                         id: towardsLabel(towards),
                   },
                   behind: location.behind,
+                  cutRemotes: cutRemotes,
                 );
               },
             ),
           ),
         ),
+        if (internet)
+          const Positioned(right: 18, bottom: 4, child: InternetRoomTag()),
         Positioned(
           left: 14,
           right: 14,
@@ -633,6 +652,7 @@ class _RoomPageState extends ConsumerState<RoomPage> {
                 child: SharingLocationTag(),
               ),
               const RoomNetworkNotice(),
+              if (cut.isNotEmpty) _cutNotice(cut),
               if (_micUnavailable) _micNotice(),
               EchoNotice(
                 visible:
@@ -643,6 +663,20 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Aviso de frecu mezclada: este teléfono está en una red sin internet y
+  /// no oye a [names], que entraron por internet.
+  Widget _cutNotice(List<String> names) {
+    final copy = t.room.internet;
+    return FrBanner.drawn(
+      key: const Key('internet_cut_notice'),
+      icon: FrIcons.globeOff,
+      tone: FrBannerTone.warn,
+      title: copy.cutTitle,
+      message: copy.cutMessage(names: names.join(copy.nor)),
+      floating: true,
     );
   }
 

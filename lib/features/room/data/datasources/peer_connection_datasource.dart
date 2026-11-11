@@ -63,8 +63,12 @@ class PeerConnectionDataSource {
   /// conecta más tarde, vuelve a contar como conectado).
   final Duration linkWaitLimit;
 
-  static const Map<String, dynamic> _config = {
-    'iceServers': <Map<String, dynamic>>[],
+  /// Servidores STUN y TURN de los enlaces nuevos: vacío en la red local
+  /// (solo direcciones locales), con STUN y TURN en una frecu por internet.
+  List<Map<String, dynamic>> iceServers = const [];
+
+  Map<String, dynamic> get _config => {
+    'iceServers': iceServers,
     'sdpSemantics': 'unified-plan',
   };
 

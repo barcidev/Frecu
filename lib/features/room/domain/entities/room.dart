@@ -25,6 +25,10 @@ sealed class Room with _$Room {
     /// teléfono o la que traía la invitación. Va en el QR para invitar.
     WifiCredentials? wifi,
 
+    /// Id de la frecu en el punto de encuentro por internet, si se abrió
+    /// también por internet. Va en el QR y en el enlace para invitar.
+    String? internetId,
+
     /// Si este teléfono la creó (es el anfitrión). Solo vale en este
     /// teléfono: no viaja en JSON.
     @JsonKey(includeFromJson: false, includeToJson: false)

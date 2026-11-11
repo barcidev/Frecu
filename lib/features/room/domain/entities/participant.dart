@@ -31,6 +31,10 @@ sealed class Participant with _$Participant {
     @Default(false) bool isMuted,
     @Default(PeerConnectionState.connected) PeerConnectionState connectionState,
 
+    /// Entró por internet (por el punto de encuentro), no por la red local.
+    /// Lo pone el anfitrión; una app anterior no lo manda y vale `false`.
+    @Default(false) bool remote,
+
     /// Calidad del enlace de voz que mide este teléfono; es local, así que
     /// no viaja en la señalización.
     @JsonKey(includeFromJson: false, includeToJson: false)

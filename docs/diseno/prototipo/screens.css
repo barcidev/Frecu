@@ -286,3 +286,15 @@
 .nfc-stage.found .nfc-ic { background: var(--signal); color: var(--signal-ink); animation: pop 500ms var(--spring-organic); }
 .nfc-stage.found .nfc-ring { display: none; }
 .sheet .scan-card { background: var(--bg-1); backdrop-filter: none; }
+
+/* ---------- Modo internet ---------- */
+.net-tag { position: absolute; right: 18px; bottom: 4px; z-index: 5; display: flex; align-items: center; gap: 6px; color: var(--signal-fg); }
+.net-tag span { color: var(--tx-2); }
+.share-box { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.share-box .btn { width: 100%; }
+.share-box .btn.done { color: var(--signal-fg); }
+.share-link { display: inline-flex; align-items: center; gap: 6px; color: var(--tx-3); font-family: var(--f-mono); text-transform: none; letter-spacing: 0; }
+.nfc-stage.off .nfc-ic { color: var(--alert); box-shadow: inset 0 0 0 1px rgba(var(--alert-rgb), .4); }
+.nfc-stage.off .nfc-ring { display: none; }
+.nfc-stage.found + .scan-card, .sheet .banner + .btn { margin-top: 2px; }
+.ch-hero .chv .tag { margin-top: 2px; }

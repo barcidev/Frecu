@@ -1,5 +1,8 @@
 // AC3: CUANDO se ve la nueva frecu ENTONCES el reloj de quintas recibe la hora y los minutos actuales y la nota de la frecu, y a su lado se lee «Tu frecu suena en», la nota (nombre en el idioma de la app, alteración y octava), sus Hz con un decimal y el separador del idioma («659,3 Hz», «659.3 Hz») y «Abierta a las HH:MM»; la nota es la de su hora en el círculo de quintas (octava 4 de 0 a 11 h y 5 de 12 a 23 h) y, CUANDO aparece una frecu cercana con esa nota o cambia la hora, ENTONCES pasa a la siguiente quinta libre o a la nota de la nueva hora.
 // AC4: CUANDO se abre la nueva frecu ENTONCES el campo «Nombre de la frecu» trae «Frecu de <nombre guardado>» (o «Mi frecu» sin nombre guardado) con su contador de 24 y el ejemplo «Ej. Ruta del domingo» al vaciarlo, y el código de acceso muestra 4 cifras generadas en celdas de solo lectura con «4 dígitos» y «Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.»; CUANDO toca «Generar otro» ENTONCES el código cambia por uno nuevo, sus celdas aparecen escalonadas con el pop del prototipo y el botón gira con el resorte `organic`.
+// N1: CUANDO no hay punto de encuentro configurado ENTONCES la nueva frecu no muestra «Permitir internet» y se abre solo local.
+// N2: CUANDO hay punto de encuentro ENTONCES «Permitir internet» aparece apagado y, sin tocarlo, la frecu se abre solo local.
+// N3: CUANDO el anfitrión enciende «Permitir internet» ENTONCES la frecu se abre también por internet.
 // AC5: CUANDO el usuario toca «Abrir frecu» ENTONCES se crea la frecu con el nombre sin espacios sobrantes, el código mostrado, el nombre guardado como anfitrión y las notas de las frecus cercanas, se publica con su nota y se abre la frecu activa; con el nombre vacío el botón no responde; si la creación falla, avisa con el mensaje de la falla, sigue en la nueva frecu y no deja ningún anuncio mDNS (F7).
 import 'dart:async';
 
@@ -8,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/app/app.dart';
 import 'package:frecu/app/router/app_router.dart';
+import 'package:frecu/core/constants/cloud_config.dart';
 import 'package:frecu/core/design/icons/fr_icon.dart';
 import 'package:frecu/core/design/icons/fr_icons.dart';
 import 'package:frecu/core/design/widgets/fr_button.dart';
@@ -154,6 +158,7 @@ void main() {
         accessCode: any(named: 'accessCode'),
         displayName: any(named: 'displayName'),
         note: any(named: 'note'),
+        internet: any(named: 'internet'),
       ),
     ).thenAnswer((_) => answer());
   }
@@ -208,6 +213,7 @@ void main() {
     WidgetTester tester, {
     String? savedName = 'Ana',
     List<NearbyRoom> nearbyRooms = const [],
+    CloudConfig cloud = CloudConfig.disabled,
   }) async {
     tester.view
       ..physicalSize = const Size(1170, 2532)
@@ -229,6 +235,7 @@ void main() {
         voiceRepositoryProvider.overrideWithValue(voice),
         newRoomClockProvider.overrideWithValue(() => now),
         accessCodeGeneratorProvider.overrideWithValue(() => codes.removeAt(0)),
+        cloudConfigProvider.overrideWithValue(cloud),
       ],
     );
     addTearDown(container.dispose);
@@ -486,6 +493,63 @@ void main() {
       await tester.pump(const Duration(seconds: 3));
       await tester.pumpAndSettle();
       expect(find.text(t.errors.network), findsNothing);
+    });
+  });
+
+  group('Permitir internet', () {
+    const cloud = CloudConfig('https://frecu.example.workers.dev');
+    final toggle = find.byKey(const Key('new_room_internet_toggle'));
+
+    Future<void> openRoom(WidgetTester tester) async {
+      await tester.ensureVisible(find.text(t.lobby.newRoom.open));
+      await tester.tap(find.text(t.lobby.newRoom.open));
+      await tester.pumpAndSettle();
+    }
+
+    void verifyCreated({required bool internet}) => verify(
+      () => rooms.createRoom(
+        name: any(named: 'name'),
+        accessCode: any(named: 'accessCode'),
+        displayName: any(named: 'displayName'),
+        note: any(named: 'note'),
+        internet: internet,
+      ),
+    ).called(1);
+
+    testWidgets('N1: without a meeting point there is no internet switch and '
+        'the room is local', (tester) async {
+      await pumpNewRoom(tester);
+
+      expect(toggle, findsNothing);
+      await openRoom(tester);
+      verifyCreated(internet: false);
+      await _unmountRoomPage(tester);
+    });
+
+    testWidgets('N2: the switch starts off and the room opens local only', (
+      tester,
+    ) async {
+      await pumpNewRoom(tester, cloud: cloud);
+
+      expect(toggle, findsOneWidget);
+      expect(find.text(t.lobby.newRoom.internet.off), findsOneWidget);
+      await openRoom(tester);
+      verifyCreated(internet: false);
+      await _unmountRoomPage(tester);
+    });
+
+    testWidgets('N3: turning it on opens the room over the internet too', (
+      tester,
+    ) async {
+      await pumpNewRoom(tester, cloud: cloud);
+
+      await tester.ensureVisible(toggle);
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      expect(find.text(t.lobby.newRoom.internet.on), findsOneWidget);
+      await openRoom(tester);
+      verifyCreated(internet: true);
+      await _unmountRoomPage(tester);
     });
   });
 }

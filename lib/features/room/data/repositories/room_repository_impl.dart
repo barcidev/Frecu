@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:frecu/core/constants/cloud_config.dart';
 import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/network/lan_address.dart';
 import 'package:frecu/core/result/result.dart';
+import 'package:frecu/features/room/data/datasources/cloud_relay_datasource.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
@@ -32,6 +34,9 @@ class RoomRepositoryImpl implements RoomRepository {
     required SignalingServerDataSource serverDataSource,
     required SignalingClientDataSource clientDataSource,
     ForegroundServiceDataSource? foregroundServiceDataSource,
+    CloudRelayDataSource? cloudRelayDataSource,
+    this.cloudConfig = CloudConfig.fromEnvironment,
+    this.signalingPort = NetworkConstants.signalingPort,
     Future<List<NetworkInterface>> Function()? networkInterfacesProvider,
     String? Function()? preferredLanInterface,
     Duration? reconnectBaseDelay,
@@ -40,6 +45,7 @@ class RoomRepositoryImpl implements RoomRepository {
     this.rejoinWelcomeTimeout = const Duration(seconds: 3),
   }) : _server = serverDataSource,
        _client = clientDataSource,
+       _relay = cloudRelayDataSource ?? CloudRelayDataSource(),
        _foregroundService =
            foregroundServiceDataSource ?? ForegroundServiceDataSource(),
        _networkInterfacesProvider =
@@ -57,6 +63,13 @@ class RoomRepositoryImpl implements RoomRepository {
 
   final SignalingServerDataSource _server;
   final SignalingClientDataSource _client;
+  final CloudRelayDataSource _relay;
+
+  /// Punto de encuentro del modo internet.
+  final CloudConfig cloudConfig;
+
+  /// Puerto del servidor local de la frecu (0 en pruebas: uno libre).
+  final int signalingPort;
   final ForegroundServiceDataSource _foregroundService;
   final Future<List<NetworkInterface>> Function() _networkInterfacesProvider;
 
@@ -96,6 +109,9 @@ class RoomRepositoryImpl implements RoomRepository {
   int? _reconnectSession;
   String? _localParticipantId;
   String _roomName = '';
+
+  /// Id por internet de la frecu de esta sesión, si tiene.
+  String? _internetId;
   _JoinTarget? _target;
 
   static bool get _isTest =>
@@ -143,13 +159,33 @@ class RoomRepositoryImpl implements RoomRepository {
     required String accessCode,
     String? displayName,
     RoomNote? note,
+    bool internet = false,
   }) async {
     final session = await _beginSession(host: true);
     _roomName = name;
     try {
-      final hostIp = await getLocalIpAddress() ?? '127.0.0.1';
-      await _server.start(accessCode: accessCode, roomName: name, note: note);
+      if (internet && !cloudConfig.isEnabled) {
+        throw StateError('Internet mode is not configured');
+      }
+      // Por internet, sin red local no hay IP que invitar: no se inventa.
+      final hostIp = internet
+          ? await _lanAddressOrNull() ?? ''
+          : await getLocalIpAddress() ?? '127.0.0.1';
+      await _server.start(
+        accessCode: accessCode,
+        roomName: name,
+        note: note,
+        port: signalingPort,
+      );
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
+      if (internet) {
+        final internetId = CloudConfig.newRoomId();
+        _internetId = internetId;
+        await _relay.start(
+          cloudConfig.hostSocket(internetId, CloudConfig.newHostSecret()),
+          onGuest: _server.accept,
+        );
+      }
       final result = await _join(
         session,
         displayName: displayName ?? '',
@@ -163,10 +199,34 @@ class RoomRepositoryImpl implements RoomRepository {
       AppLogger.e('Error creating room', e, st);
       await _abortSession(session);
       return Result.failure(
-        e is SocketException
+        e is SocketException ||
+                e is WebSocketChannelException ||
+                e is TimeoutException
             ? const Failure.network()
             : Failure.unexpected(error: e),
       );
+    }
+  }
+
+  Future<bool> _resolves(String host) async {
+    try {
+      final found = await InternetAddress.lookup(host)
+          .timeout(const Duration(seconds: 3));
+      return found.isNotEmpty;
+    } on Object {
+      return false;
+    }
+  }
+
+  Future<String?> _lanAddressOrNull() async {
+    try {
+      final interfaces = await _networkInterfacesProvider();
+      return selectLanAddress(
+        interfaces.map(LanInterface.fromIo),
+        prefer: _lanInterfaceHint?.call(),
+      )?.address;
+    } on Object {
+      return null;
     }
   }
 
@@ -179,14 +239,16 @@ class RoomRepositoryImpl implements RoomRepository {
   }) async {
     final session = await _beginSession(host: false);
     _roomName = '';
+    final uri = Uri.parse('ws://$hostAddress:$port');
     _target = _JoinTarget(
+      uri: uri,
       host: hostAddress,
       port: port,
       accessCode: accessCode,
       displayName: displayName,
     );
     try {
-      await _client.connect(Uri.parse('ws://$hostAddress:$port'));
+      await _client.connect(uri);
       final result = await _join(
         session,
         displayName: displayName,
@@ -200,6 +262,51 @@ class RoomRepositoryImpl implements RoomRepository {
       AppLogger.w('Error joining room at $hostAddress:$port: $e', e, st);
       await _abortSession(session);
       return Result.failure(_joinFailure(e));
+    }
+  }
+
+  @override
+  Future<Result<Room>> joinInternetRoom({
+    required String internetId,
+    required String accessCode,
+    required String displayName,
+  }) async {
+    final session = await _beginSession(host: false);
+    _roomName = '';
+    if (!cloudConfig.isEnabled || !CloudConfig.isRoomId(internetId)) {
+      await _abortSession(session);
+      return const Result.failure(Failure.hostUnreachable());
+    }
+    _internetId = internetId;
+    final uri = cloudConfig.guestSocket(internetId);
+    _target = _JoinTarget(
+      uri: uri,
+      host: '',
+      port: 0,
+      accessCode: accessCode,
+      displayName: displayName,
+    );
+    try {
+      await _client.connect(uri);
+      final result = await _join(
+        session,
+        displayName: displayName,
+        accessCode: accessCode,
+        hostAddress: '',
+        port: 0,
+      );
+      if (result.isFailure) await _abortSession(session);
+      return result;
+    } on Object catch (e, st) {
+      AppLogger.w('Error joining internet room: $e', e, st);
+      await _abortSession(session);
+      final failure = _joinFailure(e);
+      // Sin poder resolver el punto de encuentro, lo que falta es internet.
+      if (failure == const Failure.hostUnreachable() &&
+          !await _resolves(uri.host)) {
+        return const Result.failure(Failure.network());
+      }
+      return Result.failure(failure);
     }
   }
 
@@ -229,6 +336,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _isDeliberateLeave = false;
     _isClosed = false;
     _isHost = host;
+    _internetId = null;
     _localParticipantId = null;
     _setParticipants(const []);
     _setStatus(const RoomStatus.connecting());
@@ -256,6 +364,7 @@ class RoomRepositoryImpl implements RoomRepository {
     unawaited(_clientSubscription?.cancel());
     _clientSubscription = null;
     await _foregroundService.stopService();
+    await _relay.stop();
     if (_isHost || _server.isRunning) await _server.stop();
     _isHost = false;
     await _client.disconnect();
@@ -341,7 +450,7 @@ class RoomRepositoryImpl implements RoomRepository {
     final target = _target;
     if (target == null) return true;
     try {
-      await _client.connect(Uri.parse('ws://${target.host}:${target.port}'));
+      await _client.connect(target.uri);
       if (!_stillReconnecting(session)) return true;
 
       final welcome = Completer<Result<Room>>();
@@ -483,6 +592,7 @@ class RoomRepositoryImpl implements RoomRepository {
       accessCode: accessCode,
       createdAt: DateTime.now(),
       note: note,
+      internetId: _internetId,
     );
 
     if (!completer.isCompleted) completer.complete(Result.success(room));
@@ -569,12 +679,14 @@ class RoomRepositoryImpl implements RoomRepository {
 /// Frecu a la que volver al reconectar.
 class _JoinTarget {
   const _JoinTarget({
+    required this.uri,
     required this.host,
     required this.port,
     required this.accessCode,
     required this.displayName,
   });
 
+  final Uri uri;
   final String host;
   final int port;
   final String accessCode;

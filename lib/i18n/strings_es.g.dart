@@ -196,6 +196,7 @@ class Translations$room$es {
 	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
 	late final Translations$room$sheets$es sheets = Translations$room$sheets$es.internal(_root);
 	late final Translations$room$closure$es closure = Translations$room$closure$es.internal(_root);
+	late final Translations$room$internet$es internet = Translations$room$internet$es.internal(_root);
 	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
 	late final Translations$room$notification$es notification = Translations$room$notification$es.internal(_root);
 }
@@ -563,6 +564,18 @@ class Translations$lobby$join$es {
 	/// es: 'Cerrar'
 	String get close => 'Cerrar';
 
+	/// es: 'Por internet'
+	String get internet => 'Por internet';
+
+	/// es: 'Revisa que tengas internet y que la frecu siga abierta.'
+	String get internetUnreachableHint => 'Revisa que tengas internet y que la frecu siga abierta.';
+
+	/// es: 'No tienes internet'
+	String get noInternet => 'No tienes internet';
+
+	/// es: 'Activa tus datos móviles o conéctate a una Wi-Fi con internet.'
+	String get noInternetHint => 'Activa tus datos móviles o conéctate a una Wi-Fi con internet.';
+
 	/// es: 'Puerto $port'
 	String port({required Object port}) => 'Puerto ${port}';
 
@@ -730,6 +743,11 @@ class Translations$lobby$newRoom$es {
 	/// es: 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.'
 	String get codeHelp => 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.';
 
+	/// es: 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.'
+	String get codeHelpInternet => 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.';
+
+	late final Translations$lobby$newRoom$internet$es internet = Translations$lobby$newRoom$internet$es.internal(_root);
+
 	/// es: 'Abrir frecu'
 	String get open => 'Abrir frecu';
 
@@ -790,6 +808,12 @@ class Translations$room$mesh$es {
 	/// es: 'Señal débil'
 	String get weak => 'Señal débil';
 
+	/// es: 'Por internet'
+	String get internet => 'Por internet';
+
+	/// es: 'Sin audio'
+	String get noAudio => 'Sin audio';
+
 	/// es: 'Libre'
 	String get free => 'Libre';
 
@@ -807,6 +831,9 @@ class Translations$room$header$es {
 
 	/// es: 'Eres el anfitrión'
 	String get youAreHost => 'Eres el anfitrión';
+
+	/// es: 'Por internet'
+	String get internetTag => 'Por internet';
 
 	/// es: 'Anfitrión · $name'
 	String hostedBy({required Object name}) => 'Anfitrión · ${name}';
@@ -874,6 +901,24 @@ class Translations$room$closure$es {
 
 	/// es: 'Volver al inicio'
 	String get home => 'Volver al inicio';
+}
+
+// Path: room.internet
+class Translations$room$internet$es {
+	Translations$room$internet$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'La red de Frecu no tiene internet.'
+	String get cutTitle => 'La red de Frecu no tiene internet.';
+
+	/// es: 'No oirás a $names, que entraron por internet, ni ellos a ti.'
+	String cutMessage({required Object names}) => 'No oirás a ${names}, que entraron por internet, ni ellos a ti.';
+
+	/// es: ' ni a '
+	String get nor => ' ni a ';
 }
 
 // Path: room.talk
@@ -1511,6 +1556,9 @@ class Translations$lobby$join$scan$es {
 	/// es: 'Frecu encontrada'
 	String get found => 'Frecu encontrada';
 
+	/// es: 'Frecu encontrada · por internet'
+	String get foundInternet => 'Frecu encontrada · por internet';
+
 	/// es: 'Frecu sin nota'
 	String get noNote => 'Frecu sin nota';
 
@@ -1683,6 +1731,24 @@ class Translations$lobby$newRoom$network$es {
 	String get unsupportedMessage => 'Hace falta Android 8 o posterior. Usa tu zona Wi-Fi.';
 }
 
+// Path: lobby.newRoom.internet
+class Translations$lobby$newRoom$internet$es {
+	Translations$lobby$newRoom$internet$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Permitir internet'
+	String get title => 'Permitir internet';
+
+	/// es: 'También pueden unirse desde lejos con el enlace. Usa datos móviles.'
+	String get on => 'También pueden unirse desde lejos con el enlace. Usa datos móviles.';
+
+	/// es: 'Solo se unen quienes estén en tu red.'
+	String get off => 'Solo se unen quienes estén en tu red.';
+}
+
 // Path: room.sheets.invite
 class Translations$room$sheets$invite$es {
 	Translations$room$sheets$invite$es.internal(this._root);
@@ -1690,6 +1756,7 @@ class Translations$room$sheets$invite$es {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+	late final Translations$room$sheets$invite$internet$es internet = Translations$room$sheets$invite$internet$es.internal(_root);
 
 	/// es: 'También por NFC'
 	String get nfcTitle => 'También por NFC';
@@ -2162,6 +2229,39 @@ class Translations$lobby$newRoom$network$steps$2$es with HotspotStep {
 	@override String get rest => ' La próxima tendrá otro nombre y otra clave.';
 }
 
+// Path: room.sheets.invite.internet
+class Translations$room$sheets$invite$internet$es {
+	Translations$room$sheets$invite$internet$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: 'Invitar · por internet'
+	String get kicker => 'Invitar · por internet';
+
+	/// es: 'Escanea o comparte'
+	String get title => 'Escanea o comparte';
+
+	/// es: 'Sirven desde cualquier lugar y ya incluyen el código.'
+	String get message => 'Sirven desde cualquier lugar y ya incluyen el código.';
+
+	/// es: 'Conexión'
+	String get connection => 'Conexión';
+
+	/// es: 'Internet'
+	String get internet => 'Internet';
+
+	/// es: 'y Wi-Fi «$name»'
+	String andWifi({required Object name}) => 'y Wi-Fi «${name}»';
+
+	/// es: 'Compartir enlace'
+	String get share => 'Compartir enlace';
+
+	/// es: 'Únete a mi frecu «$name» en Frecu: $link'
+	String shareText({required Object name, required Object link}) => 'Únete a mi frecu «${name}» en Frecu: ${link}';
+}
+
 // Path: room.sheets.invite.nfcSheet
 class Translations$room$sheets$invite$nfcSheet$es {
 	Translations$room$sheets$invite$nfcSheet$es.internal(this._root);
@@ -2221,6 +2321,10 @@ extension on Translations {
 			'lobby.join.bluetooth.unreachable' => 'El anfitrión no responde por Bluetooth.',
 			'lobby.join.bluetooth.unreachableHint' => 'Acércate a su teléfono e intenta otra vez.',
 			'lobby.join.close' => 'Cerrar',
+			'lobby.join.internet' => 'Por internet',
+			'lobby.join.internetUnreachableHint' => 'Revisa que tengas internet y que la frecu siga abierta.',
+			'lobby.join.noInternet' => 'No tienes internet',
+			'lobby.join.noInternetHint' => 'Activa tus datos móviles o conéctate a una Wi-Fi con internet.',
 			'lobby.join.port' => ({required Object port}) => 'Puerto ${port}',
 			'lobby.join.wrongCode' => 'Código incorrecto. Revisa e intenta otra vez.',
 			'lobby.join.roomFullHint' => 'Podrás entrar cuando alguien salga.',
@@ -2273,6 +2377,7 @@ extension on Translations {
 			'lobby.join.scan.hint' => 'Apunta al QR que muestra el anfitrión en su teléfono.',
 			'lobby.join.scan.invalid' => 'Este QR no es una invitación de Frecu.',
 			'lobby.join.scan.found' => 'Frecu encontrada',
+			'lobby.join.scan.foundInternet' => 'Frecu encontrada · por internet',
 			'lobby.join.scan.noNote' => 'Frecu sin nota',
 			'lobby.join.scan.join' => 'Unirme',
 			'lobby.join.scan.another' => 'Escanear otro QR',
@@ -2383,6 +2488,10 @@ extension on Translations {
 			'lobby.newRoom.codeDigits' => '4 dígitos',
 			'lobby.newRoom.regenerate' => 'Generar otro',
 			'lobby.newRoom.codeHelp' => 'Compártelo solo con tu grupo: evita que se unan desconocidos de la misma red.',
+			'lobby.newRoom.codeHelpInternet' => 'El enlace y el QR ya lo incluyen: compártelos solo con tu grupo.',
+			'lobby.newRoom.internet.title' => 'Permitir internet',
+			'lobby.newRoom.internet.on' => 'También pueden unirse desde lejos con el enlace. Usa datos móviles.',
+			'lobby.newRoom.internet.off' => 'Solo se unen quienes estén en tu red.',
 			'lobby.newRoom.open' => 'Abrir frecu',
 			'lobby.newRoom.clockLabel' => ({required Object time, required Object note}) => 'Reloj de quintas: ${time}, ${note}',
 			'lobby.noteNames.0' => 'Do',
@@ -2436,14 +2545,25 @@ extension on Translations {
 			'room.mesh.connecting' => 'Conectando',
 			'room.mesh.reconnecting' => 'Reconectando',
 			'room.mesh.weak' => 'Señal débil',
+			'room.mesh.internet' => 'Por internet',
+			'room.mesh.noAudio' => 'Sin audio',
 			'room.mesh.free' => 'Libre',
 			'room.mesh.invite' => 'Invitar',
 			'room.header.youAreHost' => 'Eres el anfitrión',
+			'room.header.internetTag' => 'Por internet',
 			'room.header.hostedBy' => ({required Object name}) => 'Anfitrión · ${name}',
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
 			'room.header.note' => ({required Object note, required Object hz}) => 'Nota ${note}, ${hz} Hz',
 			'room.header.invite' => 'Invitar',
 			'room.sheets.close' => 'Cerrar',
+			'room.sheets.invite.internet.kicker' => 'Invitar · por internet',
+			'room.sheets.invite.internet.title' => 'Escanea o comparte',
+			'room.sheets.invite.internet.message' => 'Sirven desde cualquier lugar y ya incluyen el código.',
+			'room.sheets.invite.internet.connection' => 'Conexión',
+			'room.sheets.invite.internet.internet' => 'Internet',
+			'room.sheets.invite.internet.andWifi' => ({required Object name}) => 'y Wi-Fi «${name}»',
+			'room.sheets.invite.internet.share' => 'Compartir enlace',
+			'room.sheets.invite.internet.shareText' => ({required Object name, required Object link}) => 'Únete a mi frecu «${name}» en Frecu: ${link}',
 			'room.sheets.invite.nfcTitle' => 'También por NFC',
 			'room.sheets.invite.nfcMessage' => 'Acerca otro teléfono al tuyo',
 			'room.sheets.invite.nfcMessageTag' => 'Grábala en una etiqueta NFC',
@@ -2497,6 +2617,9 @@ extension on Translations {
 			'room.closure.people' => 'Personas',
 			'room.closure.note' => 'Nota',
 			'room.closure.home' => 'Volver al inicio',
+			'room.internet.cutTitle' => 'La red de Frecu no tiene internet.',
+			'room.internet.cutMessage' => ({required Object names}) => 'No oirás a ${names}, que entraron por internet, ni ellos a ti.',
+			'room.internet.nor' => ' ni a ',
 			'room.talk.modePtt' => 'PTT',
 			'room.talk.modeOpen' => 'Abierto',
 			'room.talk.core.hold' => 'Mantén',
@@ -2692,6 +2815,8 @@ extension on Translations {
 			'location.compass.nw' => 'NO',
 			'location.compassLong.n' => 'norte',
 			'location.compassLong.ne' => 'noreste',
+			_ => null,
+		} ?? switch (path) {
 			'location.compassLong.e' => 'este',
 			'location.compassLong.se' => 'sureste',
 			'location.compassLong.s' => 'sur',

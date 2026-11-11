@@ -14,6 +14,7 @@ import 'package:frecu/features/room/data/repositories/link_quality_monitor.dart'
 import 'package:frecu/features/room/data/repositories/voice_activity_detector.dart';
 import 'package:frecu/features/room/data/repositories/voice_level_sampler.dart';
 import 'package:frecu/features/room/domain/entities/audio_route.dart';
+import 'package:frecu/features/room/domain/entities/ice_server.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
@@ -188,7 +189,17 @@ class VoiceRepositoryImpl implements VoiceRepository {
   Future<void> joinMesh({
     required String localPeerId,
     required List<String> peerIds,
+    List<IceServer> iceServers = const [],
   }) async {
+    // Los enlaces nuevos (también los de quien llega después) los usan.
+    _peerConnection.iceServers = [
+      for (final server in iceServers)
+        {
+          'urls': server.urls,
+          if (server.username != null) 'username': server.username,
+          if (server.credential != null) 'credential': server.credential,
+        },
+    ];
     if (localPeerId.isEmpty || localPeerId == _meshPeerId) return;
     _meshPeerId = localPeerId;
     _setSpeakingPeers(const {});

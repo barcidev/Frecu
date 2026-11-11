@@ -12,12 +12,21 @@ abstract interface class RoomRepository {
     required String accessCode,
     String? displayName,
     RoomNote? note,
+    bool internet = false,
   });
 
   /// Se une a una frecu existente dada la dirección del anfitrión y credenciales.
   Future<Result<Room>> joinRoom({
     required String hostAddress,
     required int port,
+    required String accessCode,
+    required String displayName,
+  });
+
+  /// Se une a una frecu abierta por internet, por su [internetId], a
+  /// través del punto de encuentro.
+  Future<Result<Room>> joinInternetRoom({
+    required String internetId,
     required String accessCode,
     required String displayName,
   });

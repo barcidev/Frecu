@@ -39,6 +39,7 @@ class RoomNfcShare {
         note: room.note,
         name: room.name,
         wifi: room.wifi,
+        internetId: room.internetId,
       ),
     );
   });
