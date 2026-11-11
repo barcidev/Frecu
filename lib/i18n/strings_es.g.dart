@@ -195,6 +195,7 @@ class Translations$room$es {
 	late final Translations$room$mesh$es mesh = Translations$room$mesh$es.internal(_root);
 	late final Translations$room$header$es header = Translations$room$header$es.internal(_root);
 	late final Translations$room$sheets$es sheets = Translations$room$sheets$es.internal(_root);
+	late final Translations$room$handover$es handover = Translations$room$handover$es.internal(_root);
 	late final Translations$room$closure$es closure = Translations$room$closure$es.internal(_root);
 	late final Translations$room$internet$es internet = Translations$room$internet$es.internal(_root);
 	late final Translations$room$talk$es talk = Translations$room$talk$es.internal(_root);
@@ -831,6 +832,9 @@ class Translations$room$header$es {
 	/// es: 'Eres el anfitrión'
 	String get youAreHost => 'Eres el anfitrión';
 
+	/// es: 'Llevas la frecu'
+	String get carrying => 'Llevas la frecu';
+
 	/// es: 'Por internet'
 	String get internetTag => 'Por internet';
 
@@ -861,6 +865,81 @@ class Translations$room$sheets$es {
 	late final Translations$room$sheets$invite$es invite = Translations$room$sheets$invite$es.internal(_root);
 	late final Translations$room$sheets$route$es route = Translations$room$sheets$route$es.internal(_root);
 	late final Translations$room$sheets$leave$es leave = Translations$room$sheets$leave$es.internal(_root);
+}
+
+// Path: room.handover
+class Translations$room$handover$es {
+	Translations$room$handover$es.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// es: '¿Qué pasa con la frecu?'
+	String get leaveTitle => '¿Qué pasa con la frecu?';
+
+	/// es: 'Llevas la frecu y hay una persona más.'
+	String get leaveOne => 'Llevas la frecu y hay una persona más.';
+
+	/// es: 'Llevas la frecu y hay $count personas más.'
+	String leaveMany({required Object count}) => 'Llevas la frecu y hay ${count} personas más.';
+
+	/// es: 'Que siga sin mí'
+	String get keep => 'Que siga sin mí';
+
+	/// es: 'Pasas la frecu a otra persona y sales. Los demás siguen hablando.'
+	String get keepDetail => 'Pasas la frecu a otra persona y sales. Los demás siguen hablando.';
+
+	/// es: 'Cerrarla para todos'
+	String get close => 'Cerrarla para todos';
+
+	/// es: 'La frecu se cierra y todos salen.'
+	String get closeDetail => 'La frecu se cierra y todos salen.';
+
+	/// es: 'Seguir'
+	String get next => 'Seguir';
+
+	/// es: 'Cancelar'
+	String get cancel => 'Cancelar';
+
+	/// es: '¿Quién lleva la frecu?'
+	String get pickTitle => '¿Quién lleva la frecu?';
+
+	/// es: 'Esa persona muestra el QR y decide cuándo cerrarla.'
+	String get pickMessage => 'Esa persona muestra el QR y decide cuándo cerrarla.';
+
+	/// es: 'Lleva más tiempo · sugerida'
+	String get suggested => 'Lleva más tiempo · sugerida';
+
+	/// es: 'Desde las $time'
+	String since({required Object time}) => 'Desde las ${time}';
+
+	/// es: 'Pasar a $name y salir'
+	String pass({required Object name}) => 'Pasar a ${name} y salir';
+
+	/// es: '$previous salió · $name lleva ahora la frecu'
+	String left({required Object previous, required Object name}) => '${previous} salió · ${name} lleva ahora la frecu';
+
+	/// es: '$previous se desconectó · $name lleva ahora la frecu'
+	String lost({required Object previous, required Object name}) => '${previous} se desconectó · ${name} lleva ahora la frecu';
+
+	/// es: '$name lleva ahora la frecu'
+	String taken({required Object name}) => '${name} lleva ahora la frecu';
+
+	/// es: 'Ahora llevas la frecu.'
+	String get heirTitle => 'Ahora llevas la frecu.';
+
+	/// es: '$name te la pasó al salir.'
+	String heirLeft({required Object name}) => '${name} te la pasó al salir.';
+
+	/// es: '$name se desconectó.'
+	String heirLost({required Object name}) => '${name} se desconectó.';
+
+	/// es: 'Mostrar el QR'
+	String get showQr => 'Mostrar el QR';
+
+	/// es: 'Cerrar aviso'
+	String get dismiss => 'Cerrar aviso';
 }
 
 // Path: room.closure
@@ -2585,6 +2664,7 @@ extension on Translations {
 			'room.mesh.free' => 'Libre',
 			'room.mesh.invite' => 'Invitar',
 			'room.header.youAreHost' => 'Eres el anfitrión',
+			'room.header.carrying' => 'Llevas la frecu',
 			'room.header.internetTag' => 'Por internet',
 			'room.header.hostedBy' => ({required Object name}) => 'Anfitrión · ${name}',
 			'room.header.hz' => ({required Object value}) => '${value} Hz',
@@ -2645,6 +2725,28 @@ extension on Translations {
 			'room.sheets.leave.networkMany' => ({required Object count}) => 'Tu teléfono es la red de la frecu. Si sales, la frecu se cierra para las otras ${count} personas.',
 			'room.sheets.leave.hostConfirm' => 'Cerrar frecu',
 			'room.sheets.leave.cancel' => 'Cancelar',
+			'room.handover.leaveTitle' => '¿Qué pasa con la frecu?',
+			'room.handover.leaveOne' => 'Llevas la frecu y hay una persona más.',
+			'room.handover.leaveMany' => ({required Object count}) => 'Llevas la frecu y hay ${count} personas más.',
+			'room.handover.keep' => 'Que siga sin mí',
+			'room.handover.keepDetail' => 'Pasas la frecu a otra persona y sales. Los demás siguen hablando.',
+			'room.handover.close' => 'Cerrarla para todos',
+			'room.handover.closeDetail' => 'La frecu se cierra y todos salen.',
+			'room.handover.next' => 'Seguir',
+			'room.handover.cancel' => 'Cancelar',
+			'room.handover.pickTitle' => '¿Quién lleva la frecu?',
+			'room.handover.pickMessage' => 'Esa persona muestra el QR y decide cuándo cerrarla.',
+			'room.handover.suggested' => 'Lleva más tiempo · sugerida',
+			'room.handover.since' => ({required Object time}) => 'Desde las ${time}',
+			'room.handover.pass' => ({required Object name}) => 'Pasar a ${name} y salir',
+			'room.handover.left' => ({required Object previous, required Object name}) => '${previous} salió · ${name} lleva ahora la frecu',
+			'room.handover.lost' => ({required Object previous, required Object name}) => '${previous} se desconectó · ${name} lleva ahora la frecu',
+			'room.handover.taken' => ({required Object name}) => '${name} lleva ahora la frecu',
+			'room.handover.heirTitle' => 'Ahora llevas la frecu.',
+			'room.handover.heirLeft' => ({required Object name}) => '${name} te la pasó al salir.',
+			'room.handover.heirLost' => ({required Object name}) => '${name} se desconectó.',
+			'room.handover.showQr' => 'Mostrar el QR',
+			'room.handover.dismiss' => 'Cerrar aviso',
 			'room.closure.offAir' => 'Fuera del aire',
 			'room.closure.noteOffAir' => ({required Object note}) => '${note} · fuera del aire',
 			'room.closure.title' => 'Fin de la transmisión',
@@ -2821,6 +2923,8 @@ extension on Translations {
 			'messages.kinds.onMyWay' => 'Voy en camino',
 			'messages.kinds.sos' => 'SOS',
 			'messages.sosHold' => 'Mantén para enviar SOS',
+			_ => null,
+		} ?? switch (path) {
 			'messages.sosHoldHelp' => 'Alarma para todos hasta que alguien la atienda',
 			'messages.sent' => ({required Object text}) => 'Enviado · ${text}',
 			'messages.sosSent' => 'SOS enviado a tu grupo',
@@ -2844,8 +2948,6 @@ extension on Translations {
 			'location.sosDetail' => ({required Object distance, required Object direction}) => 'Está a ${distance} hacia el ${direction}. Avisa al grupo si vas hacia allá.',
 			'location.meters' => ({required Object value}) => '${value} m',
 			'location.kilometers' => ({required Object value}) => '${value} km',
-			_ => null,
-		} ?? switch (path) {
 			'location.compass.n' => 'N',
 			'location.compass.ne' => 'NE',
 			'location.compass.e' => 'E',

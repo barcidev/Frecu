@@ -21,7 +21,9 @@ import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/link_quality.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room.dart';
+import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:frecu/features/room/domain/entities/room_succession.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/pages/room_bluetooth_invite.dart';
 import 'package:frecu/features/room/presentation/pages/room_haptics.dart';
@@ -41,6 +43,7 @@ import 'package:frecu/features/room/presentation/widgets/invite_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/leave_sheet.dart';
 import 'package:frecu/features/room/presentation/widgets/mic_control_section.dart';
 import 'package:frecu/features/room/presentation/widgets/room_closed_view.dart';
+import 'package:frecu/features/room/presentation/widgets/room_handover.dart';
 import 'package:frecu/features/room/presentation/widgets/room_header.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
@@ -92,14 +95,13 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   /// Mensajes rápidos: enviar y avisar de los que llegan.
   late final RoomMessages _messages = RoomMessages(
     showEvent: _showEvent,
-    colorOf: (person) => meshNodeColor(
-      FrColors.dark,
-      MeshNode(
-        id: person.id,
-        name: person.displayName,
-        slot: _slots[person.id] ?? 0,
-      ),
-    ),
+    colorOf: (person) => _colorOf(person.id, person.displayName),
+  );
+
+  /// Color de la firma de cada persona en la malla.
+  Color _colorOf(String id, String name) => meshNodeColor(
+    FrColors.dark,
+    MeshNode(id: id, name: name, slot: _slots[id] ?? 0),
   );
 
   /// Resumen del cierre; mientras no es nulo se ve la pantalla de cierre.
@@ -199,6 +201,9 @@ class _RoomPageState extends ConsumerState<RoomPage> {
   /// Confirma la salida con la hoja de salir: quien no es anfitrión vuelve
   /// al inicio y el anfitrión cierra la frecu y ve la pantalla de cierre.
   Future<void> _confirmLeave({required bool host, required int others}) async {
+    if (host && others > 0 && _heirs != null) {
+      return _leaveWithHandover(others);
+    }
     final confirmed = await LeaveSheet.show(
       context,
       host: host,
@@ -209,6 +214,54 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     await _leave(host: host);
   }
 
+  /// Quienes pueden recibir una frecu local con traspaso (en una Wi-Fi que
+  /// no crea el teléfono del anfitrión), en orden de sucesión; nulo si no se
+  /// puede pasar.
+  List<RoomMember>? get _heirs {
+    final room = ref.read(roomNotifierProvider);
+    final succession = ref.read(roomHandoverProvider)?.succession;
+    if (room == null || room.reach != RoomReach.local || !room.handover) {
+      return null;
+    }
+    if (succession == null || !succession.handover) return null;
+    final localId = ref.read(roomRepositoryProvider).localParticipantId;
+    final members = [
+      for (final member in succession.members)
+        if (member.id != localId) member,
+    ];
+    return members.isEmpty ? null : members;
+  }
+
+  /// Salir de una frecu con traspaso: «¿Qué pasa con la frecu?» y, para que
+  /// siga, «¿Quién lleva la frecu?»; quien sale vuelve al inicio.
+  Future<void> _leaveWithHandover(int others) async {
+    final choice = await HandoverChoiceSheet.show(context, others: others);
+    if (choice == null || !mounted) return;
+    final members = _heirs;
+    if (choice == HandoverChoice.close || members == null) {
+      return _leave(host: true);
+    }
+    final peerId = await HandoverPickSheet.show(
+      context,
+      members: members,
+      colorOf: _colorOf,
+    );
+    if (peerId != null && mounted) await _handOver(peerId);
+  }
+
+  /// Pasa la frecu a [peerId] y vuelve al inicio; si no se pudo, sigue.
+  Future<void> _handOver(String peerId) async {
+    if (_leaving || _closure != null) return;
+    _leaving = true;
+    final passed = await _rooms.handOverAndLeave(peerId);
+    if (!mounted) return;
+    if (passed.isFailure) {
+      _leaving = false;
+      return;
+    }
+    _exitToLobby();
+  }
+
   /// Sale de la frecu como al confirmar la hoja de salir: el anfitrión la
   /// cierra para todos y ve el cierre; quien se unió vuelve al inicio.
   Future<void> _leave({required bool host}) async {
@@ -217,6 +270,11 @@ class _RoomPageState extends ConsumerState<RoomPage> {
     _leaving = true;
     await _rooms.leaveRoom();
     if (!mounted) return;
+    _exitToLobby();
+  }
+
+  /// Ya fuera de la frecu, vuelve al inicio.
+  void _exitToLobby() {
     // Ya fuera de la frecu: sale aunque la pantalla bloquee el Atrás.
     final router = context.router;
     if (router.canPop()) {
@@ -377,9 +435,11 @@ class _RoomPageState extends ConsumerState<RoomPage> {
       for (final p in after)
         if (!beforeIds.contains(p.id) && !_ownIds.contains(p.id)) p,
     ];
+    // El anfitrión solo sale de una frecu que sigue cuando la pasa: eso lo
+    // avisa el cambio de anfitrión.
     final left = [
       for (final p in before)
-        if (!afterIds.contains(p.id) && !_ownIds.contains(p.id)) p,
+        if (!afterIds.contains(p.id) && !_ownIds.contains(p.id) && !p.isHost) p,
     ];
     if (joined.isNotEmpty) {
       final person = joined.last;
@@ -642,28 +702,30 @@ class _RoomPageState extends ConsumerState<RoomPage> {
           left: 14,
           right: 14,
           top: 0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8,
-            children: [
-              // Recuerda que se comparte la ubicación, sin tapar la malla.
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: SharingLocationTag(),
-              ),
-              const RoomNetworkNotice(),
-              if (_micUnavailable) _micNotice(),
-              EchoNotice(
-                visible:
-                    voice.talkMode == TalkMode.openMic &&
-                    voice.audioRoute == AudioRoute.speaker,
-              ),
-            ],
-          ),
+          child: _notices(voice, onInvite),
         ),
       ],
     );
   }
+
+  /// Avisos sobre la malla: ubicación compartida, red de la frecu, cambio
+  /// de anfitrión, micrófono y eco.
+  Widget _notices(VoiceState voice, VoidCallback? onInvite) => Column(
+    mainAxisSize: MainAxisSize.min,
+    spacing: 8,
+    children: [
+      // Recuerda que se comparte la ubicación, sin tapar la malla.
+      const Align(alignment: Alignment.centerLeft, child: SharingLocationTag()),
+      const RoomNetworkNotice(),
+      HandoverNotice(onInvite: onInvite, colorOf: _colorOf),
+      if (_micUnavailable) _micNotice(),
+      EchoNotice(
+        visible:
+            voice.talkMode == TalkMode.openMic &&
+            voice.audioRoute == AudioRoute.speaker,
+      ),
+    ],
+  );
 
   /// Aviso de micrófono no disponible, con acceso a los ajustes.
   Widget _micNotice() {

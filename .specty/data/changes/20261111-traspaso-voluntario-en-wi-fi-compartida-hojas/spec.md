@@ -75,7 +75,7 @@ En una frecu local sobre una Wi-Fi que no depende del teléfono del anfitrión, 
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, lib/features/room/data/datasources/room_succession.dart, lib/features/room/data/repositories/room_reconnection.dart, lib/features/room/data/repositories/room_repository_impl.dart, lib/features/room/domain/repositories/room_handover.dart, test/features/room/data/room_handover_test.dart, docs/protocolo.md
   - ac: AC7
   - verify: flutter test test/features/room/data/room_handover_test.dart test/features/room/data/room_reconnect_test.dart test/features/room/data/room_succession_test.dart
-- [ ] T2: Hojas de salir y de sucesor, aviso de quien la recibe, toast y cabecera
+- [x] T2: Hojas de salir y de sucesor, aviso de quien la recibe, toast y cabecera
   - files: lib/features/room/domain/entities/room.dart, lib/features/room/domain/entities/room.freezed.dart, lib/features/room/presentation/providers/room_provider.dart, lib/features/room/presentation/providers/room_provider.g.dart, lib/features/room/presentation/widgets/room_handover.dart, lib/features/room/presentation/widgets/room_header.dart, lib/features/room/presentation/pages/room_page.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/room/presentation/room_handover_ui_test.dart
   - ac: AC6, AC7
   - verify: flutter test test/features/room/presentation/room_handover_ui_test.dart

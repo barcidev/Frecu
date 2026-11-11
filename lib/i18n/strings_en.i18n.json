@@ -274,6 +274,7 @@
     },
     "header": {
       "youAreHost": "You're the host",
+      "carrying": "You carry the frecu",
       "internetTag": "Over the internet",
       "hostedBy": "Host · $name",
       "hz": "$value Hz",
@@ -346,6 +347,30 @@
         "hostConfirm": "Close frecu",
         "cancel": "Cancel"
       }
+    },
+    "handover": {
+      "leaveTitle": "What happens to the frecu?",
+      "leaveOne": "You carry the frecu and there's one more person.",
+      "leaveMany": "You carry the frecu and there are $count more people.",
+      "keep": "Keep it going without me",
+      "keepDetail": "You pass the frecu to someone else and leave. Everyone else keeps talking.",
+      "close": "Close it for everyone",
+      "closeDetail": "The frecu closes and everyone leaves.",
+      "next": "Continue",
+      "cancel": "Cancel",
+      "pickTitle": "Who carries the frecu?",
+      "pickMessage": "That person shows the QR and decides when to close it.",
+      "suggested": "Here the longest · suggested",
+      "since": "Since $time",
+      "pass": "Pass to $name and leave",
+      "left": "$previous left · $name carries the frecu now",
+      "lost": "$previous disconnected · $name carries the frecu now",
+      "taken": "$name carries the frecu now",
+      "heirTitle": "You carry the frecu now.",
+      "heirLeft": "$name passed it to you on leaving.",
+      "heirLost": "$name disconnected.",
+      "showQr": "Show the QR",
+      "dismiss": "Dismiss notice"
     },
     "closure": {
       "offAir": "Off the air",

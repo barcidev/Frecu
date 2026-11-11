@@ -274,6 +274,7 @@
     },
     "header": {
       "youAreHost": "Eres el anfitrión",
+      "carrying": "Llevas la frecu",
       "internetTag": "Por internet",
       "hostedBy": "Anfitrión · $name",
       "hz": "$value Hz",
@@ -346,6 +347,30 @@
         "hostConfirm": "Cerrar frecu",
         "cancel": "Cancelar"
       }
+    },
+    "handover": {
+      "leaveTitle": "¿Qué pasa con la frecu?",
+      "leaveOne": "Llevas la frecu y hay una persona más.",
+      "leaveMany": "Llevas la frecu y hay $count personas más.",
+      "keep": "Que siga sin mí",
+      "keepDetail": "Pasas la frecu a otra persona y sales. Los demás siguen hablando.",
+      "close": "Cerrarla para todos",
+      "closeDetail": "La frecu se cierra y todos salen.",
+      "next": "Seguir",
+      "cancel": "Cancelar",
+      "pickTitle": "¿Quién lleva la frecu?",
+      "pickMessage": "Esa persona muestra el QR y decide cuándo cerrarla.",
+      "suggested": "Lleva más tiempo · sugerida",
+      "since": "Desde las $time",
+      "pass": "Pasar a $name y salir",
+      "left": "$previous salió · $name lleva ahora la frecu",
+      "lost": "$previous se desconectó · $name lleva ahora la frecu",
+      "taken": "$name lleva ahora la frecu",
+      "heirTitle": "Ahora llevas la frecu.",
+      "heirLeft": "$name te la pasó al salir.",
+      "heirLost": "$name se desconectó.",
+      "showQr": "Mostrar el QR",
+      "dismiss": "Cerrar aviso"
     },
     "closure": {
       "offAir": "Fuera del aire",

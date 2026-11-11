@@ -42,6 +42,12 @@ sealed class Room with _$Room {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(false)
     bool hostOwnsNetwork,
+
+    /// Este teléfono la lleva porque otro anfitrión se la pasó (o se cayó).
+    /// Solo vale en este teléfono: no viaja en JSON.
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool inherited,
   }) = _Room;
 
   const Room._();

@@ -25,7 +25,9 @@ mixin _$Room {
 @JsonKey(includeFromJson: false, includeToJson: false) bool get hosting;/// La red de la frecu la crea el teléfono del anfitrión (la red de Frecu
 /// o su zona Wi-Fi). Lo sabe cada teléfono por el `welcome`: no viaja en
 /// JSON.
-@JsonKey(includeFromJson: false, includeToJson: false) bool get hostOwnsNetwork;
+@JsonKey(includeFromJson: false, includeToJson: false) bool get hostOwnsNetwork;/// Este teléfono la lleva porque otro anfitrión se la pasó (o se cayó).
+/// Solo vale en este teléfono: no viaja en JSON.
+@JsonKey(includeFromJson: false, includeToJson: false) bool get inherited;
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -38,16 +40,16 @@ $RoomCopyWith<Room> get copyWith => _$RoomCopyWithImpl<Room>(this as Room, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note)&&(identical(other.wifi, wifi) || other.wifi == wifi)&&(identical(other.internetId, internetId) || other.internetId == internetId)&&(identical(other.hosting, hosting) || other.hosting == hosting)&&(identical(other.hostOwnsNetwork, hostOwnsNetwork) || other.hostOwnsNetwork == hostOwnsNetwork));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note)&&(identical(other.wifi, wifi) || other.wifi == wifi)&&(identical(other.internetId, internetId) || other.internetId == internetId)&&(identical(other.hosting, hosting) || other.hosting == hosting)&&(identical(other.hostOwnsNetwork, hostOwnsNetwork) || other.hostOwnsNetwork == hostOwnsNetwork)&&(identical(other.inherited, inherited) || other.inherited == inherited));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note,wifi,internetId,hosting,hostOwnsNetwork);
+int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note,wifi,internetId,hosting,hostOwnsNetwork,inherited);
 
 @override
 String toString() {
-  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note, wifi: $wifi, internetId: $internetId, hosting: $hosting, hostOwnsNetwork: $hostOwnsNetwork)';
+  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note, wifi: $wifi, internetId: $internetId, hosting: $hosting, hostOwnsNetwork: $hostOwnsNetwork, inherited: $inherited)';
 }
 
 
@@ -58,7 +60,7 @@ abstract mixin class $RoomCopyWith<$Res>  {
   factory $RoomCopyWith(Room value, $Res Function(Room) _then) = _$RoomCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note, WifiCredentials? wifi, String? internetId,@JsonKey(includeFromJson: false, includeToJson: false) bool hosting,@JsonKey(includeFromJson: false, includeToJson: false) bool hostOwnsNetwork
+ String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note, WifiCredentials? wifi, String? internetId,@JsonKey(includeFromJson: false, includeToJson: false) bool hosting,@JsonKey(includeFromJson: false, includeToJson: false) bool hostOwnsNetwork,@JsonKey(includeFromJson: false, includeToJson: false) bool inherited
 });
 
 
@@ -75,7 +77,7 @@ class _$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,Object? wifi = freezed,Object? internetId = freezed,Object? hosting = null,Object? hostOwnsNetwork = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,Object? wifi = freezed,Object? internetId = freezed,Object? hosting = null,Object? hostOwnsNetwork = null,Object? inherited = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -89,6 +91,7 @@ as RoomNote?,wifi: freezed == wifi ? _self.wifi : wifi // ignore: cast_nullable_
 as WifiCredentials?,internetId: freezed == internetId ? _self.internetId : internetId // ignore: cast_nullable_to_non_nullable
 as String?,hosting: null == hosting ? _self.hosting : hosting // ignore: cast_nullable_to_non_nullable
 as bool,hostOwnsNetwork: null == hostOwnsNetwork ? _self.hostOwnsNetwork : hostOwnsNetwork // ignore: cast_nullable_to_non_nullable
+as bool,inherited: null == inherited ? _self.inherited : inherited // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -195,10 +198,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi,  String? internetId, @JsonKey(includeFromJson: false, includeToJson: false)  bool hosting, @JsonKey(includeFromJson: false, includeToJson: false)  bool hostOwnsNetwork)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi,  String? internetId, @JsonKey(includeFromJson: false, includeToJson: false)  bool hosting, @JsonKey(includeFromJson: false, includeToJson: false)  bool hostOwnsNetwork, @JsonKey(includeFromJson: false, includeToJson: false)  bool inherited)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi,_that.internetId,_that.hosting,_that.hostOwnsNetwork);case _:
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi,_that.internetId,_that.hosting,_that.hostOwnsNetwork,_that.inherited);case _:
   return orElse();
 
 }
@@ -216,10 +219,10 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi,  String? internetId, @JsonKey(includeFromJson: false, includeToJson: false)  bool hosting, @JsonKey(includeFromJson: false, includeToJson: false)  bool hostOwnsNetwork)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi,  String? internetId, @JsonKey(includeFromJson: false, includeToJson: false)  bool hosting, @JsonKey(includeFromJson: false, includeToJson: false)  bool hostOwnsNetwork, @JsonKey(includeFromJson: false, includeToJson: false)  bool inherited)  $default,) {final _that = this;
 switch (_that) {
 case _Room():
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi,_that.internetId,_that.hosting,_that.hostOwnsNetwork);}
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi,_that.internetId,_that.hosting,_that.hostOwnsNetwork,_that.inherited);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -233,10 +236,10 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi,  String? internetId, @JsonKey(includeFromJson: false, includeToJson: false)  bool hosting, @JsonKey(includeFromJson: false, includeToJson: false)  bool hostOwnsNetwork)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String hostAddress,  int port,  String accessCode,  DateTime createdAt,  int maxParticipants, @RoomNoteConverter()  RoomNote? note,  WifiCredentials? wifi,  String? internetId, @JsonKey(includeFromJson: false, includeToJson: false)  bool hosting, @JsonKey(includeFromJson: false, includeToJson: false)  bool hostOwnsNetwork, @JsonKey(includeFromJson: false, includeToJson: false)  bool inherited)?  $default,) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi,_that.internetId,_that.hosting,_that.hostOwnsNetwork);case _:
+return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCode,_that.createdAt,_that.maxParticipants,_that.note,_that.wifi,_that.internetId,_that.hosting,_that.hostOwnsNetwork,_that.inherited);case _:
   return null;
 
 }
@@ -248,7 +251,7 @@ return $default(_that.id,_that.name,_that.hostAddress,_that.port,_that.accessCod
 @JsonSerializable()
 
 class _Room extends Room {
-  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note, this.wifi, this.internetId, @JsonKey(includeFromJson: false, includeToJson: false) this.hosting = false, @JsonKey(includeFromJson: false, includeToJson: false) this.hostOwnsNetwork = false}): super._();
+  const _Room({required this.id, required this.name, required this.hostAddress, required this.port, required this.accessCode, required this.createdAt, this.maxParticipants = 6, @RoomNoteConverter() this.note, this.wifi, this.internetId, @JsonKey(includeFromJson: false, includeToJson: false) this.hosting = false, @JsonKey(includeFromJson: false, includeToJson: false) this.hostOwnsNetwork = false, @JsonKey(includeFromJson: false, includeToJson: false) this.inherited = false}): super._();
   factory _Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
 @override final  String id;
@@ -273,6 +276,9 @@ class _Room extends Room {
 /// o su zona Wi-Fi). Lo sabe cada teléfono por el `welcome`: no viaja en
 /// JSON.
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  bool hostOwnsNetwork;
+/// Este teléfono la lleva porque otro anfitrión se la pasó (o se cayó).
+/// Solo vale en este teléfono: no viaja en JSON.
+@override@JsonKey(includeFromJson: false, includeToJson: false) final  bool inherited;
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
@@ -287,16 +293,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note)&&(identical(other.wifi, wifi) || other.wifi == wifi)&&(identical(other.internetId, internetId) || other.internetId == internetId)&&(identical(other.hosting, hosting) || other.hosting == hosting)&&(identical(other.hostOwnsNetwork, hostOwnsNetwork) || other.hostOwnsNetwork == hostOwnsNetwork));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.hostAddress, hostAddress) || other.hostAddress == hostAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.accessCode, accessCode) || other.accessCode == accessCode)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.maxParticipants, maxParticipants) || other.maxParticipants == maxParticipants)&&(identical(other.note, note) || other.note == note)&&(identical(other.wifi, wifi) || other.wifi == wifi)&&(identical(other.internetId, internetId) || other.internetId == internetId)&&(identical(other.hosting, hosting) || other.hosting == hosting)&&(identical(other.hostOwnsNetwork, hostOwnsNetwork) || other.hostOwnsNetwork == hostOwnsNetwork)&&(identical(other.inherited, inherited) || other.inherited == inherited));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note,wifi,internetId,hosting,hostOwnsNetwork);
+int get hashCode => Object.hash(runtimeType,id,name,hostAddress,port,accessCode,createdAt,maxParticipants,note,wifi,internetId,hosting,hostOwnsNetwork,inherited);
 
 @override
 String toString() {
-  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note, wifi: $wifi, internetId: $internetId, hosting: $hosting, hostOwnsNetwork: $hostOwnsNetwork)';
+  return 'Room(id: $id, name: $name, hostAddress: $hostAddress, port: $port, accessCode: $accessCode, createdAt: $createdAt, maxParticipants: $maxParticipants, note: $note, wifi: $wifi, internetId: $internetId, hosting: $hosting, hostOwnsNetwork: $hostOwnsNetwork, inherited: $inherited)';
 }
 
 
@@ -307,7 +313,7 @@ abstract mixin class _$RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
   factory _$RoomCopyWith(_Room value, $Res Function(_Room) _then) = __$RoomCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note, WifiCredentials? wifi, String? internetId,@JsonKey(includeFromJson: false, includeToJson: false) bool hosting,@JsonKey(includeFromJson: false, includeToJson: false) bool hostOwnsNetwork
+ String id, String name, String hostAddress, int port, String accessCode, DateTime createdAt, int maxParticipants,@RoomNoteConverter() RoomNote? note, WifiCredentials? wifi, String? internetId,@JsonKey(includeFromJson: false, includeToJson: false) bool hosting,@JsonKey(includeFromJson: false, includeToJson: false) bool hostOwnsNetwork,@JsonKey(includeFromJson: false, includeToJson: false) bool inherited
 });
 
 
@@ -324,7 +330,7 @@ class __$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,Object? wifi = freezed,Object? internetId = freezed,Object? hosting = null,Object? hostOwnsNetwork = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? hostAddress = null,Object? port = null,Object? accessCode = null,Object? createdAt = null,Object? maxParticipants = null,Object? note = freezed,Object? wifi = freezed,Object? internetId = freezed,Object? hosting = null,Object? hostOwnsNetwork = null,Object? inherited = null,}) {
   return _then(_Room(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -338,6 +344,7 @@ as RoomNote?,wifi: freezed == wifi ? _self.wifi : wifi // ignore: cast_nullable_
 as WifiCredentials?,internetId: freezed == internetId ? _self.internetId : internetId // ignore: cast_nullable_to_non_nullable
 as String?,hosting: null == hosting ? _self.hosting : hosting // ignore: cast_nullable_to_non_nullable
 as bool,hostOwnsNetwork: null == hostOwnsNetwork ? _self.hostOwnsNetwork : hostOwnsNetwork // ignore: cast_nullable_to_non_nullable
+as bool,inherited: null == inherited ? _self.inherited : inherited // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

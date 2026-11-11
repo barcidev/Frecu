@@ -71,7 +71,12 @@ class RoomHeader extends StatelessWidget {
 
   String _hostLine() {
     final me = participants.where((p) => p.id == localParticipantId);
-    if (me.isNotEmpty && me.first.isHost) return t.room.header.youAreHost;
+    if (me.isNotEmpty && me.first.isHost) {
+      // Quien recibió la frecu de otro anfitrión la lleva.
+      return (room?.inherited ?? false)
+          ? t.room.header.carrying
+          : t.room.header.youAreHost;
+    }
     final host = participants.where((p) => p.isHost);
     if (host.isEmpty) return '';
     return t.room.header.hostedBy(name: host.first.displayName);
