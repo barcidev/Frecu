@@ -54,7 +54,7 @@ Una frecu por internet sobrevive a la salida o a la caída de su anfitrión, com
 
 ## Tareas
 
-- [ ] T1: Worker con turno, gracia y sucesor
+- [x] T1: Worker con turno, gracia y sucesor
   - files: cloud/src/room.ts, cloud/test/handover.test.ts, cloud/README.md
   - ac: AC11
   - verify: cd cloud && npm test && npm run typecheck

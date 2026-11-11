@@ -6,6 +6,13 @@
   "branch": "feature/traspaso-por-internet-worker-con-gracia-turno-y",
   "baseCommit": "3fe7564ad82ae93c04f7b46477fb9e4df1a2a6b7",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:b18f5841c6f76e350cdd84006d42f7c46f7e3add159b5a7e94e77b341c3086a5",
+    "at": "2026-11-11T15:40:58.111Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 9,
@@ -33,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "969fa0c25426c284c18b4003397636086a80bf82",
+      "startedAt": "2026-11-11T15:40:58.405Z",
+      "doneAt": "2026-11-11T15:42:41.425Z",
+      "summary": "El Worker guarda el turno vigente: 409 a un turno menor, retira al anterior con uno igual o mayor y, al caer un anfitrión con turno, avisa host_lost y espera 10 s antes de cerrar a los invitados; sin turno, como antes."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -43,12 +60,5 @@
     "AC": 11,
     "T": 2,
     "R": 4
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:b18f5841c6f76e350cdd84006d42f7c46f7e3add159b5a7e94e77b341c3086a5",
-    "at": "2026-11-11T15:40:58.111Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }
