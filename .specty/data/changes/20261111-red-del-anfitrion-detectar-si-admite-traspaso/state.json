@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "id": "20261111-red-del-anfitrion-detectar-si-admite-traspaso",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/red-del-anfitrion-detectar-si-admite-traspaso",
+  "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "11 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:7a464027f76f0513bc19782bdd4c7ca4d21946aa8e62be8a0d0d37edb5f1aa6c",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:65e1b2e1a70a90c01365abd1cdffc5ede41dd0daf28b5cb59f021f194854365f",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 2,
+    "AC": 4,
+    "T": 2,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:6e0db163e015d06ae3dcbbcc7b136f4c5088500a85ac56f91c7306b84908d617",
+    "at": "2026-11-11T13:51:36.484Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
