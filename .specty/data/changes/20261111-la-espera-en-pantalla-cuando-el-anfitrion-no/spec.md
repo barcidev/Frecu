@@ -62,7 +62,7 @@ Cuando el anfitrión de una frecu con traspaso deja de responder, los invitados 
 
 ## Tareas
 
-- [ ] T1: La espera del anfitrión (`HostSilence`, providers y textos)
+- [x] T1: La espera del anfitrión (`HostSilence`, providers y textos)
   - files: lib/features/room/presentation/widgets/host_silence.dart, lib/features/room/presentation/providers/host_silence_provider.dart, lib/features/room/presentation/providers/host_silence_provider.g.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, lib/i18n/strings.g.dart, test/features/room/presentation/host_silence_test.dart
   - ac: AC3, AC4, AC5
   - verify: flutter test test/features/room/presentation/host_silence_test.dart

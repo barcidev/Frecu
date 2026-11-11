@@ -2050,6 +2050,12 @@ class Translations$room$talk$hint$es {
 
 	/// es: 'Recuperando la conexión…'
 	String get reconnecting => 'Recuperando la conexión…';
+
+	/// es: 'Siguen hablando · si no vuelve, $name toma la frecu'
+	String hostSilent({required Object name}) => 'Siguen hablando · si no vuelve, ${name} toma la frecu';
+
+	/// es: 'Siguen hablando · si no vuelve, tomas la frecu'
+	String get hostSilentYou => 'Siguen hablando · si no vuelve, tomas la frecu';
 }
 
 // Path: room.talk.island
@@ -2086,6 +2092,12 @@ class Translations$room$talk$island$es {
 
 	/// es: 'Reconectando · $seconds s'
 	String reconnectingIn({required Object seconds}) => 'Reconectando · ${seconds} s';
+
+	/// es: '$name no responde'
+	String hostSilent({required Object name}) => '${name} no responde';
+
+	/// es: '$name no responde · $seconds s'
+	String hostSilentFor({required Object name, required Object seconds}) => '${name} no responde · ${seconds} s';
 
 	/// es: '$name se unió'
 	String joined({required Object name}) => '${name} se unió';
@@ -2777,6 +2789,8 @@ extension on Translations {
 			'room.talk.hint.muted' => 'Toca para activar tu micrófono',
 			'room.talk.hint.connecting' => 'Conectando con el anfitrión…',
 			'room.talk.hint.reconnecting' => 'Recuperando la conexión…',
+			'room.talk.hint.hostSilent' => ({required Object name}) => 'Siguen hablando · si no vuelve, ${name} toma la frecu',
+			'room.talk.hint.hostSilentYou' => 'Siguen hablando · si no vuelve, tomas la frecu',
 			'room.talk.island.online' => ({required Object count, required Object max}) => 'En línea · ${count}/${max}',
 			'room.talk.island.openMic' => ({required Object count, required Object max}) => 'Micrófono abierto · ${count}/${max}',
 			'room.talk.island.muted' => ({required Object count, required Object max}) => 'Silenciado · ${count}/${max}',
@@ -2786,6 +2800,8 @@ extension on Translations {
 			'room.talk.island.connecting' => 'Conectando…',
 			'room.talk.island.reconnecting' => 'Reconectando…',
 			'room.talk.island.reconnectingIn' => ({required Object seconds}) => 'Reconectando · ${seconds} s',
+			'room.talk.island.hostSilent' => ({required Object name}) => '${name} no responde',
+			'room.talk.island.hostSilentFor' => ({required Object name, required Object seconds}) => '${name} no responde · ${seconds} s',
 			'room.talk.island.joined' => ({required Object name}) => '${name} se unió',
 			'room.talk.island.left' => ({required Object name}) => '${name} salió',
 			'room.talk.island.route' => ({required Object route}) => 'Audio por ${route}',
@@ -2919,12 +2935,12 @@ extension on Translations {
 			'messages.kinds.behind' => 'Me quedé atrás',
 			'messages.kinds.stop' => 'Parada en la próxima',
 			'messages.kinds.fuel' => 'Necesito combustible',
+			_ => null,
+		} ?? switch (path) {
 			'messages.kinds.ok' => 'Todo bien',
 			'messages.kinds.onMyWay' => 'Voy en camino',
 			'messages.kinds.sos' => 'SOS',
 			'messages.sosHold' => 'Mantén para enviar SOS',
-			_ => null,
-		} ?? switch (path) {
 			'messages.sosHoldHelp' => 'Alarma para todos hasta que alguien la atienda',
 			'messages.sent' => ({required Object text}) => 'Enviado · ${text}',
 			'messages.sosSent' => 'SOS enviado a tu grupo',

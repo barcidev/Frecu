@@ -6,6 +6,13 @@
   "branch": "feature/la-espera-en-pantalla-cuando-el-anfitrion-no",
   "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e318abd5427fcc65cf8c5aa8341978f168e1e1e5b09f00a7d8e92ce728756f6b",
+    "at": "2026-11-11T15:10:01.362Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 12,
@@ -33,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "b762ca2421ed35c158f08ea375c829b67b9ca53a",
+      "startedAt": "2026-11-11T15:10:01.690Z",
+      "doneAt": "2026-11-11T15:14:43.749Z",
+      "summary": "HostSilence (quién no responde, sucesor como en FailoverPlan, textos y vista de la frecu), hostSilenceProvider y hostSilenceClockProvider (cuenta hacia arriba), textos slang es/en y pruebas"
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -43,12 +60,5 @@
     "AC": 5,
     "T": 2,
     "R": 2
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:e318abd5427fcc65cf8c5aa8341978f168e1e1e5b09f00a7d8e92ce728756f6b",
-    "at": "2026-11-11T15:10:01.362Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

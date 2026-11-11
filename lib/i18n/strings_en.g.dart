@@ -1110,6 +1110,8 @@ class _Translations$room$talk$hint$en extends Translations$room$talk$hint$es {
 	@override String get muted => 'Tap to turn on your microphone';
 	@override String get connecting => 'Connecting to the host…';
 	@override String get reconnecting => 'Restoring the connection…';
+	@override String hostSilent({required Object name}) => 'Everyone can still talk · if they don\'t come back, ${name} takes the frecu';
+	@override String get hostSilentYou => 'Everyone can still talk · if they don\'t come back, you take the frecu';
 }
 
 // Path: room.talk.island
@@ -1128,6 +1130,8 @@ class _Translations$room$talk$island$en extends Translations$room$talk$island$es
 	@override String get connecting => 'Connecting…';
 	@override String get reconnecting => 'Reconnecting…';
 	@override String reconnectingIn({required Object seconds}) => 'Reconnecting · ${seconds} s';
+	@override String hostSilent({required Object name}) => '${name} isn\'t responding';
+	@override String hostSilentFor({required Object name, required Object seconds}) => '${name} isn\'t responding · ${seconds} s';
 	@override String joined({required Object name}) => '${name} joined';
 	@override String left({required Object name}) => '${name} left';
 	@override String route({required Object route}) => 'Audio via ${route}';
@@ -1699,6 +1703,8 @@ extension on TranslationsEn {
 			'room.talk.hint.muted' => 'Tap to turn on your microphone',
 			'room.talk.hint.connecting' => 'Connecting to the host…',
 			'room.talk.hint.reconnecting' => 'Restoring the connection…',
+			'room.talk.hint.hostSilent' => ({required Object name}) => 'Everyone can still talk · if they don\'t come back, ${name} takes the frecu',
+			'room.talk.hint.hostSilentYou' => 'Everyone can still talk · if they don\'t come back, you take the frecu',
 			'room.talk.island.online' => ({required Object count, required Object max}) => 'Online · ${count}/${max}',
 			'room.talk.island.openMic' => ({required Object count, required Object max}) => 'Open mic · ${count}/${max}',
 			'room.talk.island.muted' => ({required Object count, required Object max}) => 'Muted · ${count}/${max}',
@@ -1708,6 +1714,8 @@ extension on TranslationsEn {
 			'room.talk.island.connecting' => 'Connecting…',
 			'room.talk.island.reconnecting' => 'Reconnecting…',
 			'room.talk.island.reconnectingIn' => ({required Object seconds}) => 'Reconnecting · ${seconds} s',
+			'room.talk.island.hostSilent' => ({required Object name}) => '${name} isn\'t responding',
+			'room.talk.island.hostSilentFor' => ({required Object name, required Object seconds}) => '${name} isn\'t responding · ${seconds} s',
 			'room.talk.island.joined' => ({required Object name}) => '${name} joined',
 			'room.talk.island.left' => ({required Object name}) => '${name} left',
 			'room.talk.island.route' => ({required Object route}) => 'Audio via ${route}',
@@ -1841,12 +1849,12 @@ extension on TranslationsEn {
 			'messages.kinds.behind' => 'I fell behind',
 			'messages.kinds.stop' => 'Stop at the next one',
 			'messages.kinds.fuel' => 'I need fuel',
+			_ => null,
+		} ?? switch (path) {
 			'messages.kinds.ok' => 'All good',
 			'messages.kinds.onMyWay' => 'On my way',
 			'messages.kinds.sos' => 'SOS',
 			'messages.sosHold' => 'Hold to send SOS',
-			_ => null,
-		} ?? switch (path) {
 			'messages.sosHoldHelp' => 'Alarm for everyone until someone answers',
 			'messages.sent' => ({required Object text}) => 'Sent · ${text}',
 			'messages.sosSent' => 'SOS sent to your group',
