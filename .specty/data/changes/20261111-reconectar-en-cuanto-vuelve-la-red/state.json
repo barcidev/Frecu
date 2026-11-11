@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261111-reconectar-en-cuanto-vuelve-la-red",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/reconectar-en-cuanto-vuelve-la-red",
+  "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 9,
+    "adjust": 0,
+    "reasons": [
+      "7 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:e35ea9652617552a5e7da69a4099a55e3a75657519389d9669af13b3c3982e3a",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:3574a4f219e44dd44936e131a4f7aa20736d5ee22e620ae75e3ac539f3dc73de",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:ef792106963f35bc1d112769550d4d7bbaca5a939175f4d483fa4f6cda342eae",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:e0a10e3b38f2e0ebf3afed11b25e87c5ca311b80887bbfb98b8be76117633971",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 4,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1066176fbd927a93426056186aa01e3d4a251ce5ff2615cc31f7480e42dce9fb",
+    "at": "2026-11-11T05:29:48.765Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
