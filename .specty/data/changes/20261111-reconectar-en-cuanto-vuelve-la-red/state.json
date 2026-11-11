@@ -6,6 +6,13 @@
   "branch": "feature/reconectar-en-cuanto-vuelve-la-red",
   "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:1066176fbd927a93426056186aa01e3d4a251ce5ff2615cc31f7480e42dce9fb",
+    "at": "2026-11-11T05:29:48.765Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "M",
     "score": 9,
@@ -33,7 +40,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "01d85bb24377321202495f5d9360dda03f8e9a86",
+      "startedAt": "2026-11-11T05:29:49.288Z",
+      "doneAt": "2026-11-11T05:31:39.217Z",
+      "summary": "Vigía NetworkReturnWatcher en lib/core/network/network_return.dart: sondea las interfaces (500 ms) durante la espera y la corta si aparece una dirección no loopback respecto a la consulta anterior; cancelable; pruebas de aparición, reaparición, loopback, desaparición, cancelación y fallo."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -43,12 +60,5 @@
     "AC": 4,
     "T": 3,
     "R": 2
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:1066176fbd927a93426056186aa01e3d4a251ce5ff2615cc31f7480e42dce9fb",
-    "at": "2026-11-11T05:29:48.765Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

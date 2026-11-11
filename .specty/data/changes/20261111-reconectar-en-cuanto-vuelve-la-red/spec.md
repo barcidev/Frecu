@@ -49,7 +49,7 @@ Hoy, al caerse la conexión, el invitado y el relé del anfitrión en modo inter
 
 ## Tareas
 
-- [ ] T1: Vigía de vuelta de la red
+- [x] T1: Vigía de vuelta de la red
   - files: lib/core/network/network_return.dart, lib/core/constants/network_constants.dart, test/core/network/network_return_test.dart
   - ac: AC1, AC2
   - verify: flutter test test/core/network/network_return_test.dart
