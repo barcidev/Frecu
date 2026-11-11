@@ -49,3 +49,23 @@ En una Wi-Fi compartida, el anuncio mDNS de la frecu lo hace siempre quien la ll
 ## Riesgos
 
 - R1: El nuevo anfitrión aún no sabe su nota si la frecu no la trae — se publica sin `n`, como cualquier frecu sin nota.
+
+## Cierre
+
+### Resumen
+
+`LobbyPage._onRoomChanged` sigue a quien lleva la frecu: si este teléfono pasa a llevar una frecu local por un traspaso, publica el anuncio mDNS con el id, el nombre, la nota y el puerto de su servidor; si deja de llevarla sin salir (p. ej. vuelve como invitado por un turno que gana), retira el anuncio. Por internet no anuncia. Al salir, el anuncio se retira como antes.
+
+### Desviaciones
+
+- AC1 y AC2 se comprueban en un mismo test, cuyo nombre empieza por «AC1:» y nombra también AC2, por eso Specty no lo asocia a AC2.
+- AC4 no tiene test nuevo: el camino de salida no cambió y lo cubre el test existente «AC4: con una frecu activa la búsqueda queda en pausa; al terminar se retira su anuncio…» de lobby_page_test.dart.
+
+### Decisiones
+
+- Solo se reacciona a cambios de `hosting` dentro de la misma frecu, para no publicar dos veces al crearla (la publica la pantalla de nueva frecu).
+- Se llama al repositorio de descubrimiento directamente, como en `NewRoomStep`.
+
+### Pendientes
+
+- Probar en teléfonos reales, en una Wi-Fi compartida, que tras el traspaso «Frecus cercanas» muestra la frecu con la IP del nuevo anfitrión.
