@@ -48,7 +48,14 @@ class RoomRepositoryImpl implements RoomRepository {
     this.rejoinWelcomeTimeout = const Duration(seconds: 3),
   }) : _server = serverDataSource,
        _client = clientDataSource,
-       _relay = cloudRelayDataSource ?? CloudRelayDataSource(),
+       _relay =
+           cloudRelayDataSource ??
+           CloudRelayDataSource(
+             networkWatcher: NetworkReturnWatcher(
+               interfaces: networkInterfacesProvider ?? NetworkInterface.list,
+               pollInterval: networkReturnPollInterval,
+             ),
+           ),
        _foregroundService =
            foregroundServiceDataSource ?? ForegroundServiceDataSource(),
        _networkInterfacesProvider =

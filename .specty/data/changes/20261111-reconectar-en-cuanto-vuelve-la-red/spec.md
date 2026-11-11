@@ -57,7 +57,7 @@ Hoy, al caerse la conexión, el invitado y el relé del anfitrión en modo inter
   - files: lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_reconnect_test.dart
   - ac: AC3
   - verify: flutter test test/features/room/data/room_reconnect_test.dart
-- [ ] T3: El relé del anfitrión vuelve en cuanto vuelve la red
+- [x] T3: El relé del anfitrión vuelve en cuanto vuelve la red
   - files: lib/features/room/data/datasources/cloud_relay_datasource.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/internet_room_test.dart
   - ac: AC4
   - verify: flutter test test/features/room/data/internet_room_test.dart

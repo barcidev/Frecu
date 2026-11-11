@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:frecu/core/logging/app_logger.dart';
+import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -20,9 +21,14 @@ class CloudRelayDataSource {
     this.connectTimeout = const Duration(seconds: 5),
     this.reconnectBaseDelay = const Duration(seconds: 1),
     this.maxReconnectDelay = const Duration(seconds: 15),
-  }) : _channelFactory = channelFactory ?? WebSocketChannel.connect;
+    NetworkReturnWatcher? networkWatcher,
+  }) : _channelFactory = channelFactory ?? WebSocketChannel.connect,
+       _networkReturn = networkWatcher ?? NetworkReturnWatcher();
 
   final WebSocketChannel Function(Uri uri) _channelFactory;
+
+  /// Adelanta la espera de reconexión si el teléfono recupera la red.
+  final NetworkReturnWatcher _networkReturn;
 
   /// Espera máxima para abrir el socket.
   final Duration connectTimeout;
@@ -37,7 +43,6 @@ class CloudRelayDataSource {
   StreamSubscription<dynamic>? _subscription;
   Uri? _uri;
   void Function(SignalingConnection connection)? _onGuest;
-  Timer? _reconnectTimer;
   int _attempt = 0;
   int _generation = 0;
   final Map<String, _RelayConnection> _guests = {};
@@ -134,19 +139,27 @@ class CloudRelayDataSource {
     final factor = 1 << _attempt.clamp(0, 4);
     final delay = reconnectBaseDelay * factor;
     _attempt++;
-    _reconnectTimer?.cancel();
-    _reconnectTimer = Timer(
-      delay > maxReconnectDelay ? maxReconnectDelay : delay,
-      () async {
-        if (generation != _generation) return;
-        try {
-          await _connect(generation);
-        } on Object catch (e) {
-          AppLogger.w('Cloud relay reconnect failed: $e');
-          if (generation == _generation) _scheduleReconnect(generation);
-        }
-      },
+    unawaited(
+      _reconnectAfter(
+        delay > maxReconnectDelay ? maxReconnectDelay : delay,
+        generation,
+      ),
     );
+  }
+
+  /// Espera [delay], o menos si vuelve la red, y vuelve a conectar.
+  Future<void> _reconnectAfter(Duration delay, int generation) async {
+    await _networkReturn.wait(
+      delay,
+      cancelled: () => generation != _generation,
+    );
+    if (generation != _generation) return;
+    try {
+      await _connect(generation);
+    } on Object catch (e) {
+      AppLogger.w('Cloud relay reconnect failed: $e');
+      if (generation == _generation) _scheduleReconnect(generation);
+    }
   }
 
   void _send(Map<String, String> envelope) {
@@ -172,8 +185,6 @@ class CloudRelayDataSource {
     _generation++;
     _uri = null;
     _onGuest = null;
-    _reconnectTimer?.cancel();
-    _reconnectTimer = null;
     _endGuests();
     final channel = _channel;
     _channel = null;
