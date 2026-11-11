@@ -72,3 +72,27 @@ Hoy, al perder el socket con el anfitrión, la voz de cada invitado deja de tran
 - R1: Con traspaso, si es la red del propio invitado la que se cae, el micrófono queda abierto sin nadie que lo oiga — no hay daño: si la frecu se cierra, la voz sale de la malla como hoy.
 - R2: Conflicto con C11, que toca la reconexión — este corte no toca `room_repository_impl.dart`, `room_reconnection.dart` ni `cloud_relay_datasource.dart`.
 - R3: Un PTT que se suelta durante el corte deja a esa persona «hablando» para los demás hasta que vuelve y anuncia — se corrige al volver (A4).
+
+## Cierre
+
+### Resumen
+
+- `VoiceHandover` (`data/repositories/voice_handover.dart`) sigue los `room_state` y `welcome` que la voz ya recibe: sabe si la frecu admite traspaso y quién la lleva.
+- `VoiceRepositoryImpl`: con traspaso, perder el socket no corta el PTT ni el micrófono abierto, ni cierra enlaces; solo el anfitrión deja de verse hablando. Si la sucesión o el `welcome` traen otro anfitrión, se cierra solo su enlace con `PeerConnectionDataSource.closePeer`. Un `welcome` con el mismo id retoma el micrófono abierto cortado (P160) o anuncia el estado propio; con id nuevo rehace la malla y, en PTT transmitiendo, lo anuncia (P178). Sin traspaso, lo de hoy.
+- AC1 a AC5 con 11 pruebas en `test/features/room/data/voice_handover_test.dart`; `flutter analyze` sin problemas y las 501 pruebas de `test/features/room` en verde.
+- AC6 (teléfonos reales) no está verificado: el guion queda en P185 para la persona.
+
+### Desviaciones
+
+- Ninguna.
+
+### Decisiones
+
+- El nuevo anfitrión no renegocia: ya tenía enlaces con todos como invitado y los conserva (A3). Solo quien vuelve con un id nuevo rehace los suyos.
+- La voz lee el traspaso de la señalización y no de `RoomRepository`, para no cambiar su contrato ni el de `VoiceRepository`.
+
+### Pendientes
+
+- P185: correr el guion de pruebas en teléfonos reales (Android e iPhone; Wi-Fi compartida y por internet; voluntario, caída y regreso).
+- P186: la notificación del sistema oculta el micrófono durante la espera del anfitrión.
+- P158 sigue abierto en su parte de datos: una reconexión normal vuelve con id nuevo y al final de la sucesión (la voz ya rehace sus enlaces en ese caso).

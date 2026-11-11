@@ -2,10 +2,10 @@
   "schema": 1,
   "id": "20261111-la-voz-entre-invitados-sigue-durante-el",
   "kind": "standard",
-  "phase": "acceptance",
+  "phase": "done",
   "branch": "feature/la-voz-entre-invitados-sigue-durante-el",
   "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
-  "revision": 1,
+  "revision": 2,
   "approved": {
     "revision": 1,
     "hash": "sha256:a15cea4e70f0986bbab1806b790f39cd51a1f5e4f725cd88b6ae0563a613c72e",
@@ -51,12 +51,12 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "397660fc1f54bcf04de75732a7703e6e0ae419fc",
+      "attempts": 1,
       "startedAt": "2026-11-11T16:02:25.888Z",
       "doneAt": "2026-11-11T16:03:11.769Z",
-      "summary": "docs/audio.md y docs/protocolo.md: con traspaso la voz sigue mientras reconecta y solo se cierra el enlace del anfitrión anterior; guion de pruebas en teléfonos anotado en P185."
+      "summary": "docs/audio.md y docs/protocolo.md: con traspaso la voz sigue mientras reconecta y solo se cierra el enlace del anfitrión anterior; guion de pruebas en teléfonos anotado en P185.",
+      "scopeExtra": []
     }
   },
   "pending": {
@@ -68,5 +68,6 @@
     "AC": 6,
     "T": 2,
     "R": 3
-  }
+  },
+  "closingSubmittedAt": "2026-11-11T16:03:34.398Z"
 }
