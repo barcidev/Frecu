@@ -3,6 +3,7 @@
 // I3: CUANDO un invitado por internet manda un código incorrecto ENTONCES lo rechaza el anfitrión, igual que en la red local.
 // I4: CUANDO el relé del anfitrión se cae ENTONCES sus invitados por internet salen de la frecu.
 // I5: CUANDO no hay punto de encuentro configurado ENTONCES abrir o unirse por internet falla sin dejar nada abierto.
+// AC4: CUANDO el relé del anfitrión en modo internet se cae y aparece una red nueva durante la espera ENTONCES vuelve a conectar con la nube antes de que termine la espera.
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -10,6 +11,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frecu/core/constants/cloud_config.dart';
 import 'package:frecu/core/error/failure.dart';
+import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/features/room/data/datasources/cloud_relay_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
@@ -78,6 +80,45 @@ class _FakeCloud {
   Future<void> dropHost() async => host?.sink.close();
 
   Future<void> stop() async => _server?.close(force: true);
+}
+
+/// Interfaz de red de mentira con sus direcciones.
+class _Interface implements NetworkInterface {
+  _Interface(this.name, List<String> addresses)
+    : addresses = [for (final a in addresses) _Address(a)];
+
+  @override
+  final String name;
+
+  @override
+  int get index => 0;
+
+  @override
+  final List<InterfaceAddress> addresses;
+}
+
+class _Address implements InterfaceAddress {
+  _Address(String text) : _ip = InternetAddress(text);
+
+  final InternetAddress _ip;
+
+  @override
+  String get address => _ip.address;
+
+  @override
+  bool get isLoopback => _ip.isLoopback;
+
+  @override
+  InternetAddressType get type => _ip.type;
+
+  @override
+  int get prefixLength => 24;
+
+  @override
+  InternetAddress? get broadcast => null;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 Future<T> _firstWhere<T>(Stream<T> stream, bool Function(T) test) =>
@@ -232,4 +273,46 @@ void main() {
       expect(joined.failureOrNull, const Failure.hostUnreachable());
     },
   );
+
+  test('AC4: when the network comes back, the host relay reconnects before '
+      'its wait ends', () async {
+    var interfaces = <NetworkInterface>[];
+    final relay = CloudRelayDataSource(
+      reconnectBaseDelay: const Duration(seconds: 30),
+      networkWatcher: NetworkReturnWatcher(
+        interfaces: () async => interfaces,
+        pollInterval: const Duration(milliseconds: 10),
+      ),
+    );
+    final lonely = RoomRepositoryImpl(
+      serverDataSource: SignalingServerDataSource(),
+      clientDataSource: SignalingClientDataSource(),
+      cloudRelayDataSource: relay,
+      cloudConfig: cloud.config,
+      networkInterfacesProvider: () async => [],
+      signalingPort: 0,
+    );
+    addTearDown(lonely.dispose);
+    final created = await lonely.createRoom(
+      name: 'Ruta',
+      accessCode: '1234',
+      displayName: 'Ana',
+      internet: true,
+    );
+    expect(created.isSuccess, isTrue);
+    expect(relay.isConnected, isTrue);
+
+    final dropped = _firstWhere(relay.connectionState, (up) => !up);
+    await cloud.dropHost();
+    await dropped;
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    expect(relay.isConnected, isFalse);
+
+    final back = _firstWhere(relay.connectionState, (up) => up);
+    interfaces = [
+      _Interface('pdp_ip0', ['10.20.30.40']),
+    ];
+    await back;
+    expect(relay.isConnected, isTrue);
+  });
 }

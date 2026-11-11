@@ -101,7 +101,8 @@ class InviteSheet extends ConsumerWidget {
 
 /// «Compartir enlace» (`.share-box` del prototipo): abre la hoja de
 /// compartir del sistema con el enlace https de la frecu, que sirve desde
-/// cualquier lugar y ya lleva el código; debajo, el enlace.
+/// cualquier lugar y ya lleva el código. El enlace no se muestra en
+/// pantalla: solo viaja al compartir.
 class InviteShareLink extends ConsumerWidget {
   /// Crea el recuadro con el [link] de la frecu [roomName].
   const InviteShareLink({
@@ -118,14 +119,10 @@ class InviteShareLink extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fr = context.fr;
-    final c = fr.colors;
     final copy = t.room.sheets.invite.internet;
-    final shown = '${link.host}${link.path}';
     return Column(
       key: const Key('invite_share'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: 10,
       children: [
         FrButton.drawn(
           key: const Key('invite_share_button'),
@@ -137,21 +134,6 @@ class InviteShareLink extends ConsumerWidget {
               copy.shareText(name: roomName, link: link.toString()),
             ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 6,
-          children: [
-            FrIcon(FrIcons.link, size: 16, color: c.tx3),
-            Flexible(
-              child: Text(
-                shown,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: fr.type.data.copyWith(fontSize: 12, color: c.tx3),
-              ),
-            ),
-          ],
         ),
       ],
     );

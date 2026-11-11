@@ -169,6 +169,26 @@ void main() {
     await leave(tester);
   });
 
+  testWidgets('AC1: the invite sheet does not show the link under the QR', (
+    tester,
+  ) async {
+    await pumpRoom(
+      tester,
+      active: room,
+      participants: const [
+        Participant(id: 'peer_1', displayName: 'Ana', isHost: true),
+        Participant(id: 'peer_2', displayName: 'Beto', remote: true),
+      ],
+    );
+
+    await tester.tap(find.byKey(const Key('invite_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('invite_share_button')), findsOneWidget);
+    expect(find.textContaining('frecu.example.workers.dev'), findsNothing);
+    await leave(tester);
+  });
+
   testWidgets('U3: on the Frecu network without internet, unreachable '
       'remote people say «Sin audio» and a notice explains it', (tester) async {
     await pumpRoom(

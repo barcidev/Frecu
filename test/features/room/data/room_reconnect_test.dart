@@ -2,6 +2,7 @@
 // F8: CUANDO no se puede conectar con el anfitrión (sin respuesta, socket rechazado o handshake roto) ENTONCES unirse falla con `hostUnreachable`, no con un error inesperado.
 // F9: CUANDO alguien se une ENTONCES la frecu lleva el nombre que trae el `welcome`; sin él (anfitrión anterior) queda sin nombre para que la pantalla use el genérico.
 // P105: CUANDO la frecu reconecta ENTONCES el estado dice cuánto falta para el próximo intento y cuál es.
+// AC3: CUANDO un invitado reconecta y aparece una red nueva durante la espera ENTONCES reintenta antes de que termine la espera, el estado pasa a `reconnecting(retryIn: 0, attempt)` antes del intento y vuelve a quedar en línea.
 import 'dart:async';
 import 'dart:io';
 
@@ -98,6 +99,45 @@ class _FakeClient extends SignalingClientDataSource {
     await _messages.close();
     await _connection.close();
   }
+}
+
+/// Interfaz de red de mentira con sus direcciones.
+class _Interface implements NetworkInterface {
+  _Interface(this.name, List<String> addresses)
+    : addresses = [for (final a in addresses) _Address(a)];
+
+  @override
+  final String name;
+
+  @override
+  int get index => 0;
+
+  @override
+  final List<InterfaceAddress> addresses;
+}
+
+class _Address implements InterfaceAddress {
+  _Address(String text) : _ip = InternetAddress(text);
+
+  final InternetAddress _ip;
+
+  @override
+  String get address => _ip.address;
+
+  @override
+  bool get isLoopback => _ip.isLoopback;
+
+  @override
+  InternetAddressType get type => _ip.type;
+
+  @override
+  int get prefixLength => 24;
+
+  @override
+  InternetAddress? get broadcast => null;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 void main() {
@@ -254,6 +294,61 @@ void main() {
 
       expect(client.connects, connects);
       expect(closures(), [const RoomStatus.closed(reason: 'user_left')]);
+    });
+  });
+
+  group('AC3 · reintentar en cuanto vuelve la red', () {
+    test('AC3: si aparece una red durante la espera reintenta antes y vuelve '
+        'a quedar en línea', () async {
+      final otherClient = _FakeClient();
+      var interfaces = <NetworkInterface>[];
+      final slow = RoomRepositoryImpl(
+        serverDataSource: SignalingServerDataSource(),
+        clientDataSource: otherClient,
+        networkInterfacesProvider: () async => interfaces,
+        networkReturnPollInterval: const Duration(milliseconds: 10),
+        reconnectBaseDelay: const Duration(seconds: 5),
+        maxReconnectAttempts: 3,
+        welcomeTimeout: const Duration(milliseconds: 200),
+        rejoinWelcomeTimeout: const Duration(milliseconds: 50),
+      );
+      final seen = <RoomStatus>[];
+      final sub = slow.watchStatus().listen(seen.add);
+      addTearDown(() async {
+        await sub.cancel();
+        await slow.dispose();
+        await otherClient.dispose();
+      });
+      final joined = await slow.joinRoom(
+        hostAddress: '192.168.43.1',
+        port: 47800,
+        accessCode: '4821',
+        displayName: 'Ana',
+      );
+      expect(joined.isSuccess, isTrue);
+
+      final clock = Stopwatch()..start();
+      otherClient.drop();
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+      expect(otherClient.connects, 1);
+      interfaces = [
+        _Interface('wlan0', ['192.168.43.27']),
+      ];
+      while (seen.last != const RoomStatus.connected() &&
+          clock.elapsed < const Duration(seconds: 2)) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+
+      expect(clock.elapsed, lessThan(const Duration(seconds: 2)));
+      expect(otherClient.connects, 2);
+      expect(
+        seen,
+        containsAllInOrder(const [
+          RoomStatus.reconnecting(retryIn: Duration(seconds: 5), attempt: 1),
+          RoomStatus.reconnecting(retryIn: Duration.zero, attempt: 1),
+          RoomStatus.connected(),
+        ]),
+      );
     });
   });
 

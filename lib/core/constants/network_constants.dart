@@ -17,4 +17,10 @@ abstract final class NetworkConstants {
 
   /// Tope máximo para la espera de reconexión con backoff exponencial.
   static const Duration maxReconnectBackoff = Duration(seconds: 15);
+
+  /// Cada cuánto se mira si volvió la red mientras se espera para
+  /// reconectar, para reintentar antes de que acabe la espera.
+  static const Duration networkReturnPollInterval = Duration(
+    milliseconds: 500,
+  );
 }

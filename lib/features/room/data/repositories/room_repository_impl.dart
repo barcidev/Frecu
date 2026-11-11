@@ -6,6 +6,7 @@ import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/error/failure.dart';
 import 'package:frecu/core/logging/app_logger.dart';
 import 'package:frecu/core/network/lan_address.dart';
+import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/cloud_relay_datasource.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
@@ -40,17 +41,30 @@ class RoomRepositoryImpl implements RoomRepository {
     Future<List<NetworkInterface>> Function()? networkInterfacesProvider,
     String? Function()? preferredLanInterface,
     Duration? reconnectBaseDelay,
+    Duration networkReturnPollInterval =
+        NetworkConstants.networkReturnPollInterval,
     this.maxReconnectAttempts = 5,
     this.welcomeTimeout = const Duration(seconds: 5),
     this.rejoinWelcomeTimeout = const Duration(seconds: 3),
   }) : _server = serverDataSource,
        _client = clientDataSource,
-       _relay = cloudRelayDataSource ?? CloudRelayDataSource(),
+       _relay =
+           cloudRelayDataSource ??
+           CloudRelayDataSource(
+             networkWatcher: NetworkReturnWatcher(
+               interfaces: networkInterfacesProvider ?? NetworkInterface.list,
+               pollInterval: networkReturnPollInterval,
+             ),
+           ),
        _foregroundService =
            foregroundServiceDataSource ?? ForegroundServiceDataSource(),
        _networkInterfacesProvider =
            networkInterfacesProvider ?? NetworkInterface.list,
        _lanInterfaceHint = preferredLanInterface,
+       _networkReturn = NetworkReturnWatcher(
+         interfaces: networkInterfacesProvider ?? NetworkInterface.list,
+         pollInterval: networkReturnPollInterval,
+       ),
        _reconnectBaseDelay =
            reconnectBaseDelay ??
            (_isTest
@@ -76,6 +90,9 @@ class RoomRepositoryImpl implements RoomRepository {
   /// Interfaz de la red de la frecu que creó este teléfono, si la hay: su
   /// IPv4 es la que va en la invitación.
   final String? Function()? _lanInterfaceHint;
+
+  /// Adelanta la espera de reconexión si el teléfono recupera la red.
+  final NetworkReturnWatcher _networkReturn;
   final Duration _reconnectBaseDelay;
 
   /// Intentos de reconexión antes de dar la frecu por perdida.
@@ -414,6 +431,7 @@ class RoomRepositoryImpl implements RoomRepository {
   Future<void> _reconnect(int session) async {
     var delay = _reconnectBaseDelay;
     try {
+      var baseline = await _networkReturn.addresses();
       for (var attempt = 1; attempt <= maxReconnectAttempts; attempt++) {
         if (!_stillReconnecting(session)) return;
         _setStatus(RoomStatus.reconnecting(retryIn: delay, attempt: attempt));
@@ -423,7 +441,21 @@ class RoomRepositoryImpl implements RoomRepository {
             status: ForegroundStatus.reconnecting,
           ),
         );
-        await Future<void>.delayed(delay);
+        final networkBack = await _networkReturn.wait(
+          delay,
+          baseline: baseline,
+          cancelled: () => !_stillReconnecting(session),
+        );
+        if (!_stillReconnecting(session)) return;
+        if (networkBack) {
+          // Volvió la red antes de tiempo: la cuenta pasa a «intentando».
+          _setStatus(
+            RoomStatus.reconnecting(retryIn: Duration.zero, attempt: attempt),
+          );
+        }
+        // La referencia se renueva antes de cada intento: una misma red que
+        // aparece solo adelanta un intento.
+        baseline = await _networkReturn.addresses();
         if (!_stillReconnecting(session)) return;
         if (await _attemptRejoin(session, attempt)) return;
         delay = _nextBackoffDelay(delay);
