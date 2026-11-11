@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "id": "20261111-ignorar-los-ds-store-de-macos",
+  "kind": "quick",
+  "phase": "implementing",
+  "branch": "feature/ignorar-los-ds-store-de-macos",
+  "baseCommit": "34aabb092d81c69de38920c55a21cbf43164ea15",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 1,
+    "adjust": 0,
+    "reasons": [
+      "1 archivo"
+    ]
+  },
+  "items": {},
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "T": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:5a5d76121e47155b0397cfbe6b17f863a880d1fe799adf5d75b9b424d25a1e34",
+    "at": "2026-11-11T16:56:18.577Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
