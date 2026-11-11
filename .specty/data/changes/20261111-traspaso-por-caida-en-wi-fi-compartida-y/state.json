@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261111-traspaso-por-caida-en-wi-fi-compartida-y",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/traspaso-por-caida-en-wi-fi-compartida-y",
+  "baseCommit": "4a31ead5ded81850c5b28e0bcf3d81314ab12b07",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 6,
+    "adjust": 0,
+    "reasons": [
+      "6 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:1a411a453aa1176955cfdf9e6e720a8793dc456c29225ff05884f58163997d8b",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:23b44ab261b86d617303f424958fe7c4ba98add62a9db91e60a0c2f1fe193d94",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:5e2b39afab210d01ca85814b32db7aa1befb84796d008b0ef1fa10649a02578d",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 8,
+    "T": 2,
+    "R": 4
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:99efefda7e94cd6e69659a39387e6354dd017b67f74009160ec158b044dee110",
+    "at": "2026-11-11T14:56:52.551Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
