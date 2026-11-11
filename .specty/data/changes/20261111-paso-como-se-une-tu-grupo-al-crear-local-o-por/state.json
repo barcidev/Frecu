@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261111-paso-como-se-une-tu-grupo-al-crear-local-o-por",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/paso-como-se-une-tu-grupo-al-crear-local-o-por",
+  "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 18,
+    "adjust": 0,
+    "reasons": [
+      "16 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:b5ec2507549d18b2dc4c0393d9fe8f5c4d76cc8c60a2de5e46ea007fe53c38a1",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:f96d9d19d05f279b4f95a083bbc0d1bd0681bbcdb8feae1627017643cf7ab05e",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:ce38a1dd0d39532e0392b3a4b702e27191a09e5028f2252dd2b9e4571ca76a1a",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:110bfacd5d203eb500aeba559727415c2c9ff10817d21dec91eec2dcf43815e4",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 1,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:e654737a686e5c39d2c8f4046ef8060cb80fadcf4949ccffe60b640ac50c79d9",
+    "at": "2026-11-11T13:53:42.341Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
