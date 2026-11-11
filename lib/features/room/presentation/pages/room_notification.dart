@@ -14,6 +14,7 @@ import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/pages/room_state.dart';
+import 'package:frecu/features/room/presentation/providers/host_silence_provider.dart';
 import 'package:frecu/features/room/presentation/providers/reconnect_countdown_provider.dart';
 import 'package:frecu/features/room/presentation/providers/room_provider.dart';
 import 'package:frecu/features/room/presentation/providers/voice_provider.dart';
@@ -111,8 +112,9 @@ class RoomNotificationScene {
 }
 
 /// Arma la tarjeta de la frecu [roomName] como la isla de estado: el
-/// subtítulo dice lo mismo que ella ([talk], [onAirFor], [retryIn] y el
-/// [event] pasajero), la carátula muestra la malla ([nodes]) con el brillo
+/// subtítulo dice lo mismo que ella ([talk], [onAirFor], [retryIn], los
+/// [silentFor] segundos sin respuesta del anfitrión y el [event] pasajero),
+/// la carátula muestra la malla ([nodes]) con el brillo
 /// del estado y los botones son el micrófono, la salida de audio ([route])
 /// y salir. Un [sos] sin atender manda sobre todo.
 RoomNotificationScene roomNotificationScene({
@@ -125,52 +127,21 @@ RoomNotificationScene roomNotificationScene({
   String? bluetoothName,
   Duration? onAirFor,
   int? retryIn,
+  int? silentFor,
   RoomIslandEvent? event,
   RoomNotificationSos? sos,
 }) {
   const c = FrColors.dark;
   final copy = t.room.notification;
-  final island = t.room.talk.island;
-  final count = '${talk.count}';
-  const max = '$meshSlotCount';
-  final speaker = talk.speaker;
-
-  final (String subtitle, Color glow, double intensity) = switch (talk) {
-    _ when sos != null => (
-      copy.sos(where: sos.where ?? roomName),
-      c.alert,
-      .65,
-    ),
-    _ when talk.link == TalkLink.reconnecting => (
-      retryIn != null && retryIn > 0
-          ? island.reconnectingIn(seconds: '$retryIn')
-          : island.reconnecting,
-      c.warn,
-      .4,
-    ),
-    _ when talk.link == TalkLink.connecting => (island.connecting, c.tx3, .25),
-    _ when event != null => (event.label, _eventColor(event), .45),
-    _ => switch (talk.islandPhase) {
-      IslandPhase.onAir => (
-        island.onAir(time: formatOnAir(onAirFor ?? Duration.zero)),
-        c.signal,
-        .75,
-      ),
-      IslandPhase.receiving when speaker != null => (
-        island.receiving(name: speaker.name),
-        meshGlowColor(c, speaker),
-        .55,
-      ),
-      IslandPhase.openMic => (
-        island.openMic(count: count, max: max),
-        c.signal,
-        .5,
-      ),
-      IslandPhase.muted => (island.muted(count: count, max: max), c.tx3, .3),
-      IslandPhase.waiting => (island.waiting, c.signal, .38),
-      _ => (island.online(count: count, max: max), c.signal, .38),
-    },
-  };
+  final (subtitle, glow, intensity) = _look(
+    talk: talk,
+    roomName: roomName,
+    onAirFor: onAirFor,
+    retryIn: retryIn,
+    silentFor: silentFor,
+    event: event,
+    sos: sos,
+  );
 
   // Como la cabecera: Sol4 en español, G4 en inglés.
   final label = note == null
@@ -201,6 +172,69 @@ RoomNotificationScene roomNotificationScene({
       note: label,
     ),
   );
+}
+
+/// Subtítulo, brillo e intensidad de la tarjeta, como la isla.
+(String, Color, double) _look({
+  required RoomTalk talk,
+  required String roomName,
+  Duration? onAirFor,
+  int? retryIn,
+  int? silentFor,
+  RoomIslandEvent? event,
+  RoomNotificationSos? sos,
+}) {
+  const c = FrColors.dark;
+  final island = t.room.talk.island;
+  final silence = talk.silence;
+  return switch (talk) {
+    _ when sos != null => (
+      t.room.notification.sos(where: sos.where ?? roomName),
+      c.alert,
+      .65,
+    ),
+    // Como la isla: el anfitrión no responde, pero se sigue hablando.
+    _ when silence != null => (silence.islandLabel(silentFor), c.warn, .4),
+    _ when talk.link == TalkLink.reconnecting => (
+      retryIn != null && retryIn > 0
+          ? island.reconnectingIn(seconds: '$retryIn')
+          : island.reconnecting,
+      c.warn,
+      .4,
+    ),
+    _ when talk.link == TalkLink.connecting => (island.connecting, c.tx3, .25),
+    _ when event != null => (event.label, _eventColor(event), .45),
+    _ => _phaseLook(talk, onAirFor),
+  };
+}
+
+/// Subtítulo, brillo e intensidad de la frecu conectada, según su fase.
+(String, Color, double) _phaseLook(RoomTalk talk, Duration? onAirFor) {
+  const c = FrColors.dark;
+  final island = t.room.talk.island;
+  final count = '${talk.count}';
+  const max = '$meshSlotCount';
+  final speaker = talk.speaker;
+  return switch (talk.islandPhase) {
+    IslandPhase.onAir => (
+      island.onAir(time: formatOnAir(onAirFor ?? Duration.zero)),
+      c.signal,
+      .75,
+    ),
+    IslandPhase.receiving when speaker != null => (
+      island.receiving(name: speaker.name),
+      meshGlowColor(c, speaker),
+      .55,
+    ),
+    IslandPhase.openMic => (
+      island.openMic(count: count, max: max),
+      c.signal,
+      .5,
+    ),
+    IslandPhase.muted => (island.muted(count: count, max: max), c.tx3, .3),
+    IslandPhase.waiting => (island.waiting, c.signal, .38),
+    _ => (island.online(count: count, max: max), c.signal, .38),
+  };
 }
 
 Color _eventColor(RoomIslandEvent event) {
@@ -334,6 +368,8 @@ class RoomNotification {
     follow<Object?>(voiceNotifierProvider);
     follow<Object?>(onAirClockProvider);
     follow<Object?>(reconnectCountdownProvider);
+    follow<Object?>(hostSilenceProvider);
+    follow<Object?>(hostSilenceClockProvider);
     follow<Object?>(sosAlertsProvider);
     follow<Object?>(locationSharingProvider);
     _refresh();
@@ -399,15 +435,14 @@ class RoomNotification {
     if (room == null) return;
     final voice = ref.read(voiceNotifierProvider);
     final localId = ref.read(roomRepositoryProvider).localParticipantId;
-    final participants = participantsWithVoice(
+    // Como la pantalla: si el anfitrión no responde, la frecu sigue.
+    final silence = ref.read(hostSilenceProvider);
+    final (participants, status) = shownRoom(
       ref.read(roomParticipantsProvider).value ?? const [],
+      ref.read(roomStatusProvider).value,
       localId,
       voice,
-    );
-    final status = negotiatingStatus(
-      ref.read(roomStatusProvider).value,
-      participants,
-      localId,
+      silence,
     );
     _slots = assignMeshSlots(
       previous: _slots,
@@ -427,6 +462,7 @@ class RoomNotification {
       mode: voice.talkMode,
       talking: voice.isTalking,
       nodes: nodes,
+      silence: silence,
     );
     _talk = talk;
     _scene = roomNotificationScene(
@@ -439,6 +475,7 @@ class RoomNotification {
       host: participants.any((p) => p.id == localId && p.isHost),
       onAirFor: ref.read(onAirClockProvider),
       retryIn: ref.read(reconnectCountdownProvider),
+      silentFor: ref.read(hostSilenceClockProvider),
       event: _event,
       sos: _sos(ref, participants.map((p) => (p.id, p.displayName))),
     );

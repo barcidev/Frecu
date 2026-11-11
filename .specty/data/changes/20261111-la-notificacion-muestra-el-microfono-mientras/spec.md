@@ -40,7 +40,7 @@ Mientras el anfitrión de una frecu con traspaso no responde, la voz entre invit
 
 ## Tareas
 
-- [ ] T1: La tarjeta aplica la espera del anfitrión
+- [x] T1: La tarjeta aplica la espera del anfitrión
   - files: lib/features/room/presentation/pages/room_notification.dart, test/features/room/presentation/room_notification_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/room/presentation/room_notification_test.dart

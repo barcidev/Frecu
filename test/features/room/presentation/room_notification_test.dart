@@ -5,6 +5,7 @@ import 'package:frecu/features/room/domain/entities/audio_route.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/talk_mode.dart';
 import 'package:frecu/features/room/presentation/pages/room_notification.dart';
+import 'package:frecu/features/room/presentation/widgets/host_silence.dart';
 import 'package:frecu/features/room/presentation/widgets/room_mesh_scene.dart';
 import 'package:frecu/features/room/presentation/widgets/room_notification_art.dart';
 import 'package:frecu/features/room/presentation/widgets/room_talk.dart';
@@ -29,6 +30,7 @@ RoomNotificationScene _scene({
   bool host = false,
   Duration? onAirFor,
   int? retryIn,
+  int? silentFor,
   RoomIslandEvent? event,
   RoomNotificationSos? sos,
   String? bluetoothName,
@@ -50,6 +52,7 @@ RoomNotificationScene _scene({
     host: host,
     onAirFor: onAirFor,
     retryIn: retryIn,
+    silentFor: silentFor,
     event: event,
     sos: sos,
     bluetoothName: bluetoothName,
@@ -171,6 +174,59 @@ void main() {
       );
       expect(scene.subtitle, 'Reconectando · 4 s');
       expect(scene.accent, c.warn);
+      expect(_buttons(scene).map((b) => b.$1), [RoomNotificationAction.leave]);
+    });
+
+    group('el anfitrión no responde', () {
+      const silence = HostSilence(
+        hostId: 'a',
+        hostName: 'Andrés',
+        successor: 'Beto',
+      );
+      const talk = RoomTalk(
+        link: TalkLink.ready,
+        mode: TalkMode.pushToTalk,
+        talking: false,
+        count: 3,
+        silence: silence,
+      );
+
+      test('AC1: el micrófono, la salida de audio y salir siguen', () {
+        expect(_buttons(_scene(talk: talk)), [
+          (RoomNotificationAction.mic, RoomNotificationIcon.mic, 'Hablar'),
+          (
+            RoomNotificationAction.route,
+            RoomNotificationIcon.speaker,
+            'Salida de audio: Altavoz',
+          ),
+          (
+            RoomNotificationAction.leave,
+            RoomNotificationIcon.exit,
+            'Salir de la frecu',
+          ),
+        ]);
+      });
+
+      test('AC2: dice quién no responde y desde hace cuánto, en ámbar', () {
+        final scene = _scene(talk: talk, silentFor: 3, retryIn: 4);
+        expect(scene.subtitle, 'Andrés no responde · 3 s');
+        expect(scene.accent, c.warn);
+        expect(_scene(talk: talk).subtitle, 'Andrés no responde');
+      });
+    });
+
+    test('AC3: reconectando sin espera del anfitrión: «Reconectando» y solo '
+        'salir', () {
+      final scene = _scene(
+        talk: const RoomTalk(
+          link: TalkLink.reconnecting,
+          mode: TalkMode.pushToTalk,
+          talking: false,
+          count: 3,
+        ),
+        silentFor: 3,
+      );
+      expect(scene.subtitle, 'Reconectando…');
       expect(_buttons(scene).map((b) => b.$1), [RoomNotificationAction.leave]);
     });
 
