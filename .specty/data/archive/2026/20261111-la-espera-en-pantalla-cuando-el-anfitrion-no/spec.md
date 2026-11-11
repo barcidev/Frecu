@@ -75,3 +75,28 @@ Cuando el anfitrión de una frecu con traspaso deja de responder, los invitados 
 
 - R1: Conflictos con C10 en `lib/i18n/*.json` y sus generados — las claves nuevas van bajo `room.talk`, lejos de `room.handover`; se regeneran con `dart run slang` al fusionar.
 - R2: Una pista larga no cabe bajo el núcleo — se comprueba en la prueba de widget con el texto en mayúsculas.
+
+## Cierre
+
+### Resumen
+
+Con traspaso, cuando el anfitrión deja de responder, la isla dice en ámbar ««anfitrión» no responde · N s» (cuenta hacia arriba), solo el anfitrión se ve «Reconectando» en la malla, el PTT sigue en «Mantén» y la pista nombra al sucesor del plan de caída («si no vuelve, Ana toma la frecu» o «tomas la frecu»). Sin traspaso o sin sucesor, se ve la reconexión de hoy. Verificado con `flutter analyze` y `flutter test` (1223 pruebas en verde).
+
+### Desviaciones
+
+- Se añadió `lib/features/room/presentation/pages/room_state.dart` al alcance (S1): `shownRoom` y `voiceLevelsOf` salieron de `room_page.dart`, que baja de 748 a 738 líneas y deja `_meshArea` por debajo de 50 líneas.
+- Para no pasar de 50 líneas por función, se partieron `RoomStatusIsland._island` (`_eventIsland`) y `MicControlSection.build` (`_core`).
+- `HostSilence` vive en su propio archivo (`widgets/host_silence.dart`) y no en `room_talk.dart`, para no hacerlo crecer.
+
+### Decisiones
+
+- La presentación detecta la espera sin cambiar `RoomRepository` ni `RoomHandover`: estado `reconnecting`, sucesión con `handover` (leída de `RoomHandover.succession`) y que este teléfono no sea el anfitrión.
+- La espera manda sobre todo en la isla (también sobre «Al aire» y los eventos), como la reconexión.
+- La pista de la espera solo reemplaza la de reposo en PTT; en micrófono abierto o mientras alguien habla se ven las de siempre.
+
+### Pendientes
+
+- La notificación del sistema sigue diciendo «Reconectando» durante la espera.
+- En el traspaso voluntario, la espera puede verse un momento antes del aviso «… lleva ahora la frecu» (A4).
+- `room_talk.dart` pasa de 300 líneas de código (322): candidato a separar `RoomIslandEvent` y `RoomStatusIsland` en su propio archivo.
+- Por internet, la pista nombra al sucesor aunque la toma por caída llega con C6.
