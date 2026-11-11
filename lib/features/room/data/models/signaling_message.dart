@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_succession.dart';
@@ -141,14 +143,31 @@ sealed class SignalingMessage with _$SignalingMessage {
   }) = SignalingRoomStateMessage;
 
   /// El anfitrión pasa la frecu a [to] y sale: quien la recibe la abre con
-  /// el turno [term], y los demás se reconectan a su IP con su mismo id. Es
-  /// aditivo: una app anterior lo descarta.
+  /// el turno [term], y los demás se reconectan a su IP con su mismo id. Con
+  /// [address] y [port] (aditivos), la frecu ya la lleva [to] allí: así va
+  /// quien no lo tiene en su sucesión. Es aditivo: una app anterior lo
+  /// descarta.
   @FreezedUnionValue('host_handover')
   const factory SignalingMessage.hostHandover({
     required String to,
     required int term,
+    @JsonKey(includeIfNull: false) String? address,
+    @JsonKey(includeIfNull: false) int? port,
     @Default('host_handover') String type,
   }) = SignalingHostHandoverMessage;
+
+  /// Un anfitrión pregunta a otro servidor si lleva la misma frecu
+  /// ([accessCode]), con su turno [term], su id [host] y el [port] de su
+  /// servidor; el otro responde con el suyo. Gana el turno mayor y, a igual
+  /// turno, el `peer_N` menor: el otro entra como invitado. Es aditivo.
+  @FreezedUnionValue('host_probe')
+  const factory SignalingMessage.hostProbe({
+    required String accessCode,
+    required int term,
+    required String host,
+    required int port,
+    @Default('host_probe') String type,
+  }) = SignalingHostProbeMessage;
 
   /// Quien tomó la frecu ([host], con el turno [term]) se lo dice a cada
   /// persona que vuelve: [reason] es `left` si el anfitrión anterior se la
@@ -171,4 +190,16 @@ sealed class SignalingMessage with _$SignalingMessage {
   /// Deserializa un mensaje desde JSON.
   factory SignalingMessage.fromJson(Map<String, dynamic> json) =>
       _$SignalingMessageFromJson(json);
+
+  /// Lee un mensaje de texto del socket; nulo si no es un mensaje válido.
+  static SignalingMessage? tryDecode(Object? data) {
+    if (data is! String) return null;
+    try {
+      return SignalingMessage.fromJson(
+        jsonDecode(data) as Map<String, dynamic>,
+      );
+    } on Object {
+      return null;
+    }
+  }
 }

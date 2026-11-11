@@ -6,6 +6,13 @@
   "branch": "feature/regreso-del-anfitrion-anterior-y-dos",
   "baseCommit": "1212326cb9d81024607b7edf91379c9395c95be9",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:5bcbe28e2d658d34c5ab1c1a49bdf2b831ebf540275d6174273af2b67e9db103",
+    "at": "2026-11-11T15:13:50.562Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "L",
     "score": 14,
@@ -33,7 +40,19 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/signaling_connection.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "c16c64202f807bf5bdba0a743933f6bad1e0bbfe",
+      "startedAt": "2026-11-11T15:13:50.898Z",
+      "doneAt": "2026-11-11T15:19:12.571Z",
+      "summary": "host_probe (un tipo en las dos direcciones) y address/port en host_handover; host_probe.dart con outranks, HostRival y HostProbe; el servidor responde host_probe, avisa onRival y cede con yieldTo sin room_closed."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -42,13 +61,7 @@
     "A": 4,
     "AC": 9,
     "T": 3,
-    "R": 4
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:5bcbe28e2d658d34c5ab1c1a49bdf2b831ebf540275d6174273af2b67e9db103",
-    "at": "2026-11-11T15:13:50.562Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
+    "R": 4,
+    "S": 1
   }
 }

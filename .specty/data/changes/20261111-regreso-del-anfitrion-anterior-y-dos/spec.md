@@ -64,7 +64,7 @@ En una frecu local sobre una Wi-Fi compartida, cuando el anfitrión anterior vue
 
 ## Tareas
 
-- [ ] T1: `host_probe` en el protocolo, `HostProbe` y `outranks`, y el servidor responde y cede
+- [x] T1: `host_probe` en el protocolo, `HostProbe` y `outranks`, y el servidor responde y cede
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/host_probe.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/host_probe_test.dart, docs/protocolo.md
   - ac: AC9
   - verify: flutter test test/features/room/data/host_probe_test.dart test/features/room/data/signaling_server_test.dart test/features/room/data/signaling_term_test.dart test/features/room/data/signaling_access_test.dart

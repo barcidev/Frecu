@@ -91,7 +91,8 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 | `position` | peer → todos menos quien lo envía (vía host) | peerId, lat y lon opcionales, accuracy opcional |
 | `ping` / `pong` | ambos | timestamp |
 | `room_state` | host → todos | `state`: sucesión, turno y estado de la frecu |
-| `host_handover` | host → todos | `to`, `term`: el anfitrión pasa la frecu y sale |
+| `host_handover` | host → todos | `to`, `term`, `address` y `port` opcionales: el anfitrión pasa (o cede) la frecu y sale |
+| `host_probe` | host → otro host, y su respuesta | `accessCode`, `term`, `host`, `port`: ¿llevas esta frecu y con qué turno? |
 | `host_changed` | nuevo host → quien vuelve | `host`, `term`, `reason` (`left` o `lost`) |
 | `room_closed` | host → todos | reason |
 
@@ -110,6 +111,10 @@ Tras cada `join` aceptado (después de `welcome` y `peer_joined`) y cada salida,
 En una frecu local con traspaso (una Wi-Fi que no crea el teléfono del anfitrión), el anfitrión que sale con «Que siga sin mí» envía a todos `host_handover` con `to` (quien la recibe) y `term` (el turno siguiente), luego `peer_left` de sí mismo, y cierra su servidor sin `room_closed`. Quien la recibe abre su servidor en el mismo puerto con el estado de `room_state` y ese turno, y guarda un lugar a cada persona heredada (mismo id, orden y hora de llegada) hasta que se le acaba el latido. Se une a sí mismo con `join.peerId` = su id y queda como anfitrión. Los demás, en lugar de reintentar la IP vieja, se conectan a la `address` de quien la recibe (de `room_state`) con el código heredado y `join.peerId` = su id: ocupan su lugar sin `peer_joined` (ya estaban en las listas) y reciben `host_changed` con `host`, `term` y `reason: left`. Es aditivo: una app anterior descarta los tipos nuevos y su `join` sin `peerId` entra con un id nuevo.
 
 Si el anfitrión de una frecu local con traspaso deja de responder (sin `host_handover`), cada invitado sigue el mismo plan con la sucesión de `room_state`: reintenta al anfitrión dos veces (esperas de 1 s y 2 s) y, si no vuelve, recorre la sucesión en orden sin él. A cada persona le da dos intentos en su `address` con `join.peerId` = su id y `join.term` = el turno conocido (esperas de 1 s). Cuando le toca a sí mismo, si su red sigue arriba toma la frecu sin esperar, como en el traspaso voluntario, con `term + 1`, y su servidor responde `host_changed` con `reason: lost`; si su red no está arriba, pasa a la siguiente persona. Si nadie responde, la frecu se cierra con `host_unreachable`.
+
+### Dos anfitriones a la vez (`host_probe`)
+
+Si el anfitrión anterior vuelve con su frecu aún abierta (estuvo fuera de alcance) o una partición deja dos anfitriones de la misma frecu, se encuentran solos. Cada teléfono recuerda la `address` de todas las personas que vio en `room_state` durante la sesión, y mientras lleva una frecu local con traspaso, cada 3 s abre un socket en el puerto de la frecu de las IPs de quienes ya no están (sin la suya ni las de quienes siguen en la frecu) y envía `host_probe` con el código, su turno (`term`), su id (`host`) y el puerto de su servidor (`port`). Un servidor que lleva esa frecu responde con su propio `host_probe` y cierra el socket. Gana el turno mayor y, a igual turno, el `peer_N` menor. Quien pierde (lo sepa por la respuesta o por la pregunta que recibió) envía a sus invitados `host_handover` con `to`, `term`, `address` y `port` del ganador, cierra su servidor sin `room_closed` y entra como invitado al ganador con su id en `join.peerId`; sus invitados van a esa `address` y `port` aunque el ganador no esté en su sucesión, y quien tenía un lugar heredado allí vuelve a él. Un `host_probe` con el código incorrecto se rechaza con `rejected(invalidAccessCode)` y cuenta para el bloqueo, como un `join`; esa IP (que lleva otra frecu) no se vuelve a preguntar. Es aditivo: una app anterior descarta `host_probe`.
 
 ### Silencio en micrófono abierto (`muted`)
 

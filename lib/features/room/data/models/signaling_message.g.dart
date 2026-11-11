@@ -238,6 +238,8 @@ SignalingHostHandoverMessage _$SignalingHostHandoverMessageFromJson(
 ) => SignalingHostHandoverMessage(
   to: json['to'] as String,
   term: (json['term'] as num).toInt(),
+  address: json['address'] as String?,
+  port: (json['port'] as num?)?.toInt(),
   type: json['type'] as String? ?? 'host_handover',
 );
 
@@ -246,6 +248,28 @@ Map<String, dynamic> _$SignalingHostHandoverMessageToJson(
 ) => <String, dynamic>{
   'to': instance.to,
   'term': instance.term,
+  'address': ?instance.address,
+  'port': ?instance.port,
+  'type': instance.type,
+};
+
+SignalingHostProbeMessage _$SignalingHostProbeMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingHostProbeMessage(
+  accessCode: json['accessCode'] as String,
+  term: (json['term'] as num).toInt(),
+  host: json['host'] as String,
+  port: (json['port'] as num).toInt(),
+  type: json['type'] as String? ?? 'host_probe',
+);
+
+Map<String, dynamic> _$SignalingHostProbeMessageToJson(
+  SignalingHostProbeMessage instance,
+) => <String, dynamic>{
+  'accessCode': instance.accessCode,
+  'term': instance.term,
+  'host': instance.host,
+  'port': instance.port,
   'type': instance.type,
 };
 

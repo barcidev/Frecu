@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/logging/app_logger.dart';
+import 'package:frecu/features/room/data/datasources/host_probe.dart';
 import 'package:frecu/features/room/data/datasources/room_succession.dart';
+import 'package:frecu/features/room/data/datasources/signaling_connection.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -13,64 +15,8 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-/// Una conexión de un participante con el servidor de señalización, sea cual
-/// sea su transporte: un WebSocket de la red local o un invitado que llega
-/// por el relé de la nube.
-abstract interface class SignalingConnection {
-  /// Mensajes de texto que manda el participante; termina al cerrarse.
-  Stream<Object?> get incoming;
-
-  /// Clave del origen para el bloqueo por códigos incorrectos (la IP en la
-  /// red local, un resumen de la IP por internet), o `null` si no se conoce.
-  String? get remoteKey;
-
-  /// Si llega por internet (el relé de la nube) y no por la red local.
-  bool get remote;
-
-  /// Manda un mensaje de texto al participante.
-  void send(String data);
-
-  /// Cierra la conexión.
-  Future<void> close();
-}
-
-/// [SignalingConnection] sobre un WebSocket aceptado por el servidor local.
-class _ChannelConnection implements SignalingConnection {
-  _ChannelConnection(this._channel, this.remoteKey);
-
-  final WebSocketChannel _channel;
-
-  @override
-  final String? remoteKey;
-
-  @override
-  bool get remote => false;
-
-  @override
-  Stream<Object?> get incoming => _channel.stream;
-
-  @override
-  void send(String data) => _channel.sink.add(data);
-
-  @override
-  Future<void> close() async => _channel.sink.close();
-}
-
-/// Motivos de rechazo del `join` (`rejected.reason` del protocolo).
-abstract final class RejectReason {
-  /// La frecu ya tiene 6 personas.
-  static const String roomFull = 'roomFull';
-
-  /// Código de acceso incorrecto (o demasiados intentos fallidos).
-  static const String invalidAccessCode = 'invalidAccessCode';
-
-  /// El `join` habla otra versión del protocolo.
-  static const String versionMismatch = 'versionMismatch';
-
-  /// El `join` conoce un turno mayor que el de este servidor: otra persona
-  /// ya tomó la frecu.
-  static const String staleTerm = 'stale_term';
-}
+export 'package:frecu/features/room/data/datasources/signaling_connection.dart'
+    show RejectReason, SignalingConnection;
 
 /// Servidor WebSocket de señalización para el anfitrión de la sala.
 ///
@@ -110,7 +56,10 @@ class SignalingServerDataSource {
   final Map<String, SignalingConnection> _clientChannels = {};
   final Map<String, Participant> _participants = {};
   final Map<String, DateTime> _peerLastSeen = {};
-  final Map<String, List<DateTime>> _failedCodes = {};
+  late final CodeGuard _codes = CodeGuard(
+    maxAttempts: maxCodeAttempts,
+    lockout: codeLockout,
+  );
 
   /// Lugares heredados que aún no ocupó nadie.
   final Set<String> _seats = {};
@@ -169,6 +118,11 @@ class SignalingServerDataSource {
   /// `room_state` al entrar o salir alguien.
   final SuccessionLedger succession = SuccessionLedger();
 
+  /// Se llama cuando otro teléfono pregunta con `host_probe` por esta misma
+  /// frecu con un turno que gana: este servidor debe cederle la frecu
+  /// ([yieldTo]).
+  void Function(HostRival rival)? onRival;
+
   /// Frecu que tomará el próximo [start] (que la consume): guarda un lugar
   /// a cada persona heredada, y quien se une con su `host` es el anfitrión.
   /// Se fija antes de [start], como [succession].
@@ -198,7 +152,7 @@ class SignalingServerDataSource {
     _participants.clear();
     _clientChannels.clear();
     _peerLastSeen.clear();
-    _failedCodes.clear();
+    _codes.clear();
     succession.clear();
     _peerCounter = 0;
     _seedInherited();
@@ -210,7 +164,7 @@ class SignalingServerDataSource {
           : null;
       return webSocketHandler(
         (WebSocketChannel channel, String? subprotocol) =>
-            accept(_ChannelConnection(channel, address)),
+            accept(LocalConnection(channel, address)),
       )(request);
     }
 
@@ -287,14 +241,19 @@ class SignalingServerDataSource {
 
     channel.incoming.listen(
       (data) {
-        final message = _decode(data);
+        final message = SignalingMessage.tryDecode(data);
         if (message == null) return;
         final peerId = assignedPeerId;
         if (peerId == null) {
           // Antes del `join` no se enruta nada.
-          if (message is SignalingJoinMessage) {
-            _messagesController.add(message);
-            assignedPeerId = _processJoin(channel, message);
+          switch (message) {
+            case SignalingJoinMessage():
+              _messagesController.add(message);
+              assignedPeerId = _processJoin(channel, message);
+            case SignalingHostProbeMessage():
+              _answerProbe(channel, message);
+            default:
+              break;
           }
           return;
         }
@@ -312,17 +271,6 @@ class SignalingServerDataSource {
         if (peerId != null) _handlePeerLeft(peerId, channel: channel);
       },
     );
-  }
-
-  SignalingMessage? _decode(Object? data) {
-    if (data is! String) return null;
-    try {
-      final jsonMap = jsonDecode(data) as Map<String, dynamic>;
-      return SignalingMessage.fromJson(jsonMap);
-    } on Object catch (e) {
-      AppLogger.w('Ignoring malformed signaling message: $e');
-      return null;
-    }
   }
 
   /// Enruta un mensaje de [from], que ya se unió, forzando su id como
@@ -468,21 +416,11 @@ class SignalingServerDataSource {
     SignalingJoinMessage join, {
     required bool returning,
   }) {
-    final address = channel.remoteKey;
     if (join.protocolVersion != signalingProtocolVersion) {
       _reject(channel, RejectReason.versionMismatch);
       return false;
     }
-    if (_isLockedOut(address)) {
-      AppLogger.w('Too many wrong access codes from $address');
-      _reject(channel, RejectReason.invalidAccessCode);
-      return false;
-    }
-    if (join.accessCode != _accessCode) {
-      _recordWrongCode(address);
-      _reject(channel, RejectReason.invalidAccessCode);
-      return false;
-    }
+    if (!_codeAccepted(channel, join.accessCode)) return false;
     final term = join.term;
     if (term != null && term > succession.term) {
       _reject(channel, RejectReason.staleTerm);
@@ -496,25 +434,56 @@ class SignalingServerDataSource {
     return true;
   }
 
+  /// Sin bloqueo y con el código correcto; si no, rechaza y cuenta el
+  /// intento.
+  bool _codeAccepted(SignalingConnection channel, String accessCode) {
+    if (_codes.admits(channel.remoteKey, accessCode, expected: _accessCode)) {
+      return true;
+    }
+    _reject(channel, RejectReason.invalidAccessCode);
+    return false;
+  }
+
+  /// Responde a otro anfitrión que pregunta por esta frecu con su turno y su
+  /// id, y si su turno gana, lo avisa en [onRival]. Solo en la red local y
+  /// con el código correcto.
+  void _answerProbe(
+    SignalingConnection channel,
+    SignalingHostProbeMessage probe,
+  ) {
+    final host =
+        _participants.values.where((p) => p.isHost).firstOrNull?.id ??
+        _taken?.host;
+    final address = channel.remoteKey;
+    if (channel.remote || host == null || address == null) {
+      unawaited(channel.close());
+      return;
+    }
+    if (!_codeAccepted(channel, probe.accessCode)) return;
+    _sendToChannel(
+      channel,
+      SignalingMessage.hostProbe(
+        accessCode: _accessCode,
+        term: succession.term,
+        host: host,
+        port: port,
+      ),
+    );
+    unawaited(channel.close());
+    final rival = HostRival.challenging(
+      probe,
+      address: address,
+      term: succession.term,
+      host: host,
+    );
+    if (rival != null) onRival?.call(rival);
+  }
+
   void _reject(SignalingConnection channel, String reason) {
     final rejected = SignalingMessage.rejected(reason: reason);
     _messagesController.add(rejected);
     _sendToChannel(channel, rejected);
     unawaited(channel.close());
-  }
-
-  bool _isLockedOut(String? address) {
-    if (address == null) return false;
-    final attempts = _failedCodes[address];
-    if (attempts == null) return false;
-    final since = DateTime.now().subtract(codeLockout);
-    attempts.removeWhere((at) => at.isBefore(since));
-    return attempts.length >= maxCodeAttempts;
-  }
-
-  void _recordWrongCode(String? address) {
-    if (address == null) return;
-    (_failedCodes[address] ??= []).add(DateTime.now());
   }
 
   /// Saca a [peerId]; con [channel], solo si ese sigue siendo su socket.
@@ -596,13 +565,34 @@ class SignalingServerDataSource {
       SignalingMessage.hostHandover(to: to, term: succession.term + 1),
     );
     if (host != null) _broadcast(SignalingMessage.peerLeft(peerId: host.id));
+    await _stopHandingOver();
+    return true;
+  }
+
+  /// Cede la frecu a [rival], que la lleva con un turno que gana: avisa a
+  /// todos `host_handover` con su id, su turno, su IP y su puerto, y se
+  /// detiene sin `room_closed`.
+  Future<void> yieldTo(HostRival rival) async {
+    if (!isRunning) return;
+    _broadcast(
+      SignalingMessage.hostHandover(
+        to: rival.host,
+        term: rival.term,
+        address: rival.address,
+        port: rival.port,
+      ),
+    );
+    await _stopHandingOver();
+  }
+
+  /// Se detiene sin avisar `room_closed`: la frecu sigue en otro teléfono.
+  Future<void> _stopHandingOver() async {
     _handingOver = true;
     try {
       await stop();
     } finally {
       _handingOver = false;
     }
-    return true;
   }
 
   /// Detiene el servidor y cierra todas las conexiones activas.
