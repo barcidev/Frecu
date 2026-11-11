@@ -16,6 +16,6 @@ Criterio: `.gitignore` termina con el bloque `# macOS` / `.DS_Store`, y `git che
 
 ## Tareas
 
-- [ ] T1: Ignorar los .DS_Store en .gitignore
+- [x] T1: Ignorar los .DS_Store en .gitignore
   - files: .gitignore
   - verify: git check-ignore -q docs/diseno/.DS_Store

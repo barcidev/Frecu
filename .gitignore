@@ -11,3 +11,6 @@ build/
 
 # Caché local de wrangler (Cloudflare)
 .wrangler/
+
+# macOS
+.DS_Store
