@@ -169,7 +169,7 @@ Solo la envía quien activó «Compartir mi ubicación» (apagado por defecto): 
 - Heartbeat `ping` cada 5 s; un participante sin respuesta durante 15 s se considera desconectado.
 - Abrir el WebSocket espera como mucho 5 s. Sin respuesta, socket rechazado o handshake roto es `hostUnreachable`; la conexión solo se da por abierta cuando el WebSocket abrió.
 - Reconexión del cliente con backoff exponencial (1, 2, 4, 8 s, tope 15 s), hasta 5 intentos. Hay un solo bucle de reconexión por frecu y solo tras una unión con `welcome`: una unión fallida no reconecta. `RoomStatus.reconnecting` lleva el intento y el tiempo al próximo, para la cuenta atrás.
-- Al reconectar, el participante vuelve a enviar `join`, recibe otro id y se recrean sus peer connections (vuelve a ofrecer, como quien llega). Mientras reconecta no transmite; el micrófono abierto se retoma al volver.
+- Al reconectar, el participante vuelve a enviar `join`, recibe otro id y se recrean sus peer connections (vuelve a ofrecer, como quien llega). Mientras reconecta no transmite; el micrófono abierto se retoma al volver. En una frecu con traspaso la voz sigue mientras reconecta: la malla entre invitados no se desarma, solo se cierra el enlace con el anfitrión que se fue (al llegar `room_state` o `welcome` con otro anfitrión), y quien vuelve a su mismo lugar (`join.peerId`) conserva sus enlaces y vuelve a enviar su `talk_state`.
 - Si se agotan los intentos, la frecu pasa a `RoomStatus.closed('host_unreachable')` una sola vez. Si el anfitrión cierra la frecu, todos pasan a `RoomStatus.closed`.
 
 ## Modo internet

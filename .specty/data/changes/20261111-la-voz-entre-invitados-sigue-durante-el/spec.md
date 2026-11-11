@@ -62,7 +62,7 @@ Hoy, al perder el socket con el anfitrión, la voz de cada invitado deja de tran
   - files: lib/features/room/data/repositories/voice_handover.dart, lib/features/room/data/repositories/voice_repository_impl.dart, lib/features/room/data/datasources/peer_connection_datasource.dart, test/features/room/data/voice_handover_test.dart
   - ac: AC1, AC2, AC3, AC4, AC5
   - verify: flutter test test/features/room/data/voice_handover_test.dart test/features/room/data/voice_mesh_test.dart test/features/room/data/open_mic_voice_test.dart test/features/room/data/voice_repository_test.dart test/features/room/data/peer_connection_datasource_test.dart
-- [ ] T2: Docs de la voz en el traspaso y guion de pruebas en teléfonos
+- [x] T2: Docs de la voz en el traspaso y guion de pruebas en teléfonos
   - files: docs/audio.md, docs/protocolo.md
   - ac: AC6
   - verify: flutter analyze

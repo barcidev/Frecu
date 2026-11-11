@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-la-voz-entre-invitados-sigue-durante-el",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/la-voz-entre-invitados-sigue-durante-el",
   "baseCommit": "07e11900078c90f3095b2cc58a75ae29c1d67c39",
   "revision": 1,
@@ -42,12 +42,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "07dfc37d6425ec7e750540469f357f02c91bcf06",
+      "attempts": 1,
       "startedAt": "2026-11-11T15:59:38.272Z",
       "doneAt": "2026-11-11T16:02:25.582Z",
-      "summary": "VoiceHandover sigue room_state y welcome: con traspaso la voz no se corta sin socket, se cierra solo el enlace del anfitrión anterior (closePeer) y al volver se retoma el micrófono abierto o se anuncia el PTT (P160, P178)."
+      "summary": "VoiceHandover sigue room_state y welcome: con traspaso la voz no se corta sin socket, se cierra solo el enlace del anfitrión anterior (closePeer) y al volver se retoma el micrófono abierto o se anuncia el PTT (P160, P178).",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "397660fc1f54bcf04de75732a7703e6e0ae419fc",
+      "startedAt": "2026-11-11T16:02:25.888Z",
+      "doneAt": "2026-11-11T16:03:11.769Z",
+      "summary": "docs/audio.md y docs/protocolo.md: con traspaso la voz sigue mientras reconecta y solo se cierra el enlace del anfitrión anterior; guion de pruebas en teléfonos anotado en P185."
     }
   },
   "pending": {
