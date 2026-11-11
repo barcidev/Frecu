@@ -2,10 +2,17 @@
   "schema": 1,
   "id": "20261111-el-anuncio-en-la-red-sigue-al-nuevo-anfitrion",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "bugfix/el-anuncio-en-la-red-sigue-al-nuevo-anfitrion",
   "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
   "revision": 1,
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:7d37eef7e036a67d0006ca2210053bc87e1845acc7c52498fbcd79dc480758d5",
+    "at": "2026-11-11T16:36:06.729Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  },
   "size": {
     "level": "S",
     "score": 2,
@@ -32,7 +39,17 @@
       "decision": "implicit"
     }
   },
-  "tasks": {},
+  "tasks": {
+    "T1": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "757e89d3036cc991293a336c74dedb7e563686f8",
+      "startedAt": "2026-11-11T16:36:07.072Z",
+      "doneAt": "2026-11-11T16:37:08.147Z",
+      "summary": "El inicio anuncia la frecu local en mDNS cuando este teléfono empieza a llevarla por un traspaso (con el puerto de su servidor) y retira el anuncio cuando deja de llevarla sin salir; por internet no anuncia. Pruebas AC1-AC3 en lobby_page_test."
+    }
+  },
   "pending": {
     "scopeRequests": [],
     "adjustment": null
@@ -42,12 +59,5 @@
     "AC": 4,
     "T": 1,
     "R": 1
-  },
-  "approved": {
-    "revision": 1,
-    "hash": "sha256:7d37eef7e036a67d0006ca2210053bc87e1845acc7c52498fbcd79dc480758d5",
-    "at": "2026-11-11T16:36:06.729Z",
-    "by": "Jorge Palacio Barcinilla",
-    "channel": "delegated"
   }
 }

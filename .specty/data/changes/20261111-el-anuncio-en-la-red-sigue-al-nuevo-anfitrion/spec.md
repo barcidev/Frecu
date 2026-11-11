@@ -41,7 +41,7 @@ En una Wi-Fi compartida, el anuncio mDNS de la frecu lo hace siempre quien la ll
 
 ## Tareas
 
-- [ ] T1: El anuncio sigue a quien lleva la frecu
+- [x] T1: El anuncio sigue a quien lleva la frecu
   - files: lib/features/lobby/presentation/pages/lobby_page.dart, test/features/lobby/presentation/lobby_page_test.dart
   - ac: AC1, AC2, AC3, AC4
   - verify: flutter test test/features/lobby/presentation/lobby_page_test.dart
