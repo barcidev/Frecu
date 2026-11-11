@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:frecu/core/constants/network_constants.dart';
 import 'package:frecu/core/logging/app_logger.dart';
+import 'package:frecu/features/room/data/datasources/room_succession.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
@@ -147,6 +148,10 @@ class SignalingServerDataSource {
   /// [start].
   bool hostOwnsNetwork = false;
 
+  /// Sucesión de la frecu: se configura antes de [start] y se reparte en
+  /// `room_state` al entrar o salir alguien.
+  final SuccessionLedger succession = SuccessionLedger();
+
   /// Inicia el servidor de señalización de una frecu nueva.
   ///
   /// Si ya había uno en marcha (una frecu anterior que no se cerró), lo
@@ -171,6 +176,7 @@ class SignalingServerDataSource {
     _clientChannels.clear();
     _peerLastSeen.clear();
     _failedCodes.clear();
+    succession.clear();
     _peerCounter = 0;
 
     FutureOr<Response> handler(Request request) {
@@ -341,14 +347,8 @@ class SignalingServerDataSource {
         );
       case SignalingPingMessage(:final timestamp):
         _sendToPeer(from, SignalingMessage.pong(timestamp: timestamp));
-      case SignalingJoinMessage() ||
-          SignalingWelcomeMessage() ||
-          SignalingRejectedMessage() ||
-          SignalingPeerJoinedMessage() ||
-          SignalingPeerLeftMessage() ||
-          SignalingPongMessage() ||
-          SignalingRoomClosedMessage():
-        // Solo el anfitrión los emite; uno de un participante se ignora.
+      default:
+        // Solo el anfitrión emite el resto; uno de un participante se ignora.
         break;
     }
   }
@@ -408,6 +408,9 @@ class SignalingServerDataSource {
       excludePeerId: peerId,
     );
 
+    succession.add(participant, address: channel.remote ? null : address);
+    _broadcastSuccession();
+
     return peerId;
   }
 
@@ -443,8 +446,21 @@ class SignalingServerDataSource {
     if (removed != null) {
       AppLogger.i('Peer left room: $peerId');
       _broadcast(SignalingMessage.peerLeft(peerId: peerId));
+      succession.remove(peerId);
+      _broadcastSuccession();
     }
   }
+
+  /// Reparte a todos la sucesión y el estado de la frecu.
+  void _broadcastSuccession() => _broadcast(
+    SignalingMessage.roomState(
+      state: succession.snapshot(
+        name: _roomName ?? '',
+        accessCode: _accessCode,
+        note: _note,
+      ),
+    ),
+  );
 
   void _routeToPeer(String from, String to, SignalingMessage message) {
     if (to == from) return;

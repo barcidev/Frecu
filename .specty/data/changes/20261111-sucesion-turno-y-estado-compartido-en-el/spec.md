@@ -58,7 +58,7 @@ Cada participante de una frecu conoce, sin que nadie lo pida, lo necesario para 
 
 ## Tareas
 
-- [ ] T1: Sucesión, turno y estado de la frecu en `room_state`
+- [x] T1: Sucesión, turno y estado de la frecu en `room_state`
   - files: lib/features/room/domain/entities/room_succession.dart, lib/features/room/domain/entities/room_succession.freezed.dart, lib/features/room/domain/entities/room_succession.g.dart, lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/room_succession.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, lib/features/room/data/datasources/peer_connection_datasource.dart, lib/features/room/data/repositories/voice_repository_impl.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/room_succession_test.dart, docs/protocolo.md
   - ac: AC5
   - verify: flutter test test/features/room/data/room_succession_test.dart

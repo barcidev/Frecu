@@ -10,6 +10,7 @@ import 'package:frecu/core/network/network_return.dart';
 import 'package:frecu/core/result/result.dart';
 import 'package:frecu/features/room/data/datasources/cloud_relay_datasource.dart';
 import 'package:frecu/features/room/data/datasources/foreground_service_datasource.dart';
+import 'package:frecu/features/room/data/datasources/room_succession.dart';
 import 'package:frecu/features/room/data/datasources/signaling_client_datasource.dart';
 import 'package:frecu/features/room/data/datasources/signaling_server_datasource.dart';
 import 'package:frecu/features/room/data/models/signaling_message.dart';
@@ -19,6 +20,7 @@ import 'package:frecu/features/room/domain/entities/room.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
 import 'package:frecu/features/room/domain/entities/room_reach.dart';
 import 'package:frecu/features/room/domain/entities/room_status.dart';
+import 'package:frecu/features/room/domain/entities/room_succession.dart';
 import 'package:frecu/features/room/domain/repositories/room_repository.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -110,6 +112,7 @@ class RoomRepositoryImpl implements RoomRepository {
   final StreamController<RoomStatus> _statusController =
       StreamController<RoomStatus>.broadcast();
 
+  final KnownSuccession _succession = KnownSuccession();
   StreamSubscription<bool>? _connectionStateSub;
   StreamSubscription<SignalingMessage>? _clientSubscription;
   List<Participant> _participants = const [];
@@ -145,6 +148,13 @@ class RoomRepositoryImpl implements RoomRepository {
 
   @override
   String? get localParticipantId => _localParticipantId;
+
+  /// Sucesión, turno y estado de la frecu que mandó el anfitrión en
+  /// `room_state`, o nula sin frecu o antes de que llegue.
+  RoomSuccession? get succession => _succession.current;
+
+  /// [succession] y sus cambios: empieza con la actual.
+  Stream<RoomSuccession?> watchSuccession() => _succession.watch();
 
   @override
   Stream<List<Participant>> watchParticipants() =>
@@ -200,7 +210,12 @@ class RoomRepositoryImpl implements RoomRepository {
       if (internet && !cloudConfig.isEnabled) {
         throw StateError('Internet mode is not configured');
       }
-      final hostIp = await _prepareHostAddress(internet: internet);
+      final internetId = internet ? CloudConfig.newRoomId() : null;
+      final hostSecret = internet ? CloudConfig.newHostSecret() : null;
+      final hostIp = await _prepareHostAddress(
+        internetId: internetId,
+        hostSecret: hostSecret,
+      );
       await _server.start(
         accessCode: accessCode,
         roomName: name,
@@ -208,11 +223,10 @@ class RoomRepositoryImpl implements RoomRepository {
         port: signalingPort,
       );
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
-      if (internet) {
-        final internetId = CloudConfig.newRoomId();
+      if (internetId != null && hostSecret != null) {
         _internetId = internetId;
         await _relay.start(
-          cloudConfig.hostSocket(internetId, CloudConfig.newHostSecret()),
+          cloudConfig.hostSocket(internetId, hostSecret),
           onGuest: _server.accept,
         );
       }
@@ -233,16 +247,25 @@ class RoomRepositoryImpl implements RoomRepository {
   }
 
   /// IPv4 de la invitación de una frecu nueva, y fija si su red la crea
-  /// este teléfono. Por internet no se invita por la red local: todos
-  /// entran por la nube, aunque compartan la Wi-Fi del anfitrión.
-  Future<String> _prepareHostAddress({required bool internet}) async {
-    if (internet) {
-      _server.hostOwnsNetwork = false;
-      return '';
-    }
-    final lan = await _lanAddress();
-    _server.hostOwnsNetwork = _ownsNetwork(lan);
-    return lan?.address ?? _fallbackLanAddress;
+  /// este teléfono y su sucesión. Por internet ([internetId] y
+  /// [hostSecret]) no se invita por la red local: todos entran por la nube,
+  /// aunque compartan la Wi-Fi del anfitrión.
+  Future<String> _prepareHostAddress({
+    String? internetId,
+    String? hostSecret,
+  }) async {
+    final internet = internetId != null;
+    final lan = internet ? null : await _lanAddress();
+    _server.hostOwnsNetwork = !internet && _ownsNetwork(lan);
+    final hostIp = internet ? '' : lan?.address ?? _fallbackLanAddress;
+    _server.succession.configure(
+      reach: internet ? RoomReach.internet : RoomReach.local,
+      hostOwnsNetwork: _server.hostOwnsNetwork,
+      hostAddress: internet ? null : hostIp,
+      internetId: internetId,
+      hostSecret: hostSecret,
+    );
+    return hostIp;
   }
 
   /// Fallo de abrir una frecu: sin red si no se pudo escuchar o conectar.
@@ -371,6 +394,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _isHost = host;
     _internetId = null;
     _localParticipantId = null;
+    _succession.update(null);
     _setParticipants(const []);
     _setStatus(const RoomStatus.connecting());
     return session;
@@ -385,6 +409,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _isDeliberateLeave = true;
     await _teardownConnection();
     _isDeliberateLeave = false;
+    _succession.update(null);
     _setParticipants(const []);
     _setStatus(const RoomStatus.idle());
   }
@@ -540,6 +565,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _clientSubscription = null;
     unawaited(_client.disconnect());
     _setStatus(const RoomStatus.closed(reason: 'host_unreachable'));
+    _succession.update(null);
     _setParticipants(const []);
   }
 
@@ -586,17 +612,12 @@ class RoomRepositoryImpl implements RoomRepository {
             _onPeerJoined(participant);
           case SignalingPeerLeftMessage(:final peerId):
             _onPeerLeft(peerId);
+          case SignalingRoomStateMessage(:final state):
+            _succession.update(state);
           case SignalingRoomClosedMessage(:final reason):
             _onRoomClosed(reason);
-          case SignalingJoinMessage() ||
-              SignalingOfferMessage() ||
-              SignalingAnswerMessage() ||
-              SignalingIceMessage() ||
-              SignalingTalkStateMessage() ||
-              SignalingPingMessage() ||
-              SignalingPongMessage() ||
-              SignalingQuickMessage() ||
-              SignalingPositionMessage():
+          default:
+            // El resto de la señalización no cambia la frecu.
             break;
         }
       },
@@ -681,6 +702,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _localParticipantId = null;
     unawaited(_foregroundService.stopService());
     _setStatus(RoomStatus.closed(reason: reason));
+    _succession.update(null);
     _setParticipants(const []);
   }
 
@@ -707,6 +729,7 @@ class RoomRepositoryImpl implements RoomRepository {
     try {
       await _teardownConnection();
       _setStatus(const RoomStatus.closed(reason: 'user_left'));
+      _succession.update(null);
       _setParticipants(const []);
       return const Result<void>.success(null);
     } on Object catch (e, st) {
@@ -722,6 +745,7 @@ class RoomRepositoryImpl implements RoomRepository {
     _connectionStateSub = null;
     await _participantsController.close();
     await _statusController.close();
+    await _succession.dispose();
   }
 }
 

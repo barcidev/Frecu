@@ -1,5 +1,6 @@
 import 'package:frecu/features/room/domain/entities/participant.dart';
 import 'package:frecu/features/room/domain/entities/room_note.dart';
+import 'package:frecu/features/room/domain/entities/room_succession.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signaling_message.freezed.dart';
@@ -123,6 +124,15 @@ sealed class SignalingMessage with _$SignalingMessage {
     required int timestamp,
     @Default('pong') String type,
   }) = SignalingPongMessage;
+
+  /// Sucesión, turno y estado de la frecu ([state]): el anfitrión lo envía a
+  /// todos al entrar alguien y en cada cambio. Es aditivo: una app anterior
+  /// no lo conoce y lo descarta.
+  @FreezedUnionValue('room_state')
+  const factory SignalingMessage.roomState({
+    required RoomSuccession state,
+    @Default('room_state') String type,
+  }) = SignalingRoomStateMessage;
 
   /// Notificación de cierre de sala.
   @FreezedUnionValue('room_closed')

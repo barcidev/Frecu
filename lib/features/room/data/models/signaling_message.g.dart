@@ -218,6 +218,17 @@ Map<String, dynamic> _$SignalingPongMessageToJson(
   SignalingPongMessage instance,
 ) => <String, dynamic>{'timestamp': instance.timestamp, 'type': instance.type};
 
+SignalingRoomStateMessage _$SignalingRoomStateMessageFromJson(
+  Map<String, dynamic> json,
+) => SignalingRoomStateMessage(
+  state: RoomSuccession.fromJson(json['state'] as Map<String, dynamic>),
+  type: json['type'] as String? ?? 'room_state',
+);
+
+Map<String, dynamic> _$SignalingRoomStateMessageToJson(
+  SignalingRoomStateMessage instance,
+) => <String, dynamic>{'state': instance.state, 'type': instance.type};
+
 SignalingRoomClosedMessage _$SignalingRoomClosedMessageFromJson(
   Map<String, dynamic> json,
 ) => SignalingRoomClosedMessage(

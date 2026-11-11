@@ -90,6 +90,7 @@ JSON con discriminador `type`, modelados como una unión `freezed` con `@Freezed
 | `quick_message` | peer → todos menos quien lo envía (vía host) | peerId, kind |
 | `position` | peer → todos menos quien lo envía (vía host) | peerId, lat y lon opcionales, accuracy opcional |
 | `ping` / `pong` | ambos | timestamp |
+| `room_state` | host → todos | `state`: sucesión, turno y estado de la frecu |
 | `room_closed` | host → todos | reason |
 
 El servidor del anfitrión solo enruta mensajes y mantiene la lista de participantes. No procesa audio.
@@ -97,6 +98,10 @@ El servidor del anfitrión solo enruta mensajes y mantiene la lista de participa
 ### Nombre de la frecu (`roomName`)
 
 El `welcome` lleva el nombre de la frecu en `roomName`, para que quien se une (también por IP) lo vea en la cabecera y en la notificación. Es aditivo, así que `v=1` no cambia: una app anterior lo ignora y, si falta (anfitrión anterior), la frecu queda sin nombre y la pantalla usa el título genérico.
+
+### Sucesión y estado de la frecu (`room_state`)
+
+Tras cada `join` aceptado (después de `welcome` y `peer_joined`) y cada salida, el anfitrión envía a todos `room_state` con `state`: el turno vigente (`term`, 1 al abrir la frecu), si admite traspaso (`handover`: por internet o en una Wi-Fi que no crea su teléfono), el nombre (`name`), el código (`accessCode`), la nota (`note`), el tipo (`reach`: `local` o `internet`) y quienes están (`members`) en orden de sucesión, que es el de llegada con el anfitrión primero. Cada miembro lleva `id`, `displayName`, su hora de llegada (`joinedAt`) y, si entró por la red local, su IPv4 (`address`; la del anfitrión es la de su invitación). Por internet también lleva `internetId` y el secreto de anfitrión (`hostSecret`). Cada teléfono guarda el último (`RoomRepositoryImpl.succession`) y lo olvida al salir o al cerrarse la frecu. Es aditivo (`v=1`): `welcome` no cambia y una app anterior descarta el tipo desconocido, así que sigue sin traspaso.
 
 ### Silencio en micrófono abierto (`muted`)
 

@@ -561,15 +561,8 @@ class VoiceRepositoryImpl implements VoiceRepository {
         _setMutedPeers({..._mutedPeers}..remove(peerId));
       case SignalingRoomClosedMessage():
         unawaited(leaveMesh());
-      case SignalingJoinMessage() ||
-          SignalingRejectedMessage() ||
-          SignalingOfferMessage() ||
-          SignalingAnswerMessage() ||
-          SignalingIceMessage() ||
-          SignalingPingMessage() ||
-          SignalingPongMessage() ||
-          SignalingQuickMessage() ||
-          SignalingPositionMessage():
+      default:
+        // El resto de la señalización no toca la voz.
         break;
     }
   }

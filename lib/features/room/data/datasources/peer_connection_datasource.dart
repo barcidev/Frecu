@@ -425,16 +425,8 @@ class PeerConnectionDataSource {
         unawaited(_enqueue(from, (token) => _handleIce(from, ice)));
       case SignalingPeerLeftMessage(:final peerId):
         _closePeer(peerId);
-      case SignalingJoinMessage() ||
-          SignalingWelcomeMessage() ||
-          SignalingRejectedMessage() ||
-          SignalingPeerJoinedMessage() ||
-          SignalingTalkStateMessage() ||
-          SignalingPingMessage() ||
-          SignalingPongMessage() ||
-          SignalingQuickMessage() ||
-          SignalingPositionMessage() ||
-          SignalingRoomClosedMessage():
+      default:
+        // El resto de la señalización no toca la malla.
         break;
     }
   }
