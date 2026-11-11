@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "id": "20261111-tipo-de-frecu-y-traspaso",
+  "kind": "epic",
+  "phase": "implementing",
+  "branch": "feature/tipo-de-frecu-y-traspaso",
+  "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
+  "revision": 1,
+  "size": {
+    "level": "S",
+    "score": 0,
+    "adjust": 0,
+    "reasons": [
+      "0 archivos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:bb84be0e3634c85b97e82dfb1cc3413c2bc6efce480ee671ff1b9867b80d6f08",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:6dce56d76412a39a6d37408699e97c2a3f6d319f307e464af985a6604db98122",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:00ec030e445707ae03692e697fb3f0cbd62eba781f7fe4b713d3871b39a0770e",
+      "decision": "confirmed"
+    },
+    "A4": {
+      "hash": "sha256:47dcdce0759268b61bc6f2666f31ffababafea5904a2c80f4e60e9452d09b332",
+      "decision": "implicit"
+    },
+    "A5": {
+      "hash": "sha256:545e3853d4f5d792ed42aff54c2d62b194b808f5cc23753378e89fa7f9b83220",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 5,
+    "AC": 12,
+    "C": 7,
+    "R": 4
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:9e776f00fb6fde879b1acb0bff623f2c4c37c438545c677a904449bc1dd2d081",
+    "at": "2026-11-11T13:23:38.121Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
