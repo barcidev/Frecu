@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "20261111-tipo-de-frecu-al-crear-local-o-por-internet-y",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "feature/tipo-de-frecu-al-crear-local-o-por-internet-y",
+  "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
+  "revision": 1,
+  "size": {
+    "level": "L",
+    "score": 13,
+    "adjust": 0,
+    "reasons": [
+      "11 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:44d99f6df9326f35e9079cd9589644e1333a8f01c3e50ecd2f2282ec7230a47f",
+      "decision": "confirmed"
+    },
+    "A2": {
+      "hash": "sha256:a96fd969eb7b7c5e8ee016bd7e571899e7e346028851c7a39ae10228b9c99148",
+      "decision": "confirmed"
+    },
+    "A3": {
+      "hash": "sha256:767e2e521d0ea037493b276d82b425cb734fc6022bb98cb8395ec40957c1c524",
+      "decision": "implicit"
+    },
+    "A4": {
+      "hash": "sha256:0e82f91ff05c0672b98d4157c636c3e08e45f2add040e7f5a5e6597a8b67109d",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 4,
+    "AC": 3,
+    "T": 3,
+    "R": 2
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:0f4e2e53099f3a1a9f9086eccf7d99fd5cd46784ce169585638d538378e9446f",
+    "at": "2026-11-11T13:32:52.022Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
