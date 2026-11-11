@@ -85,6 +85,9 @@ Al crear una frecu, el anfitrión elige si es **Local** (todos en la misma Wi-Fi
 - C10: Regreso del anfitrión anterior y dos anfitriones a la vez: gana el turno mayor y el otro entra como invitado
   - ac: AC9
   - depends: C5
+- C11: Por internet, el anfitrión anterior que vuelve con un turno menor entra como invitado en lugar de reintentar su relé
+  - ac: AC9
+  - depends: C6
 
 ## Riesgos
 
