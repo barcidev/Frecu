@@ -1,6 +1,7 @@
 // U1: CUANDO la frecu está abierta por internet ENTONCES bajo la malla se lee «Por internet» y quien entró desde lejos lleva «Por internet» bajo su nombre.
 // U2: CUANDO el anfitrión invita a una frecu por internet ENTONCES la hoja dice «Escanea o comparte», la conexión es «Internet» y «Compartir enlace» comparte el enlace https con el código en el fragmento.
-// U3: CUANDO este teléfono está en la red de la frecu sin internet y alguien que entró por internet no conecta ENTONCES su nombre dice «Sin audio» y un aviso explica que no se oirán.
+// U3: CUANDO este teléfono está en la red de la frecu sin internet y alguien que entró por internet no conecta ENTONCES su nombre dice «Sin audio».
+// AC3: CUANDO la frecu es por internet ENTONCES todos los invitados entran por la nube, aunque estén en la misma Wi-Fi que el anfitrión. Su invitación no lleva IP local, no se anuncia por mDNS ni por Bluetooth, y ya no existe el aviso «La red de Frecu no tiene internet».
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -189,8 +190,10 @@ void main() {
     await leave(tester);
   });
 
-  testWidgets('U3: on the Frecu network without internet, unreachable '
-      'remote people say «Sin audio» and a notice explains it', (tester) async {
+  testWidgets('AC3: on the Frecu network without internet, unreachable '
+      'remote people say «Sin audio» and there is no mixed-room notice', (
+    tester,
+  ) async {
     await pumpRoom(
       tester,
       active: room.copyWith(
@@ -209,13 +212,10 @@ void main() {
       ],
     );
 
-    expect(find.byKey(const Key('internet_cut_notice')), findsOneWidget);
+    expect(find.byKey(const Key('internet_cut_notice')), findsNothing);
     expect(
-      find.textContaining(
-        t.room.internet.cutMessage(names: 'Beto'),
-        findRichText: true,
-      ),
-      findsOneWidget,
+      find.textContaining(t.room.internet.cutTitle, findRichText: true),
+      findsNothing,
     );
     expect(find.text(t.room.mesh.noAudio.toUpperCase()), findsOneWidget);
     await leave(tester);

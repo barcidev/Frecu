@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-tipo-de-frecu-al-crear-local-o-por-internet-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/tipo-de-frecu-al-crear-local-o-por-internet-y",
   "baseCommit": "dd6d1f3c49fb9535eb90817e5ee7feba7cf8417e",
   "revision": 1,
@@ -52,12 +52,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "82a025221ee0a20320454676529f0cfac8a31994",
+      "attempts": 1,
       "startedAt": "2026-11-11T13:35:16.921Z",
       "doneAt": "2026-11-11T13:37:03.739Z",
-      "summary": "RoomNotifier.createRoom recibe reach. NewRoomStep elige el tipo con «Permitir internet»; por internet no pasa red a la frecu (Bluetooth no la anuncia) ni la publica por mDNS. Test AC3 en new_room_test."
+      "summary": "RoomNotifier.createRoom recibe reach. NewRoomStep elige el tipo con «Permitir internet»; por internet no pasa red a la frecu (Bluetooth no la anuncia) ni la publica por mDNS. Test AC3 en new_room_test.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "bf893aeab5969e1a49c236fef2d74441e41a7200",
+      "startedAt": "2026-11-11T13:37:04.064Z",
+      "doneAt": "2026-11-11T13:37:45.514Z",
+      "summary": "RoomPage ya no muestra el aviso «La red de Frecu no tiene internet» (internet_cut_notice); la marca «Sin audio» de la malla sigue. Test AC3 en internet_room_ui_test."
     }
   },
   "pending": {

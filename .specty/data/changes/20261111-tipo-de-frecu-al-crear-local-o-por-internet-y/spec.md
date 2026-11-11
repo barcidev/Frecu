@@ -65,7 +65,7 @@ Una frecu es **Local** (todos en la misma Wi-Fi, sin internet) o **Por internet*
   - files: lib/features/room/presentation/providers/room_provider.dart, lib/features/lobby/presentation/widgets/new_room_step.dart, test/features/lobby/presentation/new_room_test.dart
   - ac: AC3
   - verify: flutter test test/features/lobby/presentation/new_room_test.dart
-- [ ] T3: Sin aviso de frecu mezclada
+- [x] T3: Sin aviso de frecu mezclada
   - files: lib/features/room/presentation/pages/room_page.dart, test/features/room/presentation/internet_room_ui_test.dart
   - ac: AC3
   - verify: flutter test test/features/room/presentation/internet_room_ui_test.dart
