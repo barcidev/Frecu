@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "20261111-aviso-sin-wi-fi-amigable-en-el-lobby",
+  "kind": "standard",
+  "phase": "implementing",
+  "branch": "bugfix/aviso-sin-wi-fi-amigable-en-el-lobby",
+  "baseCommit": "ece8528c381334017ad1f5cdf301943811e5bd0a",
+  "revision": 1,
+  "size": {
+    "level": "M",
+    "score": 6,
+    "adjust": 0,
+    "reasons": [
+      "4 archivos",
+      "2 módulos"
+    ]
+  },
+  "items": {
+    "A1": {
+      "hash": "sha256:98197174b5396ce579c912fce38fdf9537d45361013946baf7e5fe3e1fbf7b31",
+      "decision": "implicit"
+    },
+    "A2": {
+      "hash": "sha256:d9d3644b704c572c999853c2de1b4ecd561d65effc37ba78a878297ddd8035b3",
+      "decision": "implicit"
+    },
+    "A3": {
+      "hash": "sha256:0fe87b1f0c53894676dab203b2bbd3b3f3e5474df5ea1225e3760250f5b28f31",
+      "decision": "implicit"
+    }
+  },
+  "tasks": {},
+  "pending": {
+    "scopeRequests": [],
+    "adjustment": null
+  },
+  "maxIds": {
+    "A": 3,
+    "AC": 3,
+    "T": 1
+  },
+  "approved": {
+    "revision": 1,
+    "hash": "sha256:561ca207415def43ae7a4fbcca9db61e914aadf255ff95b37bda97d96669e102",
+    "at": "2026-11-11T05:28:56.941Z",
+    "by": "Jorge Palacio Barcinilla",
+    "channel": "delegated"
+  }
+}
