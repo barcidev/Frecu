@@ -83,3 +83,28 @@ En una frecu local sobre una Wi-Fi compartida, cuando el anfitrión anterior vue
 - R2: `room_repository_impl.dart` ya es grande (P162) — la pregunta, el orden y el rival viven en `host_probe.dart`; el repositorio solo arranca, detiene y cede.
 - R3: En pruebas todos están en 127.0.0.1 con puertos distintos — `HostProbe` recibe el puerto al que preguntar, y `host_handover` lleva el puerto del ganador.
 - R4: Preguntar a una IP que ahora lleva otra frecu cuenta como código incorrecto allí — se deja de preguntarle tras el primer rechazo.
+
+## Cierre
+
+### Resumen
+
+Dos anfitriones de la misma frecu local con traspaso se encuentran y se ordenan solos. `host_probe` (código, turno, id y puerto) es un solo tipo de mensaje en las dos direcciones: quien pregunta lo envía y el servidor responde con el suyo. `host_handover` gana `address` y `port`. `host_probe.dart` reúne `outranks` (turno mayor y, a igual turno, el `peer_N` menor), `HostRival` y `HostProbe`. `HostProbe` recuerda las IPs de la sucesión, pregunta cada 3 s en las de quienes salieron y no vuelve a preguntar a una IP que rechaza el código. El servidor responde y avisa `onRival`. `yieldTo` manda `host_handover` hacia el ganador y se detiene sin `room_closed`. El repositorio pregunta mientras lleva la frecu. Si otro gana, le cede la frecu, vuelve como invitado y emite `HostChange(outranked)`. Los invitados siguen la `address` y el `port` del mensaje. En pantalla sale el aviso «Volviste como invitado · «nombre» lleva la frecu» (ícono `check`), y `applyHostChange` deja de llevar la frecu. Pruebas: 7 de pregunta y respuesta, 2 de punta a punta con servidores reales tras proxies (el anterior vuelve y dos anfitriones con un invitado que pasa al ganador) y 2 de pantalla. `flutter analyze` no da problemas y `flutter test` pasa entero (1216).
+
+### Desviaciones
+
+- El servidor avisa al rival con un callback `onRival` en lugar del stream `rivals`, y la conexión, los motivos de rechazo y el bloqueo por códigos (`CodeGuard`) pasaron a `signaling_connection.dart` (exportado desde el servidor): el servidor pasaba de 500 líneas de código.
+- `SignalingMessage.tryDecode` lee los mensajes del socket para el servidor y para `HostProbe`, y `HostRival.challenging` decide si quien pregunta gana.
+- El puerto del rival es el que responde en su `host_probe`. En la red local siempre es 47800, y en pruebas es el de cada servidor.
+
+### Decisiones
+
+- Un solo tipo `host_probe` en lugar de `host_probe` y `host_info`. Pierde quien sabe que perdió, sea por la respuesta o por la pregunta que recibió. Como `outranks` es un orden total, los dos eligen al mismo ganador, y el que pierde solo cede una vez.
+- Quien pierde cede como un `host_handover` (`_following`) y vuelve con su id en `join.peerId`. Si el ganador le guarda un lugar heredado, lo recupera; si no, entra con un id nuevo.
+- No se pregunta a una IP de alguien que sigue en la frecu: ese teléfono es invitado, así que no lleva otra frecu.
+
+### Pendientes
+
+- Probar en teléfonos reales el regreso del anfitrión anterior y una partición con dos anfitriones.
+- El anfitrión que cede sigue anunciándose por mDNS con su IP: nadie retira el anuncio al dejar de ser anfitrión.
+- La voz de quien vuelve como invitado con un id nuevo entra con C7.
+- P162 sigue abierto: `room_repository_impl.dart` quedó en 920 líneas de código, porque ceder suma `_yieldTo` y `_afterWelcome`.
