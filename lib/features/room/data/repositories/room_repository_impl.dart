@@ -141,6 +141,10 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
 
   /// Id por internet de la frecu de esta sesión, si tiene.
   String? _internetId;
+
+  /// Sigue un `host_handover`: la reconexión va a quien recibe la frecu, sin
+  /// plan de caída.
+  bool _following = false;
   _JoinTarget? _target;
 
   static bool get _isTest =>
@@ -403,6 +407,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     _isClosed = false;
     _isHost = host;
     _internetId = null;
+    _following = false;
     _localParticipantId = null;
     _takeover.forget();
     _succession.update(null);
@@ -462,6 +467,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
         displayName: displayName,
         accessCode: accessCode,
         peerId: peerId,
+        term: _succession.current?.term,
       ),
     );
     return welcome.future.timeout(
@@ -485,21 +491,85 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
 
   bool _stillReconnecting(int session) => session == _session && _canReconnect;
 
-  Future<void> _reconnect(int session) => _rejoin.run(
-    active: () => _stillReconnecting(session),
-    onWaiting: (retryIn, attempt) {
-      _setStatus(RoomStatus.reconnecting(retryIn: retryIn, attempt: attempt));
-      if (retryIn == Duration.zero) return;
-      unawaited(
-        _foregroundService.updateNotification(
-          roomName: _roomName,
-          status: ForegroundStatus.reconnecting,
-        ),
-      );
-    },
-    attempt: (attempt) => _attemptRejoin(session, attempt),
-    onGiveUp: _giveUp,
-  );
+  Future<void> _reconnect(int session) {
+    final plan = _failoverPlan();
+    return _rejoin.run(
+      active: () => _stillReconnecting(session),
+      onWaiting: _onReconnectWait,
+      waits: plan?.waits,
+      attempt: (attempt) => plan == null
+          ? _attemptRejoin(session, attempt)
+          : _failoverAttempt(session, plan, attempt),
+      onGiveUp: _giveUp,
+    );
+  }
+
+  /// Cuenta la espera de la reconexión en el estado y en la notificación.
+  void _onReconnectWait(Duration retryIn, int attempt) {
+    _setStatus(RoomStatus.reconnecting(retryIn: retryIn, attempt: attempt));
+    if (retryIn == Duration.zero) return;
+    unawaited(
+      _foregroundService.updateNotification(
+        roomName: _roomName,
+        status: ForegroundStatus.reconnecting,
+      ),
+    );
+  }
+
+  /// Plan de caída si el anfitrión de una frecu local con traspaso dejó de
+  /// responder; nulo para reconectar como siempre (otra frecu, sin sucesión
+  /// o siguiendo un `host_handover`).
+  FailoverPlan? _failoverPlan() {
+    final state = _succession.current;
+    final me = _localParticipantId;
+    if (_following || state == null || me == null) return null;
+    if (!state.handover || state.reach != RoomReach.local) return null;
+    final host = _participants.where((p) => p.isHost).firstOrNull?.id;
+    final lost = host ?? state.order.firstOrNull;
+    if (lost == null || lost == me) return null;
+    return FailoverPlan(
+      state: state,
+      lostHost: lost,
+      me: me,
+      base: _rejoin.baseDelay,
+    );
+  }
+
+  /// Un paso del plan de caída; `true` si volvió, si tomó la frecu o si ya
+  /// no hay que seguir.
+  Future<bool> _failoverAttempt(
+    int session,
+    FailoverPlan plan,
+    int attempt,
+  ) async {
+    final target = _target;
+    if (target == null) return true;
+    switch (plan.steps[attempt - 1]) {
+      case FailoverRetryHost():
+        return _attemptRejoin(session, attempt);
+      case FailoverFollow(:final member):
+        _takeover.previousHost = plan.lostHostName;
+        _target = target.toward(member.address!, peerId: _localParticipantId);
+        return _attemptRejoin(session, attempt);
+      case FailoverTake():
+        final address = plan.myAddress;
+        if (address == null || !await _rejoin.networkUp()) return false;
+        if (!_stillReconnecting(session)) return true;
+        _takeover.previousHost = plan.lostHostName;
+        unawaited(
+          _takeOver(
+            session,
+            state: plan.state,
+            term: plan.state.term + 1,
+            address: address,
+            previousHostId: plan.lostHost,
+            target: target,
+            reason: HostChangeReason.lost,
+          ),
+        );
+        return true;
+    }
+  }
 
   /// Un intento de volver a la frecu; `true` si volvió o si ya no hay que
   /// seguir intentando.
@@ -524,6 +594,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
           displayName: target.displayName,
           accessCode: target.accessCode,
           peerId: target.peerId,
+          term: _succession.current?.term,
         ),
       );
       final result = await welcome.future.timeout(
@@ -641,6 +712,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
   }) {
     _joined = true;
     _isClosed = false;
+    _following = false;
     _localParticipantId = peerId;
     if (roomName != null && roomName.isNotEmpty) _roomName = roomName;
     _setParticipants(participants);
@@ -693,6 +765,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     final host = _participants.where((p) => p.isHost).firstOrNull;
     _takeover.previousHost = host?.displayName;
     if (to != _localParticipantId) {
+      _following = true;
       _target = target.toward(address, peerId: _localParticipantId);
       return;
     }
@@ -709,7 +782,8 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
   }
 
   /// Este teléfono toma la frecu de [state]: deja de reconectar, abre el
-  /// servidor con el turno [term] y vuelve a su mismo lugar como anfitrión.
+  /// servidor con el turno [term] y vuelve a su mismo lugar como anfitrión;
+  /// [reason] dice si se la pasaron al salir o si se cayó el anterior.
   Future<void> _takeOver(
     int session, {
     required RoomSuccession state,
@@ -717,6 +791,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     required String address,
     required String previousHostId,
     required _JoinTarget target,
+    HostChangeReason reason = HostChangeReason.left,
   }) async {
     final me = _localParticipantId;
     if (me == null) return;
@@ -734,10 +809,11 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
         address: address,
         term: term,
         port: target.port,
+        reason: reason,
       );
       if (session != _session) return;
       await _client.connect(Uri.parse('ws://127.0.0.1:${_server.port}'));
-      await _rejoinAsHost(session, me, state, address, target);
+      await _rejoinAsHost(session, me, state, address, target, reason);
     } on Object catch (e, st) {
       AppLogger.e('Could not take over the room', e, st);
       if (session != _session) return;
@@ -754,6 +830,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
     RoomSuccession state,
     String address,
     _JoinTarget target,
+    HostChangeReason reason,
   ) async {
     final result = await _join(
       session,
@@ -769,7 +846,7 @@ class RoomRepositoryImpl implements RoomRepository, RoomHandover {
       hostId: me,
       hostName: target.displayName,
       you: true,
-      reason: HostChangeReason.left,
+      reason: reason,
       hostAddress: address,
       port: _server.port,
     );

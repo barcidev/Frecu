@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-traspaso-por-caida-en-wi-fi-compartida-y",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/traspaso-por-caida-en-wi-fi-compartida-y",
   "baseCommit": "4a31ead5ded81850c5b28e0bcf3d81314ab12b07",
   "revision": 1,
@@ -38,12 +38,21 @@
   "tasks": {
     "T1": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "673f3babcf252876bb7016b9a3ed578d56e4270f",
+      "attempts": 1,
       "startedAt": "2026-11-11T14:56:52.976Z",
       "doneAt": "2026-11-11T14:58:44.837Z",
-      "summary": "join gana term opcional (se omite si es nulo); el servidor rechaza con stale_term (RejectReason.staleTerm, tras validar el código) un join con un turno mayor que el suyo. Prueba signaling_term_test (3) y protocolo.md con term, stale_term y el plan de caída."
+      "summary": "join gana term opcional (se omite si es nulo); el servidor rechaza con stale_term (RejectReason.staleTerm, tras validar el código) un join con un turno mayor que el suyo. Prueba signaling_term_test (3) y protocolo.md con term, stale_term y el plan de caída.",
+      "scopeExtra": []
+    },
+    "T2": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "5a1126d29ed51c84e97bcd02ebda81199d1b0210",
+      "startedAt": "2026-11-11T14:58:45.098Z",
+      "doneAt": "2026-11-11T15:03:45.916Z",
+      "summary": "FailoverPlan (2 reintentos al anfitrión y 2 pasos por persona de la sucesión: seguirla con el mismo id o tomarla con term+1 y razón lost si hay red); el repositorio lo usa y envía term en todo join. host_failover_test (5) y suite en verde (1205)."
     }
   },
   "pending": {

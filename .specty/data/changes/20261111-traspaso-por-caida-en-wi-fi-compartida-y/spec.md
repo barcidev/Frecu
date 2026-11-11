@@ -56,7 +56,7 @@ En una frecu local sobre una Wi-Fi que no depende del teléfono del anfitrión, 
   - files: lib/features/room/data/models/signaling_message.dart, lib/features/room/data/models/signaling_message.freezed.dart, lib/features/room/data/models/signaling_message.g.dart, lib/features/room/data/datasources/signaling_server_datasource.dart, test/features/room/data/signaling_term_test.dart, docs/protocolo.md
   - ac: AC8
   - verify: flutter test test/features/room/data/signaling_term_test.dart test/features/room/data/signaling_access_test.dart test/features/room/data/signaling_server_test.dart
-- [ ] T2: Plan de caída: reintentos al anfitrión, sucesión en orden y toma por quien siga en la red
+- [x] T2: Plan de caída: reintentos al anfitrión, sucesión en orden y toma por quien siga en la red
   - files: lib/features/room/data/repositories/room_reconnection.dart, lib/features/room/data/repositories/room_repository_impl.dart, test/features/room/data/host_failover_test.dart
   - ac: AC8
   - verify: flutter test test/features/room/data/host_failover_test.dart test/features/room/data/room_handover_test.dart test/features/room/data/room_reconnect_test.dart test/features/room/data/room_succession_test.dart
