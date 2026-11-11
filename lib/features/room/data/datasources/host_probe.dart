@@ -211,20 +211,41 @@ class HostProbe {
         port: serverPort,
       ),
     );
-    switch (reply) {
-      case SignalingRejectedMessage():
-        _refused.add(address);
-        return null;
-      case SignalingHostProbeMessage():
-        return HostRival.challenging(
-          reply,
-          address: address,
-          term: term,
-          host: host,
-        );
-      default:
-        return null;
-    }
+    return switch (reply) {
+      SignalingRejectedMessage() => _refuse(address),
+      SignalingHostProbeMessage() => HostRival.challenging(
+        reply,
+        address: address,
+        term: term,
+        host: host,
+      ),
+      // Sin respuesta, o una que no es de `host_probe`: nadie disputa la
+      // frecu. Cada mensaje va nombrado para que el compilador avise si
+      // llega uno nuevo.
+      null => null,
+      SignalingJoinMessage() => null,
+      SignalingWelcomeMessage() => null,
+      SignalingPeerJoinedMessage() => null,
+      SignalingPeerLeftMessage() => null,
+      SignalingOfferMessage() => null,
+      SignalingAnswerMessage() => null,
+      SignalingIceMessage() => null,
+      SignalingTalkStateMessage() => null,
+      SignalingQuickMessage() => null,
+      SignalingPositionMessage() => null,
+      SignalingPingMessage() => null,
+      SignalingPongMessage() => null,
+      SignalingRoomStateMessage() => null,
+      SignalingHostHandoverMessage() => null,
+      SignalingHostChangedMessage() => null,
+      SignalingRoomClosedMessage() => null,
+    };
+  }
+
+  /// [address] rechazó el código: no se le vuelve a preguntar.
+  HostRival? _refuse(String address) {
+    _refused.add(address);
+    return null;
   }
 
   /// Envía [probe] a [uri] y devuelve su respuesta (`host_probe` o

@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-dividir-room-repository-impl-y-recuperar-la",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/dividir-room-repository-impl-y-recuperar-la",
   "baseCommit": "962acef09a31fcf89da28496b1cff47de0a744b5",
   "revision": 3,
@@ -47,12 +47,24 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "79c4af02963a60716a7bf523a3fbba7f917bf9ec",
+      "attempts": 1,
       "startedAt": "2026-11-11T16:39:06.372Z",
       "doneAt": "2026-11-11T16:42:03.441Z",
-      "summary": "Los switch de room_repository y voice_repository pasan a switch expression que nombra cada mensaje sin efecto, sin default:; _onHostMessage desaparece y el filtro de anfitrión pasa a _onHostHandover/_onHostChanged."
+      "summary": "Los switch de room_repository y voice_repository pasan a switch expression que nombra cada mensaje sin efecto, sin default:; _onHostMessage desaparece y el filtro de anfitrión pasa a _onHostHandover/_onHostChanged.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [
+        "lib/features/room/data/datasources/peer_connection_signaling.dart",
+        "lib/features/room/data/datasources/signaling_server_routing.dart"
+      ],
+      "attempts": 1,
+      "baseCommit": "4794d864e6e8ec32a86b012da37aec0c6de8e9fd",
+      "startedAt": "2026-11-11T16:42:03.747Z",
+      "doneAt": "2026-11-11T16:46:00.268Z",
+      "summary": "Los switch del servidor, la malla y host_probe nombran cada mensaje sin efecto (switch expression, sin default:); el enrutado del servidor y la señalización de la malla pasan a archivos part para no superar 500 líneas."
     }
   },
   "pending": {
@@ -63,6 +75,7 @@
     "A": 3,
     "AC": 4,
     "T": 3,
-    "R": 3
+    "R": 3,
+    "S": 1
   }
 }

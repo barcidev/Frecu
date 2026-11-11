@@ -18,6 +18,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 export 'package:frecu/features/room/data/datasources/signaling_connection.dart'
     show RejectReason, SignalingConnection;
 
+part 'signaling_server_routing.dart';
+
 /// Servidor WebSocket de señalización para el anfitrión de la sala.
 ///
 /// Solo enruta mensajes de sockets que hicieron `join` con el código
@@ -245,16 +247,7 @@ class SignalingServerDataSource {
         if (message == null) return;
         final peerId = assignedPeerId;
         if (peerId == null) {
-          // Antes del `join` no se enruta nada.
-          switch (message) {
-            case SignalingJoinMessage():
-              _messagesController.add(message);
-              assignedPeerId = _processJoin(channel, message);
-            case SignalingHostProbeMessage():
-              _answerProbe(channel, message);
-            default:
-              break;
-          }
+          assignedPeerId = _beforeJoin(channel, message);
           return;
         }
         if (!identical(_clientChannels[peerId], channel)) return;
@@ -271,77 +264,6 @@ class SignalingServerDataSource {
         if (peerId != null) _handlePeerLeft(peerId, channel: channel);
       },
     );
-  }
-
-  /// Enruta un mensaje de [from], que ya se unió, forzando su id como
-  /// remitente.
-  void _routeFrom(String from, SignalingMessage message) {
-    switch (message) {
-      case SignalingOfferMessage(:final to, :final sdp):
-        _messagesController.add(message);
-        _routeToPeer(
-          from,
-          to,
-          SignalingMessage.offer(from: from, to: to, sdp: sdp),
-        );
-      case SignalingAnswerMessage(:final to, :final sdp):
-        _messagesController.add(message);
-        _routeToPeer(
-          from,
-          to,
-          SignalingMessage.answer(from: from, to: to, sdp: sdp),
-        );
-      case SignalingIceMessage(
-        :final to,
-        :final candidate,
-        :final sdpMid,
-        :final sdpMLineIndex,
-      ):
-        _messagesController.add(message);
-        _routeToPeer(
-          from,
-          to,
-          SignalingMessage.ice(
-            from: from,
-            to: to,
-            candidate: candidate,
-            sdpMid: sdpMid,
-            sdpMLineIndex: sdpMLineIndex,
-          ),
-        );
-      case SignalingTalkStateMessage(:final isSpeaking, :final muted):
-        _messagesController.add(message);
-        _broadcast(
-          SignalingMessage.talkState(
-            peerId: from,
-            isSpeaking: isSpeaking,
-            muted: muted,
-          ),
-          excludePeerId: from,
-        );
-      case SignalingQuickMessage(:final kind):
-        _messagesController.add(message);
-        _broadcast(
-          SignalingMessage.quickMessage(peerId: from, kind: kind),
-          excludePeerId: from,
-        );
-      case SignalingPositionMessage(:final lat, :final lon, :final accuracy):
-        _messagesController.add(message);
-        _broadcast(
-          SignalingMessage.position(
-            peerId: from,
-            lat: lat,
-            lon: lon,
-            accuracy: accuracy,
-          ),
-          excludePeerId: from,
-        );
-      case SignalingPingMessage(:final timestamp):
-        _sendToPeer(from, SignalingMessage.pong(timestamp: timestamp));
-      default:
-        // Solo el anfitrión emite el resto; uno de un participante se ignora.
-        break;
-    }
   }
 
   String? _processJoin(SignalingConnection channel, SignalingJoinMessage join) {
