@@ -70,7 +70,7 @@ Al crear una frecu, el anfitrión elige primero cómo se une su grupo: **Local**
   - files: lib/features/lobby/presentation/widgets/room_reach_step.dart, lib/features/lobby/presentation/widgets/room_reach_step.g.dart, lib/features/lobby/presentation/pages/create_room_page.dart, lib/features/lobby/presentation/widgets/local_network_step.dart, lib/features/lobby/presentation/widgets/hotspot_guide_step.dart, lib/i18n/strings.i18n.json, lib/i18n/strings_en.i18n.json, lib/i18n/strings.g.dart, lib/i18n/strings_es.g.dart, lib/i18n/strings_en.g.dart, test/features/lobby/presentation/new_room_test.dart, test/features/lobby/presentation/hotspot_guide_test.dart, test/features/lobby/presentation/local_network_step_test.dart
   - ac: AC1
   - verify: flutter test test/features/lobby/presentation/new_room_test.dart test/features/lobby/presentation/hotspot_guide_test.dart test/features/lobby/presentation/local_network_step_test.dart
-- [ ] T3: El resto de los flujos de creación pasan por el paso del tipo
+- [x] T3: El resto de los flujos de creación pasan por el paso del tipo
   - files: test/features/lobby/presentation/room_note_flow_test.dart, test/features/lobby/presentation/new_room_note_test.dart, test/features/lobby/presentation/saved_name_test.dart, test/features/room/presentation/room_flow_test.dart
   - ac: AC1
   - verify: flutter test test/features/lobby/presentation/room_note_flow_test.dart test/features/lobby/presentation/new_room_note_test.dart test/features/lobby/presentation/saved_name_test.dart test/features/room/presentation/room_flow_test.dart

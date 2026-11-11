@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "20261111-paso-como-se-une-tu-grupo-al-crear-local-o-por",
   "kind": "standard",
-  "phase": "implementing",
+  "phase": "acceptance",
   "branch": "feature/paso-como-se-une-tu-grupo-al-crear-local-o-por",
   "baseCommit": "c8d8df7093b4021913c268f191dfa76270de5cff",
   "revision": 1,
@@ -56,12 +56,21 @@
     },
     "T2": {
       "status": "done",
-      "scopeExtra": [],
-      "attempts": 1,
       "baseCommit": "d97fb4a06285372ee84d586bd910b4fe8713af54",
+      "attempts": 1,
       "startedAt": "2026-11-11T13:56:14.359Z",
       "doneAt": "2026-11-11T14:01:16.530Z",
-      "summary": "Nuevo RoomReachStep («¿Cómo se une tu grupo?», Local marcada, Por internet atenuada sin internet o sin punto de encuentro, provider internetCheck) como primer paso: Local sigue a la red y Por internet a «Nueva frecu», apagando la red de Frecu."
+      "summary": "Nuevo RoomReachStep («¿Cómo se une tu grupo?», Local marcada, Por internet atenuada sin internet o sin punto de encuentro, provider internetCheck) como primer paso: Local sigue a la red y Por internet a «Nueva frecu», apagando la red de Frecu.",
+      "scopeExtra": []
+    },
+    "T3": {
+      "status": "done",
+      "scopeExtra": [],
+      "attempts": 1,
+      "baseCommit": "53d5d9bce3385f5ac67638c9199603a9485b664e",
+      "startedAt": "2026-11-11T14:01:16.786Z",
+      "doneAt": "2026-11-11T14:02:30.788Z",
+      "summary": "Las pruebas que crean una frecu desde el inicio (notas, nombre guardado y flujo de la frecu) pasan por «¿Cómo se une tu grupo?» con Local y Seguir; flutter test completo en verde (1165)."
     }
   },
   "pending": {
