@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frecu · Tipo de frecu y traspaso de anfitrión — Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,100..800&family=Doto:wght,ROND@100..900,0..100&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="screens.css">
+<style>
+  .rf { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 32px 140px; }
+  .rf-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 0 0; }
+  .rf-top .wordmark canvas { width: 26px; height: 26px; }
+  .rf-theme { display: flex; gap: 6px; }
+  .rf-theme button { padding: 8px 12px; border-radius: 10px; font: 500 12px/1 var(--f-mono); color: var(--tx-2); box-shadow: inset 0 0 0 1px var(--line-1); }
+  .rf-theme button.on { color: var(--tx-1); background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .rf .sec { padding-top: 56px; }
+  .rf-dec { max-width: 860px; }
+  .rf-dec li { font-size: 15px; }
+  .rf-dec code { font: 500 12.5px/1 var(--f-mono); color: var(--tx-1); }
+  .ah-opts { display: flex; flex-direction: column; gap: 10px; }
+  .ah-opts .opt { align-items: flex-start; }
+  .ah-opts .opt .ot > span { white-space: normal; line-height: 1.45; text-transform: none; letter-spacing: 0; font: 400 13px/1.45 var(--f-ui); }
+  .ah-sug { color: var(--signal-fg); }
+  .ah-toast { position: absolute; left: 0; right: 0; top: 178px; z-index: 30; display: flex; justify-content: center; padding: 0 16px; }
+  .ah-toast .toast { height: auto; min-height: 46px; padding: 8px 16px 8px 8px; line-height: 1.35; }
+  .ah-banner { top: 186px; z-index: 30; }
+  .ah-peer { display: flex; flex-direction: column; gap: 8px; }
+  @media (max-width: 720px) { .rf { padding: 0 16px 96px; } }
+</style>
+</head>
+<body>
+<main class="rf">
+  <div class="rf-top">
+    <span class="wordmark"><canvas data-c="brand"></canvas>frecu</span>
+    <div class="rf-theme"><button class="on" data-theme-set="dark">Noche</button><button data-theme-set="light">Día</button></div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><span class="sec-n">ANF</span><h2 class="sec-t">Tipo de frecu y traspaso de anfitrión</h2>
+      <p class="sec-d">Al crear la frecu se elige si es local o por internet, sin mezcla. Si la red no depende del teléfono del anfitrión (un router o internet), la frecu sobrevive a su salida: él la pasa a otra persona o, si se cae, pasa sola.</p></div>
+    <ol class="stepsl rf-dec">
+      <li><span><b>Primero se elige el tipo.</b> «Nueva frecu» empieza preguntando cómo se une el grupo: <b>Local</b> (misma red, sin internet) o <b>Por internet</b> (desde cualquier lugar con el QR o el enlace). Desaparece el interruptor «Permitir internet».</span></li>
+      <li><span><b>Sin mezcla.</b> Una frecu local nunca toca la nube y su QR no lleva enlace. En una por internet todos entran por la nube, incluso los que están en la misma Wi-Fi, y su QR no lleva IP local. Desaparece el aviso «La red de Frecu no tiene internet».</span></li>
+      <li><span><b>La frecu local detecta su red.</b> Si la red la crea el anfitrión (red de Frecu o su zona Wi-Fi), su teléfono es la red: no hay traspaso; si cae, los demás reintentan y, si no vuelve, la frecu se cierra. Si es un router, hay traspaso.</span></li>
+      <li><span><b>Salida voluntaria.</b> Con traspaso posible, el anfitrión elige entre «Que siga sin mí» y «Cerrarla para todos». Al seguir, escoge a quién pasarla; viene sugerida la persona que lleva más tiempo.</span></li>
+      <li><span><b>Caída inesperada.</b> Cierre de la app, teléfono apagado o fuera de alcance: todos conocen de antemano el orden de sucesión (orden de llegada). Tras unos 4 s sin anfitrión, el primero de la lista que siga en la red toma la frecu y los demás se reconectan a él.</span></li>
+      <li><span><b>Un turno por traspaso.</b> Cada traspaso sube un número de turno. Si el anfitrión anterior vuelve, ve un turno mayor y entra como invitado. Si dos teléfonos se creen anfitriones, gana el turno mayor.</span></li>
+      <li><span><b>Invitación.</b> Local en router: el QR anterior deja de servir porque cambia la IP; el nuevo anfitrión muestra uno nuevo. Por internet: el enlace y el QR siguen sirviendo, porque apuntan a la frecu y no al teléfono.</span></li>
+      <li><span><b>En la nube.</b> El Worker guarda quién lleva la frecu y la mantiene abierta unos segundos sin anfitrión. Acepta al sucesor con una clave que el anfitrión reparte a todos al entrar, y deja de reenviar al anfitrión anterior.</span></li>
+      <li><span><b>Los textos no suponen género.</b> «Ana lleva ahora la frecu», «Ahora llevas la frecu».</span></li>
+    </ol>
+  </section>
+
+  <div id="gallery"></div>
+</main>
+<script src="engine.js"></script>
+<script src="components.js"></script>
+<script src="screens.js"></script>
+<script src="anfitrion.js"></script>
+</body>
+</html>
