@@ -30,6 +30,13 @@
         "command": "specty guard --tool antigravity --event PreInvocation",
         "timeout": 30
       }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "specty hook agent-stop antigravity --no-check",
+        "timeout": 600
+      }
     ]
   }
 }

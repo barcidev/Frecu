@@ -7,3 +7,4 @@
 .dart_tool/
 .packages
 build/
+/.specty/.worktrees/

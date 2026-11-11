@@ -82,6 +82,15 @@
             "command": "specty hook memory-stop claude-code"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "specty hook agent-stop claude-code --no-check",
+            "timeout": 600
+          }
+        ]
       }
     ]
   },

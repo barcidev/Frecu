@@ -11,6 +11,8 @@ sensitive:
   ["**/migrations/**", "**/auth/**", ".github/**", "**/.env*", "**/infra/**"]
 verify:
   timeoutSec: 600
+  default: "flutter test"
+  full: "flutter analyze && flutter test"
 scope:
   implicitTests: true
   generated: ["**/*.g.dart", "**/*.freezed.dart"]
